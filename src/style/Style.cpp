@@ -1,13 +1,15 @@
-#include "style.h"
+#include "Style.h"
 
-#include "stylemanager.h"
+#include "StyleManager.h"
 
 namespace tikz {
 
+/**
+ * Private data and helper functions of class Style.
+ */
 class StylePrivate
 {
 public:
-    Shape shape;
     PenStyle penStyle;
     LineWidth lineWidth;
 
@@ -17,19 +19,13 @@ public:
 Style::Style()
     : d(new StylePrivate())
 {
-    d->shape = ShapeUnset;
     d->penStyle = PenUnset;
     d->lineWidth = WidthUnset;
     d->parent = 0;
-
-    // last: register ourself as style
-    StyleManager::self()->registerStyle(this);
 }
 
 Style::~Style()
 {
-    // first, unregister style
-    StyleManager::self()->unregisterStyle(this);
 }
 
 Style *Style::parent() const
@@ -40,19 +36,6 @@ Style *Style::parent() const
 void Style::setParent(Style *parent)
 {
     d->parent = parent;
-}
-
-Shape Style::shape() const
-{
-    if (d->shape != ShapeUnset) {
-        return d->shape;
-    }
-
-    if (parent()) {
-        return parent()->shape();
-    }
-
-    return NoShape;
 }
 
 PenStyle Style::penStyle() const

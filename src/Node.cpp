@@ -1,4 +1,4 @@
-#include "node.h"
+#include "Node.h"
 
 namespace tikz {
 

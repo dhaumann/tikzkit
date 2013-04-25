@@ -5,14 +5,18 @@ FIND_PACKAGE(Qt4 REQUIRED)
 
 INCLUDE_DIRECTORIES(
     src
+    src/style
 )
 
 SET(tikzkit_SOURCES
     src/main.cpp
-    src/style.cpp
-    src/node.cpp
-    src/stylemanager.cpp
+    src/Node.cpp
+    src/style/Style.cpp
+    src/style/NodeStyle.cpp
+    src/style/EdgeStyle.cpp
+    src/style/StyleManager.cpp
 )
+
 SET(tikzkit_HEADERS
 #    TkMainWindow.h
 )
