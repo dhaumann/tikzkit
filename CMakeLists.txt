@@ -13,6 +13,7 @@ SET(tikzkit_SOURCES
     src/Coord.cpp
     src/Edge.cpp
     src/Node.cpp
+    src/Path.cpp
     src/style/Style.cpp
     src/style/StyleManager.cpp
 )

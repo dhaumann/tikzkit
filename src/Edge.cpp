@@ -1,5 +1,6 @@
 #include "Edge.h"
 #include "Coord.h"
+#include "Path.h"
 
 namespace tikz {
 
@@ -8,11 +9,17 @@ class EdgePrivate
     public:
         Coord* start;
         Coord* end;
+
+        Path* path;
 };
 
 Edge::Edge()
     : d(new EdgePrivate())
 {
+    d->start = 0;
+    d->end = 0;
+
+    d->path = 0;
 }
 
 Edge::~Edge()

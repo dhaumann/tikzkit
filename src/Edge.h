@@ -8,6 +8,7 @@ namespace tikz
 
 class EdgePrivate;
 class Coord;
+class Path;
 
 /**
  * The class Edge connects two Coords or Nodes.
@@ -25,8 +26,20 @@ class Edge
          */
         virtual ~Edge();
 
+        /**
+         * Returns the start Coord.
+         */
         Coord* start();
+
+        /**
+         * Returns the end Coord.
+         */
         Coord* end();
+
+        /**
+         * Returns a pointer to the Path this Edge belongs to.
+         */
+        Path* path();
 
     private:
         EdgePrivate * const d;
