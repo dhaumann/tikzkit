@@ -3,3 +3,12 @@ TikZ cheat cheat:
 - http://www.math.ntnu.no/~stacey/documents/tikzcheatsheet.pdf
 Basic TikZ commands: http://tex.stackexchange.com/questions/84753/summary-of-tikz-commands
 tikzset vs. tikzstyle: http://tex.stackexchange.com/questions/52372/should-tikzset-or-tikzstyle-be-used-to-define-tikz-styles
+
+Property Browsers
+- QtPropertyBrowser
+-- https://qt.gitorious.org/qt-solutions  and http://doc.qt.digia.com/qq/qq18-propertybrowser.html
+-- http://doc.qt.digia.com/solutions/4/qtpropertybrowser/index.html
+- http://qt.gitorious.org/qt/qt/trees/master/tools/designer/src/components/propertyeditor
+- yape: http://kde-apps.org/content/show.php?content=100063
+- QPropertyEditor: http://qt-apps.org/content/show.php/QPropertyEditor?content=68684
+- http://qt-apps.org/content/show.php/?content=50717

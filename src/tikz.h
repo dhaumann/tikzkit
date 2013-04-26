@@ -28,8 +28,18 @@ enum PenStyle {
     PenUnset = 0,
     NoPen,
     SolidLine,
-    DashLine,
-    DashDotLine
+    DottedLine,
+    DenselyDottedLine,
+    LooselyDottedLine,
+    DashedLine,
+    DenselyDashedLine,
+    LooselyDashedLine,
+    DashDottedLine,
+    DenselyDashDottedLine,
+    LooselyDashDottedLine,
+    DashDotDottedLine,
+    DenselyDashDotDottedLine,
+    LooselyDashDotDottedLine
 };
 
 enum LineWidth {
@@ -37,10 +47,24 @@ enum LineWidth {
     UltraThin,
     VeryThin,
     Thin,
-    Normal,
+    SemiThick,  // TikZ default
     Thick,
     VeryThick,
     UltraThick
+};
+
+enum LineCap {
+    CapUnset = 0,
+    RoundCap,
+    RectCap,
+    ButtCap     // TikZ default
+};
+
+enum LineJoin {
+    JoinUnset = 0,
+    RoundJoin,
+    BevelJoin,
+    MiterJoin    // TikZ default
 };
 
 enum ArrowStyle {

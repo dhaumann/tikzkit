@@ -50,7 +50,25 @@ class Style
          */
         LineWidth lineWidth() const;
 
-    // TODO: pen color, fill color
+        /**
+         * The the draw opacity.
+         */
+        double drawOpacity() const;
+        double fillOpacity() const;
+
+    // TODO: pen color
+    //  fill color
+    // Node: inner sep, minimum size (minimum width, minimum height)
+
+    //
+    // Node specific attributes
+    //
+    public:
+        /**
+         * Get the Shape of this style.
+         * @see Shape
+         */
+        Shape shape() const;
 
     private:
         StylePrivate * const d;

@@ -6,8 +6,6 @@
 namespace tikz {
 
 class Style;
-class NodeStyle;
-class EdgeStyle;
 
 class StyleManager
 {
@@ -21,11 +19,8 @@ class StyleManager
 
 //         Style* documentStyle();
 
-        void registerNodeStyle(NodeStyle* style);
-        void unregisterNodeStyle(NodeStyle* style);
-
-        void registerEdgeStyle(EdgeStyle* style);
-        void unregisterEdgeStyle(EdgeStyle* style);
+        void registerStyle(Style* style);
+        void unregisterStyle(Style* style);
 
     //
     // private constructor, as it is a singleton
@@ -38,8 +33,7 @@ class StyleManager
 
     private:
 //         Style* m_documentStyle;
-        QVector<NodeStyle*> m_nodeStyles;
-        QVector<EdgeStyle*> m_edgeStyles;
+        QVector<Style*> m_styles;
 };
 
 }

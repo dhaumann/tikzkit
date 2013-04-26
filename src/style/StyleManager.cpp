@@ -1,7 +1,6 @@
 #include "StyleManager.h"
 
-#include "NodeStyle.h"
-#include "EdgeStyle.h"
+#include "Style.h"
 
 namespace tikz {
 
@@ -24,14 +23,9 @@ StyleManager::StyleManager()
 
 StyleManager::~StyleManager()
 {
-    while (!m_nodeStyles.isEmpty()) {
-        delete m_nodeStyles[0];
-        m_nodeStyles.remove(0);
-    }
-
-    while (!m_edgeStyles.isEmpty()) {
-        delete m_edgeStyles[0];
-        m_edgeStyles.remove(0);
+    while (!m_styles.isEmpty()) {
+        delete m_styles[0];
+        m_styles.remove(0);
     }
 
     // last, invalidate s_self pointer again
@@ -43,19 +37,19 @@ StyleManager::~StyleManager()
 //     return m_documentStyle;
 // }
 
-void StyleManager::registerNodeStyle(NodeStyle* style)
+void StyleManager::registerStyle(Style* style)
 {
-    Q_ASSERT(!m_nodeStyles.contains(style));
+    Q_ASSERT(!m_styles.contains(style));
 
-    m_nodeStyles.append(style);
+    m_styles.append(style);
 }
 
-void StyleManager::unregisterNodeStyle(NodeStyle* style)
+void StyleManager::unregisterStyle(Style* style)
 {
-    Q_ASSERT(m_nodeStyles.contains(style));
+    Q_ASSERT(m_styles.contains(style));
 
     // fix parent relationship, if required
-    foreach (NodeStyle* s, m_nodeStyles) {
+    foreach (Style* s, m_styles) {
         if (s == style) continue;
         if (s->parent() == style) {
             s->setParent(style->parent());
@@ -63,30 +57,7 @@ void StyleManager::unregisterNodeStyle(NodeStyle* style)
     }
 
     // now it's save to remove the style
-    m_nodeStyles.remove(m_nodeStyles.indexOf(style));
-}
-
-void StyleManager::registerEdgeStyle(EdgeStyle* style)
-{
-    Q_ASSERT(!m_edgeStyles.contains(style));
-
-    m_edgeStyles.append(style);
-}
-
-void StyleManager::unregisterEdgeStyle(EdgeStyle* style)
-{
-    Q_ASSERT(m_edgeStyles.contains(style));
-
-    // fix parent relationship, if required
-    foreach (EdgeStyle* s, m_edgeStyles) {
-        if (s == style) continue;
-        if (s->parent() == style) {
-            s->setParent(style->parent());
-        }
-    }
-
-    // now it's save to remove the style
-    m_edgeStyles.remove(m_edgeStyles.indexOf(style));
+    m_styles.remove(m_styles.indexOf(style));
 }
 
 }
