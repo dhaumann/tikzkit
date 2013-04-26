@@ -1,0 +1,5 @@
+TikZ cheat cheat:
+- http://www.cord.edu/faculty/ahendric/tex/TikZcheatsheet.pdf
+- http://www.math.ntnu.no/~stacey/documents/tikzcheatsheet.pdf
+Basic TikZ commands: http://tex.stackexchange.com/questions/84753/summary-of-tikz-commands
+tikzset vs. tikzstyle: http://tex.stackexchange.com/questions/52372/should-tikzset-or-tikzstyle-be-used-to-define-tikz-styles
