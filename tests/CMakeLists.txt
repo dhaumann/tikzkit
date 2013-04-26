@@ -13,3 +13,4 @@ QT4_WRAP_CPP(StyleManagerMocs)
 add_executable(StyleManagerTest ${StyleManagerSrc} ${StyleManagerMocs})
 target_link_libraries(StyleManagerTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY})
 add_test(NAME StyleManagerTest COMMAND StyleManagerTest)
+
