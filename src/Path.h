@@ -1,7 +1,7 @@
 #ifndef TIKZ_PATH_H
 #define TIKZ_PATH_H
 
-#include <QPointF>
+#include <QPoint>
 
 #include "tikz.h"
 
@@ -9,6 +9,7 @@ namespace tikz
 {
 
 class PathPrivate;
+class Coord;
 
 class Path
 {
@@ -23,6 +24,16 @@ class Path
          */
         virtual ~Path();
 
+    //
+    // path operations and attributes
+    //
+    public:
+        Coord* start();
+        Coord* end();
+
+        QPointF cachedStart() const;
+        QPointF cachedEnd() const;
+        
         /**
          * Returns @p true, if the path is closed.
          * This maps to '-- cycle' in TikZ.
@@ -33,6 +44,20 @@ class Path
          * Set whether this path is closed.
          */
         void setClosed(bool closed);
+
+    //
+    // path manipulation
+    //
+    public:
+        /**
+         * Append @p coord at the end of the path.
+         */
+        void appendCoord(Coord* coord);
+
+        /**
+         * Remove @p coord from this path.
+         */
+        void removeCoord(Coord* coord);
 
     private:
         PathPrivate * const d;
