@@ -23,6 +23,11 @@ const QPointF& Coord::pos() const
     return d->pos;
 }
 
+void Coord::setPos(const QPointF& pos)
+{
+    d->pos = pos;
+}
+
 const QPointF& Coord::anchor(Anchor) const
 {
     return d->pos;
