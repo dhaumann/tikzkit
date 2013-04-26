@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
 SET(tikzkit_SOURCES
     src/main.cpp
     src/Node.cpp
+    src/Coord.cpp
     src/style/Style.cpp
     src/style/StyleManager.cpp
 )

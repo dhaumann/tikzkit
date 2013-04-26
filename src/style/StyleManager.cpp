@@ -18,7 +18,8 @@ StyleManager* StyleManager::self()
 
 StyleManager::StyleManager()
 {
-//     m_documentStyle = new Style();
+    m_documentStyle = new Style();
+    Q_ASSERT(m_documentStyle->parent() == 0);
 }
 
 StyleManager::~StyleManager()
@@ -32,14 +33,19 @@ StyleManager::~StyleManager()
     s_self = 0;
 }
 
-// Style* StyleManager::documentStyle()
-// {
-//     return m_documentStyle;
-// }
+Style* StyleManager::documentStyle()
+{
+    return m_documentStyle;
+}
 
 void StyleManager::registerStyle(Style* style)
 {
     Q_ASSERT(!m_styles.contains(style));
+
+    // set default parent of all other styles
+    if (style != m_documentStyle && !style->parent()) {
+        style->setParent(m_documentStyle);
+    }
 
     m_styles.append(style);
 }

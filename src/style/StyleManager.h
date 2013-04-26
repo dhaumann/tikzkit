@@ -17,7 +17,7 @@ class StyleManager
 
         static StyleManager* self();
 
-//         Style* documentStyle();
+        Style* documentStyle();
 
         void registerStyle(Style* style);
         void unregisterStyle(Style* style);
@@ -32,7 +32,7 @@ class StyleManager
         StyleManager();
 
     private:
-//         Style* m_documentStyle;
+        Style* m_documentStyle;
         QVector<Style*> m_styles;
 };
 

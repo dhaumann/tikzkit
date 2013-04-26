@@ -1,37 +1,41 @@
-#ifndef TIKZ_NODE_H
-#define TIKZ_NODE_H
+#ifndef TIKZ_COORDINATE_H
+#define TIKZ_COORDINATE_H
 
 #include <QPointF>
 
 #include "tikz.h"
-#include "Coord.h"
 
 namespace tikz
 {
 
-class NodePrivate;
+class CoordPrivate;
 
-class Node : public Coord
+class Coord
 {
     public:
         /**
          * Default constructor.
          */
-        Node();
+        Coord();
 
         /**
          * Destructor
          */
-        virtual ~Node();
+        virtual ~Coord();
+
+        /**
+         * Get the coordinates
+         */
+        const QPointF& pos() const;
 
         virtual const QPointF& anchor(Anchor anchor) const;
 
     private:
-        NodePrivate * const d;
+        CoordPrivate * const d;
 };
 
 }
 
-#endif // TIKZ_NODE_H
+#endif // TIKZ_COORDINATE_H
 
 // kate: indent-width 4; replace-tabs on;

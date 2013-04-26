@@ -18,8 +18,9 @@ Node::~Node()
     delete d;
 }
 
-const QPointF& Node::coord()
+const QPointF& Node::anchor(Anchor anchor) const
 {
+    return pos();
 }
 
 }
