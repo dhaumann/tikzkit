@@ -14,6 +14,11 @@ public:
     PenStyle penStyle;
     LineWidth lineWidth;
 
+    bool drawOpacitySet : 1;
+    double drawOpacity;
+    bool fillOpacitySet : 1;
+    double fillOpacity;
+
     // Node styles
     Shape shape;
 
@@ -25,6 +30,12 @@ Style::Style()
 {
     d->penStyle = PenUnset;
     d->lineWidth = WidthUnset;
+
+    d->drawOpacitySet = false;
+    d->fillOpacitySet = false;
+
+    d->drawOpacity = 1.0;
+    d->fillOpacity = 1.0;
 
     d->shape = ShapeUnset;
 
@@ -91,11 +102,27 @@ Shape Style::shape() const
 
 double Style::drawOpacity() const
 {
+    if (d->drawOpacitySet) {
+        return d->drawOpacity;
+    }
+
+    if (parent()) {
+        return parent()->drawOpacity();
+    }
+
     return 1.0;
 }
 
 double Style::fillOpacity() const
 {
+    if (d->fillOpacitySet) {
+        return d->fillOpacity;
+    }
+
+    if (parent()) {
+        return parent()->fillOpacity();
+    }
+
     return 1.0;
 }
 
