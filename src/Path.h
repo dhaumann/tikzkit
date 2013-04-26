@@ -33,13 +33,13 @@ class Path
 
         QPointF cachedStart() const;
         QPointF cachedEnd() const;
-        
+
         /**
          * Returns @p true, if the path is closed.
          * This maps to '-- cycle' in TikZ.
          */
         bool isClosed() const;
-        
+
         /**
          * Set whether this path is closed.
          */

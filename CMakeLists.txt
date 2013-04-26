@@ -34,4 +34,6 @@ ADD_EXECUTABLE(tikzkit
 
 TARGET_LINK_LIBRARIES(tikzkit ${QT_LIBRARIES})
 
+add_subdirectory(tests)
+
 # kate: indent-width 4; replace-tabs on;
