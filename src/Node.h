@@ -1,10 +1,11 @@
 #ifndef TIKZ_NODE_H
 #define TIKZ_NODE_H
 
-#include <QPointF>
-
 #include "tikz.h"
 #include "Coord.h"
+
+#include <QPointF>
+#include <QString>
 
 namespace tikz
 {
@@ -23,6 +24,16 @@ class Node : public Coord
          * Destructor
          */
         virtual ~Node();
+
+        /**
+         * Sets the text of this node to @p text.
+         */
+        void setText(const QString& text);
+
+        /**
+         * Returns the text of this node.
+         */
+        QString text() const;
 
         virtual const QPointF& anchor(Anchor anchor) const;
 
