@@ -3,6 +3,7 @@
 
 #include <QPoint>
 
+#include "tikz_export.h"
 #include "tikz.h"
 
 namespace tikz
@@ -11,7 +12,7 @@ namespace tikz
 class PathPrivate;
 class Coord;
 
-class Path
+class TIKZCORE_EXPORT Path
 {
     public:
         /**

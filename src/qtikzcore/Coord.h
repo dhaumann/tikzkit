@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPointF>
 
+#include "tikz_export.h"
 #include "tikz.h"
 
 namespace tikz
@@ -11,7 +12,7 @@ namespace tikz
 
 class CoordPrivate;
 
-class Coord : public QObject
+class TIKZCORE_EXPORT Coord : public QObject
 {
     Q_OBJECT
 

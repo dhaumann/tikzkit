@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPointF>
 
+#include "tikz_export.h"
 #include "tikz.h"
 
 namespace tikz
@@ -17,7 +18,7 @@ class Path;
 /**
  * The class Edge connects two Coords or Nodes.
  */
-class Edge : public QObject
+class TIKZCORE_EXPORT Edge : public QObject
 {
     Q_OBJECT
 
