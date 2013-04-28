@@ -49,6 +49,7 @@ void Edge::setStart(Coord* coord)
     // set new Coord and connect cache if applicable
     d->start = coord;
     if (d->start) {
+        d->fallbackStart.setPos(d->start->pos());
         connect(d->start, SIGNAL(changed(QPointF)), &d->fallbackStart, SLOT(setPos(QPointF)));
     }
 
@@ -81,6 +82,7 @@ void Edge::setEnd(Coord* coord)
     // set new Coord and connect cache if applicable
     d->end = coord;
     if (d->end) {
+        d->fallbackEnd.setPos(d->end->pos());
         connect(d->end, SIGNAL(changed(QPointF)), &d->fallbackEnd, SLOT(setPos(QPointF)));
     }
 
