@@ -19,7 +19,8 @@ SET(tikzkit_SOURCES
 )
 
 SET(tikzkit_HEADERS
-#    TkMainWindow.h
+    src/Coord.h
+    src/Edge.h
 )
 
 QT4_WRAP_CPP(tikzkit_HEADERS_MOC ${tikzkit_HEADERS})

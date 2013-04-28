@@ -8,13 +8,15 @@ class CoordPrivate
         QPointF pos;
 };
 
-Coord::Coord()
-    : d(new CoordPrivate())
+Coord::Coord(QObject * parent)
+    : QObject(parent)
+    , d(new CoordPrivate())
 {
 }
 
 Coord::~Coord()
 {
+    emit aboutToDelete(this);
     delete d;
 }
 
@@ -25,7 +27,10 @@ const QPointF& Coord::pos() const
 
 void Coord::setPos(const QPointF& pos)
 {
-    d->pos = pos;
+    if (d->pos != pos) {
+        d->pos = pos;
+        emit changed(d->pos);
+    }
 }
 
 const QPointF& Coord::anchor(Anchor) const
