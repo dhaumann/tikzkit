@@ -11,6 +11,7 @@ namespace tikz
 {
 
 class NodePrivate;
+class Style;
 
 class Node : public Coord
 {
@@ -18,7 +19,7 @@ class Node : public Coord
         /**
          * Default constructor.
          */
-        Node();
+        Node(QObject * parent = 0);
 
         /**
          * Destructor
@@ -34,6 +35,11 @@ class Node : public Coord
          * Returns the text of this node.
          */
         QString text() const;
+
+        /**
+         * Get the Style object of this node.
+         */
+        Style& style();
 
         virtual const QPointF& anchor(Anchor anchor) const;
 

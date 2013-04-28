@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Style.h"
 
 namespace tikz {
 
@@ -7,10 +8,12 @@ class NodePrivate
     public:
         QPointF coord;
         QString text;
+        Style style;
 };
 
-Node::Node()
-    : d(new NodePrivate())
+Node::Node(QObject * parent)
+    : Coord(parent)
+    , d(new NodePrivate())
 {
     d->coord = QPointF(0, 0);
     d->text = QString();
@@ -29,6 +32,11 @@ void Node::setText(const QString& text)
 QString Node::text() const
 {
     return d->text;
+}
+
+Style& Node::style()
+{
+    return d->style;
 }
 
 const QPointF& Node::anchor(Anchor anchor) const
