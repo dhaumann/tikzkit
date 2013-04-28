@@ -13,7 +13,6 @@ namespace tikz
 class EdgePrivate;
 class Coord;
 class Node;
-class Path;
 
 /**
  * The class Edge connects two Coords or Nodes.
@@ -48,11 +47,6 @@ class TIKZCORE_EXPORT Edge : public QObject
          * The returned pointer is always valid.
          */
         Coord& end();
-
-        /**
-         * Returns a pointer to the Path this Edge belongs to.
-         */
-        Path* path();
 
     //
     // setter slots for node manipulation

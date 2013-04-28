@@ -8,7 +8,6 @@ include_directories(
 )
 
 set(qtikzcore_SOURCES
-#     src/main.cpp
     Coord.cpp
     Edge.cpp
     Node.cpp

@@ -1,6 +1,5 @@
 #include "Edge.h"
 #include "Coord.h"
-#include "Path.h"
 
 #include <QPointer>
 
@@ -14,8 +13,6 @@ class EdgePrivate
 
         Coord fallbackStart;
         Coord fallbackEnd;
-
-        Path* path;
 };
 
 Edge::Edge(QObject * parent)
@@ -24,8 +21,6 @@ Edge::Edge(QObject * parent)
 {
     d->start = 0;
     d->end = 0;
-
-    d->path = 0;
 }
 
 Edge::~Edge()
