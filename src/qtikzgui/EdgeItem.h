@@ -38,6 +38,11 @@ class TIKZGUI_EXPORT EdgeItem : public TikzItem
          */
         virtual void draw(QPainter* painter);
 
+        /**
+         * Returns the pointer to the associated Edge.
+         */
+        tikz::Edge& edge();
+
     private:
         EdgeItemPrivate * const d;
 };

@@ -27,7 +27,8 @@ class DemoWidget : public QWidget
         virtual void paintEvent(QPaintEvent * event);
 
     private:
-        tikzgui::NodeItem* m_nodeItem;
+        tikzgui::NodeItem* m_nodeItem1;
+        tikzgui::NodeItem* m_nodeItem2;
         tikzgui::EdgeItem* m_edgeItem;
 };
 

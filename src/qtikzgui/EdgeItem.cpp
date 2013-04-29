@@ -17,8 +17,6 @@ EdgeItem::EdgeItem(QObject * parent)
     , d(new EdgeItemPrivate())
 {
     d->edge = new tikz::Edge(this);
-    d->edge->setStartPos(QPointF(0, 0));
-    d->edge->setEndPos(QPointF(3, 0));
 }
 
 EdgeItem::~EdgeItem()
@@ -33,6 +31,11 @@ void EdgeItem::draw(QPainter* painter)
     painter->drawLine(d->edge->start().pos(), d->edge->end().pos());
 
     painter->restore();
+}
+
+tikz::Edge& EdgeItem::edge()
+{
+    return *d->edge;
 }
 
 }
