@@ -31,6 +31,7 @@ const QPointF& MetaNode::pos() const
 
 void MetaNode::setPos(const QPointF& pos)
 {
+    coord().setPos(pos);
 }
 
 QPointF MetaNode::anchor(Anchor anchor) const

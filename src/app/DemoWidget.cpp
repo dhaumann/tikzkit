@@ -1,6 +1,7 @@
 #include "DemoWidget.h"
 
 #include "NodeItem.h"
+#include "EdgeItem.h"
 
 #include <QPainter>
 
@@ -9,6 +10,8 @@ DemoWidget::DemoWidget()
 {
     m_nodeItem = new tikzgui::NodeItem(this);
     m_nodeItem->node().setText("a");
+    
+    m_edgeItem = new tikzgui::EdgeItem(this);
 }
 
 DemoWidget::~DemoWidget()
@@ -23,10 +26,11 @@ void DemoWidget::paintEvent(QPaintEvent * event)
     
     p.setRenderHints(QPainter::Antialiasing);
 
-    p.scale(10, 10);
-    p.translate(width() / 20.0, height() / 20.0);
+    p.scale(20, 20);
+    p.translate(width() / 40.0, height() / 40.0);
 
     m_nodeItem->draw(&p);
+    m_edgeItem->draw(&p);
 
     p.end();
 }

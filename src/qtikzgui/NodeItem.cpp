@@ -26,7 +26,7 @@ void NodeItem::draw(QPainter* painter)
 {
     painter->save();
     
-    QRectF rect(d->node->pos() - QPointF(2, 2), QSizeF(4, 4));
+    QRectF rect(d->node->pos() - QPointF(1, 1), QSizeF(2, 2));
 
 //     painter->scale(0.1, 0.1);
 //     QRectF textRect(d->node->pos()*10 - QPointF(2, 2)*10, QSizeF(4, 4)*10);

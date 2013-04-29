@@ -5,6 +5,7 @@
 
 namespace tikzgui {
     class NodeItem;
+    class EdgeItem;
 }
 
 class DemoWidget : public QWidget
@@ -27,6 +28,7 @@ class DemoWidget : public QWidget
 
     private:
         tikzgui::NodeItem* m_nodeItem;
+        tikzgui::EdgeItem* m_edgeItem;
 };
 
 #endif // DEMO_WIDGET_H
