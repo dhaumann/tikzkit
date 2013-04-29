@@ -1,0 +1,32 @@
+project(qtikz)
+
+find_package(Qt4 REQUIRED)
+
+include_directories(
+    .
+    ${CMAKE_SOURCE_DIR}/src/qtikzcore
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui
+)
+
+set(qtikz_SOURCES
+    main.cpp
+)
+
+set(qtikz_HEADERS
+)
+
+QT4_WRAP_CPP(qtikz_HEADERS_MOC ${qtikz_HEADERS})
+
+include(${QT_USE_FILE})
+add_definitions(
+    ${QT_DEFINITIONS}
+)
+
+add_executable(qtikz
+    ${qtikz_SOURCES}
+    ${qtikz_HEADERS_MOC}
+)
+
+target_link_libraries(qtikz ${QT_LIBRARIES} qtikzcore qtikzgui)
+
+# kate: indent-width 4; replace-tabs on;
