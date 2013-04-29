@@ -49,6 +49,17 @@ const QPointF& Coord::anchor(Anchor) const
     return d->pos;
 }
 
+bool Coord::operator==(const Coord& other) const
+{
+    return d->pos == other.d->pos;
+}
+
+
+bool Coord::operator!=(const Coord& other) const
+{
+    return d->pos != other.d->pos;
+}
+
 }
 
 // kate: indent-width 4; replace-tabs on;

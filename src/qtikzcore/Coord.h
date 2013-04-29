@@ -48,6 +48,16 @@ class TIKZCORE_EXPORT Coord : public QObject
          */
         const QPointF& pos() const;
 
+        /**
+         * Comparison operator
+         */
+        bool operator==(const Coord& other) const;
+        
+        /**
+         * Colmplement of comparison operator
+         */
+        bool operator!=(const Coord& other) const;
+
     public Q_SLOTS:
         /**
          * Set the coordinates to @p pos.
