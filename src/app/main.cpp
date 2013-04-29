@@ -1,6 +1,14 @@
+#include <QApplication>
+#include "DemoWidget.h"
+
 int main(int argc, char* argv[])
 {
-    return 0;
+    QApplication app(argc, argv);
+
+    DemoWidget w;
+    w.show();
+
+    return app.exec();
 }
 
 // kate: indent-width 4; replace-tabs on;

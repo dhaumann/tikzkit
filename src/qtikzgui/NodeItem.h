@@ -8,6 +8,8 @@
 #include "tikzgui_export.h"
 #include "TikzItem.h"
 
+#include <Node.h>
+
 class QPainter;
 
 namespace tikzgui
@@ -35,6 +37,11 @@ class TIKZGUI_EXPORT NodeItem : public TikzItem
          * Draw this item.
          */
         virtual void draw(QPainter* painter);
+
+        /**
+         * Returns the pointer to the associated Node.
+         */
+        tikz::Node& node();
 
     private:
         NodeItemPrivate * const d;
