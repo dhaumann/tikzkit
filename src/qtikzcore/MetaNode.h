@@ -2,16 +2,16 @@
 #define TIKZ_METANODE_H
 
 #include "tikz.h"
-#include "Coord.h"
 
+#include <QObject>
 #include <QPointF>
-#include <QString>
 
 namespace tikz
 {
 
 class MetaNodePrivate;
 class Node;
+class Coord;
 
 class MetaNode : public QObject
 {

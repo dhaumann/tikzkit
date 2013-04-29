@@ -1,6 +1,7 @@
 #ifndef TIKZ_PATH_H
 #define TIKZ_PATH_H
 
+#include <QObject>
 #include <QPoint>
 
 #include "tikz_export.h"
@@ -11,14 +12,17 @@ namespace tikz
 
 class PathPrivate;
 class Coord;
+class Edge;
 
-class TIKZCORE_EXPORT Path
+class TIKZCORE_EXPORT Path : public QObject
 {
+    Q_OBJECT
+
     public:
         /**
          * Default constructor.
          */
-        Path();
+        Path(QObject * parent = 0);
 
         /**
          * Virtual destructor.
@@ -29,11 +33,36 @@ class TIKZCORE_EXPORT Path
     // path operations and attributes
     //
     public:
-        Coord* start();
-        Coord* end();
+        /**
+         * Returns the number of nodes in the path.
+         */
+        int nodeCount() const;
 
-        QPointF cachedStart() const;
-        QPointF cachedEnd() const;
+        /**
+         * Returns the i-th node in the path.
+         * @param i node index. If out of range, the return value is 0.
+         */
+        Coord* node(int i);
+
+        /**
+         * Returns the number of edges in the path.
+         * If the path isClosed(), the edge count equals nodeCount() + 1.
+         * If the path is not closed, the edge count equals nodeCount().
+         */
+        int edgeCount() const;
+
+        /**
+         * Returns the i-th edge in the path.
+         * @param i edge index. If out of range, the return value is 0.
+         */
+        Edge* edge(int i);
+
+        /**
+         * The start node.
+         * This return valud is always guaranteed to be valid.
+         */
+        Coord& start();
+        Coord& end();
 
         /**
          * Returns @p true, if the path is closed.

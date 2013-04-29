@@ -22,6 +22,7 @@ set(qtikzcore_HEADERS
     Node.h
     MetaNode.h
     Edge.h
+    Path.h
 )
 
 QT4_WRAP_CPP(qtikzcore_HEADERS_MOC ${qtikzcore_HEADERS})

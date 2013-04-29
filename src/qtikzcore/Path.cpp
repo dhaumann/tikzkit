@@ -1,5 +1,7 @@
 #include "Path.h"
 #include "Coord.h"
+#include "Edge.h"
+#include "MetaNode.h"
 
 #include <QVector>
 
@@ -8,17 +10,14 @@ namespace tikz {
 class PathPrivate
 {
     public:
-        bool closed;
-        QVector<Coord*> coords;
-        
-        QPointF cachedStart;
-        QPointF cachedEnd;
+        QVector<MetaNode*> nodes;
+        QVector<Edge*> edges;
 };
 
-Path::Path()
-    : d(new PathPrivate())
+Path::Path(QObject * parent)
+    : QObject(parent)
+    , d(new PathPrivate())
 {
-    d->closed = false;
 }
 
 Path::~Path()
@@ -26,77 +25,80 @@ Path::~Path()
     delete d;
 }
 
-Coord* Path::start()
+int Path::nodeCount() const
 {
-    if (!d->coords.isEmpty()) {
-        return d->coords.first();
-    }
-    return 0;
+    return d->nodes.count();
 }
 
-Coord* Path::end()
+Coord* Path::node(int i)
 {
-    if (!d->coords.isEmpty()) {
-        return d->coords.last();
-    }
-    return 0;
+    if (i < 0 || i >= d->nodes.count())
+        return 0;
+
+    return &d->nodes[i]->coord();
 }
 
-QPointF Path::cachedStart() const
+int Path::edgeCount() const
 {
-    // if start Coord does not exist, fall back to cache
-    if (!d->coords.isEmpty()) {
-        return d->coords.first()->pos();
-    }
-    return d->cachedStart;
+    return d->edges.count();
 }
 
-QPointF Path::cachedEnd() const
+Edge* Path::edge(int i)
 {
-    // if there are at least two elements, take the last one
-    if (d->coords.size() > 1) {
-        return d->coords.last()->pos();
-    }
-    // assume the end Coord was deleted
-    return d->cachedEnd;
+    if (i < 0 || i >= d->edges.count())
+        return 0;
+
+    return d->edges[i];
+}
+
+Coord& Path::start()
+{
+    Q_ASSERT(!d->nodes.isEmpty());
+
+    return d->nodes.first()->coord();
+}
+
+Coord& Path::end()
+{
+    Q_ASSERT(!d->nodes.isEmpty());
+
+    return d->nodes.last()->coord();
 }
 
 void Path::appendCoord(Coord* coord)
 {
-    d->coords.append(coord);
+//     d->nodes.append(coord);
 }
 
 void Path::removeCoord(Coord* coord)
 {
-    const int index = d->coords.indexOf(coord);
+//     const int index = d->nodes.indexOf(coord);
 
     // if coord is not part of this path, step out
-    if (index < 0) {
-        return;
-    }
+//     if (index < 0) {
+//         return;
+//     }
+    
+    // TODO
 
-    // two special cases where we need to set the cachedStart/cachedEnd
-    if (d->coords.size() == 1) {
-        d->cachedStart = coord->pos();
-    } else if (d->coords.size() == 2) {
-        if (index == 1) {
-            d->cachedEnd = coord->pos();
-        } else {
-            d->cachedEnd = d->coords.first()->pos();
-        }
-    }
-
-    d->coords.remove(index);
+//     d->nodes.remove(index);
 }
 
 bool Path::isClosed() const
 {
-    return d->closed;
+    return edgeCount() == (nodeCount() + 1);
 }
 
 void Path::setClosed(bool closed)
 {
-    d->closed = closed;
+    if (closed == isClosed())
+        return;
+
+    if (closed) {
+        d->edges.append(new Edge(this));
+    } else {
+        d->edges.pop_back();
+    }
 }
 
 }
