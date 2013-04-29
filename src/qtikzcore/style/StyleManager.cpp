@@ -10,7 +10,8 @@ StyleManager* StyleManager::self()
 {
     // if the singleton does not exist, create it
     if (!s_self) {
-        s_self = new StyleManager();
+        new StyleManager();
+        Q_ASSERT(s_self);
     }
 
     return s_self;
@@ -18,6 +19,8 @@ StyleManager* StyleManager::self()
 
 StyleManager::StyleManager()
 {
+    s_self = this;
+
     m_documentStyle = new Style();
     Q_ASSERT(m_documentStyle->parent() == 0);
 }
