@@ -38,6 +38,10 @@ class MetaNode : public QObject
          */
         QPointF anchor(Anchor anchor) const;
 
+        /**
+         * Get the anchor of this node.
+         */
+        Coord & coord() const;
 
     public Q_SLOTS:
         /**

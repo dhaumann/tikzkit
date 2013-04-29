@@ -15,8 +15,6 @@ Node::Node(QObject * parent)
     : Coord(parent)
     , d(new NodePrivate())
 {
-    d->coord = QPointF(0, 0);
-    d->text = QString();
 }
 
 Node::~Node()

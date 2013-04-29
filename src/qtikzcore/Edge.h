@@ -53,14 +53,14 @@ class TIKZCORE_EXPORT Edge : public QObject
     //
     public Q_SLOTS:
         /**
-         * Sets the start coordinate of the edge to @p coord;
+         * Sets the start coordinate of the edge to @p node;
          */
-        void setStart(Coord* coord);
+        void setStart(Node* node);
 
         /**
-         * Sets the end coordinate of the edge to @p coord;
+         * Sets the end coordinate of the edge to @p node;
          */
-        void setEnd(Coord* coord);
+        void setEnd(Node* node);
 
         /**
          * Set the position of the current start node to @p pos.

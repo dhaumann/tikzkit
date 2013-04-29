@@ -39,6 +39,11 @@ QPointF MetaNode::anchor(Anchor anchor) const
                    : d->coord.anchor(anchor);
 }
 
+Coord & MetaNode::coord() const
+{
+    return d->node ? *d->node : d->coord;
+}
+
 void MetaNode::setNode(Node* node)
 {
     // if equal, stop
