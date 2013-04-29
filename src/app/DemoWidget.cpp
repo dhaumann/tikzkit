@@ -35,6 +35,8 @@ void DemoWidget::paintEvent(QPaintEvent * event)
 
     p.scale(20, -20);
     p.translate(width() / 40.0, -height() / 40.0);
+    
+    p.fillRect(QRectF(-10, -10, 20, 20), Qt::white);
 
     m_nodeItem1->draw(&p);
     m_nodeItem2->draw(&p);
