@@ -11,6 +11,7 @@ set(qtikzcore_SOURCES
     Coord.cpp
     Edge.cpp
     Node.cpp
+    MetaNode.cpp
     Path.cpp
     style/Style.cpp
     style/StyleManager.cpp
@@ -18,6 +19,8 @@ set(qtikzcore_SOURCES
 
 set(qtikzcore_HEADERS
     Coord.h
+    Node.h
+    MetaNode.h
     Edge.h
 )
 

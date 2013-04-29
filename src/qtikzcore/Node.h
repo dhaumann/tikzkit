@@ -15,6 +15,8 @@ class Style;
 
 class Node : public Coord
 {
+    Q_OBJECT
+
     public:
         /**
          * Default constructor.
