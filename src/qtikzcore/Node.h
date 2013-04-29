@@ -1,6 +1,7 @@
 #ifndef TIKZ_NODE_H
 #define TIKZ_NODE_H
 
+#include "tikz_export.h"
 #include "tikz.h"
 #include "Coord.h"
 
@@ -13,7 +14,7 @@ namespace tikz
 class NodePrivate;
 class Style;
 
-class Node : public Coord
+class TIKZCORE_EXPORT Node : public Coord
 {
     Q_OBJECT
 
