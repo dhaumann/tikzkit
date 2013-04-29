@@ -59,9 +59,14 @@ class TIKZCORE_EXPORT Path : public QObject
 
         /**
          * The start node.
-         * This return valud is always guaranteed to be valid.
+         * This return value is always guaranteed to be valid.
          */
         Coord& start();
+
+        /**
+         * The end node.
+         * This return value is always guaranteed to be valid.
+         */
         Coord& end();
 
         /**
