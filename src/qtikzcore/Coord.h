@@ -11,6 +11,7 @@ namespace tikz
 {
 
 class CoordPrivate;
+class Node;
 
 class TIKZCORE_EXPORT Coord : public QObject
 {
@@ -26,6 +27,21 @@ class TIKZCORE_EXPORT Coord : public QObject
          * Virtual destructor.
          */
         virtual ~Coord();
+
+    //
+    // convenience functions for Node object
+    //
+    public:
+        /**
+         * Check whether this Coord is a node.
+         */
+        bool isNode() const;
+
+        /**
+         * Convert this Coord to a Node, if possible.
+         * The return value is 0, if the Coord cannot be casted to Node.
+         */
+        Node* toNode();
 
         /**
          * Get the coordinates

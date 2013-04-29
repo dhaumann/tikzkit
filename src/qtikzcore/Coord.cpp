@@ -1,4 +1,5 @@
 #include "Coord.h"
+#include "Node.h"
 
 namespace tikz {
 
@@ -18,6 +19,16 @@ Coord::~Coord()
 {
     emit aboutToDelete(this);
     delete d;
+}
+
+bool Coord::isNode() const
+{
+    return (qobject_cast<const tikz::Node*>(this) != 0);
+}
+
+Node* Coord::toNode()
+{
+    return qobject_cast<tikz::Node*>(this);
 }
 
 const QPointF& Coord::pos() const
