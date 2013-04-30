@@ -11,6 +11,7 @@ set(qtikzgui_SOURCES
 #     TikzEdge.cpp
     TikzNode.cpp
     TikzScene.cpp
+    StyleHelpers.cpp
 )
 
 set(qtikzgui_HEADERS

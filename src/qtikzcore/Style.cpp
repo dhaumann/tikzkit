@@ -19,6 +19,11 @@ public:
     bool fillOpacitySet : 1;
     double fillOpacity;
 
+    bool drawColorSet : 1;
+    QColor drawColor;
+    bool fillColorSet : 1;
+    QColor fillColor;
+
     // Node styles
     Shape shape;
 
@@ -34,8 +39,14 @@ Style::Style()
     d->drawOpacitySet = false;
     d->fillOpacitySet = false;
 
+    d->drawColorSet = false;
+    d->fillColorSet = false;
+
     d->drawOpacity = 1.0;
     d->fillOpacity = 1.0;
+
+    d->drawColor = Qt::black;
+    d->fillColor = QColor();
 
     d->shape = ShapeUnset;
 
@@ -59,6 +70,11 @@ Style *Style::parent() const
 void Style::setParent(Style *parent)
 {
     d->parent = parent;
+}
+
+bool Style::isDocumentStyle() const
+{
+    return d->parent == 0;
 }
 
 PenStyle Style::penStyle() const
@@ -124,6 +140,16 @@ double Style::fillOpacity() const
     }
 
     return 1.0;
+}
+
+QColor Style::drawColor() const
+{
+    return Qt::black;
+}
+
+QColor Style::fillColor() const
+{
+    return Qt::black;
 }
 
 }

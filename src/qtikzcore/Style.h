@@ -3,6 +3,8 @@
 
 #include "tikz.h"
 
+#include <QColor>
+
 namespace tikz {
 
 class StylePrivate;
@@ -34,6 +36,12 @@ class Style
          */
         void setParent(Style *parent);
 
+        /**
+         * Returns @p true, if this style is the one of the tikzpicture.
+         * This equals parent() == 0.
+         */
+        bool isDocumentStyle() const;
+
     //
     // common style attributes of nodes and paths
     //
@@ -55,6 +63,9 @@ class Style
          */
         double drawOpacity() const;
         double fillOpacity() const;
+
+        QColor drawColor() const;
+        QColor fillColor() const;
 
     // TODO: pen color
     //  fill color

@@ -31,8 +31,30 @@ int main(int argc, char* argv[])
     view.scale(20, 20);
     view.show();
     view.scene()->addRect(0, 0, 5, 5)->setBrush(QBrush(Qt::blue));
+
     TikzNode* item = new TikzNode();
-    item->node().setText("!");
+    item->node().setText("1");
+    item->node().setPos(QPointF(0, 0));
+    view.scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("2");
+    item->node().setPos(QPointF(1, 1));
+    view.scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("3");
+    item->node().setPos(QPointF(2, 2));
+    view.scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("4");
+    item->node().setPos(QPointF(3, 3));
+    view.scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("5");
+    item->node().setPos(QPointF(4, 4));
     view.scene()->addItem(item);
 
     return app.exec();

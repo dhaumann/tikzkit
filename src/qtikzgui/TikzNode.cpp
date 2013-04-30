@@ -1,5 +1,6 @@
 #include "TikzNode.h"
 #include "Style.h"
+#include "StyleHelpers.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -16,6 +17,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     , d(new TikzNodePrivate())
 {
     d->node = new tikz::Node(this);
+    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
@@ -39,17 +41,14 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    QPen pen(Qt::green);
-    painter->setPen(pen);
+    StyleHelper sh(d->node->style());
+    painter->setPen(sh.pen());
 
     QBrush brush(Qt::yellow);
     painter->setBrush(brush);
 
     QRectF br = boundingRect();
     painter->drawRect(br);
-
-    pen.setColor(Qt::black);
-    painter->setPen(pen);
 
     painter->resetTransform();
 
@@ -115,4 +114,11 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
     return QGraphicsObject::itemChange(change, value);
 }
 
+void TikzNode::slotSetPos(const QPointF& pos)
+{
+    disconnect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+    setPos(pos);
+    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+
+}
 // kate: indent-width 4; replace-tabs on;

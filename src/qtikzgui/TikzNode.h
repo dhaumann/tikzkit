@@ -68,6 +68,9 @@ class TIKZGUI_EXPORT TikzNode : public QGraphicsObject
     protected:
         virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
+    protected Q_SLOTS:
+        void slotSetPos(const QPointF& pos);
+
     private:
         TikzNodePrivate * const d;
 };
