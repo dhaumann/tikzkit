@@ -1,19 +1,19 @@
-#include "NodeItem.h"
+#include "TikzNode.h"
 #include "Style.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
-class NodeItemPrivate
+class TikzNodePrivate
 {
     public:
         tikz::Node* node;
 };
 
-NodeItem::NodeItem(QGraphicsItem * parent)
+TikzNode::TikzNode(QGraphicsItem * parent)
     : QGraphicsObject(parent)
-    , d(new NodeItemPrivate())
+    , d(new TikzNodePrivate())
 {
     d->node = new tikz::Node(this);
 
@@ -21,17 +21,17 @@ NodeItem::NodeItem(QGraphicsItem * parent)
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
 }
 
-NodeItem::~NodeItem()
+TikzNode::~TikzNode()
 {
     delete d;
 }
 
-tikz::Node& NodeItem::node()
+tikz::Node& TikzNode::node()
 {
     return *d->node;
 }
 
-void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -73,7 +73,7 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->restore();
 }
     
-QRectF NodeItem::boundingRect() const
+QRectF TikzNode::boundingRect() const
 {
     // TODO: call prepareGeometryChange() whenever the geometry changes via the style
     qreal lineWidth = d->node->style().lineWidth() == tikz::Thick ? 2 : 1;
@@ -90,14 +90,14 @@ QRectF NodeItem::boundingRect() const
     return br;
 }
 
-QPainterPath NodeItem::shape() const
+QPainterPath TikzNode::shape() const
 {
     QPainterPath path;
     path.addRect(boundingRect());
     return path;
 }
 
-QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant & value)
+QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 {
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();

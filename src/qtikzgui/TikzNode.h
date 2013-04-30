@@ -1,5 +1,5 @@
-#ifndef TIKZGUI_NODEITEM_H
-#define TIKZGUI_NODEITEM_H
+#ifndef TIKZ_NODE_ITEM_H
+#define TIKZ_NODE_ITEM_H
 
 #include "tikzgui_export.h"
 
@@ -9,10 +9,10 @@
 
 class QPainter;
 
-class NodeItemPrivate;
+class TikzNodePrivate;
 class Style;
 
-class TIKZGUI_EXPORT NodeItem : public QGraphicsObject
+class TIKZGUI_EXPORT TikzNode : public QGraphicsObject
 {
     Q_OBJECT
 
@@ -20,12 +20,12 @@ class TIKZGUI_EXPORT NodeItem : public QGraphicsObject
         /**
          * Default constructor.
          */
-        NodeItem(QGraphicsItem * parent = 0);
+        TikzNode(QGraphicsItem * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~NodeItem();
+        virtual ~TikzNode();
 
         /**
          * Returns the pointer to the associated Node.
@@ -69,9 +69,9 @@ class TIKZGUI_EXPORT NodeItem : public QGraphicsObject
         virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
     private:
-        NodeItemPrivate * const d;
+        TikzNodePrivate * const d;
 };
 
-#endif // TIKZGUI_NODEITEM_H
+#endif // TIKZ_NODE_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

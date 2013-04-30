@@ -1,4 +1,4 @@
-#include "EdgeItem.h"
+#include "TikzEdge.h"
 
 #include <QPainter>
 
@@ -6,25 +6,25 @@
 
 namespace tikzgui {
 
-class EdgeItemPrivate
+class TikzEdgePrivate
 {
     public:
         tikz::Edge* edge;
 };
 
-EdgeItem::EdgeItem(QObject * parent)
+TikzEdge::TikzEdge(QObject * parent)
     : TikzItem(parent)
-    , d(new EdgeItemPrivate())
+    , d(new TikzEdgePrivate())
 {
     d->edge = new tikz::Edge(this);
 }
 
-EdgeItem::~EdgeItem()
+TikzEdge::~TikzEdge()
 {
     delete d;
 }
 
-void EdgeItem::draw(QPainter* painter)
+void TikzEdge::draw(QPainter* painter)
 {
     painter->save();
     
@@ -33,7 +33,7 @@ void EdgeItem::draw(QPainter* painter)
     painter->restore();
 }
 
-tikz::Edge& EdgeItem::edge()
+tikz::Edge& TikzEdge::edge()
 {
     return *d->edge;
 }

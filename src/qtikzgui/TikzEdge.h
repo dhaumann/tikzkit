@@ -1,5 +1,5 @@
-#ifndef TIKZGUI_EDGEITEM_H
-#define TIKZGUI_EDGEITEM_H
+#ifndef GUI_TIKZ_EDGE_ITEM_H
+#define GUI_TIKZ_EDGE_ITEM_H
 
 #include <QObject>
 #include <QPointF>
@@ -15,10 +15,10 @@ class QPainter;
 namespace tikzgui
 {
 
-class EdgeItemPrivate;
+class TikzEdgePrivate;
 class Style;
 
-class TIKZGUI_EXPORT EdgeItem : public TikzItem
+class TIKZGUI_EXPORT TikzEdge : public TikzItem
 {
     Q_OBJECT
 
@@ -26,12 +26,12 @@ class TIKZGUI_EXPORT EdgeItem : public TikzItem
         /**
          * Default constructor.
          */
-        EdgeItem(QObject * parent = 0);
+        TikzEdge(QObject * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~EdgeItem();
+        virtual ~TikzEdge();
 
         /**
          * Draw this item.
@@ -44,11 +44,11 @@ class TIKZGUI_EXPORT EdgeItem : public TikzItem
         tikz::Edge& edge();
 
     private:
-        EdgeItemPrivate * const d;
+        TikzEdgePrivate * const d;
 };
 
 }
 
-#endif // TIKZGUI_EDGEITEM_H
+#endif // GUI_TIKZ_EDGE_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;
