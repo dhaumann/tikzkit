@@ -7,8 +7,8 @@ class TikzItemPrivate
     public:
 };
 
-TikzItem::TikzItem(QObject * parent)
-    : QObject(parent)
+TikzItem::TikzItem(QGraphicsItem * parent)
+    : QGraphicsObject(parent)
     , d(new TikzItemPrivate())
 {
 }

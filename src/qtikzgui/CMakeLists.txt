@@ -9,14 +9,16 @@ include_directories(
 
 set(qtikzgui_SOURCES
     TikzItem.cpp
-    NodeItem.cpp
-    EdgeItem.cpp
+#     NodeItem.cpp
+#     EdgeItem.cpp
+    TikzScene.cpp
 )
 
 set(qtikzgui_HEADERS
     TikzItem.h
-    NodeItem.h
-    EdgeItem.h
+#     NodeItem.h
+#     EdgeItem.h
+    TikzScene.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
