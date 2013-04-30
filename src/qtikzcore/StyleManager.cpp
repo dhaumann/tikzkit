@@ -21,6 +21,7 @@ StyleManager::StyleManager()
 {
     s_self = this;
 
+    m_documentStyle = 0;
     m_documentStyle = new Style();
     Q_ASSERT(m_documentStyle->parent() == 0);
 }

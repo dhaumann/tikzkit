@@ -1,6 +1,7 @@
 #include <QApplication>
 // #include "DemoWidget.h"
 #include "TikzScene.h"
+#include "NodeItem.h"
 
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
@@ -20,12 +21,19 @@ int main(int argc, char* argv[])
     w2.show();
     QGraphicsView view(&w2);
     l->addWidget(&view);
-    view.setScene(new TikzScene());
+    
+    TikzScene* scene = new TikzScene();
+    view.setScene(scene);
+
     view.resize(w2.size());
     view.setSceneRect(0, 0, view.size().width(), view.size().height());
     view.rotate(5);
+    view.scale(20, 20);
     view.show();
-    view.scene()->addRect(0, 0, 25, 25)->setBrush(QBrush(Qt::blue));
+    view.scene()->addRect(0, 0, 5, 5)->setBrush(QBrush(Qt::blue));
+    NodeItem* item = new NodeItem();
+    item->node().setText("!");
+    view.scene()->addItem(item);
 
     return app.exec();
 }

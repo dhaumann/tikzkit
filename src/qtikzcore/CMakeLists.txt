@@ -4,7 +4,6 @@ find_package(Qt4 REQUIRED)
 
 include_directories(
     .
-    style
 )
 
 set(qtikzcore_SOURCES
@@ -13,8 +12,8 @@ set(qtikzcore_SOURCES
     Node.cpp
     MetaNode.cpp
     Path.cpp
-    style/Style.cpp
-    style/StyleManager.cpp
+    Style.cpp
+    StyleManager.cpp
 )
 
 set(qtikzcore_HEADERS

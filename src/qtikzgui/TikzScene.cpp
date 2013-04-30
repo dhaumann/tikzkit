@@ -22,7 +22,7 @@ TikzScene::TikzScene(QObject * parent)
     : QGraphicsScene(parent)
     , d(new TikzScenePrivate())
 {
-    d->subDivisions = 25;
+    d->subDivisions = 1;
 }
 
 void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
@@ -38,6 +38,7 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 	lines.append(QLineF(rect.left(), y, rect.right(), y));
 
     painter->save();
+    painter->setRenderHints(QPainter::Antialiasing);
     painter->setPen(Qt::gray);
     painter->drawLines(lines.data(), lines.size());
     painter->restore();
