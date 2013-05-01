@@ -1,24 +1,17 @@
 #ifndef GUI_TIKZ_EDGE_ITEM_H
 #define GUI_TIKZ_EDGE_ITEM_H
 
-#include <QObject>
-#include <QPointF>
-#include <QString>
-
 #include "tikzgui_export.h"
-#include "TikzItem.h"
+#include <QGraphicsObject>
 
 #include <Edge.h>
 
 class QPainter;
 
-namespace tikzgui
-{
-
 class TikzEdgePrivate;
 class Style;
 
-class TIKZGUI_EXPORT TikzEdge : public TikzItem
+class TIKZGUI_EXPORT TikzEdge :  public QGraphicsObject
 {
     Q_OBJECT
 
@@ -26,7 +19,7 @@ class TIKZGUI_EXPORT TikzEdge : public TikzItem
         /**
          * Default constructor.
          */
-        TikzEdge(QObject * parent = 0);
+        TikzEdge(QGraphicsItem * parent = 0);
 
         /**
          * Destructor
@@ -34,20 +27,35 @@ class TIKZGUI_EXPORT TikzEdge : public TikzItem
         virtual ~TikzEdge();
 
         /**
-         * Draw this item.
-         */
-        virtual void draw(QPainter* painter);
-
-        /**
          * Returns the pointer to the associated Edge.
          */
         tikz::Edge& edge();
 
+    //
+    // reimplemented from QGraphicsItem
+    //
+    public:
+        /**
+         * Paint this item.
+         */
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+        /**
+         * Returns the bounding rect of this item.
+         */
+        QRectF boundingRect() const;
+
+        /**
+         * Returns an exact shape as painter path
+         */
+        QPainterPath shape() const;
+
+    private Q_SLOTS:
+        void slotUpdate();
+
     private:
         TikzEdgePrivate * const d;
 };
-
-}
 
 #endif // GUI_TIKZ_EDGE_ITEM_H
 

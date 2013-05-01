@@ -47,13 +47,13 @@ DemoWidget::DemoWidget()
     m_view->show();
     m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
 
-    TikzNode* item = new TikzNode();
-    item->node().setText("1");
-    item->node().setPos(QPointF(0, 0));
-    item->node().style().setLineWidth(tikz::VeryThin);
-    m_view->scene()->addItem(item);
+    TikzNode* itema = new TikzNode();
+    itema->node().setText("1");
+    itema->node().setPos(QPointF(0, 0));
+    itema->node().style().setLineWidth(tikz::VeryThin);
+    m_view->scene()->addItem(itema);
 
-    item = new TikzNode();
+    TikzNode* item = new TikzNode();
     item->node().setText("2");
     item->node().setPos(QPointF(1, 1));
     item->node().style().setLineWidth(tikz::Thin);
@@ -76,6 +76,12 @@ DemoWidget::DemoWidget()
     item->node().setPos(QPointF(4, 4));
     item->node().style().setLineWidth(tikz::UltraThick);
     m_view->scene()->addItem(item);
+
+    // an edge
+    TikzEdge* edge = new TikzEdge();
+    edge->edge().setStart(&itema->node());
+    edge->edge().setEnd(&item->node());
+    m_view->scene()->addItem(edge);
 }
 
 DemoWidget::~DemoWidget()

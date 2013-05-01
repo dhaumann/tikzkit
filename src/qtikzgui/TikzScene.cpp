@@ -46,8 +46,8 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 
 void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-//     QGraphicsScene::mousePressEvent(mouseEvent);
-//     return;
+    QGraphicsScene::mousePressEvent(mouseEvent);
+    return;
     QGraphicsItem* item = qgraphicsitem_cast<QGraphicsItem*>(itemAt(mouseEvent->scenePos(), QTransform()));
     if (item && item->flags() & QGraphicsItem::ItemIsMovable)
         d->dragged = item;
@@ -59,8 +59,8 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-//     QGraphicsScene::mouseMoveEvent(mouseEvent);
-//     return;
+    QGraphicsScene::mouseMoveEvent(mouseEvent);
+    return;
     if (d->dragged) {
 	// Ensure that the item's offset from the mouse cursor stays the same.
 	d->dragged->setPos(mouseEvent->scenePos() - d->dragOffset);
@@ -70,8 +70,8 @@ void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-//     QGraphicsScene::mouseReleaseEvent(mouseEvent);
-//     return;
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
+    return;
     if (d->dragged) {
 	int x = floor(mouseEvent->scenePos().x() / d->subDivisions) * d->subDivisions;
 	int y = floor(mouseEvent->scenePos().y() / d->subDivisions) * d->subDivisions;

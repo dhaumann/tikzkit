@@ -44,6 +44,8 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 //     QRectF textRect = d->textItem->boundingRect();
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+
     Text *text = new Text(this);
     text->setFlag(QGraphicsItem::ItemIsMovable, false);
     text->setFlag(QGraphicsItem::ItemIsSelectable, false);
@@ -151,10 +153,12 @@ QPainterPath TikzNode::shape() const
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 {
+//     qDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
+        qDebug() << newPos;
         d->node->setPos(newPos);
-        d->textItem->setPos(newPos);
+//         d->textItem->setPos(newPos);
         QRectF rect = scene()->sceneRect();
         if (!rect.contains(newPos)) {
             // keep the item inside the scene rect
