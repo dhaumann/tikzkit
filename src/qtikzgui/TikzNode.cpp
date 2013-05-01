@@ -48,7 +48,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(d->node->style());
+    PaintHelper sh(*painter, d->node->style());
     QPen p = sh.pen();
     qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
 //     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
@@ -99,8 +99,8 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 QRectF TikzNode::boundingRect() const
 {
     // TODO: call prepareGeometryChange() whenever the geometry changes via the style
-    PaintHelper sh(d->node->style());
-    qreal lineWidth = sh.lineWidth();
+//     PaintHelper sh(d->node->style());
+    qreal lineWidth = 2; //sh.lineWidth();
     
     QRectF br(0.5, 0.5, 1.0, 1.0);
 

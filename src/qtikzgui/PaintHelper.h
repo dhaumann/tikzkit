@@ -16,7 +16,7 @@ class PaintHelper
         /**
          * Default constructor.
          */
-        PaintHelper(tikz::Style & style);
+        PaintHelper(QPainter & p, tikz::Style & style);
 
         /**
          * Destructor

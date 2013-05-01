@@ -10,11 +10,11 @@ include_directories(
 
 set(qtikz_SOURCES
     main.cpp
-#     DemoWidget.cpp
+    DemoWidget.cpp
 )
 
 set(qtikz_HEADERS
-#     DemoWidget.h
+    DemoWidget.h
 )
 
 QT4_WRAP_CPP(qtikz_HEADERS_MOC ${qtikz_HEADERS})

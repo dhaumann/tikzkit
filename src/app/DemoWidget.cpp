@@ -1,48 +1,90 @@
 #include "DemoWidget.h"
 
-#include "NodeItem.h"
-#include "EdgeItem.h"
+#include "TikzNode.h"
+#include "TikzEdge.h"
+#include "TikzScene.h"
 
-#include <QPainter>
+#include <QHBoxLayout>
+#include <QGraphicsView>
+#include <QSlider>
+#include <QDebug>
 
 DemoWidget::DemoWidget()
     : QWidget()
 {
-    m_nodeItem1 = new tikzgui::NodeItem(this);
-    m_nodeItem1->node().setPos(QPointF(0, 0));
-    m_nodeItem1->node().setText("/");
+    QHBoxLayout* l = new QHBoxLayout(this);
+    m_view = new QGraphicsView(this);
+    l->addWidget(m_view);
 
-    m_nodeItem2 = new tikzgui::NodeItem(this);
-    m_nodeItem2->node().setPos(QPointF(4, 0));
-    m_nodeItem2->node().setText("x");
+    m_zoomSlider = new QSlider(this);
+    m_zoomSlider->setRange(100, 500);
+    l->addWidget(m_zoomSlider);
 
-    m_edgeItem = new tikzgui::EdgeItem(this);
-    m_edgeItem->edge().setStart(&m_nodeItem1->node());
-    m_edgeItem->edge().setEnd(&m_nodeItem2->node());
+    m_rotSlider = new QSlider(this);
+    m_rotSlider->setRange(0, 360);
+    l->addWidget(m_rotSlider);
+
+    connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
+    connect(m_rotSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
+
+    TikzScene* scene = new TikzScene();
+    m_view->setScene(scene);
+
+    m_view->setSceneRect(0, 0, m_view->size().width(), m_view->size().height());
+    m_view->rotate(5);
+//     QTransform t;
+//     t.rotate(5);
+//     t.scale(20, 20);
+    const qreal xScale = m_view->physicalDpiX() / 2.540;
+    const qreal yScale = m_view->physicalDpiY() / 2.540;
+    qDebug() << xScale << yScale;
+    m_view->scale(xScale, yScale);
+
+//     m_view->setTransform(t);
+//     m_view->scale(20, 20);
+    m_view->show();
+    m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
+
+    TikzNode* item = new TikzNode();
+    item->node().setText("1");
+    item->node().setPos(QPointF(0, 0));
+    m_view->scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("2");
+    item->node().setPos(QPointF(1, 1));
+    m_view->scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("3");
+    item->node().setPos(QPointF(2, 2));
+    m_view->scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("4");
+    item->node().setPos(QPointF(3, 3));
+    m_view->scene()->addItem(item);
+
+    item = new TikzNode();
+    item->node().setText("5");
+    item->node().setPos(QPointF(4, 4));
+    m_view->scene()->addItem(item);
 }
 
 DemoWidget::~DemoWidget()
 {
 }
 
-void DemoWidget::paintEvent(QPaintEvent * event)
+void DemoWidget::updateTransform()
 {
-    Q_UNUSED(event);
-    
-    QPainter p(this);
-    
-    p.setRenderHints(QPainter::Antialiasing);
+    qreal rot = m_rotSlider->value();
+    qreal scale = m_zoomSlider->value() / 10.0;
 
-    p.scale(20, -20);
-    p.translate(width() / 40.0, -height() / 40.0);
-    
-    p.fillRect(QRectF(-10, -10, 20, 20), Qt::white);
+    QTransform trans;
+    trans.rotate(rot);
+    trans.scale(scale, scale);
 
-    m_nodeItem1->draw(&p);
-    m_nodeItem2->draw(&p);
-    m_edgeItem->draw(&p);
-
-    p.end();
+    m_view->setTransform(trans);
 }
 
 // kate: indent-width 4; replace-tabs on;

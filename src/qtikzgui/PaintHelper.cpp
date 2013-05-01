@@ -1,16 +1,30 @@
-#include "PaintHelpers.h"
+#include "PaintHelper.h"
 #include "Style.h"
 #include "tikz.h"
 
 class PaintHelperPrivate
 {
     public:
+        QPainter* painter;
         tikz::Style* style;
+
+    //
+    // private helper functions
+    //
+    public:
+        qreal lineWidth() const
+        {
+//             qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
+            //     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
+//             p.setWidthF(p.widthF() * oneMilliMeter / painter->device()->physicalDpiX() * 2.54);
+            return 0.1;
+        }
 };
 
-PaintHelper::PaintHelper(tikz::Style & style)
+PaintHelper::PaintHelper(QPainter & painter, tikz::Style & style)
     : d(new PaintHelperPrivate())
 {
+    d->painter = &painter;
     d->style = &style;
 }
 
@@ -35,7 +49,7 @@ qreal PaintHelper::lineWidth() const
         case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
         default: break;
     }
-    return pt * mm;
+    return pt * mm * d->lineWidth();
 }
 
 Qt::PenStyle PaintHelper::penStyle() const

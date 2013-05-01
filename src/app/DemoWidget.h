@@ -3,10 +3,8 @@
 
 #include <QWidget>
 
-namespace tikzgui {
-    class NodeItem;
-    class EdgeItem;
-}
+class QGraphicsView;
+class QSlider;
 
 class DemoWidget : public QWidget
 {
@@ -23,13 +21,13 @@ class DemoWidget : public QWidget
          */
         virtual ~DemoWidget();
 
-    protected:
-        virtual void paintEvent(QPaintEvent * event);
+    public Q_SLOTS:
+        void updateTransform();
 
     private:
-        tikzgui::NodeItem* m_nodeItem1;
-        tikzgui::NodeItem* m_nodeItem2;
-        tikzgui::EdgeItem* m_edgeItem;
+        QGraphicsView* m_view;
+        QSlider* m_zoomSlider;
+        QSlider* m_rotSlider;
 };
 
 #endif // DEMO_WIDGET_H
