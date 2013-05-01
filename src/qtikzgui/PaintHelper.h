@@ -1,5 +1,5 @@
-#ifndef TIKZ_STYLE_HELPERS_H
-#define TIKZ_STYLE_HELPERS_H
+#ifndef TIKZ_PAINT_HELPER_H
+#define TIKZ_PAINT_HELPER_H
 
 #include <Qt>
 #include <QPen>
@@ -8,20 +8,20 @@ namespace tikz {
     class Style;
 }
 
-class StyleHelperPrivate;
+class PaintHelperPrivate;
 
-class StyleHelper
+class PaintHelper
 {
     public:
         /**
          * Default constructor.
          */
-        StyleHelper(tikz::Style & style);
+        PaintHelper(tikz::Style & style);
 
         /**
          * Destructor
          */
-        ~StyleHelper();
+        ~PaintHelper();
 
     //
     // pen helpers
@@ -43,9 +43,9 @@ class StyleHelper
         QPen pen() const;
 
     private:
-        StyleHelperPrivate * const d;
+        PaintHelperPrivate * const d;
 };
 
-#endif // TIKZ_STYLE_HELPERS_H
+#endif // TIKZ_PAINT_HELPER_H
 
 // kate: indent-width 4; replace-tabs on;

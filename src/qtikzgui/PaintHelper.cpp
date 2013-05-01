@@ -1,41 +1,44 @@
-#include "StyleHelpers.h"
+#include "PaintHelpers.h"
 #include "Style.h"
 #include "tikz.h"
 
-class StyleHelperPrivate
+class PaintHelperPrivate
 {
     public:
         tikz::Style* style;
 };
 
-StyleHelper::StyleHelper(tikz::Style & style)
-    : d(new StyleHelperPrivate())
+PaintHelper::PaintHelper(tikz::Style & style)
+    : d(new PaintHelperPrivate())
 {
     d->style = &style;
 }
 
-StyleHelper::~StyleHelper()
+PaintHelper::~PaintHelper()
 {
     delete d;
 }
 
-qreal StyleHelper::lineWidth() const
+qreal PaintHelper::lineWidth() const
 {
+    // 1pt =  0.3527 mm, see http://en.wikipedia.org/wiki/Point_(typography)
+    const qreal mm = 0.3527;
+    qreal pt = 0.0;
     switch (d->style->lineWidth()) {
-        case tikz::WidthUnset: return 0.0;
-        case tikz::UltraThin: return 0.5;
-        case tikz::VeryThin: return 0.7;
-        case tikz::Thin: return 0.9;
-        case tikz::SemiThick: return 1.0;
-        case tikz::Thick: return 1.1;
-        case tikz::VeryThick: return 1.3;
-        case tikz::UltraThick: return 1.5;
+        case tikz::WidthUnset: pt = 0.0; break;
+        case tikz::UltraThin : pt = 0.1; break; // 0.03527 mm
+        case tikz::VeryThin  : pt = 0.2; break; // 0.07054 mm
+        case tikz::Thin      : pt = 0.4; break; // 0.14108 mm
+        case tikz::SemiThick : pt = 0.6; break; // 0.21162 mm
+        case tikz::Thick     : pt = 0.8; break; // 0.28216 mm
+        case tikz::VeryThick : pt = 1.2; break; // 0.42324 mm
+        case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
         default: break;
     }
-    return 0.0;
+    return pt * mm;
 }
 
-Qt::PenStyle StyleHelper::penStyle() const
+Qt::PenStyle PaintHelper::penStyle() const
 {
     switch (d->style->lineWidth()) {
         case tikz::PenUnset: return Qt::NoPen;
@@ -58,7 +61,7 @@ Qt::PenStyle StyleHelper::penStyle() const
     return Qt::NoPen;
 }
 
-QPen StyleHelper::pen() const
+QPen PaintHelper::pen() const
 {
     // invalid color -> NoPen
     QColor c = d->style->drawColor();
