@@ -16,6 +16,20 @@ class TikzNodePrivate
         QGraphicsTextItem* textItem;
 };
 
+class Text : public QGraphicsSimpleTextItem {
+public:
+    Text(QGraphicsItem* parent = 0) : QGraphicsSimpleTextItem(parent){}
+
+    QRectF boundingRect() const {
+        QRectF br = QGraphicsSimpleTextItem::boundingRect();
+        return br.translated(-br.width()/2, -br.height()/2);
+    }
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) {
+        painter->translate(-boundingRect().width()/2, -boundingRect().height()/2);
+        QGraphicsSimpleTextItem::paint(painter, option, widget);
+    }
+};
+
 TikzNode::TikzNode(QGraphicsItem * parent)
     : QGraphicsObject(parent)
     , d(new TikzNodePrivate())
@@ -25,9 +39,23 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
-    d->textItem = new QGraphicsTextItem("a", this);
-    d->textItem->scale(25.4 / 101 / 3.97, 25.4 / 101 / 3.97);
-    d->textItem->rotate(-5);
+//     d->textItem = new QGraphicsTextItem("a", this);
+//     d->textItem->scale(25.4 / 101 / 3.97, 25.4 / 101 / 3.97);
+//     QRectF textRect = d->textItem->boundingRect();
+
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    Text *text = new Text(this);
+    text->setFlag(QGraphicsItem::ItemIsMovable, false);
+    text->setFlag(QGraphicsItem::ItemIsSelectable, false);
+    text->scale(25.4 / 101 / 3.97, 25.4 / 101 / 3.97);
+    text->setText("a");
+    text->setPos(boundingRect().center());
+
+//     qDebug() << textRect.center();
+//     QPointF c = textRect.center();
+//     c.setY(0);
+//     d->textItem->setPos(d->textItem->mapToScene(c));
+//     d->textItem->rotate(-5);
 }
 
 TikzNode::~TikzNode()
@@ -50,9 +78,9 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     PaintHelper sh(*painter, d->node->style());
     QPen p = sh.pen();
-    qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
+//     qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
 //     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
-    p.setWidthF(p.widthF() * oneMilliMeter / painter->device()->physicalDpiX() * 2.54);
+//     p.setWidthF(p.widthF() * oneMilliMeter / painter->device()->physicalDpiX() * 2.54);
     painter->setPen(p);
 
     QBrush brush(Qt::yellow);
