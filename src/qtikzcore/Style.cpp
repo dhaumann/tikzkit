@@ -103,6 +103,11 @@ LineWidth Style::lineWidth() const
     return SemiThick;
 }
 
+void Style::setLineWidth(LineWidth lineWidth)
+{
+    d->lineWidth = lineWidth;
+}
+
 Shape Style::shape() const
 {
     if (d->shape != ShapeUnset) {

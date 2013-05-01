@@ -3,6 +3,8 @@
 #include "TikzNode.h"
 #include "TikzEdge.h"
 #include "TikzScene.h"
+#include "Style.h"
+#include "tikz.h"
 
 #include <QHBoxLayout>
 #include <QGraphicsView>
@@ -48,26 +50,31 @@ DemoWidget::DemoWidget()
     TikzNode* item = new TikzNode();
     item->node().setText("1");
     item->node().setPos(QPointF(0, 0));
+    item->node().style().setLineWidth(tikz::VeryThin);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("2");
     item->node().setPos(QPointF(1, 1));
+    item->node().style().setLineWidth(tikz::Thin);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("3");
     item->node().setPos(QPointF(2, 2));
+    item->node().style().setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("4");
     item->node().setPos(QPointF(3, 3));
+    item->node().style().setLineWidth(tikz::Thick);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("5");
     item->node().setPos(QPointF(4, 4));
+    item->node().style().setLineWidth(tikz::UltraThick);
     m_view->scene()->addItem(item);
 }
 

@@ -59,6 +59,13 @@ class Style
         LineWidth lineWidth() const;
 
         /**
+         * Set the line width.
+         * @p width the line width
+         * @see Linewidth
+         */
+        void setLineWidth(LineWidth lineWidth);
+
+        /**
          * The the draw opacity.
          */
         double drawOpacity() const;
