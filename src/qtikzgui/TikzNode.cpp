@@ -35,7 +35,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     , d(new TikzNodePrivate())
 {
     d->node = new tikz::Node(this);
-//     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
