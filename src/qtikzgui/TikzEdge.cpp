@@ -18,6 +18,22 @@ class TikzEdgePrivate
         tikz::Edge* edge;
         TikzNode* start;
         TikzNode* end;
+
+    //
+    // helper functions
+    //
+    public:
+        void drawArrow(QPainter* painter, const QPointF& arrowHead, qreal rad)
+        {
+            // TODO: fix style of arrow head
+            const qreal arrowSize = 0.3; // TODO: fix size of arrow head
+            QPointF sourceArrowP1 = arrowHead + QPointF(sin(rad + M_PI - M_PI / 3) * arrowSize,
+                                                        cos(rad + M_PI - M_PI / 3) * arrowSize);
+            QPointF sourceArrowP2 = arrowHead + QPointF(sin(rad + M_PI / 3) * arrowSize,
+                                                        cos(rad + M_PI / 3) * arrowSize);
+            painter->setBrush(Qt::black);
+            painter->drawPolygon(QPolygonF() << arrowHead << sourceArrowP1 << sourceArrowP2);
+        }
 };
 
 TikzEdge::TikzEdge(QGraphicsItem * parent)
@@ -73,15 +89,21 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-//     PaintHelper sh(*painter, d->edge->style());
-//     QPen p = sh.pen();
-//     painter->setPen(p);
+    PaintHelper sh(*painter, d->edge->style());
+    QPen p = sh.pen();
+    painter->setPen(p);
 
     QPointF diff(d->edge->end().pos() - d->edge->start().pos());
     const qreal radAngle = std::atan2(diff.y(), diff.x());
-    painter->drawLine(mapFromScene(d->edge->start().anchor(tikz::Center, radAngle)),
-                      mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI)));
-    painter->drawRect(boundingRect());
+    QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
+    QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
+    painter->drawLine(startAnchor, endAnchor);
+    d->drawArrow(painter, startAnchor, -radAngle);
+    d->drawArrow(painter, endAnchor, -radAngle - M_PI);
+
+    // debug: draw bounding rect:
+    //painter->drawRect(boundingRect());
+
     // TODO: highlight selection
     //     if (option->state & QStyle::State_Selected)
     //         qt_graphicsItem_highlightSelected(this, painter, option);
