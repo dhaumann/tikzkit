@@ -100,7 +100,7 @@ void DemoWidget::updateTransform()
 
     QTransform trans;
     trans.rotate(rot);
-    trans.scale(scale, scale);
+    trans.scale(scale, -scale);
 
     m_view->setTransform(trans);
 }
