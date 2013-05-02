@@ -55,6 +55,14 @@ class TIKZGUI_EXPORT TikzEdge :  public QGraphicsObject
          */
         QPainterPath shape() const;
 
+    //
+    // Mouse handling
+    //
+    protected:
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
     private Q_SLOTS:
         void slotUpdate();
 

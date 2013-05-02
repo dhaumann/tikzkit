@@ -7,6 +7,8 @@
 #include <QGraphicsView>
 #include <QTextLayout>
 #include <QGraphicsTextItem>
+#include <QStyle>
+#include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
 class TikzNodePrivate
@@ -46,6 +48,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     Text *text = new Text(this);
     text->setFlag(QGraphicsItem::ItemIsMovable, false);
@@ -133,9 +136,10 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     painter->drawText(textRect, Qt::AlignCenter, d->node->text());
 
     // TODO: highlight selection
-//     if (option->state & QStyle::State_Selected)
+    qDebug() << (bool)(option->state & QStyle::State_Selected);
 //         qt_graphicsItem_highlightSelected(this, painter, option);
 
+qDebug() << isSelected();
     painter->restore();
 }
     

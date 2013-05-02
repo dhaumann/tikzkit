@@ -8,6 +8,7 @@
 #include <QGraphicsTextItem>
 #include <QDebug>
 #include <PaintHelper.h>
+#include <QGraphicsSceneMouseEvent>
 
 #include <Coord.h>
 #include <cmath>
@@ -118,12 +119,13 @@ QRectF TikzEdge::boundingRect() const
     qreal lineWidth = 2; //sh.lineWidth();
 
 //     QRectF br(mapFromScene(d->edge->start().pos()), mapFromScene(d->edge->end().pos()));
-    QPointF src = mapFromItem(d->start, 0, 0);
-    QPointF dst = mapFromItem(d->end, 0, 0);
+    QPointF src = d->edge->start().pos() - pos();//;mapFromItem(d->start, 0, 0);
+    QPointF dst = d->edge->end().pos() - pos();//;mapFromItem(d->end, 0, 0);
     
     QRectF br(src, QSizeF(dst.x() - src.x(), dst.y() - src.y()));
 
     br = br.normalized();
+
 
 //     QLineF line(mapFromItem(d->start, 0, 0), mapFromItem(d->end, 0, 0));
 
@@ -137,6 +139,7 @@ QRectF TikzEdge::boundingRect() const
 //     br.adjust(-lineWidth / 2, -lineWidth / 2,
 //                 lineWidth / 2, lineWidth / 2);
 
+    br.adjust(-0.1, -0.1, 0.1, 0.1);
     return br;
 }
 
@@ -145,6 +148,24 @@ QPainterPath TikzEdge::shape() const
     QPainterPath path;
     path.addRect(boundingRect());
     return path;
+}
+
+void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
+{
+    setStartNode(0);
+    d->edge->setStart(0);
+    d->edge->start().setPos(event->scenePos());
+    qDebug() << "move";
+}
+
+void TikzEdge::mousePressEvent(QGraphicsSceneMouseEvent * event)
+{
+    qDebug() << "press";
+}
+
+void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    qDebug() << "rel";
 }
 
 // kate: indent-width 4; replace-tabs on;
