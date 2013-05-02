@@ -10,6 +10,7 @@
 #include <PaintHelper.h>
 
 #include <Coord.h>
+#include <cmath>
 
 class TikzEdgePrivate
 {
@@ -76,8 +77,10 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     QPen p = sh.pen();
 //     painter->setPen(p);
 
-    painter->drawLine(mapFromScene(d->edge->start().anchor(tikz::Center)),
-                      mapFromScene(d->edge->end().anchor(tikz::Center)));
+    QPointF diff(d->edge->end().pos() - d->edge->start().pos());
+    const qreal radAngle = std::atan2(diff.y(), diff.x());
+    painter->drawLine(mapFromScene(d->edge->start().anchor(tikz::Center, radAngle)),
+                      mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI)));
     painter->drawRect(boundingRect());
     // TODO: highlight selection
     //     if (option->state & QStyle::State_Selected)

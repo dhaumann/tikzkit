@@ -113,6 +113,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         p.setStyle(Qt::DashLine);
         painter->setPen(p);
         painter->setBrush(Qt::cyan);
+        painter->setOpacity(0.5);
         painter->drawRect(br);
     }
 
