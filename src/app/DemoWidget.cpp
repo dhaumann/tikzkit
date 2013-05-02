@@ -40,7 +40,7 @@ DemoWidget::DemoWidget()
     const qreal xScale = m_view->physicalDpiX() / 2.540;
     const qreal yScale = m_view->physicalDpiY() / 2.540;
     qDebug() << xScale << yScale;
-    m_view->scale(xScale, yScale);
+    m_view->scale(xScale, -yScale);
 
 //     m_view->setTransform(t);
 //     m_view->scale(20, 20);
