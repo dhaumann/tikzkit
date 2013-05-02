@@ -1,0 +1,15 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{tikz}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture}
+  \node[draw, circle, fill=yellow] (a) at (0, 0) {a};
+  \node[draw, rectangle, fill=yellow, ultra thick] (b) at (2, 0.5) {b};
+  \draw[<->] (a) -- (b);
+\end{tikzpicture}
+\end{document}
+
