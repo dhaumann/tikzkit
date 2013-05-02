@@ -53,8 +53,10 @@ void TikzEdge::setEndNode(TikzNode* end)
 
 void TikzEdge::slotUpdate()
 {
-    QPointF src = mapFromItem(d->start, 0, 0);
-    QPointF dst = mapFromItem(d->end, 0, 0);
+//     QPointF src = mapFromItem(d->start, 0, 0);
+//     QPointF dst = mapFromItem(d->end, 0, 0);
+    QPointF src = d->edge->start().pos();
+    QPointF dst = d->edge->end().pos();
     setPos(src + (dst - src) / 2.0);
     
     qDebug() << "new pos:" << (src + (dst - src) / 2.0);
@@ -74,7 +76,8 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     QPen p = sh.pen();
 //     painter->setPen(p);
 
-    painter->drawLine(mapFromScene(d->edge->start().pos()), mapFromScene(d->edge->end().pos()));
+    painter->drawLine(mapFromScene(d->edge->start().anchor(tikz::Center)),
+                      mapFromScene(d->edge->end().anchor(tikz::Center)));
     painter->drawRect(boundingRect());
     // TODO: highlight selection
     //     if (option->state & QStyle::State_Selected)

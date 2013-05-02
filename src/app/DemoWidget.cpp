@@ -51,6 +51,7 @@ DemoWidget::DemoWidget()
     itema->node().setText("1");
     itema->node().setPos(QPointF(0, 0));
     itema->node().style().setLineWidth(tikz::VeryThin);
+    itema->node().style().setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(itema);
 
     TikzNode* item = new TikzNode();
@@ -75,6 +76,7 @@ DemoWidget::DemoWidget()
     item->node().setText("5");
     item->node().setPos(QPointF(4, 4));
     item->node().style().setLineWidth(tikz::UltraThick);
+    item->node().style().setShape(tikz::ShapeCircle);
     m_view->scene()->addItem(item);
 
     // an edge

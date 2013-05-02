@@ -105,7 +105,16 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     painter->drawRect(br);
 //     QPolygonF br = scene()->views()[0]->mapFromScene(boundingRect());
 //     painter->drawPolygon(br);
-    painter->drawRect(br);
+    if (d->node->style().shape() == tikz::ShapeCircle) {
+        painter->drawEllipse(QPointF(0, 0), 0.5, 0.5);
+    } else if (d->node->style().shape() == tikz::ShapeRectangle) {
+        painter->drawRect(br);
+    } else {
+        p.setStyle(Qt::DashLine);
+        painter->setPen(p);
+        painter->setBrush(Qt::cyan);
+        painter->drawRect(br);
+    }
 
 
     // returns the item's (0, 0) point in view's viewport coordinates
