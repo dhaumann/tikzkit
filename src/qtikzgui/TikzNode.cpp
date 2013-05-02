@@ -176,9 +176,11 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 
 void TikzNode::slotSetPos(const QPointF& pos)
 {
+    // the tikz::Node position changed.
+    // propagate this to this TikzNode::setPos().
     disconnect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     setPos(pos);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
-
 }
+
 // kate: indent-width 4; replace-tabs on;
