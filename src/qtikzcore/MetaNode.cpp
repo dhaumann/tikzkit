@@ -2,6 +2,7 @@
 #include "Node.h"
 
 #include <QPointer>
+#include <QDebug>
 
 namespace tikz {
 
@@ -16,6 +17,7 @@ MetaNode::MetaNode(QObject * parent)
     : QObject(parent)
     , d(new MetaNodePrivate())
 {
+    connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
 }
 
 MetaNode::~MetaNode()
@@ -65,7 +67,7 @@ void MetaNode::setNode(Node* node)
     }
 
     // notify about change
-    emit changed(this);
+    emit changed();
 }
 
 }

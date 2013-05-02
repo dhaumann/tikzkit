@@ -59,9 +59,8 @@ class MetaNode : public QObject
     Q_SIGNALS:
         /**
          * This signal is emitted either when a new node is set with setNode().
-         * @param node a pointer to this node
          */
-        void changed(tikz::MetaNode * node);
+        void changed();
 
     private:
         MetaNodePrivate * const d;

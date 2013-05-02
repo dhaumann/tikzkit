@@ -15,8 +15,8 @@ Edge::Edge(QObject * parent)
     : QObject(parent)
     , d(new EdgePrivate())
 {
-//     connect(d->start, SIGNAL(changed(QPointF)),
-//             &d->fallbackStart, SLOT(setPos(QPointF)));
+    connect(&d->start, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->end, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
 Edge::~Edge()
@@ -30,7 +30,7 @@ void Edge::setStart(Node* node)
     d->start.setNode(node);
 
     // notify about change
-    emit changed(this);
+    emit changed();
 }
 
 Coord& Edge::start()
@@ -44,7 +44,7 @@ void Edge::setEnd(Node* node)
     d->end.setNode(node);
 
     // notify about change
-    emit changed(this);
+    emit changed();
 }
 
 Coord& Edge::end()
@@ -55,13 +55,13 @@ Coord& Edge::end()
 void Edge::setStartPos(const QPointF& pos)
 {
     d->start.setPos(pos);
-    emit changed(this);
+    emit changed();
 }
 
 void Edge::setEndPos(const QPointF& pos)
 {
     d->end.setPos(pos);
-    emit changed(this);
+    emit changed();
 }
 
 }

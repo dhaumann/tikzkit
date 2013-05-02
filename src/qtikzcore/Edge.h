@@ -84,9 +84,8 @@ class TIKZCORE_EXPORT Edge : public QObject
          * This signal is emitted whenever the start node changes through setStart(),
          * the end node changes with setEnd(), or the position of the start() or end()
          * node changes.
-         * @param edge a pointer to this edge
          */
-        void changed(tikz::Edge * edge);
+        void changed();
 
 //     //
 //     // edge annotation
