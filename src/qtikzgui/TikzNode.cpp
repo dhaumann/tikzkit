@@ -75,6 +75,8 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
+    painter->drawRect(boundingRect());
+
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
@@ -98,7 +100,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     qreal det = t.determinant();
 //     t /= det;
 
-    QRectF br(0.5, 0.5, 1.0, 1.0);
+    QRectF br(-0.5, -0.5, 1.0, 1.0);
 //     QRectF br = t.mapRect(boundingRect());
 //     painter->drawRect(br);
 //     QPolygonF br = scene()->views()[0]->mapFromScene(boundingRect());
@@ -130,9 +132,9 @@ QRectF TikzNode::boundingRect() const
 {
     // TODO: call prepareGeometryChange() whenever the geometry changes via the style
 //     PaintHelper sh(d->node->style());
-    qreal lineWidth = 2; //sh.lineWidth();
+    qreal lineWidth = 0; //sh.lineWidth();
     
-    QRectF br(0.5, 0.5, 1.0, 1.0);
+    QRectF br(-0.5, -0.5, 1.0, 1.0);
 
     if (d->node->style().shape() == tikz::ShapeCircle
         || d->node->style().shape() == tikz::ShapeRectangle
@@ -156,7 +158,7 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 //     qDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
-        qDebug() << newPos;
+//         qDebug() << newPos;
         d->node->setPos(newPos);
 //         d->textItem->setPos(newPos);
         QRectF rect = scene()->sceneRect();

@@ -1,4 +1,5 @@
 #include "TikzEdge.h"
+#include "TikzNode.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -14,6 +15,8 @@ class TikzEdgePrivate
 {
     public:
         tikz::Edge* edge;
+        TikzNode* start;
+        TikzNode* end;
 };
 
 TikzEdge::TikzEdge(QGraphicsItem * parent)
@@ -21,8 +24,10 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     , d(new TikzEdgePrivate())
 {
     d->edge = new tikz::Edge(this);
+    d->start = 0;
+    d->end = 0;
 
-    connect(d->edge, SIGNAL(changed(tikz::Edge*)), this, SLOT(slotUpdate()));
+    connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
 
 TikzEdge::~TikzEdge()
@@ -35,8 +40,25 @@ tikz::Edge& TikzEdge::edge()
     return *d->edge;
 }
 
+void TikzEdge::setStartNode(TikzNode* start)
+{
+    d->start = start;
+}
+
+void TikzEdge::setEndNode(TikzNode* end)
+{
+    d->end = end;
+}
+
+
 void TikzEdge::slotUpdate()
 {
+    QPointF src = mapFromItem(d->start, 0, 0);
+    QPointF dst = mapFromItem(d->end, 0, 0);
+    setPos(src + (dst - src) / 2.0);
+    
+    qDebug() << "new pos:" << (src + (dst - src) / 2.0);
+
     prepareGeometryChange();
 }
 
@@ -53,6 +75,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     painter->setPen(p);
 
     painter->drawLine(mapFromScene(d->edge->start().pos()), mapFromScene(d->edge->end().pos()));
+    painter->drawRect(boundingRect());
     // TODO: highlight selection
     //     if (option->state & QStyle::State_Selected)
     //         qt_graphicsItem_highlightSelected(this, painter, option);
@@ -66,7 +89,22 @@ QRectF TikzEdge::boundingRect() const
     //     PaintHelper sh(d->node->style());
     qreal lineWidth = 2; //sh.lineWidth();
 
-    QRectF br(mapFromScene(d->edge->start().pos()), mapFromScene(d->edge->end().pos()));
+//     QRectF br(mapFromScene(d->edge->start().pos()), mapFromScene(d->edge->end().pos()));
+    QPointF src = mapFromItem(d->start, 0, 0);
+    QPointF dst = mapFromItem(d->end, 0, 0);
+    
+    QRectF br(src, QSizeF(dst.x() - src.x(), dst.y() - src.y()));
+
+    br = br.normalized();
+
+//     QLineF line(mapFromItem(d->start, 0, 0), mapFromItem(d->end, 0, 0));
+
+
+//      return QRectF(sourcePoint, QSizeF(destPoint.x() - sourcePoint.x(),
+//                                        destPoint.y() - sourcePoint.y()))
+//          .normalized()
+//          .adjusted(-extra, -extra, extra, extra);
+
 
 //     br.adjust(-lineWidth / 2, -lineWidth / 2,
 //                 lineWidth / 2, lineWidth / 2);

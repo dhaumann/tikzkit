@@ -8,8 +8,10 @@
 
 class QPainter;
 
-class TikzEdgePrivate;
+class TikzNode;
 class Style;
+
+class TikzEdgePrivate;
 
 class TIKZGUI_EXPORT TikzEdge :  public QGraphicsObject
 {
@@ -30,6 +32,9 @@ class TIKZGUI_EXPORT TikzEdge :  public QGraphicsObject
          * Returns the pointer to the associated Edge.
          */
         tikz::Edge& edge();
+
+        void setStartNode(TikzNode* start);
+        void setEndNode(TikzNode* end);
 
     //
     // reimplemented from QGraphicsItem

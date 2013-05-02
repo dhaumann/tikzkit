@@ -79,6 +79,8 @@ DemoWidget::DemoWidget()
 
     // an edge
     TikzEdge* edge = new TikzEdge();
+    edge->setStartNode(itema);
+    edge->setEndNode(item);
     edge->edge().setStart(&itema->node());
     edge->edge().setEnd(&item->node());
     m_view->scene()->addItem(edge);
