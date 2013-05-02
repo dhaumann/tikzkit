@@ -53,9 +53,9 @@ QPointF Node::anchor(Anchor anchor, qreal rad) const
     }
     else if (that->style().shape() == tikz::ShapeRectangle) {
         // TODO: set to correct size
-        qreal x = 0.5 * std::cos(rad); 
+        qreal x = 0.5 * std::cos(rad);
         qreal y = 0.5 * std::sin(rad);
-        if (x != 0 && y != 0) {
+        if (!qFuzzyCompare(x, 0.0) && !qFuzzyCompare(y, 0.0)) {
             if (fabs(y) != 0.5) {
                 // normalize to y
                 x = (x < 0 ? -1 : 1) * fabs(0.5 * x / y);
