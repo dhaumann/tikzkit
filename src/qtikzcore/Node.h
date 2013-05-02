@@ -44,7 +44,7 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         Style& style();
 
-        virtual const QPointF& anchor(Anchor anchor) const;
+        virtual QPointF anchor(Anchor anchor, qreal rad) const;
 
     private:
         NodePrivate * const d;

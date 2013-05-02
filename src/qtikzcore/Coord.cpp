@@ -44,8 +44,10 @@ void Coord::setPos(const QPointF& pos)
     }
 }
 
-const QPointF& Coord::anchor(Anchor) const
+QPointF Coord::anchor(Anchor anchor, qreal rad) const
 {
+    Q_UNUSED(anchor);
+    Q_UNUSED(rad);
     return d->pos;
 }
 

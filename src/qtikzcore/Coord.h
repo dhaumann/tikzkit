@@ -72,7 +72,7 @@ class TIKZCORE_EXPORT Coord : public QObject
         /**
          * Get the anchor point for a specific @p anchor.
          */
-        virtual const QPointF& anchor(Anchor anchor) const;
+        virtual QPointF anchor(Anchor anchor, qreal rad) const;
 
     //
     // notification about changes
