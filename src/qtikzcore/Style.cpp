@@ -103,7 +103,7 @@ LineWidth Style::lineWidth() const
     return SemiThick;
 }
 
-void Style::setLineWidth(LineWidth lineWidth)
+void Style::setLineWidth(tikz::LineWidth lineWidth)
 {
     d->lineWidth = lineWidth;
 }
@@ -119,6 +119,11 @@ Shape Style::shape() const
     }
 
     return NoShape;
+}
+
+void Style::setShape(tikz::Shape shape)
+{
+    d->shape = shape;
 }
 
 double Style::drawOpacity() const

@@ -63,7 +63,7 @@ class Style
          * @p width the line width
          * @see Linewidth
          */
-        void setLineWidth(LineWidth lineWidth);
+        void setLineWidth(tikz::LineWidth lineWidth);
 
         /**
          * The the draw opacity.
@@ -87,6 +87,12 @@ class Style
          * @see Shape
          */
         Shape shape() const;
+
+        /**
+         * Set the Shape of this style.
+         * @see Shape
+         */
+        void setShape(tikz::Shape shape);
 
     private:
         StylePrivate * const d;
