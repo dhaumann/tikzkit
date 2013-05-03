@@ -47,11 +47,11 @@ Coord & MetaNode::coord() const
     return d->node ? *d->node : d->coord;
 }
 
-void MetaNode::setNode(Node* node)
+bool MetaNode::setNode(Node* node)
 {
     // if equal, stop
     if (d->node == node) {
-        return;
+        return false;
     }
 
     // disconnect changed() signal
@@ -68,6 +68,14 @@ void MetaNode::setNode(Node* node)
 
     // notify about change
     emit changed();
+
+    // node was changed
+    return true;
+}
+
+Node* MetaNode::node() const
+{
+    return d->node;
 }
 
 }

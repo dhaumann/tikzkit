@@ -43,6 +43,12 @@ class MetaNode : public QObject
          */
         Coord & coord() const;
 
+        /**
+         * Get the Node of this MetaNode.
+         * The return value may be 0.
+         */
+        Node* node() const;
+
     public Q_SLOTS:
         /**
          * Set the coordinates to @p pos.
@@ -53,8 +59,9 @@ class MetaNode : public QObject
         /**
          * Set the node to @p node.
          * Calling this function emits changed(), if @p pos != pos().
+         * @return @p true, if the node changed, otherwise @p false.
          */
-        void setNode(Node* node);
+        bool setNode(Node* node);
         
     Q_SIGNALS:
         /**

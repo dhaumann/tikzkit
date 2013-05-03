@@ -28,11 +28,11 @@ Edge::~Edge()
 
 void Edge::setStart(Node* node)
 {
-    // udpate node
-    d->start.setNode(node);
-
-    // notify about change
-    emit changed();
+    // update node
+    if (d->start.setNode(node)) {
+        // notify about change
+        emit changed();
+    }
 }
 
 Coord& Edge::start()
@@ -42,11 +42,11 @@ Coord& Edge::start()
 
 void Edge::setEnd(Node* node)
 {
-    // udpate node
-    d->end.setNode(node);
-
-    // notify about change
-    emit changed();
+    // update node
+    if (d->end.setNode(node)) {
+        // notify about change
+        emit changed();
+    }
 }
 
 Coord& Edge::end()
