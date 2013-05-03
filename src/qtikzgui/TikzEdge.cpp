@@ -157,14 +157,9 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     const qreal radAngle = std::atan2(diff.y(), diff.x());
     QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
     QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
-    QPointF vec = endAnchor - startAnchor;
-    if (!vec.isNull() && isHovered() && !d->mouseGrabbed) {
-        const qreal len = std::sqrt(vec.x()*vec.x() + vec.y()*vec.y());
-        if (len >= 1) {
-            vec = 0.2 * vec / len;
-            d->drawHandle(painter, startAnchor);
-            d->drawHandle(painter, endAnchor);
-        }
+    if (isHovered() && !d->mouseGrabbed) {
+        d->drawHandle(painter, startAnchor);
+        d->drawHandle(painter, endAnchor);
     }
 
     // debug: draw bounding rect:
