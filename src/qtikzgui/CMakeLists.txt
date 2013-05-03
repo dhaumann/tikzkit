@@ -8,6 +8,7 @@ include_directories(
 )
 
 set(qtikzgui_SOURCES
+    TikzItem.cpp
     TikzNode.cpp
     TikzEdge.cpp
     TikzScene.cpp
@@ -15,6 +16,7 @@ set(qtikzgui_SOURCES
 )
 
 set(qtikzgui_HEADERS
+    TikzItem.h
     TikzNode.h
     TikzEdge.h
     TikzScene.h

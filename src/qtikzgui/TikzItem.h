@@ -26,20 +26,27 @@ class TIKZGUI_EXPORT TikzItem : public QGraphicsObject
          */
         virtual ~TikzItem();
 
-/*
-    QRectF rect() const; // eher QGraphicsItem::setPos
-    void setRect(const QRectF &rect);
+        /**
+         * Reimplment to return a proper UserType + 1.
+         */
+        virtual int type() const;
 
-    QRectF boundingRect() const; // override in subclasses
-    QPainterPath shape() const;  // override in subclasses
-    bool contains(const QPointF &point) const; // override in subclasses
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    bool isObscuredBy(const QGraphicsItem *item) const;
-    QPainterPath opaqueArea() const;
+    //
+    // Hovering
+    //
+    public:
+        /**
+         * Returns @p true, if the item is hovered.
+         * This function uses contains() internally.
+         * If the item isSelected(), isHovered() returns @p false.
+         */
+        bool isHovered() const;
 
-    enum { Type = 3 };
-    int type() const;
-*/
+    protected:
+        virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
+        virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+        virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+
     private:
         TikzItemPrivate * const d;
 };
