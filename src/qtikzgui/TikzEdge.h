@@ -60,6 +60,11 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          */
         QPainterPath shape() const;
 
+        /**
+         * Returns @p true, if @p point is contained in the edge.
+         */
+        bool contains(const QPointF & point) const;
+
     //
     // Mouse handling
     //
