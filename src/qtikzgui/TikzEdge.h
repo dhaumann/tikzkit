@@ -29,6 +29,11 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
         virtual ~TikzEdge();
 
         /**
+         * Reimplment to return a proper UserType + 3.
+         */
+        virtual int type() const;
+
+        /**
          * Returns the pointer to the associated Edge.
          */
         tikz::Edge& edge();

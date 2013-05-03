@@ -53,6 +53,11 @@ TikzEdge::~TikzEdge()
     delete d;
 }
 
+int TikzEdge::type() const
+{
+    return UserType + 3;
+}
+
 tikz::Edge& TikzEdge::edge()
 {
     return *d->edge;
