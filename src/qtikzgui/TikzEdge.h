@@ -2,7 +2,7 @@
 #define GUI_TIKZ_EDGE_ITEM_H
 
 #include "tikzgui_export.h"
-#include <QGraphicsObject>
+#include "TikzItem.h"
 
 #include <Edge.h>
 
@@ -13,7 +13,7 @@ class Style;
 
 class TikzEdgePrivate;
 
-class TIKZGUI_EXPORT TikzEdge :  public QGraphicsObject
+class TIKZGUI_EXPORT TikzEdge :  public TikzItem
 {
     Q_OBJECT
 

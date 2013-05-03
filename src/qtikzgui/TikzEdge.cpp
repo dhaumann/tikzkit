@@ -38,7 +38,7 @@ class TikzEdgePrivate
 };
 
 TikzEdge::TikzEdge(QGraphicsItem * parent)
-    : QGraphicsObject(parent)
+    : TikzItem(parent)
     , d(new TikzEdgePrivate())
 {
     d->edge = new tikz::Edge(this);
