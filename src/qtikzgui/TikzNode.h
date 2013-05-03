@@ -3,7 +3,7 @@
 
 #include "tikzgui_export.h"
 
-#include <QGraphicsObject>
+#include "TikzItem.h"
 
 #include <Node.h>
 
@@ -12,7 +12,7 @@ class QPainter;
 class TikzNodePrivate;
 class Style;
 
-class TIKZGUI_EXPORT TikzNode : public QGraphicsObject
+class TIKZGUI_EXPORT TikzNode : public TikzItem
 {
     Q_OBJECT
 
@@ -26,6 +26,11 @@ class TIKZGUI_EXPORT TikzNode : public QGraphicsObject
          * Destructor
          */
         virtual ~TikzNode();
+
+        /**
+         * Reimplment to return a proper UserType + 2.
+         */
+        virtual int type() const;
 
         /**
          * Returns the pointer to the associated Node.
