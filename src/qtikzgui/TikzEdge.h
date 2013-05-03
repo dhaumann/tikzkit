@@ -35,10 +35,20 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
 
         /**
          * Returns the pointer to the associated Edge.
+         * @warning Use setStartNode() and setEndNode() to change nodes
          */
         tikz::Edge& edge();
 
+        /**
+         * Set the start node to @p start.
+         * @param start start node of the edge. 0 is allows.
+         */
         void setStartNode(TikzNode* start);
+        
+        /**
+         * Set the end node to @p end.
+         * @param end end node of the edge. 0 is allows.
+         */
         void setEndNode(TikzNode* end);
 
     //

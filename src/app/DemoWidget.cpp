@@ -83,8 +83,6 @@ DemoWidget::DemoWidget()
     TikzEdge* edge = new TikzEdge();
     edge->setStartNode(itema);
     edge->setEndNode(item);
-    edge->edge().setStart(&itema->node());
-    edge->edge().setEnd(&item->node());
     edge->edge().style().setLineWidth(tikz::UltraThick);
     m_view->scene()->addItem(edge);
 }

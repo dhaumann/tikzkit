@@ -92,13 +92,14 @@ tikz::Edge& TikzEdge::edge()
 void TikzEdge::setStartNode(TikzNode* start)
 {
     d->start = start;
+    d->edge->setStart(start ? &start->node() : 0);
 }
 
 void TikzEdge::setEndNode(TikzNode* end)
 {
     d->end = end;
+    d->edge->setEnd(end ? &end->node() : 0);
 }
-
 
 void TikzEdge::slotUpdate()
 {
@@ -227,7 +228,6 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                 TikzNode* node = dynamic_cast<TikzNode*>(item);
                 Q_ASSERT(node);
                 setStartNode(node);
-                d->edge->setStart(&node->node());
                 connected = true;
                 break;
             }
@@ -236,7 +236,6 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     if (!connected) {
         setStartNode(0);
-        d->edge->setStart(0);
         d->edge->start().setPos(event->scenePos());
     }
 //     qDebug() << "move";
