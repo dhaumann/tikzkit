@@ -44,7 +44,7 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * @param start start node of the edge. 0 is allows.
          */
         void setStartNode(TikzNode* start);
-        
+
         /**
          * Set the end node to @p end.
          * @param end end node of the edge. 0 is allows.

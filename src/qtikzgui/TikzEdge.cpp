@@ -18,11 +18,18 @@
 class TikzEdgePrivate
 {
     public:
+        enum DragMode {
+            DM_Start = 0,
+            DM_End,
+        };
+
+    public:
         tikz::Edge* edge;
         TikzNode* start;
         TikzNode* end;
 
-        bool mouseGrabbed;      // true: mouse is grabbed
+        bool dragging;      // true: mouse is grabbed
+        DragMode dragMode;
 
         bool dirty;             // true: needs recalculation of paths
         QPainterPath linePath;
@@ -70,7 +77,7 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     d->start = 0;
     d->end = 0;
 
-    d->mouseGrabbed = false;
+    d->dragging = false;
     d->dirty = true;
 
     connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
@@ -160,7 +167,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     const qreal radAngle = std::atan2(diff.y(), diff.x());
     QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
     QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
-    if (isHovered() && !d->mouseGrabbed) {
+    if (isHovered() && !d->dragging) {
         d->drawHandle(painter, startAnchor);
         d->drawHandle(painter, endAnchor);
     }
@@ -215,7 +222,7 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     TikzItem::mouseMoveEvent(event);
     
-    if (!d->mouseGrabbed) {
+    if (!d->dragging) {
         event->ignore();
         return;
     }
@@ -229,7 +236,11 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
             if (item->type() == UserType + 2) {
                 TikzNode* node = dynamic_cast<TikzNode*>(item);
                 Q_ASSERT(node);
-                setStartNode(node);
+                if (d->dragMode == TikzEdgePrivate::DM_Start) {
+                    setStartNode(node);
+                } else {
+                    setEndNode(node);
+                }
                 connected = true;
                 break;
             }
@@ -237,8 +248,13 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     }
 
     if (!connected) {
-        setStartNode(0);
-        d->edge->start().setPos(event->scenePos());
+        if (d->dragMode == TikzEdgePrivate::DM_Start) {
+            setStartNode(0);
+            d->edge->start().setPos(event->scenePos());
+        } else {
+            setEndNode(0);
+            d->edge->end().setPos(event->scenePos());
+        }
     }
 //     qDebug() << "move";
 }
@@ -249,14 +265,21 @@ void TikzEdge::mousePressEvent(QGraphicsSceneMouseEvent * event)
         TikzItem::mousePressEvent(event);
     } else {
         grabMouse();
-        d->mouseGrabbed = true;
+        d->dragging = true;
+        const qreal distToStart = (event->scenePos() - d->edge->start().pos()).manhattanLength();
+        const qreal distToEnd = (event->scenePos() - d->edge->end().pos()).manhattanLength();
+        if (distToStart < distToEnd) {
+            d->dragMode = TikzEdgePrivate::DM_Start;
+        } else {
+            d->dragMode = TikzEdgePrivate::DM_End;
+        }
     }
 }
 
 void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (d->mouseGrabbed) {
-        d->mouseGrabbed = false;
+    if (d->dragging) {
+        d->dragging = false;
         ungrabMouse();
     }
 
