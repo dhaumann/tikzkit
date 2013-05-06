@@ -33,7 +33,7 @@ DemoWidget::DemoWidget()
     TikzScene* scene = new TikzScene();
     m_view->setScene(scene);
 
-    m_view->setSceneRect(0, 0, m_view->size().width(), m_view->size().height());
+    m_view->setSceneRect(0, 0, m_view->size().width() / 200.0, m_view->size().height() / 200.0);
     m_view->rotate(5);
 //     QTransform t;
 //     t.rotate(5);

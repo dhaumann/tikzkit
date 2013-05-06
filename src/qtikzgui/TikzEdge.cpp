@@ -59,11 +59,11 @@ class TikzEdgePrivate
             painter->drawPath(path);
         }
 
-        void drawHandle(QPainter* painter, const QPointF& pos)
+        void drawHandle(QPainter* painter, const QPointF& pos, bool connected)
         {
             painter->save();
-            painter->setPen(Qt::red);
-            painter->setBrush(QColor(255, 0, 0, 125));
+            painter->setPen(connected ? Qt::green : Qt::red);
+            painter->setBrush(connected ? QColor(0, 255, 0, 125) : QColor(255, 0, 0, 125));
             painter->drawEllipse(pos, 0.2, 0.2);
             painter->restore();
         }
@@ -168,8 +168,8 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
     QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
     if (isHovered() && !d->dragging) {
-        d->drawHandle(painter, startAnchor);
-        d->drawHandle(painter, endAnchor);
+        d->drawHandle(painter, startAnchor, d->start != 0);
+        d->drawHandle(painter, endAnchor, d->end != 0);
     }
 
     // debug: draw bounding rect:
