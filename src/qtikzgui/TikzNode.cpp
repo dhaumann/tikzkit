@@ -16,6 +16,8 @@ class TikzNodePrivate
     public:
         tikz::Node* node;
         QGraphicsTextItem* textItem;
+
+        bool drawAnchors;
 };
 
 class Text : public QGraphicsSimpleTextItem {
@@ -37,6 +39,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzNodePrivate())
 {
+    d->drawAnchors = false;
     d->node = new tikz::Node(this);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 
@@ -77,6 +80,18 @@ int TikzNode::type() const
 tikz::Node& TikzNode::node()
 {
     return *d->node;
+}
+
+void TikzNode::setDrawAnchors(bool drawAnchors)
+{
+    if (drawAnchors != d->drawAnchors) {
+        d->drawAnchors = drawAnchors;
+        update();
+    }
+}
+
+tikz::Anchor TikzNode::closestAnchor(const QPointF& scenepos) const
+{
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -126,7 +141,16 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         painter->drawRect(br);
     }
 
-
+    if (d->drawAnchors) {
+        painter->setPen(Qt::red);
+        if (d->node->style()->shape() == tikz::ShapeCircle) {
+            painter->drawLine(QPointF(0.1, 0.1), QPointF(-0.1, -0.1));
+            painter->drawLine(QPointF(0.1, -0.1), QPointF(-0.1, 0.1));
+        } else if (d->node->style()->shape() == tikz::ShapeRectangle) {
+            painter->drawLine(QPointF(0.1, 0.1), QPointF(-0.1, -0.1));
+            painter->drawLine(QPointF(0.1, -0.1), QPointF(-0.1, 0.1));
+        }
+    }
     // returns the item's (0, 0) point in view's viewport coordinates
 //     t.rotate(5);
 // painter->rotate(5);
@@ -141,7 +165,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     painter->drawText(textRect, Qt::AlignCenter, d->node->text());
 
     // TODO: highlight selection
-    qDebug() << (bool)(option->state & QStyle::State_Selected);
+//     qDebug() << (bool)(option->state & QStyle::State_Selected);
 //         qt_graphicsItem_highlightSelected(this, painter, option);
     if (isHovered()) {
         QRectF br = boundingRect();
@@ -153,7 +177,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         painter->drawRect(br);
     }
 
-qDebug() << isSelected();
+// qDebug() << isSelected();
     painter->restore();
 }
     
@@ -169,8 +193,7 @@ QRectF TikzNode::boundingRect() const
         || d->node->style()->shape() == tikz::ShapeRectangle
         || true
     ) {
-        br.adjust(-lineWidth / 2, -lineWidth / 2,
-                   lineWidth / 2, lineWidth / 2);
+        br.adjust(-0.2, -0.2, 0.2, 0.2);
     }
     return br;
 }

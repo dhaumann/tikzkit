@@ -237,9 +237,17 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                 TikzNode* node = dynamic_cast<TikzNode*>(item);
                 Q_ASSERT(node);
                 if (d->dragMode == TikzEdgePrivate::DM_Start) {
-                    setStartNode(node);
+                    if (d->start != node) {
+                        if (d->start) d->start->setDrawAnchors(false);
+                        setStartNode(node);
+                        d->start->setDrawAnchors(true);
+                    }
                 } else {
-                    setEndNode(node);
+                    if (d->end != node) {
+                        if (d->end) d->end->setDrawAnchors(false);
+                        setEndNode(node);
+                        d->end->setDrawAnchors(true);
+                    }
                 }
                 connected = true;
                 break;
@@ -249,9 +257,11 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     if (!connected) {
         if (d->dragMode == TikzEdgePrivate::DM_Start) {
+            if (d->start) d->start->setDrawAnchors(false);
             setStartNode(0);
             d->edge->start().setPos(event->scenePos());
         } else {
+            if (d->end) d->end->setDrawAnchors(false);
             setEndNode(0);
             d->edge->end().setPos(event->scenePos());
         }
@@ -281,6 +291,8 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     if (d->dragging) {
         d->dragging = false;
         ungrabMouse();
+        if (d->end) d->end->setDrawAnchors(false);
+        if (d->start) d->start->setDrawAnchors(false);
     }
 
     if (!contains(event->pos())) {
