@@ -3,7 +3,8 @@
 #include "TikzNode.h"
 #include "TikzEdge.h"
 #include "TikzScene.h"
-#include "Style.h"
+#include "NodeStyle.h"
+#include "EdgeStyle.h"
 #include "tikz.h"
 
 #include <QHBoxLayout>
@@ -50,40 +51,40 @@ DemoWidget::DemoWidget()
     TikzNode* itema = new TikzNode();
     itema->node().setText("1");
     itema->node().setPos(QPointF(0, 0));
-    itema->node().style().setLineWidth(tikz::VeryThin);
-    itema->node().style().setShape(tikz::ShapeCircle);
+    itema->node().style()->setLineWidth(tikz::VeryThin);
+    itema->node().style()->setShape(tikz::ShapeCircle);
     m_view->scene()->addItem(itema);
 
     TikzNode* item = new TikzNode();
     item->node().setText("2");
     item->node().setPos(QPointF(1, 1));
-    item->node().style().setLineWidth(tikz::Thin);
+    item->node().style()->setLineWidth(tikz::Thin);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("3");
     item->node().setPos(QPointF(2, 2));
-    item->node().style().setLineWidth(tikz::SemiThick);
+    item->node().style()->setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("4");
     item->node().setPos(QPointF(3, 3));
-    item->node().style().setLineWidth(tikz::Thick);
+    item->node().style()->setLineWidth(tikz::Thick);
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
     item->node().setText("5");
     item->node().setPos(QPointF(4, 4));
-    item->node().style().setLineWidth(tikz::UltraThick);
-    item->node().style().setShape(tikz::ShapeRectangle);
+    item->node().style()->setLineWidth(tikz::UltraThick);
+    item->node().style()->setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(item);
 
     // an edge
     TikzEdge* edge = new TikzEdge();
     edge->setStartNode(itema);
     edge->setEndNode(item);
-    edge->edge().style().setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setLineWidth(tikz::UltraThick);
     m_view->scene()->addItem(edge);
 }
 

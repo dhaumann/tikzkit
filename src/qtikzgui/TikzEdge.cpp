@@ -1,6 +1,8 @@
 #include "TikzEdge.h"
 #include "TikzNode.h"
 
+#include "EdgeStyle.h"
+
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -142,7 +144,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(*painter, d->edge->style());
+    PaintHelper sh(painter, d->edge->style());
     QPen p = sh.pen();
     painter->setPen(p);
 

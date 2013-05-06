@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "Style.h"
+#include "NodeStyle.h"
 
 #include <cmath>
 
@@ -12,7 +12,7 @@ class NodePrivate
     public:
         QPointF coord;
         QString text;
-        Style style;
+        NodeStyle style;
 };
 
 Node::Node(QObject * parent)
@@ -36,9 +36,9 @@ QString Node::text() const
     return d->text;
 }
 
-Style& Node::style()
+NodeStyle* Node::style()
 {
-    return d->style;
+    return &d->style;
 }
 
 QPointF Node::anchor(Anchor anchor, qreal rad) const
@@ -46,12 +46,12 @@ QPointF Node::anchor(Anchor anchor, qreal rad) const
     Q_UNUSED(anchor);
 
     Node* that = const_cast<Node*>(this);
-    if (that->style().shape() == tikz::ShapeCircle) {
+    if (that->style()->shape() == tikz::ShapeCircle) {
         qreal radius = 0.5; // TODO: set to correct size
         QPointF delta(std::cos(rad), std::sin(rad));
         return pos() + radius * delta;
     }
-    else if (that->style().shape() == tikz::ShapeRectangle) {
+    else if (that->style()->shape() == tikz::ShapeRectangle) {
         // TODO: set to correct size
         qreal x = 0.5 * std::cos(rad);
         qreal y = 0.5 * std::sin(rad);

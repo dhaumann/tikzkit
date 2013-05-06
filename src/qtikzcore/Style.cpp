@@ -28,38 +28,48 @@ public:
     Shape shape;
 
     Style * parent;
+
+    void init();
 };
+
+void StylePrivate::init()
+{
+    penStyle = PenUnset;
+    lineWidth = WidthUnset;
+
+    drawOpacitySet = false;
+    fillOpacitySet = false;
+
+    drawColorSet = false;
+    fillColorSet = false;
+
+    drawOpacity = 1.0;
+    fillOpacity = 1.0;
+
+    drawColor = Qt::black;
+    fillColor = QColor();
+
+    shape = ShapeUnset;
+
+    parent = 0;
+}
 
 Style::Style()
     : d(new StylePrivate())
 {
-    d->penStyle = PenUnset;
-    d->lineWidth = WidthUnset;
+    d->init();
+}
 
-    d->drawOpacitySet = false;
-    d->fillOpacitySet = false;
-
-    d->drawColorSet = false;
-    d->fillColorSet = false;
-
-    d->drawOpacity = 1.0;
-    d->fillOpacity = 1.0;
-
-    d->drawColor = Qt::black;
-    d->fillColor = QColor();
-
-    d->shape = ShapeUnset;
-
-    d->parent = 0;
-
-    // last: register ourself as style
-    StyleManager::self()->registerStyle(this);
+Style::Style(Document* tikzDocument)
+    : QObject()
+    , d(new StylePrivate())
+{
+    d->init();
 }
 
 Style::~Style()
 {
-    // first, unregister style
-    StyleManager::self()->unregisterStyle(this);
+    delete d;
 }
 
 Style *Style::parent() const
@@ -70,11 +80,6 @@ Style *Style::parent() const
 void Style::setParent(Style *parent)
 {
     d->parent = parent;
-}
-
-bool Style::isDocumentStyle() const
-{
-    return d->parent == 0;
 }
 
 PenStyle Style::penStyle() const
@@ -106,24 +111,6 @@ LineWidth Style::lineWidth() const
 void Style::setLineWidth(tikz::LineWidth lineWidth)
 {
     d->lineWidth = lineWidth;
-}
-
-Shape Style::shape() const
-{
-    if (d->shape != ShapeUnset) {
-        return d->shape;
-    }
-
-    if (parent()) {
-        return parent()->shape();
-    }
-
-    return NoShape;
-}
-
-void Style::setShape(tikz::Shape shape)
-{
-    d->shape = shape;
 }
 
 double Style::drawOpacity() const

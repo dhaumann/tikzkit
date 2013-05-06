@@ -1,7 +1,7 @@
 #include "Edge.h"
 #include "Coord.h"
 #include "MetaNode.h"
-#include "Style.h"
+#include "EdgeStyle.h"
 
 namespace tikz {
 
@@ -10,7 +10,7 @@ class EdgePrivate
     public:
         MetaNode start;
         MetaNode end;
-        Style style;
+        EdgeStyle style;
 };
 
 Edge::Edge(QObject * parent)
@@ -66,10 +66,11 @@ void Edge::setEndPos(const QPointF& pos)
     emit changed();
 }
 
-Style& Edge::style()
+EdgeStyle* Edge::style()
 {
-    return d->style;
+    return &d->style;
 }
+
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -21,11 +21,11 @@ class PaintHelperPrivate
         }
 };
 
-PaintHelper::PaintHelper(QPainter & painter, tikz::Style & style)
+PaintHelper::PaintHelper(QPainter * painter, tikz::Style * style)
     : d(new PaintHelperPrivate())
 {
-    d->painter = &painter;
-    d->style = &style;
+    d->painter = painter;
+    d->style = style;
 }
 
 PaintHelper::~PaintHelper()

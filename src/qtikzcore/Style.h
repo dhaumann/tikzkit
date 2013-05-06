@@ -2,20 +2,30 @@
 #define TIKZ_STYLE_H
 
 #include "tikz.h"
+#include "tikz_export.h"
 
 #include <QColor>
+#include <QObject>
 
 namespace tikz {
 
+class Document;
 class StylePrivate;
 
-class Style
+class TIKZCORE_EXPORT Style : public QObject
 {
+    Q_OBJECT
+
     public:
         /**
          * Default constructor.
          */
         Style();
+
+        /**
+         * Associate this style with the document @p tikzDocument.
+         */
+        Style(Document* tikzDocument);
 
         /**
          * Virtual destructor.
@@ -35,12 +45,6 @@ class Style
          * Set @p parent as new parent to inherit attributes from.
          */
         void setParent(Style *parent);
-
-        /**
-         * Returns @p true, if this style is the one of the tikzpicture.
-         * This equals parent() == 0.
-         */
-        bool isDocumentStyle() const;
 
     //
     // common style attributes of nodes and paths
@@ -79,20 +83,13 @@ class Style
     // Node: inner sep, minimum size (minimum width, minimum height)
 
     //
-    // Node specific attributes
+    // signals
     //
-    public:
+    Q_SIGNALS:
         /**
-         * Get the Shape of this style.
-         * @see Shape
+         * This signal is emitted whenever the style changes.
          */
-        Shape shape() const;
-
-        /**
-         * Set the Shape of this style.
-         * @see Shape
-         */
-        void setShape(tikz::Shape shape);
+        void changed();
 
     private:
         StylePrivate * const d;

@@ -12,7 +12,7 @@ namespace tikz
 {
 
 class NodePrivate;
-class Style;
+class NodeStyle;
 
 class TIKZCORE_EXPORT Node : public Coord
 {
@@ -42,7 +42,7 @@ class TIKZCORE_EXPORT Node : public Coord
         /**
          * Get the Style object of this node.
          */
-        Style& style();
+        NodeStyle* style();
 
         virtual QPointF anchor(Anchor anchor, qreal rad) const;
 

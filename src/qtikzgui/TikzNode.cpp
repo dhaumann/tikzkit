@@ -1,5 +1,5 @@
 #include "TikzNode.h"
-#include "Style.h"
+#include "NodeStyle.h"
 #include "PaintHelper.h"
 
 #include <QPainter>
@@ -89,7 +89,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(*painter, d->node->style());
+    PaintHelper sh(painter, d->node->style());
     QPen p = sh.pen();
 //     qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
 //     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
@@ -114,9 +114,9 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //     painter->drawRect(br);
 //     QPolygonF br = scene()->views()[0]->mapFromScene(boundingRect());
 //     painter->drawPolygon(br);
-    if (d->node->style().shape() == tikz::ShapeCircle) {
+    if (d->node->style()->shape() == tikz::ShapeCircle) {
         painter->drawEllipse(QPointF(0, 0), 0.5, 0.5);
-    } else if (d->node->style().shape() == tikz::ShapeRectangle) {
+    } else if (d->node->style()->shape() == tikz::ShapeRectangle) {
         painter->drawRect(br);
     } else {
         p.setStyle(Qt::DashLine);
@@ -165,8 +165,8 @@ QRectF TikzNode::boundingRect() const
     
     QRectF br(-0.5, -0.5, 1.0, 1.0);
 
-    if (d->node->style().shape() == tikz::ShapeCircle
-        || d->node->style().shape() == tikz::ShapeRectangle
+    if (d->node->style()->shape() == tikz::ShapeCircle
+        || d->node->style()->shape() == tikz::ShapeRectangle
         || true
     ) {
         br.adjust(-lineWidth / 2, -lineWidth / 2,

@@ -12,7 +12,10 @@ set(qtikzcore_SOURCES
     Node.cpp
     MetaNode.cpp
     Path.cpp
+    Document.cpp
     Style.cpp
+    NodeStyle.cpp
+    EdgeStyle.cpp
     StyleManager.cpp
 )
 
@@ -22,6 +25,10 @@ set(qtikzcore_HEADERS
     MetaNode.h
     Edge.h
     Path.h
+    Style.h
+    NodeStyle.h
+    EdgeStyle.h
+    Document.h
 )
 
 QT4_WRAP_CPP(qtikzcore_HEADERS_MOC ${qtikzcore_HEADERS})

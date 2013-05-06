@@ -13,7 +13,7 @@ namespace tikz
 class EdgePrivate;
 class Coord;
 class Node;
-class Style;
+class EdgeStyle;
 
 /**
  * The class Edge connects two Coords or Nodes.
@@ -84,7 +84,7 @@ class TIKZCORE_EXPORT Edge : public QObject
         /**
          * Get the Style object of this edge.
          */
-        Style& style();
+        EdgeStyle* style();
     //
     // signals
     //
