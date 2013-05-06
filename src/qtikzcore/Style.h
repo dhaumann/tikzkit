@@ -72,10 +72,10 @@ class TIKZCORE_EXPORT Style : public QObject
         /**
          * The the draw opacity.
          */
-        double drawOpacity() const;
+        double penOpacity() const;
         double fillOpacity() const;
 
-        QColor drawColor() const;
+        QColor penColor() const;
         QColor fillColor() const;
 
     // TODO: pen color

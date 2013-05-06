@@ -78,7 +78,7 @@ Qt::PenStyle PaintHelper::penStyle() const
 QPen PaintHelper::pen() const
 {
     // invalid color -> NoPen
-    QColor c = d->style->drawColor();
+    QColor c = d->style->penColor();
     if (!c.isValid()) {
         return Qt::NoPen;
     }

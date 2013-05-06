@@ -14,13 +14,13 @@ public:
     PenStyle penStyle;
     LineWidth lineWidth;
 
-    bool drawOpacitySet : 1;
-    double drawOpacity;
+    bool penOpacitySet : 1;
+    double penOpacity;
     bool fillOpacitySet : 1;
     double fillOpacity;
 
-    bool drawColorSet : 1;
-    QColor drawColor;
+    bool penColorSet : 1;
+    QColor penColor;
     bool fillColorSet : 1;
     QColor fillColor;
 
@@ -37,16 +37,16 @@ void StylePrivate::init()
     penStyle = PenUnset;
     lineWidth = WidthUnset;
 
-    drawOpacitySet = false;
+    penOpacitySet = false;
     fillOpacitySet = false;
 
-    drawColorSet = false;
+    penColorSet = false;
     fillColorSet = false;
 
-    drawOpacity = 1.0;
+    penOpacity = 1.0;
     fillOpacity = 1.0;
 
-    drawColor = Qt::black;
+    penColor = Qt::black;
     fillColor = QColor();
 
     shape = ShapeUnset;
@@ -113,14 +113,14 @@ void Style::setLineWidth(tikz::LineWidth lineWidth)
     d->lineWidth = lineWidth;
 }
 
-double Style::drawOpacity() const
+double Style::penOpacity() const
 {
-    if (d->drawOpacitySet) {
-        return d->drawOpacity;
+    if (d->penOpacitySet) {
+        return d->penOpacity;
     }
 
     if (parent()) {
-        return parent()->drawOpacity();
+        return parent()->penOpacity();
     }
 
     return 1.0;
@@ -139,7 +139,7 @@ double Style::fillOpacity() const
     return 1.0;
 }
 
-QColor Style::drawColor() const
+QColor Style::penColor() const
 {
     return Qt::black;
 }
