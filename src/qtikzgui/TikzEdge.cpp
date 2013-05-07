@@ -234,7 +234,7 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         return;
     }
 
-    QList<QGraphicsItem *> items = scene()->items(event->scenePos(), Qt::ContainsItemShape, Qt::AscendingOrder);
+    QList<QGraphicsItem *> items = scene()->items(event->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
     items.removeOne(this);
 
     bool connected = false;
@@ -324,8 +324,8 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 //         ungrabMouse();
 
         // clear node handles, if needed
-//         qDeleteAll(d->nodeHandles);
-//         d->nodeHandles.clear();
+        qDeleteAll(d->nodeHandles);
+        d->nodeHandles.clear();
     }
 
     if (!contains(event->pos())) {

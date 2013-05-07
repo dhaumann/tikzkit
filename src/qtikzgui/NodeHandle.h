@@ -4,7 +4,7 @@
 #include "tikzgui_export.h"
 #include "tikz.h"
 
-#include "TikzItem.h"
+#include <QGraphicsObject>
 
 class QPainter;
 class TikzNode;
@@ -12,7 +12,7 @@ class TikzEdge;
 class NodeHandlePrivate;
 class Style;
 
-class NodeHandle : public TikzItem
+class NodeHandle : public QGraphicsObject
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@ DemoWidget::DemoWidget()
     l->addWidget(m_view);
 
     m_zoomSlider = new QSlider(this);
-    m_zoomSlider->setRange(100, 500);
+    m_zoomSlider->setRange(100, 1000);
     l->addWidget(m_zoomSlider);
 
     m_rotSlider = new QSlider(this);

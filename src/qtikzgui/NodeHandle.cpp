@@ -11,6 +11,7 @@
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include <QEvent>
+#include <QGraphicsSceneMouseEvent>
 
 #include <QDebug>
 
@@ -20,16 +21,20 @@ class NodeHandlePrivate
         QPointer<TikzNode> node;
         QPointer<TikzEdge> edge;
         tikz::Anchor anchor;
+
+        bool isHovered;
 };
 
 NodeHandle::NodeHandle(TikzEdge * parent, TikzNode * node, tikz::Anchor anchor)
-    : TikzItem(node)
+    : QGraphicsObject(node)
     , d(new NodeHandlePrivate())
 {
     d->node = node;
     d->edge = parent;
     d->anchor = anchor;
+    d->isHovered = false;
 
+    // set position depending on the anchor
     switch (d->anchor) {
         case tikz::AnchorUnset:
         case tikz::Center: {
@@ -43,15 +48,10 @@ NodeHandle::NodeHandle(TikzEdge * parent, TikzNode * node, tikz::Anchor anchor)
         }
     }
 
+    // catch mouse-move events while dragging the TikzEdge
     parent->installSceneEventFilter(this);
-//    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 
-//     item->setFlag(QGraphicsItem::ItemIsMovable, true);
-//     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
-
-//     setFlag(QGraphicsItem::ItemIsMovable, true);
-//     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-//     setFlag(QGraphicsItem::ItemIsSelectable, true);
+//  TODO: ???  connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 }
 
 NodeHandle::~NodeHandle()
@@ -70,25 +70,18 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(option);
 
     // debugging
-    painter->drawRect(boundingRect());
+//     painter->drawRect(boundingRect());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-//     qDebug() << isHovered() << isUnderMouse();
-    QPen pen(isHovered() ? Qt::red : Qt::gray); // TODO: on hover: red
+    QPen pen(d->isHovered ? Qt::red : Qt::darkGray);
     pen.setWidthF(0.05); // 0.5mm
     painter->setPen(pen);
 
     painter->drawLine(QPointF(0.05, 0.05), QPointF(-0.05, -0.05));
     painter->drawLine(QPointF(0.05, -0.05), QPointF(-0.05, 0.05));
 
-//     painter->setPen(p);
-
-    QBrush brush(Qt::yellow);
-    painter->setBrush(brush);
-
-// qDebug() << isSelected();
     painter->restore();
 }
 
@@ -107,30 +100,38 @@ QRectF NodeHandle::boundingRect() const
 
 bool NodeHandle::contains(const QPointF &point) const
 {
-    qDebug() << "contains point?" << point;
     switch (d->anchor) {
         case tikz::AnchorUnset:
         case tikz::Center: return d->node->contains(point);
         default: break;
     }
 
+    // within circle of 1.5 mm?
     return (point.x() * point.x() + point.y() * point.y()) < (0.15 * 0.15);
 }
 
 bool NodeHandle::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
 {
-    if (d->edge == watched &&
-        (event->type() == QEvent::GraphicsSceneHoverEnter
-        || event->type() == QEvent::GraphicsSceneHoverLeave
-        || event->type() == QEvent::GraphicsSceneHoverMove
-//         || event->type() == QEvent::GraphicsSceneMouseMove
-//         || event->type() == QEvent::GraphicsSceneMousePress
-//         || event->type() == QEvent::GraphicsSceneMouseRelease
+    if (d->edge == watched && event->type() == QEvent::GraphicsSceneMouseMove) {
+        // get all NodeHandle items under the mouse (should be at max 2)
+        QGraphicsSceneMouseEvent* ev = static_cast<QGraphicsSceneMouseEvent*>(event);
+        QList<QGraphicsItem *> items = scene()->items(ev->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
+        for (int i = 0; i < items.size(); ) {
+            if (items[i]->type() != type()) {
+                items.removeAt(i);
+            } else {
+                ++i;
+            }
+        }
 
-        )
-    ) {
-        scene()->sendEvent(this, event);
-        return false;
+        // if this is the item under the mouse, update isHovered state, if necessary
+        const bool hov = (!items.isEmpty()) && (items[0] == this);
+        if (d->isHovered != hov) {
+            d->isHovered = hov;
+            emit hovered(d->anchor);
+            update();
+            return true;
+        }
     }
     return false;
 }
