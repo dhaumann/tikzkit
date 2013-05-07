@@ -1,7 +1,9 @@
 #include "TikzEdge.h"
-#include "TikzNode.h"
 
+#include "TikzNode.h"
+#include "NodeHandle.h"
 #include "EdgeStyle.h"
+
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -24,17 +26,23 @@ class TikzEdgePrivate
         };
 
     public:
+        // edge and nodes
         tikz::Edge* edge;
         TikzNode* start;
         TikzNode* end;
 
+        // draging state
         bool dragging;      // true: mouse is grabbed
         DragMode dragMode;
 
+        // cached painter paths
         bool dirty;             // true: needs recalculation of paths
         QPainterPath linePath;
         QPainterPath arrowHead;
         QPainterPath arrowTail;
+
+        // node handles on mouse over nodes
+        QVector<NodeHandle*> nodeHandles;
 
     //
     // helper functions
@@ -220,10 +228,9 @@ bool TikzEdge::contains(const QPointF & point) const
 
 void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    TikzItem::mouseMoveEvent(event);
-    
     if (!d->dragging) {
         event->ignore();
+        TikzItem::mouseMoveEvent(event);
         return;
     }
 
@@ -238,15 +245,28 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                 Q_ASSERT(node);
                 if (d->dragMode == TikzEdgePrivate::DM_Start) {
                     if (d->start != node) {
-                        if (d->start) d->start->setDrawAnchors(false);
+                        qDeleteAll(d->nodeHandles);
+                        d->nodeHandles.clear();
                         setStartNode(node);
-                        d->start->setDrawAnchors(true);
+
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::Center));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::North));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::NorthEast));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::East));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::SouthEast));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::South));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::SouthWest));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::West));
+                        d->nodeHandles.append(new NodeHandle(this, node, tikz::NorthWest));
                     }
                 } else {
                     if (d->end != node) {
-                        if (d->end) d->end->setDrawAnchors(false);
+                        qDeleteAll(d->nodeHandles);
+                        d->nodeHandles.clear();
                         setEndNode(node);
-                        d->end->setDrawAnchors(true);
+
+                        NodeHandle* handle = new NodeHandle(this, node, tikz::Center);
+                        d->nodeHandles.append(handle);
                     }
                 }
                 connected = true;
@@ -256,16 +276,27 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     }
 
     if (!connected) {
+        qDeleteAll(d->nodeHandles);
+        d->nodeHandles.clear();
+
         if (d->dragMode == TikzEdgePrivate::DM_Start) {
-            if (d->start) d->start->setDrawAnchors(false);
             setStartNode(0);
             d->edge->start().setPos(event->scenePos());
         } else {
-            if (d->end) d->end->setDrawAnchors(false);
             setEndNode(0);
             d->edge->end().setPos(event->scenePos());
         }
     }
+
+//     if (connected) {
+// //         event->ignore();
+//         event->ignore();
+//         foreach (NodeHandle* handle, d->nodeHandles) {
+//             scene()->sendEvent(handle, event);
+//         }
+//     }
+
+
 //     qDebug() << "move";
 }
 
@@ -274,7 +305,7 @@ void TikzEdge::mousePressEvent(QGraphicsSceneMouseEvent * event)
     if (!contains(event->pos())) {
         TikzItem::mousePressEvent(event);
     } else {
-        grabMouse();
+//         grabMouse();
         d->dragging = true;
         const qreal distToStart = (event->scenePos() - d->edge->start().pos()).manhattanLength();
         const qreal distToEnd = (event->scenePos() - d->edge->end().pos()).manhattanLength();
@@ -290,9 +321,11 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     if (d->dragging) {
         d->dragging = false;
-        ungrabMouse();
-        if (d->end) d->end->setDrawAnchors(false);
-        if (d->start) d->start->setDrawAnchors(false);
+//         ungrabMouse();
+
+        // clear node handles, if needed
+//         qDeleteAll(d->nodeHandles);
+//         d->nodeHandles.clear();
     }
 
     if (!contains(event->pos())) {

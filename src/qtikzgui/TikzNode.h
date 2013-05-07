@@ -37,19 +37,8 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
         tikz::Node& node();
 
-    //
-    // Anchor related functions
-    //
-    public:
-        /**
-         * Draw anchors for better edge placement according to @p drawAnchors.
-         */
-        void setDrawAnchors(bool drawAnchors);
+        QPointF anchor(tikz::Anchor anchor) const;
 
-        /**
-         * Get the closest anchor for the @p scenepos.
-         */
-        tikz::Anchor closestAnchor(const QPointF& scenepos) const;
 
     //
     // reimplemented from QGraphicsItem

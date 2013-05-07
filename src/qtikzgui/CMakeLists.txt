@@ -13,6 +13,7 @@ set(qtikzgui_SOURCES
     TikzEdge.cpp
     TikzScene.cpp
     PaintHelper.cpp
+    NodeHandle.cpp
 )
 
 set(qtikzgui_HEADERS
@@ -20,6 +21,7 @@ set(qtikzgui_HEADERS
     TikzNode.h
     TikzEdge.h
     TikzScene.h
+    NodeHandle.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})

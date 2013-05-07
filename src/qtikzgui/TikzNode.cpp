@@ -11,13 +11,13 @@
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
+#include <cmath>
+
 class TikzNodePrivate
 {
     public:
         tikz::Node* node;
         QGraphicsTextItem* textItem;
-
-        bool drawAnchors;
 };
 
 class Text : public QGraphicsSimpleTextItem {
@@ -39,7 +39,6 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzNodePrivate())
 {
-    d->drawAnchors = false;
     d->node = new tikz::Node(this);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 
@@ -82,16 +81,43 @@ tikz::Node& TikzNode::node()
     return *d->node;
 }
 
-void TikzNode::setDrawAnchors(bool drawAnchors)
+QPointF TikzNode::anchor(tikz::Anchor anchor) const
 {
-    if (drawAnchors != d->drawAnchors) {
-        d->drawAnchors = drawAnchors;
-        update();
+    qreal radius = 0.5; // TODO: set size correct
+    switch (d->node->style()->shape()) {
+        case tikz::ShapeCircle: {
+            switch (anchor) {
+                case tikz::AnchorUnset:
+                case tikz::Center   : return QPointF(0, 0);
+                case tikz::North    : return QPointF(0, radius);
+                case tikz::NorthEast: return QPointF(1, 1) * 0.70710678 * radius;
+                case tikz::East     : return QPointF(radius, 0);
+                case tikz::SouthEast: return QPointF(1, -1) * 0.70710678 * radius;
+                case tikz::South    : return QPointF(0, -radius);
+                case tikz::SouthWest: return QPointF(-1, -1) * 0.70710678 * radius;
+                case tikz::West     : return QPointF(-radius, 0);
+                case tikz::NorthWest: return QPointF(-1, 1) * 0.70710678 * radius;
+            }
+            break;
+        }
+        case tikz::ShapeRectangle: {
+            switch (anchor) {
+                case tikz::AnchorUnset:
+                case tikz::Center   : return QPointF(0, 0);
+                case tikz::North    : return QPointF(0, radius);
+                case tikz::NorthEast: return QPointF(radius, radius);
+                case tikz::East     : return QPointF(radius, 0);
+                case tikz::SouthEast: return QPointF(radius, -radius);
+                case tikz::South    : return QPointF(0, -radius);
+                case tikz::SouthWest: return QPointF(-radius, -radius);
+                case tikz::West     : return QPointF(-radius, 0);
+                case tikz::NorthWest: return QPointF(-radius, radius);
+            }
+            break;
+        }
     }
-}
 
-tikz::Anchor TikzNode::closestAnchor(const QPointF& scenepos) const
-{
+    return QPointF(0, 0);
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -141,16 +167,6 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         painter->drawRect(br);
     }
 
-    if (d->drawAnchors) {
-        painter->setPen(Qt::red);
-        if (d->node->style()->shape() == tikz::ShapeCircle) {
-            painter->drawLine(QPointF(0.1, 0.1), QPointF(-0.1, -0.1));
-            painter->drawLine(QPointF(0.1, -0.1), QPointF(-0.1, 0.1));
-        } else if (d->node->style()->shape() == tikz::ShapeRectangle) {
-            painter->drawLine(QPointF(0.1, 0.1), QPointF(-0.1, -0.1));
-            painter->drawLine(QPointF(0.1, -0.1), QPointF(-0.1, 0.1));
-        }
-    }
     // returns the item's (0, 0) point in view's viewport coordinates
 //     t.rotate(5);
 // painter->rotate(5);

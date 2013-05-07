@@ -2,6 +2,8 @@
 
 #include <QGraphicsSceneHoverEvent>
 
+#include <QDebug>
+
 class TikzItemPrivate
 {
     public:
@@ -52,6 +54,8 @@ void TikzItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
         d->hovered = hovered;
         update();
     }
+
+//     qDebug() << d->hovered;
 }
 
 // kate: indent-width 4; replace-tabs on;
