@@ -134,6 +134,9 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
     private Q_SLOTS:
         void slotUpdate();
 
+        void startControlPointChanged(const QPointF& pos);
+        void endControlPointChanged(const QPointF& pos);
+
     private:
         TikzEdgePrivate * const d;
 };

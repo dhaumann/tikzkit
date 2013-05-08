@@ -1,9 +1,9 @@
 #include "TikzEdge.h"
 
 #include "TikzNode.h"
-#include "AnchorHandle.h"
 #include "EdgeStyle.h"
-
+#include "AnchorHandle.h"
+#include "CurveHandle.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -19,11 +19,15 @@
 
 class TikzEdgePrivate
 {
+    TikzEdge* q;
+
     public:
         enum DragMode {
             DM_Start = 0,
             DM_End,
         };
+        
+        TikzEdgePrivate(TikzEdge* edge) : q(edge) {}
 
     public:
         // edge and nodes
@@ -44,10 +48,38 @@ class TikzEdgePrivate
         // node handles on mouse over nodes
         QVector<AnchorHandle*> nodeHandles;
 
+        // Bezier curve handles
+        CurveHandle* startControlPoint;
+        CurveHandle* endControlPoint;
+
     //
     // helper functions
     //
     public:
+        void updateCache()
+        {
+            dirty = false;
+
+            // reset old paths
+            linePath = QPainterPath();
+            arrowHead = QPainterPath();
+            arrowTail = QPainterPath();
+
+            // draw line
+            QPointF startAnchor = q->startPos();
+            QPointF endAnchor = q->endPos();
+
+            linePath.moveTo(startAnchor);
+            // d->linePath.lineTo(endAnchor);
+            linePath.cubicTo(startControlPoint->pos(), endControlPoint->pos(), endAnchor);
+
+            QPointF diff(endAnchor - startAnchor);
+            const qreal radAngle = std::atan2(diff.y(), diff.x());
+
+            createArrow(arrowHead, startAnchor, linePath.angleAtPercent(0.0) * M_PI / 180.0);
+            createArrow(arrowTail, endAnchor, linePath.angleAtPercent(1.0) * M_PI / 180.0  - M_PI);
+        }
+
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad)
         {
             // TODO: fix style of arrow head
@@ -79,7 +111,7 @@ class TikzEdgePrivate
 
 TikzEdge::TikzEdge(QGraphicsItem * parent)
     : TikzItem(parent)
-    , d(new TikzEdgePrivate())
+    , d(new TikzEdgePrivate(this))
 {
     d->edge = new tikz::Edge(this);
     d->start = 0;
@@ -87,6 +119,12 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
 
     d->dragging = false;
     d->dirty = true;
+
+    d->startControlPoint = new CurveHandle(this);
+    d->endControlPoint = new CurveHandle(this);
+
+    connect(d->startControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(startControlPointChanged(QPointF)));
+    connect(d->endControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(endControlPointChanged(QPointF)));
 
     connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
@@ -132,7 +170,7 @@ QPointF TikzEdge::startPos() const
 {
     QPointF startPos;
     if (d->start) {
-        const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
+        const QPointF diff(d->startControlPoint->scenePos() - d->edge->start().pos());
         const qreal radAngle = std::atan2(diff.y(), diff.x());
         startPos = mapFromItem(d->start, d->start->anchor(startAnchor(), radAngle));
     } else {
@@ -145,9 +183,9 @@ QPointF TikzEdge::endPos() const
 {
     QPointF endPos;
     if (d->end) {
-        const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
+        const QPointF diff(d->endControlPoint->scenePos() - d->edge->end().pos());
         const qreal radAngle = std::atan2(diff.y(), diff.x());
-        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), radAngle + M_PI));
+        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), radAngle));
     } else {
         endPos = mapFromScene(d->edge->end().pos());
     }
@@ -192,25 +230,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
 
     if (d->dirty) {
-        d->dirty = false;
-
-        // reset old paths
-        d->linePath = QPainterPath();
-        d->arrowHead = QPainterPath();
-        d->arrowTail = QPainterPath();
-
-        // draw line
-        QPointF startAnchor = startPos();
-        QPointF endAnchor = endPos();
-
-        d->linePath.moveTo(startAnchor);
-        d->linePath.lineTo(endAnchor);
-
-        QPointF diff(endAnchor - startAnchor);
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
-
-        d->createArrow(d->arrowHead, startAnchor, -radAngle);
-        d->createArrow(d->arrowTail, endAnchor, -radAngle - M_PI);
+        d->updateCache();
     }
 
     painter->save();
@@ -251,13 +271,23 @@ QRectF TikzEdge::boundingRect() const
 {
     // TODO: maybe use Style::lineWidth()
 
-    const QPointF src = startPos();
-    const QPointF dst = endPos();
 
-    QRectF br(src, dst);
+    // make sure the start and end nodes positions are up-to-date
+    d->updateCache();
+
+    QPainterPath joinedPath;
+    joinedPath.addPath(d->linePath);
+
+//     const QPointF src = startPos();
+//     const QPointF dst = endPos();
+// 
+//     QRectF br(src, dst);
+//     br = br.normalized();
+//     br.adjust(-0.2, -0.2, 0.2, 0.2);
+
+    QRectF br = joinedPath.boundingRect();
     br = br.normalized();
-    br.adjust(-0.2, -0.2, 0.2, 0.2);
-
+    br.adjust(-0.2, -0.2, 0.2, 0.2);    
     return br;
 }
 
@@ -389,6 +419,16 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
         TikzItem::mouseReleaseEvent(event);
     }
     update();
+}
+
+void TikzEdge::startControlPointChanged(const QPointF& pos)
+{
+    slotUpdate();
+}
+
+void TikzEdge::endControlPointChanged(const QPointF& pos)
+{
+    slotUpdate();
 }
 
 // kate: indent-width 4; replace-tabs on;

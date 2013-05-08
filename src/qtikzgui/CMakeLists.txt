@@ -14,6 +14,7 @@ set(qtikzgui_SOURCES
     TikzScene.cpp
     PaintHelper.cpp
     AnchorHandle.cpp
+    CurveHandle.cpp
 )
 
 set(qtikzgui_HEADERS
@@ -22,6 +23,7 @@ set(qtikzgui_HEADERS
     TikzEdge.h
     TikzScene.h
     AnchorHandle.h
+    CurveHandle.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
