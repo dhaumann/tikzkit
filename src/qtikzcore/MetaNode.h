@@ -29,20 +29,18 @@ class MetaNode : public QObject
         virtual ~MetaNode();
 
         /**
-         * Get the coordinate of this node.
-         */
-        const QPointF& pos() const;
-
-        /**
-         * Get the anchor of this node.
+         * Get the Coord object of this node.
          */
         Coord & coord() const;
 
+    //
+    // x/y-position methods
+    //
+    public:
         /**
-         * Get the Node of this MetaNode.
-         * The return value may be 0.
+         * Get the coordinate of this node.
          */
-        Node* node() const;
+        const QPointF& pos() const;
 
     public Q_SLOTS:
         /**
@@ -51,6 +49,17 @@ class MetaNode : public QObject
          */
         void setPos(const QPointF& pos);
 
+    //
+    // Node methods
+    //
+    public:
+        /**
+         * Get the Node of this MetaNode.
+         * The return value may be 0.
+         */
+        Node* node() const;
+
+    public Q_SLOTS:
         /**
          * Set the node to @p node.
          * Calling this function emits changed(), if @p pos != pos().
@@ -60,7 +69,8 @@ class MetaNode : public QObject
         
     Q_SIGNALS:
         /**
-         * This signal is emitted either when a new node is set with setNode().
+         * This signal is emitted either when a new node is set with setNode()
+         * or when the x/y position of the node changed.
          */
         void changed();
 

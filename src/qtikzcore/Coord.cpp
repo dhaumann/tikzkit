@@ -17,7 +17,6 @@ Coord::Coord(QObject * parent)
 
 Coord::~Coord()
 {
-    emit aboutToDelete(this);
     delete d;
 }
 

@@ -75,14 +75,6 @@ class TIKZCORE_EXPORT Coord : public QObject
          */
         void changed(const QPointF & newPos);
 
-        /**
-         * This signal is emitted in the destructor ~Coord().
-         * @note Derived classes are partially destroyed at this point, so
-         *       do not cast this node to any derivative.
-         * @param coord a valid pointer to this Coord
-         */
-        void aboutToDelete(tikz::Coord* coord);
-
     private:
         CoordPrivate * const d;
 };
