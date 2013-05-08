@@ -1,7 +1,7 @@
 #include "TikzEdge.h"
 
 #include "TikzNode.h"
-#include "NodeHandle.h"
+#include "AnchorHandle.h"
 #include "EdgeStyle.h"
 
 
@@ -42,7 +42,7 @@ class TikzEdgePrivate
         QPainterPath arrowTail;
 
         // node handles on mouse over nodes
-        QVector<NodeHandle*> nodeHandles;
+        QVector<AnchorHandle*> nodeHandles;
 
     //
     // helper functions
@@ -178,11 +178,10 @@ void TikzEdge::slotUpdate()
 {
     prepareGeometryChange();
 
-    QPointF src = d->edge->start().pos();
-    QPointF dst = d->edge->end().pos();
-    setPos(src + (dst - src) / 2.0);
-
-    qDebug() << "new pos:" << (src + (dst - src) / 2.0);
+    // setPos() to the middle of start and end
+    QPointF startScenePos = d->edge->start().pos();
+    QPointF endScenePos = d->edge->end().pos();
+    setPos(0.5 * (startScenePos + endScenePos));
 
     d->dirty = true;
 }
@@ -307,16 +306,16 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setStartNode(node);
 
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NoAnchor, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::Center, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::North, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthEast, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::East, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthEast, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::South, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthWest, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::West, true));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthWest, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NoAnchor, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::Center, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::North, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthEast, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::East, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthEast, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::South, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthWest, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::West, true));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthWest, true));
                     }
                 } else {
                     if (d->end != node) {
@@ -324,16 +323,16 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setEndNode(node);
 
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NoAnchor, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::Center, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::North, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthEast, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::East, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthEast, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::South, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthWest, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::West, false));
-                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthWest, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NoAnchor, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::Center, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::North, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthEast, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::East, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthEast, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::South, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthWest, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::West, false));
+                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthWest, false));
                     }
                 }
                 connected = true;

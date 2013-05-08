@@ -41,6 +41,8 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 {
     d->node = new tikz::Node(this);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+    
+    setRotation(30);
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
@@ -126,6 +128,9 @@ QPointF TikzNode::anchor(tikz::Anchor anchor, qreal rad) const
         return this->anchor(anchor);
     }
 
+    // adapt angle to account for the self rotation of this node
+    rad -= rotation() * M_PI / 180.0;
+
     tikz::Node* that = const_cast<tikz::Node*>(d->node);
     if (that->style()->shape() == tikz::ShapeCircle) {
         qreal radius = 0.5; // TODO: set to correct size
@@ -166,9 +171,6 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     PaintHelper sh(painter, d->node->style());
     QPen p = sh.pen();
-//     qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
-//     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
-//     p.setWidthF(p.widthF() * oneMilliMeter / painter->device()->physicalDpiX() * 2.54);
     painter->setPen(p);
 
     QBrush brush(Qt::yellow);
@@ -257,10 +259,8 @@ QPainterPath TikzNode::shape() const
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 {
-//     qDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
-//         qDebug() << newPos;
         d->node->setPos(newPos);
 //         d->textItem->setPos(newPos);
         QRectF rect = scene()->sceneRect();
