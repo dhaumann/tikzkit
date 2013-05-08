@@ -65,12 +65,17 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
+    painter->setPen(QColor(100, 100, 255));
+    painter->setBrush(d->isHovered ? Qt::green : Qt::white);
+    painter->drawEllipse(QPointF(0, 0), 0.1, 0.1);
+//     painter->drawRect(QRectF(-0.1, -0.1, 0.2, 0.2));
+
     QPen pen(d->isHovered ? Qt::red : Qt::darkGray);
-    pen.setWidthF(0.05); // 0.5mm
+    pen.setWidthF(0.03); // 0.5mm
     painter->setPen(pen);
 
-    painter->drawLine(QPointF(0.05, 0.05), QPointF(-0.05, -0.05));
-    painter->drawLine(QPointF(0.05, -0.05), QPointF(-0.05, 0.05));
+    painter->drawLine(QPointF(0.04, 0.04), QPointF(-0.04, -0.04));
+    painter->drawLine(QPointF(0.04, -0.04), QPointF(-0.04, 0.04));
 
     painter->restore();
 }
