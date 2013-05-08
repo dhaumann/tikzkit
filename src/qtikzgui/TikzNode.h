@@ -38,6 +38,8 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         tikz::Node& node();
 
         QPointF anchor(tikz::Anchor anchor) const;
+        
+        QPointF anchor(tikz::Anchor anchor, qreal rad) const;
 
 
     //
@@ -63,12 +65,6 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          * Returns @p true, if @p point is contained in this node.
          */
 //         bool contains(const QPointF &point) const;
-
-//     bool isObscuredBy(const QGraphicsItem *item) const;
-//     QPainterPath opaqueArea() const;
-// 
-//     enum { Type = 3 };
-//     int type() const;
 
     //
     // protected overrides

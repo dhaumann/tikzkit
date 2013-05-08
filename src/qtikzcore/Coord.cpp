@@ -44,13 +44,6 @@ void Coord::setPos(const QPointF& pos)
     }
 }
 
-QPointF Coord::anchor(Anchor anchor, qreal rad) const
-{
-    Q_UNUSED(anchor);
-    Q_UNUSED(rad);
-    return d->pos;
-}
-
 bool Coord::operator==(const Coord& other) const
 {
     return d->pos == other.d->pos;

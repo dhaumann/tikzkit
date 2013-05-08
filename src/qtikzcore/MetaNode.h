@@ -36,11 +36,6 @@ class MetaNode : public QObject
         /**
          * Get the anchor of this node.
          */
-        QPointF anchor(Anchor anchor, qreal rad) const;
-
-        /**
-         * Get the anchor of this node.
-         */
         Coord & coord() const;
 
         /**

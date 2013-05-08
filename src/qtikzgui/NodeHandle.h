@@ -18,9 +18,9 @@ class NodeHandle : public QGraphicsObject
 
     public:
         /**
-         * Default constructor.
+         * Constructor.
          */
-        NodeHandle(TikzEdge * parent, TikzNode * node, tikz::Anchor anchor);
+        NodeHandle(TikzEdge * edge, tikz::Anchor anchor, bool isStart);
 
         /**
          * Destructor
@@ -50,9 +50,6 @@ class NodeHandle : public QGraphicsObject
          * Returns @p true, if @p point is contained in this handle.
          */
         bool contains(const QPointF &point) const;
-
-    Q_SIGNALS:
-        void hovered(tikz::Anchor anchor);
 
     protected:
         virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);

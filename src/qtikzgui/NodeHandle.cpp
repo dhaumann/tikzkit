@@ -18,6 +18,7 @@
 class NodeHandlePrivate
 {
     public:
+        bool isStart;
         QPointer<TikzNode> node;
         QPointer<TikzEdge> edge;
         tikz::Anchor anchor;
@@ -25,33 +26,22 @@ class NodeHandlePrivate
         bool isHovered;
 };
 
-NodeHandle::NodeHandle(TikzEdge * parent, TikzNode * node, tikz::Anchor anchor)
-    : QGraphicsObject(node)
+NodeHandle::NodeHandle(TikzEdge * edge, tikz::Anchor anchor, bool isStart)
+    : QGraphicsObject(isStart ? edge->startNode() : edge->endNode())
     , d(new NodeHandlePrivate())
 {
-    d->node = node;
-    d->edge = parent;
+    d->isStart = isStart;
+    d->node = isStart ? edge->startNode() : edge->endNode();
+    d->edge = edge;
     d->anchor = anchor;
     d->isHovered = false;
 
     // set position depending on the anchor
-    switch (d->anchor) {
-        case tikz::AnchorUnset:
-        case tikz::Center: {
-            setZValue(10.0);
-            setPos(0.0, 0.0);
-            break;
-        }
-        default: {
-            setZValue(20.0);
-            setPos(node->anchor(anchor));
-        }
-    }
+    setZValue(d->anchor == tikz::NoAnchor ? 10.0 : 20.0);
+    setPos(d->node->anchor(anchor));
 
     // catch mouse-move events while dragging the TikzEdge
-    parent->installSceneEventFilter(this);
-
-//  TODO: ???  connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+    edge->installSceneEventFilter(this);
 }
 
 NodeHandle::~NodeHandle()
@@ -87,23 +77,17 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 QRectF NodeHandle::boundingRect() const
 {
-    if (d->anchor == tikz::AnchorUnset
-        || d->anchor == tikz::Center)
-    {
+    if (d->anchor == tikz::NoAnchor) {
         return d->node->boundingRect();
-    }
-    else
-    {
+    } else {
         return QRectF(-0.15, -0.15, 0.3, 0.3);
     }
 }
 
 bool NodeHandle::contains(const QPointF &point) const
 {
-    switch (d->anchor) {
-        case tikz::AnchorUnset:
-        case tikz::Center: return d->node->contains(point);
-        default: break;
+    if (d->anchor == tikz::NoAnchor) {
+        return d->node->contains(point);
     }
 
     // within circle of 1.5 mm?
@@ -128,7 +112,15 @@ bool NodeHandle::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
         const bool hov = (!items.isEmpty()) && (items[0] == this);
         if (d->isHovered != hov) {
             d->isHovered = hov;
-            emit hovered(d->anchor);
+
+            if (d->isHovered) {
+                if (d->isStart) {
+                    d->edge->setStartAnchor(d->anchor);
+                } else {
+                    d->edge->setEndAnchor(d->anchor);
+                }
+            }
+
             update();
             return true;
         }

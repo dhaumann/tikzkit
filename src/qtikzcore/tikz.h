@@ -5,7 +5,7 @@ namespace tikz
 {
 
 enum Anchor {
-    AnchorUnset = 0,
+    NoAnchor = 0,
     Center,
     North,
     NorthEast,

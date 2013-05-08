@@ -66,15 +66,6 @@ class TIKZCORE_EXPORT Coord : public QObject
         void setPos(const QPointF& pos);
 
     //
-    // virtuals
-    //
-    public:
-        /**
-         * Get the anchor point for a specific @p anchor.
-         */
-        virtual QPointF anchor(Anchor anchor, qreal rad) const;
-
-    //
     // notification about changes
     //
     Q_SIGNALS:

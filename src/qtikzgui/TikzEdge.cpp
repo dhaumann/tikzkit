@@ -30,6 +30,8 @@ class TikzEdgePrivate
         tikz::Edge* edge;
         TikzNode* start;
         TikzNode* end;
+        tikz::Anchor startAnchor;
+        tikz::Anchor endAnchor;
 
         // draging state
         bool dragging;      // true: mouse is grabbed
@@ -84,6 +86,8 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     d->edge = new tikz::Edge(this);
     d->start = 0;
     d->end = 0;
+    d->startAnchor = tikz::NoAnchor;
+    d->endAnchor = tikz::NoAnchor;
 
     d->dragging = false;
     d->dirty = true;
@@ -118,6 +122,62 @@ void TikzEdge::setEndNode(TikzNode* end)
     d->edge->setEnd(end ? &end->node() : 0);
 }
 
+TikzNode* TikzEdge::startNode() const
+{
+    return d->start;
+}
+
+TikzNode* TikzEdge::endNode() const
+{
+    return d->end;
+}
+
+QPointF TikzEdge::startPos() const
+{
+    QPointF startAnchor;
+    if (d->start) {
+        const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
+        const qreal radAngle = std::atan2(diff.y(), diff.x());
+        startAnchor = mapFromItem(d->start, d->start->anchor(d->startAnchor, radAngle));
+    } else {
+        startAnchor = mapFromScene(d->edge->start().pos());
+    }
+    return startAnchor;
+}
+
+QPointF TikzEdge::endPos() const
+{
+    QPointF endAnchor;
+    if (d->end) {
+        const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
+        const qreal radAngle = std::atan2(diff.y(), diff.x());
+        endAnchor = mapFromItem(d->end, d->end->anchor(d->endAnchor, radAngle + M_PI));
+    } else {
+        endAnchor = mapFromScene(d->edge->end().pos());
+    }
+    return endAnchor;
+}
+
+void TikzEdge::setStartAnchor(tikz::Anchor anchor)
+{
+    if (d->startAnchor != anchor) {
+        d->startAnchor = anchor;
+        prepareGeometryChange();
+        d->dirty = true;
+        update();
+    }
+}
+
+void TikzEdge::setEndAnchor(tikz::Anchor anchor)
+{
+    if (d->endAnchor != anchor) {
+        d->endAnchor = anchor;
+        prepareGeometryChange();
+        d->dirty = true;
+        update();
+    }
+}
+
 void TikzEdge::slotUpdate()
 {
     prepareGeometryChange();
@@ -145,12 +205,14 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         d->arrowTail = QPainterPath();
 
         // draw line
-        QPointF diff(d->edge->end().pos() - d->edge->start().pos());
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
-        QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
-        QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
+        QPointF startAnchor = startPos();
+        QPointF endAnchor = endPos();
+
         d->linePath.moveTo(startAnchor);
         d->linePath.lineTo(endAnchor);
+
+        QPointF diff(endAnchor - startAnchor);
+        const qreal radAngle = std::atan2(diff.y(), diff.x());
 
         d->createArrow(d->arrowHead, startAnchor, -radAngle);
         d->createArrow(d->arrowTail, endAnchor, -radAngle - M_PI);
@@ -170,12 +232,12 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     d->drawArrow(painter, d->arrowHead);
     d->drawArrow(painter, d->arrowTail);
 
-    // todo: create d->paths
-    QPointF diff(d->edge->end().pos() - d->edge->start().pos());
-    const qreal radAngle = std::atan2(diff.y(), diff.x());
-    QPointF startAnchor = mapFromScene(d->edge->start().anchor(tikz::Center, radAngle));
-    QPointF endAnchor = mapFromScene(d->edge->end().anchor(tikz::Center, radAngle + M_PI));
+    // TODO: create d->paths
     if (isHovered() && !d->dragging) {
+        QPointF startAnchor = startPos();
+        QPointF endAnchor = endPos();
+        QPointF diff(endAnchor - startAnchor);
+        const qreal radAngle = std::atan2(diff.y(), diff.x());
         d->drawHandle(painter, startAnchor, d->start != 0);
         d->drawHandle(painter, endAnchor, d->end != 0);
     }
@@ -194,8 +256,8 @@ QRectF TikzEdge::boundingRect() const
 {
     // TODO: maybe use Style::lineWidth()
 
-    QPointF src = d->edge->start().pos() - pos();
-    QPointF dst = d->edge->end().pos() - pos();
+    const QPointF src = startPos();
+    const QPointF dst = endPos();
 
     QRectF br(src, dst);
     br = br.normalized();
@@ -249,15 +311,16 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setStartNode(node);
 
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::Center));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::North));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::NorthEast));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::East));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::SouthEast));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::South));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::SouthWest));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::West));
-                        d->nodeHandles.append(new NodeHandle(this, node, tikz::NorthWest));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NoAnchor, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::Center, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::North, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthEast, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::East, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthEast, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::South, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthWest, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::West, true));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthWest, true));
                     }
                 } else {
                     if (d->end != node) {
@@ -265,8 +328,16 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setEndNode(node);
 
-                        NodeHandle* handle = new NodeHandle(this, node, tikz::Center);
-                        d->nodeHandles.append(handle);
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NoAnchor, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::Center, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::North, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthEast, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::East, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthEast, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::South, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::SouthWest, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::West, false));
+                        d->nodeHandles.append(new NodeHandle(this, tikz::NorthWest, false));
                     }
                 }
                 connected = true;
@@ -287,15 +358,6 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
             d->edge->end().setPos(event->scenePos());
         }
     }
-
-//     if (connected) {
-// //         event->ignore();
-//         event->ignore();
-//         foreach (NodeHandle* handle, d->nodeHandles) {
-//             scene()->sendEvent(handle, event);
-//         }
-//     }
-
 
 //     qDebug() << "move";
 }

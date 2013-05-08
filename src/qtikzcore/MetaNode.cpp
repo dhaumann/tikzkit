@@ -36,12 +36,6 @@ void MetaNode::setPos(const QPointF& pos)
     coord().setPos(pos);
 }
 
-QPointF MetaNode::anchor(Anchor anchor, qreal rad) const
-{
-    return d->node ? d->node->anchor(anchor, rad)
-                   : d->coord.anchor(anchor, rad);
-}
-
 Coord & MetaNode::coord() const
 {
     return d->node ? *d->node : d->coord;

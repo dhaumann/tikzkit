@@ -51,6 +51,40 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          */
         void setEndNode(TikzNode* end);
 
+        /**
+         * Get the start node.
+         * @return the start node or 0, if the start of the edge is not connected.
+         */
+        TikzNode* startNode() const;
+
+        /**
+         * Get the end node.
+         * @return the end node or 0, if the end of the edge is not connected.
+         */
+        TikzNode* endNode() const;
+
+        /**
+         * Get the position of the start of the edge.
+         * @return the position in item coordinates
+         */
+        QPointF startPos() const;
+
+        /**
+         * Get the position of the end of the edge.
+         * @return the position in item coordinates
+         */
+        QPointF endPos() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the anchor of the head of the edge to @p anchor.
+         */
+        void setStartAnchor(tikz::Anchor anchor);
+        /**
+         * Set the anchor of the tail of the edge to @p anchor.
+         */
+        void setEndAnchor(tikz::Anchor anchor);
+
     //
     // reimplemented from QGraphicsItem
     //

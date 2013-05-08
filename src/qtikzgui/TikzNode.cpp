@@ -87,7 +87,7 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
     switch (d->node->style()->shape()) {
         case tikz::ShapeCircle: {
             switch (anchor) {
-                case tikz::AnchorUnset:
+                case tikz::NoAnchor:
                 case tikz::Center   : return QPointF(0, 0);
                 case tikz::North    : return QPointF(0, radius);
                 case tikz::NorthEast: return QPointF(1, 1) * 0.70710678 * radius;
@@ -102,7 +102,7 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
         }
         case tikz::ShapeRectangle: {
             switch (anchor) {
-                case tikz::AnchorUnset:
+                case tikz::NoAnchor:
                 case tikz::Center   : return QPointF(0, 0);
                 case tikz::North    : return QPointF(0, radius);
                 case tikz::NorthEast: return QPointF(radius, radius);
@@ -118,6 +118,40 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
     }
 
     return QPointF(0, 0);
+}
+
+QPointF TikzNode::anchor(tikz::Anchor anchor, qreal rad) const
+{
+    if (anchor != tikz::NoAnchor) {
+        return this->anchor(anchor);
+    }
+
+    tikz::Node* that = const_cast<tikz::Node*>(d->node);
+    if (that->style()->shape() == tikz::ShapeCircle) {
+        qreal radius = 0.5; // TODO: set to correct size
+        QPointF delta(std::cos(rad), std::sin(rad));
+        return radius * delta;
+    }
+    else if (that->style()->shape() == tikz::ShapeRectangle) {
+        // TODO: set to correct size
+        qreal x = 0.5 * std::cos(rad);
+        qreal y = 0.5 * std::sin(rad);
+        if (!qFuzzyCompare(x, 0.0) && !qFuzzyCompare(y, 0.0)) {
+            if (fabs(y) != 0.5) {
+                // normalize to y
+                x = (x < 0 ? -1 : 1) * fabs(0.5 * x / y);
+                y = (y < 0 ? -1 : 1) * 0.5;
+            }
+            if (fabs(x) > 0.5) {
+                // normalize to x
+                y = (y < 0 ? -1 : 1) * fabs(0.5 * y / x);
+                x = (x < 0 ? -1 : 1) * 0.5;
+            }
+        }
+        return QPointF(x, y);
+    }
+
+    return QPointF(0.0, 0.0);
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
