@@ -30,8 +30,6 @@ class TikzEdgePrivate
         tikz::Edge* edge;
         TikzNode* start;
         TikzNode* end;
-        tikz::Anchor startAnchor;
-        tikz::Anchor endAnchor;
 
         // draging state
         bool dragging;      // true: mouse is grabbed
@@ -86,8 +84,6 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     d->edge = new tikz::Edge(this);
     d->start = 0;
     d->end = 0;
-    d->startAnchor = tikz::NoAnchor;
-    d->endAnchor = tikz::NoAnchor;
 
     d->dragging = false;
     d->dirty = true;
@@ -134,48 +130,48 @@ TikzNode* TikzEdge::endNode() const
 
 QPointF TikzEdge::startPos() const
 {
-    QPointF startAnchor;
+    QPointF startPos;
     if (d->start) {
         const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
         const qreal radAngle = std::atan2(diff.y(), diff.x());
-        startAnchor = mapFromItem(d->start, d->start->anchor(d->startAnchor, radAngle));
+        startPos = mapFromItem(d->start, d->start->anchor(startAnchor(), radAngle));
     } else {
-        startAnchor = mapFromScene(d->edge->start().pos());
+        startPos = mapFromScene(d->edge->start().pos());
     }
-    return startAnchor;
+    return startPos;
 }
 
 QPointF TikzEdge::endPos() const
 {
-    QPointF endAnchor;
+    QPointF endPos;
     if (d->end) {
         const QPointF diff(d->edge->end().pos() - d->edge->start().pos());
         const qreal radAngle = std::atan2(diff.y(), diff.x());
-        endAnchor = mapFromItem(d->end, d->end->anchor(d->endAnchor, radAngle + M_PI));
+        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), radAngle + M_PI));
     } else {
-        endAnchor = mapFromScene(d->edge->end().pos());
+        endPos = mapFromScene(d->edge->end().pos());
     }
-    return endAnchor;
+    return endPos;
+}
+
+tikz::Anchor TikzEdge::startAnchor() const
+{
+    return d->edge->startAnchor();
+}
+
+tikz::Anchor TikzEdge::endAnchor() const
+{
+    return d->edge->endAnchor();
 }
 
 void TikzEdge::setStartAnchor(tikz::Anchor anchor)
 {
-    if (d->startAnchor != anchor) {
-        d->startAnchor = anchor;
-        prepareGeometryChange();
-        d->dirty = true;
-        update();
-    }
+    d->edge->setStartAnchor(anchor);
 }
 
 void TikzEdge::setEndAnchor(tikz::Anchor anchor)
 {
-    if (d->endAnchor != anchor) {
-        d->endAnchor = anchor;
-        prepareGeometryChange();
-        d->dirty = true;
-        update();
-    }
+    d->edge->setEndAnchor(anchor);
 }
 
 void TikzEdge::slotUpdate()

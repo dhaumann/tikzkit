@@ -75,6 +75,20 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          */
         QPointF endPos() const;
 
+    //
+    // anchor methods
+    //
+    public:
+        /**
+         * Get the anchor of the start of the edge.
+         */
+        tikz::Anchor startAnchor() const;
+
+        /**
+         * Get the anchor of the end of the edge.
+         */
+        tikz::Anchor endAnchor() const;
+        
     public Q_SLOTS:
         /**
          * Set the anchor of the head of the edge to @p anchor.

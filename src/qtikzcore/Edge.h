@@ -34,24 +34,21 @@ class TIKZCORE_EXPORT Edge : public QObject
         virtual ~Edge();
 
     //
-    // node start / end manipulation
+    // Node start / end manipulation
     //
     public:
 
         /**
          * Returns the start Coord.
          */
-        Coord& start();
+        Coord& start() const;
 
         /**
          * Returns the end Coord.
          * The returned pointer is always valid.
          */
-        Coord& end();
+        Coord& end() const;
 
-    //
-    // setter slots for node manipulation
-    //
     public Q_SLOTS:
         /**
          * Sets the start coordinate of the edge to @p node;
@@ -63,6 +60,23 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         void setEnd(Node* node);
 
+    //
+    // x/y-position methods
+    //
+    public:
+        /**
+         * Get the position of the current start node.
+         * @note This is the same as start()->pos().
+         */
+        QPointF startPos() const;
+
+        /**
+         * Set the position of the current end node.
+         * @note This is the same as end()->pos().
+         */
+        QPointF endPos() const;
+        
+    public Q_SLOTS:
         /**
          * Set the position of the current start node to @p pos.
          * @param pos the new start position
@@ -76,6 +90,31 @@ class TIKZCORE_EXPORT Edge : public QObject
          * @see complement: end()->pos()
          */
         void setEndPos(const QPointF& pos);
+
+    //
+    // anchor methods
+    //
+    public:
+        /**
+         * Get the anchor of the start of the edge.
+         */
+        tikz::Anchor startAnchor() const;
+
+        /**
+         * Get the anchor of the end of the edge.
+         */
+        tikz::Anchor endAnchor() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the anchor of the start of the edge to @p anchor.
+         */
+        void setStartAnchor(tikz::Anchor anchor);
+
+        /**
+         * Set the anchor of the end of the edge to @p anchor.
+         */
+        void setEndAnchor(tikz::Anchor anchor);
 
     //
     // edge properties
