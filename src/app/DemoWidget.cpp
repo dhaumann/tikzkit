@@ -62,8 +62,8 @@ DemoWidget::DemoWidget()
     m_view->scene()->addItem(item);
 
     item = new TikzNode();
-    item->node().setText("3");
     item->node().setPos(QPointF(2, 2));
+    item->node().style()->setShape(tikz::ShapeCircle);
     item->node().style()->setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(item);
 
