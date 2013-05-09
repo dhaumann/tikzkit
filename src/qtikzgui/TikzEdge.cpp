@@ -73,11 +73,13 @@ class TikzEdgePrivate
             // d->linePath.lineTo(endAnchor);
             linePath.cubicTo(startControlPoint->pos(), endControlPoint->pos(), endAnchor);
 
-            QPointF diff(endAnchor - startAnchor);
-            const qreal radAngle = std::atan2(diff.y(), diff.x());
-
             createArrow(arrowHead, startAnchor, linePath.angleAtPercent(0.0) * M_PI / 180.0);
             createArrow(arrowTail, endAnchor, linePath.angleAtPercent(1.0) * M_PI / 180.0  - M_PI);
+
+            QPointF diff(endAnchor - startAnchor);
+            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+            const qreal radAngle = std::atan2(diff.y(), diff.x());
+//             qDebug() <<
         }
 
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad)

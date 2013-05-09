@@ -73,6 +73,12 @@ enum ArrowStyle {
     ArrowStealth
 };
 
+enum CurveMode {
+    BendCurve = 0,
+    BezierCurve,
+    InOutCurve
+};
+
 }
 
 #endif // TIKZ_H
