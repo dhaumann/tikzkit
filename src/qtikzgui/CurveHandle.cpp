@@ -55,8 +55,8 @@ void CurveHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    painter->setPen(isHovered() ? Qt::green : Qt::blue);
-    painter->setBrush(isHovered() ? QColor(0, 255, 0, 125) : QColor(0, 0, 255, 125));
+    painter->setPen(isHovered() || isSelected() ? Qt::green : Qt::blue);
+    painter->setBrush(isHovered() || isSelected() ? QColor(0, 255, 0, 125) : QColor(0, 0, 255, 125));
     painter->drawEllipse(QPointF(0, 0), 0.2, 0.2);
 
     painter->restore();
