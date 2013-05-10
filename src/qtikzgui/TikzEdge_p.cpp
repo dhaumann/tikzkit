@@ -45,6 +45,8 @@ void TikzEdgePrivate::updateCache()
         linePath.moveTo(startAnchor);
         linePath.cubicTo(cp1, cp2, endAnchor);
 
+//         qDebug() << "un jetzt:" << startRad << endRad << startAnchor << endAnchor << cp1 << cp2;
+
         startControlPoint->setPos(cp1);
         endControlPoint->setPos(cp2);
     } else {

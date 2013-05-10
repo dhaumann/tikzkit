@@ -56,7 +56,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Set the bending angle to @p angle.
          * @note This value has an effect only if the CurveMode is set to CurveMode::BendCurve.
          */
-        void setBending(qreal angle);
+        void setBendAngle(qreal angle);
 
         /**
          * Set the looseness for bending the edge to @p looseness.

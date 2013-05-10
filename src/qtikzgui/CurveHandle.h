@@ -58,7 +58,7 @@ class CurveHandle : public TikzItem
     // protected overrides
     //
     protected:
-        virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
 
     private:
         CurveHandlePrivate * const d;

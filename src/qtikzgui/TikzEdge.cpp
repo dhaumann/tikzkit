@@ -187,13 +187,8 @@ QRectF TikzEdge::boundingRect() const
 
     QPainterPath joinedPath;
     joinedPath.addPath(d->linePath);
-
-//     const QPointF src = startPos();
-//     const QPointF dst = endPos();
-// 
-//     QRectF br(src, dst);
-//     br = br.normalized();
-//     br.adjust(-0.2, -0.2, 0.2, 0.2);
+//     joinedPath.addPath(d->arrowHead);
+//     joinedPath.addPath(d->arrowTail);
 
     QRectF br = joinedPath.boundingRect();
     br = br.normalized();
@@ -333,11 +328,79 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEdge::startControlPointChanged(const QPointF& pos)
 {
+    switch (style()->curveMode()) {
+        case tikz::BendCurve: {
+            const QPointF startAnchor = startPos();
+            const QPointF endAnchor = endPos();
+            const QPointF diff = endAnchor - startAnchor;
+            qreal rad = std::atan2(diff.y(), diff.x());
+
+            const QPointF diff2 = d->startControlPoint->mapToItem(this,pos) - startAnchor;
+            rad = std::atan2(diff2.y(), diff2.x()) - rad;
+            qDebug() << "New angle:" << rad * 180.0 / M_PI;
+            style()->beginConfig();
+            style()->setBendAngle(rad * 180.0 / M_PI);
+
+            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+            const qreal len2 = sqrt(diff2.x()*diff2.x() + diff2.y()*diff2.y());
+
+            const qreal factor = 0.3915;
+            qreal looseness = len2 / (factor * len);
+            qDebug() << "new looseness:" << looseness;
+            style()->setLooseness(looseness);
+            style()->endConfig();
+
+            break;
+        }
+        case tikz::InOutCurve:
+//             rad = q->style()->setOutAngle( * 180.0 / M_PI);
+            break;
+        default:
+            break;
+    }
+
     slotUpdate();
 }
 
 void TikzEdge::endControlPointChanged(const QPointF& pos)
 {
+    switch (style()->curveMode()) {
+        case tikz::BendCurve: {
+            const QPointF startAnchor = startPos();
+            const QPointF endAnchor = endPos();
+            const QPointF diff = startAnchor - endAnchor;
+            qreal rad = std::atan2(diff.y(), diff.x());
+
+            const QPointF diff2 = d->endControlPoint->mapToItem(this, pos) - endAnchor;
+            rad = std::atan2(diff2.y(), diff2.x()) - rad;
+            qreal deg = rad * 180.0 / M_PI;
+            if (deg > 180) deg -= 360;
+            if (deg < -180) deg += 360;
+            deg = qRound(deg / 15.0) * 15.0;
+            qDebug() << "New angle:" << deg;
+            style()->beginConfig();
+            style()->setBendAngle(- deg);
+
+            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+            const qreal len2 = sqrt(diff2.x()*diff2.x() + diff2.y()*diff2.y());
+
+            const qreal factor = 0.3915;
+            qreal looseness = len2 / (factor * len);
+
+            looseness = qRound(looseness * 5.0) / 5.0;
+            qDebug() << "new looseness:" << looseness;
+            style()->setLooseness(looseness);
+            style()->endConfig();
+
+            break;
+        }
+        case tikz::InOutCurve:
+//             rad = q->style()->setOutAngle( * 180.0 / M_PI);
+            break;
+        default:
+            break;
+    }
+
     slotUpdate();
 }
 

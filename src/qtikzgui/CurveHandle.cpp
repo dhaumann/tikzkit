@@ -29,8 +29,6 @@ CurveHandle::CurveHandle(TikzEdge * edge)
     // set above edge
     setZValue(10.0);
 
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
@@ -73,15 +71,9 @@ bool CurveHandle::contains(const QPointF &point) const
     return (point.x() * point.x() + point.y() * point.y()) < (0.25 * 0.25);
 }
 
-QVariant CurveHandle::itemChange(GraphicsItemChange change, const QVariant & value)
+void CurveHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (change == ItemPositionChange && scene()) {
-        QPointF newPos = value.toPointF();
-        emit positionChanged(newPos);
-        return newPos;
-    }
-
-    return QGraphicsObject::itemChange(change, value);
+    emit positionChanged(event->pos());
 }
 
 // kate: indent-width 4; replace-tabs on;

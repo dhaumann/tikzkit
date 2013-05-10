@@ -53,11 +53,15 @@ void EdgeStyle::setCurveMode(tikz::CurveMode mode)
 
 qreal EdgeStyle::bendAngle() const
 {
-    return d->bendAngle + 30;
+    return d->bendAngle;
 }
 
-void EdgeStyle::setBending(qreal angle)
+void EdgeStyle::setBendAngle(qreal angle)
 {
+    // normalize to [-180, 180]
+    while (angle > 180) angle -= 360.0;
+    while (angle < -180) angle += 360.0;
+
     if (d->bendAngle != angle) {
         beginConfig();
         d->bendAngle = angle;
