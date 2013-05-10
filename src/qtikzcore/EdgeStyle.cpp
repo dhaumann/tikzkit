@@ -9,7 +9,7 @@ class EdgeStylePrivate
 {
 public:
     CurveMode curveMode;
-    qreal bending; // in degree
+    qreal bendAngle; // in degree
     qreal looseness;
     qreal outAngle; // in degree
     qreal inAngle; // in degree
@@ -20,7 +20,7 @@ EdgeStyle::EdgeStyle()
     , d(new EdgeStylePrivate())
 {
     d->curveMode = tikz::BendCurve;
-    d->bending = 0.0;
+    d->bendAngle = 0.0;
     d->looseness = 1.0;
     d->outAngle = 0.0;
     d->inAngle = 0.0;
@@ -51,16 +51,16 @@ void EdgeStyle::setCurveMode(tikz::CurveMode mode)
     }
 }
 
-qreal EdgeStyle::bending() const
+qreal EdgeStyle::bendAngle() const
 {
-    return d->bending;
+    return d->bendAngle + 30;
 }
 
 void EdgeStyle::setBending(qreal angle)
 {
-    if (d->bending != angle) {
+    if (d->bendAngle != angle) {
         beginConfig();
-        d->bending = angle;
+        d->bendAngle = angle;
         endConfig();
     }
 }

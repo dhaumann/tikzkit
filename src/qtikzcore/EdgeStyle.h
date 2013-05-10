@@ -47,8 +47,10 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         /**
          * Get the bending angle if the mode is set to CurveMode::BendCurve.
          * @note The return value is only of meaning if the CurveMode is set to CurveMode::BendCurve.
+         * @return The bending angle is always expressed as 'bend left'.
+         *         Therefore, negative values can be interpreted as positive with 'bend right'.
          */
-        qreal bending() const;
+        qreal bendAngle() const;
 
         /**
          * Set the bending angle to @p angle.
