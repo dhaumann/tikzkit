@@ -372,28 +372,39 @@ void TikzEdge::endControlPointChanged(const QPointF& pos)
 {
     switch (style()->curveMode()) {
         case tikz::BendCurve: {
-            const QPointF startAnchor = startPos();
-            const QPointF endAnchor = endPos();
-            const QPointF diff = startAnchor - endAnchor;
-            qreal rad = std::atan2(diff.y(), diff.x());
 
-            const QPointF diff2 = d->endControlPoint->mapToItem(this, pos) - endAnchor;
-            rad = std::atan2(diff2.y(), diff2.x()) - rad;
+            QPointF startAnchor = d->start ? mapFromItem(d->start, d->start->anchor(this->startAnchor()))
+                                : mapFromScene(d->edge->start().pos());
+            QPointF endAnchor = d->end ? mapFromItem(d->end, d->end->anchor(this->endAnchor()))
+                                : mapFromScene(d->edge->end().pos());
+
+            QPointF endToHandle = d->endControlPoint->mapToItem(this, pos) - endAnchor;
+
+//             startAnchor = startPos(M_PI - std::atan2(endToHandle.y(), endToHandle.x()));
+//             endAnchor = endPos(std::atan2(endToHandle.y(), endToHandle.x()));
+            QPointF startEnd = startAnchor - endAnchor;
+
+            qreal rad = std::atan2(startEnd.y(), startEnd.x());
+
+            rad = std::atan2(endToHandle.y(), endToHandle.x()) - rad;
+
+            endToHandle = d->endControlPoint->mapToItem(this, pos) - endAnchor;
+
             qreal deg = rad * 180.0 / M_PI;
             if (deg > 180) deg -= 360;
             if (deg < -180) deg += 360;
-            deg = qRound(deg / 15.0) * 15.0;
-            qDebug() << "New angle:" << deg;
+//             deg = qRound(deg / 15.0) * 15.0;
+//             qDebug() << "New angle:" << deg;
             style()->beginConfig();
             style()->setBendAngle(- deg);
 
-            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
-            const qreal len2 = sqrt(diff2.x()*diff2.x() + diff2.y()*diff2.y());
+            const qreal len = sqrt(startEnd.x()*startEnd.x() + startEnd.y()*startEnd.y());
+            const qreal len2 = sqrt(endToHandle.x()*endToHandle.x() + endToHandle.y()*endToHandle.y());
 
             const qreal factor = 0.3915;
             qreal looseness = len2 / (factor * len);
 
-            looseness = qRound(looseness * 5.0) / 5.0;
+//             looseness = qRound(looseness * 5.0) / 5.0;
             qDebug() << "new looseness:" << looseness;
             style()->setLooseness(looseness);
             style()->endConfig();
