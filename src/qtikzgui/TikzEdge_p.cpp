@@ -57,16 +57,18 @@ void TikzEdgePrivate::updateCache()
 
 qreal TikzEdgePrivate::startAngle()
 {
-    const QPointF startAnchor = start ? start->pos() : edge->startPos();
-    const QPointF endAnchor = end ? end->pos() : edge->endPos();
-    const QPointF diff = endAnchor - startAnchor;
-    qreal rad = std::atan2(diff.y(), diff.x());
+    qreal rad = 0.0;
     switch (q->style()->curveMode()) {
-        case tikz::BendCurve:
-            rad = rad + q->style()->bendAngle() * M_PI / 180.0;
+        case tikz::BendCurve: {
+            const QPointF startAnchor = start ? start->pos() : edge->startPos();
+            const QPointF endAnchor = end ? end->pos() : edge->endPos();
+            const QPointF diff = endAnchor - startAnchor;
+            rad = std::atan2(diff.y(), diff.x())
+                    + q->style()->bendAngle() * M_PI / 180.0;
             break;
+        }
         case tikz::InOutCurve:
-            rad = rad + q->style()->outAngle() * M_PI / 180.0;
+            rad = q->style()->outAngle() * M_PI / 180.0;
             break;
         default:
             break;
@@ -76,16 +78,18 @@ qreal TikzEdgePrivate::startAngle()
 
 qreal TikzEdgePrivate::endAngle()
 {
-    const QPointF startAnchor = start ? start->pos() : edge->startPos();
-    const QPointF endAnchor = end ? end->pos() : edge->endPos();
-    const QPointF diff = startAnchor - endAnchor;
-    qreal rad = std::atan2(diff.y(), diff.x());
+    qreal rad = 0.0;
     switch (q->style()->curveMode()) {
-        case tikz::BendCurve:
-            rad = rad - q->style()->bendAngle() * M_PI / 180.0;
+        case tikz::BendCurve: {
+            const QPointF startAnchor = start ? start->pos() : edge->startPos();
+            const QPointF endAnchor = end ? end->pos() : edge->endPos();
+            const QPointF diff = startAnchor - endAnchor;
+            rad = std::atan2(diff.y(), diff.x())
+                    - q->style()->bendAngle() * M_PI / 180.0;
             break;
+        }
         case tikz::InOutCurve:
-            rad = rad - q->style()->inAngle() * M_PI / 180.0;
+            rad = q->style()->inAngle() * M_PI / 180.0;
             break;
         default:
             break;
