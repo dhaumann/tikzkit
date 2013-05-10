@@ -9,15 +9,45 @@
 #include <QGraphicsTextItem>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
+#include <QPainterPath>
+
 #include <QDebug>
 
 #include <cmath>
 
 class TikzNodePrivate
 {
+    TikzNode* q;
+
     public:
+        TikzNodePrivate(TikzNode * tikzNode) : q(tikzNode) {}
+
+        bool dirty;
+        QPainterPath shapePath;
+
         tikz::Node* node;
         QGraphicsTextItem* textItem;
+
+    public:
+        void updateCache()
+        {
+            if (!dirty) return;
+
+            dirty = false;
+
+            shapePath = QPainterPath();
+
+            QRectF br(-0.5, -0.5, 1.0, 1.0);
+            if (node->style()->shape() == tikz::ShapeCircle) {
+                shapePath.addEllipse(QPointF(0, 0), 0.5, 0.5);
+            } else if (node->style()->shape() == tikz::ShapeRectangle) {
+                shapePath.addRect(br);
+            } else {
+                shapePath.addRect(br);
+            }
+
+            q->setRotation(node->style()->rotation());
+        }
 };
 
 class Text : public QGraphicsSimpleTextItem {
@@ -37,12 +67,12 @@ public:
 
 TikzNode::TikzNode(QGraphicsItem * parent)
     : TikzItem(parent)
-    , d(new TikzNodePrivate())
+    , d(new TikzNodePrivate(this))
 {
+    d->dirty = true;
     d->node = new tikz::Node(this);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
-    
-//     setRotation(30);
+    connect(d->node->style(), SIGNAL(changed()), this, SLOT(styleChanged()));
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
@@ -170,6 +200,8 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
+    d->updateCache();
+
     PaintHelper sh(painter, d->node->style());
     QPen p = sh.pen();
     painter->setPen(p);
@@ -177,45 +209,16 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QBrush brush(Qt::yellow);
     painter->setBrush(brush);
 
-// //     painter->resetTransform();
-//     painter->setWorldTransform(scene()->views()[0]->viewportTransform());
-//     painter->translate(scenePos());
-//     painter->rotate(5);
-//     painter->translate(-scenePos());
-//     QTransform t = deviceTransform(scene()->views()[0]->viewportTransform());
-
-//     qreal det = t.determinant();
-//     t /= det;
-
     QRectF br(-0.5, -0.5, 1.0, 1.0);
-//     QRectF br = t.mapRect(boundingRect());
-//     painter->drawRect(br);
-//     QPolygonF br = scene()->views()[0]->mapFromScene(boundingRect());
-//     painter->drawPolygon(br);
-    if (d->node->style()->shape() == tikz::ShapeCircle) {
-        painter->drawEllipse(QPointF(0, 0), 0.5, 0.5);
-    } else if (d->node->style()->shape() == tikz::ShapeRectangle) {
-        painter->drawRect(br);
-    } else {
+    if (d->node->style()->shape() == tikz::NoShape) {
         p.setStyle(Qt::DashLine);
         painter->setPen(p);
         painter->setBrush(Qt::cyan);
         painter->setOpacity(0.5);
-        painter->drawRect(br);
     }
 
-    // returns the item's (0, 0) point in view's viewport coordinates
-//     t.rotate(5);
-// painter->rotate(5);
-
-//     br = t.mapRect(br);
-//     QRectF textRect = t.map(boundingRect());
-
-//     QFont f = painter->font();
-//     f.setPointSize(15);
-//     painter->setFont(f);
-
-//     painter->drawText(textRect, Qt::AlignCenter, d->node->text());
+    painter->drawPath(d->shapePath);
+    painter->fillPath(d->shapePath, brush);
 
     // TODO: highlight selection
 //     qDebug() << (bool)(option->state & QStyle::State_Selected);
@@ -236,18 +239,13 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     
 QRectF TikzNode::boundingRect() const
 {
-    // TODO: call prepareGeometryChange() whenever the geometry changes via the style
-//     PaintHelper sh(d->node->style());
     qreal lineWidth = 0; //sh.lineWidth();
-    
-    QRectF br(-0.5, -0.5, 1.0, 1.0);
 
-    if (d->node->style()->shape() == tikz::ShapeCircle
-        || d->node->style()->shape() == tikz::ShapeRectangle
-        || true
-    ) {
-        br.adjust(-0.2, -0.2, 0.2, 0.2);
-    }
+    d->updateCache();
+
+    QRectF br = d->shapePath.boundingRect();
+    br.adjust(-0.2, -0.2, 0.2, 0.2);
+
     return br;
 }
 
@@ -284,6 +282,12 @@ void TikzNode::slotSetPos(const QPointF& pos)
     disconnect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     setPos(pos);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+}
+
+void TikzNode::styleChanged()
+{
+    prepareGeometryChange();
+    d->dirty = true;
 }
 
 // kate: indent-width 4; replace-tabs on;

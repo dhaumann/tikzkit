@@ -38,7 +38,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         tikz::Node& node();
 
         QPointF anchor(tikz::Anchor anchor) const;
-        
+
         QPointF anchor(tikz::Anchor anchor, qreal rad) const;
 
 
@@ -74,6 +74,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
 
     protected Q_SLOTS:
         void slotSetPos(const QPointF& pos);
+        void styleChanged();
 
     private:
         TikzNodePrivate * const d;
