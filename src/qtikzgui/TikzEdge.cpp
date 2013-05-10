@@ -66,20 +66,54 @@ class TikzEdgePrivate
             arrowTail = QPainterPath();
 
             // draw line
-            QPointF startAnchor = q->startPos();
-            QPointF endAnchor = q->endPos();
+            const QPointF startAnchor = q->startPos();
+            const QPointF endAnchor = q->endPos();
+            const QPointF diff = endAnchor - startAnchor;
+            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
 
-            linePath.moveTo(startAnchor);
-            // d->linePath.lineTo(endAnchor);
-            linePath.cubicTo(startControlPoint->pos(), endControlPoint->pos(), endAnchor);
+            if (q->style()->curveMode() == tikz::BendCurve) {
+                // from tikz/libraries/tikzlibrarytopaths.code.tex:
+                const qreal factor = 0.3915;
+                const qreal vecLen = len * q->style()->looseness() * factor;
+                const qreal startRad = startAngle();
+                const qreal endRad = endAngle();
+                QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
+                QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
+                linePath.moveTo(startAnchor);
+                linePath.cubicTo(cp1, cp2, endAnchor);
+
+                startControlPoint->setPos(cp1);
+                endControlPoint->setPos(cp2);
+            } else {
+                linePath.lineTo(endAnchor);
+            }
 
             createArrow(arrowHead, startAnchor, linePath.angleAtPercent(0.0) * M_PI / 180.0);
             createArrow(arrowTail, endAnchor, linePath.angleAtPercent(1.0) * M_PI / 180.0  - M_PI);
+        }
 
-            QPointF diff(endAnchor - startAnchor);
-            const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
-            const qreal radAngle = std::atan2(diff.y(), diff.x());
-//             qDebug() <<
+        qreal startAngle()
+        {
+            const QPointF startAnchor = start ? start->pos() : edge->startPos();
+            const QPointF endAnchor = end ? end->pos() : edge->endPos();
+            const QPointF diff = endAnchor - startAnchor;
+            qreal rad = std::atan2(diff.y(), diff.x());
+            if (q->style()->curveMode() == tikz::BendCurve) {
+                rad = rad + q->style()->bendAngle() * M_PI / 180.0;
+            }
+            return rad;
+        }
+
+        qreal endAngle()
+        {
+            const QPointF startAnchor = start ? start->pos() : edge->startPos();
+            const QPointF endAnchor = end ? end->pos() : edge->endPos();
+            const QPointF diff = startAnchor - endAnchor;
+            qreal rad = std::atan2(diff.y(), diff.x());
+            if (q->style()->curveMode() == tikz::BendCurve) {
+                rad = rad - q->style()->bendAngle() * M_PI / 180.0;
+            }
+            return rad;
         }
 
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad)
@@ -146,6 +180,11 @@ tikz::Edge& TikzEdge::edge()
     return *d->edge;
 }
 
+tikz::EdgeStyle* TikzEdge::style() const
+{
+    return d->edge->style();
+}
+
 void TikzEdge::setStartNode(TikzNode* start)
 {
     d->start = start;
@@ -172,9 +211,7 @@ QPointF TikzEdge::startPos() const
 {
     QPointF startPos;
     if (d->start) {
-        const QPointF diff(d->startControlPoint->scenePos() - d->edge->start().pos());
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
-        startPos = mapFromItem(d->start, d->start->anchor(startAnchor(), radAngle));
+        startPos = mapFromItem(d->start, d->start->anchor(startAnchor(), d->startAngle()));
     } else {
         startPos = mapFromScene(d->edge->start().pos());
     }
@@ -185,9 +222,7 @@ QPointF TikzEdge::endPos() const
 {
     QPointF endPos;
     if (d->end) {
-        const QPointF diff(d->endControlPoint->scenePos() - d->edge->end().pos());
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
-        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), radAngle));
+        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), d->endAngle()));
     } else {
         endPos = mapFromScene(d->edge->end().pos());
     }

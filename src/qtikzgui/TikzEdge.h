@@ -9,8 +9,6 @@
 class QPainter;
 
 class TikzNode;
-class Style;
-
 class TikzEdgePrivate;
 
 class TIKZGUI_EXPORT TikzEdge :  public TikzItem
@@ -38,6 +36,12 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * @warning Use setStartNode() and setEndNode() to change nodes
          */
         tikz::Edge& edge();
+
+        /**
+         * Get the EdgeStyle of this edge.
+         * The returned pointer is always valid.
+         */
+        tikz::EdgeStyle* style() const;
 
         /**
          * Set the start node to @p start.
