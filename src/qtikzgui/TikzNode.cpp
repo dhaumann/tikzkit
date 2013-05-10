@@ -42,7 +42,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     d->node = new tikz::Node(this);
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     
-    setRotation(30);
+//     setRotation(30);
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
@@ -164,7 +164,8 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
-    painter->drawRect(boundingRect());
+    // debugging: bounding rect
+//     painter->drawRect(boundingRect());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
