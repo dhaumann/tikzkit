@@ -11,7 +11,11 @@
 #include <QHBoxLayout>
 #include <QGraphicsView>
 #include <QSlider>
+#include <QTimer>
+
 #include <QDebug>
+
+static TikzNode* a;
 
 DemoWidget::DemoWidget()
     : QWidget()
@@ -35,7 +39,7 @@ DemoWidget::DemoWidget()
     m_view->setScene(scene);
 
     m_view->setSceneRect(0, 0, m_view->size().width() / 200.0, m_view->size().height() / 200.0);
-    m_view->rotate(5);
+//     m_view->rotate(5);
 //     QTransform t;
 //     t.rotate(5);
 //     t.scale(20, 20);
@@ -49,44 +53,109 @@ DemoWidget::DemoWidget()
     m_view->show();
     m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
 
-    TikzNode* itema = new TikzNode();
-    itema->node().setText("1");
-    itema->node().setPos(QPointF(-3, 0));
-    itema->node().style()->setLineWidth(tikz::VeryThin);
-    itema->node().style()->setShape(tikz::ShapeCircle);
-    m_view->scene()->addItem(itema);
+    TikzNode* item1 = new TikzNode();
+    item1->node().setText("1");
+    item1->node().setPos(QPointF(-3, 3));
+    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setShape(tikz::ShapeCircle);
+    m_view->scene()->addItem(item1);
 
-    TikzNode* item = new TikzNode();
-    item->node().setText("2");
-    item->node().setPos(QPointF(1, 1));
-    item->node().style()->setLineWidth(tikz::Thin);
-    m_view->scene()->addItem(item);
-
-    item = new TikzNode();
-    item->node().setPos(QPointF(2, 2));
-    item->node().style()->setShape(tikz::ShapeCircle);
-    item->node().style()->setLineWidth(tikz::SemiThick);
-    m_view->scene()->addItem(item);
-
-    item = new TikzNode();
-    item->node().setText("4");
-    item->node().setPos(QPointF(3, 3));
-    item->node().style()->setLineWidth(tikz::Thick);
-    m_view->scene()->addItem(item);
-
-    item = new TikzNode();
-    item->node().setText("5");
-    item->node().setPos(QPointF(3, 0));
-    item->node().style()->setLineWidth(tikz::UltraThick);
-    item->node().style()->setShape(tikz::ShapeRectangle);
-    m_view->scene()->addItem(item);
+    TikzNode* item2 = new TikzNode();
+    item2->node().setText("2");
+    item2->node().setPos(QPointF(3, 3));
+    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setShape(tikz::ShapeCircle);
+    m_view->scene()->addItem(item2);
 
     // an edge
     TikzEdge* edge = new TikzEdge();
-    edge->setStartNode(itema);
-    edge->setEndNode(item);
+    edge->setStartNode(item1);
+    edge->setEndNode(item2);
     edge->edge().style()->setLineWidth(tikz::UltraThick);
     m_view->scene()->addItem(edge);
+
+
+
+    item1 = new TikzNode();
+    item1->node().setText("1");
+    item1->node().setPos(QPointF(-3, 1));
+    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setShape(tikz::ShapeRectangle);
+    m_view->scene()->addItem(item1);
+
+    item2 = new TikzNode();
+    item2->node().setText("2");
+    item2->node().setPos(QPointF(3, 1));
+    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setShape(tikz::ShapeCircle);
+    m_view->scene()->addItem(item2);
+
+    // an edge
+    edge = new TikzEdge();
+    edge->setStartNode(item1);
+    edge->setEndNode(item2);
+    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    m_view->scene()->addItem(edge);
+
+
+    item1 = new TikzNode();
+    item1->node().setText("1");
+    item1->node().setPos(QPointF(-3, -1));
+    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setShape(tikz::ShapeRectangle);
+    m_view->scene()->addItem(item1);
+
+    item2 = new TikzNode();
+    item2->node().setText("2");
+    item2->node().setPos(QPointF(3, -1));
+    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setShape(tikz::ShapeRectangle);
+    m_view->scene()->addItem(item2);
+
+    // an edge
+    edge = new TikzEdge();
+    edge->setStartNode(item1);
+    edge->setEndNode(item2);
+    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    m_view->scene()->addItem(edge);
+
+
+    item1 = new TikzNode();
+    item1->node().setText("1");
+    item1->node().setPos(QPointF(-3, -3));
+    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setShape(tikz::ShapeRectangle);
+//     item1->rotate(30);
+    m_view->scene()->addItem(item1);
+    a = item1;
+
+    item2 = new TikzNode();
+    item2->node().setText("2");
+    item2->node().setPos(QPointF(3, -3));
+    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setShape(tikz::ShapeCircle);
+    m_view->scene()->addItem(item2);
+
+    // an edge
+    edge = new TikzEdge();
+    edge->setStartNode(item1);
+    edge->setEndNode(item2);
+    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setBendAngle(30);
+    m_view->scene()->addItem(edge);
+
+
+
+
+//     item1 = new TikzNode();
+//     item1->node().setText("5");
+//     item1->node().setPos(QPointF(3, 0));
+//     item1->node().style()->setLineWidth(tikz::UltraThick);
+// //     item1->node().style()->setShape(tikz::ShapeRectangle);
+//     m_view->scene()->addItem(item1);
+//
+//
+//     QTimer::singleShot(3000, item1, SLOT(deleteLater()));
 }
 
 DemoWidget::~DemoWidget()
@@ -98,8 +167,10 @@ void DemoWidget::updateTransform()
     qreal rot = m_rotSlider->value();
     qreal scale = m_zoomSlider->value() / 10.0;
 
+    a->node().style()->setRotation(rot);
+
     QTransform trans;
-    trans.rotate(rot);
+//     trans.rotate(rot);
     trans.scale(scale, -scale);
 
     m_view->setTransform(trans);
