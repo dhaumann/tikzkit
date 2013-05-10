@@ -60,14 +60,29 @@ tikz::EdgeStyle* TikzEdge::style() const
 
 void TikzEdge::setStartNode(TikzNode* start)
 {
-    d->start = start;
-    d->edge->setStart(start ? &start->node() : 0);
+    if (d->start != start) {
+        if (d->start)
+            disconnect(d->start->node().style(), 0, this, 0);
+        d->start = start;
+        d->edge->setStart(start ? &start->node() : 0);
+
+        if (d->start)
+            connect(d->start->node().style(), SIGNAL(changed()), this, SLOT(slotUpdate()));
+    }
 }
 
 void TikzEdge::setEndNode(TikzNode* end)
 {
-    d->end = end;
-    d->edge->setEnd(end ? &end->node() : 0);
+    if (d->end != end) {
+        if (d->end)
+            disconnect(d->end->node().style(), 0, this, 0);
+
+        d->end = end;
+        d->edge->setEnd(end ? &end->node() : 0);
+
+        if (d->end)
+            connect(d->end->node().style(),SIGNAL(changed()), this, SLOT(slotUpdate()));
+    }
 }
 
 TikzNode* TikzEdge::startNode() const
