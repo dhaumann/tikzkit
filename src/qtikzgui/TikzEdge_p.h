@@ -2,6 +2,7 @@
 #define GUI_TIKZ_EDGE_PRIVATE_ITEM_H
 
 #include <QPainterPath>
+#include <QPointer>
 
 namespace tikz {
     class Edge;
@@ -29,8 +30,8 @@ class TikzEdgePrivate
     public:
         // edge and nodes
         tikz::Edge* edge;
-        TikzNode* start;
-        TikzNode* end;
+        QPointer<TikzNode> start;
+        QPointer<TikzNode> end;
 
         // draging state
         bool dragging;      // true: mouse is grabbed
