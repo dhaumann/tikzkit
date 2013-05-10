@@ -98,8 +98,15 @@ class TikzEdgePrivate
             const QPointF endAnchor = end ? end->pos() : edge->endPos();
             const QPointF diff = endAnchor - startAnchor;
             qreal rad = std::atan2(diff.y(), diff.x());
-            if (q->style()->curveMode() == tikz::BendCurve) {
-                rad = rad + q->style()->bendAngle() * M_PI / 180.0;
+            switch (q->style()->curveMode()) {
+                case tikz::BendCurve:
+                    rad = rad + q->style()->bendAngle() * M_PI / 180.0;
+                    break;
+                case tikz::InOutCurve:
+                    rad = rad + q->style()->outAngle() * M_PI / 180.0;
+                    break;
+                default:
+                    break;
             }
             return rad;
         }
@@ -110,8 +117,15 @@ class TikzEdgePrivate
             const QPointF endAnchor = end ? end->pos() : edge->endPos();
             const QPointF diff = startAnchor - endAnchor;
             qreal rad = std::atan2(diff.y(), diff.x());
-            if (q->style()->curveMode() == tikz::BendCurve) {
-                rad = rad - q->style()->bendAngle() * M_PI / 180.0;
+            switch (q->style()->curveMode()) {
+                case tikz::BendCurve:
+                    rad = rad - q->style()->bendAngle() * M_PI / 180.0;
+                    break;
+                case tikz::InOutCurve:
+                    rad = rad - q->style()->inAngle() * M_PI / 180.0;
+                    break;
+                default:
+                    break;
             }
             return rad;
         }
