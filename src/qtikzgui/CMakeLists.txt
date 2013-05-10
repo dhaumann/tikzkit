@@ -11,6 +11,7 @@ set(qtikzgui_SOURCES
     TikzItem.cpp
     TikzNode.cpp
     TikzEdge.cpp
+    TikzEdge_p.cpp
     TikzScene.cpp
     PaintHelper.cpp
     AnchorHandle.cpp

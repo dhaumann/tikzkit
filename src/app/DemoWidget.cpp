@@ -6,6 +6,7 @@
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 #include "tikz.h"
+#include <Edge.h>
 
 #include <QHBoxLayout>
 #include <QGraphicsView>

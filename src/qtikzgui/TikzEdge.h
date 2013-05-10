@@ -4,7 +4,12 @@
 #include "tikzgui_export.h"
 #include "TikzItem.h"
 
-#include <Edge.h>
+#include <tikz.h>
+
+namespace tikz {
+    class Edge;
+    class EdgeStyle;
+}
 
 class QPainter;
 
