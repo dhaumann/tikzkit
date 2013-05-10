@@ -1,0 +1,29 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{tikz}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture}
+%   \node[draw, circle, fill=yellow] (a) at (0, 0) {a};
+%   \node[draw, circle, fill=blue] (b) at (2, 0) {a};
+  \draw (0,0) to[bend left=30] (4,0);
+
+  % tikzlibrarytopaths.code.tex
+  % looseness = 1 (default)
+  % factor = 0.3915
+
+  % 4 + 4*0.3915*cos(150/180*pi) = 2.6438042
+  % 4*0.3915*sin(150/180*pi) = 0.738
+  % 4*0.3915*cos(30/180*pi) = 1.3561958
+  % 4*0.3915*sin(30/180*pi) = 0.738
+
+%   \draw[red,very thin] (0,0) .. controls (30:1.6) and (2.614,0.8) .. (4,0);
+
+  \draw[green,very thin] (0,0) .. controls (30:1.6) and (2.6438042,0.783) .. (4,0);
+  \draw[red,very thin, dashed] (0,0) .. controls (1.3561958,0.783) and (2.614,0.8) .. (4,0);
+\end{tikzpicture}
+\end{document}
+
