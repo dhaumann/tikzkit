@@ -47,6 +47,33 @@ class TIKZCORE_EXPORT Style : public QObject
         void setParent(Style *parent);
 
     //
+    // config methods
+    //
+    public:
+        /**
+         * Start changing config values.
+         * This call is ref-counted. For each beginConfig() you finally
+         * have to call endConfig().
+         */
+        void beginConfig();
+
+        /**
+         * End of changing config values.
+         * This will emit changed(), if the number of calls of endConfig()
+         * matches the calls the one of beginConfig(), i.e. the ref-counter is zero.
+         *
+         * Using beginConfig() and endConfig() allows to change multiple
+         * config values, while still only emitting the changed() signal only once.
+         */
+        void endConfig();
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the style changes.
+         */
+        void changed();
+
+    //
     // common style attributes of nodes and paths
     //
     public:
@@ -81,15 +108,6 @@ class TIKZCORE_EXPORT Style : public QObject
     // TODO: pen color
     //  fill color
     // Node: inner sep, minimum size (minimum width, minimum height)
-
-    //
-    // signals
-    //
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever the style changes.
-         */
-        void changed();
 
     private:
         StylePrivate * const d;

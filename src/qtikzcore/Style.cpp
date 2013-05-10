@@ -10,6 +10,9 @@ namespace tikz {
 class StylePrivate
 {
 public:
+    Style * parent;
+    int refCounter;
+
     // Common styles
     PenStyle penStyle;
     LineWidth lineWidth;
@@ -27,13 +30,14 @@ public:
     // Node styles
     Shape shape;
 
-    Style * parent;
-
     void init();
 };
 
 void StylePrivate::init()
 {
+    parent = 0;
+    refCounter = 0;
+
     penStyle = PenUnset;
     lineWidth = WidthUnset;
 
@@ -50,8 +54,6 @@ void StylePrivate::init()
     fillColor = QColor();
 
     shape = ShapeUnset;
-
-    parent = 0;
 }
 
 Style::Style()
@@ -82,6 +84,22 @@ void Style::setParent(Style *parent)
     d->parent = parent;
 }
 
+void Style::beginConfig()
+{
+    Q_ASSERT(d->refCounter >= 0);
+    ++d->refCounter;
+}
+
+void Style::endConfig()
+{
+    Q_ASSERT(d->refCounter > 0);
+
+    --d->refCounter;
+    if (d->refCounter == 0) {
+        emit changed();
+    }
+}
+
 PenStyle Style::penStyle() const
 {
     if (d->penStyle != PenUnset) {
@@ -110,7 +128,11 @@ LineWidth Style::lineWidth() const
 
 void Style::setLineWidth(tikz::LineWidth lineWidth)
 {
-    d->lineWidth = lineWidth;
+    if (d->lineWidth = lineWidth) {
+        beginConfig();
+        d->lineWidth = lineWidth;
+        endConfig();
+    }
 }
 
 double Style::penOpacity() const
