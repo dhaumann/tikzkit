@@ -101,16 +101,16 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         qreal outAngle() const;
 
         /**
-         * Get the in angle for the end node.
-         * @note This value is only of meaning if the CurveMode is set to CurveMode::InOutCurve.
-         */
-        qreal inAngle() const;
-
-        /**
          * Set the out angle for the start node to @p angle.
          * @note This value has an effect only if the CurveMode is set to CurveMode::InOutCurve.
          */
         void setOutAngle(qreal angle);
+
+        /**
+         * Get the in angle for the end node.
+         * @note This value is only of meaning if the CurveMode is set to CurveMode::InOutCurve.
+         */
+        qreal inAngle() const;
 
         /**
          * Set the in angle for the end node to @p angle.
