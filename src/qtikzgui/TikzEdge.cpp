@@ -82,24 +82,30 @@ TikzNode* TikzEdge::endNode() const
 
 QPointF TikzEdge::startPos() const
 {
-    QPointF startPos;
+    return startPos(d->startAngle());
+}
+
+QPointF TikzEdge::startPos(qreal rad) const
+{
     if (d->start) {
-        startPos = mapFromItem(d->start, d->start->anchor(startAnchor(), d->startAngle()));
+        return mapFromItem(d->start, d->start->anchor(startAnchor(), rad));
     } else {
-        startPos = mapFromScene(d->edge->start().pos());
+        return mapFromScene(d->edge->start().pos());
     }
-    return startPos;
 }
 
 QPointF TikzEdge::endPos() const
 {
-    QPointF endPos;
+    return endPos(d->endAngle());
+}
+
+QPointF TikzEdge::endPos(qreal rad) const
+{
     if (d->end) {
-        endPos = mapFromItem(d->end, d->end->anchor(endAnchor(), d->endAngle()));
+        return mapFromItem(d->end, d->end->anchor(endAnchor(), rad));
     } else {
-        endPos = mapFromScene(d->edge->end().pos());
+        return mapFromScene(d->edge->end().pos());
     }
-    return endPos;
 }
 
 tikz::Anchor TikzEdge::startAnchor() const

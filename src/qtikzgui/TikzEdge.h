@@ -79,10 +79,22 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
         QPointF startPos() const;
 
         /**
+         * Get the position of the start of the edge for the specified angle @p rad.
+         * @return the position in item coordinates
+         */
+        QPointF startPos(qreal rad) const;
+
+        /**
          * Get the position of the end of the edge.
          * @return the position in item coordinates
          */
         QPointF endPos() const;
+
+        /**
+         * Get the position of the end of the edge for the specified angle @p rad.
+         * @return the position in item coordinates
+         */
+        QPointF endPos(qreal rad) const;
 
     //
     // anchor methods
