@@ -10,6 +10,7 @@ class NodeStylePrivate
 public:
     // Node styles
     Shape shape;
+    qreal rotation;
 };
 
 NodeStyle::NodeStyle()
@@ -17,6 +18,7 @@ NodeStyle::NodeStyle()
     , d(new NodeStylePrivate())
 {
     d->shape = ShapeUnset;
+    d->rotation = 0.0;
 }
 
 NodeStyle::NodeStyle(Document* tikzDocument)
@@ -47,6 +49,20 @@ Shape NodeStyle::shape() const
 void NodeStyle::setShape(tikz::Shape shape)
 {
     d->shape = shape;
+}
+
+qreal NodeStyle::rotation() const
+{
+    return d->rotation;
+}
+
+void NodeStyle::setRotation(qreal angle)
+{
+    if (d->rotation != angle) {
+        beginConfig();
+        d->rotation = angle;
+        endConfig();
+    }
 }
 
 }

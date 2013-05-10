@@ -46,14 +46,15 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         void setShape(tikz::Shape shape);
 
-    //
-    // signals
-    //
-    Q_SIGNALS:
         /**
-         * This signal is emitted whenever the style changes.
+         * Get the rotation in degrees.
          */
-        void changed();
+        qreal rotation() const;
+
+        /**
+         * Set the rotation to @p angle degrees.
+         */
+        void setRotation(qreal angle);
 
     private:
         NodeStylePrivate * const d;
