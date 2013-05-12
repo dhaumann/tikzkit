@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <PaintHelper.h>
 #include <QGraphicsSceneMouseEvent>
+#include <QVector2D>
 
 #include <cmath>
 
@@ -154,7 +155,6 @@ void TikzEdge::slotUpdate()
     QPointF startScenePos = d->edge->start().pos();
     QPointF endScenePos = d->edge->end().pos();
     setPos(0.5 * (startScenePos + endScenePos));
-
 }
 
 void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -354,64 +354,32 @@ void TikzEdge::startControlPointChanged(const QPointF& pos)
 {
     switch (style()->curveMode()) {
         case tikz::BendCurve: {
+            // compute angle of start.center to handle pos
             QPointF startAnchor = d->start ? mapFromItem(d->start, d->start->anchor(this->startAnchor()))
-            : mapFromScene(d->edge->start().pos());
-            QPointF endAnchor = d->end ? mapFromItem(d->end, d->end->anchor(this->endAnchor()))
-            : mapFromScene(d->edge->end().pos());
+                                           : mapFromScene(d->edge->start().pos());
+            QPointF startToHandle = mapFromItem(d->startControlPoint, pos) - startAnchor;
+            const qreal handleRad = std::atan2(startToHandle.y(), startToHandle.x());
 
-            QPointF startToHandle = d->startControlPoint->mapToItem(this, pos) - startAnchor;
+            // 1st result: new outRad angle for start node
+            const qreal outRad = handleRad - d->baseAngle();
 
-            // 1. calculate angle of (endToHandle, (1, 0))
-            const qreal startToHandleRad = std::atan2(startToHandle.y(), startToHandle.x());
+            // compute length from start contact point to handle pos
+            startAnchor = startPos(handleRad);
+            const QPointF startEnd = endPos(M_PI - handleRad) - startAnchor;
+            const qreal lineLen = QVector2D(startEnd).length();
 
-            startAnchor = startPos(startToHandleRad);
-            endAnchor = endPos(M_PI - startToHandleRad);
+            // compute length from start contact point to handle
+            startToHandle = mapFromItem(d->startControlPoint, pos) - startAnchor;
+            const qreal handleLen = QVector2D(startToHandle).length();
 
-//             d->edge->start()
+            // 2nd result: new looseness
+            const qreal factor = 0.3915;
+            const qreal looseness = handleLen / (factor * lineLen);
 
-            QPointF startEnd = endAnchor - startAnchor;
-            const qreal len = sqrt(startEnd.x()*startEnd.x() + startEnd.y()*startEnd.y());
-
-            const qreal lineRad = std::atan2(startEnd.y(), startEnd.x());
-
-            qreal rad = startToHandleRad - lineRad;
-
-            startToHandle = d->startControlPoint->mapToItem(this, pos) - startAnchor;
-            const qreal len2 = sqrt(startToHandle.x()*startToHandle.x() + startToHandle.y()*startToHandle.y());
-
-            qreal deg = rad * 180.0 / M_PI;
-            if (deg > 180) deg -= 360;
-            if (deg < -180) deg += 360;
-            //             deg = qRound(deg / 15.0) * 15.0;
-            //             qDebug() << "New angle:" << deg;
             style()->beginConfig();
-            style()->setBendAngle(deg);
-
-
-
-            const qreal factor = 0.3915; // 2,5542784
-            qreal looseness = len2 / (factor * len);
-
-            //             looseness = qRound(looseness * 5.0) / 5.0;
-            qDebug() << "new looseness:" << looseness;
+            style()->setBendAngle(outRad * 180.0 / M_PI);
             style()->setLooseness(looseness);
             style()->endConfig();
-
-
-//             const QPointF diff2 = d->startControlPoint->mapToItem(this,pos) - startAnchor;
-//             rad = std::atan2(diff2.y(), diff2.x()) - rad;
-//             qDebug() << "New angle:" << rad * 180.0 / M_PI;
-//             style()->beginConfig();
-//             style()->setBendAngle(rad * 180.0 / M_PI);
-//
-//             const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
-//             const qreal len2 = sqrt(diff2.x()*diff2.x() + diff2.y()*diff2.y());
-//
-//             const qreal factor = 0.3915;
-//             qreal looseness = len2 / (factor * len);
-//             qDebug() << "new looseness:" << looseness;
-//             style()->setLooseness(looseness);
-//             style()->endConfig();
 
             break;
         }
@@ -429,44 +397,30 @@ void TikzEdge::endControlPointChanged(const QPointF& pos)
 {
     switch (style()->curveMode()) {
         case tikz::BendCurve: {
-            QPointF startAnchor = d->start ? mapFromItem(d->start, d->start->anchor(this->startAnchor()))
-                                : mapFromScene(d->edge->start().pos());
+            // compute angle of end.center to handle pos
             QPointF endAnchor = d->end ? mapFromItem(d->end, d->end->anchor(this->endAnchor()))
                                 : mapFromScene(d->edge->end().pos());
+            QPointF endToHandle = mapFromItem(d->endControlPoint, pos) - endAnchor;
+            const qreal handleRad = std::atan2(endToHandle.y(), endToHandle.x());
 
-            QPointF endToHandle = d->endControlPoint->mapToItem(this, pos) - endAnchor;
+            // 1st result: new outRad angle with respect to the start node
+            const qreal outRad = M_PI - (handleRad - d->baseAngle());
 
-            // 1. calculate angle of (endToHandle, (1, 0))
-            const qreal endToHandleRad = std::atan2(endToHandle.y(), endToHandle.x());
+            // compute length from end contact point to handle pos
+            endAnchor = endPos(M_PI - outRad);
+            const QPointF startEnd = endAnchor - startPos(M_PI - handleRad);
+            const qreal lineLen = QVector2D(startEnd).length();
 
-            startAnchor = startPos(M_PI - endToHandleRad);
-            endAnchor = endPos(endToHandleRad);
+            // compute length from end contact point to handle
+            endToHandle = mapFromItem(d->endControlPoint, pos) - endAnchor;
+            const qreal handleLen = QVector2D(endToHandle).length();
 
-            QPointF startEnd = startAnchor - endAnchor;
-            const qreal len = sqrt(startEnd.x()*startEnd.x() + startEnd.y()*startEnd.y());
+            // 2nd result: new looseness
+            const qreal factor = 0.3915;
+            const qreal looseness = handleLen / (factor * lineLen);
 
-            const qreal lineRad = std::atan2(startEnd.y(), startEnd.x());
-
-            qreal rad = endToHandleRad - lineRad;
-
-            endToHandle = d->endControlPoint->mapToItem(this, pos) - endAnchor;
-            const qreal len2 = sqrt(endToHandle.x()*endToHandle.x() + endToHandle.y()*endToHandle.y());
-
-            qreal deg = rad * 180.0 / M_PI;
-            if (deg > 180) deg -= 360;
-            if (deg < -180) deg += 360;
-//             deg = qRound(deg / 15.0) * 15.0;
-//             qDebug() << "New angle:" << deg;
             style()->beginConfig();
-            style()->setBendAngle(- deg);
-
-
-
-            const qreal factor = 0.3915; // 2,5542784
-            qreal looseness = len2 / (factor * len);
-
-//             looseness = qRound(looseness * 5.0) / 5.0;
-            qDebug() << "new looseness:" << looseness;
+            style()->setBendAngle(outRad * 180.0 / M_PI);
             style()->setLooseness(looseness);
             style()->endConfig();
 
