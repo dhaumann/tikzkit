@@ -56,8 +56,9 @@ class TikzEdgePrivate
     public:
         void updateCache();
 
-        qreal startAngle();
-        qreal endAngle();
+        qreal baseAngle() const;
+        qreal startAngle() const;
+        qreal endAngle() const;
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad);
         void drawArrow(QPainter* painter, const QPainterPath& path);
         void drawHandle(QPainter* painter, const QPointF& pos, bool connected);
