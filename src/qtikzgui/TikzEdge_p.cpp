@@ -9,6 +9,7 @@
 #include "CurveHandle.h"
 
 #include <QPainter>
+#include <QVector2D>
 
 #include <cmath>
 
@@ -34,7 +35,7 @@ void TikzEdgePrivate::updateCache()
     const QPointF startAnchor = q->startPos();
     const QPointF endAnchor = q->endPos();
     const QPointF diff = endAnchor - startAnchor;
-    const qreal len = sqrt(diff.x()*diff.x() + diff.y()*diff.y());
+    const qreal len = QVector2D(diff).length();
 
     if (q->style()->curveMode() == tikz::BendCurve) {
         const qreal startRad = std::atan2(diff.y(), diff.x()) + q->style()->bendAngle() * M_PI / 180.0;
