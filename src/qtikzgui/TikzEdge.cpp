@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <PaintHelper.h>
 #include <QGraphicsSceneMouseEvent>
+#include <QPainterPathStroker>
 #include <QVector2D>
 
 #include <cmath>
@@ -191,8 +192,8 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     }
 
     // debug: draw bounding rect:
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(boundingRect());
+//     painter->setBrush(Qt::NoBrush);
+//     painter->drawRect(boundingRect());
 
     // TODO: highlight selection
     //     if (option->state & QStyle::State_Selected)
@@ -235,8 +236,13 @@ bool TikzEdge::contains(const QPointF & point) const
         bool intersects = false;
         QPainterPath circle;
         circle.addEllipse(point, 0.2, 0.2);
+        circle.simplified();
 
-        return d->linePath.intersects(circle)
+        QPainterPathStroker pps;
+        pps.setWidth(0.2);
+        QPainterPath curve = pps.createStroke(d->linePath);
+
+        return curve.contains(point)
             || d->arrowHead.intersects(circle)
             || d->arrowTail.intersects(circle);
     }
