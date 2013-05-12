@@ -22,8 +22,8 @@ EdgeStyle::EdgeStyle()
     d->curveMode = tikz::BendCurve;
     d->bendAngle = 0.0;
     d->looseness = 1.0;
-    d->outAngle = 0.0;
-    d->inAngle = 0.0;
+    d->outAngle = 45;
+    d->inAngle = 135;
 }
 
 EdgeStyle::EdgeStyle(Document* tikzDocument)
