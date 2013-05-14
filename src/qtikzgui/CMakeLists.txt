@@ -16,6 +16,7 @@ set(qtikzgui_SOURCES
     PaintHelper.cpp
     AnchorHandle.cpp
     CurveHandle.cpp
+    BezierCurve.cpp
 )
 
 set(qtikzgui_HEADERS
