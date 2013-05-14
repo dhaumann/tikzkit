@@ -251,6 +251,20 @@ QRectF TikzNode::boundingRect() const
 
 QPainterPath TikzNode::shape() const
 {
+    tikz::Node* that = const_cast<tikz::Node*>(d->node);
+    if (that->style()->shape() == tikz::ShapeCircle) {
+        qreal radius = 0.5; // TODO: set to correct size
+        QPainterPath circle;
+        circle.addEllipse(QPointF(0, 0), radius, radius);
+        return circle;
+    }
+    else if (that->style()->shape() == tikz::ShapeRectangle) {
+        qreal radius = 0.5; // TODO: set to correct size
+        QPainterPath rect;
+        rect.addRect(-0.5, -0.5, 1.0, 1.0);
+        return rect;
+    }
+
     QPainterPath path;
     path.addRect(boundingRect());
     return path;
