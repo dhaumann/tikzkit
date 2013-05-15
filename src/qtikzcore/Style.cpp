@@ -81,7 +81,17 @@ Style *Style::parent() const
 
 void Style::setParent(Style *parent)
 {
-    d->parent = parent;
+    if (d->parent != parent) {
+        beginConfig();
+        if (d->parent) {
+            disconnect(d->parent, 0, this, 0);
+        }
+        d->parent = parent;
+        if (d->parent) {
+            connect(d->parent, SIGNAL(changed()), this, SIGNAL(changed()));
+        }
+        endConfig();
+    }
 }
 
 void Style::beginConfig()

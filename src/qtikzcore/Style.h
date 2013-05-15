@@ -70,6 +70,8 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_SIGNALS:
         /**
          * This signal is emitted whenever the style changes.
+         * This includes changes in the parent style that possibly influence
+         * the appearance of this style.
          */
         void changed();
 
