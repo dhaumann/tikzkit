@@ -27,7 +27,8 @@ class TikzNodePrivate
         QGraphicsTextItem* textItem;
         AbstractShape * shape;
 
-        bool dirty;
+        bool itemChangeRunning : 1;
+        bool dirty : 1;
         QPainterPath shapePath;
 
     public:
@@ -69,6 +70,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     d->dirty = true;
     d->node = new tikz::Node(this);
     d->shape = new AbstractShape(this);
+    d->itemChangeRunning = false;
 
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     connect(d->node, SIGNAL(changed()), this, SLOT(styleChanged()));
@@ -204,9 +206,12 @@ QPainterPath TikzNode::shape() const
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 {
-    if (change == ItemPositionChange && scene()) {
+    if (change == ItemPositionChange && scene() && !d->itemChangeRunning) {
+        d->itemChangeRunning = true;
         QPointF newPos = value.toPointF();
+        setPos(newPos);
         d->node->setPos(newPos);
+        d->itemChangeRunning = false;
 //         d->textItem->setPos(newPos);
         QRectF rect = scene()->sceneRect();
         if (!rect.contains(newPos)) {
@@ -223,18 +228,16 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 
 void TikzNode::slotSetPos(const QPointF& pos)
 {
+    if (d->itemChangeRunning) return;
     // the tikz::Node position changed.
     // propagate this to this TikzNode::setPos().
-    disconnect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     setPos(pos);
-    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
 }
 
 void TikzNode::styleChanged()
 {
     prepareGeometryChange();
     d->dirty = true;
-
 }
 
 // kate: indent-width 4; replace-tabs on;
