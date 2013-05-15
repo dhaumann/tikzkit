@@ -24,6 +24,7 @@ Edge::Edge(QObject * parent)
 
     connect(&d->start, SIGNAL(changed()), this, SIGNAL(changed()));
     connect(&d->end, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
 Edge::~Edge()
