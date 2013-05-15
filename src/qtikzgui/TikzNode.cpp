@@ -34,8 +34,12 @@ class TikzNodePrivate
         void updateCache()
         {
             if (!dirty) return;
-
             dirty = false;
+
+            if (node->style()->shape() != shape->type()) {
+                delete shape;
+                shape = createShape(node->style()->shape(), q);
+            }
 
             shapePath = shape->shape();
 
@@ -67,7 +71,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     d->shape = new AbstractShape(this);
 
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
-    connect(d->node->style(), SIGNAL(changed()), this, SLOT(styleChanged()));
+    connect(d->node, SIGNAL(changed()), this, SLOT(styleChanged()));
 
 //     item->setFlag(QGraphicsItem::ItemIsMovable, true);
 //     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
@@ -113,16 +117,25 @@ tikz::Node& TikzNode::node()
 
 QVector<tikz::Anchor> TikzNode::supportedAnchors() const
 {
+    // make sure cache is up-to-date
+    d->updateCache();
+
     return d->shape->supportedAnchors();
 }
 
 QPointF TikzNode::anchor(tikz::Anchor anchor) const
 {
+    // make sure cache is up-to-date
+    d->updateCache();
+
     return d->shape->anchorPos(anchor);
 }
 
 QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
 {
+    // make sure cache is up-to-date
+    d->updateCache();
+
     // adapt angle to account for the self rotation of this node
     rad -= rotation() * M_PI / 180.0;
 
@@ -170,9 +183,10 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QRectF TikzNode::boundingRect() const
 {
-    qreal lineWidth = 0; //sh.lineWidth();
-
+    // make sure cache is up-to-date
     d->updateCache();
+
+    qreal lineWidth = 0; //sh.lineWidth();
 
     QRectF br = d->shapePath.boundingRect();
     br.adjust(-0.2, -0.2, 0.2, 0.2);
@@ -182,6 +196,9 @@ QRectF TikzNode::boundingRect() const
 
 QPainterPath TikzNode::shape() const
 {
+    // make sure cache is up-to-date
+    d->updateCache();
+
     return d->shape->shape();
 }
 
@@ -218,10 +235,6 @@ void TikzNode::styleChanged()
     prepareGeometryChange();
     d->dirty = true;
 
-    if (d->node->style()->shape() != d->shape->type()) {
-        delete d->shape;
-        d->shape = createShape(d->node->style()->shape(), this);
-    }
 }
 
 // kate: indent-width 4; replace-tabs on;
