@@ -167,7 +167,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 // qDebug() << isSelected();
     painter->restore();
 }
-    
+
 QRectF TikzNode::boundingRect() const
 {
     qreal lineWidth = 0; //sh.lineWidth();

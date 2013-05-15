@@ -84,6 +84,12 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
 //         bool contains(const QPointF &point) const;
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever this node changes, e.g. its style.
+         */
+        void changed();
+
     //
     // protected overrides
     //
