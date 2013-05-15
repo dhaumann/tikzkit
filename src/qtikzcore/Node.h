@@ -44,6 +44,13 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         NodeStyle* style();
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever this node changes, either due to
+         * a change of its position, or changes in its style.
+         */
+        void changed();
+
     private:
         NodePrivate * const d;
 };

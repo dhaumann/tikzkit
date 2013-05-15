@@ -19,6 +19,7 @@ Node::Node(QObject * parent)
     : Coord(parent)
     , d(new NodePrivate())
 {
+    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
 Node::~Node()
