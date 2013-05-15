@@ -1,6 +1,7 @@
 #include "TikzNode.h"
 #include "NodeStyle.h"
 #include "PaintHelper.h"
+#include "AbstractShape.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -22,11 +23,12 @@ class TikzNodePrivate
     public:
         TikzNodePrivate(TikzNode * tikzNode) : q(tikzNode) {}
 
-        bool dirty;
-        QPainterPath shapePath;
-
         tikz::Node* node;
         QGraphicsTextItem* textItem;
+        AbstractShape * shape;
+
+        bool dirty;
+        QPainterPath shapePath;
 
     public:
         void updateCache()
@@ -35,16 +37,7 @@ class TikzNodePrivate
 
             dirty = false;
 
-            shapePath = QPainterPath();
-
-            QRectF br(-0.5, -0.5, 1.0, 1.0);
-            if (node->style()->shape() == tikz::ShapeCircle) {
-                shapePath.addEllipse(QPointF(0, 0), 0.5, 0.5);
-            } else if (node->style()->shape() == tikz::ShapeRectangle) {
-                shapePath.addRect(br);
-            } else {
-                shapePath.addRect(br);
-            }
+            shapePath = shape->shape();
 
             q->setRotation(node->style()->rotation());
         }
@@ -71,6 +64,8 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 {
     d->dirty = true;
     d->node = new tikz::Node(this);
+    d->shape = new AbstractShape(this);
+
     connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     connect(d->node->style(), SIGNAL(changed()), this, SLOT(styleChanged()));
 
@@ -96,10 +91,13 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 //     c.setY(0);
 //     d->textItem->setPos(d->textItem->mapToScene(c));
 //     d->textItem->rotate(-5);
+
+//     styleChanged();
 }
 
 TikzNode::~TikzNode()
 {
+    delete d->shape;
     delete d;
 }
 
@@ -115,78 +113,15 @@ tikz::Node& TikzNode::node()
 
 QPointF TikzNode::anchor(tikz::Anchor anchor) const
 {
-    qreal radius = 0.5; // TODO: set size correct
-    switch (d->node->style()->shape()) {
-        case tikz::ShapeCircle: {
-            switch (anchor) {
-                case tikz::NoAnchor:
-                case tikz::Center   : return QPointF(0, 0);
-                case tikz::North    : return QPointF(0, radius);
-                case tikz::NorthEast: return QPointF(1, 1) * 0.70710678 * radius;
-                case tikz::East     : return QPointF(radius, 0);
-                case tikz::SouthEast: return QPointF(1, -1) * 0.70710678 * radius;
-                case tikz::South    : return QPointF(0, -radius);
-                case tikz::SouthWest: return QPointF(-1, -1) * 0.70710678 * radius;
-                case tikz::West     : return QPointF(-radius, 0);
-                case tikz::NorthWest: return QPointF(-1, 1) * 0.70710678 * radius;
-            }
-            break;
-        }
-        case tikz::ShapeRectangle: {
-            switch (anchor) {
-                case tikz::NoAnchor:
-                case tikz::Center   : return QPointF(0, 0);
-                case tikz::North    : return QPointF(0, radius);
-                case tikz::NorthEast: return QPointF(radius, radius);
-                case tikz::East     : return QPointF(radius, 0);
-                case tikz::SouthEast: return QPointF(radius, -radius);
-                case tikz::South    : return QPointF(0, -radius);
-                case tikz::SouthWest: return QPointF(-radius, -radius);
-                case tikz::West     : return QPointF(-radius, 0);
-                case tikz::NorthWest: return QPointF(-radius, radius);
-            }
-            break;
-        }
-    }
-
-    return QPointF(0, 0);
+    return d->shape->anchorPos(anchor);
 }
 
-QPointF TikzNode::anchor(tikz::Anchor anchor, qreal rad) const
+QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
 {
-    if (anchor != tikz::NoAnchor) {
-        return this->anchor(anchor);
-    }
-
     // adapt angle to account for the self rotation of this node
     rad -= rotation() * M_PI / 180.0;
 
-    tikz::Node* that = const_cast<tikz::Node*>(d->node);
-    if (that->style()->shape() == tikz::ShapeCircle) {
-        qreal radius = 0.5; // TODO: set to correct size
-        QPointF delta(std::cos(rad), std::sin(rad));
-        return radius * delta;
-    }
-    else if (that->style()->shape() == tikz::ShapeRectangle) {
-        // TODO: set to correct size
-        qreal x = 0.5 * std::cos(rad);
-        qreal y = 0.5 * std::sin(rad);
-        if (!qFuzzyCompare(x, 0.0) && !qFuzzyCompare(y, 0.0)) {
-            if (fabs(y) != 0.5) {
-                // normalize to y
-                x = (x < 0 ? -1 : 1) * fabs(0.5 * x / y);
-                y = (y < 0 ? -1 : 1) * 0.5;
-            }
-            if (fabs(x) > 0.5) {
-                // normalize to x
-                y = (y < 0 ? -1 : 1) * fabs(0.5 * y / x);
-                x = (x < 0 ? -1 : 1) * 0.5;
-            }
-        }
-        return QPointF(x, y);
-    }
-
-    return QPointF(0.0, 0.0);
+    return d->shape->contactPoint(anchor, rad);
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -209,16 +144,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     QBrush brush(Qt::yellow);
     painter->setBrush(brush);
 
-    QRectF br(-0.5, -0.5, 1.0, 1.0);
-    if (d->node->style()->shape() == tikz::NoShape) {
-        p.setStyle(Qt::DashLine);
-        painter->setPen(p);
-        painter->setBrush(Qt::cyan);
-        painter->setOpacity(0.5);
-    }
-
     painter->drawPath(d->shapePath);
-    painter->fillPath(d->shapePath, brush);
 
     // TODO: highlight selection
 //     qDebug() << (bool)(option->state & QStyle::State_Selected);
@@ -251,23 +177,7 @@ QRectF TikzNode::boundingRect() const
 
 QPainterPath TikzNode::shape() const
 {
-    tikz::Node* that = const_cast<tikz::Node*>(d->node);
-    if (that->style()->shape() == tikz::ShapeCircle) {
-        qreal radius = 0.5; // TODO: set to correct size
-        QPainterPath circle;
-        circle.addEllipse(QPointF(0, 0), radius, radius);
-        return circle;
-    }
-    else if (that->style()->shape() == tikz::ShapeRectangle) {
-        qreal radius = 0.5; // TODO: set to correct size
-        QPainterPath rect;
-        rect.addRect(-0.5, -0.5, 1.0, 1.0);
-        return rect;
-    }
-
-    QPainterPath path;
-    path.addRect(boundingRect());
-    return path;
+    return d->shape->shape();
 }
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
@@ -302,6 +212,11 @@ void TikzNode::styleChanged()
 {
     prepareGeometryChange();
     d->dirty = true;
+
+    if (d->node->style()->shape() != d->shape->type()) {
+        delete d->shape;
+        d->shape = createShape(d->node->style()->shape(), this);
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;

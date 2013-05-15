@@ -48,7 +48,11 @@ Shape NodeStyle::shape() const
 
 void NodeStyle::setShape(tikz::Shape shape)
 {
-    d->shape = shape;
+    if (d->shape != shape) {
+        beginConfig();
+        d->shape = shape;
+        endConfig();
+    }
 }
 
 qreal NodeStyle::rotation() const

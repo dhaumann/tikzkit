@@ -5,6 +5,7 @@ find_package(Qt4 REQUIRED)
 include_directories(
     .
     ${CMAKE_SOURCE_DIR}/src/qtikzcore
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
 )
 
 set(qtikzgui_SOURCES
@@ -17,6 +18,10 @@ set(qtikzgui_SOURCES
     AnchorHandle.cpp
     CurveHandle.cpp
     BezierCurve.cpp
+
+    shapes/AbstractShape.cpp
+    shapes/RectShape.cpp
+    shapes/CircleShape.cpp
 )
 
 set(qtikzgui_HEADERS

@@ -37,9 +37,18 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
         tikz::Node& node();
 
+        /**
+         * Returns the @p anchor in local node coordinates.
+         */
         QPointF anchor(tikz::Anchor anchor) const;
 
-        QPointF anchor(tikz::Anchor anchor, qreal rad) const;
+        /**
+         * Returns the contact point of this node's shape for the requested
+         * @p anchor and angle @p rad.
+         * @param anchor the anchor
+         * @param rad the angle in rad
+         */
+        QPointF contactPoint(tikz::Anchor anchor, qreal rad) const;
 
 
     //

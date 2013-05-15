@@ -106,7 +106,7 @@ QPointF TikzEdge::startPos() const
 QPointF TikzEdge::startPos(qreal rad) const
 {
     if (d->start) {
-        return mapFromItem(d->start, d->start->anchor(startAnchor(), rad));
+        return mapFromItem(d->start, d->start->contactPoint(startAnchor(), rad));
     } else {
         return mapFromScene(d->edge->start().pos());
     }
@@ -120,7 +120,7 @@ QPointF TikzEdge::endPos() const
 QPointF TikzEdge::endPos(qreal rad) const
 {
     if (d->end) {
-        return mapFromItem(d->end, d->end->anchor(endAnchor(), rad));
+        return mapFromItem(d->end, d->end->contactPoint(endAnchor(), rad));
     } else {
         return mapFromScene(d->edge->end().pos());
     }
