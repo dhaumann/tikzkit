@@ -49,7 +49,6 @@ class MetaNode : public QObject
          */
         void setPos(const QPointF& pos);
 
-    //
     // Node methods
     //
     public:
@@ -66,11 +65,12 @@ class MetaNode : public QObject
          * @return @p true, if the node changed, otherwise @p false.
          */
         bool setNode(Node* node);
-        
+
     Q_SIGNALS:
         /**
-         * This signal is emitted either when a new node is set with setNode()
-         * or when the x/y position of the node changed.
+         * This signal is emitted either when a new node is set with setNode(),
+         * when the x/y position of the node changed, or when the associated
+         * NodeStyle of the node changed.
          */
         void changed();
 

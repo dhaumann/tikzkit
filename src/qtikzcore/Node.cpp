@@ -10,7 +10,6 @@ namespace tikz {
 class NodePrivate
 {
     public:
-        QPointF coord;
         QString text;
         NodeStyle style;
 };
@@ -19,6 +18,7 @@ Node::Node(QObject * parent)
     : Coord(parent)
     , d(new NodePrivate())
 {
+    connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 

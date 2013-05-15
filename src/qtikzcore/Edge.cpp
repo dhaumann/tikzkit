@@ -37,9 +37,6 @@ void Edge::setStart(Node* node)
     if (d->start.setNode(node)) {
         // reset anchor, if the node changes
         d->startAnchor = tikz::NoAnchor;
-
-        // notify about change
-        emit changed();
     }
 }
 
@@ -54,9 +51,6 @@ void Edge::setEnd(Node* node)
     if (d->end.setNode(node)) {
         // reset anchor, if the node changes
         d->endAnchor = tikz::NoAnchor;
-
-        // notify about change
-        emit changed();
     }
 }
 
@@ -78,13 +72,11 @@ QPointF Edge::endPos() const
 void Edge::setStartPos(const QPointF& pos)
 {
     d->start.setPos(pos);
-    emit changed();
 }
 
 void Edge::setEndPos(const QPointF& pos)
 {
     d->end.setPos(pos);
-    emit changed();
 }
 
 tikz::Anchor Edge::startAnchor() const

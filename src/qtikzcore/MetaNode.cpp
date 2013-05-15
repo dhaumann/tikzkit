@@ -60,6 +60,12 @@ bool MetaNode::setNode(Node* node)
         d->coord.setPos(d->node->pos());
         connect(d->node, SIGNAL(changed(QPointF)), &d->coord, SLOT(setPos(QPointF)));
         connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
+
+        // tricky: we want to emit changed() only once: either forward by the node ...
+        disconnect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
+    } else {
+        // ...or forward from the fallback coord.
+        connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     }
 
     // notify about change
