@@ -271,16 +271,9 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setStartNode(node);
 
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NoAnchor, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::Center, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::North, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthEast, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::East, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthEast, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::South, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthWest, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::West, true));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthWest, true));
+                        foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+                            d->nodeHandles.append(new AnchorHandle(this, anchor, true));
+                        }
                     }
                 } else {
                     if (d->end != node) {
@@ -288,16 +281,9 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                         d->nodeHandles.clear();
                         setEndNode(node);
 
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NoAnchor, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::Center, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::North, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthEast, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::East, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthEast, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::South, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::SouthWest, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::West, false));
-                        d->nodeHandles.append(new AnchorHandle(this, tikz::NorthWest, false));
+                        foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+                            d->nodeHandles.append(new AnchorHandle(this, anchor, false));
+                        }
                     }
                 }
                 connected = true;

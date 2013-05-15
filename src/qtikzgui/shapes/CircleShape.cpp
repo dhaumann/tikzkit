@@ -20,7 +20,7 @@ CircleShape::~CircleShape()
 
 tikz::Shape CircleShape::type() const
 {
-    return tikz::ShapeRectangle;
+    return tikz::ShapeCircle;
 }
 
 QPainterPath CircleShape::shape() const

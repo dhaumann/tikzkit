@@ -111,6 +111,11 @@ tikz::Node& TikzNode::node()
     return *d->node;
 }
 
+QVector<tikz::Anchor> TikzNode::supportedAnchors() const
+{
+    return d->shape->supportedAnchors();
+}
+
 QPointF TikzNode::anchor(tikz::Anchor anchor) const
 {
     return d->shape->anchorPos(anchor);

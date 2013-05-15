@@ -37,6 +37,15 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
         tikz::Node& node();
 
+    //
+    // anchor methods
+    //
+    public:
+        /**
+         * Returns the list of supported anchors depending on the Node's current shape.
+         */
+        QVector<tikz::Anchor> supportedAnchors() const;
+
         /**
          * Returns the @p anchor in local node coordinates.
          */
