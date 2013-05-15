@@ -370,8 +370,6 @@ void TikzEdge::startControlPointChanged(const QPointF& pos)
         default:
             break;
     }
-
-    slotUpdate();
 }
 
 void TikzEdge::endControlPointChanged(const QPointF& pos)
@@ -413,8 +411,6 @@ void TikzEdge::endControlPointChanged(const QPointF& pos)
         default:
             break;
     }
-
-    slotUpdate();
 }
 
 // kate: indent-width 4; replace-tabs on;
