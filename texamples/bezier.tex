@@ -1,0 +1,26 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{tikz}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture}
+  \node[draw, circle, fill=yellow] (a) at (0, 0) {a};
+  \node[draw, circle, fill=blue,minimum size=3cm] (b) at (2, 0) {a};
+
+  \draw[thin] (a) to[bend left=90] (b);
+  \draw[thin, green, dashed] (a.90) to[bend left=90] (b.90);
+  \draw[thin, red, dotted] (a.north) to[bend left=90] (b.north);
+%   \draw[thin,red, dotted] (a.north) to[bend left=90] (b.north);
+%   \draw[thin,blue, dotted] (a.north) to[bend left=90] (b.center);
+
+  \draw[rotate=135] (b.center) -- +(2, 0);
+
+  % tikzlibrarytopaths.code.tex
+  % looseness = 1 (default)
+  % factor = 0.3915
+\end{tikzpicture}
+\end{document}
+
