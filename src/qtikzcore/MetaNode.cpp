@@ -51,6 +51,7 @@ bool MetaNode::setNode(Node* node)
     // disconnect changed() signal
     if (d->node != 0) {
         disconnect(d->node, 0, &d->coord, 0);
+        disconnect(d->node, 0, this, 0);
     }
 
     // set new Coord and connect cache if applicable
@@ -58,6 +59,7 @@ bool MetaNode::setNode(Node* node)
     if (d->node) {
         d->coord.setPos(d->node->pos());
         connect(d->node, SIGNAL(changed(QPointF)), &d->coord, SLOT(setPos(QPointF)));
+        connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
     }
 
     // notify about change
