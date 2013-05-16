@@ -37,6 +37,12 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
         tikz::Node& node();
 
+        /**
+         * Returns the style of this node.
+         * This is the same as node().style().
+         */
+        tikz::NodeStyle* style() const;
+
     //
     // anchor methods
     //

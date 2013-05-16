@@ -117,6 +117,11 @@ tikz::Node& TikzNode::node()
     return *d->node;
 }
 
+tikz::NodeStyle* TikzNode::style() const
+{
+    return d->node->style();
+}
+
 QVector<tikz::Anchor> TikzNode::supportedAnchors() const
 {
     // make sure cache is up-to-date
