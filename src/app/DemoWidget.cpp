@@ -71,7 +71,7 @@ DemoWidget::DemoWidget()
     TikzEdge* edge = new TikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
-    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(edge);
 
 
@@ -79,14 +79,14 @@ DemoWidget::DemoWidget()
     item1 = new TikzNode();
     item1->node().setText("1");
     item1->node().setPos(QPointF(-3, 1));
-    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setLineWidth(tikz::Thin);
     item1->node().style()->setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(item1);
 
     item2 = new TikzNode();
     item2->node().setText("2");
     item2->node().setPos(QPointF(3, 1));
-    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setLineWidth(tikz::SemiThick);
     item2->node().style()->setShape(tikz::ShapeCircle);
     m_view->scene()->addItem(item2);
 
@@ -94,21 +94,21 @@ DemoWidget::DemoWidget()
     edge = new TikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
-    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(edge);
 
 
     item1 = new TikzNode();
     item1->node().setText("1");
     item1->node().setPos(QPointF(-3, -1));
-    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setLineWidth(tikz::VeryThick);
     item1->node().style()->setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(item1);
 
     item2 = new TikzNode();
     item2->node().setText("2");
     item2->node().setPos(QPointF(3, -1));
-    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setLineWidth(tikz::UltraThick);
     item2->node().style()->setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(item2);
 
@@ -116,14 +116,14 @@ DemoWidget::DemoWidget()
     edge = new TikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
-    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setLineWidth(tikz::SemiThick);
     m_view->scene()->addItem(edge);
 
 
     item1 = new TikzNode();
     item1->node().setText("1");
     item1->node().setPos(QPointF(-3, -3));
-    item1->node().style()->setLineWidth(tikz::VeryThin);
+    item1->node().style()->setLineWidth(tikz::VeryThick);
     item1->node().style()->setShape(tikz::ShapeRectangle);
 //     item1->rotate(30);
     m_view->scene()->addItem(item1);
@@ -132,7 +132,7 @@ DemoWidget::DemoWidget()
     item2 = new TikzNode();
     item2->node().setText("2");
     item2->node().setPos(QPointF(3, -3));
-    item2->node().style()->setLineWidth(tikz::Thin);
+    item2->node().style()->setLineWidth(tikz::SemiThick);
     item2->node().style()->setShape(tikz::ShapeCircle);
     m_view->scene()->addItem(item2);
 
@@ -140,7 +140,7 @@ DemoWidget::DemoWidget()
     edge = new TikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
-    edge->edge().style()->setLineWidth(tikz::UltraThick);
+    edge->edge().style()->setLineWidth(tikz::SemiThick);
     edge->edge().style()->setBendAngle(30);
     m_view->scene()->addItem(edge);
 
