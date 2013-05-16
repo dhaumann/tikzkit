@@ -1,4 +1,8 @@
 #include "CircleShape.h"
+#include "TikzNode.h"
+#include "NodeStyle.h"
+
+#include "tikz.h"
 
 #include <cmath>
 
@@ -74,7 +78,7 @@ QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     }
 
     // TODO: set to correct size
-    const qreal radius = 0.5;
+    const qreal radius = 0.5 + node()->style()->outerSep();
     QPointF delta(std::cos(rad), std::sin(rad));
     return radius * delta;
 }

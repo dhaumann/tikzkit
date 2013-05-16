@@ -1,4 +1,8 @@
 #include "RectShape.h"
+#include "TikzNode.h"
+#include "NodeStyle.h"
+
+#include "tikz.h"
 
 #include <cmath>
 
@@ -73,8 +77,9 @@ QPointF RectShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     }
 
     // TODO: set to correct size
-    const qreal dx = 0.5;
-    const qreal dy = 0.5;
+    const qreal outerSep = node()->style()->outerSep();
+    const qreal dx = 0.5 + outerSep;
+    const qreal dy = 0.5 + outerSep;
 
     qreal x = dx * std::cos(rad);
     qreal y = dy * std::sin(rad);
