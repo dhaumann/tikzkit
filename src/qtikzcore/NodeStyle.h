@@ -28,8 +28,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         virtual ~NodeStyle();
 
-    // Node: inner sep, minimum size (minimum width, minimum height)
-
     //
     // Node specific attributes
     //
@@ -55,6 +53,32 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Set the rotation to @p angle degrees.
          */
         void setRotation(qreal angle);
+
+    //
+    // size methods
+    //
+    public:
+        /**
+         * Set the 'inner sep' to @p sep [mm].
+         */
+        void setInnerSep(qreal sep);
+
+        /**
+         * Get the 'inner sep' [mm].
+         * Default: 0.3333ex
+         */
+        qreal innerSep() const;
+
+        /**
+         * Set the 'outer sep' to @p sep [mm].
+         */
+        void setOuterSep(qreal sep);
+
+        /**
+         * Get the 'outer sep' [mm].
+         * Default: 0.5 lineWidth()
+         */
+        qreal outerSep() const;
 
     private:
         NodeStylePrivate * const d;

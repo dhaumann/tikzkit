@@ -99,6 +99,12 @@ class TIKZCORE_EXPORT Style : public QObject
         void setLineWidth(tikz::LineWidth lineWidth);
 
         /**
+         * Get the lineWidth() in mm.
+         */
+        qreal lineThickness() const;
+
+
+        /**
          * The the draw opacity.
          */
         double penOpacity() const;

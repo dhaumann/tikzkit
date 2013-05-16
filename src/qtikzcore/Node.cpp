@@ -37,7 +37,7 @@ QString Node::text() const
     return d->text;
 }
 
-NodeStyle* Node::style()
+NodeStyle* Node::style() const
 {
     return &d->style;
 }

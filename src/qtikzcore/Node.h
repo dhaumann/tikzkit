@@ -42,7 +42,7 @@ class TIKZCORE_EXPORT Node : public Coord
         /**
          * Get the Style object of this node.
          */
-        NodeStyle* style();
+        NodeStyle* style() const;
 
     Q_SIGNALS:
         /**

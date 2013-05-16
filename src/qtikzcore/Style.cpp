@@ -145,6 +145,24 @@ void Style::setLineWidth(tikz::LineWidth lineWidth)
     }
 }
 
+qreal Style::lineThickness() const
+{
+    const qreal mm = 0.03527;
+    qreal pt = 0.0;
+    switch (lineWidth()) {
+        case tikz::WidthUnset: pt = 0.0; break;
+        case tikz::UltraThin : pt = 0.1; break; // 0.03527 mm
+        case tikz::VeryThin  : pt = 0.2; break; // 0.07054 mm
+        case tikz::Thin      : pt = 0.4; break; // 0.14108 mm
+        case tikz::SemiThick : pt = 0.6; break; // 0.21162 mm
+        case tikz::Thick     : pt = 0.8; break; // 0.28216 mm
+        case tikz::VeryThick : pt = 1.2; break; // 0.42324 mm
+        case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
+        default: break;
+    }
+    return pt * mm;
+}
+
 double Style::penOpacity() const
 {
     if (d->penOpacitySet) {
