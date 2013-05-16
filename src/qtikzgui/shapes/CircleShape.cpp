@@ -54,7 +54,8 @@ QVector<tikz::Anchor> CircleShape::supportedAnchors() const
 
 QPointF CircleShape::anchorPos(tikz::Anchor anchor) const
 {
-    const qreal radius = 0.5; // TODO: set size correct
+    // TODO: set size correct
+    const qreal radius = 0.5 + node()->style()->outerSep();
     switch (anchor) {
         case tikz::NoAnchor:
         case tikz::Center   : return QPointF(0, 0);

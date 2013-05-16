@@ -53,18 +53,21 @@ QVector<tikz::Anchor> RectShape::supportedAnchors() const
 
 QPointF RectShape::anchorPos(tikz::Anchor anchor) const
 {
-    const qreal radius = 0.5; // TODO: set size correct
+    // TODO: set to correct size
+    const qreal outerSep = node()->style()->outerSep();
+    const qreal dx = 0.5 + outerSep;
+    const qreal dy = 0.5 + outerSep;
     switch (anchor) {
         case tikz::NoAnchor :
         case tikz::Center   : return QPointF(0, 0);
-        case tikz::North    : return QPointF(0, radius);
-        case tikz::NorthEast: return QPointF(radius, radius);
-        case tikz::East     : return QPointF(radius, 0);
-        case tikz::SouthEast: return QPointF(radius, -radius);
-        case tikz::South    : return QPointF(0, -radius);
-        case tikz::SouthWest: return QPointF(-radius, -radius);
-        case tikz::West     : return QPointF(-radius, 0);
-        case tikz::NorthWest: return QPointF(-radius, radius);
+        case tikz::North    : return QPointF(0, dy);
+        case tikz::NorthEast: return QPointF(dx, dy);
+        case tikz::East     : return QPointF(dx, 0);
+        case tikz::SouthEast: return QPointF(dx, -dy);
+        case tikz::South    : return QPointF(0, -dy);
+        case tikz::SouthWest: return QPointF(-dx, -dy);
+        case tikz::West     : return QPointF(-dx, 0);
+        case tikz::NorthWest: return QPointF(-dx, dy);
     }
 
     return QPointF(0, 0);
