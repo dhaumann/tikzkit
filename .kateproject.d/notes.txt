@@ -4,6 +4,11 @@ TikZ cheat cheat:
 Basic TikZ commands: http://tex.stackexchange.com/questions/84753/summary-of-tikz-commands
 tikzset vs. tikzstyle: http://tex.stackexchange.com/questions/52372/should-tikzset-or-tikzstyle-be-used-to-define-tikz-styles
 
+BezierCurves:
+- http://pomax.github.io/bezierinfo/
+- http://www.antigrain.com/research/adaptive_bezier/index.html
+- http://www.drdobbs.com/forward-difference-calculation-of-bezier/184403417
+
 Property Browsers
 - QtPropertyBrowser
 -- https://qt.gitorious.org/qt-solutions  and http://doc.qt.digia.com/qq/qq18-propertybrowser.html
