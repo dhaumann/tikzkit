@@ -25,8 +25,7 @@ enum Shape {
 };
 
 enum PenStyle {
-    PenUnset = 0,
-    NoPen,
+    NoPen = 0,
     SolidLine,
     DottedLine,
     DenselyDottedLine,

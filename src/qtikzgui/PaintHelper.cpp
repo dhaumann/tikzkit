@@ -24,7 +24,6 @@ PaintHelper::~PaintHelper()
 Qt::PenStyle PaintHelper::penStyle() const
 {
     switch (d->style->lineWidth()) {
-        case tikz::PenUnset: return Qt::NoPen;
         case tikz::NoPen: return Qt::NoPen;
         case tikz::SolidLine: return Qt::SolidLine;
         case tikz::DottedLine: return Qt::DotLine;
@@ -41,7 +40,7 @@ Qt::PenStyle PaintHelper::penStyle() const
         case tikz::LooselyDashDotDottedLine: return Qt::DashDotDotLine; // no Qt style
         default: break;
     }
-    return Qt::NoPen;
+    return Qt::SolidLine;
 }
 
 QPen PaintHelper::pen() const

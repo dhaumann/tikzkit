@@ -38,7 +38,8 @@ void StylePrivate::init()
     parent = 0;
     refCounter = 0;
 
-    penStyle = PenUnset;
+    penStyleSet = false;
+    penStyle = SolidLine;
 
     lineWidthSet = false;
     lineWidth = SemiThick;
@@ -113,7 +114,7 @@ void Style::endConfig()
 
 PenStyle Style::penStyle() const
 {
-    if (d->penStyle != PenUnset) {
+    if (d->penStyleSet) {
         return d->penStyle;
     }
 
@@ -121,7 +122,17 @@ PenStyle Style::penStyle() const
         return parent()->penStyle();
     }
 
-    return NoPen;
+    return SolidLine;
+}
+
+void Style::setPenStyle(tikz::PenStyle style)
+{
+    if (!d->penStyleSet || d->penStyle != style) {
+        beginConfig();
+        d->penStyleSet = true;
+        d->penStyle = style;
+        endConfig();
+    }
 }
 
 LineWidth Style::lineWidth() const

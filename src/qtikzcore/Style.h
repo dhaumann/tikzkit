@@ -80,10 +80,17 @@ class TIKZCORE_EXPORT Style : public QObject
     //
     public:
         /**
-         * Get the LineStyle of this style.
+         * Get the PenStyle of this style.
          * @see PenStyle
          */
         PenStyle penStyle() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the PenStyle of this style to @p style.
+         * @see PenStyle
+         */
+        void setPenStyle(tikz::PenStyle style);
 
         /**
          * Get the line width.
