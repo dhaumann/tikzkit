@@ -16,19 +16,19 @@ public:
     // Common styles
     PenStyle penStyle;
     LineWidth lineWidth;
-
-    bool penOpacitySet : 1;
-    double penOpacity;
-    bool fillOpacitySet : 1;
-    double fillOpacity;
-
-    bool penColorSet : 1;
+    qreal customLineWidth;
     QColor penColor;
-    bool fillColorSet : 1;
     QColor fillColor;
 
-    // Node styles
-    Shape shape;
+    qreal penOpacity;
+    qreal fillOpacity;
+
+    bool penStyleSet : 1;
+    bool lineWidthSet : 1;
+    bool penOpacitySet : 1;
+    bool fillOpacitySet : 1;
+    bool penColorSet : 1;
+    bool fillColorSet : 1;
 
     void init();
 };
@@ -39,7 +39,10 @@ void StylePrivate::init()
     refCounter = 0;
 
     penStyle = PenUnset;
-    lineWidth = WidthUnset;
+
+    lineWidthSet = false;
+    lineWidth = SemiThick;
+    customLineWidth = 0.21162; // = SemiThick
 
     penOpacitySet = false;
     fillOpacitySet = false;
@@ -52,8 +55,6 @@ void StylePrivate::init()
 
     penColor = Qt::black;
     fillColor = QColor();
-
-    shape = ShapeUnset;
 }
 
 Style::Style()
@@ -125,7 +126,7 @@ PenStyle Style::penStyle() const
 
 LineWidth Style::lineWidth() const
 {
-    if (d->lineWidth != WidthUnset) {
+    if (d->lineWidthSet) {
         return d->lineWidth;
     }
 
@@ -138,8 +139,9 @@ LineWidth Style::lineWidth() const
 
 void Style::setLineWidth(tikz::LineWidth lineWidth)
 {
-    if (d->lineWidth = lineWidth) {
+    if (!d->lineWidthSet || d->lineWidth != lineWidth) {
         beginConfig();
+        d->lineWidthSet = true;
         d->lineWidth = lineWidth;
         endConfig();
     }
@@ -161,20 +163,28 @@ void Style::setCustomLineWidth(qreal width)
 
 qreal Style::lineThickness() const
 {
-    const qreal mm = 0.03527;
-    qreal pt = 0.0;
-    switch (lineWidth()) {
-        case tikz::WidthUnset: pt = 0.0; break;
-        case tikz::UltraThin : pt = 0.1; break; // 0.03527 mm
-        case tikz::VeryThin  : pt = 0.2; break; // 0.07054 mm
-        case tikz::Thin      : pt = 0.4; break; // 0.14108 mm
-        case tikz::SemiThick : pt = 0.6; break; // 0.21162 mm
-        case tikz::Thick     : pt = 0.8; break; // 0.28216 mm
-        case tikz::VeryThick : pt = 1.2; break; // 0.42324 mm
-        case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
-        default: break;
+    if (d->lineWidthSet) {
+        const qreal mm = 0.03527;
+        qreal pt = 0.0;
+        switch (lineWidth()) {
+            case tikz::UltraThin : pt = 0.1; break; // 0.03527 mm
+            case tikz::VeryThin  : pt = 0.2; break; // 0.07054 mm
+            case tikz::Thin      : pt = 0.4; break; // 0.14108 mm
+            case tikz::SemiThick : pt = 0.6; break; // 0.21162 mm
+            case tikz::Thick     : pt = 0.8; break; // 0.28216 mm
+            case tikz::VeryThick : pt = 1.2; break; // 0.42324 mm
+            case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
+            case tikz::CustomLineWidth: return d->customLineWidth;
+            default: break;
+        }
+        return pt * mm;
     }
-    return pt * mm;
+
+    if (parent()) {
+        return parent()->lineThickness();
+    }
+
+    return SemiThick;
 }
 
 double Style::penOpacity() const

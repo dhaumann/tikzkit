@@ -93,6 +93,7 @@ class TIKZCORE_EXPORT Style : public QObject
 
         /**
          * Set the line width.
+         * A cusom line width is achieved by alling setCustomLineWidth().
          * @p width the line width
          * @see Linewidth
          */
@@ -111,7 +112,6 @@ class TIKZCORE_EXPORT Style : public QObject
          * Get the lineWidth() in mm.
          */
         qreal lineThickness() const;
-
 
         /**
          * The the draw opacity.

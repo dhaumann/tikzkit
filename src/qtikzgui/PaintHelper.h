@@ -28,11 +28,6 @@ class PaintHelper
     //
     public:
         /**
-         * Translates the line width of the tikz style to a value.
-         */
-        qreal lineWidth() const;
-
-        /**
          * Translates the tikz pen style to a Qt pen style.
          */
         Qt::PenStyle penStyle() const;

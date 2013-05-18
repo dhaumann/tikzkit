@@ -43,14 +43,14 @@ enum PenStyle {
 };
 
 enum LineWidth {
-    WidthUnset = 0,
-    UltraThin,
+    UltraThin = 0,
     VeryThin,
     Thin,
     SemiThick,  // TikZ default
     Thick,
     VeryThick,
-    UltraThick
+    UltraThick,
+    CustomLineWidth
 };
 
 enum LineCap {

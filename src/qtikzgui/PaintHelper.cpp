@@ -7,18 +7,6 @@ class PaintHelperPrivate
     public:
         QPainter* painter;
         tikz::Style* style;
-
-    //
-    // private helper functions
-    //
-    public:
-        qreal lineWidth() const
-        {
-//             qreal oneMilliMeter = painter->device()->physicalDpiX() / 25.4;
-            //     qDebug() << painter->device()->physicalDpiX() << oneMilliMeter;
-//             p.setWidthF(p.widthF() * oneMilliMeter / painter->device()->physicalDpiX() * 2.54);
-            return 0.1;
-        }
 };
 
 PaintHelper::PaintHelper(QPainter * painter, tikz::Style * style)
@@ -31,25 +19,6 @@ PaintHelper::PaintHelper(QPainter * painter, tikz::Style * style)
 PaintHelper::~PaintHelper()
 {
     delete d;
-}
-
-qreal PaintHelper::lineWidth() const
-{
-    // 1pt =  0.3527 mm, see http://en.wikipedia.org/wiki/Point_(typography)
-    const qreal mm = 0.3527;
-    qreal pt = 0.0;
-    switch (d->style->lineWidth()) {
-        case tikz::WidthUnset: pt = 0.0; break;
-        case tikz::UltraThin : pt = 0.1; break; // 0.03527 mm
-        case tikz::VeryThin  : pt = 0.2; break; // 0.07054 mm
-        case tikz::Thin      : pt = 0.4; break; // 0.14108 mm
-        case tikz::SemiThick : pt = 0.6; break; // 0.21162 mm
-        case tikz::Thick     : pt = 0.8; break; // 0.28216 mm
-        case tikz::VeryThick : pt = 1.2; break; // 0.42324 mm
-        case tikz::UltraThick: pt = 1.6; break; // 0.56432 mm
-        default: break;
-    }
-    return pt * mm * d->lineWidth();
 }
 
 Qt::PenStyle PaintHelper::penStyle() const
