@@ -99,6 +99,15 @@ class TIKZCORE_EXPORT Style : public QObject
         void setLineWidth(tikz::LineWidth lineWidth);
 
         /**
+         * Set the line width to @p width mm.
+         * Calling this function automatically sets the lineWidth()
+         * to LineWidth::CustomLineWidth.
+         * @p width the line width [mm]
+         * @see Linewidth
+         */
+        void setCustomLineWidth(qreal width);
+
+        /**
          * Get the lineWidth() in mm.
          */
         qreal lineThickness() const;

@@ -145,6 +145,20 @@ void Style::setLineWidth(tikz::LineWidth lineWidth)
     }
 }
 
+void Style::setCustomLineWidth(qreal width)
+{
+    if (!d->lineWidthSet
+        || (d->lineWidth == CustomLineWidth
+            && d->customLineWidth != width)
+    ) {
+        beginConfig();
+        d->lineWidthSet = true;
+        d->lineWidth = CustomLineWidth;
+        d->customLineWidth = width;
+        endConfig();
+    }
+}
+
 qreal Style::lineThickness() const
 {
     const qreal mm = 0.03527;
