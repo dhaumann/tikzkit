@@ -136,6 +136,16 @@ void Style::setPenStyle(tikz::PenStyle style)
     }
 }
 
+void Style::unsetPenStyle()
+{
+    if (d->penStyleSet) {
+        beginConfig();
+        d->penStyleSet = false;
+        d->penStyle = SolidLine;
+        endConfig();
+    }
+}
+
 LineWidth Style::lineWidth() const
 {
     if (d->lineWidthSet) {
@@ -196,8 +206,20 @@ qreal Style::lineThickness() const
         return parent()->lineThickness();
     }
 
-    return SemiThick;
+    return 0.21162; // mm
 }
+
+void Style::unsetLineWidth()
+{
+    if (d->lineWidthSet) {
+        beginConfig();
+        d->lineWidthSet = false;
+        d->lineWidth = SemiThick;
+        d->customLineWidth = 0.21162; // mm
+        endConfig();
+    }
+}
+
 
 qreal Style::penOpacity() const
 {
@@ -222,6 +244,16 @@ void Style::setPenOpacity(qreal opacity)
     }
 }
 
+void Style::unsetPenOpacity()
+{
+    if (d->penOpacitySet) {
+        beginConfig();
+        d->penOpacitySet = false;
+        d->penOpacity = 1.0;
+        endConfig();
+    }
+}
+
 qreal Style::fillOpacity() const
 {
     if (d->fillOpacitySet) {
@@ -241,6 +273,16 @@ void Style::setFillOpacity(qreal opacity)
         beginConfig();
         d->fillOpacitySet = true;
         d->fillOpacity = opacity;
+        endConfig();
+    }
+}
+
+void Style::unsetFillOpacity()
+{
+    if (d->fillOpacitySet) {
+        beginConfig();
+        d->fillOpacitySet = false;
+        d->fillOpacity = 1.0;
         endConfig();
     }
 }

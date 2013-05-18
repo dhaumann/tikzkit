@@ -92,6 +92,15 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void setPenStyle(tikz::PenStyle style);
 
+        /**
+         * Unset the pen style.
+         * After this, calling penStyle() returns the parent()->penStyle()
+         * if a parent() style exists, otherwise penStyle() returns the
+         * default pen style @e SolidLine.
+         * @see PenStyle, penStyle()
+         */
+        void unsetPenStyle();
+
     //
     // pen style / line width
     //
@@ -125,6 +134,15 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void setCustomLineWidth(qreal width);
 
+        /**
+         * Unset the line width.
+         * After this, calling lineWidth() or lineThickness() return the
+         * respective values of the parent() style, if the parent() style exists,
+         * otherwise the returned line width is @e SemiThick.
+         * @see LineWidth, lineWidth(), lineThickness()
+         */
+        void unsetLineWidth();
+
     //
     // draw & fill opacity
     //
@@ -147,10 +165,24 @@ class TIKZCORE_EXPORT Style : public QObject
         void setPenOpacity(qreal opacity);
 
         /**
+         * Unsets the draw opacity of the pen.
+         * Afterwards, penOpacity() returns either the opacity of the parent()
+         * style, or the default value @e 1.0.
+         */
+        void unsetPenOpacity();
+
+        /**
          * Set the opacity for filling primitives to @p opacity.
          * @param opacity the opacity in the interval [0.0; 1.0]
          */
         void setFillOpacity(qreal opacity);
+
+        /**
+         * Unsets the fill opacity of fill operations.
+         * Afterwards, fillOpacity() returns either the opacity of the parent()
+         * style, or the default value @e 1.0.
+         */
+        void unsetFillOpacity();
 
     //
     // pen color and fill color/brush
