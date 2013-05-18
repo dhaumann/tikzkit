@@ -76,7 +76,7 @@ class TIKZCORE_EXPORT Style : public QObject
         void changed();
 
     //
-    // common style attributes of nodes and paths
+    // pen style
     //
     public:
         /**
@@ -92,12 +92,22 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void setPenStyle(tikz::PenStyle style);
 
+    //
+    // pen style / line width
+    //
+    public:
         /**
          * Get the line width.
-         * @see Linewidth
+         * @see LineWidth
          */
         LineWidth lineWidth() const;
 
+        /**
+         * Get the lineWidth() in mm.
+         */
+        qreal lineThickness() const;
+
+    public Q_SLOTS:
         /**
          * Set the line width.
          * A cusom line width is achieved by alling setCustomLineWidth().
@@ -115,23 +125,43 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void setCustomLineWidth(qreal width);
 
+    //
+    // draw & fill opacity
+    //
+    public:
         /**
-         * Get the lineWidth() in mm.
+         * Get the opacity for drawing primitives in the interval [0.0; 1.0].
          */
-        qreal lineThickness() const;
+        qreal penOpacity() const;
 
         /**
-         * The the draw opacity.
+         * Get the opacity for filling operations in the interval [0.0; 1.0].
          */
-        double penOpacity() const;
-        double fillOpacity() const;
+        qreal fillOpacity() const;
 
+    public Q_SLOTS:
+        /**
+         * Set the opacity for drawing primitives to @p opacity.
+         * @param opacity the opacity in the interval [0.0; 1.0]
+         */
+        void setPenOpacity(qreal opacity);
+
+        /**
+         * Set the opacity for filling primitives to @p opacity.
+         * @param opacity the opacity in the interval [0.0; 1.0]
+         */
+        void setFillOpacity(qreal opacity);
+
+    //
+    // pen color and fill color/brush
+    //
+    public:
         QColor penColor() const;
         QColor fillColor() const;
 
     // TODO: pen color
     //  fill color
-    // Node: inner sep, minimum size (minimum width, minimum height)
+    // Node: minimum size (minimum width, minimum height)
 
     private:
         StylePrivate * const d;

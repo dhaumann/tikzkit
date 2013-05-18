@@ -46,13 +46,14 @@ void StylePrivate::init()
     customLineWidth = 0.21162; // = SemiThick
 
     penOpacitySet = false;
+    penOpacity = 1.0;
+
     fillOpacitySet = false;
+    fillOpacity = 1.0;
 
     penColorSet = false;
     fillColorSet = false;
 
-    penOpacity = 1.0;
-    fillOpacity = 1.0;
 
     penColor = Qt::black;
     fillColor = QColor();
@@ -198,7 +199,7 @@ qreal Style::lineThickness() const
     return SemiThick;
 }
 
-double Style::penOpacity() const
+qreal Style::penOpacity() const
 {
     if (d->penOpacitySet) {
         return d->penOpacity;
@@ -211,7 +212,17 @@ double Style::penOpacity() const
     return 1.0;
 }
 
-double Style::fillOpacity() const
+void Style::setPenOpacity(qreal opacity)
+{
+    if (!d->penOpacitySet || d->penOpacity != opacity) {
+        beginConfig();
+        d->penOpacitySet = true;
+        d->penOpacity = opacity;
+        endConfig();
+    }
+}
+
+qreal Style::fillOpacity() const
 {
     if (d->fillOpacitySet) {
         return d->fillOpacity;
@@ -222,6 +233,16 @@ double Style::fillOpacity() const
     }
 
     return 1.0;
+}
+
+void Style::setFillOpacity(qreal opacity)
+{
+    if (!d->fillOpacitySet || d->fillOpacity != opacity) {
+        beginConfig();
+        d->fillOpacitySet = true;
+        d->fillOpacity = opacity;
+        endConfig();
+    }
 }
 
 QColor Style::penColor() const
