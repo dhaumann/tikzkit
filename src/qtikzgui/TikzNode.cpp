@@ -2,6 +2,7 @@
 #include "NodeStyle.h"
 #include "PaintHelper.h"
 #include "AbstractShape.h"
+#include "RotateHandle.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -30,6 +31,9 @@ class TikzNodePrivate
         bool itemChangeRunning : 1;
         bool dirty : 1;
         QPainterPath shapePath;
+
+        RotateHandle* handleRotate;
+
 
     public:
         void updateCache()
@@ -99,6 +103,8 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 //     d->textItem->rotate(-5);
 
 //     styleChanged();
+
+    d->handleRotate = new RotateHandle(this);
 }
 
 TikzNode::~TikzNode()
