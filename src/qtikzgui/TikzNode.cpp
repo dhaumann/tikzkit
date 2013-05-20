@@ -2,7 +2,6 @@
 #include "NodeStyle.h"
 #include "PaintHelper.h"
 #include "AbstractShape.h"
-#include "RotateHandle.h"
 #include "NodeHandle.h"
 
 #include <QPainter>
@@ -33,7 +32,6 @@ class TikzNodePrivate
         bool dirty : 1;
         QPainterPath shapePath;
 
-        RotateHandle* handleRotate;
         NodeHandle* nodeHandle;
 
     public:
@@ -48,6 +46,10 @@ class TikzNodePrivate
             }
 
             shapePath = shape->shape();
+
+            QTransform trans;
+            trans.scale(node->style()->scale(), node->style()->scale());
+            shapePath = trans.map(shapePath);
 
             q->setRotation(node->style()->rotation());
         }
@@ -105,7 +107,6 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 
 //     styleChanged();
 
-    d->handleRotate = new RotateHandle(this);
     d->nodeHandle = new NodeHandle(this);
 }
 
@@ -143,7 +144,9 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
     // make sure cache is up-to-date
     d->updateCache();
 
-    return d->shape->anchorPos(anchor);
+    QTransform trans;
+    trans.scale(d->node->style()->scale(), d->node->style()->scale());
+    return trans.map(d->shape->anchorPos(anchor));
 }
 
 QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
@@ -154,7 +157,9 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
     // adapt angle to account for the self rotation of this node
     rad -= rotation() * M_PI / 180.0;
 
-    return d->shape->contactPoint(anchor, rad);
+    QTransform trans;
+    trans.scale(d->node->style()->scale(), d->node->style()->scale());
+    return trans.map(d->shape->contactPoint(anchor, rad));
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -163,7 +168,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
 
     // debugging: bounding rect
-//     painter->drawRect(boundingRect());
+    painter->drawRect(boundingRect());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
@@ -214,7 +219,7 @@ QPainterPath TikzNode::shape() const
     // make sure cache is up-to-date
     d->updateCache();
 
-    return d->shape->shape();
+    return d->shapePath;
 }
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)

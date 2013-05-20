@@ -48,11 +48,17 @@ class NodeHandle : public QGraphicsObject
          */
         bool contains(const QPointF &point) const;
 
+        /**
+         * Returns an exact shape as painter path
+         */
+        QPainterPath shape() const;
+
     //
     // Mouse handling
     //
     protected:
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
     protected Q_SLOTS:
         /**

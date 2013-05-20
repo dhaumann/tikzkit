@@ -11,7 +11,6 @@ include_directories(
 set(qtikzgui_SOURCES
     TikzItem.cpp
     TikzNode.cpp
-    RotateHandle.cpp
     NodeHandle.cpp
     TikzEdge.cpp
     TikzEdge_p.cpp
@@ -29,7 +28,6 @@ set(qtikzgui_SOURCES
 set(qtikzgui_HEADERS
     TikzItem.h
     TikzNode.h
-    RotateHandle.h
     NodeHandle.h
     TikzEdge.h
     TikzScene.h
