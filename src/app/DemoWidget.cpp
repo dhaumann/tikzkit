@@ -51,7 +51,7 @@ DemoWidget::DemoWidget()
 //     m_view->setTransform(t);
 //     m_view->scale(20, 20);
     m_view->show();
-    m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
+//     m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
 
     TikzNode* item1 = new TikzNode();
     item1->node().setText("1");

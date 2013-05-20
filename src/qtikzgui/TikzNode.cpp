@@ -188,15 +188,15 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     // TODO: highlight selection
 //     qDebug() << (bool)(option->state & QStyle::State_Selected);
 //         qt_graphicsItem_highlightSelected(this, painter, option);
-    if (isHovered()) {
-        QRectF br = boundingRect();
-        br.adjust(0.01, 0.01, -0.01, -0.01);
-        p.setColor(Qt::red);
-        painter->setPen(p);
-        painter->setBrush(QColor(194, 228, 255));
-        painter->setOpacity(0.5);
-        painter->drawRect(br);
-    }
+//     if (isHovered()) {
+//         QRectF br = boundingRect();
+//         br.adjust(0.01, 0.01, -0.01, -0.01);
+//         p.setColor(Qt::red);
+//         painter->setPen(p);
+//         painter->setBrush(QColor(194, 228, 255));
+//         painter->setOpacity(0.5);
+//         painter->drawRect(br);
+//     }
 
 // qDebug() << isSelected();
     painter->restore();
