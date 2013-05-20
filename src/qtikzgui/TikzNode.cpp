@@ -3,6 +3,7 @@
 #include "PaintHelper.h"
 #include "AbstractShape.h"
 #include "RotateHandle.h"
+#include "NodeHandle.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -33,7 +34,7 @@ class TikzNodePrivate
         QPainterPath shapePath;
 
         RotateHandle* handleRotate;
-
+        NodeHandle* nodeHandle;
 
     public:
         void updateCache()
@@ -105,6 +106,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 //     styleChanged();
 
     d->handleRotate = new RotateHandle(this);
+    d->nodeHandle = new NodeHandle(this);
 }
 
 TikzNode::~TikzNode()

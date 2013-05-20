@@ -12,6 +12,7 @@ set(qtikzgui_SOURCES
     TikzItem.cpp
     TikzNode.cpp
     RotateHandle.cpp
+    NodeHandle.cpp
     TikzEdge.cpp
     TikzEdge_p.cpp
     TikzScene.cpp
@@ -29,6 +30,7 @@ set(qtikzgui_HEADERS
     TikzItem.h
     TikzNode.h
     RotateHandle.h
+    NodeHandle.h
     TikzEdge.h
     TikzScene.h
     AnchorHandle.h
