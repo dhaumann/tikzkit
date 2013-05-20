@@ -145,7 +145,7 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     d->updateCache();
 
     // debugging
-    painter->drawRect(boundingRect());
+//     painter->drawRect(boundingRect());
 
     painter->save();
 
@@ -167,6 +167,9 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawRect(d->handleBottom);
     painter->drawRect(d->handleBottomRight);
 
+    if (d->node->style()->rotation() != 0.0) {
+        painter->setBrush(QColor(255, 128, 0));
+    }
     painter->drawEllipse(d->handleRotate);
 
     painter->restore();
@@ -192,7 +195,8 @@ QPainterPath NodeHandle::shape() const
 
 void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << d->mode;
+    d->updateCache();
+
     if (d->mode == NodeHandlePrivate::None) {
         qDebug() << "wuhääääääääää";
     }
@@ -206,9 +210,10 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         if (snap) deg = qRound(deg / 15) * 15;
         d->node->style()->setRotation(deg);
     } else {
-        const qreal curScale = d->node->style()->scale();
         qreal len = QLineF(QPointF(0, 0), event->pos()).length() - 0.1;
-        d->node->style()->setScale(len * d->cachedScale / d->cachedLen);
+        qreal scale = len * d->cachedScale / d->cachedLen;
+        if (snap) scale = qRound(scale / 0.2) * 0.2;
+        d->node->style()->setScale(scale);
     }
 }
 

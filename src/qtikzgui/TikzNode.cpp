@@ -108,6 +108,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 //     styleChanged();
 
     d->nodeHandle = new NodeHandle(this);
+    d->nodeHandle->setVisible(false);
 }
 
 TikzNode::~TikzNode()
@@ -168,7 +169,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
 
     // debugging: bounding rect
-    painter->drawRect(boundingRect());
+//     painter->drawRect(boundingRect());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
@@ -238,6 +239,17 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
             newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
             d->node->setPos(newPos);
             return newPos;
+        }
+    } else if (change == ItemSelectedHasChanged) {
+        // show / hide scale&rotate handles if selected
+        const bool selected = value.toBool();
+        if (selected) {
+            d->nodeHandle->setVisible(true);
+        } else if (scene()) {
+            QList<QGraphicsItem *> items = scene()->selectedItems();
+            if (items.count() != 1 || items[0] != d->nodeHandle) {
+                d->nodeHandle->setVisible(false);
+            }
         }
     }
 
