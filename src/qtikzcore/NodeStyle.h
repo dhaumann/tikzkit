@@ -44,15 +44,41 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         void setShape(tikz::Shape shape);
 
+    //
+    // rotation
+    //
+    public:
         /**
          * Get the rotation in degrees.
          */
         qreal rotation() const;
 
+    public Q_SLOTS:
         /**
          * Set the rotation to @p angle degrees.
          */
         void setRotation(qreal angle);
+
+    //
+    // scaling methods
+    //
+    public:
+        /**
+         * Get the scale factor.
+         * By default, the scale factor is unset and returns 1.0.
+         */
+        qreal scale() const;
+//         void scaleX(qreal xFactor);
+//         void scaleY(qreal xFactor);
+
+    public Q_SLOTS:
+        /**
+         * Set the scale factor to @p factor.
+         * @param factor the scale factor for both x and y directions
+         */
+        void setScale(qreal factor);
+//         void setScaleX(qreal xFactor);
+//         void setScaleY(qreal xFactor);
 
     //
     // size methods

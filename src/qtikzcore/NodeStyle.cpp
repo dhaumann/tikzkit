@@ -11,9 +11,11 @@ public:
     // Node styles
     Shape shape;
     qreal rotation;
+    qreal scale;
     qreal innerSep;
     qreal outerSep;
 
+    bool scaleSet : 1;
     bool innerSepSet : 1;
     bool outerSepSet : 1;
 };
@@ -27,6 +29,7 @@ NodeStyle::NodeStyle()
     d->innerSep = 0.3; // 0.3333em
     d->outerSep = 0.1; // 0.5 \pgflinewidth
 
+    d->scaleSet = false;
     d->innerSepSet = false;
     d->outerSepSet = false;
 }
@@ -75,6 +78,30 @@ void NodeStyle::setRotation(qreal angle)
     if (d->rotation != angle) {
         beginConfig();
         d->rotation = angle;
+        endConfig();
+    }
+}
+
+qreal NodeStyle::scale() const
+{
+    if (d->scaleSet) {
+        return d->scale;
+    }
+
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->scale();
+    }
+
+    return 1.0;
+}
+
+void NodeStyle::setScale(qreal factor)
+{
+    if (!d->scaleSet || d->scale != factor) {
+        beginConfig();
+        d->scaleSet = true;
+        d->scale = factor;
         endConfig();
     }
 }
