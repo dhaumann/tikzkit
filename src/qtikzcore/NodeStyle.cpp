@@ -14,10 +14,14 @@ public:
     qreal scale;
     qreal innerSep;
     qreal outerSep;
+    qreal minimumHeight;
+    qreal minimumWidth;
 
     bool scaleSet : 1;
     bool innerSepSet : 1;
     bool outerSepSet : 1;
+    bool minimumHeightSet : 1;
+    bool minimumWidthSet : 1;
 };
 
 NodeStyle::NodeStyle()
@@ -26,12 +30,16 @@ NodeStyle::NodeStyle()
 {
     d->shape = ShapeUnset;
     d->rotation = 0.0;
-    d->innerSep = 0.3; // 0.3333em
-    d->outerSep = 0.1; // 0.5 \pgflinewidth
+    d->innerSep = 0.3333; // 0.3333em
+    d->outerSep = 0.5; // 0.5 \pgflinewidth
+    d->minimumHeight = 0.0; // mm
+    d->minimumWidth = 0.0; // mm
 
     d->scaleSet = false;
     d->innerSepSet = false;
     d->outerSepSet = false;
+    d->minimumHeightSet = false;
+    d->minimumWidthSet = false;
 }
 
 NodeStyle::NodeStyle(Document* tikzDocument)
@@ -141,6 +149,94 @@ qreal NodeStyle::outerSep() const
         return 0.5 * lineThickness();
     }
     return d->outerSep;
+}
+
+void NodeStyle::unsetInnerSep()
+{
+    if (d->innerSepSet) {
+        beginConfig();
+        d->innerSepSet = false;
+        d->innerSep = 0.3333;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetOuterSep()
+{
+    if (d->outerSepSet) {
+        beginConfig();
+        d->outerSepSet = false;
+        d->outerSep = 0.3333;
+        endConfig();
+    }
+}
+
+qreal NodeStyle::minimumHeight() const
+{
+    if (d->minimumHeightSet) {
+        return d->minimumHeight;
+    }
+
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->minimumHeight();
+    }
+
+    return 0.0;
+}
+
+qreal NodeStyle::minimumWidth() const
+{
+    if (d->minimumWidthSet) {
+        return d->minimumWidth;
+    }
+
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->minimumWidth();
+    }
+
+    return 0.0;
+}
+
+void NodeStyle::setMinimumHeight(qreal height)
+{
+    if (!d->minimumHeightSet || d->minimumHeight != height) {
+        beginConfig();
+        d->minimumHeightSet = true;
+        d->minimumHeightSet = height;
+        endConfig();
+    }
+}
+
+void NodeStyle::setMinimumWidth(qreal width)
+{
+    if (!d->minimumWidthSet || d->minimumWidth != width) {
+        beginConfig();
+        d->minimumWidthSet = true;
+        d->minimumWidth = width;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetMinimumHeight()
+{
+    if (d->minimumHeightSet) {
+        beginConfig();
+        d->minimumHeightSet = false;
+        d->minimumHeight = 0.0;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetMinimumWidth()
+{
+    if (d->minimumWidthSet) {
+        beginConfig();
+        d->minimumWidthSet = false;
+        d->minimumWidth = 0.0;
+        endConfig();
+    }
 }
 
 }

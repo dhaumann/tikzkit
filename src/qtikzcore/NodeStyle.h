@@ -85,15 +85,22 @@ class TIKZCORE_EXPORT NodeStyle : public Style
     //
     public:
         /**
-         * Set the 'inner sep' to @p sep [mm].
-         */
-        void setInnerSep(qreal sep);
-
-        /**
          * Get the 'inner sep' [mm].
          * Default: 0.3333ex
          */
         qreal innerSep() const;
+
+        /**
+         * Get the 'outer sep' [mm].
+         * Default: 0.5 lineWidth()
+         */
+        qreal outerSep() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the 'inner sep' to @p sep [mm].
+         */
+        void setInnerSep(qreal sep);
 
         /**
          * Set the 'outer sep' to @p sep [mm].
@@ -101,10 +108,58 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         void setOuterSep(qreal sep);
 
         /**
-         * Get the 'outer sep' [mm].
-         * Default: 0.5 lineWidth()
+         * Unset the 'inner sep'.
+         * Afterwards, the style falls back to the value of parent()->innerSep().
          */
-        qreal outerSep() const;
+        void unsetInnerSep();
+
+        /**
+         * Unset the 'outer sep'.
+         * Afterwards, the style falls back to the value of parent()->outerSep().
+         */
+        void unsetOuterSep();
+
+    //
+    // minimum width & height
+    //
+    public:
+        /**
+         * Get the minimum height.
+         * Initially unset, and the default value is 0 mm.
+         */
+        qreal minimumHeight() const;
+
+        /**
+         * Get the minimum width.
+         * Initially unset, and the default value is 0 mm.
+         */
+        qreal minimumWidth() const;
+
+    public Q_SLOTS:
+        /**
+         * Get the minimum height.
+         * Initially unset, and the default value is 0 mm.
+         */
+        void setMinimumHeight(qreal height);
+
+        /**
+         * Get the minimum width.
+         * Initially unset, and the default value is 0 mm.
+         */
+        void setMinimumWidth(qreal width);
+
+        /**
+         * Unset the minimum height.
+         * Afterwards, the style falls back to the value of parent()->minimumHeight().
+         */
+        void unsetMinimumHeight();
+
+        /**
+         * Unset the minimum width.
+         * Afterwards, the style falls back to the value of parent()->minimumWidth().
+         */
+        void unsetMinimumWidth();
+
 
     private:
         NodeStylePrivate * const d;
