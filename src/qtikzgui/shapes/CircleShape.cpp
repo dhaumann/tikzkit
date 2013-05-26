@@ -29,9 +29,11 @@ tikz::Shape CircleShape::type() const
 
 QPainterPath CircleShape::shape() const
 {
-    const qreal radius = 0.5; // TODO: set to correct size
+    const qreal r = node()->style()->outerSep() +
+                    qMax(node()->shapeRect().width(),
+                         node()->shapeRect().height()) / 2.0;
     QPainterPath path;
-    path.addEllipse(QPointF(0, 0), radius, radius);
+    path.addEllipse(QPointF(0, 0), r, r);
     return path;
 }
 
@@ -54,19 +56,20 @@ QVector<tikz::Anchor> CircleShape::supportedAnchors() const
 
 QPointF CircleShape::anchorPos(tikz::Anchor anchor) const
 {
-    // TODO: set size correct
-    const qreal radius = 0.5 + node()->style()->outerSep();
+    const qreal r = node()->style()->outerSep() +
+                    qMax(node()->shapeRect().width(),
+                         node()->shapeRect().height()) / 2.0;
     switch (anchor) {
         case tikz::NoAnchor:
         case tikz::Center   : return QPointF(0, 0);
-        case tikz::North    : return QPointF(0, radius);
-        case tikz::NorthEast: return QPointF(1, 1) * 0.70710678 * radius;
-        case tikz::East     : return QPointF(radius, 0);
-        case tikz::SouthEast: return QPointF(1, -1) * 0.70710678 * radius;
-        case tikz::South    : return QPointF(0, -radius);
-        case tikz::SouthWest: return QPointF(-1, -1) * 0.70710678 * radius;
-        case tikz::West     : return QPointF(-radius, 0);
-        case tikz::NorthWest: return QPointF(-1, 1) * 0.70710678 * radius;
+        case tikz::North    : return QPointF(0, r);
+        case tikz::NorthEast: return QPointF(r, r) * 0.70710678;
+        case tikz::East     : return QPointF(r, 0);
+        case tikz::SouthEast: return QPointF(r, -r) * 0.70710678;
+        case tikz::South    : return QPointF(0, -r);
+        case tikz::SouthWest: return QPointF(-r, -r) * 0.70710678;
+        case tikz::West     : return QPointF(-r, 0);
+        case tikz::NorthWest: return QPointF(-r, r) * 0.70710678;
     }
 
     return QPointF(0, 0);
@@ -79,9 +82,11 @@ QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     }
 
     // TODO: set to correct size
-    const qreal radius = 0.5 + node()->style()->outerSep();
-    QPointF delta(std::cos(rad), std::sin(rad));
-    return radius * delta;
+    const qreal r = node()->style()->outerSep() +
+                    qMax(node()->shapeRect().width(),
+                         node()->shapeRect().height()) / 2.0;
+
+    return QPointF(r * std::cos(rad), r * std::sin(rad));
 }
 
 // kate: indent-width 4; replace-tabs on;

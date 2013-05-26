@@ -54,6 +54,7 @@ QPointF AbstractShape::contactPoint(tikz::Anchor anchor, qreal rad) const
 
 #include "RectShape.h"
 #include "CircleShape.h"
+#include "EllipseShape.h"
 
 AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
 {
@@ -61,6 +62,7 @@ AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
         case tikz::NoShape: return new AbstractShape(node);
         case tikz::ShapeRectangle: return new RectShape(node);
         case tikz::ShapeCircle: return new CircleShape(node);
+        case tikz::ShapeEllipse: return new EllipseShape(node);
         default: break;
     }
     return new AbstractShape(node);

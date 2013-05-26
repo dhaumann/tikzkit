@@ -23,6 +23,7 @@ set(qtikzgui_SOURCES
     shapes/AbstractShape.cpp
     shapes/RectShape.cpp
     shapes/CircleShape.cpp
+    shapes/EllipseShape.cpp
 )
 
 set(qtikzgui_HEADERS

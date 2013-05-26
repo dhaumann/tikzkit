@@ -65,6 +65,12 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          */
         QPointF contactPoint(tikz::Anchor anchor, qreal rad) const;
 
+        /**
+         * Returns the rect of this shape.
+         * Node properties such as scaling and minimum size is included.
+         * However, the style()->outerSep() is NOt included.
+         */
+        QRectF shapeRect();
 
     //
     // reimplemented from QGraphicsItem

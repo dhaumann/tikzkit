@@ -163,6 +163,26 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
     return trans.map(d->shape->contactPoint(anchor, rad));
 }
 
+QRectF TikzNode::shapeRect()
+{
+    const QRectF textRect(0, 0, 0.5, 0.5); // TODO: calc from the node text
+    const qreal innerSep = style()->innerSep();
+
+    qreal w = textRect.width() + 2 * innerSep;
+    qreal h = textRect.height() + 2 * innerSep;
+
+    // extend rect, if minimum size is set
+    if (w < style()->minimumWidth()) {
+        w = style()->minimumWidth();
+    }
+    if (h < style()->minimumHeight()) {
+        h = style()->minimumHeight();
+    }
+
+    // create rect, currently centered at (0, 0)
+    return QRectF(-w / 2.0, -h / 2.0, w, h);
+}
+
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);

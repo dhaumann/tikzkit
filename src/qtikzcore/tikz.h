@@ -20,8 +20,9 @@ enum Anchor {
 enum Shape {
     ShapeUnset = 0,
     NoShape,
+    ShapeRectangle,
     ShapeCircle,
-    ShapeRectangle
+    ShapeEllipse,
 };
 
 enum PenStyle {
