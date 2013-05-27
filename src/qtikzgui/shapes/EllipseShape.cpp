@@ -29,10 +29,8 @@ tikz::Shape EllipseShape::type() const
 
 QPainterPath EllipseShape::shape() const
 {
-    const qreal rx = node()->shapeRect().width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = node()->shapeRect().height() / 2.0 + node()->style()->outerSep();
     QPainterPath path;
-    path.addEllipse(QPointF(0, 0), rx, ry);
+    path.addEllipse(node()->shapeRect());
     return path;
 }
 

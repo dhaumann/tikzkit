@@ -29,8 +29,7 @@ tikz::Shape CircleShape::type() const
 
 QPainterPath CircleShape::shape() const
 {
-    const qreal r = node()->style()->outerSep() +
-                    qMax(node()->shapeRect().width(),
+    const qreal r = qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0;
     QPainterPath path;
     path.addEllipse(QPointF(0, 0), r, r);
@@ -81,7 +80,6 @@ QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
         return anchorPos(anchor);
     }
 
-    // TODO: set to correct size
     const qreal r = node()->style()->outerSep() +
                     qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0;

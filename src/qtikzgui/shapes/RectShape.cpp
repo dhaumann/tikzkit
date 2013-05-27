@@ -29,12 +29,8 @@ tikz::Shape RectShape::type() const
 
 QPainterPath RectShape::shape() const
 {
-    const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
-
     QPainterPath path;
-    path.addRect(QRectF(-rx, -ry, 2 * rx, 2 * ry));
+    path.addRect(node()->shapeRect());
     return path;
 }
 
