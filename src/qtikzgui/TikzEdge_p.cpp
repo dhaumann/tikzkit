@@ -54,8 +54,10 @@ void TikzEdgePrivate::updateCache()
         linePath.lineTo(endAnchor);
     }
 
-    createArrow(arrowHead, startAnchor, linePath.angleAtPercent(0.0) * M_PI / 180.0);
-    createArrow(arrowTail, endAnchor, linePath.angleAtPercent(1.0) * M_PI / 180.0  - M_PI);
+    qreal rad = linePath.angleAtPercent(0.0) * M_PI / 180.0;
+    createArrow(arrowHead, startAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
+    rad = linePath.angleAtPercent(1.0) * M_PI / 180.0 - M_PI;
+    createArrow(arrowTail, endAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
 }
 
 
