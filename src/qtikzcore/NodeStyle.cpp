@@ -204,7 +204,7 @@ void NodeStyle::setMinimumHeight(qreal height)
     if (!d->minimumHeightSet || d->minimumHeight != height) {
         beginConfig();
         d->minimumHeightSet = true;
-        d->minimumHeightSet = height;
+        d->minimumHeight = height;
         endConfig();
     }
 }
