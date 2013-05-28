@@ -133,7 +133,8 @@ DemoWidget::DemoWidget()
     item2->node().setText("2");
     item2->node().setPos(QPointF(3, -3));
     item2->node().style()->setLineWidth(tikz::SemiThick);
-    item2->node().style()->setShape(tikz::ShapeCircle);
+    item2->node().style()->setShape(tikz::ShapeEllipse);
+    item2->node().style()->setMinimumWidth(2);
     m_view->scene()->addItem(item2);
 
     // an edge
