@@ -18,8 +18,7 @@ enum Anchor {
 };
 
 enum Shape {
-    ShapeUnset = 0,
-    NoShape,
+    NoShape = 0,
     ShapeRectangle,
     ShapeCircle,
     ShapeEllipse,

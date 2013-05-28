@@ -17,6 +17,7 @@ public:
     qreal minimumHeight;
     qreal minimumWidth;
 
+    bool shapeSet : 1;
     bool rotationSet : 1;
     bool scaleSet : 1;
     bool innerSepSet : 1;
@@ -29,13 +30,14 @@ NodeStyle::NodeStyle()
     : Style()
     , d(new NodeStylePrivate())
 {
-    d->shape = ShapeUnset;
+    d->shape = ShapeRectangle;
     d->rotation = 0.0;
     d->innerSep = 0.3333; // 0.3333em
     d->outerSep = 0.5; // 0.5 \pgflinewidth
     d->minimumHeight = 0.0; // mm
     d->minimumWidth = 0.0; // mm
 
+    d->shapeSet = false;
     d->rotationSet = false;
     d->scaleSet = false;
     d->innerSepSet = false;
@@ -58,7 +60,7 @@ NodeStyle::~NodeStyle()
 
 Shape NodeStyle::shape() const
 {
-    if (d->shape != ShapeUnset) {
+    if (d->shapeSet) {
         return d->shape;
     }
 
@@ -66,14 +68,25 @@ Shape NodeStyle::shape() const
         return static_cast<NodeStyle*>(parent())->shape();
     }
 
-    return NoShape;
+    return ShapeRectangle;
 }
 
 void NodeStyle::setShape(tikz::Shape shape)
 {
-    if (d->shape != shape) {
+    if (!d->shapeSet || d->shape != shape) {
         beginConfig();
+        d->shapeSet = true;
         d->shape = shape;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetShape()
+{
+    if (d->shapeSet) {
+        beginConfig();
+        d->shapeSet = false;
+        d->shape = ShapeRectangle;
         endConfig();
     }
 }
@@ -98,6 +111,16 @@ void NodeStyle::setRotation(qreal angle)
         beginConfig();
         d->rotationSet = true;
         d->rotation = angle;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetRotation()
+{
+    if (d->rotationSet) {
+        beginConfig();
+        d->rotationSet = false;
+        d->rotation = 0.0;
         endConfig();
     }
 }

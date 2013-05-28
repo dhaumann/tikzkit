@@ -147,8 +147,9 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 //     painter->drawRect(boundingRect());
 
     painter->save();
-
     painter->setRenderHints(QPainter::Antialiasing);
+
+    // draw transparent when in action
     if (d->mode != NodeHandlePrivate::NoHandle) {
         painter->setOpacity(0.5);
     }
@@ -213,7 +214,7 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         qreal w = 2.0 * fabs(pos.x());
         qreal h = 2.0 * fabs(pos.y());
 
-        // snap
+        // snap to raster
         if (snap) w = qRound(w / 0.4) * 0.4;
         if (snap) h = qRound(h / 0.4) * 0.4;
 

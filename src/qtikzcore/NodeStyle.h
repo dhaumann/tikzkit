@@ -38,11 +38,18 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         Shape shape() const;
 
+    public Q_SLOTS:
         /**
          * Set the Shape of this style.
          * @see Shape
          */
         void setShape(tikz::Shape shape);
+
+        /**
+         * Unset the shape attribute.
+         * Afterwards, the rotation falls back to the value of parent()->shape().
+         */
+        void unsetShape();
 
     //
     // rotation
@@ -58,6 +65,12 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Set the rotation to @p angle degrees.
          */
         void setRotation(qreal angle);
+
+        /**
+         * Unset the rotation attribute.
+         * Afterwards, the rotation falls back to the value of parent()->rotation().
+         */
+        void unsetRotation();
 
     //
     // scaling methods
