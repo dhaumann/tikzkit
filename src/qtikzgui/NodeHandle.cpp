@@ -20,16 +20,16 @@ class NodeHandlePrivate
 {
     public:
         enum Mode {
-            None = 0,
-            Rotate,
-            ScaleTopLeft,
-            ScaleTop,
-            ScaleTopRight,
-            ScaleLeft,
-            ScaleRight,
-            ScaleBottomLeft,
-            ScaleBottom,
-            ScaleBottomRight
+            NoHandle = 0,
+            RotateHandle,
+            TopLeftHandle,
+            TopHandle,
+            TopRightHandle,
+            LeftHandle,
+            RightHandle,
+            BottomLeftHandle,
+            BottomHandle,
+            BottomRightHandle
         } mode;
 
     public:
@@ -59,15 +59,14 @@ class NodeHandlePrivate
             if (!dirty) return;
             dirty = false;
 
-            handleRect = node->shape().boundingRect();
-            handleRect.adjust(-0.1, -0.1, 0.1, 0.1);
+            handleRect = node->shapeRect();
 
             QRectF handle(0, 0, 0.2, 0.2);
 
             handle.moveCenter(handleRect.topLeft());
             handleTopLeft = handle;
 
-            handle.moveLeft(handleRect.center().x() - 0.1);
+            handle.moveCenter(QPointF(handleRect.center().x(), handleRect.top()));
             handleTop = handle;
 
             handle.moveCenter(handleRect.topRight());
@@ -82,7 +81,7 @@ class NodeHandlePrivate
             handle.moveCenter(handleRect.bottomLeft());
             handleBottomLeft = handle;
 
-            handle.moveLeft(handleRect.center().x() - 0.1);
+            handle.moveCenter(QPointF(handleRect.center().x(), handleRect.bottom()));
             handleBottom = handle;
 
             handle.moveCenter(handleRect.bottomRight());
@@ -92,7 +91,7 @@ class NodeHandlePrivate
             handleRotate = handle;
 
             shape = QPainterPath();
-            shape.addRect(handleRect);
+//             shape.addRect(handleRect);
             shape.addRect(handleTopLeft);
             shape.addRect(handleTop);
             shape.addRect(handleTopRight);
@@ -113,7 +112,7 @@ NodeHandle::NodeHandle(TikzNode * node)
     , d(new NodeHandlePrivate())
 {
     d->node = node;
-    d->mode = NodeHandlePrivate::None;
+    d->mode = NodeHandlePrivate::NoHandle;
     d->dirty = true;
 
     // set position depending on the anchor
@@ -197,23 +196,40 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     d->updateCache();
 
-    if (d->mode == NodeHandlePrivate::None) {
+    if (d->mode == NodeHandlePrivate::NoHandle) {
         qDebug() << "wuhääääääääää";
     }
 
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
-    if (d->mode == NodeHandlePrivate::Rotate) {
+    if (d->mode == NodeHandlePrivate::RotateHandle) {
         QPointF diff = d->node->scenePos() - event->scenePos();
         const qreal rad = atan2(-diff.y(), -diff.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
         d->node->style()->setRotation(deg);
     } else {
-        qreal len = QLineF(QPointF(0, 0), event->pos()).length() - 0.1;
-        qreal scale = len * d->cachedScale / d->cachedLen;
-        if (snap) scale = qRound(scale / 0.2) * 0.2;
-        d->node->style()->setScale(scale);
+        const QPointF pos = mapToItem(d->node, event->pos());
+        const qreal w = 2.0 * fabs(pos.x());
+        const qreal h = 2.0 * fabs(pos.y());
+
+        switch (d->mode) {
+            case NodeHandlePrivate::TopLeftHandle:
+            case NodeHandlePrivate::TopRightHandle:
+            case NodeHandlePrivate::BottomLeftHandle:
+            case NodeHandlePrivate::BottomRightHandle:
+                d->node->style()->setMinimumWidth(w);
+                d->node->style()->setMinimumHeight(h);
+                break;
+            case NodeHandlePrivate::LeftHandle:
+            case NodeHandlePrivate::RightHandle:
+                d->node->style()->setMinimumWidth(w);
+                break;
+            case NodeHandlePrivate::TopHandle:
+            case NodeHandlePrivate::BottomHandle:
+                d->node->style()->setMinimumHeight(h);
+                break;
+        }
     }
 }
 
@@ -222,29 +238,26 @@ void NodeHandle::mousePressEvent(QGraphicsSceneMouseEvent * event)
     event->accept();
     d->updateCache();
 
-    d->cachedLen = QLineF(QPointF(0, 0), event->pos()).length()  - 0.1;
-    d->cachedScale = d->node->style()->scale();
-
     if (d->handleRotate.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::Rotate;
+        d->mode = NodeHandlePrivate::RotateHandle;
     } else if (d->handleTopLeft.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleTopLeft;
+        d->mode = NodeHandlePrivate::TopLeftHandle;
     } else if (d->handleTop.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleTop;
+        d->mode = NodeHandlePrivate::TopHandle;
     } else if (d->handleTopRight.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleTopRight;
+        d->mode = NodeHandlePrivate::TopRightHandle;
     } else if (d->handleLeft.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleLeft;
+        d->mode = NodeHandlePrivate::LeftHandle;
     } else if (d->handleRight.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleRight;
+        d->mode = NodeHandlePrivate::RightHandle;
     } else if (d->handleBottomLeft.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleBottomLeft;
+        d->mode = NodeHandlePrivate::BottomLeftHandle;
     } else if (d->handleBottom.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleBottom;
+        d->mode = NodeHandlePrivate::BottomHandle;
     } else if (d->handleBottomRight.contains(event->pos())) {
-        d->mode = NodeHandlePrivate::ScaleBottomRight;
+        d->mode = NodeHandlePrivate::BottomRightHandle;
     } else {
-        d->mode = NodeHandlePrivate::None;
+        d->mode = NodeHandlePrivate::NoHandle;
         event->ignore();
     }
 }
