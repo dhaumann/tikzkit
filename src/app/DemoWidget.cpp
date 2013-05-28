@@ -112,6 +112,8 @@ DemoWidget::DemoWidget()
     item2->node().style()->setShape(tikz::ShapeRectangle);
     m_view->scene()->addItem(item2);
 
+    item2->style()->setParent(item1->style());
+
     // an edge
     edge = new TikzEdge();
     edge->setStartNode(item1);
