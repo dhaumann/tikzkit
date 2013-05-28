@@ -279,6 +279,17 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
                 break;
             }
         }
+
+        if (!connected) {
+            // mouse does not hover over node anymore, but maybe it
+            // still hovers over an anchor?
+            foreach (QGraphicsItem* item, items) {
+                if (d->nodeHandles.contains(item)) {
+                    connected = true;
+                    break;
+                }
+            }
+        }
     }
 
     if (!connected) {

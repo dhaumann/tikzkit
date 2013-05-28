@@ -14,6 +14,7 @@ class TikzEdge;
 class TikzNode;
 class AnchorHandle;
 class CurveHandle;
+class QGraphicsItem;
 
 class TikzEdgePrivate
 {
@@ -44,7 +45,7 @@ class TikzEdgePrivate
         QPainterPath arrowTail;
 
         // node handles on mouse over nodes
-        QVector<AnchorHandle*> nodeHandles;
+        QVector<QGraphicsItem*> nodeHandles;
 
         // Bezier curve handles
         CurveHandle* startControlPoint;
