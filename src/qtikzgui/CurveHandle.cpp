@@ -73,7 +73,18 @@ bool CurveHandle::contains(const QPointF &point) const
 
 void CurveHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
+    event->accept();
     emit positionChanged(event->pos());
+}
+
+void CurveHandle::mousePressEvent(QGraphicsSceneMouseEvent * event)
+{
+    event->accept();
+}
+
+void CurveHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    event->accept();
 }
 
 // kate: indent-width 4; replace-tabs on;

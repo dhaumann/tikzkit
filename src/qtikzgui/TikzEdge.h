@@ -145,12 +145,14 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
         bool contains(const QPointF & point) const;
 
     //
-    // Mouse handling
+    // Mouse handling and overrides
     //
     protected:
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
+        virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
     private Q_SLOTS:
         void slotUpdate();

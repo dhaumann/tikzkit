@@ -115,9 +115,9 @@ NodeHandle::NodeHandle(TikzNode * node)
     d->mode = NodeHandlePrivate::NoHandle;
     d->dirty = true;
 
-    // set position depending on the anchor
-    setZValue(10.0);
+    // the node handle is node centered
     setPos(QPointF(0, 0));
+    setZValue(10.0);
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(ItemIgnoresParentOpacity, true);

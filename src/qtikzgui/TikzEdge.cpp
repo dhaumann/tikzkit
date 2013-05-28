@@ -34,11 +34,15 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
 
     d->startControlPoint = new CurveHandle(this);
     d->endControlPoint = new CurveHandle(this);
+    d->startControlPoint->setVisible(false);
+    d->endControlPoint->setVisible(false);
 
     connect(d->startControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(startControlPointChanged(QPointF)));
     connect(d->endControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(endControlPointChanged(QPointF)));
 
     connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 TikzEdge::~TikzEdge()
@@ -310,9 +314,11 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEdge::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (!contains(event->pos())) {
+    if (!contains(event->pos()) || !isSelected()) {
         TikzItem::mousePressEvent(event);
     } else {
+        event->accept();
+
 //         grabMouse();
         d->dragging = true;
         const qreal distToStart = (event->scenePos() - d->edge->start().pos()).manhattanLength();
@@ -334,12 +340,35 @@ void TikzEdge::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
         // clear node handles, if needed
         qDeleteAll(d->nodeHandles);
         d->nodeHandles.clear();
+
+        event->accept();
+    } else {
+        event->ignore();
     }
 
-    if (!contains(event->pos())) {
-        TikzItem::mouseReleaseEvent(event);
-    }
     update();
+}
+
+QVariant TikzEdge::itemChange(GraphicsItemChange change, const QVariant & value)
+{
+    if (change == ItemSelectedHasChanged) {
+        // show / hide handles if selected
+        const bool selected = value.toBool();
+        if (selected) {
+            d->startControlPoint->setVisible(true);
+            d->endControlPoint->setVisible(true);
+        } else if (scene()) {
+            QList<QGraphicsItem *> items = scene()->selectedItems();
+            if (!items.contains(d->startControlPoint)
+             && !items.contains(d->endControlPoint))
+            {
+                d->startControlPoint->setVisible(false);
+                d->endControlPoint->setVisible(false);
+            }
+        }
+    }
+
+    return QGraphicsObject::itemChange(change, value);
 }
 
 void TikzEdge::startControlPointChanged(const QPointF& pos)

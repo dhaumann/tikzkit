@@ -59,6 +59,8 @@ class CurveHandle : public TikzItem
     //
     protected:
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
     private:
         CurveHandlePrivate * const d;
