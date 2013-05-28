@@ -59,6 +59,7 @@ class NodeHandle : public QGraphicsObject
     protected:
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
     protected Q_SLOTS:
         /**

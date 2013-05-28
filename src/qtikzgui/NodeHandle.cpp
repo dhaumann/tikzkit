@@ -149,6 +149,9 @@ void NodeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->save();
 
     painter->setRenderHints(QPainter::Antialiasing);
+    if (d->mode != NodeHandlePrivate::NoHandle) {
+        painter->setOpacity(0.5);
+    }
 
     QPen rectPen(QColor(255, 128, 0));
     painter->setPen(rectPen);
@@ -196,10 +199,6 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     d->updateCache();
 
-    if (d->mode == NodeHandlePrivate::NoHandle) {
-        qDebug() << "wuhääääääääää";
-    }
-
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
     if (d->mode == NodeHandlePrivate::RotateHandle) {
@@ -210,8 +209,13 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         d->node->style()->setRotation(deg);
     } else {
         const QPointF pos = mapToItem(d->node, event->pos());
-        const qreal w = 2.0 * fabs(pos.x());
-        const qreal h = 2.0 * fabs(pos.y());
+        // full width and hight => 2.0 * ...
+        qreal w = 2.0 * fabs(pos.x());
+        qreal h = 2.0 * fabs(pos.y());
+
+        // snap
+        if (snap) w = qRound(w / 0.4) * 0.4;
+        if (snap) h = qRound(h / 0.4) * 0.4;
 
         switch (d->mode) {
             case NodeHandlePrivate::TopLeftHandle:
@@ -260,6 +264,13 @@ void NodeHandle::mousePressEvent(QGraphicsSceneMouseEvent * event)
         d->mode = NodeHandlePrivate::NoHandle;
         event->ignore();
     }
+}
+
+void NodeHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    d->mode = NodeHandlePrivate::NoHandle;
+    update();
+    event->accept();
 }
 
 void NodeHandle::slotStyleChanged()
