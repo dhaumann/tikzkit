@@ -17,6 +17,7 @@ public:
     qreal minimumHeight;
     qreal minimumWidth;
 
+    bool rotationSet : 1;
     bool scaleSet : 1;
     bool innerSepSet : 1;
     bool outerSepSet : 1;
@@ -35,6 +36,7 @@ NodeStyle::NodeStyle()
     d->minimumHeight = 0.0; // mm
     d->minimumWidth = 0.0; // mm
 
+    d->rotationSet = false;
     d->scaleSet = false;
     d->innerSepSet = false;
     d->outerSepSet = false;
@@ -78,13 +80,23 @@ void NodeStyle::setShape(tikz::Shape shape)
 
 qreal NodeStyle::rotation() const
 {
-    return d->rotation;
+    if (d->rotationSet) {
+        return d->rotation;
+    }
+
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->rotation();
+    }
+
+    return 0.0;
 }
 
 void NodeStyle::setRotation(qreal angle)
 {
-    if (d->rotation != angle) {
+    if (!d->rotationSet || d->rotation != angle) {
         beginConfig();
+        d->rotationSet = true;
         d->rotation = angle;
         endConfig();
     }
