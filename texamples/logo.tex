@@ -1,0 +1,30 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{tikz}
+\PreviewEnvironment{tikzpicture}
+
+\tikzstyle{tiny dashed}=[dash pattern=on 1.1mm off 0.6mm]
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture}
+
+\node[rounded corners=3.25mm,minimum width=2.15cm,minimum height=6.5mm,white, fill=black!90] (t) at (0, 0) {Ti\textcolor{orange}{$k$}Z\textcolor{orange}{$~k$}iT};
+\node[thick, tiny dashed,draw=black!63, rounded corners=2.5mm,minimum width=2.0cm,minimum height=5mm] at (0, 0) {};
+
+\begin{scope}[xshift=0.5mm, yshift=0.6mm]
+\begin{scope}[scale=0.0425]
+\begin{scope}[yscale=-1]
+\path[fill=black!63] (2.8, 1.8) -- (2.4, 1.9) -- (1.62, 1.41) -- (1.16, 1.90)
+ -- (1.62, 2.61) -- (1.48, 3.03) -- (0.56, 3.25) -- (0.56, 3.92) -- (1.45, 4.09)
+ -- (1.59, 4.52) -- (1.09, 5.29) -- (1.55, 5.75) -- (2.26, 5.29) -- (2.82, 5.54)
+ -- (2.96, 6.39) -- (3.63, 6.39) -- (3.85, 5.5) -- (4.27, 5.36) -- (5.01, 5.86)
+ -- (5.47, 5.4) -- (4.76, 4.37) arc (30:247.05:1.56cm)
+ -- cycle;
+\end{scope}
+\end{scope}
+\end{scope}
+\end{tikzpicture}
+\end{document}
+
