@@ -7,6 +7,7 @@
 #include "NodeStyle.h"
 #include "AnchorHandle.h"
 #include "CurveHandle.h"
+#include "BezierCurve.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -173,6 +174,24 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     // draw arrows
     d->drawArrow(painter, d->arrowHead);
     d->drawArrow(painter, d->arrowTail);
+
+    //BEGIN testing
+//     BezierCurve bc;
+//     bc.setP1(mapFromScene(d->edge->startPos()));
+//     bc.setP2(mapFromScene(d->edge->endPos()));
+//     bc.setC1(d->startControlPoint->pos());
+//     bc.setC2(d->endControlPoint->pos());
+//
+//     qreal tStart = bc.intersect(mapFromItem(d->start, d->start->shape()));
+//     qreal tEnd = bc.intersect(mapFromItem(d->end, d->end->shape()));
+//
+//     painter->setPen(Qt::red);
+//     painter->setBrush(Qt::NoBrush);
+//     painter->drawPath(bc.toPath());
+//
+//     painter->setPen(Qt::green);
+//     painter->drawPath(bc.toPath(tStart, tEnd));
+    //END testing
 
     // TODO: create d->paths
     if (isHovered() && !d->dragging) {

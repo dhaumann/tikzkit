@@ -70,7 +70,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          * Node properties such as scaling and minimum size is included.
          * However, the style()->outerSep() is NOt included.
          */
-        QRectF shapeRect();
+        QRectF shapeRect() const;
 
     //
     // reimplemented from QGraphicsItem

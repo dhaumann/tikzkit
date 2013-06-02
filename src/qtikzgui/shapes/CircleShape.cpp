@@ -29,8 +29,10 @@ tikz::Shape CircleShape::type() const
 
 QPainterPath CircleShape::shape() const
 {
-    const qreal r = qMax(node()->shapeRect().width(),
-                         node()->shapeRect().height()) / 2.0;
+    const qreal w = node()->shapeRect().width() / 2.0;
+    const qreal h = node()->shapeRect().height() / 2.0;
+    const qreal r = std::sqrt(w *w + h * h);
+
     QPainterPath path;
     path.addEllipse(QPointF(0, 0), r, r);
     return path;

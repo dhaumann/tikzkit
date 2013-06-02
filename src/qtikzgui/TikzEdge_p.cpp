@@ -20,6 +20,42 @@ TikzEdgePrivate::TikzEdgePrivate(TikzEdge* edge)
 {
 }
 
+void debugString(QPainterPath path)
+{
+    QString ret;
+    for (int i = 0; i < path.elementCount(); ++i) {
+        const QPainterPath::Element &cur = path.elementAt(i);
+
+        switch (cur.type) {
+            case QPainterPath::MoveToElement:
+                ret += QString("M %1 %2").arg(cur.x).arg(cur.y);
+                break;
+            case QPainterPath::LineToElement:
+                ret += QString("L %1 %2").arg(cur.x).arg(cur.y);
+                break;
+            case QPainterPath::CurveToElement:
+            {
+                const QPainterPath::Element &c1 = path.elementAt(i + 1);
+                const QPainterPath::Element &c2 = path.elementAt(i + 2);
+
+                Q_ASSERT(c1.type == QPainterPath::CurveToDataElement);
+                Q_ASSERT(c2.type == QPainterPath::CurveToDataElement);
+
+                ret += QString("C %1 %2 %3 %4 %5 %6").arg(cur.x).arg(cur.y).arg(c1.x).arg(c1.y).arg(c2.x).arg(c2.y);
+
+                i += 2;
+                break;
+            }
+            case QPainterPath::CurveToDataElement:
+                Q_ASSERT(false);
+                break;
+        }
+    }
+
+    qDebug() << "curve:" << ret;
+}
+
+
 void TikzEdgePrivate::updateCache()
 {
     if (!dirty) return;
@@ -47,6 +83,15 @@ void TikzEdgePrivate::updateCache()
         QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
         linePath.moveTo(startAnchor);
         linePath.cubicTo(cp1, cp2, endAnchor);
+
+//         debugString(linePath);
+
+//         QPainterPathStroker pps;
+//         pps.setWidth(0.1);
+//         pps.setCurveThreshold(0.005);
+// //         pps.setDashPattern(Qt::DotLine);
+//         linePath = pps.createStroke(linePath);
+//         linePath = linePath.simplified();
 
         startControlPoint->setPos(cp1);
         endControlPoint->setPos(cp2);

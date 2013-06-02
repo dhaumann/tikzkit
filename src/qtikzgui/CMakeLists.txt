@@ -1,11 +1,14 @@
 project(qtikzgui)
 
-find_package(Qt4 REQUIRED)
+find_package(Qt4 COMPONENTS QtCore QtGui QtSvg REQUIRED)
+find_package(PopplerQt4 REQUIRED)
 
 include_directories(
     .
     ${CMAKE_SOURCE_DIR}/src/qtikzcore
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui/tex
+    ${POPPLER_QT4_INCLUDE_DIR}
 )
 
 set(qtikzgui_SOURCES
@@ -19,11 +22,16 @@ set(qtikzgui_SOURCES
     AnchorHandle.cpp
     CurveHandle.cpp
     BezierCurve.cpp
+    NodeText.cpp
+    NodeText_p.cpp
 
     shapes/AbstractShape.cpp
     shapes/RectShape.cpp
     shapes/CircleShape.cpp
     shapes/EllipseShape.cpp
+
+    tex/TexGenerator.cpp
+    tex/PdfRenderer.cpp
 )
 
 set(qtikzgui_HEADERS
@@ -34,6 +42,10 @@ set(qtikzgui_HEADERS
     TikzScene.h
     AnchorHandle.h
     CurveHandle.h
+    NodeText_p.h
+
+    tex/TexGenerator.h
+    tex/PdfRenderer.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
@@ -42,6 +54,7 @@ include(${QT_USE_FILE})
 add_definitions(
     -DMAKE_TIKZGUI
     ${QT_DEFINITIONS}
+    ${POPPLER_QT4_DEFINITIONS}
 )
 
 add_library(qtikzgui SHARED
@@ -49,6 +62,6 @@ add_library(qtikzgui SHARED
     ${qtikzgui_HEADERS_MOC}
 )
 
-target_link_libraries(qtikzgui ${QT_LIBRARIES} qtikzcore)
+target_link_libraries(qtikzgui ${QT_LIBRARIES} ${POPPLER_QT4_LIBRARIES} qtikzcore)
 
 # kate: indent-width 4; replace-tabs on;
