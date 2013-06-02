@@ -37,6 +37,21 @@ class AbstractShape
         virtual tikz::Shape type() const;
 
         /**
+         * This function is called by TikzNode::shapeRect().
+         * The shape can adjust the calculated @p shapeRect if needed.
+         *
+         * Example:
+         * The shape 'rectangle' does not need to modify the @p shapeRect,
+         * since the @p textRect perfectly fits into @p shapeRect.
+         * The shape 'circle' however needs to increase the @p shapeRect such
+         * that the circlie filling @p shapeRect includes the @p textRect.
+         *
+         * @param textRect the bounding box of the textRect
+         * @param shapeRect the rect of the shape, inner sep already included.
+         */
+        virtual void adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const;
+
+        /**
          * Returns the painter path of this shape.
          * This path is also used to draw the shape.
          */

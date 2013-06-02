@@ -134,6 +134,8 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
 
 QRectF TikzNode::shapeRect() const
 {
+    d->updateCache();
+
     const QRectF textRect = d->textItem->textRect();
     const qreal innerSep = style()->innerSep();
 
@@ -148,8 +150,13 @@ QRectF TikzNode::shapeRect() const
         h = style()->minimumHeight();
     }
 
-    // create rect, currently centered at (0, 0)
-    return QRectF(-w / 2.0, -h / 2.0, w, h);
+    QRectF rect(0.0, 0.0, w, h);
+    d->shape->adjustShapeRect(textRect, rect);
+
+    // center shape rect at (0, 0)
+    rect.moveCenter(QPointF(0, 0));
+
+    return rect;
 }
 
 void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

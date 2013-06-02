@@ -29,6 +29,12 @@ tikz::Shape AbstractShape::type() const
     return tikz::NoShape;
 }
 
+void AbstractShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
+{
+    Q_UNUSED(textRect);
+    Q_UNUSED(shapeRect);
+}
+
 QPainterPath AbstractShape::shape() const
 {
     return QPainterPath();

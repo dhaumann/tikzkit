@@ -28,6 +28,12 @@ class CircleShape : public AbstractShape
         virtual tikz::Shape type() const;
 
         /**
+         * Reimplemented such that the circle inside @p shapeRect completely
+         * includes the @p textRect.
+         */
+        virtual void adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const;
+
+        /**
          * Returns the painter path of this shape.
          * This path is also used to draw the shape.
          */

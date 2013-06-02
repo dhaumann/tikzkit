@@ -4,6 +4,7 @@
 
 #include "tikz.h"
 
+#include <QDebug>
 #include <cmath>
 
 class CircleShapePrivate
@@ -27,11 +28,24 @@ tikz::Shape CircleShape::type() const
     return tikz::ShapeCircle;
 }
 
+void CircleShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
+{
+    // calculate radius of textRect
+    const qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
+    const qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+    const qreal r = std::sqrt(w * w + h * h);
+
+    // make sure the circle around textRect is contained in shapeRect
+    if (2.0 * r > shapeRect.width() || 2.0 * r > shapeRect.height()) {
+        shapeRect.setWidth(2.0 * r);
+        shapeRect.setHeight(2.0 * r);
+    }
+}
+
 QPainterPath CircleShape::shape() const
 {
-    const qreal w = node()->shapeRect().width() / 2.0;
-    const qreal h = node()->shapeRect().height() / 2.0;
-    const qreal r = std::sqrt(w *w + h * h);
+    const qreal r = qMax(node()->shapeRect().width(),
+                         node()->shapeRect().height()) / 2.0;
 
     QPainterPath path;
     path.addEllipse(QPointF(0, 0), r, r);
