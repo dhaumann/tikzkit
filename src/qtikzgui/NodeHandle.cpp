@@ -121,9 +121,8 @@ NodeHandle::NodeHandle(TikzNode * node)
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(ItemIgnoresParentOpacity, true);
-//     setFlag(ItemIgnoresTransformations, true);
 
-    connect(d->node->style(), SIGNAL(changed()), this, SLOT(slotStyleChanged()), Qt::QueuedConnection);
+    connect(d->node, SIGNAL(changed()), this, SLOT(slotStyleChanged()), Qt::QueuedConnection);
 }
 
 NodeHandle::~NodeHandle()
