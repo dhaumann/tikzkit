@@ -38,7 +38,7 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 	lines.append(QLineF(rect.left(), y, rect.right(), y));
 
     painter->save();
-    painter->setRenderHints(QPainter::Antialiasing);
+//     painter->setRenderHints(QPainter::Antialiasing);
     painter->setPen(Qt::gray);
     painter->drawLines(lines.data(), lines.size());
     painter->restore();
