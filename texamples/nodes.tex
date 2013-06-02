@@ -1,24 +1,32 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[paper=a5,fontsize=12pt]{scrbook}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[pdftex,active,tightpage]{preview}
 \usepackage{tikz}
-\PreviewEnvironment{tikzpicture}
+\usetikzlibrary{shapes}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+%\PreviewEnvironment{tikzpicture}
 
 \begin{document}
 \thispagestyle{empty}
-\begin{tikzpicture}[minimum size=1cm]
-  \node[fill=yellow, draw, circle] (a1) at (-3, 3) {a};
-  \node[fill=yellow, draw, circle] (b1) at ( 3, 3) {a};
-  \node[fill=yellow, draw, rectangle] (a2) at (-3, 1) {a};
+\begin{preview}
+\begin{tikzpicture}[minimum size=0cm, inner sep=2mm]
+  \draw[gray, step=1cm] (-3, -3) grid (3, 3);
+  \node[fill=yellow, draw, circle] (a1) at (-3, 3) {$\int f(x) dx$};
+  \node[fill=yellow, draw, circle] (b1) at ( 3, 3) {$\Leftrightarrow$};
+  \node[fill=yellow, draw, rectangle] (a2) at (-3, 1) {$a$};
   \node[fill=yellow, draw, circle] (b2) at ( 3, 1) {a};
-  \node[fill=yellow, draw, rectangle] (a3) at (-3,-1) {a};
-  \node[fill=yellow, draw, rectangle] (b3) at ( 3,-1) {a};
-  \node[fill=yellow, draw, rectangle, rotate=45] (a4) at (-3,-3) {a};
-  \node[fill=yellow, draw, circle] (b4) at ( 3,-3) {a};
+  \node[fill=yellow, draw, rectangle] (a3) at (-3,-1) {$\iiint \max$};
+  \node[fill=yellow, draw, rectangle] (b3) at ( 3,-1) {A long text\\\\which is wrapped};
+  \node[fill=yellow, draw, rectangle, rotate=45] (a4) at (-3,-3) {c};
+  \node[fill=yellow, draw, minimum width=2cm,ellipse, inner sep=0pt] (b4) at ( 3,-3) {8};
 
   \draw[very thick] (a1) to (b1);
   \draw[very thick] (a2) to (b2);
   \draw[very thick] (a3) to (b3);
   \draw[very thick, bend left,<->] (a4) to (b4);
 \end{tikzpicture}
+\end{preview}
 \end{document}

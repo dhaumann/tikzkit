@@ -48,8 +48,14 @@ class TIKZCORE_EXPORT Node : public Coord
         /**
          * This signal is emitted whenever this node changes, either due to
          * a change of its position, or changes in its style.
+         * This signal is not emitted when the text changed.
          */
         void changed();
+
+        /**
+         * This signal is emitted whenever this node's text changed.
+         */
+        void textChanged(const QString& text);
 
     private:
         NodePrivate * const d;

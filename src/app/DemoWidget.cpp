@@ -44,8 +44,8 @@ DemoWidget::DemoWidget()
 //     t.rotate(5);
 //     t.scale(20, 20);
     const qreal xScale = m_view->physicalDpiX() / 2.540;
-    const qreal yScale = m_view->physicalDpiY() / 2.540;
-    qDebug() << xScale << yScale;
+    const qreal yScale = m_view->physicalDpiX() / 2.540;
+    qDebug() << xScale << yScale << m_view->physicalDpiX() << m_view->physicalDpiY();
     m_view->scale(xScale, -yScale);
 
 //     m_view->setTransform(t);
@@ -54,17 +54,19 @@ DemoWidget::DemoWidget()
 //     m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
 
     TikzNode* item1 = new TikzNode();
-    item1->node().setText("1");
     item1->node().setPos(QPointF(-3, 3));
     item1->node().style()->setLineWidth(tikz::VeryThin);
     item1->node().style()->setShape(tikz::ShapeCircle);
+    item1->node().style()->setInnerSep(0.2);
+    item1->node().setText("$\\int f(x) dx$");
     m_view->scene()->addItem(item1);
 
     TikzNode* item2 = new TikzNode();
-    item2->node().setText("2");
     item2->node().setPos(QPointF(3, 3));
     item2->node().style()->setLineWidth(tikz::Thin);
     item2->node().style()->setShape(tikz::ShapeCircle);
+    item2->node().style()->setInnerSep(0.2);
+    item2->node().setText("$\\Leftrightarrow$");
     m_view->scene()->addItem(item2);
 
     // an edge
@@ -77,17 +79,19 @@ DemoWidget::DemoWidget()
 
 
     item1 = new TikzNode();
-    item1->node().setText("1");
     item1->node().setPos(QPointF(-3, 1));
     item1->node().style()->setLineWidth(tikz::Thin);
     item1->node().style()->setShape(tikz::ShapeRectangle);
+    item1->node().style()->setInnerSep(0.2);
+    item1->node().setText("$a$");
     m_view->scene()->addItem(item1);
 
     item2 = new TikzNode();
-    item2->node().setText("2");
     item2->node().setPos(QPointF(3, 1));
     item2->node().style()->setLineWidth(tikz::SemiThick);
     item2->node().style()->setShape(tikz::ShapeCircle);
+    item2->node().style()->setInnerSep(0.2);
+    item2->node().setText("a");
     m_view->scene()->addItem(item2);
 
     // an edge
@@ -99,17 +103,19 @@ DemoWidget::DemoWidget()
 
 
     item1 = new TikzNode();
-    item1->node().setText("1");
     item1->node().setPos(QPointF(-3, -1));
     item1->node().style()->setLineWidth(tikz::VeryThick);
     item1->node().style()->setShape(tikz::ShapeRectangle);
+    item1->node().style()->setInnerSep(0.2);
+    item1->node().setText("$\\iiint \\max$");
     m_view->scene()->addItem(item1);
 
     item2 = new TikzNode();
-    item2->node().setText("2");
     item2->node().setPos(QPointF(3, -1));
     item2->node().style()->setLineWidth(tikz::UltraThick);
     item2->node().style()->setShape(tikz::ShapeRectangle);
+    item2->node().setText("A long text\\\\which is wrapped");
+    item2->node().style()->setInnerSep(0.2);
     m_view->scene()->addItem(item2);
 
     item2->style()->setParent(item1->style());
@@ -123,20 +129,22 @@ DemoWidget::DemoWidget()
 
 
     item1 = new TikzNode();
-    item1->node().setText("1");
     item1->node().setPos(QPointF(-3, -3));
     item1->node().style()->setLineWidth(tikz::VeryThick);
     item1->node().style()->setShape(tikz::ShapeRectangle);
+    item1->node().style()->setInnerSep(0.2);
+    item1->node().setText("c");
 //     item1->rotate(30);
     m_view->scene()->addItem(item1);
     a = item1;
 
     item2 = new TikzNode();
-    item2->node().setText("2");
     item2->node().setPos(QPointF(3, -3));
     item2->node().style()->setLineWidth(tikz::SemiThick);
     item2->node().style()->setShape(tikz::ShapeEllipse);
+    item2->node().style()->setInnerSep(0.2);
     item2->node().style()->setMinimumWidth(2);
+    item2->node().setText("8");
     m_view->scene()->addItem(item2);
 
     // an edge

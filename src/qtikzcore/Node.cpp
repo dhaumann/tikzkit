@@ -29,7 +29,10 @@ Node::~Node()
 
 void Node::setText(const QString& text)
 {
-    d->text = text;
+    if (d->text != text) {
+        d->text = text;
+        emit textChanged(d->text);
+    }
 }
 
 QString Node::text() const

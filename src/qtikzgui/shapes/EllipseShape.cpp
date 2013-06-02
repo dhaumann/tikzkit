@@ -27,6 +27,21 @@ tikz::Shape EllipseShape::type() const
     return tikz::ShapeCircle;
 }
 
+void EllipseShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
+{
+    // calculate radius of textRect
+    const qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
+    const qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+    const qreal r = std::sqrt(w * w + h * h);
+
+    // make sure the circle around textRect is contained in shapeRect
+    if (2.0 * r > shapeRect.width() || 2.0 * r > shapeRect.height()) {
+        // TODO: wrong!!!
+//         shapeRect.setWidth(2.0 * r);
+//         shapeRect.setHeight(2.0 * r);
+    }
+}
+
 QPainterPath EllipseShape::shape() const
 {
     QPainterPath path;
