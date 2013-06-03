@@ -116,7 +116,6 @@ void TexGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
         qDebug() << "launching process: 'dvisvgm'";
         d->postProcessRunning = true;
-        qDebug() << args;
         d->process->start("dvisvgm", args);
     } else {
         d->postProcessRunning = false;

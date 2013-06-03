@@ -155,9 +155,6 @@ DemoWidget::DemoWidget()
     edge->edge().style()->setBendAngle(30);
     m_view->scene()->addItem(edge);
 
-
-
-
 //     item1 = new TikzNode();
 //     item1->node().setText("5");
 //     item1->node().setPos(QPointF(3, 0));
