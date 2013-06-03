@@ -139,8 +139,8 @@ QRectF TikzNode::shapeRect() const
     const QRectF textRect = d->textItem->textRect();
     const qreal innerSep = style()->innerSep();
 
-    qreal w = textRect.width() + 2 * innerSep;
-    qreal h = textRect.height() + 2 * innerSep;
+    qreal w = textRect.width() + 2.0 * innerSep;
+    qreal h = textRect.height() + 2.0 * innerSep;
 
     // extend rect, if minimum size is set
     if (w < style()->minimumWidth()) {

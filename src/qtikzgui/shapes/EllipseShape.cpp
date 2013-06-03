@@ -29,16 +29,21 @@ tikz::Shape EllipseShape::type() const
 
 void EllipseShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
 {
+    // see pgflibraryshapes.geometric.code.tex
+
     // calculate radius of textRect
-    const qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
-    const qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
-    const qreal r = std::sqrt(w * w + h * h);
+    qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
+    qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+
+    w *= 1.4142136;
+    h *= 1.4142136;
 
     // make sure the circle around textRect is contained in shapeRect
-    if (2.0 * r > shapeRect.width() || 2.0 * r > shapeRect.height()) {
-        // TODO: wrong!!!
-//         shapeRect.setWidth(2.0 * r);
-//         shapeRect.setHeight(2.0 * r);
+    if (2.0 * w > shapeRect.width()) {
+        shapeRect.setWidth(2.0 * w);
+    }
+    if (2.0 * h > shapeRect.height()) {
+        shapeRect.setHeight(2.0 * h);
     }
 }
 
