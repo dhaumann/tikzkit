@@ -73,8 +73,9 @@ QVector<tikz::Anchor> EllipseShape::supportedAnchors() const
 
 QPointF EllipseShape::anchorPos(tikz::Anchor anchor) const
 {
-    const qreal rx = node()->shapeRect().width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = node()->shapeRect().height() / 2.0 + node()->style()->outerSep();
+    const QRectF shapeRect = node()->shapeRect();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
     switch (anchor) {
         case tikz::NoAnchor:
         case tikz::Center   : return QPointF(0, 0);
@@ -97,10 +98,17 @@ QPointF EllipseShape::contactPoint(tikz::Anchor anchor, qreal rad) const
         return anchorPos(anchor);
     }
 
-    const qreal rx = node()->shapeRect().width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = node()->shapeRect().height() / 2.0 + node()->style()->outerSep();
+    const QRectF shapeRect = node()->shapeRect();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
 
-    return QPointF(rx * std::cos(rad), ry * std::sin(rad));
+    // use polar coordinates to calculate contact point
+    const qreal xcosphi = ry * std::cos(rad);
+    const qreal ysinphi = rx * std::sin(rad);
+    const qreal denominator = sqrt(xcosphi * xcosphi + ysinphi * ysinphi);
+    const qreal d = qFuzzyCompare(denominator, 0.0) ? 0 : rx * ry / denominator;
+
+    return d * QPointF(std::cos(rad), std::sin(rad));
 }
 
 // kate: indent-width 4; replace-tabs on;
