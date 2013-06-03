@@ -44,6 +44,7 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 TikzEdge::~TikzEdge()

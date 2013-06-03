@@ -78,6 +78,8 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 
     d->nodeHandle = new NodeHandle(this);
     d->nodeHandle->setVisible(false);
+
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 TikzNode::~TikzNode()

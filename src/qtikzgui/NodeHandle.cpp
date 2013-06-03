@@ -123,6 +123,8 @@ NodeHandle::NodeHandle(TikzNode * node)
     setFlag(ItemIgnoresParentOpacity, true);
 
     connect(d->node, SIGNAL(changed()), this, SLOT(slotStyleChanged()), Qt::QueuedConnection);
+
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 NodeHandle::~NodeHandle()
