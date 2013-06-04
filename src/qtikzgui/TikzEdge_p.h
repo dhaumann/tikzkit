@@ -14,6 +14,7 @@ class TikzEdge;
 class TikzNode;
 class AnchorHandle;
 class CurveHandle;
+class AbstractArrow;
 class QGraphicsItem;
 
 class TikzEdgePrivate
@@ -34,6 +35,9 @@ class TikzEdgePrivate
         QPointer<TikzNode> start;
         QPointer<TikzNode> end;
 
+        AbstractArrow * arrowTail;
+        AbstractArrow * arrowHead;
+
         // draging state
         bool dragging;      // true: mouse is grabbed
         DragMode dragMode;
@@ -41,8 +45,8 @@ class TikzEdgePrivate
         // cached painter paths
         bool dirty;             // true: needs recalculation of paths
         QPainterPath linePath;
-        QPainterPath arrowHead;
-        QPainterPath arrowTail;
+        QPainterPath headPath;
+        QPainterPath tailPath;
 
         // node handles on mouse over nodes
         QVector<QGraphicsItem*> nodeHandles;

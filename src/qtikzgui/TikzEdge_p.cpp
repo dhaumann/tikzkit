@@ -8,6 +8,7 @@
 #include "EdgeStyle.h"
 #include "AnchorHandle.h"
 #include "CurveHandle.h"
+#include "AbstractArrow.h"
 
 #include <QPainter>
 #include <QVector2D>
@@ -19,43 +20,9 @@
 TikzEdgePrivate::TikzEdgePrivate(TikzEdge* edge)
     : q(edge)
 {
+    arrowTail = new AbstractArrow(edge);
+    arrowHead = new AbstractArrow(edge);
 }
-
-void debugString(QPainterPath path)
-{
-    QString ret;
-    for (int i = 0; i < path.elementCount(); ++i) {
-        const QPainterPath::Element &cur = path.elementAt(i);
-
-        switch (cur.type) {
-            case QPainterPath::MoveToElement:
-                ret += QString("M %1 %2").arg(cur.x).arg(cur.y);
-                break;
-            case QPainterPath::LineToElement:
-                ret += QString("L %1 %2").arg(cur.x).arg(cur.y);
-                break;
-            case QPainterPath::CurveToElement:
-            {
-                const QPainterPath::Element &c1 = path.elementAt(i + 1);
-                const QPainterPath::Element &c2 = path.elementAt(i + 2);
-
-                Q_ASSERT(c1.type == QPainterPath::CurveToDataElement);
-                Q_ASSERT(c2.type == QPainterPath::CurveToDataElement);
-
-                ret += QString("C %1 %2 %3 %4 %5 %6").arg(cur.x).arg(cur.y).arg(c1.x).arg(c1.y).arg(c2.x).arg(c2.y);
-
-                i += 2;
-                break;
-            }
-            case QPainterPath::CurveToDataElement:
-                Q_ASSERT(false);
-                break;
-        }
-    }
-
-    qDebug() << "curve:" << ret;
-}
-
 
 void TikzEdgePrivate::updateCache()
 {
@@ -65,8 +32,8 @@ void TikzEdgePrivate::updateCache()
 
     // reset old paths
     linePath = QPainterPath();
-    arrowHead = QPainterPath();
-    arrowTail = QPainterPath();
+    headPath = QPainterPath();
+    tailPath = QPainterPath();
 
     // draw line
     const QPointF startAnchor = q->startPos();
@@ -85,8 +52,6 @@ void TikzEdgePrivate::updateCache()
         linePath.moveTo(startAnchor);
         linePath.cubicTo(cp1, cp2, endAnchor);
 
-//         debugString(linePath);
-
 //         QPainterPathStroker pps;
 //         pps.setWidth(0.1);
 //         pps.setCurveThreshold(0.005);
@@ -101,9 +66,9 @@ void TikzEdgePrivate::updateCache()
     }
 
     qreal rad = linePath.angleAtPercent(0.0) * M_PI / 180.0;
-    createArrow(arrowHead, startAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
+    createArrow(headPath, startAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
     rad = linePath.angleAtPercent(1.0) * M_PI / 180.0 - M_PI;
-    createArrow(arrowTail, endAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
+    createArrow(tailPath, endAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
 }
 
 

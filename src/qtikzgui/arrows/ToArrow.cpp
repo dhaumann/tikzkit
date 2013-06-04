@@ -30,13 +30,13 @@ tikz::Arrow ToArrow::type() const
 
 qreal ToArrow::leftExtend() const
 {
-    // 0.84pt
+    // see: pgfcorearrows.code.tex; 0.84pt
     return -0.84 * 0.03527 - 1.3 * edge()->style()->lineThickness();
 }
 
 qreal ToArrow::rightExtend() const
 {
-    // 0.21pt
+    // see: pgfcorearrows.code.tex; 0.21pt
     return 0.21 * 0.03527 + 0.625 * edge()->style()->lineThickness();
 }
 
@@ -46,7 +46,7 @@ void ToArrow::draw(QPainter* painter, const QPointF& pos, qreal rad) const
     QPainterPath p = path(pos, rad);
     painter->save();
     QPen pen = painter->pen();
-    // \pgfsetlinewidth{0.8\pgflinewidth}
+
     pen.setWidthF(0.8 * edge()->style()->lineThickness());
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);

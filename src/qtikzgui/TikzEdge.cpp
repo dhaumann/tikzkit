@@ -173,8 +173,8 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawPath(d->linePath);
 
     // draw arrows
-    d->drawArrow(painter, d->arrowHead);
-    d->drawArrow(painter, d->arrowTail);
+    d->drawArrow(painter, d->headPath);
+    d->drawArrow(painter, d->tailPath);
 
     //BEGIN testing
 //     BezierCurve bc;
@@ -225,8 +225,8 @@ QRectF TikzEdge::boundingRect() const
 
     QPainterPath joinedPath;
     joinedPath.addPath(d->linePath);
-    joinedPath.addPath(d->arrowHead);
-    joinedPath.addPath(d->arrowTail);
+    joinedPath.addPath(d->headPath);
+    joinedPath.addPath(d->tailPath);
 
     QRectF br = joinedPath.boundingRect();
     br = br.normalized();
@@ -256,8 +256,8 @@ bool TikzEdge::contains(const QPointF & point) const
         QPainterPath curve = pps.createStroke(d->linePath);
 
         return curve.contains(point)
-            || d->arrowHead.intersects(circle)
-            || d->arrowTail.intersects(circle);
+            || d->headPath.intersects(circle)
+            || d->tailPath.intersects(circle);
     }
 }
 
