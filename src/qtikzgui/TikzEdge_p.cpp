@@ -83,7 +83,7 @@ void TikzEdgePrivate::updateCache()
     // update arrow tail
     QTransform trans;
     trans.translate(startAnchor.x(), startAnchor.y());
-    trans.rotate(linePath.angleAtPercent(0.0));
+    trans.rotate(180 - linePath.angleAtPercent(0.0));
     tailPath = trans.map(arrowTail->path());
 
     // update arrow tail

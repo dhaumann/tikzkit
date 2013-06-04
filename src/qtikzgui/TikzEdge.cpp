@@ -177,7 +177,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
         QPointF trans = startPos();
         painter->translate(trans.x(), trans.y());
-        painter->rotate(d->linePath.angleAtPercent(0.0));
+        painter->rotate(180 - d->linePath.angleAtPercent(0.0));
         d->arrowTail->draw(painter);
     painter->restore();
     painter->save();

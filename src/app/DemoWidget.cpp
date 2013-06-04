@@ -12,6 +12,7 @@
 #include <QGraphicsView>
 #include <QSlider>
 #include <QTimer>
+#include <QtOpenGL/QGLWidget>
 
 #include <QDebug>
 
@@ -153,6 +154,8 @@ DemoWidget::DemoWidget()
     edge->setEndNode(item2);
     edge->edge().style()->setLineWidth(tikz::SemiThick);
     edge->edge().style()->setBendAngle(30);
+    edge->edge().style()->setArrowTail(tikz::ToArrow);
+    edge->edge().style()->setArrowHead(tikz::ToArrow);
     m_view->scene()->addItem(edge);
 
 //     item1 = new TikzNode();
