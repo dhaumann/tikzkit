@@ -193,7 +193,6 @@ class TIKZCORE_EXPORT Style : public QObject
 
     // TODO: pen color
     //  fill color
-    // Node: minimum size (minimum width, minimum height)
 
     private:
         StylePrivate * const d;
