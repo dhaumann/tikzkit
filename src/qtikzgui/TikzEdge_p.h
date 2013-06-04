@@ -28,6 +28,7 @@ class TikzEdgePrivate
         };
 
         TikzEdgePrivate(TikzEdge* edge);
+        ~TikzEdgePrivate();
 
     public:
         // edge and nodes

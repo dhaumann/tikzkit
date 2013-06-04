@@ -53,15 +53,15 @@ class AbstractArrow
         virtual qreal rightExtend() const;
 
         /**
-         * Draw the arrow @p pos, rotated by @p rad radians.
+         * Draw the arrow.
          */
-        virtual void draw(QPainter* painter, const QPointF& pos, qreal rad) const;
+        virtual void draw(QPainter* painter) const;
 
         /**
          * Returns the painter path of this arrow.
          * This path is lated used for bounding box creation and mouse interaction.
          */
-        virtual QPainterPath path(const QPointF& pos, qreal rad) const;
+        virtual QPainterPath path() const;
 
     private:
         AbstractArrowPrivate * const d;

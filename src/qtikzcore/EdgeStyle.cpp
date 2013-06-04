@@ -33,6 +33,9 @@ public:
         outAngle = 45;
         inAngle = 135;
 
+        arrowTail = tikz::NoArrow;
+        arrowHead = tikz::NoArrow;
+
         curveModeSet = false;
         bendAngleSet = false;
         loosenessSet = false;

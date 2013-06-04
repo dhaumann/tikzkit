@@ -37,17 +37,13 @@ qreal AbstractArrow::rightExtend() const
     return 0.0;
 }
 
-void AbstractArrow::draw(QPainter* painter, const QPointF& pos, qreal rad) const
+void AbstractArrow::draw(QPainter* painter) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(pos);
-    Q_UNUSED(rad);
 }
 
-QPainterPath AbstractArrow::path(const QPointF& pos, qreal rad) const
+QPainterPath AbstractArrow::path() const
 {
-    Q_UNUSED(pos);
-    Q_UNUSED(rad);
     return QPainterPath();
 }
 

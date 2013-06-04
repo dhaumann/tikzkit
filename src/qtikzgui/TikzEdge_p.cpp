@@ -23,11 +23,16 @@ TikzEdgePrivate::TikzEdgePrivate(TikzEdge* edge)
     arrowTail = new AbstractArrow(edge);
     arrowHead = new AbstractArrow(edge);
 }
-
+TikzEdgePrivate::~TikzEdgePrivate()
+{
+    delete arrowTail;
+    arrowTail = 0;
+    delete arrowHead;
+    arrowHead = 0;
+}
 void TikzEdgePrivate::updateCache()
 {
     if (!dirty) return;
-
     dirty = false;
 
     // reset old paths
@@ -65,12 +70,28 @@ void TikzEdgePrivate::updateCache()
         linePath.lineTo(endAnchor);
     }
 
-    qreal rad = linePath.angleAtPercent(0.0) * M_PI / 180.0;
-    createArrow(headPath, startAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
-    rad = linePath.angleAtPercent(1.0) * M_PI / 180.0 - M_PI;
-    createArrow(tailPath, endAnchor + 0.02 * QPointF(cos(rad), -sin(rad)), rad);
-}
+    // update arrow head and arrow tail if needed
+    if (arrowTail->type() != q->edge().style()->arrowTail()) {
+        delete arrowTail;
+        arrowTail = ::createArrow(q->edge().style()->arrowTail(), q);
+    }
+    if (arrowHead->type() != q->edge().style()->arrowHead()) {
+        delete arrowHead;
+        arrowHead = ::createArrow(q->edge().style()->arrowHead(), q);
+    }
 
+    // update arrow tail
+    QTransform trans;
+    trans.translate(startAnchor.x(), startAnchor.y());
+    trans.rotate(linePath.angleAtPercent(0.0));
+    tailPath = trans.map(arrowTail->path());
+
+    // update arrow tail
+    trans.reset();
+    trans.translate(endAnchor.x(), endAnchor.y());
+    trans.rotate(-linePath.angleAtPercent(1.0));
+    headPath = trans.map(arrowHead->path());
+}
 
 qreal TikzEdgePrivate::baseAngle() const
 {
@@ -120,21 +141,6 @@ qreal TikzEdgePrivate::endAngle() const
             break;
     }
     return rad;
-}
-
-void TikzEdgePrivate::createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad)
-{
-    // TODO: fix style of arrow head
-//     const qreal arrowSize = 0.3; // TODO: fix size of arrow head
-//     QPointF sourceArrowP1 = arrowHead + QPointF(sin(rad + M_PI - M_PI / 3) * arrowSize,
-//                                                 cos(rad + M_PI - M_PI / 3) * arrowSize);
-//     QPointF sourceArrowP2 = arrowHead + QPointF(sin(rad + M_PI / 3) * arrowSize,
-//                                                 cos(rad + M_PI / 3) * arrowSize);
-//     path.addPolygon(QPolygonF() << arrowHead << sourceArrowP1 << sourceArrowP2);
-//     path.closeSubpath();
-
-    ToArrow ta(q);
-    path = ta.path(arrowHead, rad);
 }
 
 void TikzEdgePrivate::drawArrow(QPainter* painter, const QPainterPath& path)
