@@ -66,9 +66,10 @@ enum LineJoin {
     MiterJoin    // TikZ default
 };
 
-enum ArrowStyle {
+enum Arrow {
     ArrowUnset = 0,
     NoArrow,
+    ToArrow,
     ArrowStealth
 };
 

@@ -1,5 +1,6 @@
 #include "TikzEdge_p.h"
 #include "TikzEdge.h"
+#include "ToArrow.h"
 
 #include <Edge.h>
 
@@ -159,19 +160,22 @@ qreal TikzEdgePrivate::endAngle() const
 void TikzEdgePrivate::createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad)
 {
     // TODO: fix style of arrow head
-    const qreal arrowSize = 0.3; // TODO: fix size of arrow head
-    QPointF sourceArrowP1 = arrowHead + QPointF(sin(rad + M_PI - M_PI / 3) * arrowSize,
-                                                cos(rad + M_PI - M_PI / 3) * arrowSize);
-    QPointF sourceArrowP2 = arrowHead + QPointF(sin(rad + M_PI / 3) * arrowSize,
-                                                cos(rad + M_PI / 3) * arrowSize);
-    path.addPolygon(QPolygonF() << arrowHead << sourceArrowP1 << sourceArrowP2);
-    path.closeSubpath();
+//     const qreal arrowSize = 0.3; // TODO: fix size of arrow head
+//     QPointF sourceArrowP1 = arrowHead + QPointF(sin(rad + M_PI - M_PI / 3) * arrowSize,
+//                                                 cos(rad + M_PI - M_PI / 3) * arrowSize);
+//     QPointF sourceArrowP2 = arrowHead + QPointF(sin(rad + M_PI / 3) * arrowSize,
+//                                                 cos(rad + M_PI / 3) * arrowSize);
+//     path.addPolygon(QPolygonF() << arrowHead << sourceArrowP1 << sourceArrowP2);
+//     path.closeSubpath();
+
+    ToArrow ta(q);
+    path = ta.path(arrowHead, rad);
 }
 
 void TikzEdgePrivate::drawArrow(QPainter* painter, const QPainterPath& path)
 {
     // TODO: fix style of arrow head
-    painter->setBrush(Qt::black);
+    painter->setBrush(Qt::NoBrush);
     painter->drawPath(path);
 }
 

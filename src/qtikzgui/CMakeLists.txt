@@ -1,12 +1,13 @@
 project(qtikzgui)
 
-find_package(Qt4 COMPONENTS QtCore QtGui QtSvg REQUIRED)
+find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 find_package(PopplerQt4 REQUIRED)
 
 include_directories(
     .
     ${CMAKE_SOURCE_DIR}/src/qtikzcore
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui/arrows
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/tex
     ${POPPLER_QT4_INCLUDE_DIR}
 )
@@ -29,6 +30,9 @@ set(qtikzgui_SOURCES
     shapes/RectShape.cpp
     shapes/CircleShape.cpp
     shapes/EllipseShape.cpp
+
+    arrows/AbstractArrow.cpp
+    arrows/ToArrow.cpp
 
     tex/TexGenerator.cpp
     tex/PdfRenderer.cpp
