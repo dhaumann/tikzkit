@@ -129,6 +129,31 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         void setInAngle(qreal angle);
 
+    //
+    // Arrow attributes
+    //
+    public:
+        /**
+         * Get the arrow tail style.
+         */
+        Arrow arrowTail() const;
+
+        /**
+         * Get the arrow head style.
+         */
+        Arrow arrowHead() const;
+
+    public Q_SLOTS:
+        /**
+         * set the arrow tail style to @p tail.
+         */
+        void setArrowTail(tikz::Arrow tail);
+
+        /**
+         * Set the arrow head style to @p head.
+         */
+        void setArrowHead(tikz::Arrow head);
+
     private:
         EdgeStylePrivate * const d;
 };
