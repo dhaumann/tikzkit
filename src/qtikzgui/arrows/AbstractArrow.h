@@ -15,12 +15,12 @@ class AbstractArrow
 {
     public:
         /**
-         * Default constructor
+         * Constructor with @p edge.
          */
         AbstractArrow(TikzEdge* edge);
 
         /**
-         * Default constructor
+         * Destructor.
          */
         virtual ~AbstractArrow();
 

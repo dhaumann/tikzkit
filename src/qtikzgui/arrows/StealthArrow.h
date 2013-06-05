@@ -8,14 +8,7 @@ class StealthArrowPrivate;
 class StealthArrow : public AbstractArrow
 {
     public:
-        /**
-         * Default constructor
-         */
         StealthArrow(TikzEdge* edge);
-
-        /**
-         * Default constructor
-         */
         virtual ~StealthArrow();
 
     //
@@ -53,6 +46,22 @@ class StealthArrow : public AbstractArrow
 
     private:
         StealthArrowPrivate * const d;
+};
+
+class ReversedStealthArrow : public StealthArrow
+{
+public:
+    ReversedStealthArrow(TikzEdge * edge);
+
+public:
+    virtual tikz::Arrow type() const;
+
+    virtual qreal leftExtend() const;
+    virtual qreal rightExtend() const;
+
+    // not needed to reimplement draw()
+    //virtual void draw(QPainter* painter) const;
+    virtual QPainterPath path() const;
 };
 
 #endif // TIKZGUI_STEALTH_ARROW_H

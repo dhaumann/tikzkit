@@ -8,14 +8,7 @@ class LatexArrowPrivate;
 class LatexArrow : public AbstractArrow
 {
     public:
-        /**
-         * Default constructor
-         */
         LatexArrow(TikzEdge* edge);
-
-        /**
-         * Default constructor
-         */
         virtual ~LatexArrow();
 
     //
@@ -53,6 +46,22 @@ class LatexArrow : public AbstractArrow
 
     private:
         LatexArrowPrivate * const d;
+};
+
+class ReversedLatexArrow : public LatexArrow
+{
+    public:
+        ReversedLatexArrow(TikzEdge * edge);
+
+    public:
+        virtual tikz::Arrow type() const;
+
+        virtual qreal leftExtend() const;
+        virtual qreal rightExtend() const;
+
+        // not needed to reimplement draw()
+        //virtual void draw(QPainter* painter) const;
+        virtual QPainterPath path() const;
 };
 
 #endif // TIKZGUI_LATEX_ARROW_H

@@ -81,4 +81,32 @@ QPainterPath StealthArrow::path() const
     return path;
 }
 
+
+
+ReversedStealthArrow::ReversedStealthArrow(TikzEdge * edge)
+    : StealthArrow(edge)
+{
+}
+
+tikz::Arrow ReversedStealthArrow::type() const
+{
+    return tikz::ReversedStealthArrow;
+}
+
+qreal ReversedStealthArrow::leftExtend() const
+{
+    return StealthArrow::rightExtend();
+}
+
+qreal ReversedStealthArrow::rightExtend() const
+{
+    return StealthArrow::leftExtend();
+}
+
+QPainterPath ReversedStealthArrow::path() const
+{
+    QTransform trans;
+    trans.scale(-1, 1);
+    return trans.map(StealthArrow::path());
+}
 // kate: indent-width 4; replace-tabs on;

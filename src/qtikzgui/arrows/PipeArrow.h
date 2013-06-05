@@ -8,14 +8,7 @@ class PipeArrowPrivate;
 class PipeArrow : public AbstractArrow
 {
     public:
-        /**
-         * Default constructor
-         */
         PipeArrow(TikzEdge* edge);
-
-        /**
-         * Default constructor
-         */
         virtual ~PipeArrow();
 
     //

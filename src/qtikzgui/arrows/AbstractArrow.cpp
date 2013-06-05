@@ -57,8 +57,11 @@ AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
     switch (type) {
         case tikz::NoArrow: return new AbstractArrow(edge);
         case tikz::ToArrow: return new ToArrow(edge);
+        case tikz::ReversedToArrow: return new ReversedToArrow(edge);
         case tikz::StealthArrow: return new StealthArrow(edge);
+        case tikz::ReversedStealthArrow: return new ReversedStealthArrow(edge);
         case tikz::LatexArrow: return new LatexArrow(edge);
+        case tikz::ReversedLatexArrow: return new ReversedLatexArrow(edge);
         case tikz::PipeArrow: return new PipeArrow(edge);
         default: break;
     }

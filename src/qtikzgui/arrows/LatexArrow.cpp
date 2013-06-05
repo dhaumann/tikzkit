@@ -85,4 +85,33 @@ QPainterPath LatexArrow::path() const
     return path;
 }
 
+
+
+ReversedLatexArrow::ReversedLatexArrow(TikzEdge * edge)
+    : LatexArrow(edge)
+{
+}
+
+tikz::Arrow ReversedLatexArrow::type() const
+{
+    return tikz::ReversedLatexArrow;
+}
+
+qreal ReversedLatexArrow::leftExtend() const
+{
+    return LatexArrow::rightExtend();
+}
+
+qreal ReversedLatexArrow::rightExtend() const
+{
+    return LatexArrow::leftExtend();
+}
+
+QPainterPath ReversedLatexArrow::path() const
+{
+    QTransform trans;
+    trans.scale(-1, 1);
+    return trans.map(LatexArrow::path());
+}
+
 // kate: indent-width 4; replace-tabs on;

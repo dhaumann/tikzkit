@@ -71,4 +71,71 @@ QPainterPath ToArrow::path() const
     return path;
 }
 
+
+
+
+class ReversedToArrowPrivate
+{
+    public:
+};
+
+ReversedToArrow::ReversedToArrow(TikzEdge * edge)
+    : AbstractArrow(edge)
+    , d(new ReversedToArrowPrivate())
+{
+}
+
+ReversedToArrow::~ReversedToArrow()
+{
+    delete d;
+}
+
+tikz::Arrow ReversedToArrow::type() const
+{
+    return tikz::ReversedToArrow;
+}
+
+qreal ReversedToArrow::leftExtend() const
+{
+    // see: pgfcorearrows.code.tex
+    return -0.21 * 0.03527 - 0.475 * edge()->style()->lineThickness();
+}
+
+qreal ReversedToArrow::rightExtend() const
+{
+    // see: pgfcorearrows.code.tex
+    return 0.98 * 0.03527 + 1.45 * edge()->style()->lineThickness();
+}
+
+void ReversedToArrow::draw(QPainter* painter) const
+{
+    // see: pgfcorearrows.code.tex
+    QPainterPath p = path();
+    painter->save();
+    QPen pen = painter->pen();
+    pen.setWidthF(0.8 * edge()->style()->lineThickness());
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setJoinStyle(Qt::RoundJoin);
+    painter->setPen(pen);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPath(p);
+    painter->restore();
+}
+
+QPainterPath ReversedToArrow::path() const
+{
+    // see: pgfcorearrows.code.tex
+    QPainterPath path;
+
+    const qreal dima = 0.28 * 0.03527 + 0.3 * edge()->style()->lineThickness();
+    path.moveTo(dima * QPointF(3.5, 4));
+    path.cubicTo(dima * QPointF(3.25, 2.5),
+                 dima * QPointF(0.5, 0.25),
+                 dima * QPointF(-0.25, 0.0));
+    path.cubicTo(dima * QPointF(0.5, -0.25),
+                 dima * QPointF(3.25, -2.5),
+                 dima * QPointF(3.5, -4));
+    return path;
+}
+
 // kate: indent-width 4; replace-tabs on;

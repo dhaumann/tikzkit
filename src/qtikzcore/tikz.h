@@ -70,8 +70,11 @@ enum Arrow {
     ArrowUnset = 0,
     NoArrow,
     ToArrow,
+    ReversedToArrow,
     StealthArrow,
+    ReversedStealthArrow,
     LatexArrow,
+    ReversedLatexArrow,
     PipeArrow
 };
 
