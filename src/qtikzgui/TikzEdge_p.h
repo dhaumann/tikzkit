@@ -36,6 +36,14 @@ class TikzEdgePrivate
         QPointer<TikzNode> start;
         QPointer<TikzNode> end;
 
+        // Cached start and end position of the line.
+        // These positions include the rightExtend() of arrows as well as
+        // the shortening of lines. Therefore, these positions are NOT
+        // equal to TikzEdge::startPos() and TikzEdge::endPos().
+        QPointF startAnchor;
+        QPointF endAnchor;
+
+        // Arrow tail and arrow head
         AbstractArrow * arrowTail;
         AbstractArrow * arrowHead;
 

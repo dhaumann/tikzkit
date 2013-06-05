@@ -175,14 +175,12 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     // draw arrows
     painter->save();
-        QPointF trans = startPos();
-        painter->translate(trans.x(), trans.y());
+        painter->translate(d->startAnchor.x(), d->startAnchor.y());
         painter->rotate(180 - d->linePath.angleAtPercent(0.0));
         d->arrowTail->draw(painter);
     painter->restore();
     painter->save();
-        trans = endPos();
-        painter->translate(trans.x(), trans.y());
+        painter->translate(d->endAnchor.x(), d->endAnchor.y());
         painter->rotate(-d->linePath.angleAtPercent(1.0));
         d->arrowHead->draw(painter);
     painter->restore();

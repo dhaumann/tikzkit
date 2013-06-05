@@ -35,14 +35,24 @@ void TikzEdgePrivate::updateCache()
     if (!dirty) return;
     dirty = false;
 
+    // update arrow head and arrow tail if needed
+    if (arrowTail->type() != q->edge().style()->arrowTail()) {
+        delete arrowTail;
+        arrowTail = ::createArrow(q->edge().style()->arrowTail(), q);
+    }
+    if (arrowHead->type() != q->edge().style()->arrowHead()) {
+        delete arrowHead;
+        arrowHead = ::createArrow(q->edge().style()->arrowHead(), q);
+    }
+
     // reset old paths
     linePath = QPainterPath();
     headPath = QPainterPath();
     tailPath = QPainterPath();
 
     // draw line
-    const QPointF startAnchor = q->startPos();
-    const QPointF endAnchor = q->endPos();
+    startAnchor = q->startPos();
+    endAnchor = q->endPos();
     const QPointF diff = endAnchor - startAnchor;
     const qreal len = QVector2D(diff).length();
 
@@ -52,8 +62,14 @@ void TikzEdgePrivate::updateCache()
         // from tikz/libraries/tikzlibrarytopaths.code.tex:
         const qreal factor = 0.3915;
         const qreal vecLen = len * q->style()->looseness() * factor;
-        QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
-        QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
+
+        // compute control points
+        const QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
+        const QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
+
+        // adapt startAnchor and endAnchor with rightExtend() of arrows after (!) control point computation
+        startAnchor += arrowTail->rightExtend() * QPointF(std::cos(startRad), std::sin(startRad));
+        endAnchor += arrowHead->rightExtend() * QPointF(std::cos(endRad), std::sin(endRad));
         linePath.moveTo(startAnchor);
         linePath.cubicTo(cp1, cp2, endAnchor);
 
@@ -68,16 +84,6 @@ void TikzEdgePrivate::updateCache()
         endControlPoint->setPos(cp2);
     } else {
         linePath.lineTo(endAnchor);
-    }
-
-    // update arrow head and arrow tail if needed
-    if (arrowTail->type() != q->edge().style()->arrowTail()) {
-        delete arrowTail;
-        arrowTail = ::createArrow(q->edge().style()->arrowTail(), q);
-    }
-    if (arrowHead->type() != q->edge().style()->arrowHead()) {
-        delete arrowHead;
-        arrowHead = ::createArrow(q->edge().style()->arrowHead(), q);
     }
 
     // update arrow tail
