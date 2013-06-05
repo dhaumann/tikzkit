@@ -72,7 +72,7 @@ void TexGenerator::generateImage(const QString& texCode)
         delete d->tempFile;
     }
 
-    d->tempFile = new QTemporaryFile("XXXXXX", this);
+    d->tempFile = new QTemporaryFile("XXXXXX.tex", this);
     if (!d->tempFile->open()) {
         qWarning() << "Could not create temporary tex file";
         return;
