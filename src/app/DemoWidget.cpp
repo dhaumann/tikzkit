@@ -152,7 +152,7 @@ DemoWidget::DemoWidget()
     edge = new TikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
-    edge->edge().style()->setLineWidth(tikz::SemiThick);
+    edge->edge().style()->setLineWidth(tikz::UltraThick);
     edge->edge().style()->setBendAngle(30);
     edge->edge().style()->setArrowTail(tikz::ToArrow);
     edge->edge().style()->setArrowHead(tikz::ToArrow);
