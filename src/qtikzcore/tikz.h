@@ -68,6 +68,9 @@ enum LineJoin {
 
 enum Arrow {
     NoArrow = 0,
+    /**
+     * Default TikZ arrows.
+     */
     ToArrow,
     ReversedToArrow,
     StealthArrow,
@@ -75,6 +78,11 @@ enum Arrow {
     LatexArrow,
     ReversedLatexArrow,
     PipeArrow,
+    /**
+     * tikzlibrary: arrows
+     */
+    StealthTickArrow,
+    ReversedStealthTickArrow,
     ArrowCount
 };
 

@@ -51,6 +51,7 @@ QPainterPath AbstractArrow::path() const
 #include "StealthArrow.h"
 #include "LatexArrow.h"
 #include "PipeArrow.h"
+#include "StealthTickArrow.h"
 
 AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
 {
@@ -63,6 +64,8 @@ AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
         case tikz::LatexArrow: return new LatexArrow(edge);
         case tikz::ReversedLatexArrow: return new ReversedLatexArrow(edge);
         case tikz::PipeArrow: return new PipeArrow(edge);
+        case tikz::StealthTickArrow: return new StealthTickArrow(edge);
+        case tikz::ReversedStealthTickArrow: return new ReversedStealthTickArrow(edge);
         default: break;
     }
     return new AbstractArrow(edge);

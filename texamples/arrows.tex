@@ -1,0 +1,24 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex,active,tightpage]{preview}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture}[ultra thick]
+\draw[thin,gray, step=1cm] (-6, -4) grid (-4, 3);
+  \draw (-6, -4) to (-4, -4);
+  \draw[<->] (-6, -3) to (-4, -3);
+  \draw[>-<] (-6, -2) to (-4, -2);
+  \draw[stealth-stealth] (-6, -1) to (-4, -1);
+  \draw[stealth reversed-stealth reversed] (-6, 0) to (-4, 0);
+  \draw[latex-latex] (-6, 1) to (-4, 1);
+  \draw[latex reversed-latex reversed] (-6, 2) to (-4, 2);
+  \draw[|-|] (-6, 3) to (-4, 3);
+  \draw[stealth'-stealth'] (-6, 4) to (-4, 4);
+  \draw[stealth' reversed-stealth' reversed] (-6, 5) to (-4, 5);
+\end{tikzpicture}
+\end{document}
+
