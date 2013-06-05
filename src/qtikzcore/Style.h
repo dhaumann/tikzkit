@@ -143,6 +143,13 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void unsetLineWidth();
 
+    public:
+        /**
+         * Get the inner line width in mm.
+         * The inner line width is used for double lines in paths and shapes.
+         */
+        qreal innerLineThickness() const;
+
     //
     // draw & fill opacity
     //

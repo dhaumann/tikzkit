@@ -220,6 +220,11 @@ void Style::unsetLineWidth()
     }
 }
 
+qreal Style::innerLineThickness() const
+{
+    // TODO: couple with double line style.
+    return 0.0;
+}
 
 qreal Style::penOpacity() const
 {

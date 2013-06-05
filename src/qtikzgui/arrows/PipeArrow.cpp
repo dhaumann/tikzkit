@@ -58,9 +58,7 @@ QPainterPath PipeArrow::path() const
 {
     // see: pgfcorearrows.code.tex
     const qreal lineWidth = edge()->style()->lineThickness();
-    qreal dima = 0.2 * 0.03527 + 1.5 * lineWidth;
-    // TODO: innerLineWidth
-
+    const qreal dima = 0.2 * 0.03527 + 1.5 * lineWidth;
     QPainterPath path;
     path.moveTo(QPointF(0.25 * 0.03527 * lineWidth, -dima));
     path.lineTo(QPointF(0.25 * 0.03527 * lineWidth,  dima));
