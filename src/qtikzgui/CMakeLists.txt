@@ -1,7 +1,7 @@
 project(qtikzgui)
 
 find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
-find_package(PopplerQt4 REQUIRED)
+#find_package(PopplerQt4 REQUIRED)
 
 include_directories(
     .
@@ -9,7 +9,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/arrows
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/tex
-    ${POPPLER_QT4_INCLUDE_DIR}
+#    ${POPPLER_QT4_INCLUDE_DIR}
 )
 
 set(qtikzgui_SOURCES
@@ -35,7 +35,7 @@ set(qtikzgui_SOURCES
     arrows/ToArrow.cpp
 
     tex/TexGenerator.cpp
-    tex/PdfRenderer.cpp
+#    tex/PdfRenderer.cpp
 )
 
 set(qtikzgui_HEADERS
@@ -49,7 +49,7 @@ set(qtikzgui_HEADERS
     NodeText_p.h
 
     tex/TexGenerator.h
-    tex/PdfRenderer.h
+#    tex/PdfRenderer.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
@@ -58,7 +58,7 @@ include(${QT_USE_FILE})
 add_definitions(
     -DMAKE_TIKZGUI
     ${QT_DEFINITIONS}
-    ${POPPLER_QT4_DEFINITIONS}
+#    ${POPPLER_QT4_DEFINITIONS}
 )
 
 add_library(qtikzgui SHARED
@@ -66,6 +66,10 @@ add_library(qtikzgui SHARED
     ${qtikzgui_HEADERS_MOC}
 )
 
-target_link_libraries(qtikzgui ${QT_LIBRARIES} ${POPPLER_QT4_LIBRARIES} qtikzcore)
+target_link_libraries(qtikzgui
+  ${QT_LIBRARIES}
+#  ${POPPLER_QT4_LIBRARIES}
+  qtikzcore
+)
 
 # kate: indent-width 4; replace-tabs on;
