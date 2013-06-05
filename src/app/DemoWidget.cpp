@@ -160,6 +160,18 @@ DemoWidget::DemoWidget()
     edge->edge().style()->setArrowHead(tikz::ToArrow);
     m_view->scene()->addItem(edge);
 
+
+    // arrow demo
+    for (int i = 0; i < tikz::ArrowCount; ++i) {
+        edge = new TikzEdge();
+        edge->edge().setStartPos(QPointF(-6, i - 4));
+        edge->edge().setEndPos(QPointF(-4, i - 4));
+        edge->edge().style()->setLineWidth(tikz::UltraThick);
+        edge->edge().style()->setArrowTail(tikz::Arrow(i));
+        edge->edge().style()->setArrowHead(tikz::Arrow(i));
+        m_view->scene()->addItem(edge);
+    }
+
 //     item1 = new TikzNode();
 //     item1->node().setText("5");
 //     item1->node().setPos(QPointF(3, 0));

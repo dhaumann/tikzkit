@@ -67,15 +67,15 @@ enum LineJoin {
 };
 
 enum Arrow {
-    ArrowUnset = 0,
-    NoArrow,
+    NoArrow = 0,
     ToArrow,
     ReversedToArrow,
     StealthArrow,
     ReversedStealthArrow,
     LatexArrow,
     ReversedLatexArrow,
-    PipeArrow
+    PipeArrow,
+    ArrowCount
 };
 
 enum CurveMode {

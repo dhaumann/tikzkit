@@ -99,12 +99,12 @@ tikz::Arrow ReversedLatexArrow::type() const
 
 qreal ReversedLatexArrow::leftExtend() const
 {
-    return LatexArrow::rightExtend();
+    return -LatexArrow::rightExtend();
 }
 
 qreal ReversedLatexArrow::rightExtend() const
 {
-    return LatexArrow::leftExtend();
+    return -LatexArrow::leftExtend();
 }
 
 QPainterPath ReversedLatexArrow::path() const

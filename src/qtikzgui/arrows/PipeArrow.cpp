@@ -31,13 +31,13 @@ tikz::Arrow PipeArrow::type() const
 qreal PipeArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return -0.25 * 0.03527 * edge()->style()->lineThickness();
+    return -0.25 * edge()->style()->lineThickness();
 }
 
 qreal PipeArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return 0.75 * 0.03527 * edge()->style()->lineThickness();
+    return 0.75 * edge()->style()->lineThickness();
 }
 
 void PipeArrow::draw(QPainter* painter) const
@@ -47,7 +47,7 @@ void PipeArrow::draw(QPainter* painter) const
     painter->save();
     QPen pen = painter->pen();
     pen.setWidthF(edge()->style()->lineThickness());
-    pen.setCapStyle(Qt::FlatCap);
+    pen.setCapStyle(Qt::SquareCap);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(p);
@@ -58,10 +58,10 @@ QPainterPath PipeArrow::path() const
 {
     // see: pgfcorearrows.code.tex
     const qreal lineWidth = edge()->style()->lineThickness();
-    const qreal dima = 0.2 * 0.03527 + 1.5 * lineWidth;
+    const qreal dima = 2 * 0.03527 + 1.5 * lineWidth;
     QPainterPath path;
-    path.moveTo(QPointF(0.25 * 0.03527 * lineWidth, -dima));
-    path.lineTo(QPointF(0.25 * 0.03527 * lineWidth,  dima));
+    path.moveTo(QPointF(0.25 * lineWidth, -dima));
+    path.lineTo(QPointF(0.25 * lineWidth,  dima));
 
     return path;
 }

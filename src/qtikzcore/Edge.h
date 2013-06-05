@@ -75,7 +75,7 @@ class TIKZCORE_EXPORT Edge : public QObject
          * @note This is the same as end()->pos().
          */
         QPointF endPos() const;
-        
+
     public Q_SLOTS:
         /**
          * Set the position of the current start node to @p pos.

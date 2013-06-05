@@ -95,12 +95,12 @@ tikz::Arrow ReversedStealthArrow::type() const
 
 qreal ReversedStealthArrow::leftExtend() const
 {
-    return StealthArrow::rightExtend();
+    return -StealthArrow::rightExtend();
 }
 
 qreal ReversedStealthArrow::rightExtend() const
 {
-    return StealthArrow::leftExtend();
+    return -StealthArrow::leftExtend();
 }
 
 QPainterPath ReversedStealthArrow::path() const
