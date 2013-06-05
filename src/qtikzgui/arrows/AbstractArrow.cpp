@@ -50,6 +50,7 @@ QPainterPath AbstractArrow::path() const
 #include "ToArrow.h"
 #include "StealthArrow.h"
 #include "LatexArrow.h"
+#include "PipeArrow.h"
 
 AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
 {
@@ -58,6 +59,7 @@ AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
         case tikz::ToArrow: return new ToArrow(edge);
         case tikz::StealthArrow: return new StealthArrow(edge);
         case tikz::LatexArrow: return new LatexArrow(edge);
+        case tikz::PipeArrow: return new PipeArrow(edge);
         default: break;
     }
     return new AbstractArrow(edge);

@@ -71,7 +71,8 @@ enum Arrow {
     NoArrow,
     ToArrow,
     StealthArrow,
-    LatexArrow
+    LatexArrow,
+    PipeArrow
 };
 
 enum CurveMode {
