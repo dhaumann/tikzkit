@@ -70,7 +70,7 @@ enum Arrow {
     ArrowUnset = 0,
     NoArrow,
     ToArrow,
-    ArrowStealth
+    StealthArrow
 };
 
 enum CurveMode {

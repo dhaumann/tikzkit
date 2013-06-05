@@ -33,6 +33,7 @@ set(qtikzgui_SOURCES
 
     arrows/AbstractArrow.cpp
     arrows/ToArrow.cpp
+    arrows/StealthArrow.cpp
 
     tex/TexGenerator.cpp
 #    tex/PdfRenderer.cpp

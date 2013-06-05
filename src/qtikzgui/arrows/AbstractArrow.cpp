@@ -48,12 +48,14 @@ QPainterPath AbstractArrow::path() const
 }
 
 #include "ToArrow.h"
+#include "StealthArrow.h"
 
 AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
 {
     switch (type) {
         case tikz::NoArrow: return new AbstractArrow(edge);
         case tikz::ToArrow: return new ToArrow(edge);
+        case tikz::StealthArrow: return new StealthArrow(edge);
         default: break;
     }
     return new AbstractArrow(edge);

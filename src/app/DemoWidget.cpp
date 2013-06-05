@@ -154,7 +154,7 @@ DemoWidget::DemoWidget()
     edge->setEndNode(item2);
     edge->edge().style()->setLineWidth(tikz::UltraThick);
     edge->edge().style()->setBendAngle(30);
-    edge->edge().style()->setArrowTail(tikz::ToArrow);
+    edge->edge().style()->setArrowTail(tikz::StealthArrow);
     edge->edge().style()->setArrowHead(tikz::ToArrow);
     m_view->scene()->addItem(edge);
 
