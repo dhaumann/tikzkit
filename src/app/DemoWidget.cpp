@@ -126,6 +126,7 @@ DemoWidget::DemoWidget()
     edge->setStartNode(item1);
     edge->setEndNode(item2);
     edge->edge().style()->setLineWidth(tikz::SemiThick);
+    edge->edge().style()->setArrowTail(tikz::LatexArrow);
     m_view->scene()->addItem(edge);
 
 
