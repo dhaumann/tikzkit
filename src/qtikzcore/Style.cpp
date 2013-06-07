@@ -272,6 +272,16 @@ void Style::setDoubleLine(bool enabled)
     }
 }
 
+void Style::unsetDoubleLine()
+{
+    if (d->doubleLineSet) {
+        beginConfig();
+        d->doubleLineSet = false;
+        d->doubleLine = false;
+        endConfig();
+    }
+}
+
 qreal Style::innerLineWidth() const
 {
     if (d->innerLineWidthSet) {
@@ -328,6 +338,17 @@ void Style::setInnerLineWidthType(tikz::LineWidth type)
         beginConfig();
         d->innerLineWidthSet = true;
         d->innerLineWidthType = type;
+        endConfig();
+    }
+}
+
+void Style::unsetInnerLineWidth()
+{
+    if (d->innerLineWidthSet) {
+        beginConfig();
+        d->innerLineWidthSet = false;
+        d->innerLineWidthType = SemiThick;
+        d->innerLineWidth = 0.021162; // SemiThick in cm
         endConfig();
     }
 }

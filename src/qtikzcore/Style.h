@@ -167,6 +167,13 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void setDoubleLine(bool enabled);
 
+        /**
+         * Unset the double line property.
+         * After this, calling isDoubleLine() returns values of the parent()
+         * style, if applicable; otherwise the returned line width is @e false.
+         */
+        void unsetDoubleLine();
+
     public:
         /**
          * Get the inner line width in cm.
@@ -182,6 +189,13 @@ class TIKZCORE_EXPORT Style : public QObject
          * @see LineWidth
          */
         LineWidth innerLineWidthType() const;
+
+        /**
+         * Unset the inner line width property.
+         * After this, calling innerLineWidth() returns parent()->innerLineWidth(),
+         * or the default inner line width, if parent() is null.
+         */
+        void unsetInnerLineWidth();
 
     public Q_SLOTS:
         /**
