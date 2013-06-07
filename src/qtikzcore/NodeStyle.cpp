@@ -181,7 +181,7 @@ void NodeStyle::setOuterSep(qreal sep)
 qreal NodeStyle::outerSep() const
 {
     if (!d->outerSepSet) {
-        return 0.5 * lineThickness();
+        return 0.5 * penWidth();
     }
     return d->outerSep;
 }

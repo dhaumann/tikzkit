@@ -143,6 +143,7 @@ DemoWidget::DemoWidget()
 
     item2 = new TikzNode();
     item2->node().setPos(QPointF(3, -3));
+    item2->node().style()->setDoubleLine(true);
     item2->node().style()->setLineWidth(tikz::SemiThick);
     item2->node().style()->setShape(tikz::ShapeEllipse);
     item2->node().style()->setInnerSep(0.2);

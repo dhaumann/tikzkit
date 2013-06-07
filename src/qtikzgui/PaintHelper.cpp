@@ -59,7 +59,7 @@ QPen PaintHelper::pen() const
 
     // construct valid pen
     QPen pen(c);
-    pen.setWidthF(d->style->lineThickness());
+    pen.setWidthF(d->style->penWidth());
     pen.setCapStyle(Qt::FlatCap);
     pen.setJoinStyle(Qt::MiterJoin);
 //    setMiterLimit
