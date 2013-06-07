@@ -6,6 +6,7 @@ include_directories(
     .
     ${CMAKE_SOURCE_DIR}/src/qtikzcore
     ${CMAKE_SOURCE_DIR}/src/qtikzgui
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui/widgets
 )
 
 set(qtikz_SOURCES

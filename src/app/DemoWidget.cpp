@@ -8,7 +8,10 @@
 #include "tikz.h"
 #include <Edge.h>
 
+#include <ArrowComboBox.h>
+
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QGraphicsView>
 #include <QSlider>
 #include <QTimer>
@@ -21,7 +24,24 @@ static TikzNode* a;
 DemoWidget::DemoWidget()
     : QWidget()
 {
-    QHBoxLayout* l = new QHBoxLayout(this);
+    QVBoxLayout* v = new QVBoxLayout(this);
+
+    QHBoxLayout* h = new QHBoxLayout();
+    v->addLayout(h);
+
+    // add arrow head/tail combos
+    ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
+    ArrowComboBox * arrowHeadCombo = new ArrowComboBox(true, this);
+    h->addWidget(arrowTailCombo);
+    h->addWidget(arrowHeadCombo);
+    h->addStretch();
+    arrowTailCombo->show();
+    arrowHeadCombo->show();
+
+    QHBoxLayout* l = new QHBoxLayout();
+    v->addLayout(l);
+
+    // create scene
     m_view = new QGraphicsView(this);
     l->addWidget(m_view);
 

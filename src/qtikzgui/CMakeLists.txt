@@ -9,6 +9,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/arrows
     ${CMAKE_SOURCE_DIR}/src/qtikzgui/tex
+    ${CMAKE_SOURCE_DIR}/src/qtikzgui/widgets
 #    ${POPPLER_QT4_INCLUDE_DIR}
 )
 
@@ -40,6 +41,8 @@ set(qtikzgui_SOURCES
 
     tex/TexGenerator.cpp
 #    tex/PdfRenderer.cpp
+
+    widgets/ArrowComboBox.cpp
 )
 
 set(qtikzgui_HEADERS
@@ -54,6 +57,8 @@ set(qtikzgui_HEADERS
 
     tex/TexGenerator.h
 #    tex/PdfRenderer.h
+
+    widgets/ArrowComboBox.h
 )
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
