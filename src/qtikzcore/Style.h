@@ -112,7 +112,7 @@ class TIKZCORE_EXPORT Style : public QObject
         LineWidth lineWidth() const;
 
         /**
-         * Get the lineWidth() in mm.
+         * Get the lineWidth() in cm.
          */
         qreal lineThickness() const;
 
@@ -121,15 +121,15 @@ class TIKZCORE_EXPORT Style : public QObject
          * Set the line width.
          * A cusom line width is achieved by alling setCustomLineWidth().
          * @p width the line width
-         * @see Linewidth
+         * @see LineWidth
          */
         void setLineWidth(tikz::LineWidth lineWidth);
 
         /**
-         * Set the line width to @p width mm.
+         * Set the line width to @p width cm.
          * Calling this function automatically sets the lineWidth()
          * to LineWidth::CustomLineWidth.
-         * @p width the line width [mm]
+         * @p width the line width [cm]
          * @see Linewidth
          */
         void setCustomLineWidth(qreal width);
@@ -143,12 +143,55 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         void unsetLineWidth();
 
+    //
+    // double lines
+    //
     public:
         /**
-         * Get the inner line width in mm.
+         * Get whether this line is a double line.
+         * By default, returns @e false.
+         */
+        bool isDoubleLine() const;
+
+    public Q_SLOTS:
+        /**
+         * Draw double lines if @p enabled is @e true.
+         */
+        void setDoubleLine(bool enabled);
+
+    public:
+        /**
+         * Get the inner line width in cm.
          * The inner line width is used for double lines in paths and shapes.
          */
-        qreal innerLineThickness() const;
+        qreal innerLineWidth() const;
+
+
+        /**
+         * Get the line width type.
+         * If the type is LineWidth::CustomLineWidth, use innerLineWidth()
+         * to get the width in cm.
+         * @see LineWidth
+         */
+        LineWidth innerLineWidthType() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the inner line width to @p width cm.
+         * Calling this function automatically sets the innerLineThickness()
+         * to LineWidth::CustomLineWidth.
+         * @p width the line width [cm]
+         * @see LineWidth
+         */
+        void setInnerLineWidth(qreal width);
+
+        /**
+         * Set the inner line width type to @p type.
+         * A cusom line width is achieved by alling setCustomLineWidth().
+         * @p width the line width
+         * @see LineWidth
+         */
+        void setInnerLineWidthType(tikz::LineWidth type);
 
     //
     // draw & fill opacity
