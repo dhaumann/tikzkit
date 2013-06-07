@@ -32,7 +32,7 @@ qreal LatexArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->lineThickness();
+    qreal dimb = edge()->style()->penWidth();
     if (edge()->style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
     }
@@ -44,7 +44,7 @@ qreal LatexArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->lineThickness();
+    qreal dimb = edge()->style()->penWidth();
         if (edge()->style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
     }
@@ -57,7 +57,8 @@ void LatexArrow::draw(QPainter* painter) const
     // see: pgfcorearrows.code.tex
     QPainterPath p = path();
     painter->save();
-    painter->fillPath(p, Qt::black); // TODO
+
+    painter->fillPath(p, edge()->style()->penColor()); // TODO
     painter->restore();
 }
 
@@ -65,7 +66,7 @@ QPainterPath LatexArrow::path() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->lineThickness();
+    qreal dimb = edge()->style()->penWidth();
     if (edge()->style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
     }

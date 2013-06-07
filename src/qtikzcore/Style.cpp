@@ -164,6 +164,17 @@ void Style::unsetPenStyle()
     }
 }
 
+qreal Style::penWidth() const
+{
+    if (!isDoubleLine()) {
+        return lineThickness();
+    } else {
+        const qreal width = lineThickness();
+        const qreal innerWidth = innerLineWidth();
+        return 2.0 * width + innerWidth;
+    }
+}
+
 LineWidth Style::lineWidth() const
 {
     if (d->lineWidthSet) {

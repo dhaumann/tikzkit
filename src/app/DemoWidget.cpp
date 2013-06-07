@@ -166,9 +166,26 @@ DemoWidget::DemoWidget()
         edge = new TikzEdge();
         edge->edge().setStartPos(QPointF(-6, i - 4));
         edge->edge().setEndPos(QPointF(-4, i - 4));
+        edge->edge().style()->beginConfig();
         edge->edge().style()->setLineWidth(tikz::UltraThick);
         edge->edge().style()->setArrowTail(tikz::Arrow(i));
         edge->edge().style()->setArrowHead(tikz::Arrow(i));
+        edge->edge().style()->endConfig();
+        m_view->scene()->addItem(edge);
+    }
+
+    // arrow demo
+    for (int i = 0; i < tikz::ArrowCount; ++i) {
+        edge = new TikzEdge();
+        edge->edge().setStartPos(QPointF(4, i - 4));
+        edge->edge().setEndPos(QPointF(6, i - 4));
+        edge->edge().style()->beginConfig();
+        edge->edge().style()->setDoubleLine(true);
+        edge->edge().style()->setInnerLineWidth(tikz::VeryThick);
+        edge->edge().style()->setLineWidth(tikz::UltraThick);
+        edge->edge().style()->setArrowTail(tikz::Arrow(i));
+        edge->edge().style()->setArrowHead(tikz::Arrow(i));
+        edge->edge().style()->endConfig();
         m_view->scene()->addItem(edge);
     }
 

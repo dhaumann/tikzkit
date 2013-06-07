@@ -168,10 +168,21 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     PaintHelper sh(painter, d->edge->style());
     QPen p = sh.pen();
+    if (d->edge->style()->isDoubleLine()) {
+        p.setWidthF(2.0 * d->edge->style()->lineThickness()
+                          + d->edge->style()->innerLineWidth());
+    }
     painter->setPen(p);
 
     // draw line
     painter->drawPath(d->linePath);
+
+    if (d->edge->style()->isDoubleLine()) {
+        p.setWidthF(d->edge->style()->innerLineWidth());
+        p.setColor(Qt::white);
+        painter->setPen(p);
+        painter->drawPath(d->linePath);
+    }
 
     // draw arrows
     painter->save();

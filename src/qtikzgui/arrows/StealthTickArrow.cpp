@@ -31,7 +31,7 @@ tikz::Arrow StealthTickArrow::type() const
 qreal StealthTickArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    const qreal lineWidth = edge()->style()->lineThickness();
+    const qreal lineWidth = edge()->style()->penWidth();
     const qreal dima = 0.28 * 0.03527 + 0.3 * lineWidth;
     const qreal dimb = 6 * dima + 0.5 * lineWidth;
     return -dimb;
@@ -40,7 +40,7 @@ qreal StealthTickArrow::leftExtend() const
 qreal StealthTickArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    const qreal lineWidth = edge()->style()->lineThickness();
+    const qreal lineWidth = edge()->style()->penWidth();
     const qreal dima = 0.28 * 0.03527 + 0.3 * lineWidth;
     const qreal dimb = 2 * dima + 0.5 * lineWidth;
     return dimb;
@@ -52,7 +52,8 @@ void StealthTickArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
     QPen pen = painter->pen();
-    pen.setWidthF(edge()->style()->lineThickness());
+    pen.setWidthF(edge()->style()->penWidth());
+    pen.setColor(Qt::black); // TODO: edge()->style()->penColor());
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Qt::black); // TODO
@@ -63,7 +64,7 @@ void StealthTickArrow::draw(QPainter* painter) const
 QPainterPath StealthTickArrow::path() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527 + 0.3 * edge()->style()->lineThickness();
+    qreal dima = 0.28 * 0.03527 + 0.3 * edge()->style()->penWidth();
 
     QPainterPath path;
     path.moveTo(dima * QPointF(2, 0));

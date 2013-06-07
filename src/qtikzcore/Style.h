@@ -116,6 +116,14 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         qreal lineThickness() const;
 
+        /**
+         * Get the pen width for drawing in cm.
+         * The pen with equals lineWidth(), if double lines are disabled.
+         * If double lines are enabled, the pen width is set to
+         * 2 * lineWidth() + innerLineWidth().
+         */
+        qreal penWidth() const;
+
     public Q_SLOTS:
         /**
          * Set the line width.
