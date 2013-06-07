@@ -23,7 +23,7 @@ PaintHelper::~PaintHelper()
 
 Qt::PenStyle PaintHelper::penStyle() const
 {
-    switch (d->style->lineWidth()) {
+    switch (d->style->penStyle()) {
         case tikz::NoPen: return Qt::NoPen;
         case tikz::SolidLine: return Qt::SolidLine;
         case tikz::DottedLine: return Qt::DotLine;

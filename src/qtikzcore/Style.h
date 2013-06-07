@@ -109,12 +109,12 @@ class TIKZCORE_EXPORT Style : public QObject
          * Get the line width.
          * @see LineWidth
          */
-        LineWidth lineWidth() const;
+        LineWidth lineWidthType() const;
 
         /**
          * Get the lineWidth() in cm.
          */
-        qreal lineThickness() const;
+        qreal lineWidth() const;
 
         /**
          * Get the pen width for drawing in cm.
@@ -126,12 +126,12 @@ class TIKZCORE_EXPORT Style : public QObject
 
     public Q_SLOTS:
         /**
-         * Set the line width.
-         * A cusom line width is achieved by alling setCustomLineWidth().
-         * @p width the line width
+         * Set the line width type to @p type.
+         * A cusom line width is achieved by alling setLineWidth().
+         * @p width the line width type
          * @see LineWidth
          */
-        void setLineWidth(tikz::LineWidth lineWidth);
+        void setLineWidthType(tikz::LineWidth type);
 
         /**
          * Set the line width to @p width cm.
@@ -140,14 +140,14 @@ class TIKZCORE_EXPORT Style : public QObject
          * @p width the line width [cm]
          * @see Linewidth
          */
-        void setCustomLineWidth(qreal width);
+        void setLineWidth(qreal width);
 
         /**
          * Unset the line width.
-         * After this, calling lineWidth() or lineThickness() return the
+         * After this, calling lineWidth() or lineWidthType() return the
          * respective values of the parent() style, if the parent() style exists,
          * otherwise the returned line width is @e SemiThick.
-         * @see LineWidth, lineWidth(), lineThickness()
+         * @see LineWidth, lineWidth(), lineWidthType()
          */
         void unsetLineWidth();
 
@@ -186,7 +186,7 @@ class TIKZCORE_EXPORT Style : public QObject
     public Q_SLOTS:
         /**
          * Set the inner line width to @p width cm.
-         * Calling this function automatically sets the innerLineThickness()
+         * Calling this function automatically sets the innerLineWidth()
          * to LineWidth::CustomLineWidth.
          * @p width the line width [cm]
          * @see LineWidth
@@ -195,7 +195,7 @@ class TIKZCORE_EXPORT Style : public QObject
 
         /**
          * Set the inner line width type to @p type.
-         * A cusom line width is achieved by alling setCustomLineWidth().
+         * A cusom line width is achieved by alling setInnerLineWidth().
          * @p width the line width
          * @see LineWidth
          */
