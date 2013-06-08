@@ -1,5 +1,7 @@
 #include "AbstractArrow.h"
 
+#include <QObject>
+
 class AbstractArrowPrivate
 {
     public:
@@ -25,6 +27,11 @@ tikz::EdgeStyle* AbstractArrow::style() const
 tikz::Arrow AbstractArrow::type() const
 {
     return tikz::NoArrow;
+}
+
+QString AbstractArrow::name() const
+{
+    return QObject::tr("none");
 }
 
 qreal AbstractArrow::leftExtend() const

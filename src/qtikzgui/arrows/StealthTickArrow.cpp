@@ -27,6 +27,11 @@ tikz::Arrow StealthTickArrow::type() const
     return tikz::StealthTickArrow;
 }
 
+QString StealthTickArrow::name() const
+{
+    return QObject::tr("stealth'");
+}
+
 qreal StealthTickArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
@@ -91,6 +96,11 @@ ReversedStealthTickArrow::ReversedStealthTickArrow(tikz::EdgeStyle * style)
 tikz::Arrow ReversedStealthTickArrow::type() const
 {
     return tikz::ReversedStealthTickArrow;
+}
+
+QString ReversedStealthTickArrow::name() const
+{
+    return QObject::tr("stealth' reversed");
 }
 
 qreal ReversedStealthTickArrow::leftExtend() const

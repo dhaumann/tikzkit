@@ -27,6 +27,11 @@ tikz::Arrow PipeArrow::type() const
     return tikz::PipeArrow;
 }
 
+QString PipeArrow::name() const
+{
+    return QObject::tr("|");
+}
+
 qreal PipeArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex

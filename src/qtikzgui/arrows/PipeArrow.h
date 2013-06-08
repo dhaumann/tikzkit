@@ -21,6 +21,12 @@ class PipeArrow : public AbstractArrow
         virtual tikz::Arrow type() const;
 
         /**
+         * Gui visible name, such as "to" or "stealth".
+         * The string should be translated.
+         */
+        virtual QString name() const;
+
+        /**
          * The 'left extend' value defines the extent of the arrow to the left,
          * beginning at the arrow tip. This value is only only important when
          * when an arrow is being reversed or composed with other arrow tips.

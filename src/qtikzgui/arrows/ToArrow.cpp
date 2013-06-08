@@ -27,6 +27,11 @@ tikz::Arrow ToArrow::type() const
     return tikz::ToArrow;
 }
 
+QString ToArrow::name() const
+{
+    return QObject::tr("to");
+}
+
 qreal ToArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex; 0.84pt
@@ -93,6 +98,11 @@ ReversedToArrow::~ReversedToArrow()
 tikz::Arrow ReversedToArrow::type() const
 {
     return tikz::ReversedToArrow;
+}
+
+QString ReversedToArrow::name() const
+{
+    return QObject::tr("to reversed");
 }
 
 qreal ReversedToArrow::leftExtend() const

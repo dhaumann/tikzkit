@@ -22,6 +22,12 @@ class TIKZGUI_EXPORT ArrowComboBox : public QWidget
          */
         virtual ~ArrowComboBox();
 
+    public Q_SLOTS:
+        /**
+         * Set the currently worked on edge style to @p style.
+         */
+//         void setStyle(tikz::EdgeStyle * style);
+
     private:
         ArrowComboBoxPrivate * const d;
 };

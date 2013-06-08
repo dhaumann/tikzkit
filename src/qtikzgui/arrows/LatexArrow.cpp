@@ -27,6 +27,11 @@ tikz::Arrow LatexArrow::type() const
     return tikz::LatexArrow;
 }
 
+QString LatexArrow::name() const
+{
+    return QObject::tr("latex");
+}
+
 qreal LatexArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
@@ -95,6 +100,11 @@ ReversedLatexArrow::ReversedLatexArrow(tikz::EdgeStyle * style)
 tikz::Arrow ReversedLatexArrow::type() const
 {
     return tikz::ReversedLatexArrow;
+}
+
+QString ReversedLatexArrow::name() const
+{
+    return QObject::tr("latex reversed");
 }
 
 qreal ReversedLatexArrow::leftExtend() const
