@@ -3,13 +3,13 @@
 class AbstractArrowPrivate
 {
     public:
-        TikzEdge* edge;
+        tikz::EdgeStyle* style;
 };
 
-AbstractArrow::AbstractArrow(TikzEdge * edge)
+AbstractArrow::AbstractArrow(tikz::EdgeStyle* style)
     : d(new AbstractArrowPrivate())
 {
-    d->edge = edge;
+    d->style = style;
 }
 
 AbstractArrow::~AbstractArrow()
@@ -17,9 +17,9 @@ AbstractArrow::~AbstractArrow()
     delete d;
 }
 
-TikzEdge* AbstractArrow::edge() const
+tikz::EdgeStyle* AbstractArrow::style() const
 {
-    return d->edge;
+    return d->style;
 }
 
 tikz::Arrow AbstractArrow::type() const
@@ -53,22 +53,22 @@ QPainterPath AbstractArrow::path() const
 #include "PipeArrow.h"
 #include "StealthTickArrow.h"
 
-AbstractArrow *createArrow(tikz::Arrow type, TikzEdge* edge)
+AbstractArrow *createArrow(tikz::Arrow type, tikz::EdgeStyle* style)
 {
     switch (type) {
-        case tikz::NoArrow: return new AbstractArrow(edge);
-        case tikz::ToArrow: return new ToArrow(edge);
-        case tikz::ReversedToArrow: return new ReversedToArrow(edge);
-        case tikz::StealthArrow: return new StealthArrow(edge);
-        case tikz::ReversedStealthArrow: return new ReversedStealthArrow(edge);
-        case tikz::LatexArrow: return new LatexArrow(edge);
-        case tikz::ReversedLatexArrow: return new ReversedLatexArrow(edge);
-        case tikz::PipeArrow: return new PipeArrow(edge);
-        case tikz::StealthTickArrow: return new StealthTickArrow(edge);
-        case tikz::ReversedStealthTickArrow: return new ReversedStealthTickArrow(edge);
+        case tikz::NoArrow: return new AbstractArrow(style);
+        case tikz::ToArrow: return new ToArrow(style);
+        case tikz::ReversedToArrow: return new ReversedToArrow(style);
+        case tikz::StealthArrow: return new StealthArrow(style);
+        case tikz::ReversedStealthArrow: return new ReversedStealthArrow(style);
+        case tikz::LatexArrow: return new LatexArrow(style);
+        case tikz::ReversedLatexArrow: return new ReversedLatexArrow(style);
+        case tikz::PipeArrow: return new PipeArrow(style);
+        case tikz::StealthTickArrow: return new StealthTickArrow(style);
+        case tikz::ReversedStealthTickArrow: return new ReversedStealthTickArrow(style);
         default: break;
     }
-    return new AbstractArrow(edge);
+    return new AbstractArrow(style);
 }
 
 // kate: indent-width 4; replace-tabs on;

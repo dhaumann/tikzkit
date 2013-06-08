@@ -20,9 +20,8 @@
 TikzEdgePrivate::TikzEdgePrivate(TikzEdge* edge)
     : q(edge)
 {
-    arrowTail = new AbstractArrow(edge);
-    arrowHead = new AbstractArrow(edge);
 }
+
 TikzEdgePrivate::~TikzEdgePrivate()
 {
     delete arrowTail;
@@ -30,19 +29,38 @@ TikzEdgePrivate::~TikzEdgePrivate()
     delete arrowHead;
     arrowHead = 0;
 }
+
+void TikzEdgePrivate::init()
+{
+    edge = new tikz::Edge(q);
+    start = 0;
+    end = 0;
+
+    dragging = false;
+    dirty = true;
+
+    arrowTail = new AbstractArrow(q->style());
+    arrowHead = new AbstractArrow(q->style());
+
+    startControlPoint = new CurveHandle(q);
+    endControlPoint = new CurveHandle(q);
+    startControlPoint->setVisible(false);
+    endControlPoint->setVisible(false);
+}
+
 void TikzEdgePrivate::updateCache()
 {
     if (!dirty) return;
     dirty = false;
 
     // update arrow head and arrow tail if needed
-    if (arrowTail->type() != q->edge().style()->arrowTail()) {
+    if (arrowTail->type() != q->style()->arrowTail()) {
         delete arrowTail;
-        arrowTail = ::createArrow(q->edge().style()->arrowTail(), q);
+        arrowTail = ::createArrow(q->style()->arrowTail(), q->style());
     }
-    if (arrowHead->type() != q->edge().style()->arrowHead()) {
+    if (arrowHead->type() != q->style()->arrowHead()) {
         delete arrowHead;
-        arrowHead = ::createArrow(q->edge().style()->arrowHead(), q);
+        arrowHead = ::createArrow(q->style()->arrowHead(), q->style());
     }
 
     // reset old paths

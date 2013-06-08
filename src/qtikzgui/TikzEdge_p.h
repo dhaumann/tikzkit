@@ -30,6 +30,8 @@ class TikzEdgePrivate
         TikzEdgePrivate(TikzEdge* edge);
         ~TikzEdgePrivate();
 
+        void init();
+
     public:
         // edge and nodes
         tikz::Edge* edge;

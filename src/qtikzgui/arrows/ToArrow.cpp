@@ -1,6 +1,5 @@
 #include "ToArrow.h"
 
-#include "TikzEdge.h"
 #include <EdgeStyle.h>
 
 #include <QPainter>
@@ -12,8 +11,8 @@ class ToArrowPrivate
     public:
 };
 
-ToArrow::ToArrow(TikzEdge * edge)
-    : AbstractArrow(edge)
+ToArrow::ToArrow(tikz::EdgeStyle * style)
+    : AbstractArrow(style)
     , d(new ToArrowPrivate())
 {
 }
@@ -31,13 +30,13 @@ tikz::Arrow ToArrow::type() const
 qreal ToArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex; 0.84pt
-    return -0.84 * 0.03527 - 1.3 * edge()->style()->penWidth();
+    return -0.84 * 0.03527 - 1.3 * style()->penWidth();
 }
 
 qreal ToArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex; 0.21pt
-    return 0.21 * 0.03527 + 0.625 * edge()->style()->penWidth();
+    return 0.21 * 0.03527 + 0.625 * style()->penWidth();
 }
 
 void ToArrow::draw(QPainter* painter) const
@@ -46,8 +45,8 @@ void ToArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
     QPen pen = painter->pen();
-    pen.setWidthF(0.8 * edge()->style()->penWidth());
-    pen.setColor(Qt::black); // TODO: edge()->style()->penColor());
+    pen.setWidthF(0.8 * style()->penWidth());
+    pen.setColor(Qt::black); // TODO: style()->penColor());
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
@@ -61,7 +60,7 @@ QPainterPath ToArrow::path() const
     // see: pgfcorearrows.code.tex
     QPainterPath path;
 
-    const qreal dima = 0.28 * 0.03527 + 0.3 * edge()->style()->penWidth();
+    const qreal dima = 0.28 * 0.03527 + 0.3 * style()->penWidth();
     path.moveTo(dima * QPointF(-3, 4));
     path.cubicTo(dima * QPointF(-2.75, 2.5),
                  dima * QPointF(0.0, 0.25),
@@ -80,8 +79,8 @@ class ReversedToArrowPrivate
     public:
 };
 
-ReversedToArrow::ReversedToArrow(TikzEdge * edge)
-    : AbstractArrow(edge)
+ReversedToArrow::ReversedToArrow(tikz::EdgeStyle * style)
+    : AbstractArrow(style)
     , d(new ReversedToArrowPrivate())
 {
 }
@@ -99,13 +98,13 @@ tikz::Arrow ReversedToArrow::type() const
 qreal ReversedToArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return -0.21 * 0.03527 - 0.475 * edge()->style()->penWidth();
+    return -0.21 * 0.03527 - 0.475 * style()->penWidth();
 }
 
 qreal ReversedToArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return 0.98 * 0.03527 + 1.45 * edge()->style()->penWidth();
+    return 0.98 * 0.03527 + 1.45 * style()->penWidth();
 }
 
 void ReversedToArrow::draw(QPainter* painter) const
@@ -114,8 +113,8 @@ void ReversedToArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
     QPen pen = painter->pen();
-    pen.setWidthF(0.8 * edge()->style()->penWidth());
-    pen.setColor(Qt::black); // TODO: edge()->style()->penColor());
+    pen.setWidthF(0.8 * style()->penWidth());
+    pen.setColor(Qt::black); // TODO: style()->penColor());
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
@@ -129,7 +128,7 @@ QPainterPath ReversedToArrow::path() const
     // see: pgfcorearrows.code.tex
     QPainterPath path;
 
-    const qreal dima = 0.28 * 0.03527 + 0.3 * edge()->style()->penWidth();
+    const qreal dima = 0.28 * 0.03527 + 0.3 * style()->penWidth();
     path.moveTo(dima * QPointF(3.5, 4));
     path.cubicTo(dima * QPointF(3.25, 2.5),
                  dima * QPointF(0.5, 0.25),

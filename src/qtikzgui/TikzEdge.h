@@ -109,7 +109,7 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * Get the anchor of the end of the edge.
          */
         tikz::Anchor endAnchor() const;
-        
+
     public Q_SLOTS:
         /**
          * Set the anchor of the head of the edge to @p anchor.

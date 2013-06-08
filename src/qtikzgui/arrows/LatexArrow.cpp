@@ -1,6 +1,5 @@
 #include "LatexArrow.h"
 
-#include "TikzEdge.h"
 #include <EdgeStyle.h>
 
 #include <QPainter>
@@ -12,8 +11,8 @@ class LatexArrowPrivate
     public:
 };
 
-LatexArrow::LatexArrow(TikzEdge * edge)
-    : AbstractArrow(edge)
+LatexArrow::LatexArrow(tikz::EdgeStyle * style)
+    : AbstractArrow(style)
     , d(new LatexArrowPrivate())
 {
 }
@@ -32,9 +31,9 @@ qreal LatexArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-    if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+    if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
     return -1 * dima;
@@ -44,9 +43,9 @@ qreal LatexArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-        if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+        if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
     return 9 * dima;
@@ -58,7 +57,7 @@ void LatexArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
 
-    painter->fillPath(p, edge()->style()->penColor()); // TODO
+    painter->fillPath(p, style()->penColor()); // TODO
     painter->restore();
 }
 
@@ -66,9 +65,9 @@ QPainterPath LatexArrow::path() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-    if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+    if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
 
@@ -88,8 +87,8 @@ QPainterPath LatexArrow::path() const
 
 
 
-ReversedLatexArrow::ReversedLatexArrow(TikzEdge * edge)
-    : LatexArrow(edge)
+ReversedLatexArrow::ReversedLatexArrow(tikz::EdgeStyle * style)
+    : LatexArrow(style)
 {
 }
 

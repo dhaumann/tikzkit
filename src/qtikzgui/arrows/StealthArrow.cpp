@@ -1,6 +1,5 @@
 #include "StealthArrow.h"
 
-#include "TikzEdge.h"
 #include <EdgeStyle.h>
 
 #include <QPainter>
@@ -12,8 +11,8 @@ class StealthArrowPrivate
     public:
 };
 
-StealthArrow::StealthArrow(TikzEdge * edge)
-    : AbstractArrow(edge)
+StealthArrow::StealthArrow(tikz::EdgeStyle * style)
+    : AbstractArrow(style)
     , d(new StealthArrowPrivate())
 {
 }
@@ -32,9 +31,9 @@ qreal StealthArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-    if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+    if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
     return -3.0 * dima;
@@ -44,9 +43,9 @@ qreal StealthArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-    if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+    if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
     return 5.0 * dima;
@@ -65,9 +64,9 @@ QPainterPath StealthArrow::path() const
 {
     // see: pgfcorearrows.code.tex
     qreal dima = 0.28 * 0.03527;
-    qreal dimb = edge()->style()->penWidth();
-    if (edge()->style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * edge()->style()->innerLineWidth();
+    qreal dimb = style()->penWidth();
+    if (style()->innerLineWidth() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
 
@@ -83,8 +82,8 @@ QPainterPath StealthArrow::path() const
 
 
 
-ReversedStealthArrow::ReversedStealthArrow(TikzEdge * edge)
-    : StealthArrow(edge)
+ReversedStealthArrow::ReversedStealthArrow(tikz::EdgeStyle * style)
+    : StealthArrow(style)
 {
 }
 

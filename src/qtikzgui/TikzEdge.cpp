@@ -27,17 +27,8 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzEdgePrivate(this))
 {
-    d->edge = new tikz::Edge(this);
-    d->start = 0;
-    d->end = 0;
-
-    d->dragging = false;
-    d->dirty = true;
-
-    d->startControlPoint = new CurveHandle(this);
-    d->endControlPoint = new CurveHandle(this);
-    d->startControlPoint->setVisible(false);
-    d->endControlPoint->setVisible(false);
+    // initialization of member varialbes in TikzEdgePrivate constructor
+    d->init();
 
     connect(d->startControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(startControlPointChanged(QPointF)));
     connect(d->endControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(endControlPointChanged(QPointF)));
