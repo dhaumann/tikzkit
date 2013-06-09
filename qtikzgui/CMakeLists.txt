@@ -1,7 +1,6 @@
 project(qtikzgui)
 
 find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
-#find_package(PopplerQt4 REQUIRED)
 
 include_directories(
     .
@@ -10,7 +9,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qtikzgui/arrows
     ${CMAKE_SOURCE_DIR}/qtikzgui/tex
     ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
-#    ${POPPLER_QT4_INCLUDE_DIR}
 )
 
 set(qtikzgui_SOURCES
@@ -67,7 +65,6 @@ include(${QT_USE_FILE})
 add_definitions(
     -DMAKE_TIKZGUI
     ${QT_DEFINITIONS}
-#    ${POPPLER_QT4_DEFINITIONS}
 )
 
 add_library(qtikzgui SHARED
@@ -77,7 +74,6 @@ add_library(qtikzgui SHARED
 
 target_link_libraries(qtikzgui
   ${QT_LIBRARIES}
-#  ${POPPLER_QT4_LIBRARIES}
   qtikzcore
 )
 
