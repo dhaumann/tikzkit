@@ -4,9 +4,9 @@ find_package(Qt4 REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src/qtikzcore
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui/widgets
+    ${CMAKE_SOURCE_DIR}/qtikzcore
+    ${CMAKE_SOURCE_DIR}/qtikzgui
+    ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
 )
 
 set(qtikz_SOURCES

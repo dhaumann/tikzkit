@@ -5,11 +5,11 @@ find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src/qtikzcore
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui/shapes
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui/arrows
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui/tex
-    ${CMAKE_SOURCE_DIR}/src/qtikzgui/widgets
+    ${CMAKE_SOURCE_DIR}/qtikzcore
+    ${CMAKE_SOURCE_DIR}/qtikzgui/shapes
+    ${CMAKE_SOURCE_DIR}/qtikzgui/arrows
+    ${CMAKE_SOURCE_DIR}/qtikzgui/tex
+    ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
 #    ${POPPLER_QT4_INCLUDE_DIR}
 )
 

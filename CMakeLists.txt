@@ -5,9 +5,9 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules
 )
 
-add_subdirectory(src/qtikzcore)
-add_subdirectory(src/qtikzgui)
-add_subdirectory(src/app)
+add_subdirectory(qtikzcore)
+add_subdirectory(qtikzgui)
+add_subdirectory(app)
 
 enable_testing()
 add_subdirectory(tests)
