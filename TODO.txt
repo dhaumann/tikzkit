@@ -1,0 +1,49 @@
+qtikzcore
+- tikz::Document (priority: high)
+  - register tikz::Nodes
+  - register tikz::Edges
+  - register tikz::NodeStyles
+  - register tikz::EdgeStyles
+  - maybe use pgf layers: background, nodes, edges, foreground
+
+- exporter to TikZ (priority: high)
+  - based on TikZ::Document
+
+- tikz::Path (priority: medium)
+  - idea: create (open and closed) polygons with a list of edges
+  - does this influence the API of tikz::Edge?
+
+- undo/redo system (priority: medium)
+  - find appropriate undo/redo mechanism
+  - add session wide uniq id to all items, so they can be referenced
+    even after e.g. a node was removed and readded through undo?
+  - undo: save state before changing an item
+  - redo: save state after changing an item is finished
+  - state := coordinate + tikz::{Edge,Node}Style
+
+- tikz::Node (priority: low)
+  - would be nice to support 'fit'
+
+qtikzgui
+- TikzEdge (priority: high)
+  - fix hovering items: implement through mouse move events in TikzScene
+    (currently, hovering is based on the bounding rect and not the path)
+  - properly implement curve types (Bending, Bezier, ...?)
+
+app: TikZKit
+
+integration test (priority: medium)
+- implement testing suite:
+  - tests are listed in a list view on the left
+  - ability to add a new test
+  - test
+    - user graphically creates scene: add/manipulate nodes/edges
+    - baseline
+      - save the scene as TeX/TikZ code and convert to pdf
+      - use libpoppler-qt4 to render the pdf from the TeX/TikZ code
+      - save pdf as png
+      - render TikzScene to png
+    - use pdiff to check the graphical diff
+    - fail test only on user specified threshold
+
+kate: space-indent on; indent-width 2;
