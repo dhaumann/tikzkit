@@ -136,7 +136,7 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
     d->updateCache();
 
     QTransform trans;
-    trans.scale(d->node->style()->scale(), d->node->style()->scale());
+    trans.scale(style()->scale(), style()->scale());
     return trans.map(d->shape->anchorPos(anchor));
 }
 
@@ -149,7 +149,7 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
     rad -= rotation() * M_PI / 180.0;
 
     QTransform trans;
-    trans.scale(d->node->style()->scale(), d->node->style()->scale());
+    trans.scale(style()->scale(), style()->scale());
     return trans.map(d->shape->contactPoint(anchor, rad));
 }
 
@@ -193,7 +193,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     d->updateCache();
 
-    PaintHelper sh(painter, d->node->style());
+    PaintHelper sh(painter, style());
     QPen p = sh.pen();
     QBrush brush(Qt::yellow);
     painter->setPen(p);
@@ -202,9 +202,9 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawPath(d->shapePath);
 
     // draw double line, if wanted
-    if (d->node->style()->isDoubleLine()) {
+    if (style()->isDoubleLine()) {
         painter->setBrush(Qt::NoBrush);
-        p.setWidthF(d->node->style()->innerLineWidth());
+        p.setWidthF(style()->innerLineWidth());
         p.setColor(Qt::white);
         painter->setPen(p);
         painter->drawPath(d->shapePath);

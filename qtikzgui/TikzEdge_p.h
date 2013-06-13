@@ -25,6 +25,7 @@
 
 namespace tikz {
     class Edge;
+    class EdgeStyle;
 }
 
 class QPainter;
@@ -97,6 +98,9 @@ class TikzEdgePrivate
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad);
         void drawArrow(QPainter* painter, const QPainterPath& path);
         void drawHandle(QPainter* painter, const QPointF& pos, bool connected);
+
+    private:
+        inline tikz::EdgeStyle* style() const;
 };
 
 #endif // GUI_TIKZ_EDGE_PRIVATE_ITEM_H

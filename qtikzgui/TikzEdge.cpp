@@ -176,15 +176,15 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(painter, d->edge->style());
+    PaintHelper sh(painter, style());
     QPen p = sh.pen();
     painter->setPen(p);
 
     // draw line
     painter->drawPath(d->linePath);
 
-    if (d->edge->style()->isDoubleLine()) {
-        p.setWidthF(d->edge->style()->innerLineWidth());
+    if (style()->isDoubleLine()) {
+        p.setWidthF(style()->innerLineWidth());
         p.setColor(Qt::white);
         painter->setPen(p);
         painter->drawPath(d->linePath);
@@ -455,7 +455,7 @@ void TikzEdge::startControlPointChanged(const QPointF& pos)
             break;
         }
         case tikz::InOutCurve:
-//             rad = q->style()->setOutAngle( * 180.0 / M_PI);
+//             rad = style()->setOutAngle( * 180.0 / M_PI);
             break;
         default:
             break;
@@ -496,7 +496,7 @@ void TikzEdge::endControlPointChanged(const QPointF& pos)
             break;
         }
         case tikz::InOutCurve:
-//             rad = q->style()->setOutAngle( * 180.0 / M_PI);
+//             rad = style()->setOutAngle( * 180.0 / M_PI);
             break;
         default:
             break;

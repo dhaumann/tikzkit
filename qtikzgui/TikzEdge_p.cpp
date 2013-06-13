@@ -58,8 +58,8 @@ void TikzEdgePrivate::init()
     dragging = false;
     dirty = true;
 
-    arrowTail = new AbstractArrow(q->style());
-    arrowHead = new AbstractArrow(q->style());
+    arrowTail = new AbstractArrow(style());
+    arrowHead = new AbstractArrow(style());
 
     startControlPoint = new CurveHandle(q);
     endControlPoint = new CurveHandle(q);
@@ -73,13 +73,13 @@ void TikzEdgePrivate::updateCache()
     dirty = false;
 
     // update arrow head and arrow tail if needed
-    if (arrowTail->type() != q->style()->arrowTail()) {
+    if (arrowTail->type() != style()->arrowTail()) {
         delete arrowTail;
-        arrowTail = ::createArrow(q->style()->arrowTail(), q->style());
+        arrowTail = ::createArrow(style()->arrowTail(), style());
     }
-    if (arrowHead->type() != q->style()->arrowHead()) {
+    if (arrowHead->type() != style()->arrowHead()) {
         delete arrowHead;
-        arrowHead = ::createArrow(q->style()->arrowHead(), q->style());
+        arrowHead = ::createArrow(style()->arrowHead(), style());
     }
 
     // reset old paths
@@ -93,12 +93,12 @@ void TikzEdgePrivate::updateCache()
     const QPointF diff = endAnchor - startAnchor;
     const qreal len = QVector2D(diff).length();
 
-    if (q->style()->curveMode() == tikz::BendCurve) {
-        const qreal startRad = std::atan2(diff.y(), diff.x()) + q->style()->bendAngle() * M_PI / 180.0;
-        const qreal endRad = std::atan2(-diff.y(), -diff.x()) - q->style()->bendAngle() * M_PI / 180.0;
+    if (style()->curveMode() == tikz::BendCurve) {
+        const qreal startRad = std::atan2(diff.y(), diff.x()) + style()->bendAngle() * M_PI / 180.0;
+        const qreal endRad = std::atan2(-diff.y(), -diff.x()) - style()->bendAngle() * M_PI / 180.0;
         // from tikz/libraries/tikzlibrarytopaths.code.tex:
         const qreal factor = 0.3915;
-        const qreal vecLen = len * q->style()->looseness() * factor;
+        const qreal vecLen = len * style()->looseness() * factor;
 
         // compute control points
         const QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
@@ -153,13 +153,13 @@ qreal TikzEdgePrivate::baseAngle() const
 qreal TikzEdgePrivate::startAngle() const
 {
     qreal rad = 0.0;
-    switch (q->style()->curveMode()) {
+    switch (style()->curveMode()) {
         case tikz::BendCurve: {
-            rad = baseAngle() + q->style()->bendAngle() * M_PI / 180.0;
+            rad = baseAngle() + style()->bendAngle() * M_PI / 180.0;
             break;
         }
         case tikz::InOutCurve:
-            rad = q->style()->outAngle() * M_PI / 180.0;
+            rad = style()->outAngle() * M_PI / 180.0;
             break;
         default:
             break;
@@ -170,15 +170,15 @@ qreal TikzEdgePrivate::startAngle() const
 qreal TikzEdgePrivate::endAngle() const
 {
     qreal rad = 0.0;
-    switch (q->style()->curveMode()) {
+    switch (style()->curveMode()) {
         case tikz::BendCurve: {
             const QPointF diff = edge->startPos() - edge->endPos();
             rad = std::atan2(diff.y(), diff.x())
-                    - q->style()->bendAngle() * M_PI / 180.0;
+                    - style()->bendAngle() * M_PI / 180.0;
             break;
         }
         case tikz::InOutCurve:
-            rad = q->style()->inAngle() * M_PI / 180.0;
+            rad = style()->inAngle() * M_PI / 180.0;
             break;
         default:
             break;
@@ -200,6 +200,11 @@ void TikzEdgePrivate::drawHandle(QPainter* painter, const QPointF& pos, bool con
     painter->setBrush(connected ? QColor(0, 255, 0, 125) : QColor(255, 0, 0, 125));
     painter->drawEllipse(pos, 0.2, 0.2);
     painter->restore();
+}
+
+tikz::EdgeStyle* TikzEdgePrivate::style() const
+{
+    return edge->style();
 }
 
 // kate: indent-width 4; replace-tabs on;
