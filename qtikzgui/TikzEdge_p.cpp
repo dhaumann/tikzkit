@@ -104,9 +104,14 @@ void TikzEdgePrivate::updateCache()
         const QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
         const QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
 
-        // adapt startAnchor and endAnchor with rightExtend() of arrows after (!) control point computation
-        startAnchor += arrowTail->rightExtend() * QPointF(std::cos(startRad), std::sin(startRad));
-        endAnchor += arrowHead->rightExtend() * QPointF(std::cos(endRad), std::sin(endRad));
+        // adapt startAnchor and endAnchor with 'shorten' attribute and
+        // rightExtend() of arrows after (!) control point computation
+        const qreal shortenStart = style()->shortenStart() +  arrowTail->rightExtend();
+        const qreal shortenEnd = style()->shortenEnd() + arrowHead->rightExtend();
+        startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+        endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+
+        // finally create bezier curve
         linePath.moveTo(startAnchor);
         linePath.cubicTo(cp1, cp2, endAnchor);
 
