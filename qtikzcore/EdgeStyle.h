@@ -96,6 +96,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         void setLooseness(qreal looseness);
 
+        /**
+         * Unset the looseness for bending the edge.
+         */
+        void unsetLooseness();
+
     public:
         /**
          * Get the first/start control point.
@@ -172,6 +177,16 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Set the arrow head style to @p head.
          */
         void setArrowHead(tikz::Arrow head);
+
+        /**
+         * Unset the arrow tail style.
+         */
+        void unsetArrowTail();
+
+        /**
+         * Unset the arrow head style.
+         */
+        void unsetArrowHead();
 
     //
     // shorten >, shorten < of edges

@@ -148,16 +148,6 @@ void EdgeStyle::setBendAngle(qreal angle)
     }
 }
 
-void EdgeStyle::setLooseness(qreal looseness)
-{
-    if (!d->loosenessSet || d->looseness != looseness) {
-        beginConfig();
-        d->loosenessSet = true;
-        d->looseness = looseness;
-        endConfig();
-    }
-}
-
 qreal EdgeStyle::looseness() const
 {
     if (d->loosenessSet) {
@@ -170,6 +160,26 @@ qreal EdgeStyle::looseness() const
     }
 
     return 1.0;
+}
+
+void EdgeStyle::setLooseness(qreal looseness)
+{
+    if (!d->loosenessSet || d->looseness != looseness) {
+        beginConfig();
+        d->loosenessSet = true;
+        d->looseness = looseness;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetLooseness()
+{
+    if (d->loosenessSet) {
+        beginConfig();
+        d->loosenessSet = false;
+        d->looseness = 1.0;
+        endConfig();
+    }
 }
 
 void EdgeStyle::setStartControlPoint(const QPointF & cp1)
@@ -284,6 +294,26 @@ void EdgeStyle::setArrowHead(tikz::Arrow head)
         beginConfig();
         d->arrowHeadSet = true;
         d->arrowHead = head;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetArrowTail()
+{
+    if (d->arrowTailSet) {
+        beginConfig();
+        d->arrowTailSet = false;
+        d->arrowTail = tikz::NoArrow;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetArrowHead()
+{
+    if (d->arrowHeadSet) {
+        beginConfig();
+        d->arrowHeadSet = false;
+        d->arrowHead = tikz::NoArrow;
         endConfig();
     }
 }
