@@ -164,7 +164,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
 
     public Q_SLOTS:
         /**
-         * set the arrow tail style to @p tail.
+         * Set the arrow tail style to @p tail.
          */
         void setArrowTail(tikz::Arrow tail);
 
@@ -172,6 +172,43 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Set the arrow head style to @p head.
          */
         void setArrowHead(tikz::Arrow head);
+
+    //
+    // shorten >, shorten < of edges
+    //
+    public:
+        /**
+         * Shorten amount for the start of the edge in cm.
+         * Default: 0.0cm
+         */
+        qreal shortenStart() const;
+
+        /**
+         * Shorten amount for the end of the edge in cm.
+         * Default: 0.0cm
+         */
+        qreal shortenEnd() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the start shorten amount to @p shorten cm.
+         */
+        void setShortenStart(qreal shorten);
+
+        /**
+         * Set the end shorten amount to @p shorten cm.
+         */
+        void setShortenEnd(qreal shorten);
+
+        /**
+         * Unset the start shorten amount.
+         */
+        void unsetShortenStart();
+
+        /**
+         * Unset the end shorten amount.
+         */
+        void unsetShortenEnd();
 
     private:
         EdgeStylePrivate * const d;

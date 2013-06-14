@@ -36,6 +36,9 @@ public:
     Arrow arrowTail;
     Arrow arrowHead;
 
+    qreal shortenStart;
+    qreal shortenEnd;
+
     bool curveModeSet : 1;
     bool bendAngleSet : 1;
     bool loosenessSet : 1;
@@ -43,6 +46,8 @@ public:
     bool inAngleSet : 1;
     bool arrowTailSet : 1;
     bool arrowHeadSet : 1;
+    bool shortenStartSet : 1;
+    bool shortenEndSet : 1;
 
     void init()
     {
@@ -55,6 +60,9 @@ public:
         arrowTail = tikz::NoArrow;
         arrowHead = tikz::NoArrow;
 
+        shortenStart = 0.0;
+        shortenEnd = 0.0;
+
         curveModeSet = false;
         bendAngleSet = false;
         loosenessSet = false;
@@ -62,6 +70,8 @@ public:
         inAngleSet = false;
         arrowTailSet = false;
         arrowHeadSet = false;
+        shortenStartSet = false;
+        shortenEndSet = false;
     }
 };
 
@@ -274,6 +284,74 @@ void EdgeStyle::setArrowHead(tikz::Arrow head)
         beginConfig();
         d->arrowHeadSet = true;
         d->arrowHead = head;
+        endConfig();
+    }
+}
+
+qreal EdgeStyle::shortenStart() const
+{
+    if (d->shortenStartSet) {
+        return d->shortenStart;
+    }
+
+    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->shortenStart();
+    }
+
+    return 0.0;
+}
+
+qreal EdgeStyle::shortenEnd() const
+{
+    if (d->shortenEndSet) {
+        return d->shortenEnd;
+    }
+
+    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->shortenEnd();
+    }
+
+    return 0.0;
+}
+
+void EdgeStyle::setShortenStart(qreal shorten)
+{
+    if (!d->shortenStartSet || d->shortenStart != shorten) {
+        beginConfig();
+        d->shortenStartSet = true;
+        d->shortenStart = shorten;
+        endConfig();
+    }
+}
+
+void EdgeStyle::setShortenEnd(qreal shorten)
+{
+    if (!d->shortenEndSet || d->shortenEnd != shorten) {
+        beginConfig();
+        d->shortenEndSet = true;
+        d->shortenEnd = shorten;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetShortenStart()
+{
+    if (d->shortenStartSet) {
+        beginConfig();
+        d->shortenStartSet = false;
+        d->shortenStart = 0.0;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetShortenEnd()
+{
+    if (d->shortenEndSet) {
+        beginConfig();
+        d->shortenEndSet = false;
+        d->shortenEnd = 0.0;
         endConfig();
     }
 }
