@@ -22,6 +22,13 @@
 namespace tikz
 {
 
+enum TextAlignment {
+    NoAlign = 0,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+};
+
 enum Anchor {
     NoAnchor = 0,
     Center,

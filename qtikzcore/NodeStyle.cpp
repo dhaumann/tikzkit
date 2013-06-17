@@ -28,6 +28,7 @@ class NodeStylePrivate
 {
 public:
     // Node styles
+    TextAlignment align;
     Shape shape;
     qreal rotation;
     qreal scale;
@@ -36,6 +37,7 @@ public:
     qreal minimumHeight;
     qreal minimumWidth;
 
+    bool alignSet : 1;
     bool shapeSet : 1;
     bool rotationSet : 1;
     bool scaleSet : 1;
@@ -49,6 +51,7 @@ NodeStyle::NodeStyle()
     : Style()
     , d(new NodeStylePrivate())
 {
+    d->align = NoAlign;
     d->shape = ShapeRectangle;
     d->rotation = 0.0;
     d->innerSep = 0.3333; // 0.3333em
@@ -56,6 +59,7 @@ NodeStyle::NodeStyle()
     d->minimumHeight = 0.0; // mm
     d->minimumWidth = 0.0; // mm
 
+    d->alignSet = false;
     d->shapeSet = false;
     d->rotationSet = false;
     d->scaleSet = false;
@@ -76,6 +80,38 @@ NodeStyle::~NodeStyle()
     delete d;
 }
 
+TextAlignment NodeStyle::alignment() const
+{
+    if (d->alignSet) {
+        return d->align;
+    }
+
+    if (parent()) {
+        return static_cast<NodeStyle*>(parent())->alignment();
+    }
+
+    return NoAlign;
+}
+
+void NodeStyle::setAlignment(tikz::TextAlignment align)
+{
+    if (!d->alignSet || d->align != align) {
+        beginConfig();
+        d->alignSet = true;
+        d->align = align;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetAlignment()
+{
+    if (d->alignSet) {
+        beginConfig();
+        d->alignSet = false;
+        d->align = NoAlign;
+        endConfig();
+    }
+}
 
 Shape NodeStyle::shape() const
 {

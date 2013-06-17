@@ -48,6 +48,27 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         virtual ~NodeStyle();
 
     //
+    // text alignment
+    //
+    public:
+        /**
+         * Get the text alignment.
+         */
+        TextAlignment alignment() const;
+
+    public Q_SLOTS:    
+        /**
+         * Set the text alignment to @p align.
+         */
+        void setAlignment(tikz::TextAlignment align);
+
+        /**
+         * Unset the alignment attribute.
+         * The default value is tikz::NoAlign.
+         */
+        void unsetAlignment();
+
+    //
     // Node specific attributes
     //
     public:
