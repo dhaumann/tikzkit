@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QVector>
 
+class QUndoStack;
 
 namespace tikz
 {
@@ -49,6 +50,20 @@ class TIKZCORE_EXPORT Document : public QObject
          * Destructor
          */
         virtual ~Document();
+
+    //
+    // Undo / redo management
+    //
+    public:
+        /**
+         * Get the undo stack of this document.
+         */
+        QUndoStack * undoManager();
+
+        /**
+         * Check whether the document is in a modified state.
+         */
+        bool isModified() const;
 
     //
     // Style management

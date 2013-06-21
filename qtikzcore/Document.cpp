@@ -22,6 +22,7 @@
 #include "Edge.h"
 #include "Style.h"
 
+#include <QUndoStack>
 #include <QDebug>
 
 namespace tikz {
@@ -29,9 +30,10 @@ namespace tikz {
 class DocumentPrivate
 {
     public:
+        QUndoStack undoManager;
+
         Style style;
 
-        QVector<Style*> customStyles;
         QVector<Node*> nodes;
         QVector<Edge*> edges;
 };
@@ -44,7 +46,23 @@ Document::Document(QObject * parent)
 
 Document::~Document()
 {
+    // free all node and edge data
+    qDeleteAll(d->nodes);
+    d->nodes.clear();
+    qDeleteAll(d->edges);
+    d->edges.clear();
+
     delete d;
+}
+
+QUndoStack * Document::undoManager()
+{
+    return &d->undoManager;
+}
+
+bool Document::isModified() const
+{
+    return ! d->undoManager.isClean();
 }
 
 Style& Document::style() const
