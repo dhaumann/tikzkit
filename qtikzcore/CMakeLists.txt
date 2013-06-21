@@ -17,6 +17,8 @@ set(qtikzcore_SOURCES
     NodeStyle.cpp
     EdgeStyle.cpp
     StyleManager.cpp
+
+    undo/UndoCreateNode.cpp
 )
 
 set(qtikzcore_HEADERS

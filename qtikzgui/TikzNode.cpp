@@ -81,7 +81,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     , d(new TikzNodePrivate(this))
 {
     d->dirty = true;
-    d->node = new tikz::Node(this);
+    d->node = new tikz::Node(); // TODO: register in Document
     d->shape = new AbstractShape(this);
     d->itemChangeRunning = false;
 
@@ -104,6 +104,7 @@ TikzNode::TikzNode(QGraphicsItem * parent)
 TikzNode::~TikzNode()
 {
     delete d->shape;
+    delete d->node;
     delete d;
 }
 
