@@ -51,6 +51,11 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         virtual ~Style();
 
+        /**
+         * Set the properties of this style to all properties of @p other.
+         */
+        virtual void setStyle(const Style& other);
+
     //
     // parent hierarchy
     //

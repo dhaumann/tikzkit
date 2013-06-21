@@ -114,6 +114,13 @@ Style::~Style()
     delete d;
 }
 
+void Style::setStyle(const Style& other)
+{
+    beginConfig();
+    *d = *other.d;
+    endConfig();
+}
+
 Style *Style::parent() const
 {
     return d->parent;

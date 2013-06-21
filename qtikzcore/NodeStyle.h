@@ -47,6 +47,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         virtual ~NodeStyle();
 
+        /**
+         * Set the properties of this style to all properties of @p other.
+         */
+        virtual void setStyle(const NodeStyle& other);
+
     //
     // text alignment
     //

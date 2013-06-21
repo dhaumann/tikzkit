@@ -94,6 +94,14 @@ EdgeStyle::~EdgeStyle()
     delete d;
 }
 
+void EdgeStyle::setStyle(const EdgeStyle& other)
+{
+    beginConfig();
+    Style::setStyle(other);
+    *d = *other.d;
+    endConfig();
+}
+
 CurveMode EdgeStyle::curveMode() const
 {
     return d->curveMode;

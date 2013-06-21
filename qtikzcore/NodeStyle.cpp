@@ -80,6 +80,14 @@ NodeStyle::~NodeStyle()
     delete d;
 }
 
+void NodeStyle::setStyle(const NodeStyle& other)
+{
+    beginConfig();
+    Style::setStyle(other);
+    *d = *other.d;
+    endConfig();
+}
+
 TextAlignment NodeStyle::alignment() const
 {
     if (d->alignSet) {

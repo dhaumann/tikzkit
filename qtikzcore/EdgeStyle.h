@@ -49,6 +49,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         virtual ~EdgeStyle();
 
+        /**
+         * Set the properties of this style to all properties of @p other.
+         */
+        virtual void setStyle(const EdgeStyle& other);
+
     //
     // Bending attributes
     //
