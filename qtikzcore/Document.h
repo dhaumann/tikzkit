@@ -62,17 +62,14 @@ class TIKZCORE_EXPORT Document : public QObject
         Style& style() const;
 
         /**
-         * Get the number of custom styles in this document.
-         * A document can hold arbitrary many custom styles.
-         * @see customStyle()
+         * Get the list of nodes of the tikz document.
          */
-        int customStyleCount() const;
+        QVector<Node*> nodes() const;
 
         /**
-         * Returns the i-th custom style of this document.
-         * @see customStyleCount()
+         * Get the list of edges of the tikz document.
          */
-        Style* customStyle(int i) const;
+        QVector<Edge*> edges() const;
 
     //
     // Implementation details

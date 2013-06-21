@@ -52,15 +52,16 @@ Style& Document::style() const
     return d->style;
 }
 
-int Document::customStyleCount() const
+QVector<Node*> Document::nodes() const
 {
-    return d->customStyles.count();
+    return d->nodes;
 }
 
-Style* Document::customStyle(int i) const
+QVector<Edge*> Document::edges() const
 {
-    Q_ASSERT(i >= 0 && i < d->customStyles.count());
-    return d->customStyles[i];
+    return d->edges;
+}
+
 void Document::registerNode(Node* node)
 {
     Q_ASSERT(!d->nodes.contains(node));
