@@ -19,6 +19,7 @@
 
 #include "Node.h"
 #include "NodeStyle.h"
+#include "Document.h"
 
 #include <cmath>
 
@@ -31,18 +32,31 @@ class NodePrivate
     public:
         QString text;
         NodeStyle style;
+        Document * doc;
 };
 
-Node::Node(QObject * parent)
-    : Coord(parent)
+Node::Node(Document* doc)
+    : Coord(doc)
     , d(new NodePrivate())
 {
+    d->doc = doc;
+
+    // register in Document
+    if (d->doc) {
+        d->doc->registerNode(this);
+    }
+
     connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
 Node::~Node()
 {
+    // unregister from Document
+    if (d->doc) {
+        d->doc->registerNode(this);
+    }
+
     delete d;
 }
 

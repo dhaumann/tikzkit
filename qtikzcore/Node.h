@@ -32,6 +32,7 @@ namespace tikz
 
 class NodePrivate;
 class NodeStyle;
+class Document;
 
 class TIKZCORE_EXPORT Node : public Coord
 {
@@ -39,9 +40,10 @@ class TIKZCORE_EXPORT Node : public Coord
 
     public:
         /**
-         * Default constructor.
+         * Constructor that associates this node with the tikz Document @p doc.
+         * @param doc associated document, may be 0
          */
-        Node(QObject * parent = 0);
+        Node(Document* doc = 0);
 
         /**
          * Destructor
