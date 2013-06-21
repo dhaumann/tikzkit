@@ -32,6 +32,8 @@ class DocumentPrivate
         Style style;
 
         QVector<Style*> customStyles;
+        QVector<Node*> nodes;
+        QVector<Edge*> edges;
 };
 
 Document::Document(QObject * parent)
@@ -59,6 +61,20 @@ Style* Document::customStyle(int i) const
 {
     Q_ASSERT(i >= 0 && i < d->customStyles.count());
     return d->customStyles[i];
+void Document::registerNode(Node* node)
+{
+    Q_ASSERT(!d->nodes.contains(node));
+    d->nodes.append(node);
+
+    // TODO: add creation of node to undo stack
+}
+
+void Document::unregisterNode(Node* node)
+{
+    Q_ASSERT(d->nodes.contains(node));
+    d->nodes.remove(d->nodes.indexOf(node));
+
+    // TODO: add deletion of node to undo stack
 }
 
 }

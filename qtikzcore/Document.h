@@ -24,6 +24,8 @@
 #include "tikz.h"
 
 #include <QObject>
+#include <QVector>
+
 
 namespace tikz
 {
@@ -71,6 +73,25 @@ class TIKZCORE_EXPORT Document : public QObject
          * @see customStyleCount()
          */
         Style* customStyle(int i) const;
+
+    //
+    // Implementation details
+    //
+    protected:
+        friend class Node;
+        friend class Edge;
+
+        /**
+         * Register @p node in this document.
+         * The Node calls this function in its constructor.
+         */
+        void registerNode(Node* node);
+
+        /**
+         * Unregister @p node from this document.
+         * The Node calls this function in its destructor.
+         */
+        void unregisterNode(Node* node);
 
     private:
         DocumentPrivate * const d;
