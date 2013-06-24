@@ -24,6 +24,7 @@
 
 #include "UndoCreateNode.h"
 #include "UndoDeleteNode.h"
+#include "UndoCreateEdge.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -110,6 +111,7 @@ Node * Document::createNode(qint64 id)
     Node* node = new Node(this);
     d->nodes.append(node);
 
+    // track in undo/redo history, if needed
     if (!d->undoManager.isActive()) {
         d->undoManager.push(new UndoCreateNode(node, this));
     }
@@ -131,9 +133,15 @@ Edge * Document::createEdge(qint64 id)
     Edge* edge = new Edge(this);
     d->edges.append(edge);
 
+    // track in undo/redo history, if needed
+    if (!d->undoManager.isActive()) {
+        d->undoManager.push(new UndoCreateEdge(edge, this));
+    }
+
     // track deletion of the edge
     connect(edge, SIGNAL(aboutToDelete(tikz::Edge*)), this, SLOT(edgeDeleted(tikz::Edge*)));
 
+    // notify the world about the new edge
     emit edgeCreated(edge);
 
     return edge;
