@@ -39,12 +39,21 @@ class DocumentPrivate
 
         QVector<Node*> nodes;
         QVector<Edge*> edges;
+
+        qint64 nextId;
+
+        // helper to get a document-wide unique id
+        qint64 uniqueId()
+        {
+            return nextId++;
+        }
 };
 
 Document::Document(QObject * parent)
     : QObject(parent)
     , d(new DocumentPrivate())
 {
+    d->nextId = 1;
 }
 
 Document::~Document()
@@ -85,19 +94,17 @@ QVector<Edge*> Document::edges() const
 
 Node* Document::createNode()
 {
-    return createNode(-1);
+    return createNode(d->uniqueId());
 }
 
 Edge* Document::createEdge()
 {
-    return createEdge(-1);
+    return createEdge(d->uniqueId());
 }
 
 Node * Document::createNode(qint64 id)
 {
-    if (id < 0) {
-        // TODO: get uniq id?
-    }
+    Q_ASSERT(id >= 0);
 
     // create new node
     Node* node = new Node(this);
@@ -118,9 +125,7 @@ Node * Document::createNode(qint64 id)
 
 Edge * Document::createEdge(qint64 id)
 {
-    if (id < 0) {
-        // TODO: get uniq id?
-    }
+    Q_ASSERT(id >= 0);
 
     // create new edge
     Edge* edge = new Edge(this);
@@ -132,6 +137,42 @@ Edge * Document::createEdge(qint64 id)
     emit edgeCreated(edge);
 
     return edge;
+}
+
+Node * Document::nodeFromId(qint64 id)
+{
+    if (id < 0) {
+        return 0;
+    }
+
+    int index = 0;
+    for ( ; index < d->nodes.size(); ++index) {
+        if (d->nodes[index]->id() == id) {
+            return d->nodes[index];
+        }
+    }
+
+    // should not happen
+    Q_ASSERT(false);
+    return 0;
+}
+
+Edge * Document::edgeFromId(qint64 id)
+{
+    if (id < 0) {
+        return 0;
+    }
+
+    int index = 0;
+    for ( ; index < d->edges.size(); ++index) {
+        if (d->edges[index]->id() == id) {
+            return d->edges[index];
+        }
+    }
+
+    // should not happen
+    Q_ASSERT(false);
+    return 0;
 }
 
 void Document::nodeDeleted(Node* node)

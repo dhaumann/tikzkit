@@ -82,7 +82,7 @@ void TikzEdge::setStartNode(TikzNode* start)
 {
     if (d->start != start) {
         d->start = start;
-        d->edge->setStart(start ? &start->node() : 0);
+        d->edge->setStartNode(start ? &start->node() : 0);
     }
 }
 
@@ -90,7 +90,7 @@ void TikzEdge::setEndNode(TikzNode* end)
 {
     if (d->end != end) {
         d->end = end;
-        d->edge->setEnd(end ? &end->node() : 0);
+        d->edge->setEndNode(end ? &end->node() : 0);
     }
 }
 

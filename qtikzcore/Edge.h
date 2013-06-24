@@ -33,6 +33,7 @@ class EdgePrivate;
 class Coord;
 class Node;
 class EdgeStyle;
+class Document;
 
 /**
  * The class Edge connects two Coords or Nodes.
@@ -43,14 +44,20 @@ class TIKZCORE_EXPORT Edge : public QObject
 
     public:
         /**
-         * Default constructor.
+         * Default constructor with optional @p parent.
          */
-        Edge(QObject* parent = 0);
+        explicit Edge(QObject* parent = 0);
 
         /**
          * Virtual destructor.
          */
         virtual ~Edge();
+
+        /**
+         * Unique id.
+         * If the document is @e not associated to a document -1 is returned.
+         */
+        qint64 id() const;
 
     //
     // Node start / end manipulation
@@ -68,16 +75,26 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         Coord& end() const;
 
+        /**
+         * Get the start node, which was set with setStart(Node*).
+         */
+        Node* startNode() const;
+
+        /**
+         * Get the end node, which was set with setEnd(Node*).
+         */
+        Node* endNode();
+
     public Q_SLOTS:
         /**
          * Sets the start coordinate of the edge to @p node;
          */
-        void setStart(Node* node);
+        void setStartNode(Node* node);
 
         /**
          * Sets the end coordinate of the edge to @p node;
          */
-        void setEnd(Node* node);
+        void setEndNode(Node* node);
 
     //
     // x/y-position methods
@@ -160,6 +177,19 @@ class TIKZCORE_EXPORT Edge : public QObject
          * @param edge a valid pointer to this edge
          */
         void aboutToDelete(Edge* edge);
+
+    //
+    // internal to tikz::Document
+    //
+    protected:
+        friend class Document;
+
+        /**
+        * Constructor that associates this edge with the tikz Document @p doc.
+        * @param id unique id of the edge
+        * @param doc associated document
+        */
+        Edge(qint64 id, Document* doc);
 
 //     //
 //     // edge annotation

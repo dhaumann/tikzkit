@@ -21,12 +21,16 @@
 #include "Coord.h"
 #include "MetaNode.h"
 #include "EdgeStyle.h"
+#include "Document.h"
 
 namespace tikz {
 
 class EdgePrivate
 {
     public:
+        Document* doc;
+        qint64 id;
+
         MetaNode start;
         MetaNode end;
         Anchor startAnchor;
@@ -38,6 +42,24 @@ Edge::Edge(QObject * parent)
     : QObject(parent)
     , d(new EdgePrivate())
 {
+    d->doc = 0;
+    d->id = -1;
+
+    d->startAnchor = tikz::NoAnchor;
+    d->endAnchor = tikz::NoAnchor;
+
+    connect(&d->start, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->end, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+}
+
+Edge::Edge(qint64 id, Document* doc)
+    : QObject(doc)
+    , d(new EdgePrivate())
+{
+    d->doc = doc;
+    d->id = id;
+
     d->startAnchor = tikz::NoAnchor;
     d->endAnchor = tikz::NoAnchor;
 
@@ -53,7 +75,12 @@ Edge::~Edge()
     delete d;
 }
 
-void Edge::setStart(Node* node)
+qint64 Edge::id() const
+{
+    return d->id;
+}
+
+void Edge::setStartNode(Node* node)
 {
     // update node
     if (d->start.setNode(node)) {
@@ -67,13 +94,23 @@ Coord& Edge::start() const
     return d->start.coord();
 }
 
-void Edge::setEnd(Node* node)
+void Edge::setEndNode(Node* node)
 {
     // update node
     if (d->end.setNode(node)) {
         // reset anchor, if the node changes
         d->endAnchor = tikz::NoAnchor;
     }
+}
+
+Node* Edge::startNode() const
+{
+    return d->start.node();
+}
+
+Node* Edge::endNode()
+{
+    return d->end.node();
 }
 
 Coord& Edge::end() const

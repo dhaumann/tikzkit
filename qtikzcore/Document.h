@@ -102,6 +102,20 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         Edge * createEdge();
 
+        /**
+         * Get the node with @p id.
+         * @param id unique id of the node
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        Node * nodeFromId(qint64 id);
+
+        /**
+         * Get the edge with @p id.
+         * @param id unique id of the edge
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        Edge * edgeFromId(qint64 id);
+
     Q_SIGNALS:
         /**
          * This signal is emitted whenever a node was created by calling

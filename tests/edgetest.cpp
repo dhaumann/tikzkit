@@ -34,7 +34,7 @@ void EdgeTest::edgeTest()
         node.setPos(QPointF(2, 2));
         QCOMPARE(node.pos(), QPointF(2, 2));
 
-        edge.setStart(&node);
+        edge.setStartNode(&node);
         QCOMPARE(edge.start().pos(), QPointF(2, 2));
         QCOMPARE(edge.end().pos(), QPointF(0, 0));
     }
