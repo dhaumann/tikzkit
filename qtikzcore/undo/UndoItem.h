@@ -17,76 +17,59 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_CREATE_NODE_H
-#define TIKZ_UNDO_CREATE_NODE_H
+#ifndef TIKZ_UNDO_ITEM_H
+#define TIKZ_UNDO_ITEM_H
 
-#include "UndoItem.h"
-#include <QPointF>
-#include <NodeStyle.h>
+#include <QUndoCommand>
 
 namespace tikz
 {
 
 class Node;
+class Edge;
 class Document;
 
-class UndoCreateNode : public UndoItem
+class UndoItem : public QUndoCommand
 {
     public:
         /**
-         * Constructor.
+         * Constructor with optional @p parent.
          */
-        UndoCreateNode(Node * node, Document * doc);
+        UndoItem(Document* doc);
 
         /**
-         * Destructor
+         * Virtual destructor.
          */
-        virtual ~UndoCreateNode();
+        virtual ~UndoItem();
 
         /**
-         * Undo: delete node again.
+         * Accessor to the tikz Document.
          */
-        virtual void undo();
+        Document* document();
+
+    //
+    // forward functions from Document
+    //
+    public:
+        /**
+         * Creates a new node associated with this document with @p id.
+         */
+        Node * createNode(qint64 id);
 
         /**
-         * Redo: create node again.
+         * Creates a new edge associated with this document with @p id.
          */
-        virtual void redo();
+        Edge * createEdge(qint64 id);
 
     private:
         /**
-         * The document this undo/redo item belongs to.
+         * Pointer to the document of this undo/redo item.
          */
         Document* m_document;
-
-        /**
-         * The Node pointer. Only valid in redo(), null in undo().
-         */
-        Node* m_node;
-
-        /**
-         * The unique Node id.
-         */
-        qint64 m_id;
-
-        /**
-         * The node position.
-         */
-        QPointF m_pos;
-
-        /**
-         * The node text.
-         */
-        QString m_text;
-
-        /**
-         * The node style of the created node
-         */
-        NodeStyle m_style;
 };
 
 }
 
-#endif // TIKZ_UNDO_CREATE_NODE_H
+#endif // TIKZ_UNDO_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

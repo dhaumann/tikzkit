@@ -4,6 +4,7 @@ find_package(Qt4 REQUIRED)
 
 include_directories(
     .
+    undo/
 )
 
 set(qtikzcore_SOURCES
@@ -18,7 +19,9 @@ set(qtikzcore_SOURCES
     EdgeStyle.cpp
     StyleManager.cpp
 
+    undo/UndoItem.cpp
     undo/UndoCreateNode.cpp
+    undo/UndoDeleteNode.cpp
 )
 
 set(qtikzcore_HEADERS

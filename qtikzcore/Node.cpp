@@ -33,18 +33,29 @@ class NodePrivate
         QString text;
         NodeStyle style;
         Document * doc;
+        qint64 id;
 };
 
-Node::Node(Document* doc)
+Node::Node(QObject* parent)
+    : Coord(parent)
+    , d(new NodePrivate())
+{
+    d->doc = 0;
+    d->id = -1;
+
+    connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
+    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+}
+
+Node::Node(qint64 id, Document* doc)
     : Coord(doc)
     , d(new NodePrivate())
 {
-    d->doc = doc;
+    // if this constructor is called, we require a document
+    Q_ASSERT(doc);
 
-    // register in Document
-    if (d->doc) {
-        d->doc->registerNode(this);
-    }
+    d->doc = doc;
+    d->id = id;
 
     connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
@@ -52,12 +63,14 @@ Node::Node(Document* doc)
 
 Node::~Node()
 {
-    // unregister from Document
-    if (d->doc) {
-        d->doc->registerNode(this);
-    }
+    emit aboutToDelete(this);
 
     delete d;
+}
+
+qint64 Node::id() const
+{
+    return d->id;
 }
 
 void Node::setText(const QString& text)

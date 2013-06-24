@@ -40,15 +40,21 @@ class TIKZCORE_EXPORT Node : public Coord
 
     public:
         /**
-         * Constructor that associates this node with the tikz Document @p doc.
-         * @param doc associated document, may be 0
+         * Constructor for a new node.
+         * @param parent parent object, may be 0
          */
-        Node(Document* doc = 0);
+        explicit Node(QObject * parent = 0);
 
         /**
          * Destructor
          */
         virtual ~Node();
+
+        /**
+         * Unique id.
+         * If the document is @e not associated to a document -1 is returned.
+         */
+        qint64 id() const;
 
         /**
          * Sets the text of this node to @p text.
@@ -77,6 +83,26 @@ class TIKZCORE_EXPORT Node : public Coord
          * This signal is emitted whenever this node's text changed.
          */
         void textChanged(const QString& text);
+
+        /**
+         * This signal is emitted right before this node is deleted.
+         * After this signal, the pointer to @p node is invalid.
+         * @param node a valid pointer to this node
+         */
+        void aboutToDelete(Node* node);
+
+    //
+    // internal to tikz::Document
+    //
+    protected:
+        friend class Document;
+
+        /**
+        * Constructor that associates this node with the tikz Document @p doc.
+        * @param id unique id of the node
+        * @param doc associated document
+        */
+        Node(qint64 id, Document* doc);
 
     private:
         NodePrivate * const d;

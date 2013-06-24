@@ -154,6 +154,13 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         void changed();
 
+        /**
+         * This signal is emitted right before this edge is deleted.
+         * After this signal, the pointer to @p edge is invalid.
+         * @param edge a valid pointer to this edge
+         */
+        void aboutToDelete(Edge* edge);
+
 //     //
 //     // edge annotation
 //     //

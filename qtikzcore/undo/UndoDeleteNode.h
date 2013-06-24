@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_CREATE_NODE_H
-#define TIKZ_UNDO_CREATE_NODE_H
+#ifndef TIKZ_UNDO_DELETE_NODE_H
+#define TIKZ_UNDO_DELETE_NODE_H
 
 #include "UndoItem.h"
 #include <QPointF>
@@ -30,26 +30,26 @@ namespace tikz
 class Node;
 class Document;
 
-class UndoCreateNode : public UndoItem
+class UndoDeleteNode : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoCreateNode(Node * node, Document * doc);
+        UndoDeleteNode(Node * node, Document * doc);
 
         /**
          * Destructor
          */
-        virtual ~UndoCreateNode();
+        virtual ~UndoDeleteNode();
 
         /**
-         * Undo: delete node again.
+         * Undo: add node again.
          */
         virtual void undo();
 
         /**
-         * Redo: create node again.
+         * Redo: delete node again.
          */
         virtual void redo();
 
@@ -60,7 +60,7 @@ class UndoCreateNode : public UndoItem
         Document* m_document;
 
         /**
-         * The Node pointer. Only valid in redo(), null in undo().
+         * The Node pointer. Only valid after undo (), null in redo().
          */
         Node* m_node;
 
@@ -87,6 +87,6 @@ class UndoCreateNode : public UndoItem
 
 }
 
-#endif // TIKZ_UNDO_CREATE_NODE_H
+#endif // TIKZ_UNDO_DELETE_NODE_H
 
 // kate: indent-width 4; replace-tabs on;

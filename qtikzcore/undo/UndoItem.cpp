@@ -17,46 +17,34 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoCreateNode.h"
-#include "Node.h"
-#include "NodeStyle.h"
+#include "UndoItem.h"
 #include "Document.h"
-
-#include <QUndoStack>
-#include <QDebug>
 
 namespace tikz {
 
-UndoCreateNode::UndoCreateNode(Node * node, Document * doc)
-    : UndoItem(doc)
-    , m_node(node)
-    , m_id(node->id())
-    , m_pos(node->pos())
-    , m_text(node->text())
-{
-    m_style.setStyle(*node->style());
-}
-
-UndoCreateNode::~UndoCreateNode()
+UndoItem::UndoItem(Document * doc)
+    : QUndoCommand()
+    , m_document(doc)
 {
 }
 
-void UndoCreateNode::undo()
+UndoItem::~UndoItem()
 {
-    Q_ASSERT(m_node);
-
-    delete m_node;
-    m_node = 0;
 }
 
-void UndoCreateNode::redo()
+Document* UndoItem::document()
 {
-    Q_ASSERT(!m_node);
+    return m_document;
+}
 
-    m_node = createNode(m_id);
-    m_node->setPos(m_pos);
-    m_node->setText(m_text);
-    m_node->style()->setStyle(m_style);
+Node * UndoItem::createNode(qint64 id)
+{
+    return m_document->createNode(id);
+}
+
+Edge * UndoItem::createEdge(qint64 id)
+{
+    return m_document->createEdge(id);
 }
 
 }

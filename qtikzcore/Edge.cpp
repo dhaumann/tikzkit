@@ -48,6 +48,8 @@ Edge::Edge(QObject * parent)
 
 Edge::~Edge()
 {
+    aboutToDelete(this);
+
     delete d;
 }
 

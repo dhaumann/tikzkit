@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoCreateNode.h"
+#include "UndoDeleteNode.h"
 #include "Node.h"
 #include "NodeStyle.h"
 #include "Document.h"
@@ -27,9 +27,9 @@
 
 namespace tikz {
 
-UndoCreateNode::UndoCreateNode(Node * node, Document * doc)
+UndoDeleteNode::UndoDeleteNode(Node * node, Document * doc)
     : UndoItem(doc)
-    , m_node(node)
+    , m_node(0)
     , m_id(node->id())
     , m_pos(node->pos())
     , m_text(node->text())
@@ -37,19 +37,11 @@ UndoCreateNode::UndoCreateNode(Node * node, Document * doc)
     m_style.setStyle(*node->style());
 }
 
-UndoCreateNode::~UndoCreateNode()
+UndoDeleteNode::~UndoDeleteNode()
 {
 }
 
-void UndoCreateNode::undo()
-{
-    Q_ASSERT(m_node);
-
-    delete m_node;
-    m_node = 0;
-}
-
-void UndoCreateNode::redo()
+void UndoDeleteNode::undo()
 {
     Q_ASSERT(!m_node);
 
@@ -57,6 +49,14 @@ void UndoCreateNode::redo()
     m_node->setPos(m_pos);
     m_node->setText(m_text);
     m_node->style()->setStyle(m_style);
+}
+
+void UndoDeleteNode::redo()
+{
+    Q_ASSERT(m_node);
+
+    delete m_node;
+    m_node = 0;
 }
 
 }

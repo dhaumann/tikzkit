@@ -87,23 +87,68 @@ class TIKZCORE_EXPORT Document : public QObject
         QVector<Edge*> edges() const;
 
     //
-    // Implementation details
+    // Node and edge creation
+    //
+    public:
+        /**
+         * Creates a new node associated with this document.
+         * If the node is not needed anymore, just delete it.
+         */
+        Node * createNode();
+
+        /**
+         * Creates a new edge associated with this document.
+         * * If the edge is not needed anymore, just delete it.
+         */
+        Edge * createEdge();
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever a node was created by calling
+         * createNode().
+         * @param node the new node, associated with this document
+         */
+        void nodeCreated(tikz::Node* node);
+
+        /**
+         * This signal is emitted whenever an edge was created by calling
+         * createEdge().
+         * @param edge the new edge, associated with this document
+         */
+        void edgeCreated(tikz::Edge* edge);
+
+    //
+    // internal: Undo / redo needs to create items with ID
     //
     protected:
-        friend class Node;
-        friend class Edge;
+        friend class UndoItem;
+        /**
+         * Creates a new node associated with this document with @p id.
+         */
+        Node * createNode(qint64 id);
 
         /**
-         * Register @p node in this document.
-         * The Node calls this function in its constructor.
+         * Creates a new edge associated with this document with @p id.
          */
-        void registerNode(Node* node);
+        Edge * createEdge(qint64 id);
+
+    //
+    // internal: Tracking of edges and nodes
+    //
+    protected Q_SLOTS:
+        /**
+         * This slot is called whenever a node associated to this document
+         * gets deleted.
+         * @param node still valid pointer to the to-be-deleted node
+         */
+        void nodeDeleted(Node* node);
 
         /**
-         * Unregister @p node from this document.
-         * The Node calls this function in its destructor.
+         * This slot is called whenever an edge associated to this document
+         * gets deleted.
+         * @param edge still valid pointer to the to-be-deleted edge
          */
-        void unregisterNode(Node* node);
+        void edgeDeleted(Edge* edge);
 
     private:
         DocumentPrivate * const d;

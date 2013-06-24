@@ -22,6 +22,9 @@
 #include "Edge.h"
 #include "Style.h"
 
+#include "UndoCreateNode.h"
+#include "UndoDeleteNode.h"
+
 #include <QUndoStack>
 #include <QDebug>
 
@@ -80,20 +83,73 @@ QVector<Edge*> Document::edges() const
     return d->edges;
 }
 
-void Document::registerNode(Node* node)
+Node* Document::createNode()
 {
-    Q_ASSERT(!d->nodes.contains(node));
-    d->nodes.append(node);
-
-    // TODO: add creation of node to undo stack
+    return createNode(-1);
 }
 
-void Document::unregisterNode(Node* node)
+Edge* Document::createEdge()
+{
+    return createEdge(-1);
+}
+
+Node * Document::createNode(qint64 id)
+{
+    if (id < 0) {
+        // TODO: get uniq id?
+    }
+
+    // create new node
+    Node* node = new Node(this);
+    d->nodes.append(node);
+
+    if (!d->undoManager.isActive()) {
+        d->undoManager.push(new UndoCreateNode(node, this));
+    }
+
+    // track deletion of the node
+    connect(node, SIGNAL(aboutToDelete(tikz::Node*)), this, SLOT(nodeDeleted(tikz::Node*)));
+
+    // notify the world about the new node
+    emit nodeCreated(node);
+
+    return node;
+}
+
+Edge * Document::createEdge(qint64 id)
+{
+    if (id < 0) {
+        // TODO: get uniq id?
+    }
+
+    // create new edge
+    Edge* edge = new Edge(this);
+    d->edges.append(edge);
+
+    // track deletion of the edge
+    connect(edge, SIGNAL(aboutToDelete(tikz::Edge*)), this, SLOT(edgeDeleted(tikz::Edge*)));
+
+    emit edgeCreated(edge);
+
+    return edge;
+}
+
+void Document::nodeDeleted(Node* node)
 {
     Q_ASSERT(d->nodes.contains(node));
-    d->nodes.remove(d->nodes.indexOf(node));
 
-    // TODO: add deletion of node to undo stack
+    if (!d->undoManager.isActive()) {
+        d->undoManager.push(new UndoDeleteNode(node, this));
+    }
+
+    d->nodes.remove(d->nodes.indexOf(node));
+}
+
+void Document::edgeDeleted(Edge* edge)
+{
+    Q_ASSERT(d->edges.contains(edge));
+
+    d->edges.remove(d->edges.indexOf(edge));
 }
 
 }
