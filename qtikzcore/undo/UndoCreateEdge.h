@@ -55,11 +55,6 @@ class UndoCreateEdge : public UndoItem
 
     private:
         /**
-         * The document this undo/redo item belongs to.
-         */
-        Document* m_document;
-
-        /**
          * The Node pointer. Only valid in redo(), null in undo().
          */
         Edge* m_edge;
@@ -67,27 +62,27 @@ class UndoCreateEdge : public UndoItem
         /**
          * The unique Edge id.
          */
-        qint64 m_edgeId;
+        const qint64 m_edgeId;
 
         /**
          * The start position.
          */
-        QPointF m_startPos;
+        const QPointF m_startPos;
 
         /**
          * The start position.
          */
-        QPointF m_endPos;
+        const QPointF m_endPos;
 
         /**
          * If set, the unique start node id.
          */
-        qint64 m_startNodeId;
+        const qint64 m_startNodeId;
 
         /**
          * If set, the unique end node id.
          */
-        qint64 m_endNodeId;
+        const qint64 m_endNodeId;
 
         /**
          * The edge style of the created edge

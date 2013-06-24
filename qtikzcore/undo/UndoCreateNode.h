@@ -55,11 +55,6 @@ class UndoCreateNode : public UndoItem
 
     private:
         /**
-         * The document this undo/redo item belongs to.
-         */
-        Document* m_document;
-
-        /**
          * The Node pointer. Only valid in redo(), null in undo().
          */
         Node* m_node;
@@ -67,17 +62,17 @@ class UndoCreateNode : public UndoItem
         /**
          * The unique Node id.
          */
-        qint64 m_id;
+        const qint64 m_id;
 
         /**
          * The node position.
          */
-        QPointF m_pos;
+        const QPointF m_pos;
 
         /**
          * The node text.
          */
-        QString m_text;
+        const QString m_text;
 
         /**
          * The node style of the created node
