@@ -23,9 +23,6 @@
 #include "EdgeStyle.h"
 #include "Document.h"
 
-#include <QUndoStack>
-#include <QDebug>
-
 namespace tikz {
 
 UndoCreateEdge::UndoCreateEdge(Edge * edge, Document * doc)

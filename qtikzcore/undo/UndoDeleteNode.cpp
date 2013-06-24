@@ -22,9 +22,6 @@
 #include "NodeStyle.h"
 #include "Document.h"
 
-#include <QUndoStack>
-#include <QDebug>
-
 namespace tikz {
 
 UndoDeleteNode::UndoDeleteNode(Node * node, Document * doc)
