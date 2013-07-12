@@ -25,6 +25,7 @@
 #include "UndoCreateNode.h"
 #include "UndoDeleteNode.h"
 #include "UndoCreateEdge.h"
+#include "UndoDeleteEdge.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -174,7 +175,13 @@ void Document::deleteEdge(Edge * edge)
 {
     Q_ASSERT(edge != 0);
     Q_ASSERT(d->edgeMap.contains(edge->id()));
-    // TODO: create undo item
+
+    // delete edge, push will call ::redo()
+    const qint64 id = edge->id();
+    d->undoManager.push(new UndoDeleteEdge(id, this));
+
+    // edge really removed?
+    Q_ASSERT(!d->edgeMap.contains(id));
 }
 
 void Document::deleteNode(qint64 id)
@@ -216,16 +223,8 @@ Node * Document::nodeFromId(qint64 id)
         return 0;
     }
 
-    int index = 0;
-    for ( ; index < d->nodes.size(); ++index) {
-        if (d->nodes[index]->id() == id) {
-            return d->nodes[index];
-        }
-    }
-
-    // should not happen
-    Q_ASSERT(false);
-    return 0;
+    Q_ASSERT(d->nodeMap.contains(id));
+    return d->nodeMap[id];
 }
 
 Edge * Document::edgeFromId(qint64 id)
@@ -234,16 +233,8 @@ Edge * Document::edgeFromId(qint64 id)
         return 0;
     }
 
-    int index = 0;
-    for ( ; index < d->edges.size(); ++index) {
-        if (d->edges[index]->id() == id) {
-            return d->edges[index];
-        }
-    }
-
-    // should not happen
-    Q_ASSERT(false);
-    return 0;
+    Q_ASSERT(d->edgeMap.contains(id));
+    return d->edgeMap[id];
 }
 
 }
