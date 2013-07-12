@@ -18,23 +18,14 @@
  */
 
 #include "UndoCreateEdge.h"
-#include "Edge.h"
-#include "Node.h"
-#include "EdgeStyle.h"
 #include "Document.h"
 
 namespace tikz {
 
-UndoCreateEdge::UndoCreateEdge(Edge * edge, Document * doc)
+UndoCreateEdge::UndoCreateEdge(qint64 id, Document * doc)
     : UndoItem(doc)
-    , m_edge(edge)
-    , m_edgeId(edge->id())
-    , m_startPos(edge->startPos())
-    , m_endPos(edge->endPos())
-    , m_startNodeId(edge->startNode() ? edge->startNode()->id() : -1)
-    , m_endNodeId(edge->endNode() ? edge->endNode()->id() : -1)
+    , m_id(id)
 {
-    m_style.setStyle(*edge->style());
 }
 
 UndoCreateEdge::~UndoCreateEdge()
@@ -43,22 +34,12 @@ UndoCreateEdge::~UndoCreateEdge()
 
 void UndoCreateEdge::undo()
 {
-    Q_ASSERT(m_edge);
-
-    delete m_edge;
-    m_edge = 0;
+    document()->deleteEdge(m_id);
 }
 
 void UndoCreateEdge::redo()
 {
-    Q_ASSERT(!m_edge);
-
-    m_edge = createEdge(m_edgeId);
-    m_edge->setStartPos(m_startPos);
-    m_edge->setEndPos(m_endPos);
-    m_edge->setStartNode(document()->nodeFromId(m_startNodeId));
-    m_edge->setEndNode(document()->nodeFromId(m_endNodeId));
-    m_edge->style()->setStyle(m_style);
+    document()->createEdge(m_id);
 }
 
 }

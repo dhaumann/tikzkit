@@ -21,8 +21,6 @@
 #define TIKZ_UNDO_CREATE_NODE_H
 
 #include "UndoItem.h"
-#include <QPointF>
-#include <NodeStyle.h>
 
 namespace tikz
 {
@@ -36,10 +34,10 @@ class UndoCreateNode : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreateNode(Node * node, Document * doc);
+        UndoCreateNode(qint64 id, Document * doc);
 
         /**
-         * Destructor
+         * Destructor.
          */
         virtual ~UndoCreateNode();
 
@@ -55,29 +53,9 @@ class UndoCreateNode : public UndoItem
 
     private:
         /**
-         * The Node pointer. Only valid in redo(), null in undo().
-         */
-        Node* m_node;
-
-        /**
          * The unique Node id.
          */
         const qint64 m_id;
-
-        /**
-         * The node position.
-         */
-        const QPointF m_pos;
-
-        /**
-         * The node text.
-         */
-        const QString m_text;
-
-        /**
-         * The node style of the created node
-         */
-        NodeStyle m_style;
 };
 
 }

@@ -47,20 +47,6 @@ class UndoItem : public QUndoCommand
          */
         Document* document();
 
-    //
-    // forward functions from Document
-    //
-    public:
-        /**
-         * Creates a new node associated with this document with @p id.
-         */
-        Node * createNode(qint64 id);
-
-        /**
-         * Creates a new edge associated with this document with @p id.
-         */
-        Edge * createEdge(qint64 id);
-
     private:
         /**
          * Pointer to the document of this undo/redo item.

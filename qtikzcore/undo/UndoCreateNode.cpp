@@ -18,20 +18,14 @@
  */
 
 #include "UndoCreateNode.h"
-#include "Node.h"
-#include "NodeStyle.h"
 #include "Document.h"
 
 namespace tikz {
 
-UndoCreateNode::UndoCreateNode(Node * node, Document * doc)
+UndoCreateNode::UndoCreateNode(qint64 id, Document * doc)
     : UndoItem(doc)
-    , m_node(node)
-    , m_id(node->id())
-    , m_pos(node->pos())
-    , m_text(node->text())
+    , m_id(id)
 {
-    m_style.setStyle(*node->style());
 }
 
 UndoCreateNode::~UndoCreateNode()
@@ -40,20 +34,12 @@ UndoCreateNode::~UndoCreateNode()
 
 void UndoCreateNode::undo()
 {
-    Q_ASSERT(m_node);
-
-    delete m_node;
-    m_node = 0;
+    document()->deleteNode(m_id);
 }
 
 void UndoCreateNode::redo()
 {
-    Q_ASSERT(!m_node);
-
-    m_node = createNode(m_id);
-    m_node->setPos(m_pos);
-    m_node->setText(m_text);
-    m_node->style()->setStyle(m_style);
+    document()->createNode(m_id);
 }
 
 }

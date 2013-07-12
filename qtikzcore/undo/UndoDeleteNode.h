@@ -36,7 +36,7 @@ class UndoDeleteNode : public UndoItem
         /**
          * Constructor.
          */
-        UndoDeleteNode(Node * node, Document * doc);
+        UndoDeleteNode(qint64 id, Document * doc);
 
         /**
          * Destructor
@@ -55,11 +55,6 @@ class UndoDeleteNode : public UndoItem
 
     private:
         /**
-         * The Node pointer. Only valid after undo (), null in redo().
-         */
-        Node* m_node;
-
-        /**
          * The unique Node id.
          */
         const qint64 m_id;
@@ -67,12 +62,12 @@ class UndoDeleteNode : public UndoItem
         /**
          * The node position.
          */
-        const QPointF m_pos;
+        QPointF m_pos;
 
         /**
          * The node text.
          */
-        const QString m_text;
+        QString m_text;
 
         /**
          * The node style of the created node

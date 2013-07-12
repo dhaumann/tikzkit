@@ -41,6 +41,12 @@ class DocumentPrivate
         QVector<Node*> nodes;
         QVector<Edge*> edges;
 
+        /// Node lookup map
+        QHash<qint64, Node*> nodeMap;
+
+        /// Edge lookup map
+        QHash<qint64, Edge*> edgeMap;
+
         qint64 nextId;
 
         // helper to get a document-wide unique id
@@ -95,29 +101,37 @@ QVector<Edge*> Document::edges() const
 
 Node* Document::createNode()
 {
-    return createNode(d->uniqueId());
+    // create new node, push will call ::redo()
+    const qint64 id = d->uniqueId();
+    d->undoManager.push(new UndoCreateNode(id, this));
+
+    // now the node should be in the map
+    Q_ASSERT(d->nodeMap.contains(id));
+    return d->nodeMap[id];
 }
 
 Edge* Document::createEdge()
 {
-    return createEdge(d->uniqueId());
+    // create new edge, push will call ::redo()
+    const qint64 id = d->uniqueId();
+    d->undoManager.push(new UndoCreateEdge(id, this));
+
+    // now the edge should be in the map
+    Q_ASSERT(d->edgeMap.contains(id));
+    return d->edgeMap[id];
 }
 
 Node * Document::createNode(qint64 id)
 {
     Q_ASSERT(id >= 0);
+    Q_ASSERT(!d->nodeMap.contains(id));
 
     // create new node
-    Node* node = new Node(this);
+    Node* node = new Node(id, this);
     d->nodes.append(node);
 
-    // track in undo/redo history, if needed
-    if (!d->undoManager.isActive()) {
-        d->undoManager.push(new UndoCreateNode(node, this));
-    }
-
-    // track deletion of the node
-    connect(node, SIGNAL(aboutToDelete(tikz::Node*)), this, SLOT(nodeDeleted(tikz::Node*)));
+    // insert node into hash map
+    d->nodeMap.insert(id, node);
 
     // notify the world about the new node
     emit nodeCreated(node);
@@ -133,18 +147,67 @@ Edge * Document::createEdge(qint64 id)
     Edge* edge = new Edge(this);
     d->edges.append(edge);
 
-    // track in undo/redo history, if needed
-    if (!d->undoManager.isActive()) {
-        d->undoManager.push(new UndoCreateEdge(edge, this));
-    }
-
-    // track deletion of the edge
-    connect(edge, SIGNAL(aboutToDelete(tikz::Edge*)), this, SLOT(edgeDeleted(tikz::Edge*)));
+    // insert edge into hash map
+    d->edgeMap.insert(id, edge);
 
     // notify the world about the new edge
     emit edgeCreated(edge);
 
     return edge;
+}
+
+void Document::deleteNode(Node * node)
+{
+    // valid input?
+    Q_ASSERT(node != 0);
+    Q_ASSERT(d->nodeMap.contains(node->id()));
+
+    // delete node, push will call ::redo()
+    const qint64 id = node->id();
+    d->undoManager.push(new UndoDeleteNode(id, this));
+
+    // node really removed?
+    Q_ASSERT(!d->nodeMap.contains(id));
+}
+
+void Document::deleteEdge(Edge * edge)
+{
+    Q_ASSERT(edge != 0);
+    Q_ASSERT(d->edgeMap.contains(edge->id()));
+    // TODO: create undo item
+}
+
+void Document::deleteNode(qint64 id)
+{
+    // valid input?
+    Q_ASSERT(id >= 0);
+    Q_ASSERT(d->nodeMap.contains(id));
+
+    // get node
+    Node* node = d->nodeMap[id];
+    Q_ASSERT(d->nodes.contains(node));
+
+    // TODO: make sure not edge points to the node
+
+    // notify world
+    emit nodeDeleted(node);
+
+    // unregister node
+    d->nodeMap.remove(id);
+    d->nodes.remove(d->nodes.indexOf(node));
+
+    // truly delete node
+    delete node;
+
+    // notify the world about the new edge
+//     emit edgeCreated(edge);
+}
+
+void Document::deleteEdge(qint64 id)
+{
+    // valid input?
+    Q_ASSERT(id >= 0);
+    Q_ASSERT(d->edgeMap.contains(id));
 }
 
 Node * Document::nodeFromId(qint64 id)
@@ -181,24 +244,6 @@ Edge * Document::edgeFromId(qint64 id)
     // should not happen
     Q_ASSERT(false);
     return 0;
-}
-
-void Document::nodeDeleted(Node* node)
-{
-    Q_ASSERT(d->nodes.contains(node));
-
-    if (!d->undoManager.isActive()) {
-        d->undoManager.push(new UndoDeleteNode(node, this));
-    }
-
-    d->nodes.remove(d->nodes.indexOf(node));
-}
-
-void Document::edgeDeleted(Edge* edge)
-{
-    Q_ASSERT(d->edges.contains(edge));
-
-    d->edges.remove(d->edges.indexOf(edge));
 }
 
 }

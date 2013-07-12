@@ -21,13 +21,10 @@
 #define TIKZ_UNDO_CREATE_EDGE_H
 
 #include "UndoItem.h"
-#include <QPointF>
-#include <EdgeStyle.h>
 
 namespace tikz
 {
 
-class Node;
 class Document;
 
 class UndoCreateEdge : public UndoItem
@@ -36,7 +33,7 @@ class UndoCreateEdge : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreateEdge(Edge * edge, Document * doc);
+        UndoCreateEdge(qint64 id, Document * doc);
 
         /**
          * Destructor
@@ -55,39 +52,9 @@ class UndoCreateEdge : public UndoItem
 
     private:
         /**
-         * The Node pointer. Only valid in redo(), null in undo().
-         */
-        Edge* m_edge;
-
-        /**
          * The unique Edge id.
          */
-        const qint64 m_edgeId;
-
-        /**
-         * The start position.
-         */
-        const QPointF m_startPos;
-
-        /**
-         * The start position.
-         */
-        const QPointF m_endPos;
-
-        /**
-         * If set, the unique start node id.
-         */
-        const qint64 m_startNodeId;
-
-        /**
-         * If set, the unique end node id.
-         */
-        const qint64 m_endNodeId;
-
-        /**
-         * The edge style of the created edge
-         */
-        EdgeStyle m_style;
+        const qint64 m_id;
 };
 
 }

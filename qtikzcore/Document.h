@@ -66,7 +66,7 @@ class TIKZCORE_EXPORT Document : public QObject
         bool isModified() const;
 
     //
-    // Style management
+    // Node, edge and style management
     //
     public:
         /**
@@ -86,6 +86,20 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         QVector<Edge*> edges() const;
 
+        /**
+         * Get the node with @p id.
+         * @param id unique id of the node
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        Node * nodeFromId(qint64 id);
+
+        /**
+         * Get the edge with @p id.
+         * @param id unique id of the edge
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        Edge * edgeFromId(qint64 id);
+
     //
     // Node and edge creation
     //
@@ -103,18 +117,18 @@ class TIKZCORE_EXPORT Document : public QObject
         Edge * createEdge();
 
         /**
-         * Get the node with @p id.
-         * @param id unique id of the node
-         * @return null, if the id is -1, otherwise a valid pointer to the node
+         * Remove @p node from the document by deleting the node object.
+         * Afterwards, the pointer is invalid.
+         * @param node node to delete
          */
-        Node * nodeFromId(qint64 id);
+        void deleteNode(Node * node);
 
         /**
-         * Get the edge with @p id.
-         * @param id unique id of the edge
-         * @return null, if the id is -1, otherwise a valid pointer to the node
+         * Remove @p edge from the document by deleting the edge object.
+         * Afterwards, the pointer is invalid.
+         * @param edge edge to delete
          */
-        Edge * edgeFromId(qint64 id);
+        void deleteEdge(Edge * edge);
 
     Q_SIGNALS:
         /**
@@ -131,41 +145,52 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         void edgeCreated(tikz::Edge* edge);
 
+        /**
+         * This signal is emitted whenever @p node is deleted by calling
+         * deleteNode(). The @p node is still valid.
+         * @param node the deleted node, associated with this document
+         */
+        void nodeDeleted(tikz::Node* node);
+
+        /**
+         * This signal is emitted whenever @p edge is deleted by calling
+         * createEdge(). The @p edge is still valid.
+         * @param edge the deleted edge, associated with this document
+         */
+        void edgeDeleted(tikz::Edge* edge);
+
     //
-    // internal: Undo / redo needs to create items with ID
+    // internal: Undo / redo items manipulate with ID
     //
     protected:
-        friend class UndoItem;
         /**
-         * Creates a new node associated with this document with @p id.
+         * Create a new node associated with this document with @p id.
          */
         Node * createNode(qint64 id);
 
         /**
-         * Creates a new edge associated with this document with @p id.
+         * Create a new edge associated with this document with @p id.
          */
         Edge * createEdge(qint64 id);
 
-    //
-    // internal: Tracking of edges and nodes
-    //
-    protected Q_SLOTS:
         /**
-         * This slot is called whenever a node associated to this document
-         * gets deleted.
-         * @param node still valid pointer to the to-be-deleted node
+         * Delete node @p id associated with this document.
          */
-        void nodeDeleted(Node* node);
+        void deleteNode(qint64 id);
 
         /**
-         * This slot is called whenever an edge associated to this document
-         * gets deleted.
-         * @param edge still valid pointer to the to-be-deleted edge
+         * Delete edge @p id associated with this document.
          */
-        void edgeDeleted(Edge* edge);
+        void deleteEdge(qint64 id);
 
     private:
         DocumentPrivate * const d;
+
+        // friend classing
+        friend class UndoCreateNode;
+        friend class UndoDeleteNode;
+        friend class UndoCreateEdge;
+        friend class UndoDeleteEdge;
 };
 
 }

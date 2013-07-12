@@ -24,13 +24,17 @@
 
 namespace tikz {
 
-UndoDeleteNode::UndoDeleteNode(Node * node, Document * doc)
+UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
     : UndoItem(doc)
-    , m_node(0)
-    , m_id(node->id())
-    , m_pos(node->pos())
-    , m_text(node->text())
+    , m_id(id)
 {
+    // get node to save data
+    Node* node = document()->nodeFromId(m_id);
+    Q_ASSERT(node);
+
+    // save properties
+    m_pos  = node->pos();
+    m_text = node->text();
     m_style.setStyle(*node->style());
 }
 
@@ -40,20 +44,19 @@ UndoDeleteNode::~UndoDeleteNode()
 
 void UndoDeleteNode::undo()
 {
-    Q_ASSERT(!m_node);
+    document()->createNode(m_id);
 
-    m_node = createNode(m_id);
-    m_node->setPos(m_pos);
-    m_node->setText(m_text);
-    m_node->style()->setStyle(m_style);
+    Node* node = document()->nodeFromId(m_id);
+    Q_ASSERT(node);
+
+    node->setPos(m_pos);
+    node->setText(m_text);
+    node->style()->setStyle(m_style);
 }
 
 void UndoDeleteNode::redo()
 {
-    Q_ASSERT(m_node);
-
-    delete m_node;
-    m_node = 0;
+    document()->deleteNode(m_id);
 }
 
 }

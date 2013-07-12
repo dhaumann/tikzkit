@@ -37,16 +37,6 @@ Document* UndoItem::document()
     return m_document;
 }
 
-Node * UndoItem::createNode(qint64 id)
-{
-    return m_document->createNode(id);
-}
-
-Edge * UndoItem::createEdge(qint64 id)
-{
-    return m_document->createEdge(id);
-}
-
 }
 
 // kate: indent-width 4; replace-tabs on;
