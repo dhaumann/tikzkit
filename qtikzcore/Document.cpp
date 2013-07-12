@@ -69,8 +69,11 @@ Document::~Document()
     // free all node and edge data
     qDeleteAll(d->nodes);
     d->nodes.clear();
+    d->nodeMap.clear();
+
     qDeleteAll(d->edges);
     d->edges.clear();
+    d->edgeMap.clear();
 
     delete d;
 }
@@ -145,7 +148,7 @@ Edge * Document::createEdge(qint64 id)
     Q_ASSERT(id >= 0);
 
     // create new edge
-    Edge* edge = new Edge(this);
+    Edge* edge = new Edge(id, this);
     d->edges.append(edge);
 
     // insert edge into hash map
@@ -194,7 +197,7 @@ void Document::deleteNode(qint64 id)
     Node* node = d->nodeMap[id];
     Q_ASSERT(d->nodes.contains(node));
 
-    // TODO: make sure not edge points to the node
+    // TODO: make sure no edge points to the node
 
     // notify world
     emit nodeDeleted(node);
@@ -205,9 +208,6 @@ void Document::deleteNode(qint64 id)
 
     // truly delete node
     delete node;
-
-    // notify the world about the new edge
-//     emit edgeCreated(edge);
 }
 
 void Document::deleteEdge(qint64 id)
@@ -215,6 +215,22 @@ void Document::deleteEdge(qint64 id)
     // valid input?
     Q_ASSERT(id >= 0);
     Q_ASSERT(d->edgeMap.contains(id));
+
+    // get edge
+    Edge * edge = d->edgeMap[id];
+    Q_ASSERT(d->edges.contains(edge));
+
+    // TODO: not yet the case, but maybe in future: remove child nodes?
+
+    // notify world
+    emit edgeDeleted(edge);
+
+    // unregister edge
+    d->edgeMap.remove(id);
+    d->edges.remove(d->edges.indexOf(edge));
+
+    // truly delete edge
+    delete edge;
 }
 
 Node * Document::nodeFromId(qint64 id)
