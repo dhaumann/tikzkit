@@ -26,6 +26,7 @@
 #include "UndoDeleteNode.h"
 #include "UndoCreateEdge.h"
 #include "UndoDeleteEdge.h"
+#include "UndoDisconnectEdge.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -166,8 +167,27 @@ void Document::deleteNode(Node * node)
     Q_ASSERT(node != 0);
     Q_ASSERT(d->nodeMap.contains(node->id()));
 
-    // delete node, push will call ::redo()
+    // get edge id
     const qint64 id = node->id();
+
+    // make sure no edge points to the deleted node
+    foreach (Edge* edge, d->edges) {
+        const bool startMatches = edge->startNode() == node;
+        const bool endMatches = edge->endNode() == node;
+
+        if (startMatches && endMatches) {
+            // it's a loop to the node, -> simply remove edge
+            deleteEdge(edge);
+        } else if (startMatches) {
+            // disconnect start
+            d->undoManager.push(new UndoDisconnectEdge(edge->id(), id, true, this));
+        } else if (endMatches) {
+            // disonnect end
+            d->undoManager.push(new UndoDisconnectEdge(edge->id(), id, false, this));
+        }
+    }
+
+    // delete node, push will call ::redo()
     d->undoManager.push(new UndoDeleteNode(id, this));
 
     // node really removed?
@@ -178,6 +198,8 @@ void Document::deleteEdge(Edge * edge)
 {
     Q_ASSERT(edge != 0);
     Q_ASSERT(d->edgeMap.contains(edge->id()));
+
+    // TODO: not yet the case, but maybe in future: remove child nodes here?
 
     // delete edge, push will call ::redo()
     const qint64 id = edge->id();
@@ -196,8 +218,6 @@ void Document::deleteNode(qint64 id)
     // get node
     Node* node = d->nodeMap[id];
     Q_ASSERT(d->nodes.contains(node));
-
-    // TODO: make sure no edge points to the node
 
     // notify world
     emit nodeDeleted(node);
@@ -219,8 +239,6 @@ void Document::deleteEdge(qint64 id)
     // get edge
     Edge * edge = d->edgeMap[id];
     Q_ASSERT(d->edges.contains(edge));
-
-    // TODO: not yet the case, but maybe in future: remove child nodes?
 
     // notify world
     emit edgeDeleted(edge);
