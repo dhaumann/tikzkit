@@ -59,6 +59,7 @@ Edge::Edge(qint64 id, Document* doc)
 {
     d->doc = doc;
     d->id = id;
+    d->style.setParent(d->doc->style());
 
     d->startAnchor = tikz::NoAnchor;
     d->endAnchor = tikz::NoAnchor;

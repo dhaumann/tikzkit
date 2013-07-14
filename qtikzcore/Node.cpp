@@ -56,6 +56,7 @@ Node::Node(qint64 id, Document* doc)
 
     d->doc = doc;
     d->id = id;
+    d->style.setParent(d->doc->style());
 
     connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
