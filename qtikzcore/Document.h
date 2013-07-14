@@ -52,6 +52,15 @@ class TIKZCORE_EXPORT Document : public QObject
         virtual ~Document();
 
     //
+    // serialization
+    //
+    public:
+        /**
+         * Serialize the Document with all its nodes and edges to a JSON string.
+         */
+        QByteArray toJson() const;
+
+    //
     // Undo / redo management
     //
     public:

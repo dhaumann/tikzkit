@@ -1,10 +1,12 @@
 project(qtikzcore)
 
 find_package(Qt4 REQUIRED)
+find_package(QJSON REQUIRED)
 
 include_directories(
     .
     undo/
+    ${QJSON_INCLUDE_DIR}
 )
 
 set(qtikzcore_SOURCES
@@ -52,6 +54,9 @@ add_library(qtikzcore SHARED
     ${qtikzcore_HEADERS_MOC}
 )
 
-target_link_libraries(qtikzcore ${QT_LIBRARIES})
+target_link_libraries(qtikzcore
+    ${QT_LIBRARIES}
+    ${QJSON_LIBRARIES}
+)
 
 # kate: indent-width 4; replace-tabs on;

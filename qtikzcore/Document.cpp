@@ -30,6 +30,7 @@
 
 #include <QUndoStack>
 #include <QDebug>
+#include <qjson/serializer.h>
 
 namespace tikz {
 
@@ -78,6 +79,34 @@ Document::~Document()
     d->edgeMap.clear();
 
     delete d;
+}
+
+QByteArray Document::toJson() const
+{
+    QVariantList doc;
+
+    foreach (Node * node, d->nodes) {
+        QVariantMap item;
+        item.insert("node", node->id());
+        doc << item;
+    }
+
+    foreach (Edge * edge, d->edges) {
+        QVariantMap item;
+        item.insert("edge", edge->id());
+        doc << item;
+    }
+
+    bool ok;
+    QJson::Serializer serializer;
+    QByteArray json = serializer.serialize(doc, &ok);
+    if (ok) {
+        qDebug() << json;
+    } else {
+        qCritical() << "Something went wrong:" << serializer.errorMessage();
+    }
+
+    return json;
 }
 
 QUndoStack * Document::undoManager()
