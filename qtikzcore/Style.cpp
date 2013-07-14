@@ -29,6 +29,10 @@ namespace tikz {
 class StylePrivate
 {
 public:
+    // uniq id, or -1
+    qint64 id;
+
+    // parent / child hierarchy
     Style * parent;
     int refCounter;
 
@@ -65,6 +69,8 @@ public:
 
 void StylePrivate::init()
 {
+    id = -1;
+
     parent = 0;
     refCounter = 0;
 
@@ -102,16 +108,22 @@ Style::Style()
     d->init();
 }
 
-Style::Style(Document* tikzDocument)
+Style::Style(qint64 id, Document* tikzDocument)
     : QObject()
     , d(new StylePrivate())
 {
     d->init();
+    d->id = id;
 }
 
 Style::~Style()
 {
     delete d;
+}
+
+qint64 Style::id() const
+{
+    return d->id;
 }
 
 void Style::setStyle(const Style& other)

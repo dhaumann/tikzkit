@@ -42,14 +42,15 @@ class TIKZCORE_EXPORT Style : public QObject
         Style();
 
         /**
-         * Associate this style with the document @p tikzDocument.
-         */
-        Style(Document* tikzDocument);
-
-        /**
          * Virtual destructor.
          */
         virtual ~Style();
+
+        /**
+         * Unique id.
+         * If the style is @e not associated to a document, -1 is returned.
+         */
+        qint64 id() const;
 
         /**
          * Set the properties of this style to all properties of @p other.
@@ -289,6 +290,17 @@ class TIKZCORE_EXPORT Style : public QObject
 
     // TODO: pen color
     //  fill color
+
+    //
+    // internal to tikz::Document
+    //
+    protected:
+        friend class Document;
+
+        /**
+         * Associate this style with @p id to the document @p tikzDocument.
+         */
+        Style(qint64 id, Document* tikzDocument);
 
     private:
         StylePrivate * const d;

@@ -40,11 +40,6 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         EdgeStyle();
 
         /**
-         * Associate this style with the document @p tikzDocument.
-         */
-        EdgeStyle(Document* tikzDocument);
-
-        /**
          * Virtual destructor.
          */
         virtual ~EdgeStyle();
@@ -229,6 +224,17 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Unset the end shorten amount.
          */
         void unsetShortenEnd();
+
+    //
+    // internal to tikz::Document
+    //
+    protected:
+        friend class Document;
+
+        /**
+         * Associate this style with @p id to the document @p tikzDocument.
+         */
+        EdgeStyle(qint64 id, Document* tikzDocument);
 
     private:
         EdgeStylePrivate * const d;

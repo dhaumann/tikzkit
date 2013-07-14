@@ -38,11 +38,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         NodeStyle();
 
         /**
-         * Associate this style with the document @p tikzDocument.
-         */
-        NodeStyle(Document* tikzDocument);
-
-        /**
          * Virtual destructor.
          */
         virtual ~NodeStyle();
@@ -218,6 +213,16 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         void unsetMinimumWidth();
 
+    //
+    // internal to tikz::Document
+    //
+    protected:
+        friend class Document;
+
+        /**
+         * Associate this style with @p id to the document @p tikzDocument.
+         */
+        NodeStyle(qint64 id, Document* tikzDocument);
 
     private:
         NodeStylePrivate * const d;

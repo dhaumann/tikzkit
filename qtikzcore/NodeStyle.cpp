@@ -69,8 +69,8 @@ NodeStyle::NodeStyle()
     d->minimumWidthSet = false;
 }
 
-NodeStyle::NodeStyle(Document* tikzDocument)
-    : Style(tikzDocument)
+NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
+    : Style(id, tikzDocument)
     , d(new NodeStylePrivate())
 {
 }

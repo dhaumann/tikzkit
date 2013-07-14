@@ -51,7 +51,7 @@ public:
 
     void init()
     {
-        curveMode = tikz::BendCurve;
+        curveMode = tikz::StraightLine;
         bendAngle = 0.0;
         looseness = 1.0;
         outAngle = 45;
@@ -82,8 +82,8 @@ EdgeStyle::EdgeStyle()
     d->init();
 }
 
-EdgeStyle::EdgeStyle(Document* tikzDocument)
-    : Style(tikzDocument)
+EdgeStyle::EdgeStyle(qint64 id, Document* tikzDocument)
+    : Style(id, tikzDocument)
     , d(new EdgeStylePrivate())
 {
     d->init();
@@ -115,7 +115,7 @@ CurveMode EdgeStyle::curveMode() const
         return parentStyle->curveMode();
     }
 
-    return tikz::BendCurve;
+    return tikz::StraightLine;
 }
 
 void EdgeStyle::setCurveMode(tikz::CurveMode mode)
