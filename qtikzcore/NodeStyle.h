@@ -142,6 +142,12 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 //         void setScaleX(qreal xFactor);
 //         void setScaleY(qreal xFactor);
 
+        /**
+         * Unset the scale attribute.
+         * Afterwards, scale falls back to the value of parent()->scale().
+         */
+        void unsetScale();
+
     //
     // size methods
     //

@@ -34,6 +34,8 @@ public:
 
     // parent / child hierarchy
     Style * parent;
+
+    // config reference counter
     int refCounter;
 
     // line style
@@ -128,8 +130,27 @@ qint64 Style::id() const
 
 void Style::setStyle(const Style& other)
 {
+    if (this == &other) {
+        return;
+    }
+
+    // start configuration
     beginConfig();
-    *d = *other.d; // TODO: fix doc pointer etc... FIXME: proper implementation
+
+    // backup properties not to copy
+    const qint64 id = d->id;
+    Style * parent = d->parent;
+    const int refCounter = d->refCounter;
+
+    // perform copy of everything
+    *d = *other.d;
+
+    // restore persistend properties
+    d->id = id;
+    d->parent = parent;
+    d->refCounter = refCounter;
+
+    // end configuration
     endConfig();
 }
 

@@ -225,13 +225,6 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         LineWidth innerLineWidthType() const;
 
-        /**
-         * Unset the inner line width property.
-         * After this, calling innerLineWidth() returns parent()->innerLineWidth(),
-         * or the default inner line width, if parent() is null.
-         */
-        void unsetInnerLineWidth();
-
     public Q_SLOTS:
         /**
          * Set the inner line width to @p width cm.
@@ -249,6 +242,13 @@ class TIKZCORE_EXPORT Style : public QObject
          * @see LineWidth
          */
         void setInnerLineWidthType(tikz::LineWidth type);
+
+        /**
+         * Unset the inner line width property.
+         * After this, calling innerLineWidth() returns parent()->innerLineWidth(),
+         * or the default inner line width, if parent() is null.
+         */
+        void unsetInnerLineWidth();
 
     //
     // draw & fill opacity

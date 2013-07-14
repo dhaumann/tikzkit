@@ -54,6 +54,7 @@ NodeStyle::NodeStyle()
     d->align = NoAlign;
     d->shape = ShapeRectangle;
     d->rotation = 0.0;
+    d->scale = 1.0;
     d->innerSep = 0.3333; // 0.3333em
     d->outerSep = 0.5; // 0.5 \pgflinewidth
     d->minimumHeight = 0.0; // mm
@@ -265,6 +266,16 @@ void NodeStyle::setScale(qreal factor)
         beginConfig();
         d->scaleSet = true;
         d->scale = factor;
+        endConfig();
+    }
+}
+
+void NodeStyle::unsetScale()
+{
+    if (d->scaleSet) {
+        beginConfig();
+        d->scaleSet = false;
+        d->scale = 1.0;
         endConfig();
     }
 }
