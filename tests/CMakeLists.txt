@@ -11,6 +11,16 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+# Document test
+set(DocumentSrc documenttest.cpp)
+QT4_AUTOMOC(${DocumentSrc} documenttest.h)
+QT4_WRAP_CPP(DocumentMocs)
+add_executable(DocumentTest ${DocumentSrc} ${DocumentMocs})
+target_link_libraries(DocumentTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
+add_test(NAME DocumentTest COMMAND DocumentTest)
+
+
+
 # Edge test
 set(EdgeSrc edgetest.cpp)
 QT4_AUTOMOC(${EdgeSrc} edgetest.h)
