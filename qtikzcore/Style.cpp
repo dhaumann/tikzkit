@@ -129,8 +129,96 @@ qint64 Style::id() const
 void Style::setStyle(const Style& other)
 {
     beginConfig();
-    *d = *other.d;
+    *d = *other.d; // TODO: fix doc pointer etc... FIXME: proper implementation
     endConfig();
+}
+
+QVariantMap Style::toVariantMap() const
+{
+    QVariantMap vm;
+
+    // most importantly: id
+    vm.insert("id", id());
+
+    // pen style
+    if (d->penStyleSet) {
+        QString style;
+        switch (d->penStyle) {
+            SolidLine: style = "solid"; break;
+            DottedLine: style = "dotted"; break;
+            DenselyDottedLine: style = "densely dotted"; break;
+            LooselyDottedLine: style = "loosely dotted"; break;
+            DashedLine: style = "dashed"; break;
+            DenselyDashedLine: style = "densely dashed"; break;
+            LooselyDashedLine: style = "loosely dashed"; break;
+            DashDottedLine: style = "dash dotted"; break;
+            DenselyDashDottedLine: style = "densely dash dotted"; break;
+            LooselyDashDottedLine: style = "loosely dash dotted"; break;
+            DashDotDottedLine: style = "dash dot dotted"; break;
+            DenselyDashDotDottedLine: style = "densely dash dot dotted"; break;
+            LooselyDashDotDottedLine: style = "loosely dash dot dotted"; break;
+            case NoPen:
+            default: Q_ASSERT(false); break;
+        }
+        vm.insert("pen style", style);
+    }
+
+    // line width
+    if (d->lineWidthSet) {
+        QString lineWidthType;
+        switch (d->lineWidthType) {
+            case UltraThin: lineWidthType = "ultra thin"; break;
+            case VeryThin: lineWidthType = "very thin"; break;
+            case Thin: lineWidthType = "thin"; break;
+            case SemiThick: lineWidthType = "semi thick"; break;
+            case Thick: lineWidthType = "thick"; break;
+            case VeryThick: lineWidthType = "very thick"; break;
+            case UltraThick: lineWidthType = "ultra thick"; break;
+            case CustomLineWidth: lineWidthType = "custom"; break;
+            default: Q_ASSERT(false); break;
+        }
+        vm.insert("line width type", lineWidthType);
+        if (d->lineWidthType == CustomLineWidth) {
+            vm.insert("line width", d->lineWidth);
+        }
+    }
+
+    // double lines & inner line width
+    if (d->doubleLineSet) {
+        vm.insert("double line", 1);
+        if (d->innerLineWidthSet) {
+            QString lineWidthType;
+            switch (d->lineWidthType) {
+                case UltraThin: lineWidthType = "ultra thin"; break;
+                case VeryThin: lineWidthType = "very thin"; break;
+                case Thin: lineWidthType = "thin"; break;
+                case SemiThick: lineWidthType = "semi thick"; break;
+                case Thick: lineWidthType = "thick"; break;
+                case VeryThick: lineWidthType = "very thick"; break;
+                case UltraThick: lineWidthType = "ultra thick"; break;
+                case CustomLineWidth: lineWidthType = "custom"; break;
+                default: Q_ASSERT(false); break;
+            }
+            vm.insert("inner line width type", lineWidthType);
+            if (d->lineWidthType == CustomLineWidth) {
+                vm.insert("inner line width", d->lineWidth);
+            }
+        }
+    }
+
+    // TODO: colors
+//     QColor penColor;
+//     QColor fillColor;
+//
+//     qreal penOpacity;
+//     qreal fillOpacity;
+//
+//     bool penOpacitySet : 1;
+//     bool fillOpacitySet : 1;
+//     bool penColorSet : 1;
+//     bool fillColorSet : 1;
+
+    return vm;
 }
 
 Style *Style::parent() const

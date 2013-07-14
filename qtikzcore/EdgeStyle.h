@@ -50,6 +50,15 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         virtual void setStyle(const EdgeStyle& other);
 
     //
+    // serialization
+    //
+    public:
+        /**
+         * Serialize style to variant map.
+         */
+        virtual QVariantMap toVariantMap() const;
+
+    //
     // Bending attributes
     //
     public:

@@ -25,6 +25,7 @@
 
 #include <QColor>
 #include <QObject>
+#include <QVariant>
 
 namespace tikz {
 
@@ -56,6 +57,15 @@ class TIKZCORE_EXPORT Style : public QObject
          * Set the properties of this style to all properties of @p other.
          */
         virtual void setStyle(const Style& other);
+
+    //
+    // serialization
+    //
+    public:
+        /**
+         * Serialize style to variant map.
+         */
+        virtual QVariantMap toVariantMap() const;
 
     //
     // parent hierarchy

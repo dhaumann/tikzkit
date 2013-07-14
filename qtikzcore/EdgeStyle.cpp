@@ -102,6 +102,103 @@ void EdgeStyle::setStyle(const EdgeStyle& other)
     endConfig();
 }
 
+QVariantMap EdgeStyle::toVariantMap() const
+{
+    QVariantMap vm = Style::toVariantMap();
+
+    // start arrow
+    if (d->arrowTailSet) {
+        QString arrow;
+        switch (d->arrowTail) {
+            case NoArrow: arrow = "none"; break;
+            case ToArrow: arrow = "to"; break;
+            case ReversedToArrow: arrow = "to reversed"; break;
+            case StealthArrow: arrow = "stealth"; break;
+            case ReversedStealthArrow: arrow = "stealth reversed"; break;
+            case LatexArrow: arrow = "latex"; break;
+            case ReversedLatexArrow: arrow = "latex reversed"; break;
+            case PipeArrow: arrow = "|"; break;
+            case StealthTickArrow: arrow = "stealth'"; break;
+            case ReversedStealthTickArrow: arrow = "stealth' reversed"; break;
+            default: Q_ASSERT(false); break;
+        }
+        vm.insert("arrow tail", arrow);
+    }
+
+    // end arrow
+    if (d->arrowHeadSet) {
+        QString arrow;
+        switch (d->arrowHead) {
+            case NoArrow: arrow = "none"; break;
+            case ToArrow: arrow = "to"; break;
+            case ReversedToArrow: arrow = "to reversed"; break;
+            case StealthArrow: arrow = "stealth"; break;
+            case ReversedStealthArrow: arrow = "stealth reversed"; break;
+            case LatexArrow: arrow = "latex"; break;
+            case ReversedLatexArrow: arrow = "latex reversed"; break;
+            case PipeArrow: arrow = "|"; break;
+            case StealthTickArrow: arrow = "stealth'"; break;
+            case ReversedStealthTickArrow: arrow = "stealth' reversed"; break;
+            default: Q_ASSERT(false); break;
+        }
+        vm.insert("arrow head", arrow);
+    }
+
+    // other properties
+    if (d->shortenStartSet) {
+        vm.insert("shorten <", d->shortenStart);
+    }
+
+    if (d->shortenEndSet) {
+        vm.insert("shorten >", d->shortenEnd);
+    }
+
+    // curve mode
+    if (d->curveModeSet) {
+        QString mode;
+        switch (d->curveMode) {
+            case StraightLine: mode = "--"; break;
+            case HorizVertLine: mode = "-|"; break;
+            case VertHorizLine: mode = "|-"; break;
+            case BendCurve: mode = "bend"; break;
+            case InOutCurve: mode = "in out"; break;
+            case BezierCurve: mode = "bezier"; break;
+            default: Q_ASSERT(false); break;
+        }
+        vm.insert("curve mode", mode);
+
+        // looseness for bend and in/out mode
+        if (d->curveMode == BendCurve || d->curveMode == InOutCurve) {
+            if (d->loosenessSet) {
+                vm.insert("looseness", d->looseness);
+            }
+        }
+
+        // bend left and bend right
+        if (d->curveMode == BendCurve && d->bendAngleSet) {
+                vm.insert("looseness", d->looseness);
+            vm.insert("bend angle", d->bendAngle);
+        }
+
+        // in=..., out=...
+        if (d->curveMode == InOutCurve) {
+            if (d->inAngleSet) {
+                vm.insert("in angle", d->inAngle);
+            }
+            if (d->outAngleSet) {
+                vm.insert("out angle", d->outAngle);
+            }
+        }
+
+        if (d->curveMode == BezierCurve) {
+            vm.insert("control point 1", startControlPoint()); // FIXME: use d->cp1 ?
+            vm.insert("control point 2", endControlPoint()); // FIXME: use d->cp2 ?
+        }
+    }
+
+    return vm;
+}
+
 CurveMode EdgeStyle::curveMode() const
 {
     return d->curveMode;

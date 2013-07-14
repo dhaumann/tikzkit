@@ -74,6 +74,16 @@ qint64 Node::id() const
     return d->id;
 }
 
+QVariantMap Node::toVariantMap() const
+{
+    QVariantMap vm;
+    vm.insert("id", id());
+    vm.insert("position", pos());
+    vm.insert("text", text());
+//     vm.insert("position", pos());
+    return vm;
+}
+
 void Node::setText(const QString& text)
 {
     if (d->text != text) {

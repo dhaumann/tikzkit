@@ -26,6 +26,7 @@
 
 #include <QPointF>
 #include <QString>
+#include <QVariant>
 
 namespace tikz
 {
@@ -50,12 +51,25 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         virtual ~Node();
 
+    //
+    // id and serialization
+    //
+    public:
         /**
          * Unique id.
          * If the document is @e not associated to a document -1 is returned.
          */
         qint64 id() const;
 
+        /**
+         * Serialize node to variant map.
+         */
+        QVariantMap toVariantMap() const;
+
+    //
+    // style and text
+    //
+    public:
         /**
          * Sets the text of this node to @p text.
          */
@@ -98,10 +112,10 @@ class TIKZCORE_EXPORT Node : public Coord
         friend class Document;
 
         /**
-        * Constructor that associates this node with the tikz Document @p doc.
-        * @param id unique id of the node
-        * @param doc associated document
-        */
+         * Constructor that associates this node with the tikz Document @p doc.
+         * @param id unique id of the node
+         * @param doc associated document
+         */
         Node(qint64 id, Document* doc);
 
     private:
