@@ -38,7 +38,7 @@ class DocumentPrivate
     public:
         QUndoStack undoManager;
 
-        Style style;
+        Style * style;
 
         QVector<Node*> nodes;
         QVector<Edge*> edges;
@@ -62,7 +62,8 @@ Document::Document(QObject * parent)
     : QObject(parent)
     , d(new DocumentPrivate())
 {
-    d->nextId = 1;
+    d->nextId = 0;
+    d->style = new Style(d->uniqueId(), this);
 }
 
 Document::~Document()
@@ -89,7 +90,7 @@ bool Document::isModified() const
     return ! d->undoManager.isClean();
 }
 
-Style& Document::style() const
+Style * Document::style() const
 {
     return d->style;
 }

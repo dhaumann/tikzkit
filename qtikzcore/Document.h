@@ -74,7 +74,7 @@ class TIKZCORE_EXPORT Document : public QObject
          * This is the global document style. All other styles fall back to
          * this style, if a property is not set.
          */
-        Style& style() const;
+        Style * style() const;
 
         /**
          * Get the list of nodes of the tikz document.
@@ -112,7 +112,7 @@ class TIKZCORE_EXPORT Document : public QObject
 
         /**
          * Creates a new edge associated with this document.
-         * * If the edge is not needed anymore, just delete it.
+         * If the edge is not needed anymore, just delete it.
          */
         Edge * createEdge();
 
