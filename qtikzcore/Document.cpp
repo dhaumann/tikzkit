@@ -171,6 +171,9 @@ void Document::deleteNode(Node * node)
     // get edge id
     const qint64 id = node->id();
 
+    // start undo group
+    d->undoManager.beginMacro("Remove node");
+
     // make sure no edge points to the deleted node
     foreach (Edge* edge, d->edges) {
         const bool startMatches = edge->startNode() == node;
@@ -190,6 +193,9 @@ void Document::deleteNode(Node * node)
 
     // delete node, push will call ::redo()
     d->undoManager.push(new UndoDeleteNode(id, this));
+
+    // end undo group
+    d->undoManager.endMacro();
 
     // node really removed?
     Q_ASSERT(!d->nodeMap.contains(id));
