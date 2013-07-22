@@ -50,7 +50,7 @@ class TikzEdgePrivate
         TikzEdgePrivate(TikzEdge* edge);
         ~TikzEdgePrivate();
 
-        void init();
+        void init(tikz::Edge * e = 0);
 
     public:
         // edge and nodes

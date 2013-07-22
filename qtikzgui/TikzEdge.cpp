@@ -58,6 +58,22 @@ TikzEdge::TikzEdge(QGraphicsItem * parent)
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
+TikzEdge::TikzEdge(tikz::Edge * edge, QGraphicsItem * parent)
+    : TikzItem(parent)
+    , d(new TikzEdgePrivate(this))
+{
+    // initialization of member varialbes in TikzEdgePrivate constructor
+    d->init(edge);
+
+    connect(d->startControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(startControlPointChanged(QPointF)));
+    connect(d->endControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(endControlPointChanged(QPointF)));
+
+    connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+}
+
 TikzEdge::~TikzEdge()
 {
     delete d;
@@ -71,6 +87,11 @@ int TikzEdge::type() const
 tikz::Edge& TikzEdge::edge()
 {
     return *d->edge;
+}
+
+qint64 TikzEdge::id() const
+{
+    return d->edge->id();
 }
 
 tikz::EdgeStyle* TikzEdge::style() const
@@ -260,7 +281,7 @@ QRectF TikzEdge::boundingRect() const
 
     QRectF br = joinedPath.boundingRect();
     br = br.normalized();
-    br.adjust(-0.2, -0.2, 0.2, 0.2);    
+    br.adjust(-0.2, -0.2, 0.2, 0.2);
     return br;
 }
 

@@ -46,6 +46,11 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
         TikzEdge(QGraphicsItem * parent = 0);
 
         /**
+         * Constructor for @p edge and parent @p parent.
+         */
+        TikzEdge(tikz::Edge * edge, QGraphicsItem * parent = 0);
+
+        /**
          * Destructor
          */
         virtual ~TikzEdge();
@@ -60,6 +65,11 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * @warning Use setStartNode() and setEndNode() to change nodes
          */
         tikz::Edge& edge();
+
+        /**
+         * Returns edge().id();
+         */
+        qint64 id() const;
 
         /**
          * Get the EdgeStyle of this edge.

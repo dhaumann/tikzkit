@@ -12,6 +12,7 @@ include_directories(
 )
 
 set(qtikzgui_SOURCES
+    TikzDocument.cpp
     TikzItem.cpp
     TikzNode.cpp
     NodeHandle.cpp
@@ -44,6 +45,8 @@ set(qtikzgui_SOURCES
 )
 
 set(qtikzgui_HEADERS
+    TikzDocument.h
+    TikzDocument_p.h
     TikzItem.h
     TikzNode.h
     NodeHandle.h

@@ -42,6 +42,11 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         TikzNode(QGraphicsItem * parent = 0);
 
         /**
+         * Constructor for @p node and parent @p parent.
+         */
+        TikzNode(tikz::Node * node, QGraphicsItem * parent = 0);
+
+        /**
          * Destructor
          */
         virtual ~TikzNode();
@@ -55,6 +60,11 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          * Returns the pointer to the associated Node.
          */
         tikz::Node& node();
+
+        /**
+         * Returns node().id();
+         */
+        qint64 id() const;
 
         /**
          * Returns the style of this node.

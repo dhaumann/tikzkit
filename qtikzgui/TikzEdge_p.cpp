@@ -49,9 +49,9 @@ TikzEdgePrivate::~TikzEdgePrivate()
     arrowHead = 0;
 }
 
-void TikzEdgePrivate::init()
+void TikzEdgePrivate::init(tikz::Edge * e)
 {
-    edge = new tikz::Edge(q);
+    edge = e ? e : new tikz::Edge(q);
     start = 0;
     end = 0;
 

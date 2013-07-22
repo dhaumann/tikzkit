@@ -101,6 +101,31 @@ TikzNode::TikzNode(QGraphicsItem * parent)
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
+TikzNode::TikzNode(tikz::Node * node, QGraphicsItem * parent)
+    : TikzItem(parent)
+    , d(new TikzNodePrivate(this))
+{
+    d->dirty = true;
+    d->node = node;
+    d->shape = new AbstractShape(this);
+    d->itemChangeRunning = false;
+
+    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
+    connect(d->node, SIGNAL(changed()), this, SLOT(styleChanged()));
+
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    d->textItem = new NodeText(this);
+    d->textItem->setPos(boundingRect().center());
+
+    d->nodeHandle = new NodeHandle(this);
+    d->nodeHandle->setVisible(false);
+
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+}
+
 TikzNode::~TikzNode()
 {
     delete d->shape;
@@ -116,6 +141,11 @@ int TikzNode::type() const
 tikz::Node& TikzNode::node()
 {
     return *d->node;
+}
+
+qint64 TikzNode::id() const
+{
+    return d->node->id();
 }
 
 tikz::NodeStyle* TikzNode::style() const
