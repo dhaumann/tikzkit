@@ -44,11 +44,13 @@ void TikzDocumentPrivate::createTikzNode(tikz::Node * node)
     foreach (TikzNode * n, nodes) {
         Q_ASSERT(node != &n->node());
         Q_ASSERT(node->id() != n->id());
+        Q_ASSERT(! nodeMap.contains(node->id()));
     }
 #endif
 
     TikzNode * tikzNode = new TikzNode(node);
     nodes.append(tikzNode);
+    nodeMap.insert(node->id(), tikzNode);
 }
 
 void TikzDocumentPrivate::createTikzEdge(tikz::Edge * edge)
@@ -83,8 +85,15 @@ TikzDocument::~TikzDocument()
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
-QGraphicsView * createView()
+QGraphicsView * TikzDocument::createView()
 {
+}
+
+TikzNode * TikzDocument::createNode()
+{
+    tikz::Node * n = d->doc->createNode();
+    Q_ASSERT(d->nodeMap.contains(n->id()));
+    return d->nodeMap[n->id()];
 }
 
 // kate: indent-width 4; replace-tabs on;

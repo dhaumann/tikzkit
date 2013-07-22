@@ -26,6 +26,9 @@
 
 class QGraphicsView;
 
+class TikzNode;
+class TikzEdge;
+
 class TikzDocumentPrivate;
 
 class TIKZGUI_EXPORT TikzDocument : public QObject
@@ -47,6 +50,12 @@ class TIKZGUI_EXPORT TikzDocument : public QObject
          * Create a graphics view for this document.
          */
         QGraphicsView * createView();
+
+    public Q_SLOTS:
+        /**
+         * Create a node
+         */
+        TikzNode * createNode();
 
     private:
         TikzDocumentPrivate * d;

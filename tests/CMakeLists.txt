@@ -8,6 +8,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
   ${CMAKE_SOURCE_DIR}/qtikzcore
   ${CMAKE_SOURCE_DIR}/qtikzcore/style
+  ${CMAKE_SOURCE_DIR}/qtikzgui
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -38,5 +39,15 @@ QT4_WRAP_CPP(StyleManagerMocs)
 add_executable(StyleManagerTest ${StyleManagerSrc} ${StyleManagerMocs})
 target_link_libraries(StyleManagerTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
 add_test(NAME StyleManagerTest COMMAND StyleManagerTest)
+
+
+
+# TikzDocument test
+set(TikzDocumentSrc tikzdocumenttest.cpp)
+QT4_AUTOMOC(${TikzDocumentSrc} tikzdocumenttest.h)
+QT4_WRAP_CPP(${TikzDocumentSrc})
+add_executable(TikzDocumentTest ${TikzDocumentSrc} ${TikzDocumentMocs})
+target_link_libraries(TikzDocumentTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore qtikzgui)
+add_test(NAME TikzDocumentTest COMMAND TikzDocumentTest)
 
 # kate: indent-width 4; replace-tabs on;

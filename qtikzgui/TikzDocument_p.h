@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QHash>
 
 namespace tikz {
     class Document;
@@ -61,6 +62,11 @@ class TikzDocumentPrivate : public QObject
          * List of TikzNode%s.
          */
         QVector<TikzNode*> nodes;
+
+        /**
+         * Node lookup map
+         */
+        QHash<qint64, TikzNode*> nodeMap;
 
         /**
          * List of TikzEdge%s.

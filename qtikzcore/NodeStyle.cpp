@@ -152,8 +152,9 @@ TextAlignment NodeStyle::alignment() const
         return d->align;
     }
 
-    if (parent()) {
-        return static_cast<NodeStyle*>(parent())->alignment();
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->alignment();
     }
 
     return NoAlign;
@@ -185,8 +186,9 @@ Shape NodeStyle::shape() const
         return d->shape;
     }
 
-    if (parent()) {
-        return static_cast<NodeStyle*>(parent())->shape();
+    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
+    if (parentStyle) {
+        return parentStyle->shape();
     }
 
     return ShapeRectangle;
