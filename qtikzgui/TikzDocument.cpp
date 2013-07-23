@@ -30,6 +30,7 @@
 #include "TikzScene.h"
 
 #include <QDebug>
+#include <QGraphicsView>
 
 //BEGIN private data
 TikzDocumentPrivate::TikzDocumentPrivate(TikzDocument * tikzDocument)
@@ -62,8 +63,24 @@ TikzDocument::~TikzDocument()
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
-QGraphicsView * TikzDocument::createView()
+QGraphicsView * TikzDocument::createView(QWidget * parent)
 {
+    // create view
+    QGraphicsView * view = new QGraphicsView(parent);
+    d->views.append(view);
+
+    // set graphics scene
+    view->setScene(d->scene);
+
+    // set sane viewport
+    view->setSceneRect(0, 0, view->size().width() / 200.0, view->size().height() / 200.0);
+
+    // scale to true display size
+    view->scale(view->physicalDpiX() / 2.540,
+               -view->physicalDpiX() / 2.540); // TODO, FIXME: physicalDpiY() ?
+
+    // return view
+    return view;
 }
 
 TikzNode * TikzDocument::createTikzNode()

@@ -49,7 +49,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         /**
          * Create a graphics view for this document.
          */
-        QGraphicsView * createView();
+        QGraphicsView * createView(QWidget * parent);
 
     //
     // Node and edge creation
