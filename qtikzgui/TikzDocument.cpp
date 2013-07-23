@@ -60,6 +60,11 @@ TikzDocument::~TikzDocument()
         deleteNode(node->id());
     }
 
+    Q_ASSERT(0 == d->nodeMap.size());
+    Q_ASSERT(0 == d->nodes.size());
+    Q_ASSERT(0 == d->edgeMap.size());
+    Q_ASSERT(0 == d->edges.size());
+
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
