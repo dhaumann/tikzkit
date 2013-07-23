@@ -137,9 +137,9 @@ int TikzNode::type() const
     return UserType + 2;
 }
 
-tikz::Node& TikzNode::node()
+tikz::Node * TikzNode::node()
 {
-    return *d->node;
+    return d->node;
 }
 
 qint64 TikzNode::id() const

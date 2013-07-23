@@ -89,7 +89,7 @@ void TikzDocument::deleteTikzNode(TikzNode * node)
     // delete node from id
     const int id = node->id();
     Q_ASSERT(d->nodeMap.contains(id));
-    deleteNode(node->id());
+    Document::deleteNode(node->node());
     Q_ASSERT(! d->nodeMap.contains(id));
 }
 
@@ -98,7 +98,7 @@ void TikzDocument::deleteTikzEdge(TikzEdge * edge)
     // delete edge from id
     const int id = edge->id();
     Q_ASSERT(d->edgeMap.contains(id));
-    deleteEdge(edge->id());
+    Document::deleteEdge(edge->edge());
     Q_ASSERT(! d->edgeMap.contains(id));
 }
 

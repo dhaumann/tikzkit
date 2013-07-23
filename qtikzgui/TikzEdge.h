@@ -64,7 +64,7 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * Returns the pointer to the associated Edge.
          * @warning Use setStartNode() and setEndNode() to change nodes
          */
-        tikz::Edge& edge();
+        tikz::Edge * edge();
 
         /**
          * Returns edge().id();

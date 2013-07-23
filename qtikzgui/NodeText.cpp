@@ -42,7 +42,7 @@ NodeText::NodeText(TikzNode* node)
 //     scale(25.4 / 101 / 3.97, 25.4 / 101 / 3.97);
     //text->setText(QString::fromUtf8("a"));
 
-    QObject::connect(&node->node(), SIGNAL(textChanged(QString)), &d->texGenerator, SLOT(generateImage(QString)));
+    QObject::connect(node->node(), SIGNAL(textChanged(QString)), &d->texGenerator, SLOT(generateImage(QString)));
 }
 
 NodeText::~NodeText()

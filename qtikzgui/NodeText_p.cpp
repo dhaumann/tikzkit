@@ -36,7 +36,7 @@ NodeTextPrivate::NodeTextPrivate(TikzNode* tikzNode, NodeText* nodeText)
     node = tikzNode;
 
     connect(&texGenerator, SIGNAL(svgReady(QString)), this, SLOT(readSvgFile(QString)));
-    connect(this, SIGNAL(svgChanged()), &tikzNode->node(), SIGNAL(changed()));
+    connect(this, SIGNAL(svgChanged()), tikzNode->node(), SIGNAL(changed()));
 }
 
 void NodeTextPrivate::updateCache()

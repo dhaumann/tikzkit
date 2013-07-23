@@ -59,7 +59,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         /**
          * Returns the pointer to the associated Node.
          */
-        tikz::Node& node();
+        tikz::Node * node();
 
         /**
          * Returns node().id();

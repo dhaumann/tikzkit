@@ -84,9 +84,9 @@ int TikzEdge::type() const
     return UserType + 3;
 }
 
-tikz::Edge& TikzEdge::edge()
+tikz::Edge * TikzEdge::edge()
 {
-    return *d->edge;
+    return d->edge;
 }
 
 qint64 TikzEdge::id() const
@@ -103,7 +103,7 @@ void TikzEdge::setStartNode(TikzNode* start)
 {
     if (d->start != start) {
         d->start = start;
-        d->edge->setStartNode(start ? &start->node() : 0);
+        d->edge->setStartNode(start ? start->node() : 0);
     }
 }
 
@@ -111,7 +111,7 @@ void TikzEdge::setEndNode(TikzNode* end)
 {
     if (d->end != end) {
         d->end = end;
-        d->edge->setEndNode(end ? &end->node() : 0);
+        d->edge->setEndNode(end ? end->node() : 0);
     }
 }
 
