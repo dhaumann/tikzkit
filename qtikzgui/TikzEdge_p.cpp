@@ -125,6 +125,7 @@ void TikzEdgePrivate::updateCache()
         startControlPoint->setPos(cp1);
         endControlPoint->setPos(cp2);
     } else {
+        linePath.moveTo(startAnchor);
         linePath.lineTo(endAnchor);
     }
 
