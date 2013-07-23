@@ -17,6 +17,7 @@
  */
 #include "DemoWidget.h"
 
+#include "TikzDocument.h"
 #include "TikzNode.h"
 #include "TikzEdge.h"
 #include "TikzScene.h"
@@ -58,8 +59,10 @@ DemoWidget::DemoWidget()
     QHBoxLayout* l = new QHBoxLayout();
     v->addLayout(l);
 
-    // create scene
-    m_view = new QGraphicsView(this);
+
+    TikzDocument * doc = new TikzDocument(this);
+
+    m_view = doc->createView(this);
     l->addWidget(m_view);
 
     m_zoomSlider = new QSlider(this);
@@ -73,112 +76,88 @@ DemoWidget::DemoWidget()
     connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
     connect(m_rotSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
 
-    TikzScene* scene = new TikzScene();
-    m_view->setScene(scene);
+//     m_view->setSceneRect(0, 0, m_view->size().width() / 200.0, m_view->size().height() / 200.0);
 
-    m_view->setSceneRect(0, 0, m_view->size().width() / 200.0, m_view->size().height() / 200.0);
-//     m_view->rotate(5);
-//     QTransform t;
-//     t.rotate(5);
-//     t.scale(20, 20);
-    const qreal xScale = m_view->physicalDpiX() / 2.540;
-    const qreal yScale = m_view->physicalDpiX() / 2.540;
-    qDebug() << xScale << yScale << m_view->physicalDpiX() << m_view->physicalDpiY();
-    m_view->scale(xScale, -yScale);
-
-//     m_view->setTransform(t);
-//     m_view->scale(20, 20);
     m_view->show();
-//     m_view->scene()->addRect(0, 0, 1, 1)->setBrush(QBrush(Qt::blue));
 
-    TikzNode* item1 = new TikzNode();
+    TikzNode* item1 = doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, 3));
     item1->node()->style()->setLineWidthType(tikz::VeryThin);
     item1->node()->style()->setShape(tikz::ShapeCircle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("$\\int f(x) dx$");
-    m_view->scene()->addItem(item1);
 
-    TikzNode* item2 = new TikzNode();
+    TikzNode* item2 = doc->createTikzNode();
     item2->node()->setPos(QPointF(3, 3));
     item2->node()->style()->setLineWidthType(tikz::Thin);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->setText("$\\Leftrightarrow$");
-    m_view->scene()->addItem(item2);
 
     // an edge
-    TikzEdge* edge = new TikzEdge();
+    TikzEdge* edge = doc->createTikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
     edge->edge()->style()->setLineWidthType(tikz::SemiThick);
-    m_view->scene()->addItem(edge);
 
 
 
-    item1 = new TikzNode();
+    item1 = doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, 1));
     item1->node()->style()->setLineWidthType(tikz::Thin);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("$a$");
-    m_view->scene()->addItem(item1);
 
-    item2 = new TikzNode();
+    item2 = doc->createTikzNode();
     item2->node()->setPos(QPointF(3, 1));
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->setText("a");
-    m_view->scene()->addItem(item2);
 
     // an edge
-    edge = new TikzEdge();
+    edge = doc->createTikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
     edge->edge()->style()->setLineWidthType(tikz::SemiThick);
-    m_view->scene()->addItem(edge);
 
 
-    item1 = new TikzNode();
+    item1 = doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, -1));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("$\\iiint \\max$");
-    m_view->scene()->addItem(item1);
 
-    item2 = new TikzNode();
+    item2 = doc->createTikzNode();
     item2->node()->setPos(QPointF(3, -1));
     item2->node()->style()->setLineWidthType(tikz::UltraThick);
     item2->node()->style()->setShape(tikz::ShapeRectangle);
     item2->node()->setText("A long text\\\\which is wrapped");
     item2->node()->style()->setInnerSep(0.2);
-    m_view->scene()->addItem(item2);
 
     item2->style()->setParent(item1->style());
 
     // an edge
-    edge = new TikzEdge();
+    edge = doc->createTikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
     edge->edge()->style()->setLineWidthType(tikz::UltraThick);
     edge->edge()->style()->setArrowTail(tikz::LatexArrow);
     edge->edge()->style()->setArrowHead(tikz::PipeArrow);
-    m_view->scene()->addItem(edge);
 
 
-    item1 = new TikzNode();
+    item1 = doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, -3));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("c");
-//     item1->rotate(30);
-    m_view->scene()->addItem(item1);
+
     a = item1;
 
-    item2 = new TikzNode();
+    item2 = doc->createTikzNode();
     item2->node()->setPos(QPointF(3, -3));
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
@@ -186,22 +165,20 @@ DemoWidget::DemoWidget()
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->style()->setMinimumWidth(2);
     item2->node()->setText("8");
-    m_view->scene()->addItem(item2);
 
     // an edge
-    edge = new TikzEdge();
+    edge = doc->createTikzEdge();
     edge->setStartNode(item1);
     edge->setEndNode(item2);
     edge->edge()->style()->setLineWidthType(tikz::UltraThick);
     edge->edge()->style()->setBendAngle(30);
     edge->edge()->style()->setArrowTail(tikz::StealthArrow);
     edge->edge()->style()->setArrowHead(tikz::ToArrow);
-    m_view->scene()->addItem(edge);
 
 
     // arrow demo
     for (int i = 0; i < tikz::ArrowCount; ++i) {
-        edge = new TikzEdge();
+        edge = doc->createTikzEdge();
         edge->edge()->setStartPos(QPointF(-6, i - 4));
         edge->edge()->setEndPos(QPointF(-4, i - 4));
         edge->edge()->style()->beginConfig();
@@ -209,12 +186,11 @@ DemoWidget::DemoWidget()
         edge->edge()->style()->setArrowTail(tikz::Arrow(i));
         edge->edge()->style()->setArrowHead(tikz::Arrow(i));
         edge->edge()->style()->endConfig();
-        m_view->scene()->addItem(edge);
     }
 
     // arrow demo
     for (int i = 0; i < tikz::ArrowCount; ++i) {
-        edge = new TikzEdge();
+        edge = doc->createTikzEdge();
         edge->edge()->setStartPos(QPointF(4, i - 4));
         edge->edge()->setEndPos(QPointF(6, i - 4));
         edge->edge()->style()->beginConfig();
@@ -224,17 +200,8 @@ DemoWidget::DemoWidget()
         edge->edge()->style()->setArrowTail(tikz::Arrow(i));
         edge->edge()->style()->setArrowHead(tikz::Arrow(i));
         edge->edge()->style()->endConfig();
-        m_view->scene()->addItem(edge);
     }
 
-//     item1 = new TikzNode();
-//     item1->node()->setText("5");
-//     item1->node()->setPos(QPointF(3, 0));
-//     item1->node()->style()->setLineWidthType(tikz::UltraThick);
-// //     item1->node()->style()->setShape(tikz::ShapeRectangle);
-//     m_view->scene()->addItem(item1);
-//
-//
 //     QTimer::singleShot(3000, item1, SLOT(deleteLater()));
 }
 

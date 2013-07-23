@@ -35,6 +35,8 @@ class TikzNode;
 class TikzEdge;
 class TikzScene;
 
+class QGraphicsView;
+
 class TikzDocumentPrivate : public QObject
 {
     Q_OBJECT
@@ -83,6 +85,11 @@ class TikzDocumentPrivate : public QObject
          * Graphics scene for the document.
          */
         TikzScene * scene;
+
+        /**
+         * List of graphics views.
+         */
+        QVector<QGraphicsView*> views;
 };
 
 #endif // TIKZGUI_DOCUMENT_PRIVATE_H
