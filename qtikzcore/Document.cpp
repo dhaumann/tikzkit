@@ -168,9 +168,6 @@ Node * Document::createNode(qint64 id)
     // insert node into hash map
     d->nodeMap.insert(id, node);
 
-    // notify the world about the new node
-    emit nodeCreated(node);
-
     return node;
 }
 
@@ -184,9 +181,6 @@ Edge * Document::createEdge(qint64 id)
 
     // insert edge into hash map
     d->edgeMap.insert(id, edge);
-
-    // notify the world about the new edge
-    emit edgeCreated(edge);
 
     return edge;
 }
@@ -255,9 +249,6 @@ void Document::deleteNode(qint64 id)
     Node* node = d->nodeMap[id];
     Q_ASSERT(d->nodes.contains(node));
 
-    // notify world
-    emit nodeDeleted(node);
-
     // unregister node
     d->nodeMap.remove(id);
     d->nodes.remove(d->nodes.indexOf(node));
@@ -275,9 +266,6 @@ void Document::deleteEdge(qint64 id)
     // get edge
     Edge * edge = d->edgeMap[id];
     Q_ASSERT(d->edges.contains(edge));
-
-    // notify world
-    emit edgeDeleted(edge);
 
     // unregister edge
     d->edgeMap.remove(id);

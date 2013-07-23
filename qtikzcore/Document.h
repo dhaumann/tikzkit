@@ -139,35 +139,6 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         void deleteEdge(Edge * edge);
 
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever a node was created by calling
-         * createNode().
-         * @param node the new node, associated with this document
-         */
-        void nodeCreated(tikz::Node* node);
-
-        /**
-         * This signal is emitted whenever an edge was created by calling
-         * createEdge().
-         * @param edge the new edge, associated with this document
-         */
-        void edgeCreated(tikz::Edge* edge);
-
-        /**
-         * This signal is emitted whenever @p node is deleted by calling
-         * deleteNode(). The @p node is still valid.
-         * @param node the deleted node, associated with this document
-         */
-        void nodeDeleted(tikz::Node* node);
-
-        /**
-         * This signal is emitted whenever @p edge is deleted by calling
-         * createEdge(). The @p edge is still valid.
-         * @param edge the deleted edge, associated with this document
-         */
-        void edgeDeleted(tikz::Edge* edge);
-
     //
     // internal: Undo / redo items manipulate with ID
     //
