@@ -44,6 +44,11 @@ TikzScene::TikzScene(QObject * parent)
     d->subDivisions = 1;
 }
 
+TikzScene::~TikzScene()
+{
+    delete d;
+}
+
 void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     qreal left = int(rect.left()) - (int(rect.left()) % d->subDivisions);

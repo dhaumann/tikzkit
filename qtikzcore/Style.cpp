@@ -21,6 +21,8 @@
 
 #include "StyleManager.h"
 
+#include "Document.h"
+
 namespace tikz {
 
 /**
@@ -111,7 +113,7 @@ Style::Style()
 }
 
 Style::Style(qint64 id, Document* tikzDocument)
-    : QObject()
+    : QObject(tikzDocument)
     , d(new StylePrivate())
 {
     d->init();

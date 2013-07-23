@@ -36,6 +36,11 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
          */
         TikzScene(QObject * parent = 0);
 
+        /**
+         * Destructor
+         */
+        virtual ~TikzScene();
+
     protected:
         // Efficiently draws a grid in the background.
         // For more information: http://www.qtcentre.org/threads/5609-Drawing-grids-efficiently-in-QGraphicsScene?p=28905#post28905
