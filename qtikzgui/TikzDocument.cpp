@@ -27,6 +27,7 @@
 
 #include "TikzNode.h"
 #include "TikzEdge.h"
+#include "TikzScene.h"
 
 #include <QDebug>
 
@@ -36,52 +37,28 @@ TikzDocumentPrivate::TikzDocumentPrivate(TikzDocument * tikzDocument)
 {
     tikzDoc = tikzDocument;
 }
-
-void TikzDocumentPrivate::createTikzNode(tikz::Node * node)
-{
-#ifndef NDEBUG
-    // make sure the node is not yet registered
-    foreach (TikzNode * n, nodes) {
-        Q_ASSERT(node != &n->node());
-        Q_ASSERT(node->id() != n->id());
-        Q_ASSERT(! nodeMap.contains(node->id()));
-    }
-#endif
-
-    TikzNode * tikzNode = new TikzNode(node);
-    nodes.append(tikzNode);
-    nodeMap.insert(node->id(), tikzNode);
-}
-
-void TikzDocumentPrivate::createTikzEdge(tikz::Edge * edge)
-{
-#ifndef NDEBUG
-    // make sure the node is not yet registered
-    foreach (TikzEdge * e, edges) {
-        Q_ASSERT(edge != &e->edge());
-        Q_ASSERT(edge->id() != e->id());
-    }
-#endif
-
-    TikzEdge * tikzEdge = new TikzEdge(edge);
-    edges.append(tikzEdge);
-}
 //END
 
 
 
 TikzDocument::TikzDocument(QObject * parent)
-    : QObject(parent)
+    : tikz::Document(parent)
 {
     d = new TikzDocumentPrivate(this);
     d->doc = new tikz::Document(d);
-
-    connect(d->doc, SIGNAL(nodeCreated(tikz::Node*)), d, SLOT(createTikzNode(tikz::Node*)));
-    connect(d->doc, SIGNAL(edgeCreated(tikz::Edge*)), d, SLOT(createTikzEdge(tikz::Edge*)));
+    d->scene = new TikzScene(d);
 }
 
 TikzDocument::~TikzDocument()
 {
+    foreach (TikzEdge * edge, d->edges) {
+        deleteEdge(edge->id());
+    }
+
+    foreach (TikzNode* node, d->nodes) {
+        deleteNode(node->id());
+    }
+
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
@@ -89,11 +66,117 @@ QGraphicsView * TikzDocument::createView()
 {
 }
 
-TikzNode * TikzDocument::createNode()
+TikzNode * TikzDocument::createTikzNode()
 {
-    tikz::Node * n = d->doc->createNode();
-    Q_ASSERT(d->nodeMap.contains(n->id()));
-    return d->nodeMap[n->id()];
+    // create node
+    tikz::Node * node = Document::createNode();
+    Q_ASSERT(d->nodeMap.contains(node->id()));
+
+    return d->nodeMap[node->id()];
+}
+
+TikzEdge * TikzDocument::createTikzEdge()
+{
+    // create edge
+    tikz::Edge * edge = Document::createEdge();
+    Q_ASSERT(d->edgeMap.contains(edge->id()));
+
+    return d->edgeMap[edge->id()];
+}
+
+void TikzDocument::deleteTikzNode(TikzNode * node)
+{
+    // delete node from id
+    const int id = node->id();
+    Q_ASSERT(d->nodeMap.contains(id));
+    deleteNode(node->id());
+    Q_ASSERT(! d->nodeMap.contains(id));
+}
+
+void TikzDocument::deleteTikzEdge(TikzEdge * edge)
+{
+    // delete edge from id
+    const int id = edge->id();
+    Q_ASSERT(d->edgeMap.contains(id));
+    deleteEdge(edge->id());
+    Q_ASSERT(! d->edgeMap.contains(id));
+}
+
+tikz::Node * TikzDocument::createNode(qint64 id)
+{
+    // create node by tikz::Document
+    tikz::Node * node = Document::createNode(id);
+    Q_ASSERT(id == node->id());
+    Q_ASSERT(! d->nodeMap.contains(id));
+
+    // create GUI item
+    TikzNode * tikzNode = new TikzNode(node);
+    d->nodes.append(tikzNode);
+    d->nodeMap.insert(id, tikzNode);
+
+    // add to graphics scene
+    d->scene->addItem(tikzNode);
+
+    return node;
+}
+
+tikz::Edge * TikzDocument::createEdge(qint64 id)
+{
+    tikz::Edge * edge = tikz::Document::createEdge(id);
+    Q_ASSERT(id == edge->id());
+    Q_ASSERT(! d->edgeMap.contains(id));
+
+    // create GUI item
+    TikzEdge * tikzEdge = new TikzEdge(edge);
+    d->edges.append(tikzEdge);
+    d->edgeMap.insert(id, tikzEdge);
+
+    // add to graphics scene
+    d->scene->addItem(tikzEdge);
+
+    return edge;
+}
+
+void TikzDocument::deleteNode(qint64 id)
+{
+    Q_ASSERT(d->nodeMap.contains(id));
+
+    // get TikzNode
+    TikzNode * tikzNode = d->nodeMap[id];
+
+    // remove from scene
+    d->scene->removeItem(tikzNode);
+
+    const int index = d->nodes.indexOf(tikzNode);
+    Q_ASSERT(index >= 0);
+
+    // delete item
+    d->nodeMap.remove(id);
+    d->nodes.remove(index);
+    delete tikzNode;
+
+    tikz::Document::deleteNode(id);
+}
+
+void TikzDocument::deleteEdge(qint64 id)
+{
+    Q_ASSERT(d->edgeMap.contains(id));
+
+    // get TikzEdge
+    TikzEdge * tikzEdge = d->edgeMap[id];
+
+    // remove from scene
+    d->scene->removeItem(tikzEdge);
+
+    const int index = d->edges.indexOf(tikzEdge);
+    Q_ASSERT(index >= 0);
+
+    // delete item
+    d->edgeMap.remove(id);
+    d->edges.remove(index);
+    delete tikzEdge;
+
+    tikz::Document::deleteEdge(id);
 }
 
 // kate: indent-width 4; replace-tabs on;

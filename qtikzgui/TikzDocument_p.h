@@ -33,6 +33,7 @@ namespace tikz {
 class TikzDocument;
 class TikzNode;
 class TikzEdge;
+class TikzScene;
 
 class TikzDocumentPrivate : public QObject
 {
@@ -64,30 +65,24 @@ class TikzDocumentPrivate : public QObject
         QVector<TikzNode*> nodes;
 
         /**
+         * List of TikzEdge%s.
+         */
+        QVector<TikzEdge*> edges;
+
+        /**
          * Node lookup map
          */
         QHash<qint64, TikzNode*> nodeMap;
 
         /**
-         * List of TikzEdge%s.
+         * Edge lookup map
          */
-        QVector<TikzEdge*> edges;
-
-    //
-    // private slots of TikzDocument
-    //
-    public Q_SLOTS:
-        /**
-         * Whenever the tikz::Document creates a node, call this function
-         * to also create a corresponding TikzNode for the GUI.
-         */
-        void createTikzNode(tikz::Node * node);
+        QHash<qint64, TikzEdge*> edgeMap;
 
         /**
-         * Whenever the tikz::Document creates an edge, call this function
-         * to also create a corresponding TikzEdge for the GUI.
+         * Graphics scene for the document.
          */
-        void createTikzEdge(tikz::Edge * edge);
+        TikzScene * scene;
 };
 
 #endif // TIKZGUI_DOCUMENT_PRIVATE_H

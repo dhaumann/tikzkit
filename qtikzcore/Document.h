@@ -175,22 +175,22 @@ class TIKZCORE_EXPORT Document : public QObject
         /**
          * Create a new node associated with this document with @p id.
          */
-        Node * createNode(qint64 id);
+        virtual Node * createNode(qint64 id);
 
         /**
          * Create a new edge associated with this document with @p id.
          */
-        Edge * createEdge(qint64 id);
+        virtual Edge * createEdge(qint64 id);
 
         /**
          * Delete node @p id associated with this document.
          */
-        void deleteNode(qint64 id);
+        virtual void deleteNode(qint64 id);
 
         /**
          * Delete edge @p id associated with this document.
          */
-        void deleteEdge(qint64 id);
+        virtual void deleteEdge(qint64 id);
 
     private:
         DocumentPrivate * const d;

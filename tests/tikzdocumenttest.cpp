@@ -27,7 +27,7 @@ void TikzDocumentTest::documentTest()
 {
     TikzDocument doc;
 
-    TikzNode * node = doc.createNode();
+    TikzNode * node = doc.createTikzNode();
 
     Q_ASSERT(node != 0);
 

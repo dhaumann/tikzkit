@@ -22,7 +22,7 @@
 
 #include "tikzgui_export.h"
 
-#include <QObject>
+#include <Document.h>
 
 class QGraphicsView;
 
@@ -31,7 +31,7 @@ class TikzEdge;
 
 class TikzDocumentPrivate;
 
-class TIKZGUI_EXPORT TikzDocument : public QObject
+class TIKZGUI_EXPORT TikzDocument : public tikz::Document
 {
     Q_OBJECT
 
@@ -51,11 +51,61 @@ class TIKZGUI_EXPORT TikzDocument : public QObject
          */
         QGraphicsView * createView();
 
-    public Q_SLOTS:
+    //
+    // Node and edge creation
+    //
+    public:
         /**
-         * Create a node
+         * Creates a new TikzNode associated with this document.
+         * If the node is not needed anymore, delete it by
+         * calling deleteTikzNode(tikzNode).
          */
-        TikzNode * createNode();
+        TikzNode * createTikzNode();
+
+        /**
+         * Creates a new edge associated with this document.
+         * If the edge is not needed anymore, delete it by
+         * calling deleteTikzEdge(tikzEdge).
+         */
+        TikzEdge * createTikzEdge();
+
+        /**
+         * Remove @p node from the document by deleting the node object.
+         * Afterwards, the pointer is invalid.
+         * @param node node to delete
+         */
+        void deleteTikzNode(TikzNode * node);
+
+        /**
+         * Remove @p edge from the document by deleting the edge object.
+         * Afterwards, the pointer is invalid.
+         * @param edge edge to delete
+         */
+        void deleteTikzEdge(TikzEdge * edge);
+
+    //
+    // internal: Undo / redo items manipulate with ID
+    //
+    protected:
+        /**
+         * Create a new node associated with this document with @p id.
+         */
+        virtual tikz::Node * createNode(qint64 id) override;
+
+        /**
+         * Create a new edge associated with this document with @p id.
+         */
+        virtual tikz::Edge * createEdge(qint64 id) override;
+
+        /**
+         * Delete node @p id associated with this document.
+         */
+        virtual void deleteNode(qint64 id) override;
+
+        /**
+         * Delete edge @p id associated with this document.
+         */
+        virtual void deleteEdge(qint64 id) override;
 
     private:
         TikzDocumentPrivate * d;
