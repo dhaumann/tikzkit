@@ -23,6 +23,7 @@
 #include "TikzScene.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
+#include "TikzToolBox.h"
 #include "tikz.h"
 #include <Edge.h>
 
@@ -42,7 +43,16 @@ static TikzNode* a;
 DemoWidget::DemoWidget()
     : QWidget()
 {
-    QVBoxLayout* v = new QVBoxLayout(this);
+    TikzDocument * doc = new TikzDocument(this);
+
+    QHBoxLayout * hbox = new QHBoxLayout(this);
+    setLayout(hbox);
+
+    TikzToolBox * toolBox = new TikzToolBox(doc, this);
+    hbox->addWidget(toolBox);
+
+    QVBoxLayout* v = new QVBoxLayout();
+    hbox->addLayout(v);
 
     QHBoxLayout* h = new QHBoxLayout();
     v->addLayout(h);
@@ -59,8 +69,6 @@ DemoWidget::DemoWidget()
     QHBoxLayout* l = new QHBoxLayout();
     v->addLayout(l);
 
-
-    TikzDocument * doc = new TikzDocument(this);
 
     m_view = doc->createView(this);
     l->addWidget(m_view);

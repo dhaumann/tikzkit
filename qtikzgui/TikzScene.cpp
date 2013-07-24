@@ -68,7 +68,11 @@ TikzDocument * TikzScene::document() const
 
 void TikzScene::setEditMode(TikzEditMode mode)
 {
-    d->editMode = mode;
+    if (mode != d->editMode) {
+        d->editMode = mode;
+
+        emit editModeChanged(mode);
+    }
 }
 
 TikzEditMode TikzScene::editMode() const

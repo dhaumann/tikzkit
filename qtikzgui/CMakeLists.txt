@@ -25,6 +25,7 @@ set(qtikzgui_SOURCES
     BezierCurve.cpp
     NodeText.cpp
     NodeText_p.cpp
+    TikzToolBox.cpp
 
     shapes/AbstractShape.cpp
     shapes/RectShape.cpp
@@ -55,6 +56,7 @@ set(qtikzgui_HEADERS
     AnchorHandle.h
     CurveHandle.h
     NodeText_p.h
+    TikzToolBox.h
 
     tex/TexGenerator.h
 #    tex/PdfRenderer.h

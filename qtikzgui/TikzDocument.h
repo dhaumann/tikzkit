@@ -53,7 +53,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         QGraphicsView * createView(QWidget * parent);
 
     //
-    // Edit mode
+    // Forward functions for EditMode
     //
     public Q_SLOTS:
         /**
@@ -67,6 +67,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
          */
         TikzEditMode editMode() const;
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the edit mode changed through setEditMode.
+         */
+        void editModeChanged(TikzEditMode mode) const;
 
     //
     // Node and edge creation

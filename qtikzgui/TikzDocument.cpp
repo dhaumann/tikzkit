@@ -48,6 +48,8 @@ TikzDocument::TikzDocument(QObject * parent)
     d = new TikzDocumentPrivate(this);
     d->doc = new tikz::Document(d);
     d->scene = new TikzScene(this);
+
+    connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
 }
 
 TikzDocument::~TikzDocument()

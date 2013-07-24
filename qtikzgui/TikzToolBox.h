@@ -17,19 +17,19 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_TIKZ_SCENE_H
-#define TIKZGUI_TIKZ_SCENE_H
+#ifndef TIKZGUI_TIKZ_TOOL_BOX_H
+#define TIKZGUI_TIKZ_TOOL_BOX_H
 
-#include <QGraphicsScene>
+#include <QWidget>
 
 #include "tikzgui_export.h"
 #include "tikzgui.h"
 
 class TikzDocument;
 
-class TikzScenePrivate;
+class TikzToolBoxPrivate;
 
-class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
+class TIKZGUI_EXPORT TikzToolBox : public QWidget
 {
     Q_OBJECT
 
@@ -37,12 +37,12 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
         /**
          * Constructor.
          */
-        TikzScene(TikzDocument * document = 0);
+        TikzToolBox(TikzDocument * document, QWidget * parent = 0);
 
         /**
          * Destructor.
          */
-        virtual ~TikzScene();
+        virtual ~TikzToolBox();
 
         /**
          * Returns the associated TikzDocument.
@@ -64,27 +64,19 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
          */
         TikzEditMode editMode() const;
 
-    Q_SIGNALS:
+    //
+    // Internal setter for edit mode
+    //
+    private Q_SLOTS:
         /**
-         * This signal is emitted whenever the edit mode changed through setEditMode.
+         * Set the edit mode from the buttons.
          */
-        void editModeChanged(TikzEditMode mode) const;
-
-    protected:
-        // Efficiently draws a grid in the background.
-        // For more information: http://www.qtcentre.org/threads/5609-Drawing-grids-efficiently-in-QGraphicsScene?p=28905#post28905
-        void drawBackground(QPainter *painter, const QRectF &rect);
-
-        void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
-
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+        void setEditModeInternal(int mode);
 
     private:
-        TikzScenePrivate * const d;
+        TikzToolBoxPrivate * const d;
 };
 
-#endif // TIKZGUI_TIKZ_SCENE_H
+#endif // TIKZGUI_TIKZ_TOOL_BOX_H
 
 // kate: indent-width 4; replace-tabs on;
