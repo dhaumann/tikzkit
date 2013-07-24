@@ -47,7 +47,7 @@ TikzDocument::TikzDocument(QObject * parent)
 {
     d = new TikzDocumentPrivate(this);
     d->doc = new tikz::Document(d);
-    d->scene = new TikzScene(d);
+    d->scene = new TikzScene(this);
 }
 
 TikzDocument::~TikzDocument()
@@ -77,15 +77,22 @@ QGraphicsView * TikzDocument::createView(QWidget * parent)
     // set graphics scene
     view->setScene(d->scene);
 
-    // set sane viewport
-    view->setSceneRect(0, 0, view->size().width() / 200.0, view->size().height() / 200.0);
-
     // scale to true display size
     view->scale(view->physicalDpiX() / 2.540,
                -view->physicalDpiX() / 2.540); // TODO, FIXME: physicalDpiY() ?
 
     // return view
     return view;
+}
+
+void TikzDocument::setEditMode(TikzEditMode mode)
+{
+    d->scene->setEditMode(mode);
+}
+
+TikzEditMode TikzDocument::editMode() const
+{
+    return d->scene->editMode();
 }
 
 TikzNode * TikzDocument::createTikzNode()

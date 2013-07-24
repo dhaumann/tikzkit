@@ -19,34 +19,61 @@
 
 #include "TikzScene.h"
 
+#include "TikzDocument.h"
+#include "TikzNode.h"
+
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 #include <QVarLengthArray>
+#include <QDebug>
 
 #include <math.h>
 
 class TikzScenePrivate
 {
 public:
+    // associated TikzDocument
+    TikzDocument * doc;
+
     // The size of the cells in the grid.
     int subDivisions;
+
+    // Mouse edit mode
+    TikzEditMode editMode;
     // The item being dragged.
     QGraphicsItem *dragged;
     // The distance from the top left of the item to the mouse position.
     QPointF dragOffset;
 };
 
-TikzScene::TikzScene(QObject * parent)
-    : QGraphicsScene(parent)
+TikzScene::TikzScene(TikzDocument * doc)
+    : QGraphicsScene(doc)
     , d(new TikzScenePrivate())
 {
+    d->doc = doc;
     d->subDivisions = 1;
+    d->editMode = TikzEditMode::ModePlaceNode;
 }
 
 TikzScene::~TikzScene()
 {
     delete d;
+}
+
+TikzDocument * TikzScene::document() const
+{
+    return d->doc;
+}
+
+void TikzScene::setEditMode(TikzEditMode mode)
+{
+    d->editMode = mode;
+}
+
+TikzEditMode TikzScene::editMode() const
+{
+    return d->editMode;
 }
 
 void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
@@ -70,6 +97,19 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 
 void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    switch (d->editMode) {
+        case TikzEditMode::ModeSelect: break;
+        case TikzEditMode::ModePlaceCoord: break;
+        case TikzEditMode::ModePlaceNode: {
+            TikzNode * node = document()->createTikzNode();
+            node->setPos(mouseEvent->scenePos());
+            setEditMode(TikzEditMode::ModeSelect);
+            return;
+        }
+        case TikzEditMode::ModePlaceEdge: break;
+        default: break;
+    }
+
     QGraphicsScene::mousePressEvent(mouseEvent);
     return;
     QGraphicsItem* item = qgraphicsitem_cast<QGraphicsItem*>(itemAt(mouseEvent->scenePos(), QTransform()));
@@ -83,6 +123,7 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    setSceneRect(itemsBoundingRect());
     QGraphicsScene::mouseMoveEvent(mouseEvent);
     return;
     if (d->dragged) {

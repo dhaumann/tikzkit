@@ -21,6 +21,7 @@
 #define TIKZGUI_DOCUMENT_H
 
 #include "tikzgui_export.h"
+#include "tikzgui.h"
 
 #include <Document.h>
 
@@ -50,6 +51,22 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
          * Create a graphics view for this document.
          */
         QGraphicsView * createView(QWidget * parent);
+
+    //
+    // Edit mode
+    //
+    public Q_SLOTS:
+        /**
+         * Set the edit mode to @p mode.
+         */
+        void setEditMode(TikzEditMode mode);
+
+    public:
+        /**
+         * Get the edit mode.
+         */
+        TikzEditMode editMode() const;
+
 
     //
     // Node and edge creation

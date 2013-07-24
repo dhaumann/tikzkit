@@ -23,6 +23,9 @@
 #include <QGraphicsScene>
 
 #include "tikzgui_export.h"
+#include "tikzgui.h"
+
+class TikzDocument;
 
 class TikzScenePrivate;
 
@@ -32,14 +35,34 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
 
     public:
         /**
-         * Default constructor
+         * Constructor.
          */
-        TikzScene(QObject * parent = 0);
+        TikzScene(TikzDocument * document = 0);
 
         /**
-         * Destructor
+         * Destructor.
          */
         virtual ~TikzScene();
+
+        /**
+         * Returns the associated TikzDocument.
+         */
+        TikzDocument * document() const;
+
+    //
+    // Edit mode
+    //
+    public Q_SLOTS:
+        /**
+         * Set the edit mode to @p mode.
+         */
+        void setEditMode(TikzEditMode mode);
+
+    public:
+        /**
+         * Get the edit mode.
+         */
+        TikzEditMode editMode() const;
 
     protected:
         // Efficiently draws a grid in the background.
