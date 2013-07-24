@@ -65,6 +65,11 @@ TikzToolBox::TikzToolBox(TikzDocument * doc, QWidget * parent)
     createNodeAction->setCheckable(true);
     createEdgeAction->setCheckable(true);
 
+    selectAction->setAutoRaise(true);
+    createCoordAction->setAutoRaise(true);
+    createNodeAction->setAutoRaise(true);
+    createEdgeAction->setAutoRaise(true);
+
     grid->addWidget(selectAction, 0, 0);
     grid->addWidget(createCoordAction, 0, 1);
     grid->addWidget(createNodeAction, 0, 2);
