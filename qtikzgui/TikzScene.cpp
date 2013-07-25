@@ -21,6 +21,9 @@
 
 #include "TikzDocument.h"
 #include "TikzNode.h"
+#include "TikzEdge.h"
+
+#include <Edge.h>
 
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -110,7 +113,14 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             setEditMode(TikzEditMode::ModeSelect);
             return;
         }
-        case TikzEditMode::ModePlaceEdge: break;
+        case TikzEditMode::ModePlaceEdge: {
+            TikzEdge * edge = document()->createTikzEdge();
+            edge->edge()->setStartPos(mouseEvent->scenePos());
+            edge->edge()->setEndPos(mouseEvent->scenePos());
+            sendEvent(edge, mouseEvent);
+            mouseEvent->ignore();
+            return;
+        }
         default: break;
     }
 
@@ -127,6 +137,7 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    qDebug() << "scene mouseMoveEvent";
     setSceneRect(itemsBoundingRect());
     QGraphicsScene::mouseMoveEvent(mouseEvent);
     return;
@@ -139,6 +150,10 @@ void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    if (d->editMode == TikzEditMode::ModePlaceEdge) {
+        setEditMode(TikzEditMode::ModeSelect);
+    }
+
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
     return;
     if (d->dragged) {
