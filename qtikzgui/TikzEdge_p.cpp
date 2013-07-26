@@ -225,6 +225,10 @@ qreal TikzEdgePrivate::startAngle() const
 {
     qreal rad = 0.0;
     switch (style()->curveMode()) {
+        case tikz::StraightLine: {
+            rad = baseAngle();
+            break;
+        }
         case tikz::BendCurve: {
             rad = baseAngle() + style()->bendAngle() * M_PI / 180.0;
             break;
@@ -242,6 +246,10 @@ qreal TikzEdgePrivate::endAngle() const
 {
     qreal rad = 0.0;
     switch (style()->curveMode()) {
+        case tikz::StraightLine: {
+            rad = baseAngle() - M_PI;
+            break;
+        }
         case tikz::BendCurve: {
             const QPointF diff = edge->startPos() - edge->endPos();
             rad = std::atan2(diff.y(), diff.x())
