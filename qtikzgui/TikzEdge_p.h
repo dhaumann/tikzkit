@@ -92,10 +92,30 @@ class TikzEdgePrivate
     public:
         void updateCache();
 
+        /**
+         * The base angle [rad] is defined as the angle from the center of the
+         * startNode to the center of the endNode.
+         */
         qreal baseAngle() const;
+
+        /**
+         * The start angle [rad] is defined as the base angle + an additional
+         * rotation e.g. because of edge bending.
+         */
         qreal startAngle() const;
+
+        /**
+         * The end angle [rad] is defined as the base angle + an additional
+         * rotation e.g. because of edge bending.
+         */
         qreal endAngle() const;
+
+        /**
+         * Creates a painter path @p path that represents the arrow at position @p arrowHead.
+         * The arrow is rotated by @p rad units.
+         */
         void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad);
+
         void drawArrow(QPainter* painter, const QPainterPath& path);
         void drawHandle(QPainter* painter, const QPointF& pos, bool connected);
 
