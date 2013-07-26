@@ -105,15 +105,49 @@ void TikzEdgePrivate::updateCache()
             startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
             endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
 
-            // create line
+            // create line: first vertical, then horizontal
             linePath.moveTo(startAnchor);
             linePath.lineTo(endAnchor);
             break;
         }
         case tikz::HorizVertLine: { // (a) -| (b)
+            // compute in/outward angles: {0, 90, 180, -90} degrees
+            const qreal startRad = edge->startPos().x() < edge->endPos().x() ? 0.0 : M_PI;
+            const qreal endRad = edge->startPos().y() < edge->endPos().y() ? -0.5 * M_PI
+                : (edge->startPos().y() > edge->endPos().y() ? 0.5 * M_PI : (startRad == 0.0 ? -M_PI : M_PI));
+
+            // get anchors
+            startAnchor = q->startPos(startRad);
+            endAnchor = q->endPos(endRad);
+
+            // shorten line
+            startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+            endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+
+            // create line: first horizontal, then vertical
+            linePath.moveTo(startAnchor);
+            linePath.lineTo(QPointF(endAnchor.x(), startAnchor.y()));
+            linePath.lineTo(endAnchor);
             break;
         }
         case tikz::VertHorizLine: { // (a) |- (b)
+            // compute in/outward angles: {0, 90, 180, -90} degrees
+            const qreal startRad = edge->startPos().y() < edge->endPos().y() ? 0.5 * M_PI : -0.5 * M_PI;
+            const qreal endRad = edge->startPos().x() < edge->endPos().x() ? -M_PI
+                : (edge->startPos().x() > edge->endPos().x() ? 0.0 : -startRad);
+
+            // get anchors
+            startAnchor = q->startPos(startRad);
+            endAnchor = q->endPos(endRad);
+
+            // shorten line
+            startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+            endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+
+            // create line: first vertical, then horizontal
+            linePath.moveTo(startAnchor);
+            linePath.lineTo(QPointF(startAnchor.x(), endAnchor.y()));
+            linePath.lineTo(endAnchor);
             break;
         }
         case tikz::BendCurve: {
