@@ -56,7 +56,7 @@ TikzScene::TikzScene(TikzDocument * doc)
 {
     d->doc = doc;
     d->subDivisions = 1;
-    d->editMode = TikzEditMode::ModePlaceNode;
+    d->editMode = TikzEditMode::ModeSelect;
 }
 
 TikzScene::~TikzScene()
