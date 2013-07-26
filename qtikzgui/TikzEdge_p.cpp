@@ -93,40 +93,71 @@ void TikzEdgePrivate::updateCache()
     const QPointF diff = endAnchor - startAnchor;
     const qreal len = QVector2D(diff).length();
 
-    if (style()->curveMode() == tikz::BendCurve) {
-        const qreal startRad = std::atan2(diff.y(), diff.x()) + style()->bendAngle() * M_PI / 180.0;
-        const qreal endRad = std::atan2(-diff.y(), -diff.x()) - style()->bendAngle() * M_PI / 180.0;
-        // from tikz/libraries/tikzlibrarytopaths.code.tex:
-        const qreal factor = 0.3915;
-        const qreal vecLen = len * style()->looseness() * factor;
+    // compute shorten < and shorten > so it can be used to adapt startAnchor and endAnchor
+    const qreal shortenStart = style()->shortenStart() +  arrowTail->rightExtend();
+    const qreal shortenEnd = style()->shortenEnd() + arrowHead->rightExtend();
 
-        // compute control points
-        const QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
-        const QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
+    switch (style()->curveMode()) {
+        case tikz::StraightLine: { // (a) -- (b)
+            const qreal startRad = std::atan2(diff.y(), diff.x()) + style()->bendAngle() * M_PI / 180.0;
+            const qreal endRad = std::atan2(-diff.y(), -diff.x()) - style()->bendAngle() * M_PI / 180.0;
 
-        // adapt startAnchor and endAnchor with 'shorten' attribute and
-        // rightExtend() of arrows after (!) control point computation
-        const qreal shortenStart = style()->shortenStart() +  arrowTail->rightExtend();
-        const qreal shortenEnd = style()->shortenEnd() + arrowHead->rightExtend();
-        startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
-        endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+            startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+            endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
 
-        // finally create bezier curve
-        linePath.moveTo(startAnchor);
-        linePath.cubicTo(cp1, cp2, endAnchor);
+            // create line
+            linePath.moveTo(startAnchor);
+            linePath.lineTo(endAnchor);
+            break;
+        }
+        case tikz::HorizVertLine: { // (a) -| (b)
+            break;
+        }
+        case tikz::VertHorizLine: { // (a) |- (b)
+            break;
+        }
+        case tikz::BendCurve: {
+            const qreal startRad = std::atan2(diff.y(), diff.x()) + style()->bendAngle() * M_PI / 180.0;
+            const qreal endRad = std::atan2(-diff.y(), -diff.x()) - style()->bendAngle() * M_PI / 180.0;
+            // from tikz/libraries/tikzlibrarytopaths.code.tex:
+            const qreal factor = 0.3915;
+            const qreal vecLen = len * style()->looseness() * factor;
 
-//         QPainterPathStroker pps;
-//         pps.setWidth(0.1);
-//         pps.setCurveThreshold(0.005);
-// //         pps.setDashPattern(Qt::DotLine);
-//         linePath = pps.createStroke(linePath);
-//         linePath = linePath.simplified();
+            // compute control points
+            const QPointF cp1 = startAnchor + vecLen * QPointF(std::cos(startRad), std::sin(startRad));
+            const QPointF cp2 = endAnchor + vecLen * QPointF(std::cos(endRad), std::sin(endRad));
 
-        startControlPoint->setPos(cp1);
-        endControlPoint->setPos(cp2);
-    } else {
-        linePath.moveTo(startAnchor);
-        linePath.lineTo(endAnchor);
+            // adapt startAnchor and endAnchor with 'shorten' attribute and
+            // rightExtend() of arrows after (!) control point computation
+            startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+            endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+
+            // finally create bezier curve
+            linePath.moveTo(startAnchor);
+            linePath.cubicTo(cp1, cp2, endAnchor);
+
+    //         QPainterPathStroker pps;
+    //         pps.setWidth(0.1);
+    //         pps.setCurveThreshold(0.005);
+    // //         pps.setDashPattern(Qt::DotLine);
+    //         linePath = pps.createStroke(linePath);
+    //         linePath = linePath.simplified();
+
+            startControlPoint->setPos(cp1);
+            endControlPoint->setPos(cp2);
+            break;
+        }
+        case tikz::InOutCurve: { // (a) to[in=20, out=30] (b)
+            break;
+        }
+        case tikz::BezierCurve: { // (a) .. controls (b) and (c) .. (d)
+            break;
+        }
+        default: {
+            linePath.moveTo(startAnchor);
+            linePath.lineTo(endAnchor);
+            break;
+        }
     }
 
     // update arrow tail

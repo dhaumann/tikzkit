@@ -385,9 +385,9 @@ void TikzEdge::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEdge::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (!contains(event->pos()) || !isSelected()) {
+    /*if (!contains(event->pos()) || !isSelected()) {
         TikzItem::mousePressEvent(event);
-    } else {
+    } else*/ {
         event->accept();
 
 //         grabMouse();
