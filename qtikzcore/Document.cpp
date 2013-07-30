@@ -307,6 +307,10 @@ void Document::setNodeText(Node * node, const QString & text)
     Q_ASSERT(node->text() == text);
 }
 
+void Document::setNodeStyle(Node * node, const NodeStyle & style)
+{
+}
+
 Node * Document::nodeFromId(qint64 id)
 {
     if (id < 0) {

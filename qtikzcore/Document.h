@@ -36,6 +36,8 @@ class DocumentPrivate;
 class Style;
 class Node;
 class Edge;
+class NodeStyle;
+class EdgeStyle;
 
 class TIKZCORE_EXPORT Document : public QObject
 {
@@ -154,6 +156,12 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         void setNodeText(Node * node, const QString & text);
 
+        /**
+         * Set the style of @p node to @p style.
+         */
+        void setNodeStyle(Node * node, const NodeStyle & style);
+
+    //
     // internal: Undo / redo items manipulate with ID
     //
     protected:

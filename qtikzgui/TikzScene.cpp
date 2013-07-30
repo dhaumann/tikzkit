@@ -31,6 +31,7 @@
 #include <QVarLengthArray>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QUndoStack>
 
 #include <math.h>
 
@@ -210,6 +211,7 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
 {
     // on Del, remove selected items
     if (keyEvent->key() == Qt::Key_Delete) {
+        d->doc->undoManager()->beginMacro("remove items");
         foreach (QGraphicsItem* item, selectedItems()) {
             if (item->type() == QGraphicsItem::UserType + 2) {
                 TikzNode* node = dynamic_cast<TikzNode*>(item);
@@ -221,6 +223,7 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
                 d->doc->deleteTikzEdge(edge);
             }
         }
+        d->doc->undoManager()->endMacro();
 
         keyEvent->accept();
         return;

@@ -101,18 +101,18 @@ DemoWidget::DemoWidget()
     m_view->show();
 
     TikzNode* item1 = doc->createTikzNode();
-    item1->node()->setPos(QPointF(-3, 3));
+    doc->setNodePos(item1->node(), QPointF(-3, 3));
     item1->node()->style()->setLineWidthType(tikz::VeryThin);
     item1->node()->style()->setShape(tikz::ShapeCircle);
     item1->node()->style()->setInnerSep(0.2);
-    item1->node()->setText("$\\int f(x) dx$");
+    doc->setNodeText(item1->node(), "$\\int f(x) dx$");
 
     TikzNode* item2 = doc->createTikzNode();
-    item2->node()->setPos(QPointF(3, 3));
+    doc->setNodePos(item2->node(), QPointF(3, 3));
     item2->node()->style()->setLineWidthType(tikz::Thin);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
-    item2->node()->setText("$\\Leftrightarrow$");
+    doc->setNodeText(item2->node(), "$\\Leftrightarrow$");
 
     // an edge
     TikzEdge* edge = doc->createTikzEdge();
@@ -123,18 +123,18 @@ DemoWidget::DemoWidget()
 
 
     item1 = doc->createTikzNode();
-    item1->node()->setPos(QPointF(-3, 1));
+    doc->setNodePos(item1->node(), QPointF(-3, 1));
     item1->node()->style()->setLineWidthType(tikz::Thin);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    item1->node()->setText("$a$");
+    doc->setNodeText(item1->node(), "$a$");
 
     item2 = doc->createTikzNode();
-    item2->node()->setPos(QPointF(3, 1));
+    doc->setNodePos(item2->node(), QPointF(3, 1));
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
-    item2->node()->setText("a");
+    doc->setNodeText(item2->node(), "a");
 
     // an edge
     edge = doc->createTikzEdge();
@@ -144,18 +144,18 @@ DemoWidget::DemoWidget()
 
 
     item1 = doc->createTikzNode();
-    item1->node()->setPos(QPointF(-3, -1));
+    doc->setNodePos(item1->node(), QPointF(-3, -1));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    item1->node()->setText("$\\iiint \\max$");
+    doc->setNodeText(item1->node(), "$\\iiint \\max$");
 
     item2 = doc->createTikzNode();
-    item2->node()->setPos(QPointF(3, -1));
+    doc->setNodePos(item2->node(), QPointF(3, -1));
     item2->node()->style()->setLineWidthType(tikz::UltraThick);
     item2->node()->style()->setShape(tikz::ShapeRectangle);
-    item2->node()->setText("A long text\\\\which is wrapped");
     item2->node()->style()->setInnerSep(0.2);
+    doc->setNodeText(item2->node(), "A long text\\\\which is wrapped");
 
     item2->style()->setParent(item1->style());
 
@@ -169,22 +169,22 @@ DemoWidget::DemoWidget()
 
 
     item1 = doc->createTikzNode();
-    item1->node()->setPos(QPointF(-3, -3));
+    doc->setNodePos(item1->node(), QPointF(-3, -3));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    item1->node()->setText("c");
+    doc->setNodeText(item1->node(), "c");
 
     a = item1;
 
     item2 = doc->createTikzNode();
-    item2->node()->setPos(QPointF(3, -3));
+    doc->setNodePos(item2->node(), QPointF(3, -3));
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
     item2->node()->style()->setShape(tikz::ShapeEllipse);
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->style()->setMinimumWidth(2);
-    item2->node()->setText("8");
+    doc->setNodeText(item2->node(), "8");
 
     // an edge
     edge = doc->createTikzEdge();

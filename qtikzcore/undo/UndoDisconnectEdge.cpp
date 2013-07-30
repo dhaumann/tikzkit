@@ -52,6 +52,8 @@ void UndoDisconnectEdge::undo()
     Q_ASSERT(edge != 0);
     Q_ASSERT(node != 0);
 
+    edge->beginConfig();
+
     if (m_isStart) {
         edge->setStartNode(node);
         edge->setStartAnchor(m_anchor);
@@ -59,6 +61,7 @@ void UndoDisconnectEdge::undo()
         edge->setEndNode(node);
         edge->setEndAnchor(m_anchor);
     }
+    edge->endConfig();
 }
 
 void UndoDisconnectEdge::redo()

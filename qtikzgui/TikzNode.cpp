@@ -299,6 +299,7 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
 void TikzNode::slotSetPos(const QPointF& pos)
 {
     if (d->itemChangeRunning) return;
+
     // the tikz::Node position changed.
     // propagate this to this TikzNode::setPos().
     setPos(pos);
