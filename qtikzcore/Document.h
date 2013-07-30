@@ -27,6 +27,7 @@
 #include <QVector>
 
 class QUndoStack;
+class QPointF;
 
 namespace tikz
 {
@@ -140,6 +141,14 @@ class TIKZCORE_EXPORT Document : public QObject
         void deleteEdge(Edge * edge);
 
     //
+    // Node manipulation with undo/redo support
+    //
+    public:
+        /**
+         * Set the position of @p node to @p pos.
+         */
+        void setNodePos(Node * node, const QPointF & pos);
+
     // internal: Undo / redo items manipulate with ID
     //
     protected:

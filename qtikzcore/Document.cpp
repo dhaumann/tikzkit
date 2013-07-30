@@ -27,6 +27,7 @@
 #include "UndoCreateEdge.h"
 #include "UndoDeleteEdge.h"
 #include "UndoDisconnectEdge.h"
+#include "UndoSetNodePos.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -273,6 +274,19 @@ void Document::deleteEdge(qint64 id)
 
     // truly delete edge
     delete edge;
+}
+
+void Document::setNodePos(Node * node, const QPointF & pos)
+{
+    // valid input?
+    Q_ASSERT(node != 0);
+    Q_ASSERT(d->nodeMap.contains(node->id()));
+
+    // create new undo item, push will call ::redo()
+    d->undoManager.push(new UndoSetNodePos(node->id(), pos, this));
+
+    // now the position should be set to pos
+    Q_ASSERT(node->pos() == pos);
 }
 
 Node * Document::nodeFromId(qint64 id)
