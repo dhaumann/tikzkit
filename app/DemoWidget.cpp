@@ -35,6 +35,8 @@
 #include <QSlider>
 #include <QTimer>
 #include <QtOpenGL/QGLWidget>
+#include <QUndoStack>
+#include <QToolButton>
 
 #include <QDebug>
 
@@ -56,6 +58,16 @@ DemoWidget::DemoWidget()
 
     QHBoxLayout* h = new QHBoxLayout();
     v->addLayout(h);
+
+    QToolButton * undoButton = new QToolButton(this);
+    undoButton->setText("undo");
+    connect(undoButton, SIGNAL(clicked()), doc->undoManager(), SLOT(undo()));
+    QToolButton * redoButton = new QToolButton(this);
+    redoButton->setText("redo");
+    connect(redoButton, SIGNAL(clicked()), doc->undoManager(), SLOT(redo()));
+
+    h->addWidget(undoButton);
+    h->addWidget(redoButton);
 
     // add arrow head/tail combos
     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
