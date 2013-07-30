@@ -176,6 +176,18 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         void changed();
 
+        /**
+         * This signal is emitted whenever the start node of this edge changes.
+         * The node @p start may be 0.
+         */
+        void startNodeChanged(tikz::Node * start);
+
+        /**
+         * This signal is emitted whenever the end node of this edge changes.
+         * The node @p start may be 0.
+         */
+        void endNodeChanged(tikz::Node * start);
+
     //
     // reference counted config
     //

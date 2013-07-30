@@ -106,9 +106,13 @@ void Edge::setStartNode(Node* node)
     // update node
     if (d->start.node() != node) {
         beginConfig();
+
         d->start.setNode(node);
         // reset anchor, if the node changes
         d->startAnchor = tikz::NoAnchor;
+
+        emit startNodeChanged(node);
+
         endConfig();
     }
 }
@@ -123,9 +127,13 @@ void Edge::setEndNode(Node* node)
     // update node
     if (d->end.node() != node) {
         beginConfig();
+
         d->end.setNode(node);
         // reset anchor, if the node changes
         d->endAnchor = tikz::NoAnchor;
+
+        emit endNodeChanged(node);
+
         endConfig();
     }
 }
