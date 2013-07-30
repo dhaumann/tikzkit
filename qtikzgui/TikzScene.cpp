@@ -44,10 +44,15 @@ public:
 
     // Mouse edit mode
     TikzEditMode editMode;
+
     // The item being dragged.
     QGraphicsItem *dragged;
+
     // The distance from the top left of the item to the mouse position.
     QPointF dragOffset;
+
+    // currently edited edge
+    TikzEdge * currentEdge;
 };
 
 TikzScene::TikzScene(TikzDocument * doc)
@@ -57,6 +62,7 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->doc = doc;
     d->subDivisions = 1;
     d->editMode = TikzEditMode::ModeSelect;
+    d->currentEdge = 0;
 }
 
 TikzScene::~TikzScene()
@@ -114,12 +120,31 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             return;
         }
         case TikzEditMode::ModePlaceEdge: {
-            TikzEdge * edge = document()->createTikzEdge();
-            edge->edge()->setStartPos(mouseEvent->scenePos());
-            edge->edge()->setEndPos(mouseEvent->scenePos());
-            sendEvent(edge, mouseEvent);
-            mouseEvent->ignore();
-            return;
+            // create edge
+            d->currentEdge = document()->createTikzEdge();
+            d->currentEdge->edge()->setStartPos(mouseEvent->scenePos());
+            d->currentEdge->edge()->setEndPos(mouseEvent->scenePos());
+
+            // update selected item
+            clearSelection();
+            d->currentEdge->setSelected(true);
+
+            // connect start to node, if applicable
+            QList<QGraphicsItem *> itemList = items(mouseEvent->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
+            foreach (QGraphicsItem* item, itemList) {
+                if (item->type() == QGraphicsItem::UserType + 2) {
+                    TikzNode* node = dynamic_cast<TikzNode*>(item);
+                    Q_ASSERT(node);
+                    d->currentEdge->setStartNode(node);
+                    break;
+                }
+            }
+
+            // pass mouse click to edge
+            sendEvent(d->currentEdge, mouseEvent);
+
+            mouseEvent->ignore(); // TODO, FIXME: accept or ignore?
+            return; // TODO, FIXME: return or break?
         }
         default: break;
     }
@@ -137,7 +162,11 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    qDebug() << "scene mouseMoveEvent";
+    if (d->currentEdge) {
+        sendEvent(d->currentEdge, mouseEvent);
+        mouseEvent->ignore();
+        return;
+    }
     setSceneRect(itemsBoundingRect());
     QGraphicsScene::mouseMoveEvent(mouseEvent);
     return;
@@ -150,8 +179,14 @@ void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (d->editMode == TikzEditMode::ModePlaceEdge) {
+    // still in edge placing mode
+    if (d->currentEdge) {
+        Q_ASSERT(d->editMode == TikzEditMode::ModePlaceEdge);
+        sendEvent(d->currentEdge, mouseEvent);
+        mouseEvent->ignore();
+        d->currentEdge = 0;
         setEditMode(TikzEditMode::ModeSelect);
+        return;
     }
 
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
