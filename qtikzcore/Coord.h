@@ -38,7 +38,7 @@ class TIKZCORE_EXPORT Coord : public QObject
 
     public:
         /**
-         * Default constructor.
+         * Constructor.
          */
         Coord(QObject * parent = 0);
 
@@ -48,20 +48,9 @@ class TIKZCORE_EXPORT Coord : public QObject
         virtual ~Coord();
 
     //
-    // convenience functions for Node object
+    // convenience functions
     //
     public:
-        /**
-         * Check whether this Coord is a node.
-         */
-        bool isNode() const;
-
-        /**
-         * Convert this Coord to a Node, if possible.
-         * The return value is 0, if the Coord cannot be casted to Node.
-         */
-        Node* toNode();
-
         /**
          * Get the coordinates
          */

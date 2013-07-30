@@ -39,16 +39,6 @@ Coord::~Coord()
     delete d;
 }
 
-bool Coord::isNode() const
-{
-    return (qobject_cast<const tikz::Node*>(this) != 0);
-}
-
-Node* Coord::toNode()
-{
-    return qobject_cast<tikz::Node*>(this);
-}
-
 const QPointF& Coord::pos() const
 {
     return d->pos;
