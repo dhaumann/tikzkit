@@ -67,24 +67,25 @@ bool MetaNode::setNode(Node* node)
         return false;
     }
 
-    // disconnect changed() signal
+    // disconnect changed() signal ...
     if (d->node != 0) {
         disconnect(d->node, 0, &d->coord, 0);
         disconnect(d->node, 0, this, 0);
+
+        // ... and connect coord
+        connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     }
 
     // set new Coord and connect cache if applicable
     d->node = node;
     if (d->node) {
+        // we want to emit changed() only once: either forward by the node
+        disconnect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
+
         d->coord.setPos(d->node->pos());
+
         connect(d->node, SIGNAL(changed(QPointF)), &d->coord, SLOT(setPos(QPointF)));
         connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
-
-        // tricky: we want to emit changed() only once: either forward by the node ...
-        disconnect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
-    } else {
-        // ...or forward from the fallback coord.
-        connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
     }
 
     // notify about change
