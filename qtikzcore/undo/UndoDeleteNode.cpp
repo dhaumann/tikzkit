@@ -49,9 +49,11 @@ void UndoDeleteNode::undo()
     Node* node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
 
+    node->beginConfig();
     node->setPos(m_pos);
     node->setText(m_text);
     node->style()->setStyle(m_style);
+    node->endConfig();
 }
 
 void UndoDeleteNode::redo()

@@ -51,6 +51,7 @@ void UndoDeleteEdge::undo()
     Edge * edge = document()->edgeFromId(m_id);
     Q_ASSERT(edge);
 
+    edge->beginConfig();
     edge->setStartPos(m_startPos);
     edge->setEndPos(m_endPos);
     if (m_startId >= 0) {
@@ -64,6 +65,7 @@ void UndoDeleteEdge::undo()
         edge->setEndNode(node);
     }
     edge->style()->setStyle(m_style);
+    edge->endConfig();
 }
 
 void UndoDeleteEdge::redo()
