@@ -308,8 +308,8 @@ void TikzEdgePrivate::updateStartNode(tikz::Node * node)
         newStartNode = doc->tikzNodeFromId(node->id());
     }
 
-    if (end != newStartNode) {
-        end = newStartNode;
+    if (start != newStartNode) {
+        start = newStartNode;
     }
 }
 
