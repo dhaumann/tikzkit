@@ -30,6 +30,7 @@
 #include <QGraphicsView>
 #include <QVarLengthArray>
 #include <QDebug>
+#include <QKeyEvent>
 
 #include <math.h>
 
@@ -203,6 +204,28 @@ void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 	d->dragged = 0;
     } else
 	QGraphicsScene::mouseReleaseEvent(mouseEvent);
+}
+
+void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
+{
+    // on Del, remove selected items
+    if (keyEvent->key() == Qt::Key_Delete) {
+        foreach (QGraphicsItem* item, selectedItems()) {
+            if (item->type() == QGraphicsItem::UserType + 2) {
+                TikzNode* node = dynamic_cast<TikzNode*>(item);
+                Q_ASSERT(node);
+                d->doc->deleteTikzNode(node);
+            } else if (item->type() == QGraphicsItem::UserType + 3) {
+                TikzEdge* edge = dynamic_cast<TikzEdge*>(item);
+                Q_ASSERT(edge);
+                d->doc->deleteTikzEdge(edge);
+            }
+        }
+
+        keyEvent->accept();
+        return;
+    }
+    QGraphicsScene::keyPressEvent(keyEvent);
 }
 
 // kate: indent-width 4; replace-tabs on;
