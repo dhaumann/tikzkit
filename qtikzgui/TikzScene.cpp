@@ -116,6 +116,11 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case TikzEditMode::ModePlaceNode: {
             TikzNode * node = document()->createTikzNode();
             node->setPos(mouseEvent->scenePos());
+
+            // update selected item
+            clearSelection();
+            node->setSelected(true);
+
             setEditMode(TikzEditMode::ModeSelect);
             return;
         }
