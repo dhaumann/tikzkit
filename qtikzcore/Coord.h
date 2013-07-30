@@ -71,7 +71,7 @@ class TIKZCORE_EXPORT Coord : public QObject
          * Comparison operator
          */
         bool operator==(const Coord& other) const;
-        
+
         /**
          * Colmplement of comparison operator
          */

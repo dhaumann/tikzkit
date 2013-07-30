@@ -30,9 +30,19 @@ namespace tikz {
 class NodePrivate
 {
     public:
+        // config reference counter
+        int refCounter;
+
+        // node text
         QString text;
+
+        // this node's style
         NodeStyle style;
+
+        // associated document, may be 0
         Document * doc;
+
+        // document-wide uniq id. If doc == 0, id == -1
         qint64 id;
 };
 
@@ -40,11 +50,13 @@ Node::Node(QObject* parent)
     : Coord(parent)
     , d(new NodePrivate())
 {
+    d->refCounter = 0;
+
     d->doc = 0;
     d->id = -1;
 
-    connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
-    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(this, SIGNAL(changed(QPointF)), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 Node::Node(qint64 id, Document* doc)
@@ -54,12 +66,13 @@ Node::Node(qint64 id, Document* doc)
     // if this constructor is called, we require a document
     Q_ASSERT(doc);
 
+    d->refCounter = 0;
     d->doc = doc;
     d->id = id;
     d->style.setParent(d->doc->style());
 
-    connect(this, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
-    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(this, SIGNAL(changed(QPointF)), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 Node::~Node()
@@ -85,8 +98,10 @@ QVariantMap Node::toVariantMap() const
 void Node::setText(const QString& text)
 {
     if (d->text != text) {
+        beginConfig();
         d->text = text;
         emit textChanged(d->text);
+        endConfig();
     }
 }
 
@@ -98,6 +113,29 @@ QString Node::text() const
 NodeStyle* Node::style() const
 {
     return &d->style;
+}
+
+void Node::beginConfig()
+{
+    Q_ASSERT(d->refCounter >= 0);
+    ++d->refCounter;
+}
+
+void Node::endConfig()
+{
+    Q_ASSERT(d->refCounter > 0);
+
+    --d->refCounter;
+    if (d->refCounter == 0) {
+        emit changed();
+    }
+}
+
+void Node::emitChangedIfNeeded()
+{
+    if (d->refCounter == 0) {
+        emit changed();
+    }
 }
 
 }

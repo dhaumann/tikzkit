@@ -99,6 +99,31 @@ class TIKZCORE_EXPORT Node : public Coord
         void textChanged(const QString& text);
 
     //
+    // reference counted config
+    //
+    public:
+        /**
+         * Increase config reference counter.
+         * For beginConfig() call must have a matching endConfig() call.
+         * When the reference counter is 0, changed() is emitted.
+         */
+        void beginConfig();
+
+        /**
+         * Decrease config reference counter.
+         * For beginConfig() call must have a matching endConfig() call.
+         */
+        void endConfig();
+
+    public Q_SLOTS:
+        /**
+         * Emits changed() if reference counter is 0.
+         * Otherwise, emitting changed() is delayed until the reference
+         * counter is 0 after a call of endConfig().
+         */
+        void emitChangedIfNeeded();
+
+    //
     // internal to tikz::Document
     //
     protected:

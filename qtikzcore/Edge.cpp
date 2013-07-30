@@ -28,13 +28,28 @@ namespace tikz {
 class EdgePrivate
 {
     public:
-        Document* doc;
+        // config reference counter
+        int refCounter;
+
+        // associated document, may be 0
+        Document * doc;
+
+        // document-wide uniq id. If doc == 0, id == -1
         qint64 id;
 
+        // start meta node this edge points to
         MetaNode start;
+
+        // target/end meta node this edge points to
         MetaNode end;
+
+        // anchor of the start node
         Anchor startAnchor;
+
+        // anchor of the end node
         Anchor endAnchor;
+
+        // this edge's style
         EdgeStyle style;
 };
 
@@ -42,21 +57,23 @@ Edge::Edge(QObject * parent)
     : QObject(parent)
     , d(new EdgePrivate())
 {
+    d->refCounter = 0;
     d->doc = 0;
     d->id = -1;
 
     d->startAnchor = tikz::NoAnchor;
     d->endAnchor = tikz::NoAnchor;
 
-    connect(&d->start, SIGNAL(changed()), this, SIGNAL(changed()));
-    connect(&d->end, SIGNAL(changed()), this, SIGNAL(changed()));
-    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 Edge::Edge(qint64 id, Document* doc)
     : QObject(doc)
     , d(new EdgePrivate())
 {
+    d->refCounter = 0;
     d->doc = doc;
     d->id = id;
     d->style.setParent(d->doc->style());
@@ -64,9 +81,9 @@ Edge::Edge(qint64 id, Document* doc)
     d->startAnchor = tikz::NoAnchor;
     d->endAnchor = tikz::NoAnchor;
 
-    connect(&d->start, SIGNAL(changed()), this, SIGNAL(changed()));
-    connect(&d->end, SIGNAL(changed()), this, SIGNAL(changed()));
-    connect(&d->style, SIGNAL(changed()), this, SIGNAL(changed()));
+    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 Edge::~Edge()
@@ -150,22 +167,47 @@ tikz::Anchor Edge::endAnchor() const
 void Edge::setStartAnchor(tikz::Anchor anchor)
 {
     if (d->startAnchor != anchor) {
+        beginConfig();
         d->startAnchor = anchor;
-        emit changed();
+        endConfig();
     }
 }
 
 void Edge::setEndAnchor(tikz::Anchor anchor)
 {
     if (d->endAnchor != anchor) {
+        beginConfig();
         d->endAnchor = anchor;
-        emit changed();
+        endConfig();
     }
 }
 
 EdgeStyle* Edge::style()
 {
     return &d->style;
+}
+
+void Edge::beginConfig()
+{
+    Q_ASSERT(d->refCounter >= 0);
+    ++d->refCounter;
+}
+
+void Edge::endConfig()
+{
+    Q_ASSERT(d->refCounter > 0);
+
+    --d->refCounter;
+    if (d->refCounter == 0) {
+        emit changed();
+    }
+}
+
+void Edge::emitChangedIfNeeded()
+{
+    if (d->refCounter == 0) {
+        emit changed();
+    }
 }
 
 }
