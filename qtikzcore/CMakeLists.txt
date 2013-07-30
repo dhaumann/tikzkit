@@ -27,6 +27,7 @@ set(qtikzcore_SOURCES
     undo/UndoCreateEdge.cpp
     undo/UndoDeleteEdge.cpp
     undo/UndoDisconnectEdge.cpp
+    undo/UndoSetNodePos.cpp
 )
 
 set(qtikzcore_HEADERS
