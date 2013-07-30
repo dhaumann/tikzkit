@@ -22,8 +22,10 @@
 
 #include <QPainterPath>
 #include <QPointer>
+#include <QObject>
 
 namespace tikz {
+    class Node;
     class Edge;
     class EdgeStyle;
 }
@@ -37,8 +39,10 @@ class CurveHandle;
 class AbstractArrow;
 class QGraphicsItem;
 
-class TikzEdgePrivate
+class TikzEdgePrivate : public QObject
 {
+    Q_OBJECT
+
     TikzEdge* q;
 
     public:
@@ -48,7 +52,7 @@ class TikzEdgePrivate
         };
 
         TikzEdgePrivate(TikzEdge* edge);
-        ~TikzEdgePrivate();
+        virtual ~TikzEdgePrivate();
 
         void init(tikz::Edge * e = 0);
 
@@ -118,6 +122,21 @@ class TikzEdgePrivate
 
         void drawArrow(QPainter* painter, const QPainterPath& path);
         void drawHandle(QPainter* painter, const QPointF& pos, bool connected);
+
+    public Q_SLOTS:
+        /**
+         * This function is called whenever the tikz::Node::setStartNode()
+         * changes. This is required, since otherwise the model is updated,
+         * without the TikzEdge being notified.
+         */
+        void updateStartNode(tikz::Node * node);
+
+        /**
+         * This function is called whenever the tikz::Node::setEndNode()
+         * changes. This is required, since otherwise the model is updated,
+         * without the TikzEdge being notified.
+         */
+        void updateEndNode(tikz::Node * node);
 
     private:
         inline tikz::EdgeStyle* style() const;

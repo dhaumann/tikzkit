@@ -52,6 +52,7 @@ set(qtikzgui_HEADERS
     TikzNode.h
     NodeHandle.h
     TikzEdge.h
+    TikzEdge_p.h
     TikzScene.h
     AnchorHandle.h
     CurveHandle.h

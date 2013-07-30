@@ -28,6 +28,7 @@
 #include "AnchorHandle.h"
 #include "CurveHandle.h"
 #include "AbstractArrow.h"
+#include "TikzDocument.h"
 
 #include <QPainter>
 #include <QVector2D>
@@ -37,7 +38,8 @@
 #include <QDebug>
 
 TikzEdgePrivate::TikzEdgePrivate(TikzEdge* edge)
-    : q(edge)
+    : QObject()
+    , q(edge)
 {
 }
 
@@ -65,6 +67,15 @@ void TikzEdgePrivate::init(tikz::Edge * e)
     endControlPoint = new CurveHandle(q);
     startControlPoint->setVisible(false);
     endControlPoint->setVisible(false);
+
+    if (edge->document()) {
+        // catch if the model changes behind our back: we need to track the
+        // TikzNode start and end node
+        connect(edge, SIGNAL(startNodeChanged(tikz::Node*)), this,
+                SLOT(updateStartNode(tikz::Node*)));
+        connect(edge, SIGNAL(endNodeChanged(tikz::Node*)), this,
+                SLOT(updateEndNode(tikz::Node*)));
+    }
 }
 
 void TikzEdgePrivate::updateCache()
@@ -284,6 +295,38 @@ void TikzEdgePrivate::drawHandle(QPainter* painter, const QPointF& pos, bool con
 tikz::EdgeStyle* TikzEdgePrivate::style() const
 {
     return edge->style();
+}
+
+void TikzEdgePrivate::updateStartNode(tikz::Node * node)
+{
+    TikzNode * newStartNode = 0;
+
+    if (node) {
+        TikzDocument * doc = qobject_cast<TikzDocument*>(edge->document());
+        Q_ASSERT(doc != 0);
+
+        newStartNode = doc->tikzNodeFromId(node->id());
+    }
+
+    if (end != newStartNode) {
+        end = newStartNode;
+    }
+}
+
+void TikzEdgePrivate::updateEndNode(tikz::Node * node)
+{
+    TikzNode * newEndNode = 0;
+
+    if (node) {
+        TikzDocument * doc = qobject_cast<TikzDocument*>(edge->document());
+        Q_ASSERT(doc != 0);
+
+        newEndNode = doc->tikzNodeFromId(node->id());
+    }
+
+    if (end != newEndNode) {
+        end = newEndNode;
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;
