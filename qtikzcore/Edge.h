@@ -54,6 +54,11 @@ class TIKZCORE_EXPORT Edge : public QObject
         virtual ~Edge();
 
         /**
+         * Returns the associated document, if available.
+         */
+        Document * document() const;
+
+        /**
          * Unique id.
          * If the document is @e not associated to a document -1 is returned.
          */

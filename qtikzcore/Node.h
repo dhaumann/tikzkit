@@ -51,6 +51,11 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         virtual ~Node();
 
+        /**
+         * Returns the associated document, if available.
+         */
+        Document * document() const;
+
     //
     // id and serialization
     //

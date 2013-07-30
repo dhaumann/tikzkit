@@ -91,6 +91,11 @@ Edge::~Edge()
     delete d;
 }
 
+Document * Edge::document() const
+{
+    return d->doc;
+}
+
 qint64 Edge::id() const
 {
     return d->id;
@@ -99,9 +104,12 @@ qint64 Edge::id() const
 void Edge::setStartNode(Node* node)
 {
     // update node
-    if (d->start.setNode(node)) {
+    if (d->start.node() != node) {
+        beginConfig();
+        d->start.setNode(node);
         // reset anchor, if the node changes
         d->startAnchor = tikz::NoAnchor;
+        endConfig();
     }
 }
 
@@ -113,9 +121,12 @@ Coord& Edge::start() const
 void Edge::setEndNode(Node* node)
 {
     // update node
-    if (d->end.setNode(node)) {
+    if (d->end.node() != node) {
+        beginConfig();
+        d->end.setNode(node);
         // reset anchor, if the node changes
         d->endAnchor = tikz::NoAnchor;
+        endConfig();
     }
 }
 

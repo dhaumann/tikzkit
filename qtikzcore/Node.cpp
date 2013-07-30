@@ -80,6 +80,11 @@ Node::~Node()
     delete d;
 }
 
+Document * Node::document() const
+{
+    return d->doc;
+}
+
 qint64 Node::id() const
 {
     return d->id;
