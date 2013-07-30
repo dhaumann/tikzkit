@@ -105,6 +105,20 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
          */
         void deleteTikzEdge(TikzEdge * edge);
 
+        /**
+         * Get the TikzNode with @p id.
+         * @param id unique id of the node
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        TikzNode * tikzNodeFromId(qint64 id);
+
+        /**
+         * Get the TikzEdge with @p id.
+         * @param id unique id of the edge
+         * @return null, if the id is -1, otherwise a valid pointer to the node
+         */
+        TikzEdge * tikzEdgeFromId(qint64 id);
+
     //
     // internal: Undo / redo items manipulate with ID
     //

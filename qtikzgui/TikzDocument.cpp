@@ -210,4 +210,24 @@ void TikzDocument::deleteEdge(qint64 id)
     tikz::Document::deleteEdge(id);
 }
 
+TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
+{
+    if (id < 0) {
+        return 0;
+    }
+
+    Q_ASSERT(d->nodeMap.contains(id));
+    return d->nodeMap[id];
+}
+
+TikzEdge * TikzDocument::tikzEdgeFromId(qint64 id)
+{
+    if (id < 0) {
+        return 0;
+    }
+
+    Q_ASSERT(d->edgeMap.contains(id));
+    return d->edgeMap[id];
+}
+
 // kate: indent-width 4; replace-tabs on;
