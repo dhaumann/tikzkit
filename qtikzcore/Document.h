@@ -149,6 +149,11 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         void setNodePos(Node * node, const QPointF & pos);
 
+        /**
+         * Set the text of @p node to @p text.
+         */
+        void setNodeText(Node * node, const QString & text);
+
     // internal: Undo / redo items manipulate with ID
     //
     protected:
