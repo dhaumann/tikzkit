@@ -64,8 +64,6 @@ Node::Node(qint64 id, Document* doc)
 
 Node::~Node()
 {
-    emit aboutToDelete(this);
-
     delete d;
 }
 

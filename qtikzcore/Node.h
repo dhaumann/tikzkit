@@ -98,13 +98,6 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         void textChanged(const QString& text);
 
-        /**
-         * This signal is emitted right before this node is deleted.
-         * After this signal, the pointer to @p node is invalid.
-         * @param node a valid pointer to this node
-         */
-        void aboutToDelete(Node* node);
-
     //
     // internal to tikz::Document
     //

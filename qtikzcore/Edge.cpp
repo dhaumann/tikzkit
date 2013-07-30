@@ -71,8 +71,6 @@ Edge::Edge(qint64 id, Document* doc)
 
 Edge::~Edge()
 {
-    aboutToDelete(this);
-
     delete d;
 }
 
