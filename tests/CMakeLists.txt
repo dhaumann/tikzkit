@@ -20,6 +20,14 @@ add_executable(TestCoord ${TestCoordSrc} ${TestCoordMocs})
 target_link_libraries(TestCoord ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
 add_test(NAME TestCoord COMMAND TestCoord)
 
+# Test: MetaNode
+set(TestMetaNodeSrc TestMetaNode.cpp)
+QT4_AUTOMOC(${TestMetaNodeSrc} TestMetaNode.h)
+QT4_WRAP_CPP(TestMetaNodeMocs)
+add_executable(TestMetaNode ${TestMetaNodeSrc} ${TestMetaNodeMocs})
+target_link_libraries(TestMetaNode ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
+add_test(NAME TestMetaNode COMMAND TestMetaNode)
+
 # Document test
 set(DocumentSrc documenttest.cpp)
 QT4_AUTOMOC(${DocumentSrc} documenttest.h)

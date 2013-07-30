@@ -54,7 +54,8 @@ void Coord::setPos(const QPointF& pos)
 
 bool Coord::operator==(const Coord& other) const
 {
-    return d->pos == other.d->pos;
+    return this == &other
+        || d->pos == other.d->pos;
 }
 
 
