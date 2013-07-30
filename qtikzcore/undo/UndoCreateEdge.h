@@ -43,12 +43,12 @@ class UndoCreateEdge : public UndoItem
         /**
          * Undo: delete node again.
          */
-        virtual void undo();
+        virtual void undo() override;
 
         /**
          * Redo: create node again.
          */
-        virtual void redo();
+        virtual void redo() override;
 
     private:
         /**
