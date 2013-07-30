@@ -146,11 +146,13 @@ QPointF Edge::endPos() const
 
 void Edge::setStartPos(const QPointF& pos)
 {
+//     setStartNode(0);
     d->start.setPos(pos);
 }
 
 void Edge::setEndPos(const QPointF& pos)
 {
+//     setEndNode(0);
     d->end.setPos(pos);
 }
 
