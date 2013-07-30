@@ -16,13 +16,13 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef TEST_META_NODE_H
-#define TEST_META_NODE_H
+#ifndef TEST_NODE_H
+#define TEST_NODE_H
 
 #include <QObject>
 #include <QPointF>
 
-class MetaNodeTest : public QObject
+class NodeTest : public QObject
 {
     Q_OBJECT
 
@@ -31,19 +31,15 @@ public slots:
     void cleanupTestCase();
 
 private slots:
-    void testMetaNode();
-    void testMetaNodeWithNode();
+    void testCoord();
 
 public slots:
-    void posChangedEmitted(const QPointF & coord);
-    void changedEmitted();
+    void newCoord(const QPointF & coord);
 
 private:
-    QPointF m_changedPos;
-    int m_posChangeCount;
-    int m_changeCount;
+    QPointF m_pos;
 };
 
-#endif // TEST_META_NODE_H
+#endif // TEST_NODE_H
 
 // kate: indent-width 4; replace-tabs on;

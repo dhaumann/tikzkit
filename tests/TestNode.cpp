@@ -16,34 +16,50 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef TEST_META_NODE_H
-#define TEST_META_NODE_H
+#include "TestNode.h"
+#include "TestNode.moc"
 
-#include <QObject>
-#include <QPointF>
+#include <QtTest/QTest>
 
-class MetaNodeTest : public QObject
+#include "Node.h"
+
+QTEST_MAIN(NodeTest)
+
+void NodeTest::initTestCase()
 {
-    Q_OBJECT
+}
 
-public slots:
-    void initTestCase();
-    void cleanupTestCase();
+void NodeTest::cleanupTestCase()
+{
+}
 
-private slots:
-    void testMetaNode();
-    void testMetaNodeWithNode();
+void NodeTest::testCoord()
+{
+    tikz::Node n;
 
-public slots:
-    void posChangedEmitted(const QPointF & coord);
-    void changedEmitted();
+    // initially (0, 0)
+    QCOMPARE(n.pos(), QPointF(0, 0));
 
-private:
-    QPointF m_changedPos;
-    int m_posChangeCount;
-    int m_changeCount;
-};
+    // test changed signal
+    connect(&n, SIGNAL(changed(const QPointF & )), this, SLOT(newCoord(const QPointF & )));
 
-#endif // TEST_META_NODE_H
+    m_pos = QPointF(-1, -1);
+
+    n.setPos(QPointF(1, 1));
+    QCOMPARE(n.pos(), QPointF(1, 1));
+    QCOMPARE(m_pos, QPointF(1, 1));
+
+    // test operators
+    tikz::Coord c2;
+    QVERIFY(n != c2);
+
+    c2.setPos(n.pos());
+    QVERIFY(n == c2);
+}
+
+void NodeTest::newCoord(const QPointF & coord)
+{
+    m_pos = coord;
+}
 
 // kate: indent-width 4; replace-tabs on;
