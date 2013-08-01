@@ -29,6 +29,7 @@ set(qtikzcore_SOURCES
     undo/UndoDisconnectEdge.cpp
     undo/UndoSetNodePos.cpp
     undo/UndoSetNodeText.cpp
+    undo/UndoSetNodeStyle.cpp
 )
 
 set(qtikzcore_HEADERS
