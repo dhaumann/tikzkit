@@ -23,6 +23,7 @@
 #include "PaintHelper.h"
 #include "AbstractShape.h"
 #include "NodeHandle.h"
+#include "TikzDocument.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -130,6 +131,11 @@ TikzNode::~TikzNode()
 {
     delete d->shape;
     delete d;
+}
+
+TikzDocument * TikzNode::document() const
+{
+    return qobject_cast<TikzDocument*>(d->node->document());
 }
 
 int TikzNode::type() const

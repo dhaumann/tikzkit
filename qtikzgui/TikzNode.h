@@ -28,8 +28,9 @@
 
 class QPainter;
 
-class TikzNodePrivate;
 class Style;
+class TikzDocument;
+class TikzNodePrivate;
 
 class TIKZGUI_EXPORT TikzNode : public TikzItem
 {
@@ -50,6 +51,11 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          * Destructor
          */
         virtual ~TikzNode();
+
+        /**
+         * Returns the associated document, if available.
+         */
+        TikzDocument * document() const;
 
         /**
          * Reimplment to return a proper UserType + 2.
