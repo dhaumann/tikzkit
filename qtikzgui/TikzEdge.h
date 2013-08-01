@@ -32,6 +32,7 @@ namespace tikz {
 
 class QPainter;
 
+class TikzDocument;
 class TikzNode;
 class TikzEdgePrivate;
 
@@ -54,6 +55,11 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
          * Destructor
          */
         virtual ~TikzEdge();
+
+        /**
+         * Returns the associated document, if available.
+         */
+        TikzDocument * document() const;
 
         /**
          * Reimplment to return a proper UserType + 3.

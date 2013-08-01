@@ -22,6 +22,7 @@
 
 #include <Edge.h>
 #include "TikzNode.h"
+#include "TikzDocument.h"
 #include "EdgeStyle.h"
 #include "NodeStyle.h"
 #include "AnchorHandle.h"
@@ -77,6 +78,11 @@ TikzEdge::TikzEdge(tikz::Edge * edge, QGraphicsItem * parent)
 TikzEdge::~TikzEdge()
 {
     delete d;
+}
+
+TikzDocument * TikzEdge::document() const
+{
+    return qobject_cast<TikzDocument*>(d->edge->document());
 }
 
 int TikzEdge::type() const
