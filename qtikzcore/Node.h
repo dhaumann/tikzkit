@@ -41,12 +41,6 @@ class TIKZCORE_EXPORT Node : public Coord
 
     public:
         /**
-         * Constructor for a new node.
-         * @param parent parent object, may be 0
-         */
-        explicit Node(QObject * parent = 0);
-
-        /**
          * Destructor
          */
         virtual ~Node();
@@ -140,6 +134,12 @@ class TIKZCORE_EXPORT Node : public Coord
          * @param doc associated document
          */
         Node(qint64 id, Document* doc);
+
+    private:
+        /**
+         * private default constructor, not implemented
+         */
+        Node();
 
     private:
         NodePrivate * const d;

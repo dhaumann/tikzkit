@@ -38,11 +38,6 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
 
     public:
         /**
-         * Default constructor.
-         */
-        TikzNode(QGraphicsItem * parent = 0);
-
-        /**
          * Constructor for @p node and parent @p parent.
          */
         TikzNode(tikz::Node * node, QGraphicsItem * parent = 0);
@@ -146,6 +141,15 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
     protected Q_SLOTS:
         void slotSetPos(const QPointF& pos);
         void styleChanged();
+
+    //
+    // internal
+    //
+    private:
+        /**
+         * Private default constructor, not implemented
+         */
+        TikzNode();
 
     private:
         TikzNodePrivate * const d;

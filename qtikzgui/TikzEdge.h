@@ -42,11 +42,6 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
 
     public:
         /**
-         * Default constructor.
-         */
-        TikzEdge(QGraphicsItem * parent = 0);
-
-        /**
          * Constructor for @p edge and parent @p parent.
          */
         TikzEdge(tikz::Edge * edge, QGraphicsItem * parent = 0);
@@ -194,6 +189,15 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
 
         void startControlPointChanged(const QPointF& pos);
         void endControlPointChanged(const QPointF& pos);
+
+    //
+    // internal
+    //
+    private:
+        /**
+         * Private default constructor, not implemented
+         */
+        TikzEdge();
 
     private:
         TikzEdgePrivate * const d;

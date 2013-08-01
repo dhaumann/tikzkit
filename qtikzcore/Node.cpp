@@ -46,19 +46,6 @@ class NodePrivate
         qint64 id;
 };
 
-Node::Node(QObject* parent)
-    : Coord(parent)
-    , d(new NodePrivate())
-{
-    d->refCounter = 0;
-
-    d->doc = 0;
-    d->id = -1;
-
-    connect(this, SIGNAL(changed(QPointF)), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-}
-
 Node::Node(qint64 id, Document* doc)
     : Coord(doc)
     , d(new NodePrivate())

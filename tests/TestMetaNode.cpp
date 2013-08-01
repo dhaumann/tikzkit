@@ -21,6 +21,7 @@
 
 #include <QtTest/QTest>
 
+#include "Document.h"
 #include "MetaNode.h"
 #include "Node.h"
 
@@ -83,18 +84,19 @@ void MetaNodeTest::changedEmitted()
 
 void MetaNodeTest::testMetaNodeWithNode()
 {
+    tikz::Document doc;
     tikz::MetaNode m;
-    tikz::Node n;
+    tikz::Node * n = doc.createNode();
 
     // get pointer to coord
     tikz::Coord & c = m.coord();
 
     // check setting node
-    QVERIFY(m.setNode(&n));
-    QCOMPARE(m.node(), &n);
+    QVERIFY(m.setNode(n));
+    QCOMPARE(m.node(), n);
 
     // make sure setting same node again does nothing
-    QVERIFY(! m.setNode(&n));
+    QVERIFY(! m.setNode(n));
 
     // should still be (0, 0)
     QCOMPARE(m.pos(), QPointF(0, 0));

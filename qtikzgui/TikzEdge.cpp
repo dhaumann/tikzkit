@@ -43,22 +43,6 @@
 
 #include <cmath>
 
-TikzEdge::TikzEdge(QGraphicsItem * parent)
-    : TikzItem(parent)
-    , d(new TikzEdgePrivate(this))
-{
-    // initialization of member varialbes in TikzEdgePrivate constructor
-    d->init();
-
-    connect(d->startControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(startControlPointChanged(QPointF)));
-    connect(d->endControlPoint, SIGNAL(positionChanged(QPointF)), this, SLOT(endControlPointChanged(QPointF)));
-
-    connect(d->edge, SIGNAL(changed()), this, SLOT(slotUpdate()));
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-}
-
 TikzEdge::TikzEdge(tikz::Edge * edge, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzEdgePrivate(this))

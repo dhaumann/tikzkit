@@ -77,31 +77,6 @@ class TikzNodePrivate
         }
 };
 
-TikzNode::TikzNode(QGraphicsItem * parent)
-    : TikzItem(parent)
-    , d(new TikzNodePrivate(this))
-{
-    d->dirty = true;
-    d->node = new tikz::Node(this);
-    d->shape = new AbstractShape(this);
-    d->itemChangeRunning = false;
-
-    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
-    connect(d->node, SIGNAL(changed()), this, SLOT(styleChanged()));
-
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    d->textItem = new NodeText(this);
-    d->textItem->setPos(boundingRect().center());
-
-    d->nodeHandle = new NodeHandle(this);
-    d->nodeHandle->setVisible(false);
-
-    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-}
-
 TikzNode::TikzNode(tikz::Node * node, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzNodePrivate(this))

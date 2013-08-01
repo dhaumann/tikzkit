@@ -21,6 +21,7 @@
 
 #include <QtTest/QTest>
 
+#include "Document.h"
 #include "Node.h"
 
 QTEST_MAIN(NodeTest)
@@ -35,26 +36,27 @@ void NodeTest::cleanupTestCase()
 
 void NodeTest::testCoord()
 {
-    tikz::Node n;
+    tikz::Document doc;
+    tikz::Node * n = doc.createNode();
 
     // initially (0, 0)
-    QCOMPARE(n.pos(), QPointF(0, 0));
+    QCOMPARE(n->pos(), QPointF(0, 0));
 
     // test changed signal
-    connect(&n, SIGNAL(changed(const QPointF & )), this, SLOT(newCoord(const QPointF & )));
+    connect(n, SIGNAL(changed(const QPointF & )), this, SLOT(newCoord(const QPointF & )));
 
     m_pos = QPointF(-1, -1);
 
-    n.setPos(QPointF(1, 1));
-    QCOMPARE(n.pos(), QPointF(1, 1));
+    n->setPos(QPointF(1, 1));
+    QCOMPARE(n->pos(), QPointF(1, 1));
     QCOMPARE(m_pos, QPointF(1, 1));
 
     // test operators
     tikz::Coord c2;
-    QVERIFY(n != c2);
+    QVERIFY(*n != c2);
 
-    c2.setPos(n.pos());
-    QVERIFY(n == c2);
+    c2.setPos(n->pos());
+    QVERIFY(*n == c2);
 }
 
 void NodeTest::newCoord(const QPointF & coord)
