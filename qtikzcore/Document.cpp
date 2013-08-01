@@ -116,6 +116,16 @@ QUndoStack * Document::undoManager()
     return &d->undoManager;
 }
 
+void Document::beginUndoGroup(const QString & name)
+{
+    d->undoManager.beginMacro(name);
+}
+
+void Document::endUndoGroup()
+{
+    d->undoManager.endMacro();
+}
+
 bool Document::isModified() const
 {
     return ! d->undoManager.isClean();

@@ -73,6 +73,18 @@ class TIKZCORE_EXPORT Document : public QObject
         QUndoStack * undoManager();
 
         /**
+         * Begin undo group @p name.
+         * Each beginUndoGroup() must have a matching endUndoGroup().
+         * The calls may be nested.
+         */
+        void beginUndoGroup(const QString & name);
+
+        /**
+         * End undo group @p name.
+         */
+        void endUndoGroup();
+
+        /**
          * Check whether the document is in a modified state.
          */
         bool isModified() const;
