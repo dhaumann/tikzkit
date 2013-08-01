@@ -21,6 +21,7 @@
 #include "Coord.h"
 #include "Edge.h"
 #include "MetaNode.h"
+#include "Document.h"
 
 #include <QVector>
 
@@ -29,14 +30,18 @@ namespace tikz {
 class PathPrivate
 {
     public:
+        Document * doc;
         QVector<MetaNode*> nodes;
         QVector<Edge*> edges;
 };
 
-Path::Path(QObject * parent)
-    : QObject(parent)
+Path::Path(Document * doc)
+    : QObject(doc)
     , d(new PathPrivate())
 {
+    Q_ASSERT(doc);
+
+    d->doc = doc;
 }
 
 Path::~Path()
@@ -114,7 +119,7 @@ void Path::setClosed(bool closed)
         return;
 
     if (closed) {
-        d->edges.append(new Edge(this));
+        d->edges.append(d->doc->createEdge());
     } else {
         d->edges.pop_back();
     }

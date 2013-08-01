@@ -33,25 +33,26 @@ class NodePrivate
         // config reference counter
         int refCounter;
 
+        // associated document, is always valid, i.e. != 0.
+        Document * doc;
+
+        // document-wide uniq id >= 0
+        qint64 id;
+
         // node text
         QString text;
 
         // this node's style
         NodeStyle style;
-
-        // associated document, may be 0
-        Document * doc;
-
-        // document-wide uniq id. If doc == 0, id == -1
-        qint64 id;
 };
 
 Node::Node(qint64 id, Document* doc)
     : Coord(doc)
     , d(new NodePrivate())
 {
-    // if this constructor is called, we require a document
+    // valid document and uniq id required
     Q_ASSERT(doc);
+    Q_ASSERT(id >= 0);
 
     d->refCounter = 0;
     d->doc = doc;

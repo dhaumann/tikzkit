@@ -44,11 +44,6 @@ class TIKZCORE_EXPORT Edge : public QObject
 
     public:
         /**
-         * Default constructor with optional @p parent.
-         */
-        explicit Edge(QObject* parent = 0);
-
-        /**
          * Virtual destructor.
          */
         virtual ~Edge();
@@ -251,6 +246,15 @@ class TIKZCORE_EXPORT Edge : public QObject
     //
 //     private:
 //         Q_PRIVATE_SLOT(m_embeddedObject, void slot1(int))
+
+    //
+    // internal
+    //
+    private:
+        /**
+         * Private default constructor, not implemented
+         */
+        Edge();
 
     private:
         EdgePrivate * const d;

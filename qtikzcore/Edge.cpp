@@ -31,10 +31,10 @@ class EdgePrivate
         // config reference counter
         int refCounter;
 
-        // associated document, may be 0
+        // associated document, is always valid, i.e. != 0.
         Document * doc;
 
-        // document-wide uniq id. If doc == 0, id == -1
+        // document-wide uniq id >= 0
         qint64 id;
 
         // start meta node this edge points to
@@ -53,26 +53,14 @@ class EdgePrivate
         EdgeStyle style;
 };
 
-Edge::Edge(QObject * parent)
-    : QObject(parent)
-    , d(new EdgePrivate())
-{
-    d->refCounter = 0;
-    d->doc = 0;
-    d->id = -1;
-
-    d->startAnchor = tikz::NoAnchor;
-    d->endAnchor = tikz::NoAnchor;
-
-    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-}
-
 Edge::Edge(qint64 id, Document* doc)
     : QObject(doc)
     , d(new EdgePrivate())
 {
+    // valid document and uniq id required
+    Q_ASSERT(doc);
+    Q_ASSERT(id >= 0);
+
     d->refCounter = 0;
     d->doc = doc;
     d->id = id;

@@ -29,9 +29,10 @@
 namespace tikz
 {
 
-class PathPrivate;
+class Document;
 class Coord;
 class Edge;
+class PathPrivate;
 
 class TIKZCORE_EXPORT Path : public QObject
 {
@@ -41,7 +42,7 @@ class TIKZCORE_EXPORT Path : public QObject
         /**
          * Default constructor.
          */
-        Path(QObject * parent = 0);
+        Path(Document * doc);
 
         /**
          * Virtual destructor.
@@ -113,11 +114,16 @@ class TIKZCORE_EXPORT Path : public QObject
          */
         void removeCoord(Coord* coord);
 
+    //
+    // internal
+    //
+    private:
+        /**
+         * Private default constructor, not implemented
+         */
+        Path();
     private:
         PathPrivate * const d;
-
-        // disallow copy constructor and = assignment
-        Q_DISABLE_COPY(Path);
 };
 
 }

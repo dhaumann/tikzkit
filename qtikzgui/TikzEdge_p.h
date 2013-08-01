@@ -54,7 +54,7 @@ class TikzEdgePrivate : public QObject
         TikzEdgePrivate(TikzEdge* edge);
         virtual ~TikzEdgePrivate();
 
-        void init(tikz::Edge * e = 0);
+        void init(tikz::Edge * e);
 
     public:
         // edge and nodes

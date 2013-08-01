@@ -53,7 +53,7 @@ TikzEdgePrivate::~TikzEdgePrivate()
 
 void TikzEdgePrivate::init(tikz::Edge * e)
 {
-    edge = e ? e : new tikz::Edge(q);
+    edge = e;
     start = 0;
     end = 0;
 
