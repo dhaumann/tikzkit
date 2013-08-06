@@ -67,6 +67,10 @@ set(qtikzgui_HEADERS
 
 QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
 
+# add icon resource
+set(qtikzgui_RESOURCES icons.qrc)
+qt4_add_resources(qtikzgui_RESOURCES_RCC ${qtikzgui_RESOURCES})
+
 include(${QT_USE_FILE})
 add_definitions(
     -DMAKE_TIKZGUI
@@ -76,6 +80,7 @@ add_definitions(
 add_library(qtikzgui SHARED
     ${qtikzgui_SOURCES}
     ${qtikzgui_HEADERS_MOC}
+    ${qtikzgui_RESOURCES_RCC}
 )
 
 target_link_libraries(qtikzgui

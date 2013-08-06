@@ -56,6 +56,7 @@ TikzToolBox::TikzToolBox(TikzDocument * doc, QWidget * parent)
     QToolButton * createEdgeAction = new QToolButton(this);
 
     selectAction->setText("s");
+    selectAction->setIcon(QIcon(":/icons/icons/edit-select.png"));
     createCoordAction->setText("c");
     createNodeAction->setText("n");
     createEdgeAction->setText("e");
