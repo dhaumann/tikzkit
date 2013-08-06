@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/edit-select.png</file>
+    <file>icons/edit-redo.png</file>
+    <file>icons/edit-undo.png</file>
+  </qresource>
+</RCC>
