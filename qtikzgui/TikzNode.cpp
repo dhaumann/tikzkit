@@ -110,6 +110,7 @@ TikzNode::~TikzNode()
 
 TikzDocument * TikzNode::document() const
 {
+    Q_ASSERT(qobject_cast<TikzDocument*>(d->node->document()) != nullptr);
     return qobject_cast<TikzDocument*>(d->node->document());
 }
 

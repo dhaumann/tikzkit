@@ -302,10 +302,7 @@ void TikzEdgePrivate::updateStartNode(tikz::Node * node)
     TikzNode * newStartNode = 0;
 
     if (node) {
-        TikzDocument * doc = qobject_cast<TikzDocument*>(edge->document());
-        Q_ASSERT(doc != 0);
-
-        newStartNode = doc->tikzNodeFromId(node->id());
+        newStartNode = q->document()->tikzNodeFromId(node->id());
     }
 
     if (start != newStartNode) {
@@ -318,10 +315,7 @@ void TikzEdgePrivate::updateEndNode(tikz::Node * node)
     TikzNode * newEndNode = 0;
 
     if (node) {
-        TikzDocument * doc = qobject_cast<TikzDocument*>(edge->document());
-        Q_ASSERT(doc != 0);
-
-        newEndNode = doc->tikzNodeFromId(node->id());
+        newEndNode = q->document()->tikzNodeFromId(node->id());
     }
 
     if (end != newEndNode) {

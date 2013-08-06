@@ -66,6 +66,7 @@ TikzEdge::~TikzEdge()
 
 TikzDocument * TikzEdge::document() const
 {
+    Q_ASSERT(qobject_cast<TikzDocument*>(d->edge->document()) != nullptr);
     return qobject_cast<TikzDocument*>(d->edge->document());
 }
 
