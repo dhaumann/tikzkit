@@ -19,8 +19,6 @@
 
 #include "Style.h"
 
-#include "StyleManager.h"
-
 #include "Document.h"
 
 namespace tikz {
