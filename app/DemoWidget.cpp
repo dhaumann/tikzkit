@@ -157,7 +157,7 @@ DemoWidget::DemoWidget()
     item2->node()->style()->setInnerSep(0.2);
     doc->setNodeText(item2->node(), "A long text\\\\which is wrapped");
 
-    item2->style()->setParent(item1->style());
+    item2->style()->setParentStyle(item1->style());
 
     // an edge
     edge = doc->createTikzEdge();

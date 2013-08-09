@@ -36,6 +36,7 @@ public:
 
     // parent / child hierarchy
     Style * parent;
+    QVector<Style *> children;
 
     // config reference counter
     int refCounter;
@@ -122,6 +123,15 @@ Style::Style(qint64 id, Document* tikzDocument)
 
 Style::~Style()
 {
+    // unregister all child styles
+    foreach (Style * style, d->children) {
+        style->setParentStyle(d->parent);
+    }
+    Q_ASSERT(d->children.size() == 0);
+
+    // remove from parent's child list, if needed
+    setParentStyle(0);
+
     delete d;
 }
 
@@ -244,24 +254,39 @@ QVariantMap Style::toVariantMap() const
     return vm;
 }
 
-Style *Style::parent() const
+Style *Style::parentStyle() const
 {
     return d->parent;
 }
 
-void Style::setParent(Style *parent)
+void Style::setParentStyle(Style *parent)
 {
     if (d->parent != parent) {
         beginConfig();
         if (d->parent) {
+            // disconnect all signals (e.g. changed())
             disconnect(d->parent, 0, this, 0);
+
+            // remove this in old parent's children list
+            Q_ASSERT(d->parent->d->children.contains(this));
+            d->parent->d->children.remove(d->parent->d->children.indexOf(this));
         }
         d->parent = parent;
         if (d->parent) {
+            // forward changed() signal
             connect(d->parent, SIGNAL(changed()), this, SIGNAL(changed()));
+
+            // interst us into the new parent's children list
+            Q_ASSERT(! d->parent->d->children.contains(this));
+            d->parent->d->children.append(this);
         }
         endConfig();
     }
+}
+
+bool Style::hasChildStyles() const
+{
+    return d->children.size() > 0;
 }
 
 void Style::beginConfig()
@@ -286,8 +311,8 @@ PenStyle Style::penStyle() const
         return d->penStyle;
     }
 
-    if (parent()) {
-        return parent()->penStyle();
+    if (parentStyle()) {
+        return parentStyle()->penStyle();
     }
 
     return SolidLine;
@@ -330,8 +355,8 @@ LineWidth Style::lineWidthType() const
         return d->lineWidthType;
     }
 
-    if (parent()) {
-        return parent()->lineWidthType();
+    if (parentStyle()) {
+        return parentStyle()->lineWidthType();
     }
 
     return SemiThick;
@@ -380,8 +405,8 @@ qreal Style::lineWidth() const
         return pt * cm;
     }
 
-    if (parent()) {
-        return parent()->lineWidth();
+    if (parentStyle()) {
+        return parentStyle()->lineWidth();
     }
 
     return 0.021162; // SemiThick in cm
@@ -404,8 +429,8 @@ bool Style::isDoubleLine() const
         return d->doubleLine;
     }
 
-    if (parent()) {
-        return parent()->isDoubleLine();
+    if (parentStyle()) {
+        return parentStyle()->isDoubleLine();
     }
 
     return false;
@@ -450,8 +475,8 @@ qreal Style::innerLineWidth() const
         return pt * cm;
     }
 
-    if (parent()) {
-        return parent()->innerLineWidth();
+    if (parentStyle()) {
+        return parentStyle()->innerLineWidth();
     }
 
     // SemiThick in cm on double line, otherwise 0
@@ -464,8 +489,8 @@ LineWidth Style::innerLineWidthType() const
         return d->innerLineWidthType;
     }
 
-    if (parent()) {
-        return parent()->innerLineWidthType();
+    if (parentStyle()) {
+        return parentStyle()->innerLineWidthType();
     }
 
     return SemiThick;
@@ -508,8 +533,8 @@ qreal Style::penOpacity() const
         return d->penOpacity;
     }
 
-    if (parent()) {
-        return parent()->penOpacity();
+    if (parentStyle()) {
+        return parentStyle()->penOpacity();
     }
 
     return 1.0;
@@ -541,8 +566,8 @@ qreal Style::fillOpacity() const
         return d->fillOpacity;
     }
 
-    if (parent()) {
-        return parent()->fillOpacity();
+    if (parentStyle()) {
+        return parentStyle()->fillOpacity();
     }
 
     return 1.0;

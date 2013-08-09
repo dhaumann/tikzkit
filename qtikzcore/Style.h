@@ -68,18 +68,24 @@ class TIKZCORE_EXPORT Style : public QObject
         virtual QVariantMap toVariantMap() const;
 
     //
-    // parent hierarchy
+    // parent / child hierarchy
     //
     public:
         /**
          * Get the parent style this style inherits from.
          */
-        Style *parent() const;
+        Style *parentStyle() const;
 
         /**
          * Set @p parent as new parent to inherit attributes from.
          */
-        void setParent(Style *parent);
+        void setParentStyle(Style *parent);
+
+        /**
+         * Returns true, if this style has child styles inheriting from
+         * this style.
+         */
+        bool hasChildStyles() const;
 
     //
     // config methods

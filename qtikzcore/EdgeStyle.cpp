@@ -207,9 +207,9 @@ CurveMode EdgeStyle::curveMode() const
         return d->curveMode;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->curveMode();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->curveMode();
     }
 
     return tikz::StraightLine;
@@ -231,9 +231,9 @@ qreal EdgeStyle::bendAngle() const
         return d->bendAngle;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->bendAngle();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->bendAngle();
     }
 
     return 0.0;
@@ -259,9 +259,9 @@ qreal EdgeStyle::looseness() const
         return d->looseness;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->looseness();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->looseness();
     }
 
     return 1.0;
@@ -313,9 +313,9 @@ qreal EdgeStyle::outAngle() const
         return d->outAngle;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->outAngle();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->outAngle();
     }
 
     return 45;
@@ -337,9 +337,9 @@ qreal EdgeStyle::inAngle() const
         return d->inAngle;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->inAngle();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->inAngle();
     }
 
     return 135;
@@ -361,9 +361,9 @@ Arrow EdgeStyle::arrowTail() const
         return d->arrowTail;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->arrowTail();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->arrowTail();
     }
 
     return tikz::NoArrow;
@@ -375,9 +375,9 @@ Arrow EdgeStyle::arrowHead() const
         return d->arrowHead;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->arrowHead();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->arrowHead();
     }
 
     return tikz::NoArrow;
@@ -429,9 +429,9 @@ qreal EdgeStyle::shortenStart() const
         return d->shortenStart;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->shortenStart();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->shortenStart();
     }
 
     return 0.0;
@@ -443,9 +443,9 @@ qreal EdgeStyle::shortenEnd() const
         return d->shortenEnd;
     }
 
-    EdgeStyle * parentStyle = qobject_cast<EdgeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->shortenEnd();
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->shortenEnd();
     }
 
     return 0.0;

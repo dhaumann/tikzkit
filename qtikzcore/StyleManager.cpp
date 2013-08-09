@@ -67,7 +67,7 @@ void StyleManager::registerStyle(Style* style)
 
     // set default parent of all other styles
     if (style != m_documentStyle && !style->parent()) {
-        style->setParent(m_documentStyle);
+        style->setParentStyle(m_documentStyle);
     }
 
     m_styles.append(style);
@@ -81,7 +81,7 @@ void StyleManager::unregisterStyle(Style* style)
     foreach (Style* s, m_styles) {
         if (s == style) continue;
         if (s->parent() == style) {
-            s->setParent(style->parent());
+            s->setParentStyle(style->parentStyle());
         }
     }
 
