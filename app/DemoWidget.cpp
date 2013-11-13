@@ -247,7 +247,7 @@ DemoWidget::DemoWidget()
         doc->setNodeText(n2->node(), "KTextEditor\\\\(Interfaces)");
 
         TikzNode *n3 = doc->createTikzNode();
-        doc->setNodePos(n3->node(), QPointF(-7, 10));
+        doc->setNodePos(n3->node(), QPointF(-5.8, 10));
         n3->node()->style()->setLineWidthType(tikz::SemiThick);
         n3->node()->style()->setShape(tikz::ShapeRectangle);
         n3->node()->style()->setInnerSep(0.2);
@@ -258,7 +258,7 @@ DemoWidget::DemoWidget()
         doc->setNodeText(n3->node(), "Kate\\\\(Application)");
 
         TikzNode *n4 = doc->createTikzNode();
-        doc->setNodePos(n4->node(), QPointF(-3.5, 10));
+        doc->setNodePos(n4->node(), QPointF(-2.9, 10));
         n4->node()->style()->setLineWidthType(tikz::SemiThick);
         n4->node()->style()->setShape(tikz::ShapeRectangle);
         n4->node()->style()->setInnerSep(0.2);
@@ -280,7 +280,7 @@ DemoWidget::DemoWidget()
         doc->setNodeText(n5->node(), "KDevelop\\\\(Application)");
 
         TikzNode *n6 = doc->createTikzNode();
-        doc->setNodePos(n6->node(), QPointF(3.5, 10));
+        doc->setNodePos(n6->node(), QPointF(2.9, 10));
         n6->node()->style()->setLineWidthType(tikz::SemiThick);
         n6->node()->style()->setShape(tikz::ShapeRectangle);
         n6->node()->style()->setInnerSep(0.2);
@@ -291,7 +291,7 @@ DemoWidget::DemoWidget()
         doc->setNodeText(n6->node(), "Kile\\\\(Application)");
 
         TikzNode *n7 = doc->createTikzNode();
-        doc->setNodePos(n7->node(), QPointF(7.0, 10));
+        doc->setNodePos(n7->node(), QPointF(5.8, 10));
         n7->node()->style()->setLineWidthType(tikz::SemiThick);
         n7->node()->style()->setShape(tikz::ShapeRectangle);
         n7->node()->style()->setInnerSep(0.2);
