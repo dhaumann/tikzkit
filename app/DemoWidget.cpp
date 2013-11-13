@@ -222,7 +222,138 @@ DemoWidget::DemoWidget()
         edge->edge()->style()->endConfig();
     }
 
-//     QTimer::singleShot(3000, item1, SLOT(deleteLater()));
+    // test example
+    {
+        TikzNode *n1 = doc->createTikzNode();
+        doc->setNodePos(n1->node(), QPointF(0, 6));
+        n1->node()->style()->setLineWidthType(tikz::SemiThick);
+        n1->node()->style()->setShape(tikz::ShapeRectangle);
+        n1->node()->style()->setInnerSep(0.2);
+        n1->node()->style()->setMinimumWidth(6);
+        n1->node()->style()->setMinimumHeight(1.5);
+        n1->node()->style()->setPenColor(QColor(51, 189, 242));
+        n1->node()->style()->setFillColor(QColor(204, 239, 252));
+        doc->setNodeText(n1->node(), "Kate Part\\\\(Backend library)");
+
+        TikzNode *n2 = doc->createTikzNode();
+        doc->setNodePos(n2->node(), QPointF(0, 8));
+        n2->node()->style()->setLineWidthType(tikz::SemiThick);
+        n2->node()->style()->setShape(tikz::ShapeRectangle);
+        n2->node()->style()->setInnerSep(0.2);
+        n2->node()->style()->setMinimumWidth(6);
+        n2->node()->style()->setMinimumHeight(1.5);
+        n2->node()->style()->setPenColor(QColor(255, 153, 51));
+        n2->node()->style()->setFillColor(QColor(255, 229, 204));
+        doc->setNodeText(n2->node(), "KTextEditor\\\\(Interfaces)");
+
+        TikzNode *n3 = doc->createTikzNode();
+        doc->setNodePos(n3->node(), QPointF(-7, 10));
+        n3->node()->style()->setLineWidthType(tikz::SemiThick);
+        n3->node()->style()->setShape(tikz::ShapeRectangle);
+        n3->node()->style()->setInnerSep(0.2);
+        n3->node()->style()->setMinimumWidth(2.5);
+        n3->node()->style()->setMinimumHeight(1.5);
+        n3->node()->style()->setPenColor(QColor(255, 51, 51));
+        n3->node()->style()->setFillColor(QColor(255, 204, 204));
+        doc->setNodeText(n3->node(), "Kate\\\\(Application)");
+
+        TikzNode *n4 = doc->createTikzNode();
+        doc->setNodePos(n4->node(), QPointF(-3.5, 10));
+        n4->node()->style()->setLineWidthType(tikz::SemiThick);
+        n4->node()->style()->setShape(tikz::ShapeRectangle);
+        n4->node()->style()->setInnerSep(0.2);
+        n4->node()->style()->setMinimumWidth(2.5);
+        n4->node()->style()->setMinimumHeight(1.5);
+        n4->node()->style()->setPenColor(QColor(255, 51, 51));
+        n4->node()->style()->setFillColor(QColor(255, 204, 204));
+        doc->setNodeText(n4->node(), "KWrite\\\\(Application)");
+
+        TikzNode *n5 = doc->createTikzNode();
+        doc->setNodePos(n5->node(), QPointF(0, 10));
+        n5->node()->style()->setLineWidthType(tikz::SemiThick);
+        n5->node()->style()->setShape(tikz::ShapeRectangle);
+        n5->node()->style()->setInnerSep(0.2);
+        n5->node()->style()->setMinimumWidth(2.5);
+        n5->node()->style()->setMinimumHeight(1.5);
+        n5->node()->style()->setPenColor(QColor(255, 51, 51));
+        n5->node()->style()->setFillColor(QColor(255, 204, 204));
+        doc->setNodeText(n5->node(), "KDevelop\\\\(Application)");
+
+        TikzNode *n6 = doc->createTikzNode();
+        doc->setNodePos(n6->node(), QPointF(3.5, 10));
+        n6->node()->style()->setLineWidthType(tikz::SemiThick);
+        n6->node()->style()->setShape(tikz::ShapeRectangle);
+        n6->node()->style()->setInnerSep(0.2);
+        n6->node()->style()->setMinimumWidth(2.5);
+        n6->node()->style()->setMinimumHeight(1.5);
+        n6->node()->style()->setPenColor(QColor(255, 51, 51));
+        n6->node()->style()->setFillColor(QColor(255, 204, 204));
+        doc->setNodeText(n6->node(), "Kile\\\\(Application)");
+
+        TikzNode *n7 = doc->createTikzNode();
+        doc->setNodePos(n7->node(), QPointF(7.0, 10));
+        n7->node()->style()->setLineWidthType(tikz::SemiThick);
+        n7->node()->style()->setShape(tikz::ShapeRectangle);
+        n7->node()->style()->setInnerSep(0.2);
+        n7->node()->style()->setMinimumWidth(2.5);
+        n7->node()->style()->setMinimumHeight(1.5);
+        n7->node()->style()->setPenColor(QColor(255, 51, 51));
+        n7->node()->style()->setFillColor(QColor(255, 204, 204));
+        doc->setNodeText(n7->node(), "3rd party\\\\(Application)");
+
+        //
+        // edges
+        //
+        TikzEdge* edge = doc->createTikzEdge();
+        edge->setStartNode(n1);
+        edge->setEndNode(n2);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+
+        edge = doc->createTikzEdge();
+        edge->setStartNode(n2);
+        edge->setEndNode(n3);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        edge->edge()->setStartAnchor(tikz::West);
+
+        edge = doc->createTikzEdge();
+        edge->setStartNode(n2);
+        edge->setEndNode(n4);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+
+        edge = doc->createTikzEdge();
+        edge->setStartNode(n2);
+        edge->setEndNode(n5);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        
+        edge = doc->createTikzEdge();
+        edge->setStartNode(n2);
+        edge->setEndNode(n6);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        
+        edge = doc->createTikzEdge();
+        edge->setStartNode(n2);
+        edge->setEndNode(n7);
+        edge->edge()->style()->setLineWidthType(tikz::Thick);
+        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
+        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
+        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        edge->edge()->setStartAnchor(tikz::East);
+    }
 }
 
 DemoWidget::~DemoWidget()
