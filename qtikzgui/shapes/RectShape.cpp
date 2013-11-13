@@ -25,6 +25,8 @@
 
 #include <cmath>
 
+#include <QDebug>
+
 class RectShapePrivate
 {
     public:
@@ -102,8 +104,8 @@ QPointF RectShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
     const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
 
-    qreal x = rx * std::cos(rad);
-    qreal y = ry * std::sin(rad);
+    qreal x = std::cos(rad);
+    qreal y = std::sin(rad);
     if (!qFuzzyCompare(x, 0.0) && !qFuzzyCompare(y, 0.0)) {
         if (fabs(y) != ry) {
             // normalize to y
