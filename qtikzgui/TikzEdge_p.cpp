@@ -226,7 +226,8 @@ qreal TikzEdgePrivate::baseAngle() const
 
     const QPointF endPos =
         end ? q->mapFromItem(end, end->anchor(q->endAnchor()))
-        : q->mapFromScene(edge->endPos());
+            : q->mapFromScene(edge->endPos());
+
 
     const QPointF diff = endPos - startPos;
     return std::atan2(diff.y(), diff.x());
