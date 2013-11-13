@@ -106,7 +106,11 @@ QPointF RectShape::contactPoint(tikz::Anchor anchor, qreal rad) const
 
     qreal x = std::cos(rad);
     qreal y = std::sin(rad);
-    if (!qFuzzyCompare(x, 0.0) && !qFuzzyCompare(y, 0.0)) {
+    if (qFuzzyCompare(y, 0.0)) {
+        x *= rx;
+    } else if (qFuzzyCompare(x, 0.0)) {
+        y *= ry;
+    } else {
         if (fabs(y) != ry) {
             // normalize to y
             x = (x < 0 ? -1 : 1) * fabs(ry * x / y);
