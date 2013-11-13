@@ -106,7 +106,7 @@ void TexGenerator::generateImage(const QString& texCode)
         "\\begin{document}\n"
         "\\begin{preview}\n"
         "\\begin{tikzpicture}[inner sep=0pt, outer sep=0pt]\n"
-        "\\node at (0, 0) {"+ texCode + "};\n"
+        "\\node[align=center] at (0, 0) {"+ texCode + "};\n"
         "\\end{tikzpicture}\n"
         "\\end{preview}\n"
         "\\end{document}";
