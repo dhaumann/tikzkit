@@ -301,11 +301,44 @@ class TIKZCORE_EXPORT Style : public QObject
     // pen color and fill color/brush
     //
     public:
+        /**
+         * Gets the pen color for drawing paths.
+         * If the color is not explicitly set, the returned color is Qt::black.
+         */
         QColor penColor() const;
+
+        /**
+         * Gets the fill color for filling paths.
+         * If the color is not explicitly set, the returned color is Qt::transparent.
+         */
         QColor fillColor() const;
 
-    // TODO: pen color
-    //  fill color
+    public Q_SLOTS:
+        /**
+         * Sets the pen color used for drawing paths to @p color.
+         * @param color draw color
+         */
+        void setPenColor(const QColor & color);
+
+        /**
+         * Unsets the pen color used for drawing paths.
+         * Afterwards, penColor() returns either the color of the parent()
+         * style, or the default color Qt::black.
+         */
+        void unsetPenColor();
+
+        /**
+         * Sets the fill color used for filling paths to @p color.
+         * @param color draw color
+         */
+        void setFillColor(const QColor & color);
+
+        /**
+         * Unsets the fill color used for filling paths.
+         * Afterwards, fillColor() returns either the color of the parent()
+         * style, or the default Qt::transparent.
+         */
+        void unsetFillColor();
 
     //
     // internal to tikz::Document

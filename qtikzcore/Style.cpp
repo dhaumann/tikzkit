@@ -102,7 +102,7 @@ void StylePrivate::init()
 
 
     penColor = Qt::black;
-    fillColor = QColor();
+    fillColor = Qt::transparent;
 }
 
 Style::Style()
@@ -593,12 +593,68 @@ void Style::unsetFillOpacity()
 
 QColor Style::penColor() const
 {
+    if (d->penColorSet) {
+        return d->penColor;
+    }
+
+    if (parentStyle()) {
+        return parentStyle()->penColor();
+    }
+
     return Qt::black;
 }
 
 QColor Style::fillColor() const
 {
-    return Qt::black;
+    if (d->fillColorSet) {
+        return d->fillColor;
+    }
+
+    if (parentStyle()) {
+        return parentStyle()->fillColor();
+    }
+
+    return Qt::transparent;
+}
+
+void Style::setPenColor(const QColor & color)
+{
+    if (!d->penColorSet || d->penColor != color) {
+        beginConfig();
+        d->penColorSet = true;
+        d->penColor = color;
+        endConfig();
+    }
+}
+
+void Style::unsetPenColor()
+{
+    if (d->penColorSet) {
+        beginConfig();
+        d->penColorSet = false;
+        d->penColor = Qt::black;
+        endConfig();
+    }
+}
+
+void Style::setFillColor(const QColor & color)
+{
+    if (!d->fillColorSet || d->fillColor != color) {
+        beginConfig();
+        d->fillColorSet = true;
+        d->fillColor = color;
+        endConfig();
+    }
+}
+
+void Style::unsetFillColor()
+{
+    if (d->fillColorSet) {
+        beginConfig();
+        d->fillColorSet = false;
+        d->fillColor = Qt::transparent;
+        endConfig();
+    }
 }
 
 }
