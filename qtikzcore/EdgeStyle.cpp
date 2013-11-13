@@ -227,6 +227,11 @@ void EdgeStyle::setCurveMode(tikz::CurveMode mode)
 
 qreal EdgeStyle::bendAngle() const
 {
+    // bending is only allowed for mode "tikz::BendCurve"
+    if (curveMode() != tikz::BendCurve) {
+        return 0.0;
+    }
+
     if (d->bendAngleSet) {
         return d->bendAngle;
     }
