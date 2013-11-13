@@ -207,7 +207,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     PaintHelper sh(painter, style());
     QPen p = sh.pen();
-    QBrush brush(Qt::yellow);
+    QBrush brush(style()->fillColor());
     painter->setPen(p);
     painter->setBrush(brush);
 
