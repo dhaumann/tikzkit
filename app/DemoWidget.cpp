@@ -377,6 +377,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupActions()
 {
     connect(m_ui->aNew, SIGNAL(triggered()), m_doc, SLOT(clear()));
+    connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
 }
 
 void MainWindow::updateTransform()
@@ -391,6 +392,12 @@ void MainWindow::updateTransform()
     trans.scale(scale, -scale);
 
     m_view->setTransform(trans);
+}
+
+void MainWindow::saveFile()
+{
+    QString filename("output.tikzkit");
+    m_doc->save(filename);
 }
 
 // kate: indent-width 4; replace-tabs on;

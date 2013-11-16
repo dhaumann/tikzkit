@@ -47,6 +47,8 @@ class MainWindow : public QMainWindow
     public Q_SLOTS:
         void updateTransform();
 
+        void saveFile();
+
     protected:
         void setupActions();
 

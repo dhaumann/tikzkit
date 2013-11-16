@@ -60,6 +60,17 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         void clear();
 
+        /**
+         * Load the tikz document from @p file.
+         * The file contents must be in json notation, written by save().
+         */
+        bool load(const QString & file);
+
+        /**
+         * Save the tikz document to @p file in json notation.
+         */
+        bool save(const QString & file);
+
     //
     // serialization
     //

@@ -33,6 +33,8 @@
 
 #include <QUndoStack>
 #include <QDebug>
+#include <QTextStream>
+#include <QFile>
 #include <qjson/serializer.h>
 
 namespace tikz {
@@ -109,6 +111,33 @@ void Document::clear()
     d->undoManager.clear();
 }
 
+bool Document::load(const QString & file)
+{
+    // first start a clean document
+    clear();
+
+    // open the file contents
+    QFile target(file);
+    if (!target.open(QIODevice::ReadOnly | QIODevice::Text)) {
+         return false;
+    }
+
+    QByteArray jsonByteArray = target.readAll();
+}
+
+bool Document::save(const QString & file)
+{
+    // open file
+    QFile target(file);
+    if (!target.open(QIODevice::WriteOnly | QIODevice::Text)) {
+         return false;
+    }
+
+    // write json to text stream
+    QTextStream ts(&target);
+    ts << toJson();
+}
+
 QByteArray Document::toJson() const
 {
     QVariantList doc;
@@ -127,10 +156,9 @@ QByteArray Document::toJson() const
 
     bool ok;
     QJson::Serializer serializer;
+    serializer.setIndentMode(QJson::IndentFull);
     QByteArray json = serializer.serialize(doc, &ok);
-    if (ok) {
-        qDebug() << json;
-    } else {
+    if (!ok) {
         qCritical() << "Something went wrong:" << serializer.errorMessage();
     }
 
