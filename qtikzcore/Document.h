@@ -54,6 +54,12 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         virtual ~Document();
 
+    public Q_SLOTS:
+        /**
+         * Clear all contents of the document.
+         */
+        void clear();
+
     //
     // serialization
     //

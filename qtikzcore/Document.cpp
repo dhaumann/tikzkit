@@ -84,6 +84,31 @@ Document::~Document()
     delete d;
 }
 
+void Document::clear()
+{
+    while (d->edges.size()) {
+        deleteEdge(d->edges.last()->id());
+    }
+
+    while (d->nodes.size()) {
+        deleteNode(d->nodes.last()->id());
+    }
+
+    Q_ASSERT(0 == d->nodeMap.size());
+    Q_ASSERT(0 == d->nodes.size());
+    Q_ASSERT(0 == d->edgeMap.size());
+    Q_ASSERT(0 == d->edges.size());
+
+    delete d->style;
+    d->style = new Style(d->uniqueId(), this);
+
+    // reset unique id counter
+    d->nextId = 0;
+
+    // clear undo stack
+    d->undoManager.clear();
+}
+
 QByteArray Document::toJson() const
 {
     QVariantList doc;

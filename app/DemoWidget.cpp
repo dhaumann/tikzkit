@@ -376,7 +376,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupActions()
 {
-    connect(m_ui->aNew, SIGNAL(triggered()), this, SLOT(newDocument()));
+    connect(m_ui->aNew, SIGNAL(triggered()), m_doc, SLOT(clear()));
 }
 
 void MainWindow::updateTransform()
@@ -391,11 +391,6 @@ void MainWindow::updateTransform()
     trans.scale(scale, -scale);
 
     m_view->setTransform(trans);
-}
-
-void MainWindow::newDocument()
-{
-    m_doc->clear();
 }
 
 // kate: indent-width 4; replace-tabs on;
