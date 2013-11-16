@@ -316,6 +316,11 @@ PenStyle Style::penStyle() const
     return SolidLine;
 }
 
+bool Style::penStyleSet() const
+{
+    return d->penStyleSet;
+}
+
 void Style::setPenStyle(tikz::PenStyle style)
 {
     if (!d->penStyleSet || d->penStyle != style) {
@@ -358,6 +363,11 @@ LineWidth Style::lineWidthType() const
     }
 
     return SemiThick;
+}
+
+bool Style::lineWidthSet() const
+{
+    return d->lineWidthSet;
 }
 
 void Style::setLineWidthType(tikz::LineWidth type)
@@ -434,6 +444,11 @@ bool Style::isDoubleLine() const
     return false;
 }
 
+bool Style::doubleLineSet() const
+{
+    return d->doubleLineSet;
+}
+
 void Style::setDoubleLine(bool enabled)
 {
     if (!d->doubleLineSet || d->doubleLine != enabled) {
@@ -479,6 +494,11 @@ qreal Style::innerLineWidth() const
 
     // SemiThick in cm on double line, otherwise 0
     return d->doubleLineSet ? 0.021162 : 0.0;
+}
+
+bool Style::innerLineWidthSet() const
+{
+    return d->innerLineWidthSet;
 }
 
 LineWidth Style::innerLineWidthType() const
@@ -548,6 +568,11 @@ void Style::setPenOpacity(qreal opacity)
     }
 }
 
+bool Style::penOpacitySet() const
+{
+    return d->penOpacitySet;
+}
+
 void Style::unsetPenOpacity()
 {
     if (d->penOpacitySet) {
@@ -569,6 +594,11 @@ qreal Style::fillOpacity() const
     }
 
     return 1.0;
+}
+
+bool Style::fillOpacitySet() const
+{
+    return d->fillOpacitySet;
 }
 
 void Style::setFillOpacity(qreal opacity)
@@ -604,6 +634,11 @@ QColor Style::penColor() const
     return Qt::black;
 }
 
+bool Style::penColorSet() const
+{
+    return d->penColorSet;
+}
+
 QColor Style::fillColor() const
 {
     if (d->fillColorSet) {
@@ -615,6 +650,11 @@ QColor Style::fillColor() const
     }
 
     return Qt::transparent;
+}
+
+bool Style::fillColorSet() const
+{
+    return d->fillColorSet;
 }
 
 void Style::setPenColor(const QColor & color)

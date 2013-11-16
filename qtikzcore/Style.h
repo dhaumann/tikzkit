@@ -126,6 +126,12 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         PenStyle penStyle() const;
 
+        /**
+         * Check whether the pen style is set.
+         * @return true, if this style has an own pen style
+         */
+        bool penStyleSet() const;
+
     public Q_SLOTS:
         /**
          * Set the PenStyle of this style to @p style.
@@ -151,6 +157,12 @@ class TIKZCORE_EXPORT Style : public QObject
          * @see LineWidth
          */
         LineWidth lineWidthType() const;
+
+        /**
+         * Check whether the line width is set.
+         * @return true, if this style has an own line width
+         */
+        bool lineWidthSet() const;
 
         /**
          * Get the lineWidth() in cm.
@@ -202,6 +214,12 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         bool isDoubleLine() const;
 
+        /**
+         * Check whether the double line property is set.
+         * @return true, if this style has an own double line property
+         */
+        bool doubleLineSet() const;
+
     public Q_SLOTS:
         /**
          * Draw double lines if @p enabled is @e true.
@@ -222,6 +240,11 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         qreal innerLineWidth() const;
 
+        /**
+         * Check whether the inner line width property is set.
+         * @return true, if this style has an own inner line width property
+         */
+        bool innerLineWidthSet() const;
 
         /**
          * Get the line width type.
@@ -266,9 +289,21 @@ class TIKZCORE_EXPORT Style : public QObject
         qreal penOpacity() const;
 
         /**
+         * Check whether the pen opacity property is set.
+         * @return true, if this style has an own pen opacity property
+         */
+        bool penOpacitySet() const;
+
+        /**
          * Get the opacity for filling operations in the interval [0.0; 1.0].
          */
         qreal fillOpacity() const;
+
+        /**
+         * Check whether the fill opacity property is set.
+         * @return true, if this style has an own fill opacity property
+         */
+        bool fillOpacitySet() const;
 
     public Q_SLOTS:
         /**
@@ -308,10 +343,22 @@ class TIKZCORE_EXPORT Style : public QObject
         QColor penColor() const;
 
         /**
+         * Check whether the pen color property is set.
+         * @return true, if this style has an own pen color property
+         */
+        bool penColorSet() const;
+
+        /**
          * Gets the fill color for filling paths.
          * If the color is not explicitly set, the returned color is Qt::transparent.
          */
         QColor fillColor() const;
+
+        /**
+         * Check whether the fill color property is set.
+         * @return true, if this style has an own fill color property
+         */
+        bool fillColorSet() const;
 
     public Q_SLOTS:
         /**
