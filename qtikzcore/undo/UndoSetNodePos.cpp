@@ -61,8 +61,14 @@ bool UndoSetNodePos::mergeWith(const QUndoCommand * command)
 {
     Q_ASSERT(id() == command->id());
 
-    m_redoPos = static_cast<const UndoSetNodePos*>(command)->m_redoPos;
-    return true;
+    const UndoSetNodePos* other = dynamic_cast<const UndoSetNodePos*>(command);
+
+    // only merge when command is of type UndoSetNodePos
+    if (other) {
+        m_redoPos = other->m_redoPos;
+    }
+
+    return other != 0;
 }
 
 }
