@@ -9,6 +9,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qtikzgui
     ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
     #${POPPLER_QT4_INCLUDE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set(qtikz_SOURCES
@@ -28,9 +29,13 @@ add_definitions(
     #${POPPLER_QT4_DEFINITIONS}
 )
 
+set(qtikz_FORMS MainWindow.ui)
+QT4_WRAP_UI(qtikz_FORMS_HEADERS ${qtikz_FORMS})
+
 add_executable(qtikz
     ${qtikz_SOURCES}
     ${qtikz_HEADERS_MOC}
+    ${qtikz_FORMS_HEADERS}
 )
 
 target_link_libraries(qtikz

@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    DemoWidget w;
+    MainWindow w;
     w.resize(640, 480);
     w.show();
 

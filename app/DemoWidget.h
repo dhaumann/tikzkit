@@ -18,12 +18,18 @@
 #ifndef DEMO_WIDGET_H
 #define DEMO_WIDGET_H
 
-#include <QWidget>
+#include <QMainWindow>
+#include <memory>
 
 class QGraphicsView;
 class QSlider;
+class TikzDocument;
 
-class DemoWidget : public QWidget
+namespace Ui {
+    class MainWindow;
+};
+
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -31,20 +37,29 @@ class DemoWidget : public QWidget
         /**
          * Default constructor.
          */
-        DemoWidget();
+        MainWindow();
 
         /**
          * Virtual destructor.
          */
-        virtual ~DemoWidget();
+        virtual ~MainWindow();
 
     public Q_SLOTS:
         void updateTransform();
+
+        void newDocument();
+
+    protected:
+        void setupActions();
 
     private:
         QGraphicsView* m_view;
         QSlider* m_zoomSlider;
         QSlider* m_rotSlider;
+
+        std::unique_ptr<Ui::MainWindow> m_ui;
+
+        TikzDocument * m_doc;
 };
 
 #endif // DEMO_WIDGET_H
