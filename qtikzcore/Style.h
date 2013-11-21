@@ -35,6 +35,8 @@ class StylePrivate;
 class TIKZCORE_EXPORT Style : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor RESET unsetPenColor)
+    Q_PROPERTY(QColor fillColor READ fillColor WRITE setFillColor RESET unsetFillColor)
 
     public:
         /**
