@@ -214,7 +214,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawPath(d->shapePath);
 
     // draw double line, if wanted
-    if (style()->isDoubleLine()) {
+    if (style()->doubleLine()) {
         painter->setBrush(Qt::NoBrush);
         p.setWidthF(style()->innerLineWidth());
         p.setColor(Qt::white);

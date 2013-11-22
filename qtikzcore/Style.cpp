@@ -343,7 +343,7 @@ void Style::unsetPenStyle()
 
 qreal Style::penWidth() const
 {
-    if (!isDoubleLine()) {
+    if (!doubleLine()) {
         return lineWidth();
     } else {
         const qreal width = lineWidth();
@@ -431,14 +431,14 @@ void Style::unsetLineWidth()
     }
 }
 
-bool Style::isDoubleLine() const
+bool Style::doubleLine() const
 {
     if (d->doubleLineSet) {
         return d->doubleLine;
     }
 
     if (parentStyle()) {
-        return parentStyle()->isDoubleLine();
+        return parentStyle()->doubleLine();
     }
 
     return false;

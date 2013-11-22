@@ -195,7 +195,7 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     // draw line
     painter->drawPath(d->linePath);
 
-    if (style()->isDoubleLine()) {
+    if (style()->doubleLine()) {
         p.setWidthF(style()->innerLineWidth());
         p.setColor(Qt::white);
         painter->setPen(p);

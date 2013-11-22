@@ -96,13 +96,13 @@ void ArrowComboBoxPrivate::fillComboBox()
         p.setPen(pen);
         if (arrowHead) {
             p.drawLine(QPointF(0.0, 0.0), QPointF(0.5 - arrow->rightExtend(), 0.0));
-            if (style.isDoubleLine()) {
+            if (style.doubleLine()) {
                 p.setPen(innerPen);
                 p.drawLine(QPointF(0.0, 0.0), QPointF(0.5 - arrow->rightExtend(), 0.0));
             }
         } else {
             p.drawLine(QPointF(0.5, 0.0), QPointF(0.0 + arrow->rightExtend(), 0.0));
-            if (style.isDoubleLine()) {
+            if (style.doubleLine()) {
                 p.setPen(innerPen);
                 p.drawLine(QPointF(0.5, 0.0), QPointF(0.0 + arrow->rightExtend(), 0.0));
             }
