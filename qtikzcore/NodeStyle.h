@@ -31,6 +31,15 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 {
     Q_OBJECT
 
+    Q_PROPERTY(TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
+    Q_PROPERTY(Shape shape READ shape WRITE setShape RESET unsetShape)
+    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
+    Q_PROPERTY(qreal scale READ scale WRITE setScale RESET unsetScale)
+    Q_PROPERTY(qreal innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
+    Q_PROPERTY(qreal outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
+    Q_PROPERTY(qreal minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
+    Q_PROPERTY(qreal minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
+
     public:
         /**
          * Default constructor.
