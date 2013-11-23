@@ -34,6 +34,7 @@ namespace tikz
 class NodePrivate;
 class NodeStyle;
 class Document;
+class Visitor;
 
 class TIKZCORE_EXPORT Node : public Coord
 {
@@ -64,6 +65,16 @@ class TIKZCORE_EXPORT Node : public Coord
          * Serialize node to variant map.
          */
         QVariantMap toVariantMap() const;
+
+    //
+    // visitor pattern
+    //
+    public:
+        /**
+         * Visitor pattern.
+         * Visits all elements of the document.
+         */
+        bool accept(tikz::Visitor & visitor);
 
     //
     // style and text

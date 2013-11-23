@@ -31,6 +31,8 @@
 #include "UndoSetNodeText.h"
 #include "UndoSetNodeStyle.h"
 
+#include "Visitor.h"
+
 #include <QUndoStack>
 #include <QDebug>
 #include <QTextStream>
@@ -86,6 +88,18 @@ Document::~Document()
     delete d;
 }
 
+bool Document::accept(tikz::Visitor & visitor)
+{
+    visitor.visit(this);
+    foreach (Node* node, d->nodes) {
+        node->accept(visitor);
+    }
+        
+    foreach (Edge* edge, d->edges) {
+        edge->accept(visitor);
+    }
+}
+
 void Document::clear()
 {
     while (d->edges.size()) {
@@ -123,6 +137,7 @@ bool Document::load(const QString & file)
     }
 
     QByteArray jsonByteArray = target.readAll();
+    // TODO: read from jsonByteArray
 }
 
 bool Document::save(const QString & file)

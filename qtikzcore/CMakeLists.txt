@@ -6,6 +6,7 @@ find_package(QJSON REQUIRED)
 include_directories(
     .
     undo/
+    visitor/
     ${QJSON_INCLUDE_DIR}
 )
 
@@ -30,6 +31,9 @@ set(qtikzcore_SOURCES
     undo/UndoSetNodePos.cpp
     undo/UndoSetNodeText.cpp
     undo/UndoSetNodeStyle.cpp
+
+    visitor/Visitor.cpp
+    visitor/SerializeVisitor.cpp
 )
 
 set(qtikzcore_HEADERS

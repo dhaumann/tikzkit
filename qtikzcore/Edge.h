@@ -34,6 +34,7 @@ class Coord;
 class Node;
 class EdgeStyle;
 class Document;
+class Visitor;
 
 /**
  * The class Edge connects two Coords or Nodes.
@@ -58,6 +59,16 @@ class TIKZCORE_EXPORT Edge : public QObject
          * If the document is @e not associated to a document -1 is returned.
          */
         qint64 id() const;
+
+    //
+    // visitor pattern
+    //
+    public:
+        /**
+         * Visitor pattern.
+         * Visits all elements of the document.
+         */
+        bool accept(tikz::Visitor & visitor);
 
     //
     // Node start / end manipulation

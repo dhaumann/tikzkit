@@ -38,6 +38,7 @@ class Node;
 class Edge;
 class NodeStyle;
 class EdgeStyle;
+class Visitor;
 
 class TIKZCORE_EXPORT Document : public QObject
 {
@@ -53,6 +54,16 @@ class TIKZCORE_EXPORT Document : public QObject
          * Destructor
          */
         virtual ~Document();
+
+    //
+    // visitor pattern
+    //
+    public:
+        /**
+         * Visitor pattern.
+         * Visits all elements of the document.
+         */
+        bool accept(tikz::Visitor & visitor);
 
     public Q_SLOTS:
         /**

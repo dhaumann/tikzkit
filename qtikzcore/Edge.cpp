@@ -22,6 +22,7 @@
 #include "MetaNode.h"
 #include "EdgeStyle.h"
 #include "Document.h"
+#include "Visitor.h"
 
 namespace tikz {
 
@@ -87,6 +88,11 @@ Document * Edge::document() const
 qint64 Edge::id() const
 {
     return d->id;
+}
+
+bool Edge::accept(tikz::Visitor & visitor)
+{
+    visitor.visit(this);
 }
 
 void Edge::setStartNode(Node* node)

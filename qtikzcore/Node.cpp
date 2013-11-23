@@ -20,6 +20,7 @@
 #include "Node.h"
 #include "NodeStyle.h"
 #include "Document.h"
+#include "Visitor.h"
 
 #include <cmath>
 
@@ -86,6 +87,11 @@ QVariantMap Node::toVariantMap() const
     vm.insert("text", text());
 //     vm.insert("position", pos());
     return vm;
+}
+
+bool Node::accept(tikz::Visitor & visitor)
+{
+    visitor.visit(this);
 }
 
 void Node::setText(const QString& text)
