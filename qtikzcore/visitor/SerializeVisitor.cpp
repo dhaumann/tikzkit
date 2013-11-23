@@ -24,6 +24,9 @@
 #include "Edge.h"
 
 #include <QStringList>
+#include <QTextStream>
+#include <QFile>
+#include <qjson/serializer.h>
 
 namespace tikz
 {
@@ -35,6 +38,30 @@ SerializeVisitor::SerializeVisitor()
 
 SerializeVisitor::~SerializeVisitor()
 {
+}
+
+bool SerializeVisitor::save(const QString & filename)
+{
+    // convert to JSON
+    bool ok;
+    QJson::Serializer serializer;
+    serializer.setIndentMode(QJson::IndentFull);
+    QByteArray json = serializer.serialize(m_map, &ok);
+
+    // there is no reason for failure
+    Q_ASSERT(ok);
+
+    // open file
+    QFile target(filename);
+    if (!target.open(QIODevice::WriteOnly | QIODevice::Text)) {
+         return false;
+    }
+
+    // write json to text stream
+    QTextStream ts(&target);
+    ts << json;
+
+    return true;
 }
 
 void SerializeVisitor::visit(tikz::Document * doc)

@@ -51,6 +51,16 @@ class SerializeVisitor : public Visitor
         virtual ~SerializeVisitor();
 
     //
+    // extra functions
+    //
+    public:
+        /**
+         * Save the tikz::Document to the file @p filename.
+         * @return true on success, otherwise false
+         */
+        bool save(const QString & filename);
+
+    //
     // Visitor pattern
     //
     public:

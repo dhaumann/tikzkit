@@ -32,6 +32,7 @@
 #include "UndoSetNodeStyle.h"
 
 #include "Visitor.h"
+#include "SerializeVisitor.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -142,15 +143,10 @@ bool Document::load(const QString & file)
 
 bool Document::save(const QString & file)
 {
-    // open file
-    QFile target(file);
-    if (!target.open(QIODevice::WriteOnly | QIODevice::Text)) {
-         return false;
-    }
+    tikz::SerializeVisitor sv;
+    accept(sv);
 
-    // write json to text stream
-    QTextStream ts(&target);
-    ts << toJson();
+    sv.save("output.tikzkit");
 }
 
 QByteArray Document::toJson() const
