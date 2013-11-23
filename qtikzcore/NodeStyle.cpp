@@ -21,6 +21,15 @@
 
 namespace tikz {
 
+static const char * s_align = "align";
+static const char * s_shape = "shape";
+static const char * s_rotation = "rotation";
+static const char * s_scale = "scale";
+static const char * s_innerSep = "innerSep";
+static const char * s_outerSep = "outerSep";
+static const char * s_minimumHeight = "minimumHeight";
+static const char * s_minimumWidth = "minimumWidth";
+
 /**
  * Private data and helper functions of class NodeStyle.
  */
@@ -36,15 +45,6 @@ public:
     qreal outerSep;
     qreal minimumHeight;
     qreal minimumWidth;
-
-    bool alignSet : 1;
-    bool shapeSet : 1;
-    bool rotationSet : 1;
-    bool scaleSet : 1;
-    bool innerSepSet : 1;
-    bool outerSepSet : 1;
-    bool minimumHeightSet : 1;
-    bool minimumWidthSet : 1;
 };
 
 NodeStyle::NodeStyle()
@@ -59,15 +59,6 @@ NodeStyle::NodeStyle()
     d->outerSep = 0.5; // 0.5 \pgflinewidth
     d->minimumHeight = 0.0; // mm
     d->minimumWidth = 0.0; // mm
-
-    d->alignSet = false;
-    d->shapeSet = false;
-    d->rotationSet = false;
-    d->scaleSet = false;
-    d->innerSepSet = false;
-    d->outerSepSet = false;
-    d->minimumHeightSet = false;
-    d->minimumWidthSet = false;
 }
 
 NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
@@ -94,7 +85,7 @@ QVariantMap NodeStyle::toVariantMap() const
     QVariantMap vm = Style::toVariantMap();
 
     // align
-    if (d->alignSet) {
+    if (propertySet(s_align)) {
         QString align;
         switch (d->align) {
             case AlignLeft: align = "left"; break;
@@ -107,7 +98,7 @@ QVariantMap NodeStyle::toVariantMap() const
     }
 
     // shape
-    if (d->shapeSet) {
+    if (propertySet(s_shape)) {
         QString shape;
         switch (d->shape) {
             case ShapeRectangle: shape = "rectangle"; break;
@@ -119,27 +110,27 @@ QVariantMap NodeStyle::toVariantMap() const
     }
 
     // other properties
-    if (d->rotationSet) {
+    if (propertySet(s_rotation)) {
         vm.insert("rotate", d->rotation);
     }
 
-    if (d->scaleSet) {
+    if (propertySet(s_scale)) {
         vm.insert("scale", d->scale);
     }
 
-    if (d->innerSepSet) {
+    if (propertySet(s_innerSep)) {
         vm.insert("inner sep", d->innerSep);
     }
 
-    if (d->outerSepSet) {
+    if (propertySet(s_outerSep)) {
         vm.insert("outer sep", d->outerSep);
     }
 
-    if (d->minimumWidthSet) {
+    if (propertySet(s_minimumWidth)) {
         vm.insert("minimum width", d->minimumWidth);
     }
 
-    if (d->minimumHeightSet) {
+    if (propertySet(s_minimumHeight)) {
         vm.insert("minimum height", d->minimumHeight);
     }
 
@@ -148,7 +139,7 @@ QVariantMap NodeStyle::toVariantMap() const
 
 TextAlignment NodeStyle::alignment() const
 {
-    if (d->alignSet) {
+    if (propertySet(s_align)) {
         return d->align;
     }
 
@@ -162,9 +153,9 @@ TextAlignment NodeStyle::alignment() const
 
 void NodeStyle::setAlignment(tikz::TextAlignment align)
 {
-    if (!d->alignSet || d->align != align) {
+    if (!propertySet(s_align) || d->align != align) {
         beginConfig();
-        d->alignSet = true;
+        addProperty(s_align);
         d->align = align;
         endConfig();
     }
@@ -172,9 +163,9 @@ void NodeStyle::setAlignment(tikz::TextAlignment align)
 
 void NodeStyle::unsetAlignment()
 {
-    if (d->alignSet) {
+    if (propertySet(s_align)) {
         beginConfig();
-        d->alignSet = false;
+        removeProperty(s_align);
         d->align = NoAlign;
         endConfig();
     }
@@ -182,7 +173,7 @@ void NodeStyle::unsetAlignment()
 
 Shape NodeStyle::shape() const
 {
-    if (d->shapeSet) {
+    if (propertySet(s_shape)) {
         return d->shape;
     }
 
@@ -196,9 +187,9 @@ Shape NodeStyle::shape() const
 
 void NodeStyle::setShape(tikz::Shape shape)
 {
-    if (!d->shapeSet || d->shape != shape) {
+    if (!propertySet(s_shape) || d->shape != shape) {
         beginConfig();
-        d->shapeSet = true;
+        addProperty(s_shape);
         d->shape = shape;
         endConfig();
     }
@@ -206,9 +197,9 @@ void NodeStyle::setShape(tikz::Shape shape)
 
 void NodeStyle::unsetShape()
 {
-    if (d->shapeSet) {
+    if (propertySet(s_shape)) {
         beginConfig();
-        d->shapeSet = false;
+        removeProperty(s_shape);
         d->shape = ShapeRectangle;
         endConfig();
     }
@@ -216,7 +207,7 @@ void NodeStyle::unsetShape()
 
 qreal NodeStyle::rotation() const
 {
-    if (d->rotationSet) {
+    if (propertySet(s_rotation)) {
         return d->rotation;
     }
 
@@ -230,9 +221,9 @@ qreal NodeStyle::rotation() const
 
 void NodeStyle::setRotation(qreal angle)
 {
-    if (!d->rotationSet || d->rotation != angle) {
+    if (!propertySet(s_rotation) || d->rotation != angle) {
         beginConfig();
-        d->rotationSet = true;
+        addProperty(s_rotation);
         d->rotation = angle;
         endConfig();
     }
@@ -240,9 +231,9 @@ void NodeStyle::setRotation(qreal angle)
 
 void NodeStyle::unsetRotation()
 {
-    if (d->rotationSet) {
+    if (propertySet(s_rotation)) {
         beginConfig();
-        d->rotationSet = false;
+        removeProperty(s_rotation);
         d->rotation = 0.0;
         endConfig();
     }
@@ -250,7 +241,7 @@ void NodeStyle::unsetRotation()
 
 qreal NodeStyle::scale() const
 {
-    if (d->scaleSet) {
+    if (propertySet(s_scale)) {
         return d->scale;
     }
 
@@ -264,9 +255,9 @@ qreal NodeStyle::scale() const
 
 void NodeStyle::setScale(qreal factor)
 {
-    if (!d->scaleSet || d->scale != factor) {
+    if (!propertySet(s_scale) || d->scale != factor) {
         beginConfig();
-        d->scaleSet = true;
+        addProperty(s_scale);
         d->scale = factor;
         endConfig();
     }
@@ -274,9 +265,9 @@ void NodeStyle::setScale(qreal factor)
 
 void NodeStyle::unsetScale()
 {
-    if (d->scaleSet) {
+    if (propertySet(s_scale)) {
         beginConfig();
-        d->scaleSet = false;
+        removeProperty(s_scale);
         d->scale = 1.0;
         endConfig();
     }
@@ -284,9 +275,9 @@ void NodeStyle::unsetScale()
 
 void NodeStyle::setInnerSep(qreal sep)
 {
-    if (!d->innerSepSet || d->innerSep != sep) {
+    if (!propertySet(s_innerSep) || d->innerSep != sep) {
         beginConfig();
-        d->innerSepSet = true;
+        addProperty(s_innerSep);
         d->innerSep = sep;
         endConfig();
     }
@@ -295,7 +286,7 @@ void NodeStyle::setInnerSep(qreal sep)
 qreal NodeStyle::innerSep() const
 {
     NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
-    if (!d->innerSepSet && parentStyle) {
+    if (!propertySet(s_innerSep) && parentStyle) {
         return parentStyle->innerSep();
     }
     return d->innerSep;
@@ -303,9 +294,9 @@ qreal NodeStyle::innerSep() const
 
 void NodeStyle::setOuterSep(qreal sep)
 {
-    if (!d->outerSepSet || d->outerSep != sep) {
+    if (!propertySet(s_outerSep) || d->outerSep != sep) {
         beginConfig();
-        d->outerSepSet = true;
+        addProperty(s_outerSep);
         d->outerSep = sep;
         endConfig();
     }
@@ -313,7 +304,7 @@ void NodeStyle::setOuterSep(qreal sep)
 
 qreal NodeStyle::outerSep() const
 {
-    if (!d->outerSepSet) {
+    if (!propertySet(s_outerSep)) {
         return 0.5 * penWidth();
     }
     return d->outerSep;
@@ -321,9 +312,9 @@ qreal NodeStyle::outerSep() const
 
 void NodeStyle::unsetInnerSep()
 {
-    if (d->innerSepSet) {
+    if (propertySet(s_innerSep)) {
         beginConfig();
-        d->innerSepSet = false;
+        removeProperty(s_innerSep);
         d->innerSep = 0.3333;
         endConfig();
     }
@@ -331,9 +322,9 @@ void NodeStyle::unsetInnerSep()
 
 void NodeStyle::unsetOuterSep()
 {
-    if (d->outerSepSet) {
+    if (propertySet(s_outerSep)) {
         beginConfig();
-        d->outerSepSet = false;
+        removeProperty(s_outerSep);
         d->outerSep = 0.3333;
         endConfig();
     }
@@ -341,7 +332,7 @@ void NodeStyle::unsetOuterSep()
 
 qreal NodeStyle::minimumHeight() const
 {
-    if (d->minimumHeightSet) {
+    if (propertySet(s_minimumHeight)) {
         return d->minimumHeight;
     }
 
@@ -355,7 +346,7 @@ qreal NodeStyle::minimumHeight() const
 
 qreal NodeStyle::minimumWidth() const
 {
-    if (d->minimumWidthSet) {
+    if (propertySet(s_minimumWidth)) {
         return d->minimumWidth;
     }
 
@@ -369,9 +360,9 @@ qreal NodeStyle::minimumWidth() const
 
 void NodeStyle::setMinimumHeight(qreal height)
 {
-    if (!d->minimumHeightSet || d->minimumHeight != height) {
+    if (!propertySet(s_minimumHeight) || d->minimumHeight != height) {
         beginConfig();
-        d->minimumHeightSet = true;
+        addProperty(s_minimumHeight);
         d->minimumHeight = height;
         endConfig();
     }
@@ -379,9 +370,9 @@ void NodeStyle::setMinimumHeight(qreal height)
 
 void NodeStyle::setMinimumWidth(qreal width)
 {
-    if (!d->minimumWidthSet || d->minimumWidth != width) {
+    if (!propertySet(s_minimumWidth) || d->minimumWidth != width) {
         beginConfig();
-        d->minimumWidthSet = true;
+        addProperty(s_minimumWidth);
         d->minimumWidth = width;
         endConfig();
     }
@@ -389,9 +380,9 @@ void NodeStyle::setMinimumWidth(qreal width)
 
 void NodeStyle::unsetMinimumHeight()
 {
-    if (d->minimumHeightSet) {
+    if (propertySet(s_minimumHeight)) {
         beginConfig();
-        d->minimumHeightSet = false;
+        removeProperty(s_minimumHeight);
         d->minimumHeight = 0.0;
         endConfig();
     }
@@ -399,9 +390,9 @@ void NodeStyle::unsetMinimumHeight()
 
 void NodeStyle::unsetMinimumWidth()
 {
-    if (d->minimumWidthSet) {
+    if (propertySet(s_minimumWidth)) {
         beginConfig();
-        d->minimumWidthSet = false;
+        removeProperty(s_minimumWidth);
         d->minimumWidth = 0.0;
         endConfig();
     }
