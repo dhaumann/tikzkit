@@ -21,6 +21,16 @@
 
 namespace tikz {
 
+static const char * s_curveMode = "curveMode";
+static const char * s_bendAngle = "bendAngle";
+static const char * s_looseness = "looseness";
+static const char * s_outAngle = "outAngle";
+static const char * s_inAngle = "inAngle";
+static const char * s_arrowTail = "arrowTail";
+static const char * s_arrowHead = "arrowHead";
+static const char * s_shortenStart = "shortenStart";
+static const char * s_shortenEnd = "shortenEnd";
+
 /**
  * Private data and helper functions of class EdgeStyle.
  */
@@ -39,16 +49,6 @@ public:
     qreal shortenStart;
     qreal shortenEnd;
 
-    bool curveModeSet : 1;
-    bool bendAngleSet : 1;
-    bool loosenessSet : 1;
-    bool outAngleSet : 1;
-    bool inAngleSet : 1;
-    bool arrowTailSet : 1;
-    bool arrowHeadSet : 1;
-    bool shortenStartSet : 1;
-    bool shortenEndSet : 1;
-
     void init()
     {
         curveMode = tikz::StraightLine;
@@ -62,16 +62,6 @@ public:
 
         shortenStart = 0.0;
         shortenEnd = 0.0;
-
-        curveModeSet = false;
-        bendAngleSet = false;
-        loosenessSet = false;
-        outAngleSet = false;
-        inAngleSet = false;
-        arrowTailSet = false;
-        arrowHeadSet = false;
-        shortenStartSet = false;
-        shortenEndSet = false;
     }
 };
 
@@ -107,7 +97,7 @@ QVariantMap EdgeStyle::toVariantMap() const
     QVariantMap vm = Style::toVariantMap();
 
     // start arrow
-    if (d->arrowTailSet) {
+    if (propertySet(s_arrowTail)) {
         QString arrow;
         switch (d->arrowTail) {
             case NoArrow: arrow = "none"; break;
@@ -126,7 +116,7 @@ QVariantMap EdgeStyle::toVariantMap() const
     }
 
     // end arrow
-    if (d->arrowHeadSet) {
+    if (propertySet(s_arrowHead)) {
         QString arrow;
         switch (d->arrowHead) {
             case NoArrow: arrow = "none"; break;
@@ -145,16 +135,16 @@ QVariantMap EdgeStyle::toVariantMap() const
     }
 
     // other properties
-    if (d->shortenStartSet) {
+    if (propertySet(s_shortenStart)) {
         vm.insert("shorten <", d->shortenStart);
     }
 
-    if (d->shortenEndSet) {
+    if (propertySet(s_shortenEnd)) {
         vm.insert("shorten >", d->shortenEnd);
     }
 
     // curve mode
-    if (d->curveModeSet) {
+    if (propertySet(s_curveMode)) {
         QString mode;
         switch (d->curveMode) {
             case StraightLine: mode = "--"; break;
@@ -169,23 +159,23 @@ QVariantMap EdgeStyle::toVariantMap() const
 
         // looseness for bend and in/out mode
         if (d->curveMode == BendCurve || d->curveMode == InOutCurve) {
-            if (d->loosenessSet) {
+            if (propertySet(s_looseness)) {
                 vm.insert("looseness", d->looseness);
             }
         }
 
         // bend left and bend right
-        if (d->curveMode == BendCurve && d->bendAngleSet) {
+        if (d->curveMode == BendCurve && propertySet(s_bendAngle)) {
                 vm.insert("looseness", d->looseness);
             vm.insert("bend angle", d->bendAngle);
         }
 
         // in=..., out=...
         if (d->curveMode == InOutCurve) {
-            if (d->inAngleSet) {
+            if (propertySet(s_inAngle)) {
                 vm.insert("in angle", d->inAngle);
             }
-            if (d->outAngleSet) {
+            if (propertySet(s_outAngle)) {
                 vm.insert("out angle", d->outAngle);
             }
         }
@@ -203,7 +193,7 @@ CurveMode EdgeStyle::curveMode() const
 {
     return d->curveMode;
 
-    if (d->curveModeSet) {
+    if (propertySet(s_curveMode)) {
         return d->curveMode;
     }
 
@@ -217,9 +207,9 @@ CurveMode EdgeStyle::curveMode() const
 
 void EdgeStyle::setCurveMode(tikz::CurveMode mode)
 {
-    if (!d->curveModeSet || d->curveMode != mode) {
+    if (!propertySet(s_curveMode) || d->curveMode != mode) {
         beginConfig();
-        d->curveModeSet = true;
+        addProperty(s_curveMode);
         d->curveMode = mode;
         endConfig();
     }
@@ -227,9 +217,9 @@ void EdgeStyle::setCurveMode(tikz::CurveMode mode)
 
 void EdgeStyle::unsetCurveMode()
 {
-    if (d->curveModeSet) {
+    if (propertySet(s_curveMode)) {
         beginConfig();
-        d->curveModeSet = false;
+        removeProperty(s_curveMode);
         d->curveMode = tikz::StraightLine;
         endConfig();
     }
@@ -242,7 +232,7 @@ qreal EdgeStyle::bendAngle() const
         return 0.0;
     }
 
-    if (d->bendAngleSet) {
+    if (propertySet(s_bendAngle)) {
         return d->bendAngle;
     }
 
@@ -260,9 +250,9 @@ void EdgeStyle::setBendAngle(qreal angle)
     while (angle > 180) angle -= 360.0;
     while (angle < -180) angle += 360.0;
 
-    if (!d->bendAngleSet || d->bendAngle != angle) {
+    if (!propertySet(s_bendAngle) || d->bendAngle != angle) {
         beginConfig();
-        d->bendAngleSet = true;
+        addProperty(s_bendAngle);
         d->bendAngle = angle;
         endConfig();
     }
@@ -270,9 +260,9 @@ void EdgeStyle::setBendAngle(qreal angle)
 
 void EdgeStyle::unsetBendAngle()
 {
-    if (d->bendAngleSet) {
+    if (propertySet(s_bendAngle)) {
         beginConfig();
-        d->bendAngleSet = false;
+        removeProperty(s_bendAngle);
         d->bendAngle = 0.0;
         endConfig();
     }
@@ -280,7 +270,7 @@ void EdgeStyle::unsetBendAngle()
 
 qreal EdgeStyle::looseness() const
 {
-    if (d->loosenessSet) {
+    if (propertySet(s_looseness)) {
         return d->looseness;
     }
 
@@ -294,9 +284,9 @@ qreal EdgeStyle::looseness() const
 
 void EdgeStyle::setLooseness(qreal looseness)
 {
-    if (!d->loosenessSet || d->looseness != looseness) {
+    if (!propertySet(s_looseness) || d->looseness != looseness) {
         beginConfig();
-        d->loosenessSet = true;
+        addProperty(s_looseness);
         d->looseness = looseness;
         endConfig();
     }
@@ -304,9 +294,9 @@ void EdgeStyle::setLooseness(qreal looseness)
 
 void EdgeStyle::unsetLooseness()
 {
-    if (d->loosenessSet) {
+    if (propertySet(s_looseness)) {
         beginConfig();
-        d->loosenessSet = false;
+        removeProperty(s_looseness);
         d->looseness = 1.0;
         endConfig();
     }
@@ -334,7 +324,7 @@ QPointF EdgeStyle::endControlPoint() const
 
 qreal EdgeStyle::outAngle() const
 {
-    if (d->outAngleSet) {
+    if (propertySet(s_outAngle)) {
         return d->outAngle;
     }
 
@@ -348,9 +338,9 @@ qreal EdgeStyle::outAngle() const
 
 void EdgeStyle::setOutAngle(qreal angle)
 {
-    if (!d->outAngleSet || d->outAngle != angle) {
+    if (!propertySet(s_outAngle) || d->outAngle != angle) {
         beginConfig();
-        d->outAngleSet = true;
+        addProperty(s_outAngle);
         d->outAngle = angle;
         endConfig();
     }
@@ -358,9 +348,9 @@ void EdgeStyle::setOutAngle(qreal angle)
 
 void EdgeStyle::unsetOutAngle()
 {
-    if (d->outAngleSet) {
+    if (propertySet(s_outAngle)) {
         beginConfig();
-        d->outAngleSet = false;
+        removeProperty(s_outAngle);
         d->outAngle = 45;
         endConfig();
     }
@@ -368,7 +358,7 @@ void EdgeStyle::unsetOutAngle()
 
 qreal EdgeStyle::inAngle() const
 {
-    if (d->inAngleSet) {
+    if (propertySet(s_inAngle)) {
         return d->inAngle;
     }
 
@@ -382,9 +372,9 @@ qreal EdgeStyle::inAngle() const
 
 void EdgeStyle::setInAngle(qreal angle)
 {
-    if (!d->inAngleSet || d->inAngle != angle) {
+    if (!propertySet(s_inAngle) || d->inAngle != angle) {
         beginConfig();
-        d->inAngleSet = true;
+        addProperty(s_inAngle);
         d->inAngle = angle;
         endConfig();
     }
@@ -392,9 +382,9 @@ void EdgeStyle::setInAngle(qreal angle)
 
 void EdgeStyle::unsetInAngle()
 {
-    if (d->inAngleSet) {
+    if (propertySet(s_inAngle)) {
         beginConfig();
-        d->inAngleSet = false;
+        removeProperty(s_inAngle);
         d->inAngle = 135;
         endConfig();
     }
@@ -402,7 +392,7 @@ void EdgeStyle::unsetInAngle()
 
 Arrow EdgeStyle::arrowTail() const
 {
-    if (d->arrowTailSet) {
+    if (propertySet(s_arrowTail)) {
         return d->arrowTail;
     }
 
@@ -416,7 +406,7 @@ Arrow EdgeStyle::arrowTail() const
 
 Arrow EdgeStyle::arrowHead() const
 {
-    if (d->arrowHeadSet) {
+    if (propertySet(s_arrowHead)) {
         return d->arrowHead;
     }
 
@@ -430,9 +420,9 @@ Arrow EdgeStyle::arrowHead() const
 
 void EdgeStyle::setArrowTail(tikz::Arrow tail)
 {
-    if (!d->arrowTailSet || d->arrowTail != tail) {
+    if (!propertySet(s_arrowTail) || d->arrowTail != tail) {
         beginConfig();
-        d->arrowTailSet = true;
+        addProperty(s_arrowTail);
         d->arrowTail = tail;
         endConfig();
     }
@@ -440,9 +430,9 @@ void EdgeStyle::setArrowTail(tikz::Arrow tail)
 
 void EdgeStyle::setArrowHead(tikz::Arrow head)
 {
-    if (!d->arrowHeadSet || d->arrowHead != head) {
+    if (!propertySet(s_arrowHead) || d->arrowHead != head) {
         beginConfig();
-        d->arrowHeadSet = true;
+        addProperty(s_arrowHead);
         d->arrowHead = head;
         endConfig();
     }
@@ -450,9 +440,9 @@ void EdgeStyle::setArrowHead(tikz::Arrow head)
 
 void EdgeStyle::unsetArrowTail()
 {
-    if (d->arrowTailSet) {
+    if (propertySet(s_arrowTail)) {
         beginConfig();
-        d->arrowTailSet = false;
+        removeProperty(s_arrowTail);
         d->arrowTail = tikz::NoArrow;
         endConfig();
     }
@@ -460,9 +450,9 @@ void EdgeStyle::unsetArrowTail()
 
 void EdgeStyle::unsetArrowHead()
 {
-    if (d->arrowHeadSet) {
+    if (propertySet(s_arrowHead)) {
         beginConfig();
-        d->arrowHeadSet = false;
+        removeProperty(s_arrowHead);
         d->arrowHead = tikz::NoArrow;
         endConfig();
     }
@@ -470,7 +460,7 @@ void EdgeStyle::unsetArrowHead()
 
 qreal EdgeStyle::shortenStart() const
 {
-    if (d->shortenStartSet) {
+    if (propertySet(s_shortenStart)) {
         return d->shortenStart;
     }
 
@@ -484,7 +474,7 @@ qreal EdgeStyle::shortenStart() const
 
 qreal EdgeStyle::shortenEnd() const
 {
-    if (d->shortenEndSet) {
+    if (propertySet(s_shortenEnd)) {
         return d->shortenEnd;
     }
 
@@ -498,9 +488,9 @@ qreal EdgeStyle::shortenEnd() const
 
 void EdgeStyle::setShortenStart(qreal shorten)
 {
-    if (!d->shortenStartSet || d->shortenStart != shorten) {
+    if (!propertySet(s_shortenStart) || d->shortenStart != shorten) {
         beginConfig();
-        d->shortenStartSet = true;
+        addProperty(s_shortenStart);
         d->shortenStart = shorten;
         endConfig();
     }
@@ -508,9 +498,9 @@ void EdgeStyle::setShortenStart(qreal shorten)
 
 void EdgeStyle::setShortenEnd(qreal shorten)
 {
-    if (!d->shortenEndSet || d->shortenEnd != shorten) {
+    if (!propertySet(s_shortenEnd) || d->shortenEnd != shorten) {
         beginConfig();
-        d->shortenEndSet = true;
+        addProperty(s_shortenEnd);
         d->shortenEnd = shorten;
         endConfig();
     }
@@ -518,9 +508,9 @@ void EdgeStyle::setShortenEnd(qreal shorten)
 
 void EdgeStyle::unsetShortenStart()
 {
-    if (d->shortenStartSet) {
+    if (propertySet(s_shortenStart)) {
         beginConfig();
-        d->shortenStartSet = false;
+        removeProperty(s_shortenStart);
         d->shortenStart = 0.0;
         endConfig();
     }
@@ -528,9 +518,9 @@ void EdgeStyle::unsetShortenStart()
 
 void EdgeStyle::unsetShortenEnd()
 {
-    if (d->shortenEndSet) {
+    if (propertySet(s_shortenEnd)) {
         beginConfig();
-        d->shortenEndSet = false;
+        removeProperty(s_shortenEnd);
         d->shortenEnd = 0.0;
         endConfig();
     }
