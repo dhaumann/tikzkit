@@ -134,6 +134,26 @@ class TIKZCORE_EXPORT Style : public QObject
         void changed();
 
     //
+    // properties
+    //
+    public Q_SLOTS:
+        /**
+         * Add @p property to the list of set properties.
+         */
+        void addProperty(const QString & property);
+
+        /**
+         * Remove @p property from the list of set properties.
+         */
+        void removeProperty(const QString & property);
+
+    public:
+        /**
+         * Check whether @p property is set.
+         */
+        bool propertySet(const QString & property) const;
+
+    //
     // pen style
     //
     public:

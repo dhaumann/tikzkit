@@ -21,7 +21,20 @@
 
 #include "Document.h"
 
+#include <QSet>
+
 namespace tikz {
+
+// NOTE: these strings have to match the Q_PROPERTY strings, otherise
+//       serialization will not work correctly.
+static const char * s_penStyle = "penStyle";
+static const char * s_lineWidth = "lineWidth";
+static const char * s_doubleLine = "doubleLine";
+static const char * s_innerLineWidth = "innerLineWidth";
+static const char * s_penOpacity = "penOpacity";
+static const char * s_fillOpacity = "fillOpacity";
+static const char * s_penColor = "penColor";
+static const char * s_fillColor = "fillColor";
 
 /**
  * Private data and helper functions of class Style.
@@ -38,6 +51,9 @@ public:
 
     // config reference counter
     int refCounter;
+
+    // list of set properties
+    QSet<QString> properties;
 
     // line style
     PenStyle penStyle;
@@ -58,15 +74,6 @@ public:
     qreal penOpacity;
     qreal fillOpacity;
 
-    bool penStyleSet : 1;
-    bool lineWidthSet : 1;
-    bool doubleLineSet : 1;
-    bool innerLineWidthSet : 1;
-    bool penOpacitySet : 1;
-    bool fillOpacitySet : 1;
-    bool penColorSet : 1;
-    bool fillColorSet : 1;
-
     void init();
 };
 
@@ -77,29 +84,18 @@ void StylePrivate::init()
     parent = 0;
     refCounter = 0;
 
-    penStyleSet = false;
     penStyle = SolidLine;
 
-    lineWidthSet = false;
     lineWidthType = SemiThick;
     lineWidth = 0.6 * 0.03527; // SemiThick in cm
 
-    doubleLineSet = false;
     doubleLine = false;
 
-    innerLineWidthSet = false;
     innerLineWidthType = SemiThick;
     innerLineWidth = 0.6 * 0.03527; // SemiThick in cm
 
-    penOpacitySet = false;
     penOpacity = 1.0;
-
-    fillOpacitySet = false;
     fillOpacity = 1.0;
-
-    penColorSet = false;
-    fillColorSet = false;
-
 
     penColor = Qt::black;
     fillColor = Qt::transparent;
@@ -172,7 +168,7 @@ QVariantMap Style::toVariantMap() const
     vm.insert("id", id());
 
     // pen style
-    if (d->penStyleSet) {
+    if (propertySet(s_penStyle)) {
         QString style;
         switch (d->penStyle) {
             SolidLine: style = "solid"; break;
@@ -195,7 +191,7 @@ QVariantMap Style::toVariantMap() const
     }
 
     // line width
-    if (d->lineWidthSet) {
+    if (propertySet(s_lineWidth)) {
         QString lineWidthType;
         switch (d->lineWidthType) {
             case UltraThin: lineWidthType = "ultra thin"; break;
@@ -215,9 +211,9 @@ QVariantMap Style::toVariantMap() const
     }
 
     // double lines & inner line width
-    if (d->doubleLineSet) {
+    if (propertySet(s_doubleLine)) {
         vm.insert("double line", 1);
-        if (d->innerLineWidthSet) {
+        if (propertySet(s_innerLineWidth)) {
             QString lineWidthType;
             switch (d->lineWidthType) {
                 case UltraThin: lineWidthType = "ultra thin"; break;
@@ -303,9 +299,24 @@ void Style::endConfig()
     }
 }
 
+void Style::addProperty(const QString & property)
+{
+    d->properties.insert(property);
+}
+
+void Style::removeProperty(const QString & property)
+{
+    d->properties.remove(property);
+}
+
+bool Style::propertySet(const QString & property) const
+{
+    return d->properties.contains(property);
+}
+
 PenStyle Style::penStyle() const
 {
-    if (d->penStyleSet) {
+    if (propertySet(s_penStyle)) {
         return d->penStyle;
     }
 
@@ -318,14 +329,14 @@ PenStyle Style::penStyle() const
 
 bool Style::penStyleSet() const
 {
-    return d->penStyleSet;
+    return propertySet(s_penStyle);
 }
 
 void Style::setPenStyle(tikz::PenStyle style)
 {
-    if (!d->penStyleSet || d->penStyle != style) {
+    if (!propertySet(s_penStyle) || d->penStyle != style) {
         beginConfig();
-        d->penStyleSet = true;
+        addProperty(s_penStyle);
         d->penStyle = style;
         endConfig();
     }
@@ -333,9 +344,9 @@ void Style::setPenStyle(tikz::PenStyle style)
 
 void Style::unsetPenStyle()
 {
-    if (d->penStyleSet) {
+    if (propertySet(s_penStyle)) {
         beginConfig();
-        d->penStyleSet = false;
+        removeProperty(s_penStyle);
         d->penStyle = SolidLine;
         endConfig();
     }
@@ -354,7 +365,7 @@ qreal Style::penWidth() const
 
 LineWidth Style::lineWidthType() const
 {
-    if (d->lineWidthSet) {
+    if (propertySet(s_lineWidth)) {
         return d->lineWidthType;
     }
 
@@ -367,14 +378,14 @@ LineWidth Style::lineWidthType() const
 
 bool Style::lineWidthSet() const
 {
-    return d->lineWidthSet;
+    return propertySet(s_lineWidth);
 }
 
 void Style::setLineWidthType(tikz::LineWidth type)
 {
-    if (!d->lineWidthSet || d->lineWidthType != type) {
+    if (!propertySet(s_lineWidth) || d->lineWidthType != type) {
         beginConfig();
-        d->lineWidthSet = true;
+        addProperty(s_lineWidth);
         d->lineWidthType = type;
         endConfig();
     }
@@ -382,12 +393,12 @@ void Style::setLineWidthType(tikz::LineWidth type)
 
 void Style::setLineWidth(qreal width)
 {
-    if (!d->lineWidthSet
+    if (!propertySet(s_lineWidth)
         || (d->lineWidthType == CustomLineWidth
             && d->lineWidth != width)
     ) {
         beginConfig();
-        d->lineWidthSet = true;
+        addProperty(s_lineWidth);
         d->lineWidthType = CustomLineWidth;
         d->lineWidth = width;
         endConfig();
@@ -396,7 +407,7 @@ void Style::setLineWidth(qreal width)
 
 qreal Style::lineWidth() const
 {
-    if (d->lineWidthSet) {
+    if (propertySet(s_lineWidth)) {
         const qreal cm = 0.03527;
         qreal pt = 0.0;
         switch (lineWidthType()) {
@@ -422,9 +433,9 @@ qreal Style::lineWidth() const
 
 void Style::unsetLineWidth()
 {
-    if (d->lineWidthSet) {
+    if (propertySet(s_lineWidth)) {
         beginConfig();
-        d->lineWidthSet = false;
+        removeProperty(s_lineWidth);
         d->lineWidthType = SemiThick;
         d->lineWidth = 0.021162; // SemiThick in cm
         endConfig();
@@ -433,7 +444,7 @@ void Style::unsetLineWidth()
 
 bool Style::doubleLine() const
 {
-    if (d->doubleLineSet) {
+    if (propertySet(s_doubleLine)) {
         return d->doubleLine;
     }
 
@@ -446,14 +457,14 @@ bool Style::doubleLine() const
 
 bool Style::doubleLineSet() const
 {
-    return d->doubleLineSet;
+    return propertySet(s_doubleLine);
 }
 
 void Style::setDoubleLine(bool enabled)
 {
-    if (!d->doubleLineSet || d->doubleLine != enabled) {
+    if (!propertySet(s_doubleLine) || d->doubleLine != enabled) {
         beginConfig();
-        d->doubleLineSet = true;
+        addProperty(s_doubleLine);
         d->doubleLine = enabled;
         endConfig();
     }
@@ -461,9 +472,9 @@ void Style::setDoubleLine(bool enabled)
 
 void Style::unsetDoubleLine()
 {
-    if (d->doubleLineSet) {
+    if (propertySet(s_doubleLine)) {
         beginConfig();
-        d->doubleLineSet = false;
+        removeProperty(s_doubleLine);
         d->doubleLine = false;
         endConfig();
     }
@@ -471,7 +482,7 @@ void Style::unsetDoubleLine()
 
 qreal Style::innerLineWidth() const
 {
-    if (d->innerLineWidthSet) {
+    if (propertySet(s_innerLineWidth)) {
         const qreal cm = 0.03527;
         qreal pt = 0.0;
         switch (innerLineWidthType()) {
@@ -493,17 +504,17 @@ qreal Style::innerLineWidth() const
     }
 
     // SemiThick in cm on double line, otherwise 0
-    return d->doubleLineSet ? 0.021162 : 0.0;
+    return propertySet(s_doubleLine) ? 0.021162 : 0.0;
 }
 
 bool Style::innerLineWidthSet() const
 {
-    return d->innerLineWidthSet;
+    return propertySet(s_innerLineWidth);
 }
 
 LineWidth Style::innerLineWidthType() const
 {
-    if (d->innerLineWidthSet) {
+    if (propertySet(s_innerLineWidth)) {
         return d->innerLineWidthType;
     }
 
@@ -516,9 +527,9 @@ LineWidth Style::innerLineWidthType() const
 
 void Style::setInnerLineWidth(qreal width)
 {
-    if (!d->innerLineWidthSet || d->innerLineWidth != width) {
+    if (!propertySet(s_innerLineWidth) || d->innerLineWidth != width) {
         beginConfig();
-        d->innerLineWidthSet = true;
+        addProperty(s_innerLineWidth);
         d->innerLineWidth = width;
         endConfig();
     }
@@ -526,9 +537,9 @@ void Style::setInnerLineWidth(qreal width)
 
 void Style::setInnerLineWidthType(tikz::LineWidth type)
 {
-    if (!d->innerLineWidthSet || d->innerLineWidthType != type) {
+    if (!propertySet(s_innerLineWidth) || d->innerLineWidthType != type) {
         beginConfig();
-        d->innerLineWidthSet = true;
+        addProperty(s_innerLineWidth);
         d->innerLineWidthType = type;
         endConfig();
     }
@@ -536,9 +547,9 @@ void Style::setInnerLineWidthType(tikz::LineWidth type)
 
 void Style::unsetInnerLineWidth()
 {
-    if (d->innerLineWidthSet) {
+    if (propertySet(s_innerLineWidth)) {
         beginConfig();
-        d->innerLineWidthSet = false;
+        removeProperty(s_innerLineWidth);
         d->innerLineWidthType = SemiThick;
         d->innerLineWidth = 0.021162; // SemiThick in cm
         endConfig();
@@ -547,7 +558,7 @@ void Style::unsetInnerLineWidth()
 
 qreal Style::penOpacity() const
 {
-    if (d->penOpacitySet) {
+    if (propertySet(s_penOpacity)) {
         return d->penOpacity;
     }
 
@@ -560,9 +571,9 @@ qreal Style::penOpacity() const
 
 void Style::setPenOpacity(qreal opacity)
 {
-    if (!d->penOpacitySet || d->penOpacity != opacity) {
+    if (!propertySet(s_penOpacity) || d->penOpacity != opacity) {
         beginConfig();
-        d->penOpacitySet = true;
+        addProperty(s_penOpacity);
         d->penOpacity = opacity;
         endConfig();
     }
@@ -570,14 +581,14 @@ void Style::setPenOpacity(qreal opacity)
 
 bool Style::penOpacitySet() const
 {
-    return d->penOpacitySet;
+    return propertySet(s_penOpacity);
 }
 
 void Style::unsetPenOpacity()
 {
-    if (d->penOpacitySet) {
+    if (propertySet(s_penOpacity)) {
         beginConfig();
-        d->penOpacitySet = false;
+        removeProperty(s_penOpacity);
         d->penOpacity = 1.0;
         endConfig();
     }
@@ -585,7 +596,7 @@ void Style::unsetPenOpacity()
 
 qreal Style::fillOpacity() const
 {
-    if (d->fillOpacitySet) {
+    if (propertySet(s_fillOpacity)) {
         return d->fillOpacity;
     }
 
@@ -598,14 +609,14 @@ qreal Style::fillOpacity() const
 
 bool Style::fillOpacitySet() const
 {
-    return d->fillOpacitySet;
+    return propertySet(s_fillOpacity);
 }
 
 void Style::setFillOpacity(qreal opacity)
 {
-    if (!d->fillOpacitySet || d->fillOpacity != opacity) {
+    if (!propertySet(s_fillOpacity) || d->fillOpacity != opacity) {
         beginConfig();
-        d->fillOpacitySet = true;
+        addProperty(s_fillOpacity);
         d->fillOpacity = opacity;
         endConfig();
     }
@@ -613,9 +624,9 @@ void Style::setFillOpacity(qreal opacity)
 
 void Style::unsetFillOpacity()
 {
-    if (d->fillOpacitySet) {
+    if (propertySet(s_fillOpacity)) {
         beginConfig();
-        d->fillOpacitySet = false;
+        removeProperty(s_fillOpacity);
         d->fillOpacity = 1.0;
         endConfig();
     }
@@ -623,7 +634,7 @@ void Style::unsetFillOpacity()
 
 QColor Style::penColor() const
 {
-    if (d->penColorSet) {
+    if (propertySet(s_penColor)) {
         return d->penColor;
     }
 
@@ -636,12 +647,12 @@ QColor Style::penColor() const
 
 bool Style::penColorSet() const
 {
-    return d->penColorSet;
+    return propertySet(s_penColor);
 }
 
 QColor Style::fillColor() const
 {
-    if (d->fillColorSet) {
+    if (propertySet(s_fillColor)) {
         return d->fillColor;
     }
 
@@ -654,14 +665,14 @@ QColor Style::fillColor() const
 
 bool Style::fillColorSet() const
 {
-    return d->fillColorSet;
+    return propertySet(s_fillColor);
 }
 
 void Style::setPenColor(const QColor & color)
 {
-    if (!d->penColorSet || d->penColor != color) {
+    if (!propertySet(s_penColor) || d->penColor != color) {
         beginConfig();
-        d->penColorSet = true;
+        addProperty(s_penColor);
         d->penColor = color;
         endConfig();
     }
@@ -669,9 +680,9 @@ void Style::setPenColor(const QColor & color)
 
 void Style::unsetPenColor()
 {
-    if (d->penColorSet) {
+    if (propertySet(s_penColor)) {
         beginConfig();
-        d->penColorSet = false;
+        removeProperty(s_penColor);
         d->penColor = Qt::black;
         endConfig();
     }
@@ -679,9 +690,9 @@ void Style::unsetPenColor()
 
 void Style::setFillColor(const QColor & color)
 {
-    if (!d->fillColorSet || d->fillColor != color) {
+    if (!propertySet(s_fillColor) || d->fillColor != color) {
         beginConfig();
-        d->fillColorSet = true;
+        addProperty(s_fillColor);
         d->fillColor = color;
         endConfig();
     }
@@ -689,9 +700,9 @@ void Style::setFillColor(const QColor & color)
 
 void Style::unsetFillColor()
 {
-    if (d->fillColorSet) {
+    if (propertySet(s_fillColor)) {
         beginConfig();
-        d->fillColorSet = false;
+        removeProperty(s_fillColor);
         d->fillColor = Qt::transparent;
         endConfig();
     }
