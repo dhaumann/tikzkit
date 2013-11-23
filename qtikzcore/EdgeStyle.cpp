@@ -225,6 +225,16 @@ void EdgeStyle::setCurveMode(tikz::CurveMode mode)
     }
 }
 
+void EdgeStyle::unsetCurveMode()
+{
+    if (d->curveModeSet) {
+        beginConfig();
+        d->curveModeSet = false;
+        d->curveMode = tikz::StraightLine;
+        endConfig();
+    }
+}
+
 qreal EdgeStyle::bendAngle() const
 {
     // bending is only allowed for mode "tikz::BendCurve"
@@ -254,6 +264,16 @@ void EdgeStyle::setBendAngle(qreal angle)
         beginConfig();
         d->bendAngleSet = true;
         d->bendAngle = angle;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetBendAngle()
+{
+    if (d->bendAngleSet) {
+        beginConfig();
+        d->bendAngleSet = false;
+        d->bendAngle = 0.0;
         endConfig();
     }
 }
@@ -336,6 +356,16 @@ void EdgeStyle::setOutAngle(qreal angle)
     }
 }
 
+void EdgeStyle::unsetOutAngle()
+{
+    if (d->outAngleSet) {
+        beginConfig();
+        d->outAngleSet = false;
+        d->outAngle = 45;
+        endConfig();
+    }
+}
+
 qreal EdgeStyle::inAngle() const
 {
     if (d->inAngleSet) {
@@ -356,6 +386,16 @@ void EdgeStyle::setInAngle(qreal angle)
         beginConfig();
         d->inAngleSet = true;
         d->inAngle = angle;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetInAngle()
+{
+    if (d->inAngleSet) {
+        beginConfig();
+        d->inAngleSet = false;
+        d->inAngle = 135;
         endConfig();
     }
 }

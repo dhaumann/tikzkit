@@ -32,6 +32,15 @@ class EdgeStylePrivate;
 class TIKZCORE_EXPORT EdgeStyle : public Style
 {
     Q_OBJECT
+        Q_PROPERTY(CurveMode curveMode READ curveMode WRITE setCurveMode RESET unsetCurveMode)
+        Q_PROPERTY(qreal bendAngle READ bendAngle WRITE setBendAngle RESET unsetBendAngle)
+        Q_PROPERTY(qreal looseness READ looseness WRITE setLooseness RESET unsetLooseness)
+        Q_PROPERTY(qreal outAngle READ outAngle WRITE setOutAngle RESET unsetOutAngle)
+        Q_PROPERTY(qreal inAngle READ inAngle WRITE setInAngle RESET unsetInAngle)
+        Q_PROPERTY(Arrow arrowTail READ arrowTail WRITE setArrowTail RESET unsetArrowTail)
+        Q_PROPERTY(Arrow arrowHead READ arrowHead WRITE setArrowHead RESET unsetArrowHead)
+        Q_PROPERTY(qreal shortenStart READ shortenStart WRITE setShortenStart RESET unsetShortenStart)
+        Q_PROPERTY(qreal shortenEnd READ shortenEnd WRITE setShortenEnd RESET unsetShortenEnd)
 
     public:
         /**
@@ -73,6 +82,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         void setCurveMode(tikz::CurveMode mode);
 
+        /**
+         * Unset the curve mode property.
+         */
+        void unsetCurveMode();
+
     public:
         /**
          * Get the bending angle if the mode is set to CurveMode::BendCurve.
@@ -88,6 +102,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @note This value has an effect only if the CurveMode is set to CurveMode::BendCurve.
          */
         void setBendAngle(qreal angle);
+
+        /**
+         * Unset the bend angle property.
+         */
+        void unsetBendAngle();
 
     public:
         /**
@@ -157,10 +176,20 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         void setOutAngle(qreal angle);
 
         /**
+         * Unset the out angle property.
+         */
+        void unsetOutAngle();
+
+        /**
          * Set the in angle for the end node to @p angle.
          * @note This value has an effect only if the CurveMode is set to CurveMode::InOutCurve.
          */
         void setInAngle(qreal angle);
+
+        /**
+         * Unset the in angle property.
+         */
+        void unsetInAngle();
 
     //
     // Arrow attributes
