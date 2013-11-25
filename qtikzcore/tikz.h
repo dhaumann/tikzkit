@@ -19,8 +19,23 @@
 #ifndef TIKZ_H
 #define TIKZ_H
 
-namespace tikz
-{
+#include <QObject>
+#ifndef Q_MOC_RUN
+namespace tikz {
+#else
+class tikz {
+    Q_GADGET
+    Q_ENUMS(TextAlignment)
+    Q_ENUMS(Anchor)
+    Q_ENUMS(Shape)
+    Q_ENUMS(PenStyle)
+    Q_ENUMS(LineWidth)
+    Q_ENUMS(LineCap)
+    Q_ENUMS(LineJoin)
+    Q_ENUMS(Arrow)
+    Q_ENUMS(CurveMode)
+public:
+#endif
 
 enum TextAlignment {
     NoAlign = 0,
@@ -120,7 +135,13 @@ enum CurveMode {
     BezierCurve // (a) .. controls (b) and (c) .. (d)
 };
 
+extern const QMetaObject staticMetaObject;
+
+#ifdef Q_MOC_RUN
+};
+#else
 }
+#endif
 
 #endif // TIKZ_H
 

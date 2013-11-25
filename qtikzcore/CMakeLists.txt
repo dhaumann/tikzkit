@@ -46,6 +46,7 @@ set(qtikzcore_HEADERS
     NodeStyle.h
     EdgeStyle.h
     Document.h
+    tikz.h
 )
 
 QT4_WRAP_CPP(qtikzcore_HEADERS_MOC ${qtikzcore_HEADERS})

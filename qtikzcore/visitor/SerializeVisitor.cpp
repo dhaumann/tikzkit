@@ -22,10 +22,14 @@
 #include "Document.h"
 #include "Node.h"
 #include "Edge.h"
+#include "NodeStyle.h"
 
 #include <QStringList>
 #include <QTextStream>
+#include <QMetaProperty>
 #include <QFile>
+#include <QDebug>
+
 #include <qjson/serializer.h>
 
 namespace tikz
@@ -34,6 +38,8 @@ namespace tikz
 SerializeVisitor::SerializeVisitor()
     : Visitor()
 {
+    qRegisterMetaType<tikz::Shape>("Shape");
+    qRegisterMetaType<tikz::LineWidth>("LineWidth");
 }
 
 SerializeVisitor::~SerializeVisitor()
@@ -49,6 +55,7 @@ bool SerializeVisitor::save(const QString & filename)
     QByteArray json = serializer.serialize(m_map, &ok);
 
     // there is no reason for failure
+    qCritical() << serializer.errorMessage();
     Q_ASSERT(ok);
 
     // open file
@@ -83,6 +90,38 @@ void SerializeVisitor::visit(tikz::Document * doc)
 
 void SerializeVisitor::visit(tikz::Node * node)
 {
+    QVariantMap map;
+
+    const QMetaObject * metaObject = node->style()->metaObject();
+    const int count = metaObject->propertyCount();
+
+    for (int i = 0; i < count; ++i) {
+        QMetaProperty metaproperty = metaObject->property(i);
+        const char *name = metaproperty.name();
+
+        if ((!node->style()->propertySet(name)) || (!metaproperty.isReadable()))
+            continue;
+
+        QVariant value;
+        if (metaproperty.isEnumType() || metaproperty.type() >= QVariant::UserType) {
+            qDebug() << "JOA" << metaproperty.type() << name;
+            
+            QVariant metaVariant = node->style()->property(name);
+
+            const QMetaObject &mo = tikz::staticMetaObject;
+            int enum_index = mo.indexOfEnumerator(metaproperty.typeName());
+            QMetaEnum metaEnum = mo.enumerator(enum_index);
+
+            QByteArray str = metaEnum.valueToKey(*((int*)metaVariant.data()));
+            qDebug() << "Value as str:" << str;
+            value = str;
+        } else {
+            value = node->style()->property(name);
+        }
+        map[QLatin1String(name)] = value;
+    }
+
+    m_map.insert(QString("node-%1").arg(node->id()), map);
 }
 
 void SerializeVisitor::visit(tikz::Edge * edge)
