@@ -183,14 +183,21 @@ QVariantMap SerializeVisitor::serializeStyle(tikz::Style * style)
         if (metaproperty.isEnumType() || metaproperty.type() >= QVariant::UserType) {
             QVariant metaVariant = style->property(name);
 
+            // remove full qualifier
+            QString typeName = metaproperty.typeName();
+            int i = typeName.lastIndexOf("::");
+            if (i >= 0) {
+                typeName = typeName.right(typeName.length() - i - 2);
+            }
+
             // convert enum to string
             const QMetaObject &mo = tikz::staticMetaObject;
-            int enum_index = mo.indexOfEnumerator(metaproperty.typeName());
+            int enum_index = mo.indexOfEnumerator(typeName.toLatin1());
             QMetaEnum metaEnum = mo.enumerator(enum_index);
 
             QByteArray str = metaEnum.valueToKey(*((int*)metaVariant.data()));
             value = str;
-//             qDebug() << "type:" << metaproperty.type() << name << "value:" << str;
+//             qDebug() << "type:" << metaproperty.type() << name << "value:" << str << enum_index << metaproperty.typeName();
         } else {
             value = style->property(name);
         }
