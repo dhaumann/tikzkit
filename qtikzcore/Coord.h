@@ -20,11 +20,11 @@
 #ifndef TIKZ_COORDINATE_H
 #define TIKZ_COORDINATE_H
 
-#include <QObject>
-#include <QPointF>
-
 #include "tikz_export.h"
 #include "tikz.h"
+
+#include <QObject>
+#include <QPointF>
 
 namespace tikz
 {
@@ -35,6 +35,7 @@ class Node;
 class TIKZCORE_EXPORT Coord : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 
     public:
         /**
@@ -48,14 +49,27 @@ class TIKZCORE_EXPORT Coord : public QObject
         virtual ~Coord();
 
     //
-    // convenience functions
+    // Setters & getters
     //
     public:
         /**
-         * Get the coordinates
+         * Get the coordinates.
+         * @see setPos()
          */
         const QPointF& pos() const;
 
+    public Q_SLOTS:
+        /**
+         * Set the coordinates to @p pos.
+         * Calling this function emits changed(), if @p pos != pos().
+         * @see pos()
+         */
+        void setPos(const QPointF& pos);
+
+    //
+    // convenience functions
+    //
+    public:
         /**
          * Comparison operator
          */
@@ -65,13 +79,6 @@ class TIKZCORE_EXPORT Coord : public QObject
          * Colmplement of comparison operator
          */
         bool operator!=(const Coord& other) const;
-
-    public Q_SLOTS:
-        /**
-         * Set the coordinates to @p pos.
-         * Calling this function emits changed(), if @p pos != pos().
-         */
-        void setPos(const QPointF& pos);
 
     //
     // notification about changes
