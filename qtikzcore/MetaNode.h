@@ -68,6 +68,7 @@ class MetaNode : public QObject
          */
         void setPos(const QPointF& pos);
 
+    //
     // Node methods
     //
     public:
