@@ -39,6 +39,7 @@ class Visitor;
 class TIKZCORE_EXPORT Node : public Coord
 {
     Q_OBJECT
+    Q_PROPERTY(QString text READ text WRITE setText)
 
     public:
         /**
