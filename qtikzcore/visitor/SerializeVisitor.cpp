@@ -39,10 +39,15 @@ namespace tikz
 SerializeVisitor::SerializeVisitor()
     : Visitor()
 {
-    qRegisterMetaType<tikz::Shape>("Shape");
-    qRegisterMetaType<tikz::LineWidth>("LineWidth");
+    qRegisterMetaType<tikz::Anchor>("Anchor");
     qRegisterMetaType<tikz::Arrow>("Arrow");
+    qRegisterMetaType<tikz::LineCap>("LineCap");
+    qRegisterMetaType<tikz::LineJoin>("LineJoin");
+    qRegisterMetaType<tikz::LineWidth>("LineWidth");
+    qRegisterMetaType<tikz::PenStyle>("PenStyle");
+    qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::CurveMode>("CurveMode");
+    qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
 }
 
 SerializeVisitor::~SerializeVisitor()
@@ -106,7 +111,13 @@ void SerializeVisitor::visit(tikz::Document * doc)
 void SerializeVisitor::visit(tikz::Node * node)
 {
     QVariantMap map;
+    
+    // serialize node
+    map.insert("pos.x", node->pos().x());
+    map.insert("pos.y", node->pos().y());
+    map.insert("text", node->text());
 
+    // serialize node style
     QVariantMap styleMap;
     styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->id() : -1);
     styleMap.insert("properties", serializeStyle(node->style()));
@@ -119,6 +130,24 @@ void SerializeVisitor::visit(tikz::Edge * edge)
 {
     QVariantMap map;
 
+    // serialize node
+    if (edge->startNode()) {
+        map.insert("start.node", edge->startNode()->id());
+        map.insert("start.anchor", edge->startAnchor());
+    } else {
+        map.insert("start.pos.x", edge->startPos().x());
+        map.insert("start.pos.y", edge->startPos().y());
+    }
+
+    if (edge->endNode()) {
+        map.insert("end.node", edge->endNode()->id());
+        map.insert("end.anchor", edge->endAnchor());
+    } else {
+        map.insert("end.pos.x", edge->endPos().x());
+        map.insert("end.pos.y", edge->endPos().y());
+    }
+
+    // serialize edge style
     QVariantMap styleMap;
     styleMap.insert("parent", edge->style()->parentStyle() ? edge->style()->parentStyle()->id() : -1);
     styleMap.insert("properties", serializeStyle(edge->style()));
