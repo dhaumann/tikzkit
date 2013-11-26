@@ -33,6 +33,7 @@
 
 #include "Visitor.h"
 #include "SerializeVisitor.h"
+#include "DeserializeVisitor.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -116,11 +117,12 @@ void Document::clear()
     Q_ASSERT(0 == d->edgeMap.size());
     Q_ASSERT(0 == d->edges.size());
 
-    delete d->style;
-    d->style = new Style(d->uniqueId(), this);
-
     // reset unique id counter
     d->nextId = 0;
+
+    // reinitialize document style
+    delete d->style;
+    d->style = new Style(d->uniqueId(), this);
 
     // clear undo stack
     d->undoManager.clear();
@@ -132,13 +134,12 @@ bool Document::load(const QString & file)
     clear();
 
     // open the file contents
-    QFile target(file);
-    if (!target.open(QIODevice::ReadOnly | QIODevice::Text)) {
-         return false;
+    tikz::DeserializeVisitor dv;
+    if (dv.load(file)) {
+        accept(dv);
+        return true;
     }
-
-    QByteArray jsonByteArray = target.readAll();
-    // TODO: read from jsonByteArray
+    return false;
 }
 
 bool Document::save(const QString & file)
@@ -146,7 +147,8 @@ bool Document::save(const QString & file)
     tikz::SerializeVisitor sv;
     accept(sv);
 
-    sv.save("output.tikzkit");
+    sv.save(file);
+    return true;
 }
 
 QByteArray Document::toJson() const

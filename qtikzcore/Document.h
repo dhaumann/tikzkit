@@ -205,6 +205,7 @@ class TIKZCORE_EXPORT Document : public QObject
     // internal: Undo / redo items manipulate with ID
     //
     protected:
+        friend class DeserializeVisitor;
         /**
          * Create a new node associated with this document with @p id.
          */

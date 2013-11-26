@@ -48,6 +48,7 @@ class MainWindow : public QMainWindow
         void updateTransform();
 
         void saveFile();
+        void loadFile();
 
     protected:
         void setupActions();
