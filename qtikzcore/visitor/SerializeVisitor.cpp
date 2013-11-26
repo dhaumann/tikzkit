@@ -23,6 +23,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include "NodeStyle.h"
+#include "EdgeStyle.h"
 
 #include <QStringList>
 #include <QTextStream>
@@ -40,6 +41,8 @@ SerializeVisitor::SerializeVisitor()
 {
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::LineWidth>("LineWidth");
+    qRegisterMetaType<tikz::Arrow>("Arrow");
+    qRegisterMetaType<tikz::CurveMode>("CurveMode");
 }
 
 SerializeVisitor::~SerializeVisitor()
@@ -48,11 +51,18 @@ SerializeVisitor::~SerializeVisitor()
 
 bool SerializeVisitor::save(const QString & filename)
 {
+    // build final tree
+    QVariantMap root = m_root;
+    root.insert("nodes", m_nodes);
+    root.insert("edges", m_edges);
+    root.insert("node-styles", m_nodeStyles);
+    root.insert("edge-styles", m_edgeStyles);
+
     // convert to JSON
     bool ok;
     QJson::Serializer serializer;
     serializer.setIndentMode(QJson::IndentFull);
-    QByteArray json = serializer.serialize(m_map, &ok);
+    QByteArray json = serializer.serialize(root, &ok);
 
     // there is no reason for failure
     qCritical() << serializer.errorMessage();
@@ -78,54 +88,43 @@ void SerializeVisitor::visit(tikz::Document * doc)
     foreach (Node * node, doc->nodes()) {
         list.append(QString::number(node->id()));
     }
-    m_map.insert("node-ids", list.join(", "));
+    m_root.insert("node-ids", list.join(", "));
 
     // aggregate edge ids
     list.clear();
     foreach (Edge * edge, doc->edges()) {
         list.append(QString::number(edge->id()));
     }
-    m_map.insert("edge-ids", list.join(", "));
+    m_root.insert("edge-ids", list.join(", "));
+
+    // save document style
+    QVariantMap docStyle;
+    docStyle.insert("properties", serializeStyle(doc->style()));
+    m_root.insert("document-style", docStyle);
 }
 
 void SerializeVisitor::visit(tikz::Node * node)
 {
     QVariantMap map;
 
-    const QMetaObject * metaObject = node->style()->metaObject();
-    const int count = metaObject->propertyCount();
+    QVariantMap styleMap;
+    styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->id() : -1);
+    styleMap.insert("properties", serializeStyle(node->style()));
+    map.insert("style", styleMap);
 
-    for (int i = 0; i < count; ++i) {
-        QMetaProperty metaproperty = metaObject->property(i);
-        const char *name = metaproperty.name();
-
-        if ((!node->style()->propertySet(name)) || (!metaproperty.isReadable()))
-            continue;
-
-        QVariant value;
-        if (metaproperty.isEnumType() || metaproperty.type() >= QVariant::UserType) {
-            qDebug() << "JOA" << metaproperty.type() << name;
-            
-            QVariant metaVariant = node->style()->property(name);
-
-            const QMetaObject &mo = tikz::staticMetaObject;
-            int enum_index = mo.indexOfEnumerator(metaproperty.typeName());
-            QMetaEnum metaEnum = mo.enumerator(enum_index);
-
-            QByteArray str = metaEnum.valueToKey(*((int*)metaVariant.data()));
-            qDebug() << "Value as str:" << str;
-            value = str;
-        } else {
-            value = node->style()->property(name);
-        }
-        map[QLatin1String(name)] = value;
-    }
-
-    m_map.insert(QString("node-%1").arg(node->id()), map);
+    m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
 void SerializeVisitor::visit(tikz::Edge * edge)
 {
+    QVariantMap map;
+
+    QVariantMap styleMap;
+    styleMap.insert("parent", edge->style()->parentStyle() ? edge->style()->parentStyle()->id() : -1);
+    styleMap.insert("properties", serializeStyle(edge->style()));
+    map.insert("style", styleMap);
+
+    m_edges.insert(QString("edge-%1").arg(edge->id()), map);
 }
 
 void SerializeVisitor::visit(tikz::NodeStyle * style)
@@ -134,6 +133,41 @@ void SerializeVisitor::visit(tikz::NodeStyle * style)
 
 void SerializeVisitor::visit(tikz::EdgeStyle * style)
 {
+}
+
+QVariantMap SerializeVisitor::serializeStyle(tikz::Style * style)
+{
+    QVariantMap map;
+
+    // get style's meta object
+    const QMetaObject * metaObject = style->metaObject();
+    const int count = metaObject->propertyCount();
+
+    for (int i = 0; i < count; ++i) {
+        QMetaProperty metaproperty = metaObject->property(i);
+        const char *name = metaproperty.name();
+
+        if ((!style->propertySet(name)) || (!metaproperty.isReadable()))
+            continue;
+
+        QVariant value;
+        if (metaproperty.isEnumType() || metaproperty.type() >= QVariant::UserType) {
+            QVariant metaVariant = style->property(name);
+
+            // convert enum to string
+            const QMetaObject &mo = tikz::staticMetaObject;
+            int enum_index = mo.indexOfEnumerator(metaproperty.typeName());
+            QMetaEnum metaEnum = mo.enumerator(enum_index);
+
+            QByteArray str = metaEnum.valueToKey(*((int*)metaVariant.data()));
+            value = str;
+//             qDebug() << "type:" << metaproperty.type() << name << "value:" << str;
+        } else {
+            value = style->property(name);
+        }
+        map[QLatin1String(name)] = value;
+    }
+    return map;
 }
 
 }

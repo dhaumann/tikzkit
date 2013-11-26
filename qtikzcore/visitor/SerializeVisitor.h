@@ -90,10 +90,20 @@ class SerializeVisitor : public Visitor
         virtual void visit(tikz::EdgeStyle * style) override;
 
     //
+    // helper functions
+    //
+    private:
+        QVariantMap serializeStyle(tikz::Style * style);
+
+    //
     // private data
     //
     private:
-        QVariantMap m_map;
+        QVariantMap m_root;
+        QVariantMap m_nodes;
+        QVariantMap m_edges;
+        QVariantMap m_nodeStyles;
+        QVariantMap m_edgeStyles;
 };
 
 }

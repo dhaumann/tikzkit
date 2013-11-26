@@ -49,10 +49,6 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_PROPERTY(LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
     Q_PROPERTY(qreal innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
 
-// not required?
-//     Q_ENUMS(LineWidth)
-//     Q_ENUMS(PenStyle)
-
     public:
         /**
          * Default constructor.
