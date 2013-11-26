@@ -31,8 +31,8 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 {
     Q_OBJECT
 
-    Q_PROPERTY(TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
-    Q_PROPERTY(Shape shape READ shape WRITE setShape RESET unsetShape)
+    Q_PROPERTY(tikz::TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
+    Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
     Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
     Q_PROPERTY(qreal scale READ scale WRITE setScale RESET unsetScale)
     Q_PROPERTY(qreal innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)

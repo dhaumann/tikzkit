@@ -32,13 +32,13 @@ class EdgeStylePrivate;
 class TIKZCORE_EXPORT EdgeStyle : public Style
 {
     Q_OBJECT
-        Q_PROPERTY(CurveMode curveMode READ curveMode WRITE setCurveMode RESET unsetCurveMode)
+        Q_PROPERTY(tikz::CurveMode curveMode READ curveMode WRITE setCurveMode RESET unsetCurveMode)
         Q_PROPERTY(qreal bendAngle READ bendAngle WRITE setBendAngle RESET unsetBendAngle)
         Q_PROPERTY(qreal looseness READ looseness WRITE setLooseness RESET unsetLooseness)
         Q_PROPERTY(qreal outAngle READ outAngle WRITE setOutAngle RESET unsetOutAngle)
         Q_PROPERTY(qreal inAngle READ inAngle WRITE setInAngle RESET unsetInAngle)
-        Q_PROPERTY(Arrow arrowTail READ arrowTail WRITE setArrowTail RESET unsetArrowTail)
-        Q_PROPERTY(Arrow arrowHead READ arrowHead WRITE setArrowHead RESET unsetArrowHead)
+        Q_PROPERTY(tikz::Arrow arrowTail READ arrowTail WRITE setArrowTail RESET unsetArrowTail)
+        Q_PROPERTY(tikz::Arrow arrowHead READ arrowHead WRITE setArrowHead RESET unsetArrowHead)
         Q_PROPERTY(qreal shortenStart READ shortenStart WRITE setShortenStart RESET unsetShortenStart)
         Q_PROPERTY(qreal shortenEnd READ shortenEnd WRITE setShortenEnd RESET unsetShortenEnd)
 

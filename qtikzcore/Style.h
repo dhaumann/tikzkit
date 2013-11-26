@@ -40,13 +40,13 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_PROPERTY(qreal penOpacity READ penOpacity WRITE setPenOpacity RESET unsetPenOpacity)
     Q_PROPERTY(qreal fillOpacity READ fillOpacity WRITE setFillOpacity RESET unsetFillOpacity)
 
-    Q_PROPERTY(PenStyle penStyle READ penStyle WRITE setPenStyle RESET unsetPenStyle)
+    Q_PROPERTY(tikz::PenStyle penStyle READ penStyle WRITE setPenStyle RESET unsetPenStyle)
 
-    Q_PROPERTY(LineWidth lineWidthType READ lineWidthType WRITE setLineWidthType RESET unsetLineWidth)
+    Q_PROPERTY(tikz::LineWidth lineWidthType READ lineWidthType WRITE setLineWidthType RESET unsetLineWidth)
     Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth RESET unsetLineWidth)
 
     Q_PROPERTY(bool doubleLine READ doubleLine WRITE setDoubleLine RESET unsetDoubleLine)
-    Q_PROPERTY(LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
+    Q_PROPERTY(tikz::LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
     Q_PROPERTY(qreal innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
 
     public:
