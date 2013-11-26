@@ -156,9 +156,6 @@ void DeserializeVisitor::visit(tikz::EdgeStyle * style)
 
 void DeserializeVisitor::deserializeStyle(tikz::Style * style, const QVariantMap & map)
 {
-    // get style's meta object
-    const QMetaObject * metaObject = style->metaObject();
-
     QVariantMap::const_iterator it = map.constBegin();
     for ( ; it != map.constEnd(); ++it) {
         const QString key = it.key();
