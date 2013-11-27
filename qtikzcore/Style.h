@@ -72,15 +72,6 @@ class TIKZCORE_EXPORT Style : public QObject
         virtual void setStyle(const Style& other);
 
     //
-    // serialization
-    //
-    public:
-        /**
-         * Serialize style to variant map.
-         */
-        virtual QVariantMap toVariantMap() const;
-
-    //
     // parent / child hierarchy
     //
     public:

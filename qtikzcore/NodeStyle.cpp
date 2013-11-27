@@ -80,63 +80,6 @@ void NodeStyle::setStyle(const NodeStyle& other)
     endConfig();
 }
 
-QVariantMap NodeStyle::toVariantMap() const
-{
-    QVariantMap vm = Style::toVariantMap();
-
-    // align
-    if (propertySet(s_align)) {
-        QString align;
-        switch (d->align) {
-            case AlignLeft: align = "left"; break;
-            case AlignCenter: align = "center"; break;
-            case AlignRight: align = "right"; break;
-            case NoAlign:
-            default: Q_ASSERT(false); break;
-        }
-        vm.insert("align", align);
-    }
-
-    // shape
-    if (propertySet(s_shape)) {
-        QString shape;
-        switch (d->shape) {
-            case ShapeRectangle: shape = "rectangle"; break;
-            case ShapeCircle: shape = "circle"; break;
-            case ShapeEllipse: shape = "ellipse"; break;
-            default: Q_ASSERT(false); break;
-        }
-        vm.insert("shape", shape);
-    }
-
-    // other properties
-    if (propertySet(s_rotation)) {
-        vm.insert("rotate", d->rotation);
-    }
-
-    if (propertySet(s_scale)) {
-        vm.insert("scale", d->scale);
-    }
-
-    if (propertySet(s_innerSep)) {
-        vm.insert("inner sep", d->innerSep);
-    }
-
-    if (propertySet(s_outerSep)) {
-        vm.insert("outer sep", d->outerSep);
-    }
-
-    if (propertySet(s_minimumWidth)) {
-        vm.insert("minimum width", d->minimumWidth);
-    }
-
-    if (propertySet(s_minimumHeight)) {
-        vm.insert("minimum height", d->minimumHeight);
-    }
-
-    return vm;
-}
-
 TextAlignment NodeStyle::alignment() const
 {
     if (propertySet(s_align)) {

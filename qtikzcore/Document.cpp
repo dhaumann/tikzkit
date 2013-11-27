@@ -151,33 +151,6 @@ bool Document::save(const QString & file)
     return true;
 }
 
-QByteArray Document::toJson() const
-{
-    QVariantList doc;
-
-    foreach (Node * node, d->nodes) {
-        QVariantMap item;
-        item.insert("node", node->id());
-        doc << item;
-    }
-
-    foreach (Edge * edge, d->edges) {
-        QVariantMap item;
-        item.insert("edge", edge->id());
-        doc << item;
-    }
-
-    bool ok;
-    QJson::Serializer serializer;
-    serializer.setIndentMode(QJson::IndentFull);
-    QByteArray json = serializer.serialize(doc, &ok);
-    if (!ok) {
-        qCritical() << "Something went wrong:" << serializer.errorMessage();
-    }
-
-    return json;
-}
-
 QUndoStack * Document::undoManager()
 {
     return &d->undoManager;

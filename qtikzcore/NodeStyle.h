@@ -57,15 +57,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         virtual void setStyle(const NodeStyle& other);
 
     //
-    // serialization
-    //
-    public:
-        /**
-         * Serialize style to variant map.
-         */
-        virtual QVariantMap toVariantMap() const;
-
-    //
     // text alignment
     //
     public:

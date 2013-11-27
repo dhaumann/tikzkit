@@ -83,15 +83,6 @@ class TIKZCORE_EXPORT Document : public QObject
         bool save(const QString & file);
 
     //
-    // serialization
-    //
-    public:
-        /**
-         * Serialize the Document with all its nodes and edges to a JSON string.
-         */
-        QByteArray toJson() const;
-
-    //
     // Undo / redo management
     //
     public:

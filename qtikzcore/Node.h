@@ -53,7 +53,7 @@ class TIKZCORE_EXPORT Node : public Coord
         Document * document() const;
 
     //
-    // id and serialization
+    // id
     //
     public:
         /**
@@ -61,11 +61,6 @@ class TIKZCORE_EXPORT Node : public Coord
          * If the document is @e not associated to a document -1 is returned.
          */
         qint64 id() const;
-
-        /**
-         * Serialize node to variant map.
-         */
-        QVariantMap toVariantMap() const;
 
     //
     // visitor pattern
