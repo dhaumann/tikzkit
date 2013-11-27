@@ -144,7 +144,7 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
     // export pen style
     //
     if (style->penStyleSet()) {
-        PenStyle ps = style->penStyle();
+        const PenStyle ps = style->penStyle();
         switch (ps) {
             case PenStyle::SolidLine: options << "solid"; break;
             case PenStyle::DottedLine: options << "dotted"; break;
@@ -168,7 +168,7 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
     // export line width
     //
     if (style->lineWidthSet()) {
-        LineWidth lw = style->lineWidthType();
+        const LineWidth lw = style->lineWidthType();
         switch (lw) {
             case LineWidth::UltraThin: options << "ultra thin"; break;
             case LineWidth::VeryThin: options << "very thin"; break;
@@ -284,7 +284,7 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
     // export curve mode
     //
     if (style->curveModeSet()) {
-        CurveMode cm = style->curveMode();
+        const CurveMode cm = style->curveMode();
         switch (cm) {
             case StraightLine: break;
             case HorizVertLine: break;
@@ -327,60 +327,82 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
         }
     }
 #endif
+
+    return options;
 }
 
 QStringList TikzExportVisitor::nodeStyleOptions(tikz::NodeStyle * style)
 {
-#if 0
-    if (propertySet(s_align)) {
-        QString align;
-        switch (d->align) {
-            case AlignLeft: align = "left"; break;
-            case AlignCenter: align = "center"; break;
-            case AlignRight: align = "right"; break;
-            case NoAlign:
-            default: Q_ASSERT(false); break;
+    QStringList options;
+
+    //
+    // export align
+    //
+    if (style->alignmentSet()) {
+        const TextAlignment ta = style->alignment();
+        switch (ta) {
+            case TextAlignment::NoAlign: options << "align=none";  break;
+            case TextAlignment::AlignLeft: options << "align=left";  break;
+            case TextAlignment::AlignCenter: options << "align=center";  break;
+            case TextAlignment::AlignRight: options << "align=right";  break;
+            case TextAlignment::AlignJustify: options << "align=justify";  break;
+            default: Q_ASSERT(false);
         }
-        vm.insert("align", align);
     }
 
-    // shape
-    if (propertySet(s_shape)) {
-        QString shape;
-        switch (d->shape) {
-            case ShapeRectangle: shape = "rectangle"; break;
-            case ShapeCircle: shape = "circle"; break;
-            case ShapeEllipse: shape = "ellipse"; break;
-            default: Q_ASSERT(false); break;
+    //
+    // export shape
+    //
+    if (style->shapeSet()) {
+        const Shape s = style->shape();
+        switch (s) {
+            case Shape::NoShape: break;
+            case Shape::ShapeRectangle: options << "rectangle";  break;
+            case Shape::ShapeCircle: options << "circle";  break;
+            case Shape::ShapeEllipse: options << "ellipse";  break;
+            default: Q_ASSERT(false);
         }
-        vm.insert("shape", shape);
     }
 
-    // other properties
-    if (propertySet(s_rotation)) {
-        vm.insert("rotate", d->rotation);
+    //
+    // export rotation
+    //
+    if (style->rotationSet()) {
+        options << QString("rotate=%1").arg(style->rotation());
     }
 
-    if (propertySet(s_scale)) {
-        vm.insert("scale", d->scale);
+    //
+    // export scale
+    //
+    if (style->scaleSet()) {
+        options << QString("scale=%1").arg(style->scale());
     }
 
-    if (propertySet(s_innerSep)) {
-        vm.insert("inner sep", d->innerSep);
+    //
+    // export inner sep and outer sep
+    //
+    if (style->innerSepSet()) {
+        options << QString("inner sep=%1cm").arg(style->innerSep());
     }
 
-    if (propertySet(s_outerSep)) {
-        vm.insert("outer sep", d->outerSep);
+    if (style->outerSepSet()) {
+        options << QString("outer sep=%1cm").arg(style->outerSep());
     }
 
-    if (propertySet(s_minimumWidth)) {
-        vm.insert("minimum width", d->minimumWidth);
+    //
+    // export minimum width and minimum height
+    //
+    if (style->minimumWidthSet() && style->minimumHeightSet()
+        && style->minimumWidth() == style->minimumHeight())
+    {
+        options << QString("minimum size=%1cm").arg(style->minimumWidth());
+    } else if (style->minimumWidthSet()) {
+        options << QString("minimum width=%1cm").arg(style->minimumWidth());
+    } else if (style->minimumHeightSet()) {
+        options << QString("minimum height=%1cm").arg(style->minimumHeight());
     }
 
-    if (propertySet(s_minimumHeight)) {
-        vm.insert("minimum height", d->minimumHeight);
-    }
-#endif
+    return options;
 }
 
 }
