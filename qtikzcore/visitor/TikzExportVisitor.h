@@ -17,11 +17,12 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_TIKZ_VISITOR_H
-#define TIKZ_TIKZ_VISITOR_H
+#ifndef TIKZ_EXPORT_VISITOR_H
+#define TIKZ_EXPORT_VISITOR_H
 
 #include "Visitor.h"
-#include <QVariantMap>
+#include <QVector>
+#include <QString>
 
 namespace tikz
 {
@@ -43,18 +44,18 @@ public:
 /**
  * Visitor exporint the tikz::Document to PGF/TikZ.
  */
-class TikzVisitor : public Visitor
+class TikzExportVisitor : public Visitor
 {
     public:
         /**
          * Default constructor.
          */
-        TikzVisitor();
+        TikzExportVisitor();
 
         /**
          * Destructor
          */
-        virtual ~TikzVisitor();
+        virtual ~TikzExportVisitor();
 
     //
     // extra functions
@@ -98,7 +99,10 @@ class TikzVisitor : public Visitor
     // helper functions
     //
     private:
-        QVariantMap serializeStyle(tikz::Style * style);
+        QStringList styleOptions(tikz::Style * style);
+        QStringList edgeStyleOptions(tikz::EdgeStyle * style);
+        QStringList nodeStyleOptions(tikz::NodeStyle * style);
+        
 
     //
     // private data
@@ -109,6 +113,6 @@ class TikzVisitor : public Visitor
 
 }
 
-#endif // TIKZ_TIKZ_VISITOR_H
+#endif // TIKZ_EXPORT_VISITOR_H
 
 // kate: indent-width 4; replace-tabs on;
