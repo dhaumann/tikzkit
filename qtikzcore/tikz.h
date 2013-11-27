@@ -42,6 +42,8 @@ enum TextAlignment {
     AlignLeft,
     AlignCenter,
     AlignRight,
+    AlignJustify
+    // TODO: add all types ?
 };
 
 enum Anchor {
@@ -61,7 +63,7 @@ enum Shape {
     NoShape = 0,
     ShapeRectangle,
     ShapeCircle,
-    ShapeEllipse,
+    ShapeEllipse
 };
 
 enum PenStyle {
