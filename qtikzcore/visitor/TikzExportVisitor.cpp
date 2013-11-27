@@ -225,95 +225,102 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
 QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
 {
     QStringList options;
-#if 0
+
     //
     // export arrow tail
     //
-    if (style->arrowTailSet()
+    if (style->arrowTailSet() && style->arrowHeadSet()) {
+        options << "<->";
+    } else if (style->arrowTailSet()) {
+        options << "<-";
+    } else if (style->arrowHeadSet()) {
+        options << "->";
+    }
 
-    if (propertySet(s_arrowTail)) {
-        QString arrow;
-        switch (d->arrowTail) {
-            case NoArrow: arrow = "none"; break;
-            case ToArrow: arrow = "to"; break;
-            case ReversedToArrow: arrow = "to reversed"; break;
-            case StealthArrow: arrow = "stealth"; break;
-            case ReversedStealthArrow: arrow = "stealth reversed"; break;
-            case LatexArrow: arrow = "latex"; break;
-            case ReversedLatexArrow: arrow = "latex reversed"; break;
-            case PipeArrow: arrow = "|"; break;
-            case StealthTickArrow: arrow = "stealth'"; break;
-            case ReversedStealthTickArrow: arrow = "stealth' reversed"; break;
+    if (style->arrowTailSet()) {
+        switch (style->arrowTail()) {
+            case Arrow::NoArrow: options << "<=none"; break;
+            case Arrow::ToArrow: options << "<=to"; break;
+            case Arrow::ReversedToArrow: options << "<=to reversed"; break;
+            case Arrow::StealthArrow: options << "<=stealth"; break;
+            case Arrow::ReversedStealthArrow: options << "<=stealth reversed"; break;
+            case Arrow::LatexArrow: options << "<=latex"; break;
+            case Arrow::ReversedLatexArrow: options << "<=latex reversed"; break;
+            case Arrow::PipeArrow: options << "<=|"; break;
+            case Arrow::StealthTickArrow: options << "<=stealth'"; break;
+            case Arrow::ReversedStealthTickArrow: options << "<=stealth' reversed"; break;
             default: Q_ASSERT(false); break;
         }
-        vm.insert("arrow tail", arrow);
     }
 
-    // end arrow
-    if (propertySet(s_arrowHead)) {
-        QString arrow;
-        switch (d->arrowHead) {
-            case NoArrow: arrow = "none"; break;
-            case ToArrow: arrow = "to"; break;
-            case ReversedToArrow: arrow = "to reversed"; break;
-            case StealthArrow: arrow = "stealth"; break;
-            case ReversedStealthArrow: arrow = "stealth reversed"; break;
-            case LatexArrow: arrow = "latex"; break;
-            case ReversedLatexArrow: arrow = "latex reversed"; break;
-            case PipeArrow: arrow = "|"; break;
-            case StealthTickArrow: arrow = "stealth'"; break;
-            case ReversedStealthTickArrow: arrow = "stealth' reversed"; break;
+    if (style->arrowHeadSet()) {
+        switch (style->arrowHead()) {
+            case Arrow::NoArrow: options << ">=none"; break;
+            case Arrow::ToArrow: options << ">=to"; break;
+            case Arrow::ReversedToArrow: options << ">=to reversed"; break;
+            case Arrow::StealthArrow: options << ">=stealth"; break;
+            case Arrow::ReversedStealthArrow: options << ">=stealth reversed"; break;
+            case Arrow::LatexArrow: options << ">=latex"; break;
+            case Arrow::ReversedLatexArrow: options << ">=latex reversed"; break;
+            case Arrow::PipeArrow: options << ">=|"; break;
+            case Arrow::StealthTickArrow: options << ">=stealth'"; break;
+            case Arrow::ReversedStealthTickArrow: options << ">=stealth' reversed"; break;
             default: Q_ASSERT(false); break;
         }
-        vm.insert("arrow head", arrow);
     }
 
-    // other properties
-    if (propertySet(s_shortenStart)) {
-        vm.insert("shorten <", d->shortenStart);
+    //
+    // export shorten properties
+    //
+    if (style->shortenStartSet()) {
+        options << QString("shorten <=cm").arg(style->shortenStart());
     }
 
-    if (propertySet(s_shortenEnd)) {
-        vm.insert("shorten >", d->shortenEnd);
+    if (style->shortenEndSet()) {
+        options << QString("shorten >=cm").arg(style->shortenEnd());
     }
 
-    // curve mode
-    if (propertySet(s_curveMode)) {
-        QString mode;
-        switch (d->curveMode) {
-            case StraightLine: mode = "--"; break;
-            case HorizVertLine: mode = "-|"; break;
-            case VertHorizLine: mode = "|-"; break;
-            case BendCurve: mode = "bend"; break;
-            case InOutCurve: mode = "in out"; break;
-            case BezierCurve: mode = "bezier"; break;
+    //
+    // export curve mode
+    //
+    if (style->curveModeSet()) {
+        CurveMode cm = style->curveMode();
+        switch (cm) {
+            case StraightLine: break;
+            case HorizVertLine: break;
+            case VertHorizLine: break;
+            case BendCurve: {
+                if (style->bendAngleSet()) {
+                    const qreal angle = style->bendAngle();
+                    if (angle > 0) options << QString("bend left=%1").arg(angle);
+                    if (angle < 0) options << QString("bend right=%1").arg(-angle);
+                }
+                break;
+            }
+            case InOutCurve: {
+                if (style->outAngleSet()) {
+                    options << QString("out=%1").arg(style->outAngle());
+                }
+                if (style->inAngleSet()) {
+                    options << QString("in=%1").arg(style->inAngle());
+                }
+                break;
+            }
+            case BezierCurve: {
+                // TODO ?
+            }
             default: Q_ASSERT(false); break;
         }
-        vm.insert("curve mode", mode);
 
-        // looseness for bend and in/out mode
-        if (d->curveMode == BendCurve || d->curveMode == InOutCurve) {
-            if (propertySet(s_looseness)) {
-                vm.insert("looseness", d->looseness);
-            }
+        //
+        // export looseness
+        //
+        if (style->loosenessSet()) {
+            Q_ASSERT(cm == CurveMode::BendCurve || cm == CurveMode::InOutCurve || cm == CurveMode::BezierCurve);
+            options << QString("looseness").arg(style->looseness());
         }
-
-        // bend left and bend right
-        if (d->curveMode == BendCurve && propertySet(s_bendAngle)) {
-                vm.insert("looseness", d->looseness);
-            vm.insert("bend angle", d->bendAngle);
-        }
-
-        // in=..., out=...
-        if (d->curveMode == InOutCurve) {
-            if (propertySet(s_inAngle)) {
-                vm.insert("in angle", d->inAngle);
-            }
-            if (propertySet(s_outAngle)) {
-                vm.insert("out angle", d->outAngle);
-            }
-        }
-
+    }
+#if 0
         if (d->curveMode == BezierCurve) {
             vm.insert("control point 1", startControlPoint()); // FIXME: use d->cp1 ?
             vm.insert("control point 2", endControlPoint()); // FIXME: use d->cp2 ?
