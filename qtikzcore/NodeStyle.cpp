@@ -94,6 +94,11 @@ TextAlignment NodeStyle::alignment() const
     return NoAlign;
 }
 
+bool NodeStyle::alignmentSet() const
+{
+    return propertySet(s_align);
+}
+
 void NodeStyle::setAlignment(tikz::TextAlignment align)
 {
     if (!propertySet(s_align) || d->align != align) {
@@ -126,6 +131,11 @@ Shape NodeStyle::shape() const
     }
 
     return ShapeRectangle;
+}
+
+bool NodeStyle::shapeSet() const
+{
+    return propertySet(s_shape);
 }
 
 void NodeStyle::setShape(tikz::Shape shape)
@@ -162,6 +172,11 @@ qreal NodeStyle::rotation() const
     return 0.0;
 }
 
+bool NodeStyle::rotationSet() const
+{
+    return propertySet(s_rotation);
+}
+
 void NodeStyle::setRotation(qreal angle)
 {
     if (!propertySet(s_rotation) || d->rotation != angle) {
@@ -196,6 +211,11 @@ qreal NodeStyle::scale() const
     return 1.0;
 }
 
+bool NodeStyle::scaleSet() const
+{
+    return propertySet(s_scale);
+}
+
 void NodeStyle::setScale(qreal factor)
 {
     if (!propertySet(s_scale) || d->scale != factor) {
@@ -226,6 +246,11 @@ void NodeStyle::setInnerSep(qreal sep)
     }
 }
 
+bool NodeStyle::innerSepSet() const
+{
+    return propertySet(s_innerSep);
+}
+
 qreal NodeStyle::innerSep() const
 {
     NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
@@ -243,6 +268,11 @@ void NodeStyle::setOuterSep(qreal sep)
         d->outerSep = sep;
         endConfig();
     }
+}
+
+bool NodeStyle::outerSepSet() const
+{
+    return propertySet(s_outerSep);
 }
 
 qreal NodeStyle::outerSep() const
@@ -287,6 +317,11 @@ qreal NodeStyle::minimumHeight() const
     return 0.0;
 }
 
+bool NodeStyle::minimumHeightSet() const
+{
+    return propertySet(s_minimumHeight);
+}
+
 qreal NodeStyle::minimumWidth() const
 {
     if (propertySet(s_minimumWidth)) {
@@ -299,6 +334,11 @@ qreal NodeStyle::minimumWidth() const
     }
 
     return 0.0;
+}
+
+bool NodeStyle::minimumWidthSet() const
+{
+    return propertySet(s_minimumWidth);
 }
 
 void NodeStyle::setMinimumHeight(qreal height)

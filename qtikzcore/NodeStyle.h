@@ -65,7 +65,12 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          */
         TextAlignment alignment() const;
 
-    public Q_SLOTS:    
+        /**
+         * Check whether the alignment is set.
+         */
+        bool alignmentSet() const;
+
+    public Q_SLOTS:
         /**
          * Set the text alignment to @p align.
          */
@@ -86,6 +91,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * @see Shape
          */
         Shape shape() const;
+
+        /**
+         * Check whether the shape is set.
+         */
+        bool shapeSet() const;
 
     public Q_SLOTS:
         /**
@@ -108,6 +118,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Get the rotation in degrees.
          */
         qreal rotation() const;
+
+        /**
+         * Check whether the rotation is set.
+         */
+        bool rotationSet() const;
 
     public Q_SLOTS:
         /**
@@ -132,6 +147,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         qreal scale() const;
 //         void scaleX(qreal xFactor);
 //         void scaleY(qreal xFactor);
+
+        /**
+         * Check whether the scale is set.
+         */
+        bool scaleSet() const;
 
     public Q_SLOTS:
         /**
@@ -159,10 +179,20 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         qreal innerSep() const;
 
         /**
+         * Check whether the inner sep is set.
+         */
+        bool innerSepSet() const;
+
+        /**
          * Get the 'outer sep' [mm].
          * Default: 0.5 lineWidth()
          */
         qreal outerSep() const;
+
+        /**
+         * Check whether the inner sep is set.
+         */
+        bool outerSepSet() const;
 
     public Q_SLOTS:
         /**
@@ -198,10 +228,20 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         qreal minimumHeight() const;
 
         /**
+         * Check whether the minimum height is set.
+         */
+        bool minimumHeightSet() const;
+
+        /**
          * Get the minimum width.
          * Initially unset, and the default value is 0 mm.
          */
         qreal minimumWidth() const;
+
+        /**
+         * Check whether the minimum width is set.
+         */
+        bool minimumWidthSet() const;
 
     public Q_SLOTS:
         /**
