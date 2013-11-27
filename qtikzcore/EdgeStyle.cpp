@@ -108,6 +108,11 @@ CurveMode EdgeStyle::curveMode() const
     return tikz::StraightLine;
 }
 
+bool EdgeStyle::curveModeSet() const
+{
+    return propertySet(s_curveMode);
+}
+
 void EdgeStyle::setCurveMode(tikz::CurveMode mode)
 {
     if (!propertySet(s_curveMode) || d->curveMode != mode) {
@@ -147,6 +152,11 @@ qreal EdgeStyle::bendAngle() const
     return 0.0;
 }
 
+bool EdgeStyle::bendAngleSet() const
+{
+    return propertySet(s_bendAngle);
+}
+
 void EdgeStyle::setBendAngle(qreal angle)
 {
     // normalize to [-180, 180]
@@ -183,6 +193,11 @@ qreal EdgeStyle::looseness() const
     }
 
     return 1.0;
+}
+
+bool EdgeStyle::loosenessSet() const
+{
+    return propertySet(s_looseness);
 }
 
 void EdgeStyle::setLooseness(qreal looseness)
@@ -239,6 +254,11 @@ qreal EdgeStyle::outAngle() const
     return 45;
 }
 
+bool EdgeStyle::outAngleSet() const
+{
+    return propertySet(s_outAngle);
+}
+
 void EdgeStyle::setOutAngle(qreal angle)
 {
     if (!propertySet(s_outAngle) || d->outAngle != angle) {
@@ -271,6 +291,11 @@ qreal EdgeStyle::inAngle() const
     }
 
     return 135;
+}
+
+bool EdgeStyle::inAngleSet() const
+{
+    return propertySet(s_inAngle);
 }
 
 void EdgeStyle::setInAngle(qreal angle)
@@ -307,6 +332,11 @@ Arrow EdgeStyle::arrowTail() const
     return tikz::NoArrow;
 }
 
+bool EdgeStyle::arrowTailSet() const
+{
+    return propertySet(s_arrowTail);
+}
+
 Arrow EdgeStyle::arrowHead() const
 {
     if (propertySet(s_arrowHead)) {
@@ -319,6 +349,11 @@ Arrow EdgeStyle::arrowHead() const
     }
 
     return tikz::NoArrow;
+}
+
+bool EdgeStyle::arrowHeadSet() const
+{
+    return propertySet(s_arrowHead);
 }
 
 void EdgeStyle::setArrowTail(tikz::Arrow tail)
@@ -375,6 +410,11 @@ qreal EdgeStyle::shortenStart() const
     return 0.0;
 }
 
+bool EdgeStyle::shortenStartSet() const
+{
+    return propertySet(s_shortenStart);
+}
+
 qreal EdgeStyle::shortenEnd() const
 {
     if (propertySet(s_shortenEnd)) {
@@ -387,6 +427,11 @@ qreal EdgeStyle::shortenEnd() const
     }
 
     return 0.0;
+}
+
+bool EdgeStyle::shortenEndSet() const
+{
+    return propertySet(s_shortenEnd);
 }
 
 void EdgeStyle::setShortenStart(qreal shorten)

@@ -67,6 +67,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         CurveMode curveMode() const;
 
+        /**
+         * Check whether the curve mode is set.
+         */
+        bool curveModeSet() const;
+
     public Q_SLOTS:
         /**
          * Set the CurveMode to @p mode.
@@ -87,6 +92,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         qreal bendAngle() const;
 
+        /**
+         * Check whether the bend angle is set.
+         */
+        bool bendAngleSet() const;
+
     public Q_SLOTS:
         /**
          * Set the bending angle to @p angle.
@@ -106,6 +116,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          *       CurveMode::BendCurve or CurveMode::InOutCurve.
          */
         qreal looseness() const;
+
+        /**
+         * Check whether the looseness is set.
+         */
+        bool loosenessSet() const;
 
     public Q_SLOTS:
         /**
@@ -154,10 +169,20 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         qreal outAngle() const;
 
         /**
+         * Check whether the out angle is set.
+         */
+        bool outAngleSet() const;
+
+        /**
          * Get the in angle for the end node.
          * @note This value is only of meaning if the CurveMode is set to CurveMode::InOutCurve.
          */
         qreal inAngle() const;
+
+        /**
+         * Check whether the in angle is set.
+         */
+        bool inAngleSet() const;
 
     public Q_SLOTS:
         /**
@@ -192,9 +217,19 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         Arrow arrowTail() const;
 
         /**
+         * Check whether the arrow tail is set.
+         */
+        bool arrowTailSet() const;
+
+        /**
          * Get the arrow head style.
          */
         Arrow arrowHead() const;
+
+        /**
+         * Check whether the arrow head is set.
+         */
+        bool arrowHeadSet() const;
 
     public Q_SLOTS:
         /**
@@ -228,10 +263,20 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         qreal shortenStart() const;
 
         /**
+         * Check whether shorten start is set.
+         */
+        bool shortenStartSet() const;
+
+        /**
          * Shorten amount for the end of the edge in cm.
          * Default: 0.0cm
          */
         qreal shortenEnd() const;
+
+        /**
+         * Check whether shorten end is set.
+         */
+        bool shortenEndSet() const;
 
     public Q_SLOTS:
         /**
