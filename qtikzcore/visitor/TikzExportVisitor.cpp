@@ -157,10 +157,27 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     }
 
     //
+    // build connection string
+    //
+    QString to;
+    switch (edge->style()->curveMode()) {
+        case CurveMode::StraightLine: to = "--"; break;
+        case CurveMode::HorizVertLine: to = "-|"; break;
+        case CurveMode::VertHorizLine: to = "|-"; break;
+        case CurveMode::BendCurve: to = "to"; break;
+        case CurveMode::InOutCurve: to = "to"; break;
+        case CurveMode::BezierCurve: to = "to"; break; // TODO: implement correctly
+        default: break;
+    }
+
+    //
     // build draw command
     //
+    if (!options.isEmpty()) {
+        options = "[" + options + "]";
+    }
     QString cmd;
-    cmd += "\\draw " + startCoord + " -- " + endCoord + ";";
+    cmd += "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
 
     //
     // finally add edge to picture
@@ -215,7 +232,7 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
             case LineWidth::UltraThin: options << "ultra thin"; break;
             case LineWidth::VeryThin: options << "very thin"; break;
             case LineWidth::Thin: options << "thin"; break;
-            case LineWidth::SemiThick: options << "semi thick"; break;
+            case LineWidth::SemiThick: options << "semithick"; break;
             case LineWidth::Thick: options << "thick"; break;
             case LineWidth::VeryThick: options << "very thick"; break;
             case LineWidth::UltraThick: options << "ultra thick"; break;
@@ -266,49 +283,47 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
 
 QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
 {
-    QStringList options;
+    QStringList options = styleOptions(style);;
 
     //
     // export arrow tail
     //
-    if (style->arrowTailSet() && style->arrowHeadSet()) {
-        options << "<->";
-    } else if (style->arrowTailSet()) {
-        options << "<-";
-    } else if (style->arrowHeadSet()) {
-        options << "->";
-    }
-
+    QString arrowTail;
     if (style->arrowTailSet()) {
         switch (style->arrowTail()) {
-            case Arrow::NoArrow: options << "<=none"; break;
-            case Arrow::ToArrow: options << "<=to"; break;
-            case Arrow::ReversedToArrow: options << "<=to reversed"; break;
-            case Arrow::StealthArrow: options << "<=stealth"; break;
-            case Arrow::ReversedStealthArrow: options << "<=stealth reversed"; break;
-            case Arrow::LatexArrow: options << "<=latex"; break;
-            case Arrow::ReversedLatexArrow: options << "<=latex reversed"; break;
-            case Arrow::PipeArrow: options << "<=|"; break;
-            case Arrow::StealthTickArrow: options << "<=stealth'"; break;
-            case Arrow::ReversedStealthTickArrow: options << "<=stealth' reversed"; break;
+            case Arrow::NoArrow: arrowTail = ""; break;
+            case Arrow::ToArrow: arrowTail = "to"; break;
+            case Arrow::ReversedToArrow: arrowTail = "to reversed"; break;
+            case Arrow::StealthArrow: arrowTail = "stealth"; break;
+            case Arrow::ReversedStealthArrow: arrowTail = "stealth reversed"; break;
+            case Arrow::LatexArrow: arrowTail = "latex"; break;
+            case Arrow::ReversedLatexArrow: arrowTail = "latex reversed"; break;
+            case Arrow::PipeArrow: arrowTail = "|"; break;
+            case Arrow::StealthTickArrow: arrowTail = "stealth'"; break;
+            case Arrow::ReversedStealthTickArrow: arrowTail = "stealth' reversed"; break;
             default: Q_ASSERT(false); break;
         }
     }
 
+    QString arrowHead;
     if (style->arrowHeadSet()) {
         switch (style->arrowHead()) {
-            case Arrow::NoArrow: options << ">=none"; break;
-            case Arrow::ToArrow: options << ">=to"; break;
-            case Arrow::ReversedToArrow: options << ">=to reversed"; break;
-            case Arrow::StealthArrow: options << ">=stealth"; break;
-            case Arrow::ReversedStealthArrow: options << ">=stealth reversed"; break;
-            case Arrow::LatexArrow: options << ">=latex"; break;
-            case Arrow::ReversedLatexArrow: options << ">=latex reversed"; break;
-            case Arrow::PipeArrow: options << ">=|"; break;
-            case Arrow::StealthTickArrow: options << ">=stealth'"; break;
-            case Arrow::ReversedStealthTickArrow: options << ">=stealth' reversed"; break;
+            case Arrow::NoArrow: arrowHead = ""; break;
+            case Arrow::ToArrow: arrowHead = "to"; break;
+            case Arrow::ReversedToArrow: arrowHead = "to reversed"; break;
+            case Arrow::StealthArrow: arrowHead = "stealth"; break;
+            case Arrow::ReversedStealthArrow: arrowHead = "stealth reversed"; break;
+            case Arrow::LatexArrow: arrowHead = "latex"; break;
+            case Arrow::ReversedLatexArrow: arrowHead = "latex reversed"; break;
+            case Arrow::PipeArrow: arrowHead = "|"; break;
+            case Arrow::StealthTickArrow: arrowHead = "stealth'"; break;
+            case Arrow::ReversedStealthTickArrow: arrowHead = "stealth' reversed"; break;
             default: Q_ASSERT(false); break;
         }
+    }
+
+    if (style->arrowTailSet() || style->arrowHeadSet()) {
+        options << arrowTail + "-" + arrowHead;
     }
 
     //
@@ -375,7 +390,7 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
 
 QStringList TikzExportVisitor::nodeStyleOptions(tikz::NodeStyle * style)
 {
-    QStringList options;
+    QStringList options = styleOptions(style);
 
     //
     // export align
