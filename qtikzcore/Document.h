@@ -83,6 +83,15 @@ class TIKZCORE_EXPORT Document : public QObject
         bool save(const QString & file);
 
     //
+    // signals
+    //
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the document changed.
+         */
+        void changed();
+
+    //
     // Undo / redo management
     //
     public:
