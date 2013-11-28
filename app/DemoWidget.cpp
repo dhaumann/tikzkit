@@ -38,6 +38,8 @@
 #include <QtOpenGL/QGLWidget>
 #include <QUndoStack>
 #include <QToolButton>
+#include <QTextEdit>
+#include <QSplitter>
 
 #include <QDebug>
 
@@ -49,9 +51,13 @@ MainWindow::MainWindow()
 {
     m_ui->setupUi(this);
 
+    QSplitter * splitter = new QSplitter(Qt::Vertical, this);
+    setCentralWidget(splitter);
+
+  
     // create toplevel widget
-    QWidget * top = new QWidget(this);
-    setCentralWidget(top);
+    QWidget * top = new QWidget(splitter);
+    splitter->addWidget(top);
 
     QHBoxLayout * hbox = new QHBoxLayout(top);
     top->setLayout(hbox);
@@ -92,6 +98,11 @@ MainWindow::MainWindow()
     QHBoxLayout* l = new QHBoxLayout();
     v->addLayout(l);
 
+    m_textEdit = new QTextEdit(splitter);
+    splitter->addWidget(m_textEdit);
+    
+    splitter->setStretchFactor(0, 20);
+    splitter->setStretchFactor(1, 1);
 
     m_view = m_doc->createView(this);
     l->addWidget(m_view);
@@ -168,7 +179,7 @@ MainWindow::MainWindow()
     item2->node()->style()->setInnerSep(0.2);
     m_doc->setNodeText(item2->node(), "A long text\\\\which is wrapped");
 
-    item2->style()->setParentStyle(item1->style());
+//     item2->style()->setParentStyle(item1->style());
 
     // an edge
     edge = m_doc->createTikzEdge();
@@ -368,6 +379,9 @@ MainWindow::MainWindow()
     }
 
     setupActions();
+
+    connect(m_doc, SIGNAL(changed()), this, SLOT(updateTikzCode()));
+    updateTikzCode();
 }
 
 MainWindow::~MainWindow()
@@ -405,6 +419,11 @@ void MainWindow::loadFile()
 {
     QString filename("output.tikzkit");
     m_doc->load(filename);
+}
+
+void MainWindow::updateTikzCode()
+{
+    m_textEdit->setText(m_doc->tikzCode());
 }
 
 // kate: indent-width 4; replace-tabs on;

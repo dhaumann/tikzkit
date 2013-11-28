@@ -23,6 +23,7 @@
 
 class QGraphicsView;
 class QSlider;
+class QTextEdit;
 class TikzDocument;
 
 namespace Ui {
@@ -50,6 +51,8 @@ class MainWindow : public QMainWindow
         void saveFile();
         void loadFile();
 
+        void updateTikzCode();
+
     protected:
         void setupActions();
 
@@ -61,6 +64,8 @@ class MainWindow : public QMainWindow
         std::unique_ptr<Ui::MainWindow> m_ui;
 
         TikzDocument * m_doc;
+
+        QTextEdit * m_textEdit;
 };
 
 #endif // DEMO_WIDGET_H
