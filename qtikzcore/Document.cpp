@@ -34,6 +34,7 @@
 #include "Visitor.h"
 #include "SerializeVisitor.h"
 #include "DeserializeVisitor.h"
+#include "TikzExportVisitor.h"
 
 #include <QUndoStack>
 #include <QDebug>
@@ -151,6 +152,14 @@ bool Document::save(const QString & file)
 
     sv.save(file);
     return true;
+}
+
+QString Document::tikzCode()
+{
+    tikz::TikzExportVisitor tev;
+    accept(tev);
+
+    return tev.tikzCode();
 }
 
 QUndoStack * Document::undoManager()

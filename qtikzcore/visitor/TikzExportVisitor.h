@@ -21,6 +21,8 @@
 #define TIKZ_EXPORT_VISITOR_H
 
 #include "Visitor.h"
+#include "TikzExport.h"
+
 #include <QVector>
 #include <QString>
 
@@ -33,13 +35,6 @@ class Node;
 class Edge;
 class NodeStyle;
 class EdgeStyle;
-
-class TikzLine
-{
-public:
-    QString contents;
-    QVector<qint64> deps;
-};
 
 /**
  * Visitor exporint the tikz::Document to PGF/TikZ.
@@ -108,7 +103,7 @@ class TikzExportVisitor : public Visitor
     // private data
     //
     private:
-        QVector<TikzLine> m_lines;
+        TikzExport m_tikzExport;
 };
 
 }

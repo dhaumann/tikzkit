@@ -82,6 +82,11 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         bool save(const QString & file);
 
+        /**
+         * Export the picture to TikZ.
+         */
+        QString tikzCode();
+
     //
     // signals
     //

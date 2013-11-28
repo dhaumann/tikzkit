@@ -68,64 +68,109 @@ TikzExportVisitor::~TikzExportVisitor()
 
 QString TikzExportVisitor::tikzCode()
 {
-    return QString();
+    return m_tikzExport.tikzCode();
 }
 
 void TikzExportVisitor::visit(tikz::Document * doc)
 {
-    QStringList options;
-
-    Style * style = doc->style();
-
-
+    //
+    // export the global options for the tikzpicture
+    //
+    QStringList options = styleOptions(doc->style());
+    m_tikzExport.setDocumentOptions(options.join(", "));
 }
 
 void TikzExportVisitor::visit(tikz::Node * node)
 {
-//     QVariantMap map;
-//     
-//     // serialize node
-//     map.insert("pos.x", node->pos().x());
-//     map.insert("pos.y", node->pos().y());
-//     map.insert("text", node->text());
-// 
-//     // serialize node style
-//     QVariantMap styleMap;
-//     styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->id() : -1);
-//     styleMap.insert("properties", serializeStyle(node->style()));
-//     map.insert("style", styleMap);
-// 
-//     m_nodes.insert(QString("node-%1").arg(node->id()), map);
+    QString cmd = QString("\\node[%1] (%2) at (%3, %4) {%5};")
+        .arg(nodeStyleOptions(node->style()).join(", "))
+        .arg(node->id())
+        .arg(node->pos().x())
+        .arg(node->pos().y())
+        .arg(node->text());
+
+    //
+    // finally add node to picture
+    //
+    TikzLine line;
+    line.contents = cmd;
+    m_tikzExport.addTikzLine(line);
 }
 
 void TikzExportVisitor::visit(tikz::Edge * edge)
 {
-//     QVariantMap map;
-// 
-//     // serialize node
-//     if (edge->startNode()) {
-//         map.insert("start.node", edge->startNode()->id());
-//         map.insert("start.anchor", edge->startAnchor());
-//     } else {
-//         map.insert("start.pos.x", edge->startPos().x());
-//         map.insert("start.pos.y", edge->startPos().y());
-//     }
-// 
-//     if (edge->endNode()) {
-//         map.insert("end.node", edge->endNode()->id());
-//         map.insert("end.anchor", edge->endAnchor());
-//     } else {
-//         map.insert("end.pos.x", edge->endPos().x());
-//         map.insert("end.pos.y", edge->endPos().y());
-//     }
-// 
-//     // serialize edge style
-//     QVariantMap styleMap;
-//     styleMap.insert("parent", edge->style()->parentStyle() ? edge->style()->parentStyle()->id() : -1);
-//     styleMap.insert("properties", serializeStyle(edge->style()));
-//     map.insert("style", styleMap);
-// 
-//     m_edges.insert(QString("edge-%1").arg(edge->id()), map);
+    QString options = edgeStyleOptions(edge->style()).join(", ");
+
+    //
+    // \draw startCoord -- endCoord;
+    //
+    QString startCoord;
+    QString endCoord;
+
+    //
+    // compute start
+    //
+    if (edge->startNode()) {
+        QString anchor;
+        switch (edge->startAnchor()) {
+            case Anchor::NoAnchor: break;
+            case Anchor::Center: anchor = ".center"; break;
+            case Anchor::North: anchor = ".north"; break;
+            case Anchor::NorthEast: anchor = ".north east"; break;
+            case Anchor::East: anchor = ".east"; break;
+            case Anchor::SouthEast: anchor = ".south east"; break;
+            case Anchor::South: anchor = ".south"; break;
+            case Anchor::SouthWest: anchor = ".south west"; break;
+            case Anchor::West: anchor = ".west"; break;
+            case Anchor::NorthWest: anchor = ".north west"; break;
+            default: break;
+        }
+        startCoord = "(" + QString::number(edge->startNode()->id()) + anchor + ")";
+    } else {
+        const QPointF & pos = edge->startPos();
+        startCoord = QString("(%1, %2)")
+            .arg(pos.x())
+            .arg(pos.y());
+    }
+
+    //
+    // compute end
+    //
+    if (edge->endNode()) {
+        QString anchor;
+        switch (edge->endAnchor()) {
+            case Anchor::NoAnchor: break;
+            case Anchor::Center: anchor = ".center"; break;
+            case Anchor::North: anchor = ".north"; break;
+            case Anchor::NorthEast: anchor = ".north east"; break;
+            case Anchor::East: anchor = ".east"; break;
+            case Anchor::SouthEast: anchor = ".south east"; break;
+            case Anchor::South: anchor = ".south"; break;
+            case Anchor::SouthWest: anchor = ".south west"; break;
+            case Anchor::West: anchor = ".west"; break;
+            case Anchor::NorthWest: anchor = ".north west"; break;
+            default: break;
+        }
+        endCoord = "(" + QString::number(edge->endNode()->id()) + anchor + ")";
+    } else {
+        const QPointF & pos = edge->endPos();
+        endCoord = QString("(%1, %2)")
+            .arg(pos.x())
+            .arg(pos.y());
+    }
+
+    //
+    // build draw command
+    //
+    QString cmd;
+    cmd += "\\draw " + startCoord + " -- " + endCoord + ";";
+
+    //
+    // finally add edge to picture
+    //
+    TikzLine line;
+    line.contents = cmd;
+    m_tikzExport.addTikzLine(line);
 }
 
 void TikzExportVisitor::visit(tikz::NodeStyle * style)
