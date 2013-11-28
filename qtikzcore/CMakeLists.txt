@@ -36,6 +36,7 @@ set(qtikzcore_SOURCES
     visitor/SerializeVisitor.cpp
     visitor/DeserializeVisitor.cpp
     visitor/TikzExportVisitor.cpp
+    visitor/TikzExport.cpp
 )
 
 set(qtikzcore_HEADERS
