@@ -31,6 +31,9 @@
 #include <QFile>
 #include <QDebug>
 
+namespace tikz
+{
+
 static QString colorToString(const QColor & color)
 {
     // TODO: fix color conversion
@@ -54,8 +57,28 @@ static QString colorToString(const QColor & color)
     return QString("orange");
 }
 
-namespace tikz
+/**
+ * Helper function.
+ * Returns e.g. ".north" for a north anchor.
+ */
+static QString anchorToString(Anchor anchor)
 {
+    QString str;
+    switch (anchor) {
+        case Anchor::NoAnchor: break;
+        case Anchor::Center: str = ".center"; break;
+        case Anchor::North: str = ".north"; break;
+        case Anchor::NorthEast: str = ".north east"; break;
+        case Anchor::East: str = ".east"; break;
+        case Anchor::SouthEast: str = ".south east"; break;
+        case Anchor::South: str = ".south"; break;
+        case Anchor::SouthWest: str = ".south west"; break;
+        case Anchor::West: str = ".west"; break;
+        case Anchor::NorthWest: str = ".north west"; break;
+        default: break;
+    }
+    return str;
+}
 
 TikzExportVisitor::TikzExportVisitor()
     : Visitor()
@@ -111,20 +134,7 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     // compute start
     //
     if (edge->startNode()) {
-        QString anchor;
-        switch (edge->startAnchor()) {
-            case Anchor::NoAnchor: break;
-            case Anchor::Center: anchor = ".center"; break;
-            case Anchor::North: anchor = ".north"; break;
-            case Anchor::NorthEast: anchor = ".north east"; break;
-            case Anchor::East: anchor = ".east"; break;
-            case Anchor::SouthEast: anchor = ".south east"; break;
-            case Anchor::South: anchor = ".south"; break;
-            case Anchor::SouthWest: anchor = ".south west"; break;
-            case Anchor::West: anchor = ".west"; break;
-            case Anchor::NorthWest: anchor = ".north west"; break;
-            default: break;
-        }
+        QString anchor = anchorToString(edge->startAnchor());
         startCoord = "(" + QString::number(edge->startNode()->id()) + anchor + ")";
     } else {
         const QPointF & pos = edge->startPos();
@@ -137,20 +147,7 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     // compute end
     //
     if (edge->endNode()) {
-        QString anchor;
-        switch (edge->endAnchor()) {
-            case Anchor::NoAnchor: break;
-            case Anchor::Center: anchor = ".center"; break;
-            case Anchor::North: anchor = ".north"; break;
-            case Anchor::NorthEast: anchor = ".north east"; break;
-            case Anchor::East: anchor = ".east"; break;
-            case Anchor::SouthEast: anchor = ".south east"; break;
-            case Anchor::South: anchor = ".south"; break;
-            case Anchor::SouthWest: anchor = ".south west"; break;
-            case Anchor::West: anchor = ".west"; break;
-            case Anchor::NorthWest: anchor = ".north west"; break;
-            default: break;
-        }
+        QString anchor = anchorToString(edge->endAnchor());
         endCoord = "(" + QString::number(edge->endNode()->id()) + anchor + ")";
     } else {
         const QPointF & pos = edge->endPos();
