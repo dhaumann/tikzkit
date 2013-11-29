@@ -64,7 +64,6 @@ class TIKZGUI_EXPORT TikzItem : public QGraphicsObject
     protected:
         virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
         virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-        virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
 
     private:
         TikzItemPrivate * const d;

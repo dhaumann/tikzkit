@@ -56,7 +56,8 @@ bool TikzItem::isHovered() const
 void TikzItem::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 {
     Q_UNUSED(event);
-    // nothing to do: also calls hoverMoveEvent();
+    d->hovered = true;
+    update();
 }
 
 void TikzItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
@@ -64,17 +65,6 @@ void TikzItem::hoverLeaveEvent(QGraphicsSceneHoverEvent * event)
     Q_UNUSED(event);
     d->hovered = false;
     update();
-}
-
-void TikzItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
-{
-    bool hovered = contains(event->pos());
-    if (d->hovered != hovered) {
-        d->hovered = hovered;
-        update();
-    }
-
-//     qDebug() << d->hovered;
 }
 
 // kate: indent-width 4; replace-tabs on;
