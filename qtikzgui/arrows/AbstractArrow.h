@@ -87,9 +87,14 @@ class AbstractArrow
 
         /**
          * Returns the painter path of this arrow.
-         * This path is lated used for bounding box creation and mouse interaction.
          */
         virtual QPainterPath path() const;
+
+        /**
+         * Returns the contour painter path of this arrow by drawing the
+         * arrow's path with a pen of width @p width.
+         */
+        virtual QPainterPath contour(qreal width) const;
 
     private:
         AbstractArrowPrivate * const d;

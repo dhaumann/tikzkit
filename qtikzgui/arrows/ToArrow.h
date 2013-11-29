@@ -69,6 +69,12 @@ class ToArrow : public AbstractArrow
          */
         virtual QPainterPath path() const;
 
+        /**
+         * Returns the contour painter path of this arrow by drawing the
+         * arrow's path with a pen of width @p width.
+         */
+        virtual QPainterPath contour(qreal width) const;
+
     private:
         ToArrowPrivate * const d;
 };
@@ -96,6 +102,7 @@ class ReversedToArrow : public AbstractArrow
 
         virtual void draw(QPainter* painter) const;
         virtual QPainterPath path() const;
+        virtual QPainterPath contour(qreal width) const;
 
     private:
         ReversedToArrowPrivate * const d;

@@ -70,7 +70,7 @@ void PipeArrow::draw(QPainter* painter) const
     painter->save();
     QPen pen = painter->pen();
     pen.setWidthF(style()->penWidth());
-    pen.setColor(Qt::black); // TODO: style()->penColor());
+    pen.setColor(style()->penColor());
     pen.setCapStyle(Qt::SquareCap);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
@@ -89,5 +89,16 @@ QPainterPath PipeArrow::path() const
 
     return path;
 }
+
+QPainterPath PipeArrow::contour(qreal width) const
+{
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::SquareCap);
+    stroker.setWidth(width + style()->penWidth());
+
+    return stroker.createStroke(path());
+}
+
 
 // kate: indent-width 4; replace-tabs on;

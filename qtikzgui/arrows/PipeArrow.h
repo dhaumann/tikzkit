@@ -69,6 +69,12 @@ class PipeArrow : public AbstractArrow
          */
         virtual QPainterPath path() const;
 
+        /**
+         * Returns the contour painter path of this arrow by drawing the
+         * arrow's path with a pen of width @p width.
+         */
+        virtual QPainterPath contour(qreal width) const;
+
     private:
         PipeArrowPrivate * const d;
 };

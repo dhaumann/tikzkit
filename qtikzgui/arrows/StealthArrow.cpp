@@ -80,7 +80,7 @@ void StealthArrow::draw(QPainter* painter) const
     // see: pgfcorearrows.code.tex
     QPainterPath p = path();
     painter->save();
-    painter->fillPath(p, Qt::black); // TODO
+    painter->fillPath(p, style()->penColor());
     painter->restore();
 }
 
@@ -102,6 +102,16 @@ QPainterPath StealthArrow::path() const
     path.closeSubpath();
 
     return path;
+}
+
+QPainterPath StealthArrow::contour(qreal width) const
+{
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::RoundCap);
+    stroker.setWidth(width);
+
+    return stroker.createStroke(path());
 }
 
 

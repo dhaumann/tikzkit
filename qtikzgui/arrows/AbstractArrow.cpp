@@ -18,8 +18,10 @@
  */
 
 #include "AbstractArrow.h"
+#include "EdgeStyle.h"
 
 #include <QObject>
+#include <QPainterPathStroker>
 
 class AbstractArrowPrivate
 {
@@ -71,6 +73,23 @@ void AbstractArrow::draw(QPainter* painter) const
 QPainterPath AbstractArrow::path() const
 {
     return QPainterPath();
+}
+
+QPainterPath AbstractArrow::contour(qreal width) const
+{
+    QPainterPath arrowPath = path();
+
+    // if path is empty, return immediately
+    if (arrowPath.isEmpty()) {
+        return QPainterPath();
+    }
+
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::RoundCap);
+    stroker.setWidth(width + style()->penWidth());
+
+    return stroker.createStroke(arrowPath);
 }
 
 #include "ToArrow.h"

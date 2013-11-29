@@ -81,7 +81,7 @@ void LatexArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
 
-    painter->fillPath(p, style()->penColor()); // TODO
+    painter->fillPath(p, style()->penColor());
     painter->restore();
 }
 
@@ -107,6 +107,16 @@ QPainterPath LatexArrow::path() const
     path.closeSubpath();
 
     return path;
+}
+
+QPainterPath LatexArrow::contour(qreal width) const
+{
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::RoundCap);
+    stroker.setWidth(width);
+
+    return stroker.createStroke(path());
 }
 
 

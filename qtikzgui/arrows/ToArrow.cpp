@@ -70,7 +70,7 @@ void ToArrow::draw(QPainter* painter) const
     painter->save();
     QPen pen = painter->pen();
     pen.setWidthF(0.8 * style()->penWidth());
-    pen.setColor(Qt::black); // TODO: style()->penColor());
+    pen.setColor(style()->penColor());
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
@@ -93,6 +93,16 @@ QPainterPath ToArrow::path() const
                  dima * QPointF(-2.75, -2.5),
                  dima * QPointF(-3, -4));
     return path;
+}
+
+QPainterPath ToArrow::contour(qreal width) const
+{
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::RoundCap);
+    stroker.setWidth(width + style()->penWidth());
+
+    return stroker.createStroke(path());
 }
 
 
@@ -143,7 +153,7 @@ void ReversedToArrow::draw(QPainter* painter) const
     painter->save();
     QPen pen = painter->pen();
     pen.setWidthF(0.8 * style()->penWidth());
-    pen.setColor(Qt::black); // TODO: style()->penColor());
+    pen.setColor(style()->penColor());
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
@@ -166,6 +176,16 @@ QPainterPath ReversedToArrow::path() const
                  dima * QPointF(3.25, -2.5),
                  dima * QPointF(3.5, -4));
     return path;
+}
+
+QPainterPath ReversedToArrow::contour(qreal width) const
+{
+    QPainterPathStroker stroker;
+    stroker.setJoinStyle(Qt::RoundJoin);
+    stroker.setCapStyle(Qt::RoundCap);
+    stroker.setWidth(width + style()->penWidth());
+
+    return stroker.createStroke(path());
 }
 
 // kate: indent-width 4; replace-tabs on;

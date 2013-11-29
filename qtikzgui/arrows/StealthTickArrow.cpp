@@ -76,7 +76,7 @@ void StealthTickArrow::draw(QPainter* painter) const
     painter->save();
     QPen pen = painter->pen();
     pen.setWidthF(style()->penWidth());
-    pen.setColor(Qt::black); // TODO: style()->penColor());
+    pen.setColor(style()->penColor());
     pen.setJoinStyle(Qt::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Qt::black); // TODO
