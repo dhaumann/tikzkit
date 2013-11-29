@@ -259,20 +259,12 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QRectF TikzEdge::boundingRect() const
 {
-    // TODO: maybe use Style::lineWidth()
-
-
     // make sure the start and end nodes positions are up-to-date
     d->updateCache();
 
-    QPainterPath joinedPath;
-    joinedPath.addPath(d->linePath);
-    joinedPath.addPath(d->headPath);
-    joinedPath.addPath(d->tailPath);
-
-    QRectF br = joinedPath.boundingRect();
+    QRectF br = d->hoverPath.boundingRect();
     br = br.normalized();
-    br.adjust(-0.2, -0.2, 0.2, 0.2);
+    br.adjust(-0.05, -0.05, 0.05, 0.05);
     return br;
 }
 
