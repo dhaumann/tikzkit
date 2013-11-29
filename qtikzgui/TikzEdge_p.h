@@ -83,6 +83,9 @@ class TikzEdgePrivate : public QObject
         QPainterPath headPath;
         QPainterPath tailPath;
 
+        QPainterPath hoverPath;
+        QPainterPath shapePath;
+
         // node handles on mouse over nodes
         QVector<QGraphicsItem*> nodeHandles;
 

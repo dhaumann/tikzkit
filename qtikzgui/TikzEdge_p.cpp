@@ -205,17 +205,35 @@ void TikzEdgePrivate::updateCache()
         }
     }
 
-    // update arrow tail
-    QTransform trans;
-    trans.translate(startAnchor.x(), startAnchor.y());
-    trans.rotate(180 - linePath.angleAtPercent(0.0));
-    tailPath = trans.map(arrowTail->path());
+    //
+    // update arrow tail + arrow head
+    //
+    QTransform tailTrans;
+    tailTrans.translate(startAnchor.x(), startAnchor.y());
+    tailTrans.rotate(180 - linePath.angleAtPercent(0.0));
+    tailPath = tailTrans.map(arrowTail->path());
 
-    // update arrow tail
-    trans.reset();
-    trans.translate(endAnchor.x(), endAnchor.y());
-    trans.rotate(-linePath.angleAtPercent(1.0));
-    headPath = trans.map(arrowHead->path());
+    QTransform headTrans;
+    headTrans.translate(endAnchor.x(), endAnchor.y());
+    headTrans.rotate(-linePath.angleAtPercent(1.0));
+    headPath = headTrans.map(arrowHead->path());
+
+    //
+    // cache hover and shape path
+    //
+    QPainterPathStroker pps;
+    pps.setJoinStyle(Qt::RoundJoin);
+    pps.setCapStyle(Qt::FlatCap);
+
+    pps.setWidth(style()->penWidth() + 0.1);
+    hoverPath = pps.createStroke(linePath);
+    hoverPath.addPath(headTrans.map(arrowHead->contour(0.1)));
+    hoverPath.addPath(tailTrans.map(arrowTail->contour(0.1)));
+
+    pps.setWidth(style()->penWidth() + 0.2);
+    shapePath = pps.createStroke(linePath);
+    shapePath.addPath(headTrans.map(arrowHead->contour(0.2)));
+    shapePath.addPath(tailTrans.map(arrowTail->contour(0.2)));
 }
 
 qreal TikzEdgePrivate::baseAngle() const

@@ -190,8 +190,12 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     PaintHelper sh(painter, style());
     QPen p = sh.pen();
-    painter->setPen(p);
 
+    if (isHovered() && !d->dragging) {
+        painter->fillPath(d->hoverPath, Qt::magenta);
+    }
+    
+    painter->setPen(p);
     // draw line
     painter->drawPath(d->linePath);
 
@@ -242,8 +246,8 @@ void TikzEdge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         QPointF endAnchor = endPos();
         QPointF diff(endAnchor - startAnchor);
         const qreal radAngle = std::atan2(diff.y(), diff.x());
-        d->drawHandle(painter, startAnchor, d->start != 0);
-        d->drawHandle(painter, endAnchor, d->end != 0);
+//         d->drawHandle(painter, startAnchor, d->start != 0);
+//         d->drawHandle(painter, endAnchor, d->end != 0);
     }
 
     // debug: draw bounding rect:
