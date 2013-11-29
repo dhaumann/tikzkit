@@ -270,9 +270,9 @@ QRectF TikzEdge::boundingRect() const
 
 QPainterPath TikzEdge::shape() const
 {
-    QPainterPath path;
-    path.addRect(boundingRect());
-    return path;
+    d->updateCache();
+
+    return d->shapePath;
 }
 
 bool TikzEdge::contains(const QPointF & point) const
@@ -280,18 +280,7 @@ bool TikzEdge::contains(const QPointF & point) const
     if (d->dirty) {
         return TikzItem::contains(point);
     } else {
-        bool intersects = false;
-        QPainterPath circle;
-        circle.addEllipse(point, 0.2, 0.2);
-        circle.simplified();
-
-        QPainterPathStroker pps;
-        pps.setWidth(0.2);
-        QPainterPath curve = pps.createStroke(d->linePath);
-
-        return curve.contains(point)
-            || d->headPath.intersects(circle)
-            || d->tailPath.intersects(circle);
+        return d->hoverPath.contains(point);
     }
 }
 
