@@ -24,6 +24,7 @@
 #include "Edge.h"
 #include "Style.h"
 #include "Document.h"
+#include "TikzView.h"
 
 #include "TikzNode.h"
 #include "TikzEdge.h"
@@ -73,7 +74,7 @@ TikzDocument::~TikzDocument()
 QGraphicsView * TikzDocument::createView(QWidget * parent)
 {
     // create view
-    QGraphicsView * view = new QGraphicsView(parent);
+    QGraphicsView * view = new TikzView(this, parent);
     d->views.append(view);
 
     // set graphics scene

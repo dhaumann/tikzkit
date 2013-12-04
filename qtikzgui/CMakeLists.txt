@@ -19,6 +19,8 @@ set(qtikzgui_SOURCES
     TikzEdge.cpp
     TikzEdge_p.cpp
     TikzScene.cpp
+    TikzView.cpp
+    TikzRuler.cpp
     PaintHelper.cpp
     AnchorHandle.cpp
     CurveHandle.cpp
@@ -54,6 +56,8 @@ set(qtikzgui_HEADERS
     TikzEdge.h
     TikzEdge_p.h
     TikzScene.h
+    TikzView.h
+    TikzRuler.h
     AnchorHandle.h
     CurveHandle.h
     NodeText_p.h
