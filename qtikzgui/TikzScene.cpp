@@ -105,7 +105,7 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 
     painter->save();
 //     painter->setRenderHints(QPainter::Antialiasing);
-    painter->setPen(Qt::gray);
+    painter->setPen(QColor(243, 243, 243));
     painter->drawLines(lines.data(), lines.size());
     painter->restore();
 }
