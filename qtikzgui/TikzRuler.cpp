@@ -21,7 +21,7 @@
 #include <Document.h>
 #include <QDebug>
 
-static const int s_ruler_size = 20;
+static const int s_ruler_size = 15;
 
 TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
     : QWidget(parent)
@@ -31,7 +31,7 @@ TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
     , m_zoom(1.0)
     , m_drawText(false)
 {
-    QFont txtFont("Courier New", 8);
+    QFont txtFont("Monospace", 7);
     txtFont.setStyleHint(QFont::TypeWriter, QFont::PreferOutline);
     setFont(txtFont);
 
@@ -116,13 +116,11 @@ void TikzRuler::paintEvent(QPaintEvent* event)
     drawAScaleMeter(&painter, rulerRect, 1.0, (Qt::Horizontal == m_orientation ? rulerRect.height() : rulerRect.width()) / 4);
     // drawing a scale of 100
     m_drawText = true;
-    drawAScaleMeter(&painter, rulerRect, 5.0, 2);
+    drawAScaleMeter(&painter, rulerRect, 1.0, 2);
     m_drawText = false;
 
     // drawing the current mouse position indicator
-    painter.setOpacity(0.4);
     drawMousePosTick(&painter);
-    painter.setOpacity(1.0);
 
     // drawing no man's land between the ruler & view
     QPointF starPt = Qt::Horizontal == m_orientation ? rulerRect.bottomLeft() : rulerRect.topRight();
@@ -177,9 +175,8 @@ void TikzRuler::drawFrom_originTo(QPainter* painter, QRectF rulerRect, qreal sta
         painter->drawLine(QLineF(x1,y1,x2,y2));
         if (m_drawText)
         {
-            QPainterPath txtPath;
-            txtPath.addText(x1 + 1,y1 + (isHorzRuler ? 7 : -2), font(), QString::number(qAbs(int(1) * startTickNo++)));
-            painter->drawPath(txtPath);
+            painter->drawText(QPoint(x1 + 1, y1 + (isHorzRuler ? 7 : -2)),
+                              QString::number(qAbs(int(1) * startTickNo++)));
             iterate++;
         }
     }
@@ -187,18 +184,19 @@ void TikzRuler::drawFrom_originTo(QPainter* painter, QRectF rulerRect, qreal sta
 
 void TikzRuler::drawMousePosTick(QPainter* painter)
 {
-    QPoint starPt = m_mousePos;
-    QPoint endPt;
+    QPainterPath triangle;
     if (Qt::Horizontal == m_orientation) {
-        starPt.setY(rect().top());
-        endPt.setX(starPt.x());
-        endPt.setY(rect().bottom());
+        triangle.moveTo(QPoint(m_mousePos.x(), rect().bottom()));
+        triangle.lineTo(QPoint(m_mousePos.x() + 4, rect().bottom() - 4));
+        triangle.lineTo(QPoint(m_mousePos.x() - 4, rect().bottom() - 4));
+        triangle.closeSubpath();
     } else {
-        starPt.setX(rect().left());
-        endPt.setX(rect().right());
-        endPt.setY(starPt.y());
+        triangle.moveTo(QPoint(rect().right(), m_mousePos.y()));
+        triangle.lineTo(QPoint(rect().right() - 4, m_mousePos.y() - 4));
+        triangle.lineTo(QPoint(rect().right() - 4, m_mousePos.y() + 4));
+        triangle.closeSubpath();
     }
-    painter->drawLine(starPt,endPt);
+    painter->fillPath(triangle, Qt::black);
 }
 
 // kate: indent-width 4; replace-tabs on;

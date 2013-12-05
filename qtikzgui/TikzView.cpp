@@ -23,7 +23,7 @@
 
 #include <math.h>
 
-static const int s_ruler_size = 20;
+static const int s_ruler_size = 15;
 
 class TikzViewPrivate
 {
