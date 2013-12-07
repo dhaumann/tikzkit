@@ -137,13 +137,6 @@ enum CurveMode {
     BezierCurve // (a) .. controls (b) and (c) .. (d)
 };
 
-enum Unit {
-    Point = 0,  // =  1.00pt = 0.3515mm
-    Millimeter, // =  2.84pt = 0.99826mm
-    Centimeter, // = 28.40pt = 9.9826mm
-    Inch        // = 72.27pt = 25.402905mm
-};
-
 //
 // QMetaObject is used to convert enums to strings and vice versa
 //

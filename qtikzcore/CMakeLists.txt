@@ -12,6 +12,7 @@ include_directories(
 
 set(qtikzcore_SOURCES
     Coord.cpp
+    Value.cpp
     Edge.cpp
     Node.cpp
     MetaNode.cpp

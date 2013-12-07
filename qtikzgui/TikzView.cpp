@@ -49,8 +49,8 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     d->m_horizRuler = new TikzRuler(Qt::Horizontal, this);
     d->m_vertRuler = new TikzRuler(Qt::Vertical, this);
 
-    d->m_horizRuler->setUnit(tikz::Unit::Millimeter);
-    d->m_vertRuler->setUnit(tikz::Unit::Millimeter);
+    d->m_horizRuler->setUnit(tikz::Unit::Centimeter);
+    d->m_vertRuler->setUnit(tikz::Unit::Centimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);

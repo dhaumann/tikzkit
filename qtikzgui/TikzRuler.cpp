@@ -27,7 +27,7 @@ TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_origin(0.0)
-//     , m_unit(1.0) // TODO
+    , m_unit(tikz::Unit::Centimeter)
     , m_zoom(1.0)
     , m_drawText(false)
 {
@@ -112,7 +112,9 @@ void TikzRuler::paintEvent(QPaintEvent* event)
     painter.translate(horizontal ? m_origin : 0, horizontal ? 0 : m_origin);
 
     // how many pixels is one unit ?
-    const double pixelPerCm = m_zoom * (horizontal ? physicalDpiX() : physicalDpiY()) / 2.540;
+    const qreal dpi = physicalDpi();
+    const qreal pixelPerCm = m_zoom * dpi / tikz::in2cm(1);
+    const qreal pixelPerUnit = m_zoom * dpi / tikz::convertTo(1, tikz::Unit::Inch, m_unit);
 
     if (horizontal) {
         for (int i = floor(-m_origin / pixelPerCm); i < (width() - m_origin) / pixelPerCm; ++i) {
@@ -153,6 +155,11 @@ void TikzRuler::drawMouseTick(QPainter* painter)
         triangle.closeSubpath();
     }
     painter->fillPath(triangle, Qt::black);
+}
+
+qreal TikzRuler::physicalDpi() const
+{
+    return (m_orientation == Qt::Horizontal) ? physicalDpiX() : physicalDpiY();
 }
 
 // kate: indent-width 4; replace-tabs on;

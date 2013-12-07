@@ -22,6 +22,7 @@
 
 #include "tikzgui_export.h"
 #include "tikz.h"
+#include "Value.h"
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -74,6 +75,11 @@ private:
      * Draw indicator for the current mouse position.
      */
     void drawMouseTick(QPainter* painter);
+
+    /**
+     * Returns physical dpi depending on the orientation.
+     */
+    qreal physicalDpi() const;
 
 private:
     Qt::Orientation m_orientation;
