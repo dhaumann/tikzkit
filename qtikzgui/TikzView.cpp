@@ -81,6 +81,19 @@ void TikzView::mouseMoveEvent(QMouseEvent* event)
     d->m_horizRuler->setMousePos(event->globalPos());
     d->m_vertRuler->setMousePos(event->globalPos());
 
+void TikzView::wheelEvent(QWheelEvent* event)
+{
+    if (event->modifiers() & Qt::ControlModifier) {
+        // fix mouse position when zooming
+        setTransformationAnchor(AnchorUnderMouse);
+
+        // zoom in / out
+        const double scaleFactor = event->delta() > 0 ? 1.15 : (1 / 1.15);
+        scale(scaleFactor, scaleFactor);
+    } else {
+        QGraphicsView::wheelEvent(event);
+    }
+}
 }
 
 // kate: indent-width 4; replace-tabs on;
