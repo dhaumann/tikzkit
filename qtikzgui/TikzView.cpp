@@ -22,8 +22,9 @@
 #include <TikzRuler.h>
 
 #include <math.h>
+#include <QDebug>
 
-static const int s_ruler_size = 15;
+static const int s_ruler_size = 16;
 
 class TikzViewPrivate
 {
@@ -48,8 +49,8 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     d->m_horizRuler = new TikzRuler(Qt::Horizontal, this);
     d->m_vertRuler = new TikzRuler(Qt::Vertical, this);
 
-    d->m_horizRuler->setUnit(physicalDpiX() / 2.540);
-    d->m_vertRuler->setUnit(physicalDpiY() / 2.540);
+    d->m_horizRuler->setUnit(tikz::Unit::Millimeter);
+    d->m_vertRuler->setUnit(tikz::Unit::Millimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
@@ -94,6 +95,15 @@ void TikzView::wheelEvent(QWheelEvent* event)
         QGraphicsView::wheelEvent(event);
     }
 }
+
+bool TikzView::viewportEvent(QEvent * event)
+{
+    d->m_horizRuler->setOrigin(d->m_horizRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    d->m_vertRuler->setOrigin(d->m_vertRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    d->m_horizRuler->setZoom(transform().m11() / physicalDpiX() * 2.540);
+    d->m_vertRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * 2.540);
+
+    return QGraphicsView::viewportEvent(event);
 }
 
 // kate: indent-width 4; replace-tabs on;

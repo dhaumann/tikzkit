@@ -21,6 +21,7 @@
 #define TIKZGUI_RULER_H
 
 #include "tikzgui_export.h"
+#include "tikz.h"
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -31,7 +32,7 @@ class TIKZGUI_EXPORT TikzRuler : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(qreal origin READ origin WRITE setOrigin)
-    Q_PROPERTY(qreal unit READ unit WRITE setUnit)
+    Q_PROPERTY(tikz::Unit unit READ unit WRITE setUnit)
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
 
 public:
@@ -43,7 +44,7 @@ public:
 
     qreal origin() const;
 
-    qreal unit() const;
+    tikz::Unit unit() const;
 
     qreal zoom() const;
 
@@ -51,28 +52,33 @@ public Q_SLOTS:
 
     void setOrigin(qreal origin);
 
-    void setUnit(qreal unit);
+    void setUnit(tikz::Unit unit);
 
     void setZoom(qreal zoom);
 
     void setMousePos(const QPoint & cursorPos);
 
 protected:
-    void mouseMoveEvent(QMouseEvent* event);
+    /**
+     * Reimplement to update mouse position.
+     */
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
 
-    void paintEvent(QPaintEvent* event);
+    /**
+     * Implement painting of the ruler.
+     */
+    virtual void paintEvent(QPaintEvent* event) override;
 
 private:
-    void drawAScaleMeter(QPainter* painter, QRectF rulerRect, qreal scaleMeter, qreal startPositoin);
-
-    void drawFrom_originTo(QPainter* painter, QRectF rulerRect, qreal startMark, qreal endMark, int startTickNo, qreal step, qreal startPosition);
-
-    void drawMousePosTick(QPainter* painter);
+    /**
+     * Draw indicator for the current mouse position.
+     */
+    void drawMouseTick(QPainter* painter);
 
 private:
     Qt::Orientation m_orientation;
     qreal m_origin;
-    qreal m_unit;
+    tikz::Unit m_unit;
     qreal m_zoom;
     QPoint m_mousePos;
     bool m_drawText;
