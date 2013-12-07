@@ -29,7 +29,6 @@ TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
     , m_origin(0.0)
     , m_unit(tikz::Unit::Centimeter)
     , m_zoom(1.0)
-    , m_drawText(false)
 {
     QFont txtFont("Sans Serif Mono", 7);
     txtFont.setStyleHint(QFont::TypeWriter, QFont::PreferOutline);

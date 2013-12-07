@@ -87,7 +87,6 @@ private:
     tikz::Unit m_unit;
     qreal m_zoom;
     QPoint m_mousePos;
-    bool m_drawText;
 };
 
 #endif // TIKZGUI_RULER_H
