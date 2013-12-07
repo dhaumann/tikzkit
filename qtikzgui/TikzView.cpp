@@ -81,6 +81,7 @@ void TikzView::mouseMoveEvent(QMouseEvent* event)
 
     d->m_horizRuler->setMousePos(event->globalPos());
     d->m_vertRuler->setMousePos(event->globalPos());
+}
 
 void TikzView::wheelEvent(QWheelEvent* event)
 {
