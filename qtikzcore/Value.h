@@ -139,28 +139,6 @@ class TIKZCORE_EXPORT Value
         }
 
         /**
-         * Plus operator.
-         * Returns a new Value object with the same unit increased by @p value.
-         * This operation is independent of the unit.
-         */
-        inline Value operator+(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return Value(m_value + value, m_unit);
-        }
-
-        /**
-         * Minus operator.
-         * Returns a new Value object with the same unit decreased by @p value.
-         * This operation is independent of the unit.
-         */
-        inline Value operator-(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return Value(m_value - value, m_unit);
-        }
-
-        /**
          * += operator.
          * Returns a reference to this object increased by @p value.
          * This operation is independent of the unit.
@@ -182,50 +160,6 @@ class TIKZCORE_EXPORT Value
             Q_ASSERT(isValid());
             m_value -= value;
             return *this;
-        }
-
-        /**
-         * > operator.
-         * Returns true if this object's value is greater than @p value.
-         * This operation is independent of the unit.
-         */
-        inline bool operator>(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return m_value > value;
-        }
-
-        /**
-         * >= operator.
-         * Returns true if this object's value is greater than or equal to @p value.
-         * This operation is independent of the unit.
-         */
-        inline bool operator>=(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return m_value >= value;
-        }
-
-        /**
-         * < operator.
-         * Returns true if this object's value is smaller than @p value.
-         * This operation is independent of the unit.
-         */
-        inline bool operator<(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return m_value < value;
-        }
-
-        /**
-         * <= operator.
-         * Returns true if this object's value is smaller than or equal to @p value.
-         * This operation is independent of the unit.
-         */
-        inline bool operator<=(qreal value)
-        {
-            Q_ASSERT(isValid());
-            return m_value <= value;
         }
 
     //
