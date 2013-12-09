@@ -105,7 +105,29 @@ class TIKZCORE_EXPORT Value
         }
 
     //
-    // operators
+    // operators for equality
+    //
+    public:
+        /**
+         * Check for equality with (val1 == val2).
+         * The value @p other is converted to a compatible unit, meaning that
+         * the unit of @p other and this object are allowed to differ.
+         */
+        inline bool operator==(const Value & other) const
+        {
+            return m_value == other.convertTo(m_unit);
+        }
+
+        /**
+         * Check for inequality with (val1 != val2).
+         */
+        inline bool operator!=(const Value & other) const
+        {
+            return !(operator==(other));
+        }
+
+    //
+    // operators for qreal values
     //
     public:
         /**
@@ -116,8 +138,213 @@ class TIKZCORE_EXPORT Value
             return m_value;
         }
 
+        /**
+         * Plus operator.
+         * Returns a new Value object with the same unit increased by @p value.
+         * This operation is independent of the unit.
+         */
+        inline Value operator+(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return Value(m_value + value, m_unit);
+        }
+
+        /**
+         * Minus operator.
+         * Returns a new Value object with the same unit decreased by @p value.
+         * This operation is independent of the unit.
+         */
+        inline Value operator-(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return Value(m_value - value, m_unit);
+        }
+
+        /**
+         * += operator.
+         * Returns a reference to this object increased by @p value.
+         * This operation is independent of the unit.
+         */
+        inline Value & operator+=(qreal value)
+        {
+            Q_ASSERT(isValid());
+            m_value += value;
+            return *this;
+        }
+
+        /**
+         * -= operator.
+         * Returns a reference to this object increased by @p value.
+         * This operation is independent of the unit.
+         */
+        inline Value & operator-=(qreal value)
+        {
+            Q_ASSERT(isValid());
+            m_value -= value;
+            return *this;
+        }
+
+        /**
+         * > operator.
+         * Returns true if this object's value is greater than @p value.
+         * This operation is independent of the unit.
+         */
+        inline bool operator>(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return m_value > value;
+        }
+
+        /**
+         * >= operator.
+         * Returns true if this object's value is greater than or equal to @p value.
+         * This operation is independent of the unit.
+         */
+        inline bool operator>=(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return m_value >= value;
+        }
+
+        /**
+         * < operator.
+         * Returns true if this object's value is smaller than @p value.
+         * This operation is independent of the unit.
+         */
+        inline bool operator<(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return m_value < value;
+        }
+
+        /**
+         * <= operator.
+         * Returns true if this object's value is smaller than or equal to @p value.
+         * This operation is independent of the unit.
+         */
+        inline bool operator<=(qreal value)
+        {
+            Q_ASSERT(isValid());
+            return m_value <= value;
+        }
+
+    //
+    // operators for two Value
+    //
+    public:
+        /**
+         * Plus operator for two Value%s.
+         * Returns a new Value object with the same unit increased by @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline Value operator+(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return Value(m_value + value.convertTo(m_unit).value(), m_unit);
+        }
+
+        /**
+         * Minus operator for two Value%s.
+         * Returns a new Value object with the same unit decreased by @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline Value operator-(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return Value(m_value - value.convertTo(m_unit).value(), m_unit);
+        }
+
+        /**
+         * += operator for two Value%s.
+         * Returns a reference to this object increased by @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline Value & operator+=(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return operator+=(value.convertTo(m_unit).value());
+        }
+
+        /**
+         * -= operator for two Value%s.
+         * Returns a reference to this object decreased by @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline Value & operator-=(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return operator-=(value.convertTo(m_unit).value());
+        }
+
+        /**
+         * > operator for two Value%s.
+         * Returns true if this object's value is greater than @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline bool operator>(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return m_value > value.convertTo(m_unit).value();
+        }
+
+        /**
+         * >= operator for two Value%s.
+         * Returns true if this object's value is greater than or equal to @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline bool operator>=(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return m_value >= value.convertTo(m_unit).value();
+        }
+
+        /**
+         * < operator for two Value%s.
+         * Returns true if this object's value is smaller than @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline bool operator<(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return m_value < value.convertTo(m_unit).value();
+        }
+
+        /**
+         * <= operator for two Value%s.
+         * Returns true if this object's value is smaller than or equal to @p value.
+         * If @p value's unit is different, @p value is first converted to a
+         * compatible Unit before adding the value.
+         */
+        inline bool operator<=(const Value & value)
+        {
+            Q_ASSERT(isValid());
+            Q_ASSERT(value.isValid());
+            return m_value <= value.convertTo(m_unit).value();
+        }
+
     private:
+        /**
+         * The value.
+         */
         qreal m_value;
+
+        /**
+         * The unit of this value.
+         */
         Unit m_unit;
 };
 
