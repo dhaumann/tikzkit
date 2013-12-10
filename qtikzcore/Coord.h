@@ -64,7 +64,7 @@ class TIKZCORE_EXPORT Coord : public QObject
          * Calling this function emits changed(), if @p pos != pos().
          * @see pos()
          */
-        void setPos(const QPointF& pos);
+        virtual void setPos(const QPointF& pos);
 
     //
     // convenience functions

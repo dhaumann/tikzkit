@@ -45,24 +45,37 @@ int UndoSetNodeText::id() const
 
 void UndoSetNodeText::undo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
     node->setText(m_undoText);
+
+    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodeText::redo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
     node->setText(m_redoText);
+
+    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodeText::mergeWith(const QUndoCommand * command)
 {
     Q_ASSERT(id() == command->id());
 
-    m_redoText = static_cast<const UndoSetNodeText*>(command)->m_redoText;
-    return true;
+    // only merge when command is of correct type
+    const UndoSetNodeText * other = dynamic_cast<const UndoSetNodeText*>(command);
+    if (other) {
+        m_redoText = other->m_redoText;
+    }
+
+    return other;
 }
 
 }

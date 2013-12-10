@@ -73,9 +73,15 @@ class TIKZCORE_EXPORT Node : public Coord
         bool accept(tikz::Visitor & visitor);
 
     //
-    // style and text
+    // position, style and text
     //
     public:
+        /**
+         * Set the coordinates to @p pos.
+         * @see pos()
+         */
+        virtual void setPos(const QPointF& pos) override;
+
         /**
          * Sets the text of this node to @p text.
          */

@@ -45,25 +45,32 @@ int UndoSetNodePos::id() const
 
 void UndoSetNodePos::undo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
     node->setPos(m_undoPos);
+
+    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodePos::redo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
     node->setPos(m_redoPos);
+
+    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodePos::mergeWith(const QUndoCommand * command)
 {
     Q_ASSERT(id() == command->id());
 
+    // only merge when command is of correct type
     const UndoSetNodePos* other = dynamic_cast<const UndoSetNodePos*>(command);
-
-    // only merge when command is of type UndoSetNodePos
     if (other) {
         m_redoPos = other->m_redoPos;
     }

@@ -27,8 +27,6 @@
 #include "UndoCreateEdge.h"
 #include "UndoDeleteEdge.h"
 #include "UndoDisconnectEdge.h"
-#include "UndoSetNodePos.h"
-#include "UndoSetNodeText.h"
 #include "UndoSetNodeStyle.h"
 
 #include "Visitor.h"
@@ -47,7 +45,10 @@ namespace tikz {
 class DocumentPrivate
 {
     public:
+        // undo manager
         QUndoStack undoManager;
+        // flag whether operations should add undo items or not
+        bool undoActive;
 
         Style * style;
 
@@ -73,6 +74,7 @@ Document::Document(QObject * parent)
     : QObject(parent)
     , d(new DocumentPrivate())
 {
+    d->undoActive = false;
     d->nextId = 0;
     d->style = new Style(d->uniqueId(), this);
 
@@ -175,6 +177,18 @@ void Document::beginUndoGroup(const QString & name)
 void Document::endUndoGroup()
 {
     d->undoManager.endMacro();
+}
+
+bool Document::setUndoActive(bool active)
+{
+    const bool lastState = d->undoActive;
+    d->undoActive = active;
+    return lastState;
+}
+
+bool Document::undoActive() const
+{
+    return d->undoActive;
 }
 
 bool Document::isModified() const
@@ -336,36 +350,6 @@ void Document::deleteEdge(qint64 id)
 
     // truly delete edge
     delete edge;
-}
-
-void Document::setNodePos(Node * node, const QPointF & pos)
-{
-    // valid input?
-    Q_ASSERT(node != 0);
-    Q_ASSERT(d->nodeMap.contains(node->id()));
-
-    // create new undo item, push will call ::redo()
-    d->undoManager.push(new UndoSetNodePos(node->id(), pos, this));
-
-    // now the position should be updated
-    Q_ASSERT(node->pos() == pos);
-}
-
-void Document::setNodeText(Node * node, const QString & text)
-{
-    // valid input?
-    Q_ASSERT(node != 0);
-    Q_ASSERT(d->nodeMap.contains(node->id()));
-
-    if (node->text() == text) {
-        return;
-    }
-
-    // create new undo item, push will call ::redo()
-    d->undoManager.push(new UndoSetNodeText(node->id(), text, this));
-
-    // now the text should be updated
-    Q_ASSERT(node->text() == text);
 }
 
 void Document::setNodeStyle(Node * node, const NodeStyle & style)

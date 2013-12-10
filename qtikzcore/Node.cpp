@@ -22,8 +22,12 @@
 #include "Document.h"
 #include "Visitor.h"
 
+#include "UndoSetNodePos.h"
+#include "UndoSetNodeText.h"
+
 #include <cmath>
 
+#include <QUndoStack>
 #include <QDebug>
 
 namespace tikz {
@@ -84,13 +88,42 @@ bool Node::accept(tikz::Visitor & visitor)
     visitor.visit(this);
 }
 
+void Node::setPos(const QPointF& pos)
+{
+    // only continue when change is required
+    if (pos == this->pos()) {
+        return;
+    }
+
+    if (document()->undoActive()) {
+        Coord::setPos(pos);
+    } else {
+        // create new undo item, push will call ::redo()
+        document()->undoManager()->push(new UndoSetNodePos(id(), pos, document()));
+
+        // now the position should be updated
+        Q_ASSERT(this->pos() == pos);
+    }
+}
+
 void Node::setText(const QString& text)
 {
-    if (d->text != text) {
+    // only continue when change is required
+    if (d->text == text) {
+        return;
+    }
+
+    if (document()->undoActive()) {
         beginConfig();
         d->text = text;
         emit textChanged(d->text);
         endConfig();
+    } else {
+        // create new undo item, push will call ::redo()
+        document()->undoManager()->push(new UndoSetNodeText(id(), text, document()));
+
+        // now the text should be updated
+        Q_ASSERT(d->text == text);
     }
 }
 

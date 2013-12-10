@@ -118,6 +118,21 @@ class TIKZCORE_EXPORT Document : public QObject
         void endUndoGroup();
 
         /**
+         * If @p active is @e true, modifying Nodes, Edges or the Document
+         * directly changes the data without creating an undo item.
+         * For instance, all undo items themselves call this function with
+         * @p active set to @e true.
+         *
+         * @return the old active state is returned
+         */
+        bool setUndoActive(bool active);
+
+        /**
+         * Check whether undo tracking is active.
+         */
+        bool undoActive() const;
+
+        /**
          * Check whether the document is in a modified state.
          */
         bool isModified() const;
@@ -191,16 +206,6 @@ class TIKZCORE_EXPORT Document : public QObject
     // Node manipulation with undo/redo support
     //
     public:
-        /**
-         * Set the position of @p node to @p pos.
-         */
-        void setNodePos(Node * node, const QPointF & pos);
-
-        /**
-         * Set the text of @p node to @p text.
-         */
-        void setNodeText(Node * node, const QString & text);
-
         /**
          * Set the style of @p node to @p style.
          */

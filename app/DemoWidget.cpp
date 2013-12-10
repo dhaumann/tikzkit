@@ -123,18 +123,18 @@ MainWindow::MainWindow()
     m_view->show();
 
     TikzNode* item1 = m_doc->createTikzNode();
-    m_doc->setNodePos(item1->node(), QPointF(-3, 3));
+    item1->node()->setPos(QPointF(-3, 3));
     item1->node()->style()->setLineWidthType(tikz::VeryThin);
     item1->node()->style()->setShape(tikz::ShapeCircle);
     item1->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item1->node(), "$\\int f(x) dx$");
+    item1->node()->setText("$\\int f(x) dx$");
 
     TikzNode* item2 = m_doc->createTikzNode();
-    m_doc->setNodePos(item2->node(), QPointF(3, 3));
+    item2->node()->setPos(QPointF(3, 3));
     item2->node()->style()->setLineWidthType(tikz::Thin);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item2->node(), "$\\Leftrightarrow$");
+    item2->node()->setText("$\\Leftrightarrow$");
 
     // an edge
     TikzEdge* edge = m_doc->createTikzEdge();
@@ -145,18 +145,18 @@ MainWindow::MainWindow()
 
 
     item1 = m_doc->createTikzNode();
-    m_doc->setNodePos(item1->node(), QPointF(-3, 1));
+    item1->setPos(QPointF(-3, 1));
     item1->node()->style()->setLineWidthType(tikz::Thin);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item1->node(), "$a$");
+    item1->node()->setText("$a$");
 
     item2 = m_doc->createTikzNode();
-    m_doc->setNodePos(item2->node(), QPointF(3, 1));
+    item2->node()->setPos(QPointF(3, 1));
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
     item2->node()->style()->setShape(tikz::ShapeCircle);
     item2->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item2->node(), "a");
+    item2->node()->setText("a");
 
     // an edge
     edge = m_doc->createTikzEdge();
@@ -166,18 +166,18 @@ MainWindow::MainWindow()
 
 
     item1 = m_doc->createTikzNode();
-    m_doc->setNodePos(item1->node(), QPointF(-3, -1));
+    item1->setPos(QPointF(-3, -1));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item1->node(), "$\\iiint \\max$");
+    item1->node()->setText("$\\iiint \\max$");
 
     item2 = m_doc->createTikzNode();
-    m_doc->setNodePos(item2->node(), QPointF(3, -1));
+    item2->node()->setPos(QPointF(3, -1));
     item2->node()->style()->setLineWidthType(tikz::UltraThick);
     item2->node()->style()->setShape(tikz::ShapeRectangle);
     item2->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item2->node(), "A long text\\\\which is wrapped");
+    item2->node()->setText("A long text\\\\which is wrapped");
 
 //     item2->style()->setParentStyle(item1->style());
 
@@ -191,22 +191,22 @@ MainWindow::MainWindow()
 
 
     item1 = m_doc->createTikzNode();
-    m_doc->setNodePos(item1->node(), QPointF(-3, -3));
+    item1->setPos(QPointF(-3, -3));
     item1->node()->style()->setLineWidthType(tikz::VeryThick);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
-    m_doc->setNodeText(item1->node(), "c");
+    item1->node()->setText("c");
 
     a = item1;
 
     item2 = m_doc->createTikzNode();
-    m_doc->setNodePos(item2->node(), QPointF(3, -3));
+    item2->node()->setPos(QPointF(3, -3));
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidthType(tikz::SemiThick);
     item2->node()->style()->setShape(tikz::ShapeEllipse);
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->style()->setMinimumWidth(2);
-    m_doc->setNodeText(item2->node(), "8");
+    item2->node()->setText("8");
 
     // an edge
     edge = m_doc->createTikzEdge();
@@ -248,7 +248,7 @@ MainWindow::MainWindow()
     // test example
     {
         TikzNode *n1 = m_doc->createTikzNode();
-        m_doc->setNodePos(n1->node(), QPointF(0, 6));
+        n1->node()->setPos(QPointF(0, 6));
         n1->node()->style()->setLineWidthType(tikz::SemiThick);
         n1->node()->style()->setShape(tikz::ShapeRectangle);
         n1->node()->style()->setInnerSep(0.2);
@@ -256,10 +256,10 @@ MainWindow::MainWindow()
         n1->node()->style()->setMinimumHeight(1.5);
         n1->node()->style()->setPenColor(QColor(51, 189, 242));
         n1->node()->style()->setFillColor(QColor(204, 239, 252));
-        m_doc->setNodeText(n1->node(), "Kate Part\\\\(Backend library)");
+        n1->node()->setText("Kate Part\\\\(Backend library)");
 
         TikzNode *n2 = m_doc->createTikzNode();
-        m_doc->setNodePos(n2->node(), QPointF(0, 8));
+        n2->node()->setPos(QPointF(0, 8));
         n2->node()->style()->setLineWidthType(tikz::SemiThick);
         n2->node()->style()->setShape(tikz::ShapeRectangle);
         n2->node()->style()->setInnerSep(0.2);
@@ -267,10 +267,10 @@ MainWindow::MainWindow()
         n2->node()->style()->setMinimumHeight(1.5);
         n2->node()->style()->setPenColor(QColor(255, 153, 51));
         n2->node()->style()->setFillColor(QColor(255, 229, 204));
-        m_doc->setNodeText(n2->node(), "KTextEditor\\\\(Interfaces)");
+        n2->node()->setText("KTextEditor\\\\(Interfaces)");
 
         TikzNode *n3 = m_doc->createTikzNode();
-        m_doc->setNodePos(n3->node(), QPointF(-5.8, 10));
+        n3->node()->setPos(QPointF(-5.8, 10));
         n3->node()->style()->setLineWidthType(tikz::SemiThick);
         n3->node()->style()->setShape(tikz::ShapeRectangle);
         n3->node()->style()->setInnerSep(0.2);
@@ -278,10 +278,10 @@ MainWindow::MainWindow()
         n3->node()->style()->setMinimumHeight(1.5);
         n3->node()->style()->setPenColor(QColor(255, 51, 51));
         n3->node()->style()->setFillColor(QColor(255, 204, 204));
-        m_doc->setNodeText(n3->node(), "Kate\\\\(Application)");
+        n3->node()->setText("Kate\\\\(Application)");
 
         TikzNode *n4 = m_doc->createTikzNode();
-        m_doc->setNodePos(n4->node(), QPointF(-2.9, 10));
+        n4->node()->setPos(QPointF(-2.9, 10));
         n4->node()->style()->setLineWidthType(tikz::SemiThick);
         n4->node()->style()->setShape(tikz::ShapeRectangle);
         n4->node()->style()->setInnerSep(0.2);
@@ -289,10 +289,10 @@ MainWindow::MainWindow()
         n4->node()->style()->setMinimumHeight(1.5);
         n4->node()->style()->setPenColor(QColor(255, 51, 51));
         n4->node()->style()->setFillColor(QColor(255, 204, 204));
-        m_doc->setNodeText(n4->node(), "KWrite\\\\(Application)");
+        n4->node()->setText("KWrite\\\\(Application)");
 
         TikzNode *n5 = m_doc->createTikzNode();
-        m_doc->setNodePos(n5->node(), QPointF(0, 10));
+        n5->node()->setPos(QPointF(0, 10));
         n5->node()->style()->setLineWidthType(tikz::SemiThick);
         n5->node()->style()->setShape(tikz::ShapeRectangle);
         n5->node()->style()->setInnerSep(0.2);
@@ -300,10 +300,10 @@ MainWindow::MainWindow()
         n5->node()->style()->setMinimumHeight(1.5);
         n5->node()->style()->setPenColor(QColor(255, 51, 51));
         n5->node()->style()->setFillColor(QColor(255, 204, 204));
-        m_doc->setNodeText(n5->node(), "KDevelop\\\\(Application)");
+        n5->node()->setText("KDevelop\\\\(Application)");
 
         TikzNode *n6 = m_doc->createTikzNode();
-        m_doc->setNodePos(n6->node(), QPointF(2.9, 10));
+        n6->node()->setPos(QPointF(2.9, 10));
         n6->node()->style()->setLineWidthType(tikz::SemiThick);
         n6->node()->style()->setShape(tikz::ShapeRectangle);
         n6->node()->style()->setInnerSep(0.2);
@@ -311,10 +311,10 @@ MainWindow::MainWindow()
         n6->node()->style()->setMinimumHeight(1.5);
         n6->node()->style()->setPenColor(QColor(255, 51, 51));
         n6->node()->style()->setFillColor(QColor(255, 204, 204));
-        m_doc->setNodeText(n6->node(), "Kile\\\\(Application)");
+        n6->node()->setText("Kile\\\\(Application)");
 
         TikzNode *n7 = m_doc->createTikzNode();
-        m_doc->setNodePos(n7->node(), QPointF(5.8, 10));
+        n7->node()->setPos(QPointF(5.8, 10));
         n7->node()->style()->setLineWidthType(tikz::SemiThick);
         n7->node()->style()->setShape(tikz::ShapeRectangle);
         n7->node()->style()->setInnerSep(0.2);
@@ -322,7 +322,7 @@ MainWindow::MainWindow()
         n7->node()->style()->setMinimumHeight(1.5);
         n7->node()->style()->setPenColor(QColor(255, 51, 51));
         n7->node()->style()->setFillColor(QColor(255, 204, 204));
-        m_doc->setNodeText(n7->node(), "3rd party\\\\(Application)");
+        n7->node()->setText("3rd party\\\\(Application)");
 
         //
         // edges
