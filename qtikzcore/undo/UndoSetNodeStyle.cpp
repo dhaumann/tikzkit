@@ -48,18 +48,24 @@ int UndoSetNodeStyle::id() const
 
 void UndoSetNodeStyle::undo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node* node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
+    node->setStyle(m_undoStyle);
 
-    node->style()->setStyle(m_undoStyle);
+    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodeStyle::redo()
 {
+    const bool wasActive = document()->setUndoActive(true);
+
     Node* node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
+    node->setStyle(m_redoStyle);
 
-    node->style()->setStyle(m_redoStyle);
+    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodeStyle::mergeWith(const QUndoCommand * command)
@@ -69,10 +75,9 @@ bool UndoSetNodeStyle::mergeWith(const QUndoCommand * command)
     auto * otherStyle = dynamic_cast<const UndoSetNodeStyle*>(command);
     if (otherStyle) {
         m_redoStyle.setStyle(otherStyle->m_redoStyle);
-        return true;
     }
 
-    return false;
+    return otherStyle;
 }
 
 }

@@ -352,25 +352,6 @@ void Document::deleteEdge(qint64 id)
     delete edge;
 }
 
-void Document::setNodeStyle(Node * node, const NodeStyle & style)
-{
-    // valid input?
-    Q_ASSERT(node != 0);
-    Q_ASSERT(d->nodeMap.contains(node->id()));
-
-    // TODO: room for optimization: if style did not change, abort
-    //       currently, operator== does not exist
-//     if (*node->style() == style) {
-//         return;
-//     }
-
-    // create new undo item, push will call ::redo()
-    d->undoManager.push(new UndoSetNodeStyle(node->id(), style, this));
-
-    // now the text should be updated
-//     Q_ASSERT(*node->style() == style); // same as above
-}
-
 Node * Document::nodeFromId(qint64 id)
 {
     if (id < 0) {

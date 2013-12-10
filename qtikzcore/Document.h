@@ -203,15 +203,6 @@ class TIKZCORE_EXPORT Document : public QObject
         void deleteEdge(Edge * edge);
 
     //
-    // Node manipulation with undo/redo support
-    //
-    public:
-        /**
-         * Set the style of @p node to @p style.
-         */
-        void setNodeStyle(Node * node, const NodeStyle & style);
-
-    //
     // internal: Undo / redo items manipulate with ID
     //
     protected:

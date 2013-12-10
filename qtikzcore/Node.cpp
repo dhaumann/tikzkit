@@ -24,6 +24,7 @@
 
 #include "UndoSetNodePos.h"
 #include "UndoSetNodeText.h"
+#include "UndoSetNodeStyle.h"
 
 #include <cmath>
 
@@ -135,6 +136,23 @@ QString Node::text() const
 NodeStyle* Node::style() const
 {
     return &d->style;
+}
+
+void Node::setStyle(const NodeStyle & style)
+{
+    // TODO: room for optimization: if style did not change, abort
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->style.setStyle(style);
+        endConfig();
+    } else {
+    // create new undo item, push will call ::redo()
+    document()->undoManager()->push(new UndoSetNodeStyle(id(), style, document()));
+
+    // now the text should be updated
+//     Q_ASSERT(d->style == style); // same as above
+    }
 }
 
 void Node::beginConfig()

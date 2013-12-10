@@ -97,6 +97,11 @@ class TIKZCORE_EXPORT Node : public Coord
          */
         NodeStyle* style() const;
 
+        /**
+         * Set the style of this node to @p style.
+         */
+        void setStyle(const NodeStyle & style);
+
     Q_SIGNALS:
         /**
          * This signal is emitted whenever this node changes, either due to
