@@ -29,6 +29,7 @@ class Document;
 class Style;
 class Node;
 class Edge;
+class Path;
 class NodeStyle;
 class EdgeStyle;
 
@@ -68,6 +69,11 @@ class TIKZCORE_EXPORT Visitor
          * This function is called for every tikz::Edge in the document.
          */
         virtual void visit(tikz::Edge * edge) = 0;
+
+        /**
+         * This function is called for every tikz::Path in the document.
+         */
+        virtual void visit(tikz::Path * path) {} // FIXME: pure virtual!
 
         /**
          * This function is called for every tikz::NodeStyle in the document.

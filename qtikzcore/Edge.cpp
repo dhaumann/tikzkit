@@ -23,6 +23,7 @@
 #include "EdgeStyle.h"
 #include "Document.h"
 #include "Visitor.h"
+#include "Path.h"
 
 namespace tikz {
 
@@ -34,6 +35,9 @@ class EdgePrivate
 
         // associated document, is always valid, i.e. != 0.
         Document * doc;
+
+        // associated path, is always valid, i.e. != 0.
+        Path * path;
 
         // document-wide uniq id >= 0
         qint64 id;
@@ -66,6 +70,28 @@ Edge::Edge(qint64 id, Document* doc)
     d->doc = doc;
     d->id = id;
     d->style.setParentStyle(d->doc->style());
+    d->path = 0;
+
+    d->startAnchor = tikz::NoAnchor;
+    d->endAnchor = tikz::NoAnchor;
+
+    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+}
+
+Edge::Edge(Path * path)
+    : QObject(path)
+    , d(new EdgePrivate())
+{
+    // valid document and uniq id required
+    Q_ASSERT(path);
+
+    d->refCounter = 0;
+    d->path = path;
+    d->doc = path->document();
+    d->id = -1;
+    d->style.setParentStyle(d->path->style());
 
     d->startAnchor = tikz::NoAnchor;
     d->endAnchor = tikz::NoAnchor;

@@ -32,6 +32,7 @@ namespace tikz
 class EdgePrivate;
 class Coord;
 class Node;
+class Path;
 class EdgeStyle;
 class Document;
 class Visitor;
@@ -48,6 +49,11 @@ class TIKZCORE_EXPORT Edge : public QObject
          * Virtual destructor.
          */
         virtual ~Edge();
+
+        /**
+         * Constructor that associates this edge to the Path @p path.
+         */
+        Edge(Path * path);
 
         /**
          * Returns the associated document, if available.

@@ -20,7 +20,9 @@
 #include "Path.h"
 #include "Coord.h"
 #include "Edge.h"
+#include "EdgeStyle.h"
 #include "MetaNode.h"
+#include "Visitor.h"
 #include "Document.h"
 
 #include <QVector>
@@ -30,24 +32,158 @@ namespace tikz {
 class PathPrivate
 {
     public:
+        // config reference counter
+        int refCounter;
+
+        // associated document, is always valid, i.e. != 0.
         Document * doc;
+
+        // document-wide uniq id >= 0
+        qint64 id;
+
+        // this edge's style
+        EdgeStyle style;
+
         QVector<MetaNode*> nodes;
         QVector<Edge*> edges;
 };
 
-Path::Path(Document * doc)
+Path::Path(qint64 id, Document* doc)
     : QObject(doc)
     , d(new PathPrivate())
 {
+    // valid document and uniq id required
     Q_ASSERT(doc);
+    Q_ASSERT(id >= 0);
 
+    d->refCounter = 0;
     d->doc = doc;
+    d->id = id;
+    d->style.setParentStyle(d->doc->style());
 }
 
 Path::~Path()
 {
     delete d;
 }
+
+Document * Path::document() const
+{
+    return d->doc;
+}
+
+qint64 Path::id() const
+{
+    return d->id;
+}
+
+bool Path::accept(tikz::Visitor & visitor)
+{
+    visitor.visit(this);
+}
+
+EdgeStyle* Path::style() const
+{
+    return &d->style;
+}
+
+void Path::setStyle(const EdgeStyle & style)
+{
+    // TODO: room for optimization: if style did not change, abort
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->style.setStyle(style);
+        endConfig();
+    } else {
+        // create new undo item, push will call ::redo()
+        // FIXME: add undo item
+//         document()->undoManager()->push(new UndoSetNodeStyle(id(), style, document()));
+
+        // now the text should be updated
+        //     Q_ASSERT(d->style == style); // same as above
+    }
+}
+
+Edge * Path::createEdge(int index)
+{
+    // TODO: add undo item
+
+    Q_ASSERT(index <= d->edges.size());
+
+    // append if index is < 0
+    if (index < 0) {
+        index = d->edges.size();
+    }
+
+    // create and insert edge
+    Edge * edge = new Edge(this);
+
+    // set edge's parent style to either this Path's style, or to
+    // the predecessor of this edge
+    Q_ASSERT(edge->style()->parentStyle() == &d->style);
+    if (index != 0) {
+        edge->style()->setParentStyle(d->edges[index - 1]->style());
+    }
+
+    // set the parent style of the successor edge correctly
+    if (index < d->edges.size()) {
+        d->edges[index + 1]->style()->setParentStyle(edge->style());
+    }
+
+    // insert and return edge
+    d->edges.insert(index, edge);
+
+    return edge;
+}
+
+void Path::deleteEdge(Edge * edge)
+{
+    // TODO: add undo item
+
+    const int index = d->edges.indexOf(edge);
+    Q_ASSERT(index >= 0);
+
+    const bool isLastEdge = index == (d->edges.size() - 1);
+
+    // remove edge
+    d->edges.remove(index);
+
+    // fix parent/child hierarchy of edge styles
+    if (!isLastEdge) {
+        if (index == 0) {
+            d->edges[0]->style()->setParentStyle(&d->style);
+        } else {
+            d->edges[index]->style()->setParentStyle(d->edges[index - 1]->style());
+        }
+    }
+
+    // finally delete edge
+    delete edge;
+}
+
+Edge* Path::edge(int i)
+{
+    Q_ASSERT(i >= 0);
+    Q_ASSERT(i < d->edges.count());
+
+    return d->edges[i];
+}
+
+int Path::edgeIndex(Edge * edge)
+{
+    const int index = d->edges.indexOf(edge);
+    Q_ASSERT(index >= 0);
+    return index;
+}
+
+int Path::edgeCount() const
+{
+    return d->edges.count();
+}
+
+
+
 
 int Path::nodeCount() const
 {
@@ -60,19 +196,6 @@ Coord* Path::node(int i)
         return 0;
 
     return &d->nodes[i]->coord();
-}
-
-int Path::edgeCount() const
-{
-    return d->edges.count();
-}
-
-Edge* Path::edge(int i)
-{
-    if (i < 0 || i >= d->edges.count())
-        return 0;
-
-    return d->edges[i];
 }
 
 Coord& Path::start()
@@ -122,6 +245,29 @@ void Path::setClosed(bool closed)
         d->edges.append(d->doc->createEdge());
     } else {
         d->edges.pop_back();
+    }
+}
+
+void Path::beginConfig()
+{
+    Q_ASSERT(d->refCounter >= 0);
+    ++d->refCounter;
+}
+
+void Path::endConfig()
+{
+    Q_ASSERT(d->refCounter > 0);
+
+    --d->refCounter;
+    if (d->refCounter == 0) {
+        emit changed();
+    }
+}
+
+void Path::emitChangedIfNeeded()
+{
+    if (d->refCounter == 0) {
+        emit changed();
     }
 }
 
