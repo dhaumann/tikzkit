@@ -44,7 +44,6 @@ class PathPrivate
         // this edge's style
         EdgeStyle style;
 
-        QVector<MetaNode*> nodes;
         QVector<Edge*> edges;
 };
 
@@ -182,58 +181,10 @@ int Path::edgeCount() const
     return d->edges.count();
 }
 
-
-
-
-int Path::nodeCount() const
-{
-    return d->nodes.count();
-}
-
-Coord* Path::node(int i)
-{
-    if (i < 0 || i >= d->nodes.count())
-        return 0;
-
-    return &d->nodes[i]->coord();
-}
-
-Coord& Path::start()
-{
-    Q_ASSERT(!d->nodes.isEmpty());
-
-    return d->nodes.first()->coord();
-}
-
-Coord& Path::end()
-{
-    Q_ASSERT(!d->nodes.isEmpty());
-
-    return d->nodes.last()->coord();
-}
-
-void Path::appendCoord(Coord* coord)
-{
-//     d->nodes.append(coord);
-}
-
-void Path::removeCoord(Coord* coord)
-{
-//     const int index = d->nodes.indexOf(coord);
-
-    // if coord is not part of this path, step out
-//     if (index < 0) {
-//         return;
-//     }
-    
-    // TODO
-
-//     d->nodes.remove(index);
-}
-
 bool Path::isClosed() const
 {
-    return edgeCount() == (nodeCount() + 1);
+    // FIXME: implement
+    return false;
 }
 
 void Path::setClosed(bool closed)

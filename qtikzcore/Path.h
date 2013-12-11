@@ -138,6 +138,7 @@ class TIKZCORE_EXPORT Path : public QObject
 
         /**
          * Delete @p edge from the edge list.
+         * After this call, @p edge is deleted.
          */
         void deleteEdge(Edge * edge);
 
@@ -145,29 +146,6 @@ class TIKZCORE_EXPORT Path : public QObject
          * Get the index of @p edge.
          */
         int edgeIndex(Edge * edge);
-
-        /**
-         * Returns the number of nodes in the path.
-         */
-        int nodeCount() const;
-
-        /**
-         * Returns the i-th node in the path.
-         * @param i node index. If out of range, the return value is 0.
-         */
-        Coord* node(int i);
-
-        /**
-         * The start node.
-         * This return value is always guaranteed to be valid.
-         */
-        Coord& start();
-
-        /**
-         * The end node.
-         * This return value is always guaranteed to be valid.
-         */
-        Coord& end();
 
         /**
          * Returns @p true, if the path is closed.
@@ -179,20 +157,6 @@ class TIKZCORE_EXPORT Path : public QObject
          * Set whether this path is closed.
          */
         void setClosed(bool closed);
-
-    //
-    // path manipulation
-    //
-    public:
-        /**
-         * Append @p coord at the end of the path.
-         */
-        void appendCoord(Coord* coord);
-
-        /**
-         * Remove @p coord from this path.
-         */
-        void removeCoord(Coord* coord);
 
     //
     // internal to tikz::Document
