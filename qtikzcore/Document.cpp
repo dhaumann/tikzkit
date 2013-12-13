@@ -20,6 +20,7 @@
 #include "Document.h"
 #include "Node.h"
 #include "Edge.h"
+#include "Path.h"
 #include "Style.h"
 
 #include "UndoCreateNode.h"
@@ -50,16 +51,22 @@ class DocumentPrivate
         // flag whether operations should add undo items or not
         bool undoActive;
 
+        // global document style options
         Style * style;
 
+        // node & path list
         QVector<Node*> nodes;
         QVector<Edge*> edges;
+        QVector<Path*> paths;
 
         /// Node lookup map
         QHash<qint64, Node*> nodeMap;
 
         /// Edge lookup map
         QHash<qint64, Edge*> edgeMap;
+
+        /// Path lookup map
+        QHash<qint64, Path*> pathMap;
 
         qint64 nextId;
 
@@ -92,6 +99,10 @@ Document::~Document()
     d->edges.clear();
     d->edgeMap.clear();
 
+    qDeleteAll(d->paths);
+    d->paths.clear();
+    d->pathMap.clear();
+
     delete d;
 }
 
@@ -101,9 +112,13 @@ bool Document::accept(tikz::Visitor & visitor)
     foreach (Node* node, d->nodes) {
         node->accept(visitor);
     }
-        
+
     foreach (Edge* edge, d->edges) {
         edge->accept(visitor);
+    }
+
+    foreach (Path* path, d->paths) {
+        path->accept(visitor);
     }
 }
 
@@ -117,10 +132,16 @@ void Document::clear()
         deleteNode(d->nodes.last()->id());
     }
 
+    while (d->paths.size()) {
+        deletePath(d->paths.last()->id());
+    }
+
     Q_ASSERT(0 == d->nodeMap.size());
     Q_ASSERT(0 == d->nodes.size());
     Q_ASSERT(0 == d->edgeMap.size());
     Q_ASSERT(0 == d->edges.size());
+    Q_ASSERT(0 == d->pathMap.size());
+    Q_ASSERT(0 == d->paths.size());
 
     // reset unique id counter
     d->nextId = 0;
@@ -210,6 +231,38 @@ QVector<Edge*> Document::edges() const
 {
     return d->edges;
 }
+
+QVector<Path*> Document::paths() const
+{
+    return d->paths;
+}
+
+Path * Document::createPath()
+{
+    // create new edge, push will call ::redo()
+    const qint64 id = d->uniqueId();
+//     d->undoManager.push(new UndoCreatePath(id, this)); // FIXME: Path creation
+
+    // now the edge should be in the map
+    Q_ASSERT(d->pathMap.contains(id));
+    return d->pathMap[id];
+}
+
+void Document::deletePath(Path * path)
+{
+    Q_ASSERT(path != 0);
+    Q_ASSERT(d->pathMap.contains(path->id()));
+
+    // TODO: not yet the case, but maybe in future: remove child nodes here?
+
+    // delete path, push will call ::redo()
+    const qint64 id = path->id();
+//     d->undoManager.push(new UndoDeletePath(id, this)); // FIXME: Path deletion
+
+    // path really removed?
+    Q_ASSERT(!d->pathMap.contains(id));
+}
+
 
 Node* Document::createNode()
 {
@@ -352,6 +405,38 @@ void Document::deleteEdge(qint64 id)
     delete edge;
 }
 
+Path * Document::createPath(qint64 id)
+{
+    Q_ASSERT(id >= 0);
+
+    // create new path
+    Path* path = new Path(id, this);
+    d->paths.append(path);
+
+    // insert path into hash map
+    d->pathMap.insert(id, path);
+
+    return path;
+}
+
+void Document::deletePath(qint64 id)
+{
+    // valid input?
+    Q_ASSERT(id >= 0);
+    Q_ASSERT(d->pathMap.contains(id));
+
+    // get path
+    Path * path = d->pathMap[id];
+    Q_ASSERT(d->paths.contains(path));
+
+    // unregister path
+    d->pathMap.remove(id);
+    d->paths.remove(d->paths.indexOf(path));
+
+    // truly delete path
+    delete path;
+}
+
 Node * Document::nodeFromId(qint64 id)
 {
     if (id < 0) {
@@ -370,6 +455,16 @@ Edge * Document::edgeFromId(qint64 id)
 
     Q_ASSERT(d->edgeMap.contains(id));
     return d->edgeMap[id];
+}
+
+Path * Document::pathFromId(qint64 id)
+{
+    if (id < 0) {
+        return 0;
+    }
+
+    Q_ASSERT(d->pathMap.contains(id));
+    return d->pathMap[id];
 }
 
 }

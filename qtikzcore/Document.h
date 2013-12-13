@@ -36,6 +36,7 @@ class DocumentPrivate;
 class Style;
 class Node;
 class Edge;
+class Path;
 class NodeStyle;
 class EdgeStyle;
 class Visitor;
@@ -138,7 +139,7 @@ class TIKZCORE_EXPORT Document : public QObject
         bool isModified() const;
 
     //
-    // Node, edge and style management
+    // Node, Path and style management
     //
     public:
         /**
@@ -159,6 +160,11 @@ class TIKZCORE_EXPORT Document : public QObject
         QVector<Edge*> edges() const;
 
         /**
+         * Get the list of paths of the tikz document.
+         */
+        QVector<Path*> paths() const;
+
+        /**
          * Get the node with @p id.
          * @param id unique id of the node
          * @return null, if the id is -1, otherwise a valid pointer to the node
@@ -168,9 +174,16 @@ class TIKZCORE_EXPORT Document : public QObject
         /**
          * Get the edge with @p id.
          * @param id unique id of the edge
-         * @return null, if the id is -1, otherwise a valid pointer to the node
+         * @return null, if the id is -1, otherwise a valid pointer to the edge
          */
         Edge * edgeFromId(qint64 id);
+
+        /**
+         * Get the path with @p id.
+         * @param id unique id of the path
+         * @return null, if the id is -1, otherwise a valid pointer to the path
+         */
+        Path * pathFromId(qint64 id);
 
     //
     // Node and edge creation
@@ -178,13 +191,13 @@ class TIKZCORE_EXPORT Document : public QObject
     public:
         /**
          * Creates a new node associated with this document.
-         * If the node is not needed anymore, just delete it.
+         * If the node is not needed anymore, delete it with deleteNode().
          */
         Node * createNode();
 
         /**
          * Creates a new edge associated with this document.
-         * If the edge is not needed anymore, just delete it.
+         * If the edge is not needed anymore, delete it with deleteEdge().
          */
         Edge * createEdge();
 
@@ -201,6 +214,19 @@ class TIKZCORE_EXPORT Document : public QObject
          * @param edge edge to delete
          */
         void deleteEdge(Edge * edge);
+
+        /**
+         * Creates a new path associated with this document.
+         * If the path is not needed anymore, delete it with deletePath().
+         */
+        Path * createPath();
+
+        /**
+         * Remove @p path from the document by deleting the path object.
+         * Afterwards, the pointer is invalid.
+         * @param path path to delete
+         */
+        void deletePath(Path * path);
 
     //
     // internal: Undo / redo items manipulate with ID
@@ -227,14 +253,32 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         virtual void deleteEdge(qint64 id);
 
+        /**
+         * Create a new path associated with this document with @p id.
+         */
+        virtual Path * createPath(qint64 id);
+
+        /**
+         * Delete path @p id associated with this document.
+         */
+        virtual void deletePath(qint64 id);
+
+    //
+    // data pointer
+    //
     private:
         DocumentPrivate * const d;
 
-        // friend classing
+    //
+    // friends
+    //
+    protected:
         friend class UndoCreateNode;
         friend class UndoDeleteNode;
         friend class UndoCreateEdge;
         friend class UndoDeleteEdge;
+        friend class UndoCreatePath;
+        friend class UndoDeletePath;
 };
 
 }
