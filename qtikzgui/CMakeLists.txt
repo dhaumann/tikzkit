@@ -18,6 +18,8 @@ set(qtikzgui_SOURCES
     NodeHandle.cpp
     TikzEdge.cpp
     TikzEdge_p.cpp
+    TikzPath.cpp
+    TikzPath_p.cpp
     TikzScene.cpp
     TikzView.cpp
     TikzRuler.cpp
@@ -55,6 +57,8 @@ set(qtikzgui_HEADERS
     NodeHandle.h
     TikzEdge.h
     TikzEdge_p.h
+    TikzPath.h
+    TikzPath_p.h
     TikzScene.h
     TikzView.h
     TikzRuler.h
