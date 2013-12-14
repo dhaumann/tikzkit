@@ -31,6 +31,7 @@
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
 #include "UndoSetEdgeStyle.h"
+#include "UndoSetEdgeType.h"
 
 #include <QUndoStack>
 
@@ -45,6 +46,12 @@ class EdgePrivate
         // associated path, is always valid, i.e. != 0.
         Path * path;
 
+        // the element type of this edge
+        ElementType type;
+
+        // this edge's style
+        EdgeStyle style;
+
         // start meta node this edge points to
         MetaNode start;
 
@@ -56,9 +63,6 @@ class EdgePrivate
 
         // anchor of the end node
         Anchor endAnchor;
-
-        // this edge's style
-        EdgeStyle style;
 };
 
 Edge::Edge(Path * path)
@@ -70,6 +74,7 @@ Edge::Edge(Path * path)
 
     d->refCounter = 0;
     d->path = path;
+    d->type = ET_StraightLine;
     d->style.setParentStyle(d->path->style());
 
     d->startAnchor = tikz::NoAnchor;
@@ -93,6 +98,27 @@ Document * Edge::document() const
 int Edge::index() const
 {
     return d->path->edgeIndex(this);
+}
+
+ElementType Edge::type() const
+{
+    return d->type;
+}
+
+void Edge::setType(ElementType type)
+{
+    if (d->type == type) {
+        return;
+    }
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->type = type;
+        endConfig();
+    } else {
+        document()->undoManager()->push(
+            new UndoSetEdgeType(d->path->id(), index(), type, document()));
+    }
 }
 
 bool Edge::accept(tikz::Visitor & visitor)

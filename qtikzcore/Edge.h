@@ -60,6 +60,16 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         int index() const;
 
+        /**
+         * Returns the element type of this edge.
+         */
+        ElementType type() const;
+
+        /**
+         * Set the element type of this edge to @p type.
+         */
+        void setType(ElementType type);
+
     //
     // visitor pattern
     //

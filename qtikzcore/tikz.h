@@ -128,6 +128,18 @@ enum Arrow {
     ArrowCount
 };
 
+enum ElementType {
+    ET_StraightLine = 0, // (a) -- (b)
+    ET_HorizVertLine, // (a) -| (b)
+    ET_VertHorizLine, // (a) |- (b)
+    ET_BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
+    ET_InOutCurve, // (a) to[in=20, out=30] (b)
+    ET_BezierCurve, // (a) .. controls (b) and (c) .. (d)
+    ET_Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
+    ET_Rectangle, // (a) rectangle (b)
+    ET_Grid, // (a) grid (b)
+};
+
 enum CurveMode {
     StraightLine = 0, // (a) -- (b)
     HorizVertLine, // (a) -| (b)
