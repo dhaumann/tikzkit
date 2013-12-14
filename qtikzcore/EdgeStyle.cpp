@@ -21,7 +21,6 @@
 
 namespace tikz {
 
-static const char * s_curveMode = "curveMode";
 static const char * s_bendAngle = "bendAngle";
 static const char * s_looseness = "looseness";
 static const char * s_outAngle = "outAngle";
@@ -37,7 +36,6 @@ static const char * s_shortenEnd = "shortenEnd";
 class EdgeStylePrivate
 {
 public:
-    CurveMode curveMode;
     qreal bendAngle; // in degree
     qreal looseness;
     qreal outAngle; // in degree
@@ -51,7 +49,6 @@ public:
 
     void init()
     {
-        curveMode = tikz::StraightLine;
         bendAngle = 0.0;
         looseness = 1.0;
         outAngle = 45;
@@ -92,54 +89,8 @@ void EdgeStyle::setStyle(const EdgeStyle& other)
     endConfig();
 }
 
-CurveMode EdgeStyle::curveMode() const
-{
-    return d->curveMode;
-
-    if (propertySet(s_curveMode)) {
-        return d->curveMode;
-    }
-
-    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
-    if (style) {
-        return style->curveMode();
-    }
-
-    return tikz::StraightLine;
-}
-
-bool EdgeStyle::curveModeSet() const
-{
-    return propertySet(s_curveMode);
-}
-
-void EdgeStyle::setCurveMode(tikz::CurveMode mode)
-{
-    if (!propertySet(s_curveMode) || d->curveMode != mode) {
-        beginConfig();
-        addProperty(s_curveMode);
-        d->curveMode = mode;
-        endConfig();
-    }
-}
-
-void EdgeStyle::unsetCurveMode()
-{
-    if (propertySet(s_curveMode)) {
-        beginConfig();
-        removeProperty(s_curveMode);
-        d->curveMode = tikz::StraightLine;
-        endConfig();
-    }
-}
-
 qreal EdgeStyle::bendAngle() const
 {
-    // bending is only allowed for mode "tikz::BendCurve"
-    if (curveMode() != tikz::BendCurve) {
-        return 0.0;
-    }
-
     if (propertySet(s_bendAngle)) {
         return d->bendAngle;
     }

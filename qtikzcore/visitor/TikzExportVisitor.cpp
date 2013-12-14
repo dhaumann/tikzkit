@@ -160,13 +160,13 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     // build connection string
     //
     QString to;
-    switch (edge->style()->curveMode()) {
-        case CurveMode::StraightLine: to = "--"; break;
-        case CurveMode::HorizVertLine: to = "-|"; break;
-        case CurveMode::VertHorizLine: to = "|-"; break;
-        case CurveMode::BendCurve: to = "to"; break;
-        case CurveMode::InOutCurve: to = "to"; break;
-        case CurveMode::BezierCurve: to = "to"; break; // TODO: implement correctly
+    switch (edge->type()) {
+        case ElementType::ET_StraightLine: to = "--"; break;
+        case ElementType::ET_HorizVertLine: to = "-|"; break;
+        case ElementType::ET_VertHorizLine: to = "|-"; break;
+        case ElementType::ET_BendCurve: to = "to"; break;
+        case ElementType::ET_InOutCurve: to = "to"; break;
+        case ElementType::ET_BezierCurve: to = "to"; break; // TODO: implement correctly
         default: break;
     }
 
@@ -337,6 +337,8 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
         options << QString("shorten >=cm").arg(style->shortenEnd());
     }
 
+// FIXME
+#if 0
     //
     // export curve mode
     //
@@ -377,6 +379,8 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
             options << QString("looseness").arg(style->looseness());
         }
     }
+#endif
+
 #if 0
         if (d->curveMode == BezierCurve) {
             vm.insert("control point 1", startControlPoint()); // FIXME: use d->cp1 ?

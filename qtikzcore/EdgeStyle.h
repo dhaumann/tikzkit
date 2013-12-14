@@ -32,7 +32,6 @@ class EdgeStylePrivate;
 class TIKZCORE_EXPORT EdgeStyle : public Style
 {
     Q_OBJECT
-        Q_PROPERTY(tikz::CurveMode curveMode READ curveMode WRITE setCurveMode RESET unsetCurveMode)
         Q_PROPERTY(qreal bendAngle READ bendAngle WRITE setBendAngle RESET unsetBendAngle)
         Q_PROPERTY(qreal looseness READ looseness WRITE setLooseness RESET unsetLooseness)
         Q_PROPERTY(qreal outAngle READ outAngle WRITE setOutAngle RESET unsetOutAngle)
@@ -58,35 +57,10 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          */
         virtual void setStyle(const EdgeStyle& other);
 
-    //
-    // Bending attributes
-    //
     public:
         /**
-         * Get the Bend mode of this style.
-         */
-        CurveMode curveMode() const;
-
-        /**
-         * Check whether the curve mode is set.
-         */
-        bool curveModeSet() const;
-
-    public Q_SLOTS:
-        /**
-         * Set the CurveMode to @p mode.
-         */
-        void setCurveMode(tikz::CurveMode mode);
-
-        /**
-         * Unset the curve mode property.
-         */
-        void unsetCurveMode();
-
-    public:
-        /**
-         * Get the bending angle if the mode is set to CurveMode::BendCurve.
-         * @note The return value is only of meaning if the CurveMode is set to CurveMode::BendCurve.
+         * Get the bending angle in degrees.
+         * @note The return value is only of meaning if the edge type is BendCurve.
          * @return The bending angle is always expressed as 'bend left'.
          *         Therefore, negative values can be interpreted as positive with 'bend right'.
          */
@@ -100,7 +74,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
     public Q_SLOTS:
         /**
          * Set the bending angle to @p angle.
-         * @note This value has an effect only if the CurveMode is set to CurveMode::BendCurve.
+         * @note This value has an effect only if the edge type is BendCurve.
          */
         void setBendAngle(qreal angle);
 
@@ -112,7 +86,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
     public:
         /**
          * Get the looseness of the edge. The default value is 1.0.
-         * @note This value has an effect only if the CurveMode is set to
+         * @note This value has an effect only if the edge type is set to
          *       CurveMode::BendCurve or CurveMode::InOutCurve.
          */
         qreal looseness() const;
@@ -125,7 +99,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
     public Q_SLOTS:
         /**
          * Set the looseness for bending the edge to @p looseness.
-         * @note This value has an effect only if the CurveMode is set to
+         * @note This value has an effect only if the edge type is set to
          *       CurveMode::BendCurve or CurveMode::InOutCurve.
          */
         void setLooseness(qreal looseness);
@@ -138,33 +112,38 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
     public:
         /**
          * Get the first/start control point.
-         * @note This returned point is only of meaning if the CurveMode is set to CurveMode::BezierCurve.
+         * @note This returned point is only of meaning if the edge type is set
+         *       to CurveMode::BezierCurve.
          */
         QPointF startControlPoint() const;
 
         /**
          * Get the second/end control point.
-         * @note This returned point is only of meaning if the CurveMode is set to CurveMode::BezierCurve.
+         * @note This returned point is only of meaning if the edge type is set
+         *       to CurveMode::BezierCurve.
          */
         QPointF endControlPoint() const;
 
     public Q_SLOTS:
         /**
          * Set the first/start control point to @p cp1.
-         * @note This value has an effect only if the CurveMode is set to CurveMode::BezierCurve.
+         * @note This value has an effect only if the edge type is set to
+         *       CurveMode::BezierCurve.
          */
         void setStartControlPoint(const QPointF & cp1);
 
         /**
          * Set the second/end control point to @p cp2.
-         * @note This value has an effect only if the CurveMode is set to CurveMode::BezierCurve.
+         * @note This value has an effect only if the edge type is set to
+         *       CurveMode::BezierCurve.
          */
         void setEndControlPoint(const QPointF & cp2);
 
     public:
         /**
          * Get the out angle for the start node.
-         * @note This value is only of meaning if the CurveMode is set to CurveMode::InOutCurve.
+         * @note This value is only of meaning if the edge type is set to
+         *       CurveMode::InOutCurve.
          */
         qreal outAngle() const;
 
@@ -175,7 +154,8 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
 
         /**
          * Get the in angle for the end node.
-         * @note This value is only of meaning if the CurveMode is set to CurveMode::InOutCurve.
+         * @note This value is only of meaning if the edge type is set to
+         *       CurveMode::InOutCurve.
          */
         qreal inAngle() const;
 
@@ -187,7 +167,8 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
     public Q_SLOTS:
         /**
          * Set the out angle for the start node to @p angle.
-         * @note This value has an effect only if the CurveMode is set to CurveMode::InOutCurve.
+         * @note This value has an effect only if the edge type is set to
+         *       CurveMode::InOutCurve.
          */
         void setOutAngle(qreal angle);
 
@@ -198,7 +179,8 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
 
         /**
          * Set the in angle for the end node to @p angle.
-         * @note This value has an effect only if the CurveMode is set to CurveMode::InOutCurve.
+         * @note This value has an effect only if the edge type is set to
+         *       CurveMode::InOutCurve.
          */
         void setInAngle(qreal angle);
 
