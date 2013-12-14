@@ -21,13 +21,14 @@
 #include "TikzDocument_p.h"
 
 #include "Node.h"
+#include "Path.h"
 #include "Edge.h"
 #include "Style.h"
 #include "Document.h"
 #include "TikzView.h"
 
 #include "TikzNode.h"
-#include "TikzEdge.h"
+#include "TikzPath.h"
 #include "TikzScene.h"
 
 #include <QDebug>
@@ -55,8 +56,8 @@ TikzDocument::TikzDocument(QObject * parent)
 
 TikzDocument::~TikzDocument()
 {
-    foreach (TikzEdge * edge, d->edges) {
-        deleteEdge(edge->id());
+    foreach (TikzPath * path, d->paths) {
+        deletePath(path->id());
     }
 
     foreach (TikzNode* node, d->nodes) {
@@ -65,8 +66,8 @@ TikzDocument::~TikzDocument()
 
     Q_ASSERT(0 == d->nodeMap.size());
     Q_ASSERT(0 == d->nodes.size());
-    Q_ASSERT(0 == d->edgeMap.size());
-    Q_ASSERT(0 == d->edges.size());
+    Q_ASSERT(0 == d->pathMap.size());
+    Q_ASSERT(0 == d->paths.size());
 
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
@@ -107,13 +108,13 @@ TikzNode * TikzDocument::createTikzNode()
     return d->nodeMap[node->id()];
 }
 
-TikzEdge * TikzDocument::createTikzEdge()
+TikzPath * TikzDocument::createTikzPath()
 {
-    // create edge
-    tikz::Edge * edge = Document::createEdge();
-    Q_ASSERT(d->edgeMap.contains(edge->id()));
+    // create path
+    tikz::Edge * path = Document::createPath();
+    Q_ASSERT(d->pathMap.contains(path->id()));
 
-    return d->edgeMap[edge->id()];
+    return d->pathMap[path->id()];
 }
 
 void TikzDocument::deleteTikzNode(TikzNode * node)
@@ -125,13 +126,13 @@ void TikzDocument::deleteTikzNode(TikzNode * node)
     Q_ASSERT(! d->nodeMap.contains(id));
 }
 
-void TikzDocument::deleteTikzEdge(TikzEdge * edge)
+void TikzDocument::deleteTikzPath(TikzPath * path)
 {
-    // delete edge from id
-    const int id = edge->id();
-    Q_ASSERT(d->edgeMap.contains(id));
-    Document::deleteEdge(edge->edge());
-    Q_ASSERT(! d->edgeMap.contains(id));
+    // delete path from id
+    const int id = path->id();
+    Q_ASSERT(d->pathMap.contains(id));
+    Document::deletePath(path->path());
+    Q_ASSERT(! d->pathMap.contains(id));
 }
 
 tikz::Node * TikzDocument::createNode(qint64 id)
@@ -150,23 +151,6 @@ tikz::Node * TikzDocument::createNode(qint64 id)
     d->scene->addItem(tikzNode);
 
     return node;
-}
-
-tikz::Edge * TikzDocument::createEdge(qint64 id)
-{
-    tikz::Edge * edge = tikz::Document::createEdge(id);
-    Q_ASSERT(id == edge->id());
-    Q_ASSERT(! d->edgeMap.contains(id));
-
-    // create GUI item
-    TikzEdge * tikzEdge = new TikzEdge(edge);
-    d->edges.append(tikzEdge);
-    d->edgeMap.insert(id, tikzEdge);
-
-    // add to graphics scene
-    d->scene->addItem(tikzEdge);
-
-    return edge;
 }
 
 void TikzDocument::deleteNode(qint64 id)
@@ -190,25 +174,42 @@ void TikzDocument::deleteNode(qint64 id)
     tikz::Document::deleteNode(id);
 }
 
-void TikzDocument::deleteEdge(qint64 id)
+tikz::Edge * TikzDocument::createPath(qint64 id)
 {
-    Q_ASSERT(d->edgeMap.contains(id));
+    tikz::Edge * path = tikz::Document::createPath(id);
+    Q_ASSERT(id == path->id());
+    Q_ASSERT(! d->pathMap.contains(id));
 
-    // get TikzEdge
-    TikzEdge * tikzEdge = d->edgeMap[id];
+    // create GUI item
+    TikzPath * tikzPath = new TikzPath(path);
+    d->paths.append(tikzPath);
+    d->pathMap.insert(id, tikzPath);
+
+    // add to graphics scene
+    d->scene->addItem(tikzPath);
+
+    return path;
+}
+
+void TikzDocument::deletePath(qint64 id)
+{
+    Q_ASSERT(d->pathMap.contains(id));
+
+    // get TikzPath
+    TikzPath * tikzPath = d->pathMap[id];
 
     // remove from scene
-    d->scene->removeItem(tikzEdge);
+    d->scene->removeItem(tikzPath);
 
-    const int index = d->edges.indexOf(tikzEdge);
+    const int index = d->paths.indexOf(tikzPath);
     Q_ASSERT(index >= 0);
 
     // delete item
-    d->edgeMap.remove(id);
-    d->edges.remove(index);
-    delete tikzEdge;
+    d->pathMap.remove(id);
+    d->paths.remove(index);
+    delete tikzPath;
 
-    tikz::Document::deleteEdge(id);
+    tikz::Document::deletePath(id);
 }
 
 TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
@@ -221,14 +222,14 @@ TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
     return d->nodeMap[id];
 }
 
-TikzEdge * TikzDocument::tikzEdgeFromId(qint64 id)
+TikzPath * TikzDocument::tikzPathFromId(qint64 id)
 {
     if (id < 0) {
         return 0;
     }
 
-    Q_ASSERT(d->edgeMap.contains(id));
-    return d->edgeMap[id];
+    Q_ASSERT(d->pathMap.contains(id));
+    return d->pathMap[id];
 }
 
 // kate: indent-width 4; replace-tabs on;

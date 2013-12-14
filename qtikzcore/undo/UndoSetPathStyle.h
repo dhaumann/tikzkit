@@ -17,75 +17,70 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_DISCONNECT_EDGE_H
-#define TIKZ_UNDO_DISCONNECT_EDGE_H
+#ifndef TIKZ_UNDO_SET_PATH_STYLE_H
+#define TIKZ_UNDO_SET_PATH_STYLE_H
 
 #include "UndoItem.h"
-#include "tikz.h"
-
-#include <QPointF>
+#include <EdgeStyle.h>
 
 namespace tikz
 {
 
-class UndoDisconnectEdge : public UndoItem
+class Node;
+class Document;
+
+class UndoSetPathStyle : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoDisconnectEdge(qint64 pathId, int index,
-                           qint64 nodeId, bool isStartNode, Document * doc);
+        UndoSetPathStyle(qint64 id, const EdgeStyle & style, Document * doc);
 
         /**
          * Destructor
          */
-        virtual ~UndoDisconnectEdge();
+        virtual ~UndoSetPathStyle();
 
         /**
-         * Undo: connect edge again.
+         * Return node id, which is uniq.
          */
-        virtual void undo();
+        virtual int id() const override;
 
         /**
-         * Redo: disconnect edge
+         * Undo: add node again.
          */
-        virtual void redo();
+        virtual void undo() override;
+
+        /**
+         * Redo: delete node again.
+         */
+        virtual void redo() override;
+
+        /**
+         * Merge undo items, if possible.
+         */
+        virtual bool mergeWith(const QUndoCommand * command) override;
 
     private:
         /**
-         * The unique Edge id.
-         */
-        const qint64 m_pathId;
-
-        /**
-         * The index of the edge in the path.
-         */
-        int m_index;
-
-        /**
          * The unique Node id.
          */
-        const qint64 m_nodeId;
+        const qint64 m_id;
 
         /**
-         * anchor of the connection
+         * The node style before the change
          */
-        Anchor m_anchor;
+        EdgeStyle m_undoStyle;
 
         /**
-         * Is it start or end node?
+         * The node style after the change
          */
-        bool m_isStart;
-
-        /**
-         * Old position of the node
-         */
-        QPointF m_nodePos;
+        EdgeStyle m_redoStyle;
 };
 
 }
 
-#endif // TIKZ_UNDO_DISCONNECT_EDGE_H
+#endif // TIKZ_UNDO_SET_PATH_STYLE_H
 
 // kate: indent-width 4; replace-tabs on;

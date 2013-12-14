@@ -24,6 +24,14 @@
 #include "Document.h"
 #include "Visitor.h"
 #include "Path.h"
+#include "Node.h"
+
+#include "UndoDisconnectEdge.h"
+#include "UndoConnectEdge.h"
+#include "UndoSetEdgeAnchor.h"
+#include "UndoSetEdgePos.h"
+
+#include <QUndoStack>
 
 namespace tikz {
 
@@ -33,14 +41,8 @@ class EdgePrivate
         // config reference counter
         int refCounter;
 
-        // associated document, is always valid, i.e. != 0.
-        Document * doc;
-
         // associated path, is always valid, i.e. != 0.
         Path * path;
-
-        // document-wide uniq id >= 0
-        qint64 id;
 
         // start meta node this edge points to
         MetaNode start;
@@ -58,28 +60,6 @@ class EdgePrivate
         EdgeStyle style;
 };
 
-Edge::Edge(qint64 id, Document* doc)
-    : QObject(doc)
-    , d(new EdgePrivate())
-{
-    // valid document and uniq id required
-    Q_ASSERT(doc);
-    Q_ASSERT(id >= 0);
-
-    d->refCounter = 0;
-    d->doc = doc;
-    d->id = id;
-    d->style.setParentStyle(d->doc->style());
-    d->path = 0;
-
-    d->startAnchor = tikz::NoAnchor;
-    d->endAnchor = tikz::NoAnchor;
-
-    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-}
-
 Edge::Edge(Path * path)
     : QObject(path)
     , d(new EdgePrivate())
@@ -89,8 +69,6 @@ Edge::Edge(Path * path)
 
     d->refCounter = 0;
     d->path = path;
-    d->doc = path->document();
-    d->id = -1;
     d->style.setParentStyle(d->path->style());
 
     d->startAnchor = tikz::NoAnchor;
@@ -108,12 +86,12 @@ Edge::~Edge()
 
 Document * Edge::document() const
 {
-    return d->doc;
+    return d->path->document();
 }
 
-qint64 Edge::id() const
+int Edge::index() const
 {
-    return d->id;
+    return d->path->edgeIndex(this);
 }
 
 bool Edge::accept(tikz::Visitor & visitor)
@@ -123,17 +101,28 @@ bool Edge::accept(tikz::Visitor & visitor)
 
 void Edge::setStartNode(Node* node)
 {
-    // update node
-    if (d->start.node() != node) {
+    if (d->start.node() == node) {
+        return;
+    }
+
+    // set start node
+    if (document()->undoActive()) {
         beginConfig();
 
         d->start.setNode(node);
         // reset anchor, if the node changes
         d->startAnchor = tikz::NoAnchor;
 
-        emit startNodeChanged(node);
+        emit endNodeChanged(node);
 
         endConfig();
+    } else if (node) {
+        document()->undoManager()->push(
+            new UndoConnectEdge(d->path->id(), index(), node->id(), true, document()));
+    } else {
+        Q_ASSERT(d->start.node() != 0);
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(d->path->id(), index(), d->start.node()->id(), true, document()));
     }
 }
 
@@ -144,8 +133,12 @@ Coord& Edge::start() const
 
 void Edge::setEndNode(Node* node)
 {
-    // update node
-    if (d->end.node() != node) {
+    if (d->end.node() == node) {
+        return;
+    }
+
+    // set end node
+    if (document()->undoActive()) {
         beginConfig();
 
         d->end.setNode(node);
@@ -155,6 +148,13 @@ void Edge::setEndNode(Node* node)
         emit endNodeChanged(node);
 
         endConfig();
+    } else if (node) {
+        document()->undoManager()->push(
+            new UndoConnectEdge(d->path->id(), index(), node->id(), false, document()));
+    } else {
+        Q_ASSERT(d->end.node() != 0);
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(d->path->id(), index(), d->end.node()->id(), false, document()));
     }
 }
 
@@ -185,14 +185,40 @@ QPointF Edge::endPos() const
 
 void Edge::setStartPos(const QPointF& pos)
 {
-//     setStartNode(0);
-    d->start.setPos(pos);
+    if (d->start.node() == 0 && d->start.pos() == pos) {
+        return;
+    }
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->start.setPos(pos);
+        endConfig();
+    } else {
+        // first set start node to 0
+        setStartNode(0);
+        // then set position
+        document()->undoManager()->push(
+            new UndoSetEdgePos(d->path->id(), index(), pos, true, document()));
+    }
 }
 
 void Edge::setEndPos(const QPointF& pos)
 {
-//     setEndNode(0);
-    d->end.setPos(pos);
+    if (d->end.node() == 0 && d->end.pos() == pos) {
+        return;
+    }
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->end.setPos(pos);
+        endConfig();
+    } else {
+        // first set end node to 0
+        setEndNode(0);
+        // then set position
+        document()->undoManager()->push(
+            new UndoSetEdgePos(d->path->id(), index(), pos, false, document()));
+    }
 }
 
 tikz::Anchor Edge::startAnchor() const
@@ -207,19 +233,35 @@ tikz::Anchor Edge::endAnchor() const
 
 void Edge::setStartAnchor(tikz::Anchor anchor)
 {
-    if (d->startAnchor != anchor) {
+    if (d->startAnchor == anchor) {
+        return;
+    }
+
+    // set end node
+    if (document()->undoActive()) {
         beginConfig();
         d->startAnchor = anchor;
         endConfig();
+    } else {
+        document()->undoManager()->push(
+            new UndoSetEdgeAnchor(d->path->id(), index(), anchor, true, document()));
     }
 }
 
 void Edge::setEndAnchor(tikz::Anchor anchor)
 {
-    if (d->endAnchor != anchor) {
+    if (d->endAnchor == anchor) {
+        return;
+    }
+
+    // set end node
+    if (document()->undoActive()) {
         beginConfig();
         d->endAnchor = anchor;
         endConfig();
+    } else {
+        document()->undoManager()->push(
+            new UndoSetEdgeAnchor(d->path->id(), index(), anchor, false, document()));
     }
 }
 

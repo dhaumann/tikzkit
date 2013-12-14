@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_DISCONNECT_EDGE_H
-#define TIKZ_UNDO_DISCONNECT_EDGE_H
+#ifndef TIKZ_UNDO_SET_EDGE_POS_H
+#define TIKZ_UNDO_SET_EDGE_POS_H
 
 #include "UndoItem.h"
 #include "tikz.h"
@@ -28,27 +28,28 @@
 namespace tikz
 {
 
-class UndoDisconnectEdge : public UndoItem
+class UndoSetEdgePos : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoDisconnectEdge(qint64 pathId, int index,
-                           qint64 nodeId, bool isStartNode, Document * doc);
+        UndoSetEdgePos(qint64 pathId, int index,
+                       const QPointF & newPos,
+                       bool isStartNode, Document * doc);
 
         /**
          * Destructor
          */
-        virtual ~UndoDisconnectEdge();
+        virtual ~UndoSetEdgePos();
 
         /**
-         * Undo: connect edge again.
+         * Undo: disconnect edge again.
          */
         virtual void undo();
 
         /**
-         * Redo: disconnect edge
+         * Redo: connect edge
          */
         virtual void redo();
 
@@ -61,31 +62,26 @@ class UndoDisconnectEdge : public UndoItem
         /**
          * The index of the edge in the path.
          */
-        int m_index;
+        int m_edgeIndex;
 
         /**
-         * The unique Node id.
+         * old anchor of the connection
          */
-        const qint64 m_nodeId;
+        QPointF m_oldPos;
 
         /**
-         * anchor of the connection
+         * new anchor of the connection
          */
-        Anchor m_anchor;
+        QPointF m_newPos;
 
         /**
          * Is it start or end node?
          */
         bool m_isStart;
-
-        /**
-         * Old position of the node
-         */
-        QPointF m_nodePos;
 };
 
 }
 
-#endif // TIKZ_UNDO_DISCONNECT_EDGE_H
+#endif // TIKZ_UNDO_SET_EDGE_POS_H
 
 // kate: indent-width 4; replace-tabs on;

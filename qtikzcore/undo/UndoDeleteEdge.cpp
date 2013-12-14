@@ -19,17 +19,22 @@
 
 #include "UndoDeleteEdge.h"
 #include "Document.h"
+#include "Path.h"
 #include "Edge.h"
 #include "Node.h"
 
 namespace tikz {
 
-UndoDeleteEdge::UndoDeleteEdge(qint64 id, Document * doc)
+UndoDeleteEdge::UndoDeleteEdge(qint64 id, int index, Document * doc)
     : UndoItem(doc)
     , m_id(id)
+    , m_index(index)
 {
     // get edge to save data
-    Edge* edge = document()->edgeFromId(m_id);
+    Path * path = document()->pathFromId(m_id);
+    Q_ASSERT(path);
+
+    Edge* edge = path->edge(index);
     Q_ASSERT(edge);
 
     // save properties
@@ -46,9 +51,16 @@ UndoDeleteEdge::~UndoDeleteEdge()
 
 void UndoDeleteEdge::undo()
 {
-    document()->createEdge(m_id);
+    const bool wasActive = document()->setUndoActive(true);
 
-    Edge * edge = document()->edgeFromId(m_id);
+    // get path
+    Path * path = document()->pathFromId(m_id);
+    Q_ASSERT(path);
+
+    path->beginConfig();
+
+    // create edge
+    Edge * edge = path->createEdge(m_index);
     Q_ASSERT(edge);
 
     edge->beginConfig();
@@ -66,11 +78,22 @@ void UndoDeleteEdge::undo()
     }
     edge->style()->setStyle(m_style);
     edge->endConfig();
+
+    path->endConfig();
+
+    document()->setUndoActive(wasActive);
 }
 
 void UndoDeleteEdge::redo()
 {
-    document()->deleteEdge(m_id);
+    const bool wasActive = document()->setUndoActive(true);
+
+    Path * path = document()->pathFromId(m_id);
+    Q_ASSERT(path);
+
+    path->deleteEdge(m_index);
+
+    document()->setUndoActive(wasActive);
 }
 
 }

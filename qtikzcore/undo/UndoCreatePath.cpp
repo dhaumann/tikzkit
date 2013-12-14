@@ -17,47 +17,29 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoCreateEdge.h"
+#include "UndoCreatePath.h"
 #include "Document.h"
-#include "Path.h"
 
 namespace tikz {
 
-UndoCreateEdge::UndoCreateEdge(qint64 id, int index, Document * doc)
+UndoCreatePath::UndoCreatePath(qint64 id, Document * doc)
     : UndoItem(doc)
     , m_id(id)
-    , m_index(index)
 {
 }
 
-UndoCreateEdge::~UndoCreateEdge()
+UndoCreatePath::~UndoCreatePath()
 {
 }
 
-void UndoCreateEdge::undo()
+void UndoCreatePath::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
-    Path * path = document()->pathFromId(m_id);
-    Q_ASSERT(path);
-
-    path->deleteEdge(m_index);
-
-    document()->setUndoActive(wasActive);
+    document()->deletePath(m_id);
 }
 
-void UndoCreateEdge::redo()
+void UndoCreatePath::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
-    Path * path = document()->pathFromId(m_id);
-    Q_ASSERT(path);
-
-    path->createEdge(m_index);
-
-    // FIXME: which type???
-
-    document()->setUndoActive(wasActive);
+    document()->createPath(m_id);
 }
 
 }

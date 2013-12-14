@@ -129,19 +129,19 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         virtual tikz::Node * createNode(qint64 id) override;
 
         /**
-         * Create a new edge associated with this document with @p id.
-         */
-        virtual tikz::Edge * createEdge(qint64 id) override;
-
-        /**
          * Delete node @p id associated with this document.
          */
         virtual void deleteNode(qint64 id) override;
 
         /**
-         * Delete edge @p id associated with this document.
+         * Create a new path associated with this document with @p id.
          */
-        virtual void deleteEdge(qint64 id) override;
+        virtual tikz::Path * createEdge(qint64 id) override;
+
+        /**
+         * Delete path @p id associated with this document.
+         */
+        virtual void deletePath(qint64 id) override;
 
     private:
         TikzDocumentPrivate * d;

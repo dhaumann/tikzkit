@@ -34,7 +34,7 @@ class UndoDeleteEdge : public UndoItem
         /**
          * Constructor.
          */
-        UndoDeleteEdge(qint64 id, Document * doc);
+        UndoDeleteEdge(qint64 id, int index, Document * doc);
 
         /**
          * Destructor
@@ -56,6 +56,11 @@ class UndoDeleteEdge : public UndoItem
          * The unique Edge id.
          */
         const qint64 m_id;
+
+        /**
+         * Index of to-be-deleted edge.
+         */
+        const int m_index;
 
         /**
          * The start position.

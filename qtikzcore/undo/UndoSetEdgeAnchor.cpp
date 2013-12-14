@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoDisconnectEdge.h"
+#include "UndoSetEdgeAnchor.h"
 #include "Document.h"
 #include "Path.h"
 #include "Edge.h"
@@ -25,75 +25,62 @@
 
 namespace tikz {
 
-UndoDisconnectEdge::UndoDisconnectEdge(qint64 pathId, int index, qint64 nodeId, bool isStartNode, Document * doc)
+UndoSetEdgeAnchor::UndoSetEdgeAnchor(qint64 pathId,
+                                    int index,
+                                    Anchor newAnchor,
+                                    bool isStartNode,
+                                    Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)
-    , m_index(index)
-    , m_nodeId(nodeId)
+    , m_edgeIndex(index)
+    , m_oldAnchor(Anchor::NoAnchor)
+    , m_newAnchor(newAnchor)
     , m_isStart(isStartNode)
 {
-    // save position at node
-    Node * node = document()->nodeFromId(m_nodeId);
-    Q_ASSERT(node != 0);
-
-    m_nodePos = node->pos();
-
-    // save anchor
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
 
-    Edge * edge = path->edge(m_index);
+    Edge * edge = path->edge(m_edgeIndex);
     Q_ASSERT(edge != 0);
 
-    m_anchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+    m_oldAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
-UndoDisconnectEdge::~UndoDisconnectEdge()
+UndoSetEdgeAnchor::~UndoSetEdgeAnchor()
 {
 }
 
-void UndoDisconnectEdge::undo()
+void UndoSetEdgeAnchor::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Node * node = document()->nodeFromId(m_nodeId);
-    Q_ASSERT(node != 0);
-
     Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path);
-
-    Edge * edge = path->edge(m_index);
+    Q_ASSERT(path != 0);
+    Edge * edge = path->edge(m_edgeIndex);
     Q_ASSERT(edge != 0);
 
-    edge->beginConfig();
-
     if (m_isStart) {
-        edge->setStartNode(node);
-        edge->setStartAnchor(m_anchor);
+        edge->setStartAnchor(m_oldAnchor);
     } else {
-        edge->setEndNode(node);
-        edge->setEndAnchor(m_anchor);
+        edge->setEndAnchor(m_oldAnchor);
     }
-    edge->endConfig();
 
     document()->setUndoActive(wasActive);
 }
 
-void UndoDisconnectEdge::redo()
+void UndoSetEdgeAnchor::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_index);
+    Edge * edge = path->edge(m_edgeIndex);
     Q_ASSERT(edge != 0);
 
     if (m_isStart) {
-        edge->setStartPos(m_nodePos);
-        Q_ASSERT(edge->startNode() == 0);
+        edge->setStartAnchor(m_newAnchor);
     } else {
-        edge->setEndPos(m_nodePos);
-        Q_ASSERT(edge->endNode() == 0);
+        edge->setEndAnchor(m_newAnchor);
     }
 
     document()->setUndoActive(wasActive);

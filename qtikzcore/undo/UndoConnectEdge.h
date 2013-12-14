@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_DISCONNECT_EDGE_H
-#define TIKZ_UNDO_DISCONNECT_EDGE_H
+#ifndef TIKZ_UNDO_CONNECT_EDGE_H
+#define TIKZ_UNDO_CONNECT_EDGE_H
 
 #include "UndoItem.h"
 #include "tikz.h"
@@ -28,27 +28,27 @@
 namespace tikz
 {
 
-class UndoDisconnectEdge : public UndoItem
+class UndoConnectEdge : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoDisconnectEdge(qint64 pathId, int index,
-                           qint64 nodeId, bool isStartNode, Document * doc);
+        UndoConnectEdge(qint64 pathId, int index,
+                        qint64 nodeId, bool isStartNode, Document * doc);
 
         /**
          * Destructor
          */
-        virtual ~UndoDisconnectEdge();
+        virtual ~UndoConnectEdge();
 
         /**
-         * Undo: connect edge again.
+         * Undo: disconnect edge again.
          */
         virtual void undo();
 
         /**
-         * Redo: disconnect edge
+         * Redo: connect edge
          */
         virtual void redo();
 
@@ -61,17 +61,27 @@ class UndoDisconnectEdge : public UndoItem
         /**
          * The index of the edge in the path.
          */
-        int m_index;
+        int m_edgeIndex;
 
         /**
          * The unique Node id.
          */
-        const qint64 m_nodeId;
+        qint64 m_oldNodeId;
 
         /**
          * anchor of the connection
          */
-        Anchor m_anchor;
+        Anchor m_oldAnchor;
+
+        /**
+         * The unique Node id.
+         */
+        const qint64 m_targetNodeId;
+
+        /**
+         * anchor of the connection
+         */
+        Anchor m_targetAnchor;
 
         /**
          * Is it start or end node?
@@ -79,13 +89,13 @@ class UndoDisconnectEdge : public UndoItem
         bool m_isStart;
 
         /**
-         * Old position of the node
+         * Old position before connecting to node
          */
-        QPointF m_nodePos;
+        QPointF m_oldPos;
 };
 
 }
 
-#endif // TIKZ_UNDO_DISCONNECT_EDGE_H
+#endif // TIKZ_UNDO_CONNECT_EDGE_H
 
 // kate: indent-width 4; replace-tabs on;

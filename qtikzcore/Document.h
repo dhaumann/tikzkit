@@ -119,7 +119,7 @@ class TIKZCORE_EXPORT Document : public QObject
         void endUndoGroup();
 
         /**
-         * If @p active is @e true, modifying Nodes, Edges or the Document
+         * If @p active is @e true, modifying Nodes, Paths or the Document
          * directly changes the data without creating an undo item.
          * For instance, all undo items themselves call this function with
          * @p active set to @e true.
@@ -155,11 +155,6 @@ class TIKZCORE_EXPORT Document : public QObject
         QVector<Node*> nodes() const;
 
         /**
-         * Get the list of edges of the tikz document.
-         */
-        QVector<Edge*> edges() const;
-
-        /**
          * Get the list of paths of the tikz document.
          */
         QVector<Path*> paths() const;
@@ -172,13 +167,6 @@ class TIKZCORE_EXPORT Document : public QObject
         Node * nodeFromId(qint64 id);
 
         /**
-         * Get the edge with @p id.
-         * @param id unique id of the edge
-         * @return null, if the id is -1, otherwise a valid pointer to the edge
-         */
-        Edge * edgeFromId(qint64 id);
-
-        /**
          * Get the path with @p id.
          * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the path
@@ -186,7 +174,7 @@ class TIKZCORE_EXPORT Document : public QObject
         Path * pathFromId(qint64 id);
 
     //
-    // Node and edge creation
+    // Node and path creation
     //
     public:
         /**
@@ -196,24 +184,11 @@ class TIKZCORE_EXPORT Document : public QObject
         Node * createNode();
 
         /**
-         * Creates a new edge associated with this document.
-         * If the edge is not needed anymore, delete it with deleteEdge().
-         */
-        Edge * createEdge();
-
-        /**
          * Remove @p node from the document by deleting the node object.
          * Afterwards, the pointer is invalid.
          * @param node node to delete
          */
         void deleteNode(Node * node);
-
-        /**
-         * Remove @p edge from the document by deleting the edge object.
-         * Afterwards, the pointer is invalid.
-         * @param edge edge to delete
-         */
-        void deleteEdge(Edge * edge);
 
         /**
          * Creates a new path associated with this document.
@@ -238,19 +213,9 @@ class TIKZCORE_EXPORT Document : public QObject
         virtual Node * createNode(qint64 id);
 
         /**
-         * Create a new edge associated with this document with @p id.
-         */
-        virtual Edge * createEdge(qint64 id);
-
-        /**
          * Delete node @p id associated with this document.
          */
         virtual void deleteNode(qint64 id);
-
-        /**
-         * Delete edge @p id associated with this document.
-         */
-        virtual void deleteEdge(qint64 id);
 
         /**
          * Create a new path associated with this document with @p id.
@@ -278,8 +243,6 @@ class TIKZCORE_EXPORT Document : public QObject
         // uddo/redo system
         friend class UndoCreateNode;
         friend class UndoDeleteNode;
-        friend class UndoCreateEdge;
-        friend class UndoDeleteEdge;
         friend class UndoCreatePath;
         friend class UndoDeletePath;
 };

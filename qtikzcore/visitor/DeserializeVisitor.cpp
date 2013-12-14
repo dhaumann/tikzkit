@@ -86,12 +86,14 @@ void DeserializeVisitor::visit(tikz::Document * doc)
         doc->createNode(id.toLongLong());
     }
 
+// FIXME
+#if 0
     // aggregate edge ids
     list = m_root["edge-ids"].toString().split(", ");
     foreach (const QString & id, list) {
         doc->createEdge(id.toLongLong());
     }
-
+#endif
     // load document style
     deserializeStyle(doc->style(), m_root["document-style"].toMap()["properties"].toMap());
 }
@@ -117,6 +119,9 @@ void DeserializeVisitor::visit(tikz::Node * node)
 
 void DeserializeVisitor::visit(tikz::Edge * edge)
 {
+// FIXME
+#if 0
+
     const QVariantMap & map = m_edges[QString("edge-%1").arg(edge->id())].toMap();
 
     // serialize node
@@ -144,6 +149,7 @@ void DeserializeVisitor::visit(tikz::Edge * edge)
     edge->style()->setParentStyle(edge->document()->style());
 
     deserializeStyle(edge->style(), propertyMap);
+#endif
 }
 
 void DeserializeVisitor::visit(tikz::NodeStyle * style)

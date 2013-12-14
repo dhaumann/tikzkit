@@ -95,11 +95,14 @@ void SerializeVisitor::visit(tikz::Document * doc)
     }
     m_root.insert("node-ids", list.join(", "));
 
+// FIXME
+#if 0
     // aggregate edge ids
     list.clear();
     foreach (Edge * edge, doc->edges()) {
         list.append(QString::number(edge->id()));
     }
+#endif
     m_root.insert("edge-ids", list.join(", "));
 
     // save document style
@@ -129,7 +132,8 @@ void SerializeVisitor::visit(tikz::Node * node)
 void SerializeVisitor::visit(tikz::Edge * edge)
 {
     QVariantMap map;
-
+// FIXME
+#if 0
     // serialize node
     if (edge->startNode()) {
         map.insert("start.node", edge->startNode()->id());
@@ -154,6 +158,7 @@ void SerializeVisitor::visit(tikz::Edge * edge)
     map.insert("style", styleMap);
 
     m_edges.insert(QString("edge-%1").arg(edge->id()), map);
+#endif
 }
 
 void SerializeVisitor::visit(tikz::NodeStyle * style)

@@ -143,9 +143,15 @@ class TIKZCORE_EXPORT Path : public QObject
         void deleteEdge(Edge * edge);
 
         /**
+         * Delete edge at index @p index from the edge list.
+         * After this call, the corresponding edge is deleted.
+         */
+        void deleteEdge(int index);
+
+        /**
          * Get the index of @p edge.
          */
-        int edgeIndex(Edge * edge);
+        int edgeIndex(const Edge * edge) const;
 
         /**
          * Returns @p true, if the path is closed.

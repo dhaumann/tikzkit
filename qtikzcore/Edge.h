@@ -51,20 +51,14 @@ class TIKZCORE_EXPORT Edge : public QObject
         virtual ~Edge();
 
         /**
-         * Constructor that associates this edge to the Path @p path.
-         */
-        Edge(Path * path);
-
-        /**
          * Returns the associated document, if available.
          */
         Document * document() const;
 
         /**
-         * Unique id.
-         * If the document is @e not associated to a document -1 is returned.
+         * Returns the index of this edge in the path.
          */
-        qint64 id() const;
+        int index() const;
 
     //
     // visitor pattern
@@ -229,40 +223,12 @@ class TIKZCORE_EXPORT Edge : public QObject
     // internal to tikz::Document
     //
     protected:
-        friend class Document;
+        friend class Path;
 
         /**
-        * Constructor that associates this edge with the tikz Document @p doc.
-        * @param id unique id of the edge
-        * @param doc associated document
-        */
-        Edge(qint64 id, Document* doc);
-
-//     //
-//     // edge annotation
-//     //
-//     public:
-//         /**
-//          * Returns the edge node, if available.
-//          * This node is created and deleted by the Edge.
-//          */
-//         Node* edgeNode();
-//
-//         /**
-//          * Enable / disable the edge node.
-//          */
-//         void setEdgeNodeEnabled(bool enabled);
-//
-//         /**
-//          * Enable / disable the edge node.
-//          */
-//         void setEdgeNodeEnabled(bool enabled);
-
-    //
-    // private slot forwarding
-    //
-//     private:
-//         Q_PRIVATE_SLOT(m_embeddedObject, void slot1(int))
+         * Constructor that associates this edge to the Path @p path.
+         */
+        Edge(Path * path);
 
     //
     // internal

@@ -17,47 +17,47 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoCreateEdge.h"
+#include "UndoDeletePath.h"
 #include "Document.h"
 #include "Path.h"
+#include "Node.h"
 
 namespace tikz {
 
-UndoCreateEdge::UndoCreateEdge(qint64 id, int index, Document * doc)
+UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
     : UndoItem(doc)
     , m_id(id)
-    , m_index(index)
+{
+    // get path to save data
+    Path* path = document()->pathFromId(m_id);
+    Q_ASSERT(path);
+
+    // the path must be empty here, since we only save the path style
+    Q_ASSERT(path->edgeCount() == 0);
+
+    // save properties
+    m_style.setStyle(*path->style());
+}
+
+UndoDeletePath::~UndoDeletePath()
 {
 }
 
-UndoCreateEdge::~UndoCreateEdge()
+void UndoDeletePath::undo()
 {
-}
-
-void UndoCreateEdge::undo()
-{
-    const bool wasActive = document()->setUndoActive(true);
+    document()->createPath(m_id);
 
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    path->deleteEdge(m_index);
-
-    document()->setUndoActive(wasActive);
+    path->beginConfig();
+    path->style()->setStyle(m_style);
+    path->endConfig();
 }
 
-void UndoCreateEdge::redo()
+void UndoDeletePath::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
-    Path * path = document()->pathFromId(m_id);
-    Q_ASSERT(path);
-
-    path->createEdge(m_index);
-
-    // FIXME: which type???
-
-    document()->setUndoActive(wasActive);
+    document()->deletePath(m_id);
 }
 
 }

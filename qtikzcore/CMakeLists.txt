@@ -26,12 +26,18 @@ set(qtikzcore_SOURCES
     undo/UndoItem.cpp
     undo/UndoCreateNode.cpp
     undo/UndoDeleteNode.cpp
+    undo/UndoCreatePath.cpp
+    undo/UndoDeletePath.cpp
     undo/UndoCreateEdge.cpp
     undo/UndoDeleteEdge.cpp
+    undo/UndoConnectEdge.cpp
     undo/UndoDisconnectEdge.cpp
     undo/UndoSetNodePos.cpp
     undo/UndoSetNodeText.cpp
     undo/UndoSetNodeStyle.cpp
+    undo/UndoSetPathStyle.cpp
+    undo/UndoSetEdgeAnchor.cpp
+    undo/UndoSetEdgePos.cpp
 
     visitor/Visitor.cpp
     visitor/SerializeVisitor.cpp

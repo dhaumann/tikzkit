@@ -25,6 +25,10 @@
 #include "Visitor.h"
 #include "Document.h"
 
+#include "UndoSetPathStyle.h"
+#include "UndoCreateEdge.h"
+#include "UndoDeleteEdge.h"
+
 #include <QVector>
 
 namespace tikz {
@@ -96,8 +100,7 @@ void Path::setStyle(const EdgeStyle & style)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        // FIXME: add undo item
-//         document()->undoManager()->push(new UndoSetNodeStyle(id(), style, document()));
+        document()->undoManager()->push(new UndoSetPathStyle(id(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above
@@ -106,59 +109,68 @@ void Path::setStyle(const EdgeStyle & style)
 
 Edge * Path::createEdge(int index)
 {
-    // TODO: add undo item
-
+    // sanity check
     Q_ASSERT(index <= d->edges.size());
 
-    // append if index is < 0
+    // negative index: append item
     if (index < 0) {
         index = d->edges.size();
     }
 
-    // create and insert edge
-    Edge * edge = new Edge(this);
+    Edge * edge = 0;
 
-    // set edge's parent style to either this Path's style, or to
-    // the predecessor of this edge
-    Q_ASSERT(edge->style()->parentStyle() == &d->style);
-    if (index != 0) {
-        edge->style()->setParentStyle(d->edges[index - 1]->style());
+    if (document()->undoActive()) {
+        beginConfig();
+
+        // create and insert edge
+        edge = new Edge(this);
+
+        // insert edge
+        d->edges.insert(index, edge);
+
+        endConfig();
+    } else {
+        // create edge via undo system
+        document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
+        Q_ASSERT(index < d->edges.size());
+
+        // return newly created edge
+        edge = d->edges[index];
     }
-
-    // set the parent style of the successor edge correctly
-    if (index < d->edges.size()) {
-        d->edges[index + 1]->style()->setParentStyle(edge->style());
-    }
-
-    // insert and return edge
-    d->edges.insert(index, edge);
 
     return edge;
 }
 
 void Path::deleteEdge(Edge * edge)
 {
-    // TODO: add undo item
-
     const int index = d->edges.indexOf(edge);
     Q_ASSERT(index >= 0);
 
-    const bool isLastEdge = index == (d->edges.size() - 1);
+    deleteEdge(index);
+}
 
-    // remove edge
-    d->edges.remove(index);
+void Path::deleteEdge(int index)
+{
+    Q_ASSERT(index >= 0);
+    Q_ASSERT(index < d->edges.size());
 
-    // fix parent/child hierarchy of edge styles
-    if (!isLastEdge) {
-        if (index == 0) {
-            d->edges[0]->style()->setParentStyle(&d->style);
-        } else {
-            d->edges[index]->style()->setParentStyle(d->edges[index - 1]->style());
-        }
+    if (document()->undoActive()) {
+        beginConfig();
+
+        // get edge to delete
+        Edge * edge = d->edges[index];
+
+        // remove edge
+        d->edges.remove(index);
+
+        // finally delete edge
+        delete edge;
+
+        endConfig();
+    } else {
+        // create edge via undo system
+        document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));
     }
-
-    // finally delete edge
-    delete edge;
 }
 
 Edge* Path::edge(int i)
@@ -169,9 +181,10 @@ Edge* Path::edge(int i)
     return d->edges[i];
 }
 
-int Path::edgeIndex(Edge * edge)
+int Path::edgeIndex(const Edge * edge) const
 {
-    const int index = d->edges.indexOf(edge);
+    Q_ASSERT(edge != 0);
+    const int index = d->edges.indexOf(const_cast<Edge*>(edge));
     Q_ASSERT(index >= 0);
     return index;
 }
@@ -193,9 +206,10 @@ void Path::setClosed(bool closed)
         return;
 
     if (closed) {
-        d->edges.append(d->doc->createEdge());
+        Edge * edge = createEdge();
+        // FIXME: implement
     } else {
-        d->edges.pop_back();
+        // FIXME: implement
     }
 }
 

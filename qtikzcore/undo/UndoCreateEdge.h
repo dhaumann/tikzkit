@@ -33,7 +33,7 @@ class UndoCreateEdge : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreateEdge(qint64 id, Document * doc);
+        UndoCreateEdge(qint64 id, int index, Document * doc);
 
         /**
          * Destructor
@@ -55,6 +55,11 @@ class UndoCreateEdge : public UndoItem
          * The unique Edge id.
          */
         const qint64 m_id;
+
+        /**
+         * Index where to insert the edge into the path.
+         */
+        const int m_index;
 };
 
 }
