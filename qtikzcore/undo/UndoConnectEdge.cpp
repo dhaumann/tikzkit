@@ -33,9 +33,9 @@ UndoConnectEdge::UndoConnectEdge(qint64 pathId,
     : UndoItem(doc)
     , m_pathId(pathId)
     , m_edgeIndex(index)
-    , m_oldNodeId(-1)
-    , m_oldAnchor(Anchor::NoAnchor)
-    , m_targetNodeId(nodeId)
+    , m_undoNodeId(-1)
+    , m_undoAnchor(Anchor::NoAnchor)
+    , m_redoNodeId(nodeId)
     , m_isStart(isStartNode)
 {
     Path * path = document()->pathFromId(m_pathId);
@@ -45,29 +45,29 @@ UndoConnectEdge::UndoConnectEdge(qint64 pathId,
     Q_ASSERT(edge != 0);
 
     Node * oldNode = m_isStart ? edge->startNode() : edge->endNode();
-    m_oldAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+    m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 
     // if edge was connected to other node
     if (m_isStart) {
         Node * oldNode = edge->startNode();
         if (oldNode) {
-            m_oldNodeId = oldNode->id();
-            m_oldAnchor = edge->startAnchor();
+            m_undoNodeId = oldNode->id();
+            m_undoAnchor = edge->startAnchor();
         }
     } else {
         Node * oldNode = edge->endNode();
         if (oldNode) {
-            m_oldNodeId = oldNode->id();
-            m_oldAnchor = edge->endAnchor();
+            m_undoNodeId = oldNode->id();
+            m_undoAnchor = edge->endAnchor();
         }
     }
 
     // no: edge was not connected to other node, so just save old position
-    if (m_oldNodeId == -1) {
-        m_oldPos = m_isStart ? edge->startPos() : edge->endPos();
+    if (m_undoNodeId == -1) {
+        m_undoPos = m_isStart ? edge->startPos() : edge->endPos();
     }
 
-    m_targetAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+    m_redoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
 UndoConnectEdge::~UndoConnectEdge()
@@ -86,28 +86,28 @@ void UndoConnectEdge::undo()
 
     edge->beginConfig();
 
-    if (m_oldNodeId == -1) {
+    if (m_undoNodeId == -1) {
         //
         // set position to coordinate
         //
         if (m_isStart) {
-            edge->setStartPos(m_oldPos);
+            edge->setStartPos(m_undoPos);
         } else {
-            edge->setEndPos(m_oldPos);
+            edge->setEndPos(m_undoPos);
         }
     } else {
         //
         // restore old node connection
         //
-        Node * node = document()->nodeFromId(m_oldNodeId);
+        Node * node = document()->nodeFromId(m_undoNodeId);
         Q_ASSERT(node != 0);
 
         if (m_isStart) {
             edge->setStartNode(node);
-            edge->setStartAnchor(m_oldAnchor);
+            edge->setStartAnchor(m_undoAnchor);
         } else {
             edge->setEndNode(node);
-            edge->setEndAnchor(m_oldAnchor);
+            edge->setEndAnchor(m_undoAnchor);
         }
     }
 
@@ -126,11 +126,11 @@ void UndoConnectEdge::redo()
     Q_ASSERT(edge != 0);
 
     if (m_isStart) {
-        edge->setStartNode(document()->nodeFromId(m_targetNodeId));
-        Q_ASSERT(edge->startNode()->id() == m_targetNodeId);
+        edge->setStartNode(document()->nodeFromId(m_redoNodeId));
+        Q_ASSERT(edge->startNode()->id() == m_redoNodeId);
     } else {
-        edge->setEndNode(document()->nodeFromId(m_targetNodeId));
-        Q_ASSERT(edge->endNode()->id() == m_targetNodeId);
+        edge->setEndNode(document()->nodeFromId(m_redoNodeId));
+        Q_ASSERT(edge->endNode()->id() == m_redoNodeId);
     }
 
     document()->setUndoActive(wasActive);

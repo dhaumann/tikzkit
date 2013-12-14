@@ -66,12 +66,12 @@ class UndoSetEdgeAnchor : public UndoItem
         /**
          * old anchor of the connection
          */
-        Anchor m_oldAnchor;
+        Anchor m_undoAnchor;
 
         /**
          * new anchor of the connection
          */
-        Anchor m_newAnchor;
+        Anchor m_redoAnchor;
 
         /**
          * Is it start or end node?

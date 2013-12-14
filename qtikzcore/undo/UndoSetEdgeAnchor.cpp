@@ -33,8 +33,8 @@ UndoSetEdgeAnchor::UndoSetEdgeAnchor(qint64 pathId,
     : UndoItem(doc)
     , m_pathId(pathId)
     , m_edgeIndex(index)
-    , m_oldAnchor(Anchor::NoAnchor)
-    , m_newAnchor(newAnchor)
+    , m_undoAnchor(Anchor::NoAnchor)
+    , m_redoAnchor(newAnchor)
     , m_isStart(isStartNode)
 {
     Path * path = document()->pathFromId(m_pathId);
@@ -43,7 +43,7 @@ UndoSetEdgeAnchor::UndoSetEdgeAnchor(qint64 pathId,
     Edge * edge = path->edge(m_edgeIndex);
     Q_ASSERT(edge != 0);
 
-    m_oldAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+    m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
 UndoSetEdgeAnchor::~UndoSetEdgeAnchor()
@@ -60,9 +60,9 @@ void UndoSetEdgeAnchor::undo()
     Q_ASSERT(edge != 0);
 
     if (m_isStart) {
-        edge->setStartAnchor(m_oldAnchor);
+        edge->setStartAnchor(m_undoAnchor);
     } else {
-        edge->setEndAnchor(m_oldAnchor);
+        edge->setEndAnchor(m_undoAnchor);
     }
 
     document()->setUndoActive(wasActive);
@@ -78,9 +78,9 @@ void UndoSetEdgeAnchor::redo()
     Q_ASSERT(edge != 0);
 
     if (m_isStart) {
-        edge->setStartAnchor(m_newAnchor);
+        edge->setStartAnchor(m_redoAnchor);
     } else {
-        edge->setEndAnchor(m_newAnchor);
+        edge->setEndAnchor(m_redoAnchor);
     }
 
     document()->setUndoActive(wasActive);

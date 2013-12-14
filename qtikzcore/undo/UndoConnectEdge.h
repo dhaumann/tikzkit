@@ -66,22 +66,22 @@ class UndoConnectEdge : public UndoItem
         /**
          * The unique Node id.
          */
-        qint64 m_oldNodeId;
+        qint64 m_undoNodeId;
 
         /**
          * anchor of the connection
          */
-        Anchor m_oldAnchor;
+        Anchor m_undoAnchor;
 
         /**
          * The unique Node id.
          */
-        const qint64 m_targetNodeId;
+        const qint64 m_redoNodeId;
 
         /**
          * anchor of the connection
          */
-        Anchor m_targetAnchor;
+        Anchor m_redoAnchor;
 
         /**
          * Is it start or end node?
@@ -91,7 +91,7 @@ class UndoConnectEdge : public UndoItem
         /**
          * Old position before connecting to node
          */
-        QPointF m_oldPos;
+        QPointF m_undoPos;
 };
 
 }
