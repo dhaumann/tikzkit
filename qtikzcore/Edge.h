@@ -170,7 +170,14 @@ class TIKZCORE_EXPORT Edge : public QObject
         /**
          * Get the Style object of this edge.
          */
-        EdgeStyle* style();
+        EdgeStyle* style() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the Style of this edge to @p style.
+         */
+        void setStyle(const EdgeStyle & style);
+
     //
     // signals
     //

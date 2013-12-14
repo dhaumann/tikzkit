@@ -30,6 +30,7 @@
 #include "UndoConnectEdge.h"
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
+#include "UndoSetEdgeStyle.h"
 
 #include <QUndoStack>
 
@@ -113,7 +114,7 @@ void Edge::setStartNode(Node* node)
         // reset anchor, if the node changes
         d->startAnchor = tikz::NoAnchor;
 
-        emit endNodeChanged(node);
+        emit startNodeChanged(node);
 
         endConfig();
     } else if (node) {
@@ -265,9 +266,26 @@ void Edge::setEndAnchor(tikz::Anchor anchor)
     }
 }
 
-EdgeStyle* Edge::style()
+EdgeStyle* Edge::style() const
 {
     return &d->style;
+}
+
+void Edge::setStyle(const EdgeStyle & style)
+{
+    // TODO: room for optimization: if style did not change, abort
+
+    if (document()->undoActive()) {
+        beginConfig();
+        d->style.setStyle(style);
+        endConfig();
+    } else {
+        // create new undo item, push will call ::redo()
+        document()->undoManager()->push(new UndoSetEdgeStyle(d->path->id(), index(), style, document()));
+
+        // now the text should be updated
+        //     Q_ASSERT(d->style == style); // same as above
+    }
 }
 
 void Edge::beginConfig()

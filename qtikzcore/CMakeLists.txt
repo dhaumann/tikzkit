@@ -38,6 +38,7 @@ set(qtikzcore_SOURCES
     undo/UndoSetPathStyle.cpp
     undo/UndoSetEdgeAnchor.cpp
     undo/UndoSetEdgePos.cpp
+    undo/UndoSetEdgeStyle.cpp
 
     visitor/Visitor.cpp
     visitor/SerializeVisitor.cpp
