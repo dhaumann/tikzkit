@@ -20,13 +20,12 @@
 #include "UndoSetEdgeType.h"
 #include "Document.h"
 #include "Path.h"
-#include "Edge.h"
 
 namespace tikz {
 
 UndoSetEdgeType::UndoSetEdgeType(qint64 pathId,
                                int index,
-                               ElementType type,
+                               Edge::Type type,
                                Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)

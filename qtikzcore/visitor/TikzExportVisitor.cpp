@@ -161,12 +161,12 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     //
     QString to;
     switch (edge->type()) {
-        case ElementType::ET_StraightLine: to = "--"; break;
-        case ElementType::ET_HorizVertLine: to = "-|"; break;
-        case ElementType::ET_VertHorizLine: to = "|-"; break;
-        case ElementType::ET_BendCurve: to = "to"; break;
-        case ElementType::ET_InOutCurve: to = "to"; break;
-        case ElementType::ET_BezierCurve: to = "to"; break; // TODO: implement correctly
+        case Edge::Type::StraightLine: to = "--"; break;
+        case Edge::Type::HorizVertLine: to = "-|"; break;
+        case Edge::Type::VertHorizLine: to = "|-"; break;
+        case Edge::Type::BendCurve: to = "to"; break;
+        case Edge::Type::InOutCurve: to = "to"; break;
+        case Edge::Type::BezierCurve: to = "to"; break; // TODO: implement correctly
         default: break;
     }
 

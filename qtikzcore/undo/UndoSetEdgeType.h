@@ -22,6 +22,7 @@
 
 #include "UndoItem.h"
 #include "tikz.h"
+#include "Edge.h"
 
 namespace tikz
 {
@@ -32,7 +33,7 @@ class UndoSetEdgeType : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEdgeType(qint64 pathId, int index, ElementType type, Document * doc);
+        UndoSetEdgeType(qint64 pathId, int index, Edge::Type type, Document * doc);
 
         /**
          * Destructor
@@ -63,12 +64,12 @@ class UndoSetEdgeType : public UndoItem
         /**
          * The previous element type
          */
-        ElementType m_undoType;
+        Edge::Type m_undoType;
 
         /**
          * The new element type
          */
-        ElementType m_redoType;
+        Edge::Type m_redoType;
 };
 
 }

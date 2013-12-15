@@ -47,7 +47,7 @@ class EdgePrivate
         Path * path;
 
         // the element type of this edge
-        ElementType type;
+        Edge::Type type;
 
         // this edge's style
         EdgeStyle style;
@@ -74,7 +74,7 @@ Edge::Edge(Path * path)
 
     d->refCounter = 0;
     d->path = path;
-    d->type = ET_StraightLine;
+    d->type = StraightLine;
     d->style.setParentStyle(d->path->style());
 
     d->startAnchor = tikz::NoAnchor;
@@ -100,12 +100,12 @@ int Edge::index() const
     return d->path->edgeIndex(this);
 }
 
-ElementType Edge::type() const
+Edge::Type Edge::type() const
 {
     return d->type;
 }
 
-void Edge::setType(ElementType type)
+void Edge::setType(Edge::Type type)
 {
     if (d->type == type) {
         return;

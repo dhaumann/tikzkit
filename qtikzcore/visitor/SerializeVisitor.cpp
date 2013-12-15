@@ -46,7 +46,6 @@ SerializeVisitor::SerializeVisitor()
     qRegisterMetaType<tikz::LineWidth>("LineWidth");
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
-    qRegisterMetaType<tikz::CurveMode>("CurveMode");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
 }
 

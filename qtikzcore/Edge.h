@@ -43,6 +43,8 @@ class Visitor;
 class TIKZCORE_EXPORT Edge : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Edge::Type type READ type WRITE setType)
+    Q_ENUMS(Type)
 
     public:
         /**
@@ -60,15 +62,31 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         int index() const;
 
+    //
+    // element type
+    //
+    public:
+        enum Type {
+            StraightLine = 0, // (a) -- (b)
+            HorizVertLine, // (a) -| (b)
+            VertHorizLine, // (a) |- (b)
+            BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
+            InOutCurve, // (a) to[in=20, out=30] (b)
+            BezierCurve, // (a) .. controls (b) and (c) .. (d)
+            Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
+            Rectangle, // (a) rectangle (b)
+            Grid, // (a) grid (b)
+        };
+
         /**
          * Returns the element type of this edge.
          */
-        ElementType type() const;
+        Edge::Type type() const;
 
         /**
          * Set the element type of this edge to @p type.
          */
-        void setType(ElementType type);
+        void setType(Edge::Type type);
 
     //
     // visitor pattern
