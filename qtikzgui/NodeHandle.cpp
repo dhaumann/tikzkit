@@ -20,6 +20,7 @@
 #include "NodeHandle.h"
 #include "NodeStyle.h"
 #include "TikzNode.h"
+#include "NodeStyle.h"
 
 #include <QApplication>
 #include <QPointer>
@@ -227,7 +228,10 @@ void NodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         const qreal rad = atan2(-diff.y(), -diff.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
-        d->node->style()->setRotation(deg);
+        tikz::NodeStyle style;
+        style.setStyle(*d->node->style());
+        style.setRotation(deg);
+        d->node->node()->setStyle(style);
     } else {
         const QPointF pos = mapToItem(d->node, event->pos());
         // full width and hight => 2.0 * ...

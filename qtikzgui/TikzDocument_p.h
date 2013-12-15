@@ -27,12 +27,12 @@
 namespace tikz {
     class Document;
     class Node;
-    class Edge;
+    class Path;
 }
 
 class TikzDocument;
 class TikzNode;
-class TikzEdge;
+class TikzPath;
 class TikzScene;
 
 class QGraphicsView;
@@ -69,7 +69,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * List of TikzEdge%s.
          */
-        QVector<TikzEdge*> edges;
+        QVector<TikzPath*> paths;
 
         /**
          * Node lookup map
@@ -79,7 +79,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * Edge lookup map
          */
-        QHash<qint64, TikzEdge*> edgeMap;
+        QHash<qint64, TikzPath*> pathMap;
 
         /**
          * Graphics scene for the document.

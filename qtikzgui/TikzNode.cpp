@@ -253,15 +253,6 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
         setPos(newPos);
         d->node->setPos(newPos);
         d->itemChangeRunning = false;
-//         d->textItem->setPos(newPos);
-        QRectF rect = scene()->sceneRect();
-        if (!rect.contains(newPos)) {
-            // keep the item inside the scene rect
-            newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
-            newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
-            d->node->setPos(newPos);
-            return newPos;
-        }
     } else if (change == ItemSelectedHasChanged) {
         // show / hide scale&rotate handles if selected
         const bool selected = value.toBool();

@@ -80,11 +80,6 @@ tikz::Edge * TikzEdge::edge()
     return d->edge;
 }
 
-qint64 TikzEdge::id() const
-{
-    return d->edge->id();
-}
-
 tikz::EdgeStyle* TikzEdge::style() const
 {
     return d->edge->style();
@@ -420,6 +415,8 @@ QVariant TikzEdge::itemChange(GraphicsItemChange change, const QVariant & value)
 
 void TikzEdge::startControlPointChanged(const QPointF& pos)
 {
+// FIXME
+#if 0
     switch (style()->curveMode()) {
         case tikz::BendCurve: {
             // compute angle of start.center to handle pos
@@ -457,10 +454,13 @@ void TikzEdge::startControlPointChanged(const QPointF& pos)
         default:
             break;
     }
+#endif
 }
 
 void TikzEdge::endControlPointChanged(const QPointF& pos)
 {
+// FIXME
+#if 0
     switch (style()->curveMode()) {
         case tikz::BendCurve: {
             // compute angle of end.center to handle pos
@@ -498,6 +498,7 @@ void TikzEdge::endControlPointChanged(const QPointF& pos)
         default:
             break;
     }
+#endif
 }
 
 // kate: indent-width 4; replace-tabs on;

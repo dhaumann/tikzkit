@@ -68,11 +68,6 @@ class TIKZGUI_EXPORT TikzEdge :  public TikzItem
         tikz::Edge * edge();
 
         /**
-         * Returns edge().id();
-         */
-        qint64 id() const;
-
-        /**
          * Get the EdgeStyle of this edge.
          * The returned pointer is always valid.
          */

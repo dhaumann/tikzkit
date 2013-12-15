@@ -20,13 +20,14 @@
 
 #include "TikzDocument.h"
 #include "TikzNode.h"
-#include "TikzEdge.h"
+#include "TikzPath.h"
 #include "TikzScene.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 #include "TikzToolBox.h"
 #include "tikz.h"
 #include <Edge.h>
+#include <Path.h>
 
 #include <ArrowComboBox.h>
 
@@ -107,19 +108,6 @@ MainWindow::MainWindow()
     m_view = m_doc->createView(this);
     l->addWidget(m_view);
 
-    m_zoomSlider = new QSlider(this);
-    m_zoomSlider->setRange(100, 1000);
-    l->addWidget(m_zoomSlider);
-
-    m_rotSlider = new QSlider(this);
-    m_rotSlider->setRange(0, 360);
-    l->addWidget(m_rotSlider);
-
-    connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
-    connect(m_rotSlider, SIGNAL(valueChanged(int)), this, SLOT(updateTransform()));
-
-//     m_view->setSceneRect(0, 0, m_view->size().width() / 200.0, m_view->size().height() / 200.0);
-
     m_view->show();
 
     TikzNode* item1 = m_doc->createTikzNode();
@@ -136,11 +124,11 @@ MainWindow::MainWindow()
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->setText("$\\Leftrightarrow$");
 
-    // an edge
-    TikzEdge* edge = m_doc->createTikzEdge();
-    edge->setStartNode(item1);
-    edge->setEndNode(item2);
-    edge->edge()->style()->setLineWidthType(tikz::SemiThick);
+    // an path
+    TikzPath* path = m_doc->createTikzPath();
+//     path->setStartNode(item1);
+//     path->setEndNode(item2);
+    path->path()->style()->setLineWidthType(tikz::SemiThick);
 
 
 
@@ -158,11 +146,11 @@ MainWindow::MainWindow()
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->setText("a");
 
-    // an edge
-    edge = m_doc->createTikzEdge();
-    edge->setStartNode(item1);
-    edge->setEndNode(item2);
-    edge->edge()->style()->setLineWidthType(tikz::SemiThick);
+    // an path
+    path = m_doc->createTikzPath();
+//     path->setStartNode(item1);
+//     path->setEndNode(item2);
+    path->path()->style()->setLineWidthType(tikz::SemiThick);
 
 
     item1 = m_doc->createTikzNode();
@@ -181,13 +169,13 @@ MainWindow::MainWindow()
 
 //     item2->style()->setParentStyle(item1->style());
 
-    // an edge
-    edge = m_doc->createTikzEdge();
-    edge->setStartNode(item1);
-    edge->setEndNode(item2);
-    edge->edge()->style()->setLineWidthType(tikz::UltraThick);
-    edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-    edge->edge()->style()->setArrowHead(tikz::PipeArrow);
+    // an path
+    path = m_doc->createTikzPath();
+//     path->setStartNode(item1);
+//     path->setEndNode(item2);
+    path->path()->style()->setLineWidthType(tikz::UltraThick);
+    path->path()->style()->setArrowTail(tikz::LatexArrow);
+    path->path()->style()->setArrowHead(tikz::PipeArrow);
 
 
     item1 = m_doc->createTikzNode();
@@ -208,41 +196,41 @@ MainWindow::MainWindow()
     item2->node()->style()->setMinimumWidth(2);
     item2->node()->setText("8");
 
-    // an edge
-    edge = m_doc->createTikzEdge();
-    edge->setStartNode(item1);
-    edge->setEndNode(item2);
-    edge->edge()->style()->setLineWidthType(tikz::UltraThick);
-    edge->edge()->style()->setBendAngle(30);
-    edge->edge()->style()->setCurveMode(tikz::HorizVertLine);
-    edge->edge()->style()->setArrowTail(tikz::StealthArrow);
-    edge->edge()->style()->setArrowHead(tikz::ToArrow);
+    // an path
+    path = m_doc->createTikzPath();
+//     path->setStartNode(item1);
+//     path->setEndNode(item2);
+    path->path()->style()->setLineWidthType(tikz::UltraThick);
+    path->path()->style()->setBendAngle(30);
+//     path->path()->style()->setCurveMode(tikz::HorizVertLine);
+    path->path()->style()->setArrowTail(tikz::StealthArrow);
+    path->path()->style()->setArrowHead(tikz::ToArrow);
 
 
     // arrow demo
     for (int i = 0; i < tikz::ArrowCount; ++i) {
-        edge = m_doc->createTikzEdge();
-        edge->edge()->setStartPos(QPointF(-6, i - 4));
-        edge->edge()->setEndPos(QPointF(-4, i - 4));
-        edge->edge()->style()->beginConfig();
-        edge->edge()->style()->setLineWidthType(tikz::UltraThick);
-        edge->edge()->style()->setArrowTail(tikz::Arrow(i));
-        edge->edge()->style()->setArrowHead(tikz::Arrow(i));
-        edge->edge()->style()->endConfig();
+        path = m_doc->createTikzPath();
+//         path->path()->setStartPos(QPointF(-6, i - 4));
+//         path->path()->setEndPos(QPointF(-4, i - 4));
+        path->path()->style()->beginConfig();
+        path->path()->style()->setLineWidthType(tikz::UltraThick);
+        path->path()->style()->setArrowTail(tikz::Arrow(i));
+        path->path()->style()->setArrowHead(tikz::Arrow(i));
+        path->path()->style()->endConfig();
     }
 
     // arrow demo
     for (int i = 0; i < tikz::ArrowCount; ++i) {
-        edge = m_doc->createTikzEdge();
-        edge->edge()->setStartPos(QPointF(4, i - 4));
-        edge->edge()->setEndPos(QPointF(6, i - 4));
-        edge->edge()->style()->beginConfig();
-        edge->edge()->style()->setDoubleLine(true);
-        edge->edge()->style()->setInnerLineWidth(tikz::VeryThick);
-        edge->edge()->style()->setLineWidthType(tikz::UltraThick);
-        edge->edge()->style()->setArrowTail(tikz::Arrow(i));
-        edge->edge()->style()->setArrowHead(tikz::Arrow(i));
-        edge->edge()->style()->endConfig();
+        path = m_doc->createTikzPath();
+//         path->path()->setStartPos(QPointF(4, i - 4));
+//         path->path()->setEndPos(QPointF(6, i - 4));
+        path->path()->style()->beginConfig();
+        path->path()->style()->setDoubleLine(true);
+        path->path()->style()->setInnerLineWidth(tikz::VeryThick);
+        path->path()->style()->setLineWidthType(tikz::UltraThick);
+        path->path()->style()->setArrowTail(tikz::Arrow(i));
+        path->path()->style()->setArrowHead(tikz::Arrow(i));
+        path->path()->style()->endConfig();
     }
 
     // test example
@@ -325,57 +313,57 @@ MainWindow::MainWindow()
         n7->node()->setText("3rd party\\\\(Application)");
 
         //
-        // edges
+        // paths
         //
-        TikzEdge* edge = m_doc->createTikzEdge();
-        edge->setStartNode(n1);
-        edge->setEndNode(n2);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        TikzPath* path = m_doc->createTikzPath();
+//         path->setStartNode(n1);
+//         path->setEndNode(n2);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
 
-        edge = m_doc->createTikzEdge();
-        edge->setStartNode(n2);
-        edge->setEndNode(n3);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
-        edge->edge()->setStartAnchor(tikz::West);
+        path = m_doc->createTikzPath();
+//         path->setStartNode(n2);
+//         path->setEndNode(n3);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
+//         path->path()->setStartAnchor(tikz::West);
 
-        edge = m_doc->createTikzEdge();
-        edge->setStartNode(n2);
-        edge->setEndNode(n4);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        path = m_doc->createTikzPath();
+//         path->setStartNode(n2);
+//         path->setEndNode(n4);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
 
-        edge = m_doc->createTikzEdge();
-        edge->setStartNode(n2);
-        edge->setEndNode(n5);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        path = m_doc->createTikzPath();
+//         path->setStartNode(n2);
+//         path->setEndNode(n5);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
         
-        edge = m_doc->createTikzEdge();
-        edge->setStartNode(n2);
-        edge->setEndNode(n6);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
+        path = m_doc->createTikzPath();
+//         path->setStartNode(n2);
+//         path->setEndNode(n6);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
         
-        edge = m_doc->createTikzEdge();
-        edge->setStartNode(n2);
-        edge->setEndNode(n7);
-        edge->edge()->style()->setLineWidthType(tikz::Thick);
-        edge->edge()->style()->setArrowTail(tikz::LatexArrow);
-        edge->edge()->style()->setArrowHead(tikz::LatexArrow);
-        edge->edge()->style()->setPenColor(QColor(122, 122, 122));
-        edge->edge()->setStartAnchor(tikz::East);
+        path = m_doc->createTikzPath();
+//         path->setStartNode(n2);
+//         path->setEndNode(n7);
+        path->path()->style()->setLineWidthType(tikz::Thick);
+        path->path()->style()->setArrowTail(tikz::LatexArrow);
+        path->path()->style()->setArrowHead(tikz::LatexArrow);
+        path->path()->style()->setPenColor(QColor(122, 122, 122));
+//         path->path()->setStartAnchor(tikz::East);
     }
 
     setupActions();
@@ -393,20 +381,6 @@ void MainWindow::setupActions()
     connect(m_ui->aNew, SIGNAL(triggered()), m_doc, SLOT(clear()));
     connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(m_ui->aOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
-}
-
-void MainWindow::updateTransform()
-{
-    qreal rot = m_rotSlider->value();
-    qreal scale = m_zoomSlider->value() / 10.0;
-
-    a->node()->style()->setRotation(rot);
-
-    QTransform trans;
-//     trans.rotate(rot);
-    trans.scale(scale, -scale);
-
-    m_view->setTransform(trans);
 }
 
 void MainWindow::saveFile()

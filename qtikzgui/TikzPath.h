@@ -78,56 +78,6 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
          */
         tikz::EdgeStyle* style() const;
 
-        /**
-         * Set the start node to @p start.
-         * @param start start node of the edge. 0 is allows.
-         */
-        void setStartNode(TikzNode* start);
-
-        /**
-         * Set the end node to @p end.
-         * @param end end node of the edge. 0 is allows.
-         */
-        void setEndNode(TikzNode* end);
-
-        /**
-         * Get the start node.
-         * @return the start node or 0, if the start of the edge is not connected.
-         */
-        TikzNode* startNode() const;
-
-        /**
-         * Get the end node.
-         * @return the end node or 0, if the end of the edge is not connected.
-         */
-        TikzNode* endNode() const;
-
-        /**
-         * Get the position of the start of the edge for the specified angle @p rad.
-         * @return the position in item coordinates
-         */
-        QPointF startPos(qreal rad) const;
-
-        /**
-         * Get the position of the end of the edge for the specified angle @p rad.
-         * @return the position in item coordinates
-         */
-        QPointF endPos(qreal rad) const;
-
-    //
-    // anchor methods
-    //
-    public:
-        /**
-         * Get the anchor of the start of the edge.
-         */
-        tikz::Anchor startAnchor() const;
-
-        /**
-         * Get the anchor of the end of the edge.
-         */
-        tikz::Anchor endAnchor() const;
-
     //
     // reimplemented from QGraphicsItem
     //

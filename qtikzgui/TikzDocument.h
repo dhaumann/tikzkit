@@ -28,7 +28,7 @@
 class QGraphicsView;
 
 class TikzNode;
-class TikzEdge;
+class TikzPath;
 
 class TikzDocumentPrivate;
 
@@ -74,7 +74,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         void editModeChanged(TikzEditMode mode) const;
 
     //
-    // Node and edge creation
+    // Node and path creation
     //
     public:
         /**
@@ -85,11 +85,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         TikzNode * createTikzNode();
 
         /**
-         * Creates a new edge associated with this document.
-         * If the edge is not needed anymore, delete it by
-         * calling deleteTikzEdge(tikzEdge).
+         * Creates a new path associated with this document.
+         * If the path is not needed anymore, delete it by
+         * calling deleteTikzPath(tikzPath).
          */
-        TikzEdge * createTikzEdge();
+        TikzPath * createTikzPath();
 
         /**
          * Remove @p node from the document by deleting the node object.
@@ -99,11 +99,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         void deleteTikzNode(TikzNode * node);
 
         /**
-         * Remove @p edge from the document by deleting the edge object.
+         * Remove @p path from the document by deleting the path object.
          * Afterwards, the pointer is invalid.
-         * @param edge edge to delete
+         * @param path path to delete
          */
-        void deleteTikzEdge(TikzEdge * edge);
+        void deleteTikzPath(TikzPath * path);
 
         /**
          * Get the TikzNode with @p id.
@@ -113,11 +113,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         TikzNode * tikzNodeFromId(qint64 id);
 
         /**
-         * Get the TikzEdge with @p id.
-         * @param id unique id of the edge
+         * Get the TikzPath with @p id.
+         * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        TikzEdge * tikzEdgeFromId(qint64 id);
+        TikzPath * tikzPathFromId(qint64 id);
 
     //
     // internal: Undo / redo items manipulate with ID
@@ -136,7 +136,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         /**
          * Create a new path associated with this document with @p id.
          */
-        virtual tikz::Path * createEdge(qint64 id) override;
+        virtual tikz::Path * createPath(qint64 id) override;
 
         /**
          * Delete path @p id associated with this document.

@@ -22,7 +22,6 @@
 #include <memory>
 
 class QGraphicsView;
-class QSlider;
 class QTextEdit;
 class TikzDocument;
 
@@ -46,8 +45,6 @@ class MainWindow : public QMainWindow
         virtual ~MainWindow();
 
     public Q_SLOTS:
-        void updateTransform();
-
         void saveFile();
         void loadFile();
 
@@ -58,8 +55,6 @@ class MainWindow : public QMainWindow
 
     private:
         QGraphicsView* m_view;
-        QSlider* m_zoomSlider;
-        QSlider* m_rotSlider;
 
         std::unique_ptr<Ui::MainWindow> m_ui;
 

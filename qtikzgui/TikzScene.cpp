@@ -22,8 +22,10 @@
 #include "TikzDocument.h"
 #include "TikzNode.h"
 #include "TikzEdge.h"
+#include "TikzPath.h"
 
 #include <Edge.h>
+#include <Path.h>
 
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -54,7 +56,7 @@ public:
     QPointF dragOffset;
 
     // currently edited edge
-    TikzEdge * currentEdge;
+    TikzPath * currentPath;
 };
 
 TikzScene::TikzScene(TikzDocument * doc)
@@ -64,7 +66,10 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->doc = doc;
     d->subDivisions = 1;
     d->editMode = TikzEditMode::ModeSelect;
-    d->currentEdge = 0;
+    d->currentPath = 0;
+
+    // set sane scene rect
+    setSceneRect(-10, -10, 20, 20);
 }
 
 TikzScene::~TikzScene()
@@ -93,6 +98,11 @@ TikzEditMode TikzScene::editMode() const
 
 void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
+    if (!rect.isValid()) {
+        qWarning() << "Scene bounding rect is invalid. Something is wrong!";
+        return;
+    }
+    qDebug() << rect;
     qreal left = int(rect.left()) - (int(rect.left()) % d->subDivisions);
     qreal top = int(rect.top()) - (int(rect.top()) % d->subDivisions);
 
@@ -128,13 +138,15 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         }
         case TikzEditMode::ModePlaceEdge: {
             // create edge
-            d->currentEdge = document()->createTikzEdge();
-            d->currentEdge->edge()->setStartPos(mouseEvent->scenePos());
-            d->currentEdge->edge()->setEndPos(mouseEvent->scenePos());
+            d->currentPath = document()->createTikzPath();
+
+            tikz::Edge * edge = d->currentPath->path()->createEdge();
+            edge->setStartPos(mouseEvent->scenePos());
+            edge->setEndPos(mouseEvent->scenePos());
 
             // update selected item
             clearSelection();
-            d->currentEdge->setSelected(true);
+            d->currentPath->setSelected(true);
 
             // connect start to node, if applicable
             QList<QGraphicsItem *> itemList = items(mouseEvent->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
@@ -142,13 +154,14 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 if (item->type() == QGraphicsItem::UserType + 2) {
                     TikzNode* node = dynamic_cast<TikzNode*>(item);
                     Q_ASSERT(node);
-                    d->currentEdge->setStartNode(node);
+                    // FIXME
+//                     d->currentPath->path()->edge(0)->setStartNode(node);
                     break;
                 }
             }
 
             // pass mouse click to edge
-            sendEvent(d->currentEdge, mouseEvent);
+            sendEvent(d->currentPath, mouseEvent);
 
             mouseEvent->ignore(); // TODO, FIXME: accept or ignore?
             return; // TODO, FIXME: return or break?
@@ -169,12 +182,18 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (d->currentEdge) {
-        sendEvent(d->currentEdge, mouseEvent);
+    if (d->currentPath) {
+        sendEvent(d->currentPath, mouseEvent);
         mouseEvent->ignore();
         return;
     }
-    setSceneRect(itemsBoundingRect());
+
+    const QRectF br(itemsBoundingRect());
+    if (br.isValid()) {
+        setSceneRect(itemsBoundingRect());
+    } else {
+        qWarning() << "TikzScene::mouseMoveEvent: invalid bounding rect, ignoring";
+    }
     QGraphicsScene::mouseMoveEvent(mouseEvent);
     return;
     if (d->dragged) {
@@ -187,11 +206,11 @@ void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // still in edge placing mode
-    if (d->currentEdge) {
+    if (d->currentPath) {
         Q_ASSERT(d->editMode == TikzEditMode::ModePlaceEdge);
-        sendEvent(d->currentEdge, mouseEvent);
+        sendEvent(d->currentPath, mouseEvent);
         mouseEvent->ignore();
-        d->currentEdge = 0;
+        d->currentPath = 0;
         setEditMode(TikzEditMode::ModeSelect);
         return;
     }
@@ -218,9 +237,9 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
                 Q_ASSERT(node);
                 d->doc->deleteTikzNode(node);
             } else if (item->type() == QGraphicsItem::UserType + 3) {
-                TikzEdge* edge = dynamic_cast<TikzEdge*>(item);
-                Q_ASSERT(edge);
-                d->doc->deleteTikzEdge(edge);
+                TikzPath * path = dynamic_cast<TikzPath*>(item);
+                Q_ASSERT(path);
+                d->doc->deleteTikzPath(path);
             }
         }
         d->doc->undoManager()->endMacro();

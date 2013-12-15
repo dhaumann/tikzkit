@@ -111,7 +111,7 @@ TikzNode * TikzDocument::createTikzNode()
 TikzPath * TikzDocument::createTikzPath()
 {
     // create path
-    tikz::Edge * path = Document::createPath();
+    tikz::Path * path = Document::createPath();
     Q_ASSERT(d->pathMap.contains(path->id()));
 
     return d->pathMap[path->id()];
@@ -174,9 +174,9 @@ void TikzDocument::deleteNode(qint64 id)
     tikz::Document::deleteNode(id);
 }
 
-tikz::Edge * TikzDocument::createPath(qint64 id)
+tikz::Path * TikzDocument::createPath(qint64 id)
 {
-    tikz::Edge * path = tikz::Document::createPath(id);
+    tikz::Path * path = tikz::Document::createPath(id);
     Q_ASSERT(id == path->id());
     Q_ASSERT(! d->pathMap.contains(id));
 
