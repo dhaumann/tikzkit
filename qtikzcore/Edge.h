@@ -67,9 +67,9 @@ class TIKZCORE_EXPORT Edge : public QObject
     //
     public:
         enum Type {
-            StraightLine = 0, // (a) -- (b)
-            HorizVertLine, // (a) -| (b)
-            VertHorizLine, // (a) |- (b)
+            LineTo = 0, // (a) -- (b)
+            HVLineTo, // (a) -| (b)
+            VHLineTo, // (a) |- (b)
             BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
             InOutCurve, // (a) to[in=20, out=30] (b)
             BezierCurve, // (a) .. controls (b) and (c) .. (d)

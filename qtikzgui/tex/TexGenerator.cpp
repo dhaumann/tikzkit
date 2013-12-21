@@ -97,20 +97,20 @@ void TexGenerator::generateImage(const QString& texCode)
         return;
     } else {
         QTextStream ts(d->tempFile);
-        ts << "\\documentclass[paper=a5,fontsize=12pt]{scrbook}\n"
+        ts << "\\documentclass[crop]{standalone}\n"
         "\\renewcommand*{\\familydefault}{\\sfdefault}\n"
-        "\\usepackage[pdftex,active,tightpage]{preview}\n"
+//         "\\usepackage[pdftex,active,tightpage]{preview}\n"
         "\\usepackage{amsmath}\n"
         "\\usepackage{amssymb}\n"
         "\\usepackage{amsfonts}\n"
         "\\usepackage{tikz}\n"
         "\\begin{document}\n"
-        "\\begin{preview}\n"
+//         "\\begin{preview}\n"
         "\\small\n"
         "\\begin{tikzpicture}[inner sep=0pt, outer sep=0pt]\n"
         "\\node[align=center] at (0, 0) {"+ texCode + "};\n"
         "\\end{tikzpicture}\n"
-        "\\end{preview}\n"
+//         "\\end{preview}\n"
         "\\end{document}";
         d->tempFile->close();
     }

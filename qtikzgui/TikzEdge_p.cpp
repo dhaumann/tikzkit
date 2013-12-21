@@ -109,7 +109,7 @@ void TikzEdgePrivate::updateCache()
     const qreal shortenEnd = style()->shortenEnd() + arrowHead->rightExtend();
 
     switch (edge->type()) {
-        case tikz::Edge::StraightLine: { // (a) -- (b)
+        case tikz::Edge::LineTo: { // (a) -- (b)
             const qreal startRad = std::atan2(diff.y(), diff.x()) + style()->bendAngle() * M_PI / 180.0;
             const qreal endRad = std::atan2(-diff.y(), -diff.x()) - style()->bendAngle() * M_PI / 180.0;
 
@@ -121,7 +121,7 @@ void TikzEdgePrivate::updateCache()
             linePath.lineTo(endAnchor);
             break;
         }
-        case tikz::Edge::HorizVertLine: { // (a) -| (b)
+        case tikz::Edge::HVLineTo: { // (a) -| (b)
             // compute in/outward angles: {0, 90, 180, -90} degrees
             const qreal startRad = edge->startPos().x() < edge->endPos().x() ? 0.0 : M_PI;
             const qreal endRad = edge->startPos().y() < edge->endPos().y() ? -0.5 * M_PI
@@ -141,7 +141,7 @@ void TikzEdgePrivate::updateCache()
             linePath.lineTo(endAnchor);
             break;
         }
-        case tikz::Edge::VertHorizLine: { // (a) |- (b)
+        case tikz::Edge::VHLineTo: { // (a) |- (b)
             // compute in/outward angles: {0, 90, 180, -90} degrees
             const qreal startRad = edge->startPos().y() < edge->endPos().y() ? 0.5 * M_PI : -0.5 * M_PI;
             const qreal endRad = edge->startPos().x() < edge->endPos().x() ? -M_PI
@@ -255,7 +255,7 @@ qreal TikzEdgePrivate::startAngle() const
 {
     qreal rad = 0.0;
     switch (edge->type()) {
-        case tikz::Edge::StraightLine: {
+        case tikz::Edge::LineTo: {
             rad = baseAngle();
             break;
         }
@@ -276,7 +276,7 @@ qreal TikzEdgePrivate::endAngle() const
 {
     qreal rad = 0.0;
     switch (edge->type()) {
-        case tikz::Edge::StraightLine: {
+        case tikz::Edge::LineTo: {
             rad = baseAngle() - M_PI;
             break;
         }

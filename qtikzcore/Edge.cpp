@@ -74,7 +74,7 @@ Edge::Edge(Path * path)
 
     d->refCounter = 0;
     d->path = path;
-    d->type = StraightLine;
+    d->type = LineTo;
     d->style.setParentStyle(d->path->style());
 
     d->startAnchor = tikz::NoAnchor;

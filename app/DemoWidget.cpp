@@ -202,7 +202,7 @@ MainWindow::MainWindow()
 //     path->setEndNode(item2);
     path->path()->style()->setLineWidthType(tikz::UltraThick);
     path->path()->style()->setBendAngle(30);
-//     path->path()->style()->setCurveMode(tikz::HorizVertLine);
+//     path->path()->style()->setCurveMode(tikz::HVLineTo);
     path->path()->style()->setArrowTail(tikz::StealthArrow);
     path->path()->style()->setArrowHead(tikz::ToArrow);
 

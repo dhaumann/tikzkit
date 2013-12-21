@@ -161,9 +161,9 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     //
     QString to;
     switch (edge->type()) {
-        case Edge::Type::StraightLine: to = "--"; break;
-        case Edge::Type::HorizVertLine: to = "-|"; break;
-        case Edge::Type::VertHorizLine: to = "|-"; break;
+        case Edge::Type::LineTo: to = "--"; break;
+        case Edge::Type::HVLineTo: to = "-|"; break;
+        case Edge::Type::VHLineTo: to = "|-"; break;
         case Edge::Type::BendCurve: to = "to"; break;
         case Edge::Type::InOutCurve: to = "to"; break;
         case Edge::Type::BezierCurve: to = "to"; break; // TODO: implement correctly
@@ -345,9 +345,9 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
     if (style->curveModeSet()) {
         const CurveMode cm = style->curveMode();
         switch (cm) {
-            case StraightLine: break;
-            case HorizVertLine: break;
-            case VertHorizLine: break;
+            case LineTo: break;
+            case HVLineTo: break;
+            case VHLineTo: break;
             case BendCurve: {
                 if (style->bendAngleSet()) {
                     const qreal angle = style->bendAngle();
