@@ -40,6 +40,27 @@ class TIKZCORE_EXPORT Path : public QObject
 {
     Q_OBJECT
 
+    //
+    // Path type
+    //
+    public:
+        enum Type {
+            Line = 0, // (a) -- (b)
+            HVLine, // (a) -| (b)
+            VHLine, // (a) |- (b)
+            BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
+            InOutCurve, // (a) to[in=20, out=30] (b)
+            BezierCurve, // (a) .. controls (b) and (c) .. (d)
+            Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
+            Rectangle, // (a) rectangle (b)
+            Grid, // (a) grid (b)
+        };
+
+        /**
+         * Returns the element type of this edge.
+         */
+        virtual Path::Type type() const;
+
     public:
         /**
          * Virtual destructor.

@@ -42,6 +42,11 @@ class TIKZCORE_EXPORT EdgePath : public Path
          */
         virtual ~EdgePath();
 
+        /**
+         * Returns the element type of this edge.
+         */
+        Path::Type type() const override;
+
     //
     // Node start / end manipulation
     //
@@ -200,10 +205,11 @@ class TIKZCORE_EXPORT EdgePath : public Path
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
+         * @param type Path type
          * @param id unique id of the path
          * @param doc associated document
          */
-        EdgePath(qint64 id, Document* doc);
+        EdgePath(Path::Type type, qint64 id, Document* doc);
 
     //
     // internal

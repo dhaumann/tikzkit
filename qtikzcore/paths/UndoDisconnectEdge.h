@@ -34,8 +34,7 @@ class UndoDisconnectEdge : public UndoItem
         /**
          * Constructor.
          */
-        UndoDisconnectEdge(qint64 pathId, int index,
-                           qint64 nodeId, bool isStartNode, Document * doc);
+        UndoDisconnectEdge(qint64 pathId, qint64 nodeId, bool isStartNode, Document * doc);
 
         /**
          * Destructor
@@ -59,19 +58,14 @@ class UndoDisconnectEdge : public UndoItem
         const qint64 m_pathId;
 
         /**
-         * The index of the edge in the path.
-         */
-        int m_index;
-
-        /**
          * The unique Node id.
          */
-        const qint64 m_nodeId;
+        const qint64 m_undoNodeId;
 
         /**
          * anchor of the connection
          */
-        Anchor m_anchor;
+        Anchor m_undoAnchor;
 
         /**
          * Is it start or end node?
@@ -79,9 +73,9 @@ class UndoDisconnectEdge : public UndoItem
         bool m_isStart;
 
         /**
-         * Old position of the node
+         * New position of the node
          */
-        QPointF m_nodePos;
+        QPointF m_redoPos;
 };
 
 }

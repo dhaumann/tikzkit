@@ -25,6 +25,8 @@ set(qtikzcore_SOURCES
     StyleManager.cpp
 
     paths/EdgePath.cpp
+    paths/UndoConnectEdge.cpp
+    paths/UndoDisconnectEdge.cpp
 
     undo/UndoItem.cpp
     undo/UndoCreateNode.cpp
@@ -33,8 +35,6 @@ set(qtikzcore_SOURCES
     undo/UndoDeletePath.cpp
     undo/UndoCreateEdge.cpp
     undo/UndoDeleteEdge.cpp
-    undo/UndoConnectEdge.cpp
-    undo/UndoDisconnectEdge.cpp
     undo/UndoSetNodePos.cpp
     undo/UndoSetNodeText.cpp
     undo/UndoSetNodeStyle.cpp

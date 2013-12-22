@@ -32,6 +32,11 @@ class MetaPosPrivate;
 class Node;
 class Coord;
 
+/**
+ * MetaPos describes a position in the tikz scene.
+ * This position may either be a simple coordinate, or a node.
+ * In case of a node, the anchor additionally takes effect.
+ */
 class MetaPos : public QObject
 {
     Q_OBJECT

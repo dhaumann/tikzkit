@@ -27,7 +27,7 @@
 #include "Node.h"
 
 #include "UndoDisconnectEdge.h"
-#include "UndoConnectEdge.h"
+// #include "UndoConnectEdge.h"
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
 #include "UndoSetEdgeStyle.h"

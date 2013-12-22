@@ -63,6 +63,8 @@ Path::Path(qint64 id, Document* doc)
     d->doc = doc;
     d->id = id;
     d->style.setParentStyle(d->doc->style());
+
+    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 Path::~Path()

@@ -19,6 +19,7 @@
 
 #include "EdgePath.h"
 #include "Coord.h"
+#include "Node.h"
 #include "Edge.h"
 #include "EdgeStyle.h"
 #include "MetaPos.h"
@@ -29,6 +30,9 @@
 #include "UndoCreateEdge.h"
 #include "UndoDeleteEdge.h"
 
+#include "UndoConnectEdge.h"
+#include "UndoDisconnectEdge.h"
+
 #include <QVector>
 
 namespace tikz {
@@ -37,10 +41,7 @@ class EdgePathPrivate
 {
     public:
         // the element type of this edge
-        Edge::Type type;
-
-        // this edge's style
-        EdgeStyle style;
+        Path::Type type;
 
         // start meta node this edge points to
         MetaPos start;
@@ -49,13 +50,14 @@ class EdgePathPrivate
         MetaPos end;
 };
 
-EdgePath::EdgePath(qint64 id, Document* doc)
+EdgePath::EdgePath(Type type, qint64 id, Document* doc)
     : Path(id, doc)
     , d(new EdgePathPrivate())
 {
+    d->type = type;
+
     connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
     connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 EdgePath::~EdgePath()
@@ -63,6 +65,10 @@ EdgePath::~EdgePath()
     delete d;
 }
 
+Path::Type EdgePath::type() const
+{
+    return d->type;
+}
 
 void EdgePath::setStartNode(Node* node)
 {
@@ -79,12 +85,12 @@ void EdgePath::setStartNode(Node* node)
 
         endConfig();
     } else if (node) {
-//         document()->undoManager()->push(
-//             new UndoConnectEdge(d->path->id(), index(), node->id(), true, document()));
+        document()->undoManager()->push(
+            new UndoConnectEdge(id(), node->id(), true, document()));
     } else {
         Q_ASSERT(d->start.node() != 0);
-//         document()->undoManager()->push(
-//             new UndoDisconnectEdge(d->path->id(), index(), d->start.node()->id(), true, document()));
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(id(), d->start.node()->id(), true, document()));
     }
 }
 
@@ -108,12 +114,12 @@ void EdgePath::setEndNode(Node* node)
 
         endConfig();
     } else if (node) {
-//         document()->undoManager()->push(
-//             new UndoConnectEdge(d->path->id(), index(), node->id(), false, document()));
+        document()->undoManager()->push(
+            new UndoConnectEdge(id(), node->id(), false, document()));
     } else {
         Q_ASSERT(d->end.node() != 0);
-//         document()->undoManager()->push(
-//             new UndoDisconnectEdge(d->path->id(), index(), d->end.node()->id(), false, document()));
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
     }
 }
 
