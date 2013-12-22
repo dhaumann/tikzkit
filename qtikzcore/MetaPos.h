@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_METANODE_H
-#define TIKZ_METANODE_H
+#ifndef TIKZ_METAPOS_H
+#define TIKZ_METAPOS_H
 
 #include "tikz.h"
 
@@ -28,11 +28,11 @@
 namespace tikz
 {
 
-class MetaNodePrivate;
+class MetaPosPrivate;
 class Node;
 class Coord;
 
-class MetaNode : public QObject
+class MetaPos : public QObject
 {
     Q_OBJECT
 
@@ -40,12 +40,12 @@ class MetaNode : public QObject
         /**
          * Default constructor.
          */
-        MetaNode(QObject * parent = 0);
+        MetaPos(QObject * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~MetaNode();
+        virtual ~MetaPos();
 
         /**
          * Get the Coord object of this node.
@@ -73,10 +73,16 @@ class MetaNode : public QObject
     //
     public:
         /**
-         * Get the Node of this MetaNode.
+         * Get the Node of this MetaPos.
          * The return value may be 0.
          */
         Node* node() const;
+
+        /**
+         * Get the anchor of this pos.
+         * The return value may be 0.
+         */
+        Anchor anchor() const;
 
     public Q_SLOTS:
         /**
@@ -85,6 +91,11 @@ class MetaNode : public QObject
          * @return @p true, if the node changed, otherwise @p false.
          */
         bool setNode(Node* node);
+
+        /**
+         * Set the anchor of this node to @p anchor.
+         */
+        void setAnchor(tikz::Anchor anchor);
 
     Q_SIGNALS:
         /**
@@ -95,11 +106,11 @@ class MetaNode : public QObject
         void changed();
 
     private:
-        MetaNodePrivate * const d;
+        MetaPosPrivate * const d;
 };
 
 }
 
-#endif // TIKZ_METANODE_H
+#endif // TIKZ_METAPOS_H
 
 // kate: indent-width 4; replace-tabs on;

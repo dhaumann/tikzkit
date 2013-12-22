@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "MetaNode.h"
+#include "MetaPos.h"
 #include "Node.h"
 
 #include <QPointer>
@@ -25,42 +25,43 @@
 
 namespace tikz {
 
-class MetaNodePrivate
+class MetaPosPrivate
 {
     public:
         Coord coord;
         QPointer<Node> node;
+        Anchor anchor;
 };
 
-MetaNode::MetaNode(QObject * parent)
+MetaPos::MetaPos(QObject * parent)
     : QObject(parent)
-    , d(new MetaNodePrivate())
+    , d(new MetaPosPrivate())
 {
     connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
 }
 
-MetaNode::~MetaNode()
+MetaPos::~MetaPos()
 {
     delete d;
 }
 
-const QPointF& MetaNode::pos() const
+const QPointF& MetaPos::pos() const
 {
     return d->node ? d->node->pos()
                    : d->coord.pos();
 }
 
-void MetaNode::setPos(const QPointF& pos)
+void MetaPos::setPos(const QPointF& pos)
 {
     coord().setPos(pos);
 }
 
-Coord & MetaNode::coord() const
+Coord & MetaPos::coord() const
 {
     return d->node ? *d->node : d->coord;
 }
 
-bool MetaNode::setNode(Node* node)
+bool MetaPos::setNode(Node* node)
 {
     // if equal, stop
     if (d->node == node) {
@@ -88,6 +89,9 @@ bool MetaNode::setNode(Node* node)
         connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
     }
 
+    // reset anchor
+    d->anchor = NoAnchor;
+
     // notify about change
     emit changed();
 
@@ -95,9 +99,14 @@ bool MetaNode::setNode(Node* node)
     return true;
 }
 
-Node* MetaNode::node() const
+Node* MetaPos::node() const
 {
     return d->node;
+}
+
+Anchor MetaPos::anchor() const
+{
+    return d->node ? d->anchor : tikz::NoAnchor;
 }
 
 }

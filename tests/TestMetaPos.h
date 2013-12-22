@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QPointF>
 
-class MetaNodeTest : public QObject
+class MetaPosTest : public QObject
 {
     Q_OBJECT
 
@@ -31,8 +31,8 @@ public slots:
     void cleanupTestCase();
 
 private slots:
-    void testMetaNode();
-    void testMetaNodeWithNode();
+    void testMetaPos();
+    void testMetaPosWithNode();
 
 public slots:
     void posChangedEmitted(const QPointF & coord);

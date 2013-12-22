@@ -19,7 +19,7 @@
 
 #include "Edge.h"
 #include "Coord.h"
-#include "MetaNode.h"
+#include "MetaPos.h"
 #include "EdgeStyle.h"
 #include "Document.h"
 #include "Visitor.h"
@@ -53,10 +53,10 @@ class EdgePrivate
         EdgeStyle style;
 
         // start meta node this edge points to
-        MetaNode start;
+        MetaPos start;
 
         // target/end meta node this edge points to
-        MetaNode end;
+        MetaPos end;
 
         // anchor of the start node
         Anchor startAnchor;

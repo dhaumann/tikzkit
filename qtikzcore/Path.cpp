@@ -21,7 +21,7 @@
 #include "Coord.h"
 #include "Edge.h"
 #include "EdgeStyle.h"
-#include "MetaNode.h"
+#include "MetaPos.h"
 #include "Visitor.h"
 #include "Document.h"
 

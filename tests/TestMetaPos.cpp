@@ -16,28 +16,28 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#include "TestMetaNode.h"
-#include "TestMetaNode.moc"
+#include "TestMetaPos.h"
+#include "TestMetaPos.moc"
 
 #include <QtTest/QTest>
 
 #include "Document.h"
-#include "MetaNode.h"
+#include "MetaPos.h"
 #include "Node.h"
 
-QTEST_MAIN(MetaNodeTest)
+QTEST_MAIN(MetaPosTest)
 
-void MetaNodeTest::initTestCase()
+void MetaPosTest::initTestCase()
 {
 }
 
-void MetaNodeTest::cleanupTestCase()
+void MetaPosTest::cleanupTestCase()
 {
 }
 
-void MetaNodeTest::testMetaNode()
+void MetaPosTest::testMetaPos()
 {
-    tikz::MetaNode m;
+    tikz::MetaPos m;
 
     // initially (0, 0)
     QCOMPARE(m.pos(), QPointF(0, 0));
@@ -71,21 +71,21 @@ void MetaNodeTest::testMetaNode()
     QCOMPARE(m_posChangeCount, 1);
 }
 
-void MetaNodeTest::posChangedEmitted(const QPointF & coord)
+void MetaPosTest::posChangedEmitted(const QPointF & coord)
 {
     ++m_posChangeCount;
     m_changedPos = coord;
 }
 
-void MetaNodeTest::changedEmitted()
+void MetaPosTest::changedEmitted()
 {
     ++m_changeCount;
 }
 
-void MetaNodeTest::testMetaNodeWithNode()
+void MetaPosTest::testMetaPosWithNode()
 {
     tikz::Document doc;
-    tikz::MetaNode m;
+    tikz::MetaPos m;
     tikz::Node * n = doc.createNode();
 
     // get pointer to coord

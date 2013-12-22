@@ -16,7 +16,7 @@ set(qtikzcore_SOURCES
     Value.cpp
     Edge.cpp
     Node.cpp
-    MetaNode.cpp
+    MetaPos.cpp
     Path.cpp
     Document.cpp
     Style.cpp
@@ -54,7 +54,7 @@ set(qtikzcore_SOURCES
 set(qtikzcore_HEADERS
     Coord.h
     Node.h
-    MetaNode.h
+    MetaPos.h
     Edge.h
     Path.h
     Style.h
