@@ -33,12 +33,9 @@ UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Docum
     Path* path = document()->pathFromId(m_pathId);
     Q_ASSERT(path);
 
-//     Edge * edge = path->edge(index);
-//     Q_ASSERT(edge);
-//
-//     // save properties
-//     m_undoStyle.setStyle(*edge->style());
-//     m_redoStyle.setStyle(style);
+    // save properties
+    m_undoStyle.setStyle(*path->style());
+    m_redoStyle.setStyle(style);
 }
 
 UndoSetPathStyle::~UndoSetPathStyle()
@@ -57,10 +54,7 @@ void UndoSetPathStyle::undo()
     Path* path = document()->pathFromId(m_pathId);
     Q_ASSERT(path);
 
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge);
-//
-//     edge->setStyle(m_undoStyle);
+    path->setStyle(m_undoStyle);
 
     document()->setUndoActive(wasActive);
 }
@@ -72,10 +66,7 @@ void UndoSetPathStyle::redo()
     Path* path = document()->pathFromId(m_pathId);
     Q_ASSERT(path);
 
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge);
-//
-//     edge->setStyle(m_redoStyle);
+    path->setStyle(m_redoStyle);
 
     document()->setUndoActive(wasActive);
 }
