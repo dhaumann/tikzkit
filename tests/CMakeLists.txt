@@ -28,13 +28,13 @@ add_executable(TestNode ${TestNodeSrc} ${TestNodeMocs})
 target_link_libraries(TestNode ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
 add_test(NAME TestNode COMMAND TestNode)
 
-# Test: MetaNode
-set(TestMetaNodeSrc TestMetaNode.cpp)
-QT4_AUTOMOC(${TestMetaNodeSrc} TestMetaNode.h)
-QT4_WRAP_CPP(TestMetaNodeMocs)
-add_executable(TestMetaNode ${TestMetaNodeSrc} ${TestMetaNodeMocs})
-target_link_libraries(TestMetaNode ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
-add_test(NAME TestMetaNode COMMAND TestMetaNode)
+# Test: MetaPos
+set(TestMetaPosSrc TestMetaPos.cpp)
+QT4_AUTOMOC(${TestMetaPosSrc} TestMetaPos.h)
+QT4_WRAP_CPP(TestMetaPosMocs)
+add_executable(TestMetaPos ${TestMetaPosSrc} ${TestMetaPosMocs})
+target_link_libraries(TestMetaPos ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
+add_test(NAME TestMetaPos COMMAND TestMetaPos)
 
 # Document test
 set(DocumentSrc documenttest.cpp)
