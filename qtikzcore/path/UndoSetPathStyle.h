@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UNDO_SET_EDGE_STYLE_H
-#define TIKZ_UNDO_SET_EDGE_STYLE_H
+#ifndef TIKZ_UNDO_SET_PATH_STYLE_H
+#define TIKZ_UNDO_SET_PATH_STYLE_H
 
 #include "UndoItem.h"
 #include <EdgeStyle.h>
@@ -29,18 +29,18 @@ namespace tikz
 class Node;
 class Document;
 
-class UndoSetEdgeStyle : public UndoItem
+class UndoSetPathStyle : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoSetEdgeStyle(qint64 pathId, int index, const EdgeStyle & style, Document * doc);
+        UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc);
 
         /**
          * Destructor
          */
-        virtual ~UndoSetEdgeStyle();
+        virtual ~UndoSetPathStyle();
 
         /**
          * Return node id, which is uniq.
@@ -69,11 +69,6 @@ class UndoSetEdgeStyle : public UndoItem
         const qint64 m_pathId;
 
         /**
-         * Edge index
-         */
-        int m_edgeIndex;
-
-        /**
          * The node style before the change
          */
         EdgeStyle m_undoStyle;
@@ -86,6 +81,6 @@ class UndoSetEdgeStyle : public UndoItem
 
 }
 
-#endif // TIKZ_UNDO_SET_EDGE_STYLE_H
+#endif // TIKZ_UNDO_SET_PATH_STYLE_H
 
 // kate: indent-width 4; replace-tabs on;

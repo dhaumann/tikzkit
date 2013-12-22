@@ -26,11 +26,10 @@
 #include "Path.h"
 #include "Node.h"
 
-#include "UndoDisconnectEdge.h"
-// #include "UndoConnectEdge.h"
+#include "UndoSetPathStyle.h"
+
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
-#include "UndoSetEdgeStyle.h"
 #include "UndoSetEdgeType.h"
 
 #include <QUndoStack>

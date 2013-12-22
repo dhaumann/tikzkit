@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "UndoSetEdgeStyle.h"
+#include "UndoSetPathStyle.h"
 #include "Path.h"
 #include "Edge.h"
 #include "EdgeStyle.h"
@@ -25,10 +25,9 @@
 
 namespace tikz {
 
-UndoSetEdgeStyle::UndoSetEdgeStyle(qint64 pathId, int index, const EdgeStyle & style, Document * doc)
+UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)
-    , m_edgeIndex(index)
 {
     // get path to save data
     Path* path = document()->pathFromId(m_pathId);
@@ -42,16 +41,16 @@ UndoSetEdgeStyle::UndoSetEdgeStyle(qint64 pathId, int index, const EdgeStyle & s
 //     m_redoStyle.setStyle(style);
 }
 
-UndoSetEdgeStyle::~UndoSetEdgeStyle()
+UndoSetPathStyle::~UndoSetPathStyle()
 {
 }
 
-int UndoSetEdgeStyle::id() const
+int UndoSetPathStyle::id() const
 {
     return m_pathId;
 }
 
-void UndoSetEdgeStyle::undo()
+void UndoSetPathStyle::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
@@ -66,7 +65,7 @@ void UndoSetEdgeStyle::undo()
     document()->setUndoActive(wasActive);
 }
 
-void UndoSetEdgeStyle::redo()
+void UndoSetPathStyle::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
@@ -81,11 +80,11 @@ void UndoSetEdgeStyle::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetEdgeStyle::mergeWith(const QUndoCommand * command)
+bool UndoSetPathStyle::mergeWith(const QUndoCommand * command)
 {
     Q_ASSERT(id() == command->id());
 
-    auto * otherStyle = dynamic_cast<const UndoSetEdgeStyle*>(command);
+    auto * otherStyle = dynamic_cast<const UndoSetPathStyle*>(command);
     if (otherStyle) {
         m_redoStyle.setStyle(otherStyle->m_redoStyle);
     }

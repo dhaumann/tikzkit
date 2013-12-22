@@ -7,7 +7,8 @@ include_directories(
     .
     undo/
     visitor/
-    paths/
+    path
+    path/edge
     ${QJSON_INCLUDE_DIR}
 )
 
@@ -17,16 +18,17 @@ set(qtikzcore_SOURCES
     Edge.cpp
     Node.cpp
     MetaPos.cpp
-    Path.cpp
     Document.cpp
     Style.cpp
     NodeStyle.cpp
     EdgeStyle.cpp
     StyleManager.cpp
 
-    paths/EdgePath.cpp
-    paths/UndoConnectEdge.cpp
-    paths/UndoDisconnectEdge.cpp
+    path/Path.cpp
+    path/UndoSetPathStyle.cpp
+    path/edge/EdgePath.cpp
+    path/edge/UndoConnectEdge.cpp
+    path/edge/UndoDisconnectEdge.cpp
 
     undo/UndoItem.cpp
     undo/UndoCreateNode.cpp
@@ -38,10 +40,8 @@ set(qtikzcore_SOURCES
     undo/UndoSetNodePos.cpp
     undo/UndoSetNodeText.cpp
     undo/UndoSetNodeStyle.cpp
-    undo/UndoSetPathStyle.cpp
     undo/UndoSetEdgeAnchor.cpp
     undo/UndoSetEdgePos.cpp
-    undo/UndoSetEdgeStyle.cpp
     undo/UndoSetEdgeType.cpp
 
     visitor/Visitor.cpp
@@ -56,7 +56,8 @@ set(qtikzcore_HEADERS
     Node.h
     MetaPos.h
     Edge.h
-    Path.h
+    path/Path.h
+    path/edge/EdgePath.h
     Style.h
     NodeStyle.h
     EdgeStyle.h
