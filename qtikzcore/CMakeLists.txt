@@ -9,6 +9,7 @@ include_directories(
     visitor/
     path
     path/edge
+    path/ellipse
     ${QJSON_INCLUDE_DIR}
 )
 

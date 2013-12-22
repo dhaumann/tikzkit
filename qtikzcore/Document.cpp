@@ -19,9 +19,8 @@
 
 #include "Document.h"
 #include "Node.h"
-#include "Edge.h"
-#include "Path.h"
 #include "EdgePath.h"
+#include "EllipsePath.h"
 #include "Style.h"
 
 #include "UndoCreateNode.h"
@@ -107,15 +106,15 @@ Document::~Document()
 
 bool Document::accept(tikz::Visitor & visitor)
 {
+    // visit this document
     visitor.visit(this);
+
+    // visit all nodes
     foreach (Node* node, d->nodes) {
         node->accept(visitor);
     }
 
-    foreach (Edge* edge, d->edges) {
-        edge->accept(visitor);
-    }
-
+    // visit all paths
     foreach (Path* path, d->paths) {
         path->accept(visitor);
     }
@@ -363,7 +362,7 @@ Path * Document::createPath(Path::Type type, qint64 id)
             break;
         }
         case Path::Ellipse:
-//             path = new EllipsePath(type, id, this); FIXME
+            path = new EllipsePath(id, this);
         default:
             Q_ASSERT(false);
     }
