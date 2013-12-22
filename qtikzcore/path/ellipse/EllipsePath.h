@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_EDGE_PATH_H
-#define TIKZ_EDGE_PATH_H
+#ifndef TIKZ_ELLIPSE_PATH_H
+#define TIKZ_ELLIPSE_PATH_H
 
 #include <Path.h>
 
@@ -29,17 +29,16 @@ namespace tikz
 
 class Node;
 
-class EdgePathPrivate;
+class EllipsePathPrivate;
 
 /**
- * This class represents a TikZ path from one position to another position.
+ * This class represents a TikZ ellipse path.
  * For instance, a typical edge looks like this:
  * @code
- * \draw (1, 1) -- (b);
+ * \draw (1, 1) ellipse (2cm and 1cm);
  * @endcode
- * The type of the edge is defined by type().
  */
-class TIKZCORE_EXPORT EdgePath : public Path
+class TIKZCORE_EXPORT EllipsePath : public Path
 {
     Q_OBJECT
 
@@ -47,12 +46,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Virtual destructor.
          */
-        virtual ~EdgePath();
-
-        /**
-         * Returns the element type of this edge.
-         */
-        Path::Type type() const override;
+        virtual ~EllipsePath();
 
     //
     // Node start / end manipulation
@@ -62,34 +56,18 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Returns the start Coord.
          */
-        Coord& start() const;
-
-        /**
-         * Returns the end Coord.
-         * The returned pointer is always valid.
-         */
-        Coord& end() const;
+        Coord& coord() const;
 
         /**
          * Get the start node, which was set with setStart(Node*).
          */
-        Node* startNode() const;
-
-        /**
-         * Get the end node, which was set with setEnd(Node*).
-         */
-        Node* endNode();
+        Node* node() const;
 
     public Q_SLOTS:
         /**
          * Sets the start coordinate of the edge to @p node;
          */
-        void setStartNode(Node* node);
-
-        /**
-         * Sets the end coordinate of the edge to @p node;
-         */
-        void setEndNode(Node* node);
+        void setNode(Node* node);
 
     //
     // x/y-position methods
@@ -99,13 +77,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Get the position of the current start node.
          * @note This is the same as start()->pos().
          */
-        QPointF startPos() const;
-
-        /**
-         * Set the position of the current end node.
-         * @note This is the same as end()->pos().
-         */
-        QPointF endPos() const;
+        const QPointF & pos() const;
 
     public Q_SLOTS:
         /**
@@ -113,55 +85,33 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * @param pos the new start position
          * @see complement: start()->pos()
          */
-        void setStartPos(const QPointF& pos);
-
-        /**
-         * Set the position of the current end node to @p pos.
-         * @param pos the new end position
-         * @see complement: end()->pos()
-         */
-        void setEndPos(const QPointF& pos);
+        void setPos(const QPointF& pos);
 
     //
     // anchor methods
     //
     public:
         /**
-         * Get the anchor of the start of the edge.
+         * Get the anchor of the ellipse.
          */
-        tikz::Anchor startAnchor() const;
+        tikz::Anchor anchor() const;
 
-        /**
-         * Get the anchor of the end of the edge.
-         */
-        tikz::Anchor endAnchor() const;
 
     public Q_SLOTS:
         /**
-         * Set the anchor of the start of the edge to @p anchor.
+         * Set the anchor of the ellipse to @p anchor.
          */
-        void setStartAnchor(tikz::Anchor anchor);
-
-        /**
-         * Set the anchor of the end of the edge to @p anchor.
-         */
-        void setEndAnchor(tikz::Anchor anchor);
+        void setAnchor(tikz::Anchor anchor);
 
     //
     // signals
     //
     Q_SIGNALS:
         /**
-         * This signal is emitted whenever the start node of this edge changes.
-         * The node @p start may be 0.
+         * This signal is emitted whenever the node of this ellipse changes.
+         * @param node may be 0
          */
-        void startNodeChanged(tikz::Node * start);
-
-        /**
-         * This signal is emitted whenever the end node of this edge changes.
-         * The node @p start may be 0.
-         */
-        void endNodeChanged(tikz::Node * start);
+        void nodeChanged(tikz::Node * node);
 
     //
     // internal to tikz::Document
@@ -175,7 +125,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * @param id unique id of the path
          * @param doc associated document
          */
-        EdgePath(Path::Type type, qint64 id, Document* doc);
+        EllipsePath(qint64 id, Document* doc);
 
         /**
          * Destruct the node by saving the start and end pos or node connection.
@@ -189,13 +139,13 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Private default constructor, not implemented
          */
-        EdgePath();
+        EllipsePath();
     private:
-        EdgePathPrivate * const d;
+        EllipsePathPrivate * const d;
 };
 
 }
 
-#endif // TIKZ_EDGE_PATH_H
+#endif // TIKZ_ELLIPSE_PATH_H
 
 // kate: indent-width 4; replace-tabs on;

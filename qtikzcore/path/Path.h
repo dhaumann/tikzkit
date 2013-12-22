@@ -21,7 +21,6 @@
 #define TIKZ_PATH_H
 
 #include <QObject>
-#include <QPoint>
 
 #include "tikz_export.h"
 #include "tikz.h"

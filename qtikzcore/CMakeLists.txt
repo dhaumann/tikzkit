@@ -32,6 +32,12 @@ set(qtikzcore_SOURCES
     path/edge/UndoSetEdgeAnchor.cpp
     path/edge/UndoSetEdgePos.cpp
 
+    path/ellipse/EllipsePath.cpp
+    path/ellipse/UndoConnectEllipse.cpp
+    path/ellipse/UndoDisconnectEllipse.cpp
+    path/ellipse/UndoSetEllipseAnchor.cpp
+    path/ellipse/UndoSetEllipsePos.cpp
+
     undo/UndoItem.cpp
     undo/UndoCreateNode.cpp
     undo/UndoDeleteNode.cpp
