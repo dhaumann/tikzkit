@@ -22,9 +22,10 @@
 
 namespace tikz {
 
-UndoCreatePath::UndoCreatePath(qint64 id, Document * doc)
+UndoCreatePath::UndoCreatePath(Path::Type type, qint64 id, Document * doc)
     : UndoItem(doc)
     , m_id(id)
+    , m_type(type)
 {
 }
 
@@ -39,7 +40,7 @@ void UndoCreatePath::undo()
 
 void UndoCreatePath::redo()
 {
-    document()->createPath(m_id);
+    document()->createPath(m_type, m_id);
 }
 
 }

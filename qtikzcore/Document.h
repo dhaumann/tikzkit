@@ -22,6 +22,7 @@
 
 #include "tikz_export.h"
 #include "tikz.h"
+#include "Path.h"
 
 #include <QObject>
 #include <QVector>
@@ -36,7 +37,6 @@ class DocumentPrivate;
 class Style;
 class Node;
 class Edge;
-class Path;
 class NodeStyle;
 class EdgeStyle;
 class Visitor;
@@ -193,8 +193,9 @@ class TIKZCORE_EXPORT Document : public QObject
         /**
          * Creates a new path associated with this document.
          * If the path is not needed anymore, delete it with deletePath().
+         * @param type the path type
          */
-        Path * createPath();
+        Path * createPath(Path::Type type = Path::Line);
 
         /**
          * Remove @p path from the document by deleting the path object.
@@ -220,7 +221,7 @@ class TIKZCORE_EXPORT Document : public QObject
         /**
          * Create a new path associated with this document with @p id.
          */
-        virtual Path * createPath(qint64 id);
+        virtual Path * createPath(Path::Type type, qint64 id);
 
         /**
          * Delete path @p id associated with this document.

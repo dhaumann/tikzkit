@@ -22,6 +22,8 @@
 
 #include "UndoItem.h"
 
+#include "Path.h"
+
 namespace tikz
 {
 
@@ -33,7 +35,7 @@ class UndoCreatePath : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreatePath(qint64 id, Document * doc);
+        UndoCreatePath(Path::Type type, qint64 id, Document * doc);
 
         /**
          * Destructor
@@ -52,9 +54,14 @@ class UndoCreatePath : public UndoItem
 
     private:
         /**
-         * The unique Edge id.
+         * The unique Path id.
          */
         const qint64 m_id;
+
+        /**
+         * Path type.
+         */
+        const Path::Type m_type;
 };
 
 }

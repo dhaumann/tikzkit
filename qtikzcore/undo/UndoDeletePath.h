@@ -21,8 +21,7 @@
 #define TIKZ_UNDO_DELETE_PATH_H
 
 #include "UndoItem.h"
-
-#include <QPointF>
+#include "Path.h"
 #include "EdgeStyle.h"
 
 namespace tikz
@@ -56,6 +55,11 @@ class UndoDeletePath : public UndoItem
          * The unique Edge id.
          */
         const qint64 m_id;
+
+        /**
+         * Path type.
+         */
+        Path::Type m_type;
 
         /**
          * The edge style of the created edge

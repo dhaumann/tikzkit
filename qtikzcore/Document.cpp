@@ -21,6 +21,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include "Path.h"
+#include "EdgePath.h"
 #include "Style.h"
 
 #include "UndoCreateNode.h"
@@ -224,11 +225,11 @@ QVector<Path*> Document::paths() const
     return d->paths;
 }
 
-Path * Document::createPath()
+Path * Document::createPath(Path::Type type)
 {
     // create new edge, push will call ::redo()
     const qint64 id = d->uniqueId();
-    d->undoManager.push(new UndoCreatePath(id, this));
+    d->undoManager.push(new UndoCreatePath(type, id, this));
 
     // now the edge should be in the map
     Q_ASSERT(d->pathMap.contains(id));
@@ -346,12 +347,29 @@ void Document::deleteNode(qint64 id)
     delete node;
 }
 
-Path * Document::createPath(qint64 id)
+Path * Document::createPath(Path::Type type, qint64 id)
 {
     Q_ASSERT(id >= 0);
 
     // create new path
-    Path* path = new Path(id, this);
+    Path* path = 0;
+    switch(type) {
+        case Path::Line:
+        case Path::HVLine:
+        case Path::VHLine:
+        case Path::BendCurve:
+        case Path::InOutCurve:
+        case Path::BezierCurve: {
+            path = new EdgePath(type, id, this);
+            break;
+        }
+        case Path::Ellipse:
+//             path = new EllipsePath(type, id, this); FIXME
+        default:
+            Q_ASSERT(false);
+    }
+
+    // register path
     d->paths.append(path);
 
     // insert path into hash map
