@@ -104,6 +104,17 @@ Node* MetaPos::node() const
     return d->node;
 }
 
+void MetaPos::setAnchor(tikz::Anchor anchor)
+{
+    // setting an anchor only makes sense with node
+    Q_ASSERT(d->node);
+
+    if (d->anchor != anchor) {
+        d->anchor = anchor;
+        emit changed();
+    }
+}
+
 Anchor MetaPos::anchor() const
 {
     return d->node ? d->anchor : tikz::NoAnchor;
