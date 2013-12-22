@@ -113,58 +113,6 @@ class TIKZCORE_EXPORT Path : public QObject
         void setStyle(const EdgeStyle & style);
 
     //
-    // path operations and attributes
-    //
-    public:
-        /**
-         * Returns the number of edges in the path.
-         * If the path isClosed(), the edge count equals nodeCount() + 1.
-         * If the path is not closed, the edge count equals nodeCount().
-         */
-        int edgeCount() const;
-
-        /**
-         * Returns the i-th edge in the path.
-         * @param i edge index. If out of range, the return value is 0.
-         */
-        Edge * edge(int i);
-
-        /**
-         * Create a new edge.
-         * This edge is inserted at position @p index.
-         * If @p index < 0, the edge is appended at the end of the edge list.
-         */
-        Edge * createEdge(int index = -1);
-
-        /**
-         * Delete @p edge from the edge list.
-         * After this call, @p edge is deleted.
-         */
-        void deleteEdge(Edge * edge);
-
-        /**
-         * Delete edge at index @p index from the edge list.
-         * After this call, the corresponding edge is deleted.
-         */
-        void deleteEdge(int index);
-
-        /**
-         * Get the index of @p edge.
-         */
-        int edgeIndex(const Edge * edge) const;
-
-        /**
-         * Returns @p true, if the path is closed.
-         * This maps to '-- cycle' in TikZ.
-         */
-        bool isClosed() const;
-
-        /**
-         * Set whether this path is closed.
-         */
-        void setClosed(bool closed);
-
-    //
     // internal to tikz::Document
     //
     protected:

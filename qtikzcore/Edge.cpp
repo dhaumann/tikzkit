@@ -95,11 +95,6 @@ Document * Edge::document() const
     return d->path->document();
 }
 
-int Edge::index() const
-{
-    return d->path->edgeIndex(this);
-}
-
 Edge::Type Edge::type() const
 {
     return d->type;
@@ -116,8 +111,8 @@ void Edge::setType(Edge::Type type)
         d->type = type;
         endConfig();
     } else {
-        document()->undoManager()->push(
-            new UndoSetEdgeType(d->path->id(), index(), type, document()));
+//         document()->undoManager()->push(
+//             new UndoSetEdgeType(d->path->id(), index(), type, document()));
     }
 }
 
@@ -144,12 +139,12 @@ void Edge::setStartNode(Node* node)
 
         endConfig();
     } else if (node) {
-        document()->undoManager()->push(
-            new UndoConnectEdge(d->path->id(), index(), node->id(), true, document()));
+//         document()->undoManager()->push(
+//             new UndoConnectEdge(d->path->id(), index(), node->id(), true, document()));
     } else {
         Q_ASSERT(d->start.node() != 0);
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(d->path->id(), index(), d->start.node()->id(), true, document()));
+//         document()->undoManager()->push(
+//             new UndoDisconnectEdge(d->path->id(), index(), d->start.node()->id(), true, document()));
     }
 }
 
@@ -176,12 +171,12 @@ void Edge::setEndNode(Node* node)
 
         endConfig();
     } else if (node) {
-        document()->undoManager()->push(
-            new UndoConnectEdge(d->path->id(), index(), node->id(), false, document()));
+//         document()->undoManager()->push(
+//             new UndoConnectEdge(d->path->id(), index(), node->id(), false, document()));
     } else {
         Q_ASSERT(d->end.node() != 0);
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(d->path->id(), index(), d->end.node()->id(), false, document()));
+//         document()->undoManager()->push(
+//             new UndoDisconnectEdge(d->path->id(), index(), d->end.node()->id(), false, document()));
     }
 }
 
@@ -224,8 +219,8 @@ void Edge::setStartPos(const QPointF& pos)
         // first set start node to 0
         setStartNode(0);
         // then set position
-        document()->undoManager()->push(
-            new UndoSetEdgePos(d->path->id(), index(), pos, true, document()));
+//         document()->undoManager()->push(
+//             new UndoSetEdgePos(d->path->id(), index(), pos, true, document()));
     }
 }
 
@@ -243,8 +238,8 @@ void Edge::setEndPos(const QPointF& pos)
         // first set end node to 0
         setEndNode(0);
         // then set position
-        document()->undoManager()->push(
-            new UndoSetEdgePos(d->path->id(), index(), pos, false, document()));
+//         document()->undoManager()->push(
+//             new UndoSetEdgePos(d->path->id(), index(), pos, false, document()));
     }
 }
 
@@ -270,8 +265,8 @@ void Edge::setStartAnchor(tikz::Anchor anchor)
         d->startAnchor = anchor;
         endConfig();
     } else {
-        document()->undoManager()->push(
-            new UndoSetEdgeAnchor(d->path->id(), index(), anchor, true, document()));
+//         document()->undoManager()->push(
+//             new UndoSetEdgeAnchor(d->path->id(), index(), anchor, true, document()));
     }
 }
 
@@ -287,8 +282,8 @@ void Edge::setEndAnchor(tikz::Anchor anchor)
         d->endAnchor = anchor;
         endConfig();
     } else {
-        document()->undoManager()->push(
-            new UndoSetEdgeAnchor(d->path->id(), index(), anchor, false, document()));
+//         document()->undoManager()->push(
+//             new UndoSetEdgeAnchor(d->path->id(), index(), anchor, false, document()));
     }
 }
 
@@ -307,7 +302,7 @@ void Edge::setStyle(const EdgeStyle & style)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->undoManager()->push(new UndoSetEdgeStyle(d->path->id(), index(), style, document()));
+//         document()->undoManager()->push(new UndoSetEdgeStyle(d->path->id(), index(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above

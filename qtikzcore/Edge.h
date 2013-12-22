@@ -57,11 +57,6 @@ class TIKZCORE_EXPORT Edge : public QObject
          */
         Document * document() const;
 
-        /**
-         * Returns the index of this edge in the path.
-         */
-        int index() const;
-
     //
     // element type
     //

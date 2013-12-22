@@ -42,10 +42,10 @@ UndoDisconnectEdge::UndoDisconnectEdge(qint64 pathId, int index, qint64 nodeId, 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
 
-    Edge * edge = path->edge(m_index);
-    Q_ASSERT(edge != 0);
-
-    m_anchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+//     Edge * edge = path->edge(m_index);
+//     Q_ASSERT(edge != 0);
+//
+//     m_anchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
 UndoDisconnectEdge::~UndoDisconnectEdge()
@@ -62,19 +62,19 @@ void UndoDisconnectEdge::undo()
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path);
 
-    Edge * edge = path->edge(m_index);
-    Q_ASSERT(edge != 0);
-
-    edge->beginConfig();
-
-    if (m_isStart) {
-        edge->setStartNode(node);
-        edge->setStartAnchor(m_anchor);
-    } else {
-        edge->setEndNode(node);
-        edge->setEndAnchor(m_anchor);
-    }
-    edge->endConfig();
+// //     Edge * edge = path->edge(m_index);
+// //     Q_ASSERT(edge != 0);
+// //
+// //     edge->beginConfig();
+// //
+// //     if (m_isStart) {
+// //         edge->setStartNode(node);
+// //         edge->setStartAnchor(m_anchor);
+// //     } else {
+// //         edge->setEndNode(node);
+// //         edge->setEndAnchor(m_anchor);
+// //     }
+// //     edge->endConfig();
 
     document()->setUndoActive(wasActive);
 }
@@ -85,16 +85,16 @@ void UndoDisconnectEdge::redo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_index);
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        edge->setStartPos(m_nodePos);
-        Q_ASSERT(edge->startNode() == 0);
-    } else {
-        edge->setEndPos(m_nodePos);
-        Q_ASSERT(edge->endNode() == 0);
-    }
+//     Edge * edge = path->edge(m_index);
+//     Q_ASSERT(edge != 0);
+//
+//     if (m_isStart) {
+//         edge->setStartPos(m_nodePos);
+//         Q_ASSERT(edge->startNode() == 0);
+//     } else {
+//         edge->setEndPos(m_nodePos);
+//         Q_ASSERT(edge->endNode() == 0);
+//     }
 
     document()->setUndoActive(wasActive);
 }

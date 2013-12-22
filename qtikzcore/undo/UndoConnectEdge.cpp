@@ -41,33 +41,33 @@ UndoConnectEdge::UndoConnectEdge(qint64 pathId,
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
 
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    Node * oldNode = m_isStart ? edge->startNode() : edge->endNode();
-    m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
-
-    // if edge was connected to other node
-    if (m_isStart) {
-        Node * oldNode = edge->startNode();
-        if (oldNode) {
-            m_undoNodeId = oldNode->id();
-            m_undoAnchor = edge->startAnchor();
-        }
-    } else {
-        Node * oldNode = edge->endNode();
-        if (oldNode) {
-            m_undoNodeId = oldNode->id();
-            m_undoAnchor = edge->endAnchor();
-        }
-    }
-
-    // no: edge was not connected to other node, so just save old position
-    if (m_undoNodeId == -1) {
-        m_undoPos = m_isStart ? edge->startPos() : edge->endPos();
-    }
-
-    m_redoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     Node * oldNode = m_isStart ? edge->startNode() : edge->endNode();
+//     m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+//
+//     // if edge was connected to other node
+//     if (m_isStart) {
+//         Node * oldNode = edge->startNode();
+//         if (oldNode) {
+//             m_undoNodeId = oldNode->id();
+//             m_undoAnchor = edge->startAnchor();
+//         }
+//     } else {
+//         Node * oldNode = edge->endNode();
+//         if (oldNode) {
+//             m_undoNodeId = oldNode->id();
+//             m_undoAnchor = edge->endAnchor();
+//         }
+//     }
+//
+//     // no: edge was not connected to other node, so just save old position
+//     if (m_undoNodeId == -1) {
+//         m_undoPos = m_isStart ? edge->startPos() : edge->endPos();
+//     }
+//
+//     m_redoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
 UndoConnectEdge::~UndoConnectEdge()
@@ -81,37 +81,37 @@ void UndoConnectEdge::undo()
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path);
 
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    edge->beginConfig();
-
-    if (m_undoNodeId == -1) {
-        //
-        // set position to coordinate
-        //
-        if (m_isStart) {
-            edge->setStartPos(m_undoPos);
-        } else {
-            edge->setEndPos(m_undoPos);
-        }
-    } else {
-        //
-        // restore old node connection
-        //
-        Node * node = document()->nodeFromId(m_undoNodeId);
-        Q_ASSERT(node != 0);
-
-        if (m_isStart) {
-            edge->setStartNode(node);
-            edge->setStartAnchor(m_undoAnchor);
-        } else {
-            edge->setEndNode(node);
-            edge->setEndAnchor(m_undoAnchor);
-        }
-    }
-
-    edge->endConfig();
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     edge->beginConfig();
+//
+//     if (m_undoNodeId == -1) {
+//         //
+//         // set position to coordinate
+//         //
+//         if (m_isStart) {
+//             edge->setStartPos(m_undoPos);
+//         } else {
+//             edge->setEndPos(m_undoPos);
+//         }
+//     } else {
+//         //
+//         // restore old node connection
+//         //
+//         Node * node = document()->nodeFromId(m_undoNodeId);
+//         Q_ASSERT(node != 0);
+//
+//         if (m_isStart) {
+//             edge->setStartNode(node);
+//             edge->setStartAnchor(m_undoAnchor);
+//         } else {
+//             edge->setEndNode(node);
+//             edge->setEndAnchor(m_undoAnchor);
+//         }
+//     }
+//
+//     edge->endConfig();
 
     document()->setUndoActive(wasActive);
 }
@@ -122,16 +122,16 @@ void UndoConnectEdge::redo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        edge->setStartNode(document()->nodeFromId(m_redoNodeId));
-        Q_ASSERT(edge->startNode()->id() == m_redoNodeId);
-    } else {
-        edge->setEndNode(document()->nodeFromId(m_redoNodeId));
-        Q_ASSERT(edge->endNode()->id() == m_redoNodeId);
-    }
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     if (m_isStart) {
+//         edge->setStartNode(document()->nodeFromId(m_redoNodeId));
+//         Q_ASSERT(edge->startNode()->id() == m_redoNodeId);
+//     } else {
+//         edge->setEndNode(document()->nodeFromId(m_redoNodeId));
+//         Q_ASSERT(edge->endNode()->id() == m_redoNodeId);
+//     }
 
     document()->setUndoActive(wasActive);
 }

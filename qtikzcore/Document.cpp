@@ -243,9 +243,9 @@ void Document::deletePath(Path * path)
     // TODO: not yet the case, but maybe in future: remove child nodes here?
 
     // remove all edges
-    for (int i = path->edgeCount() - 1; i >= 0; --i) {
-        path->deleteEdge(i);
-    }
+//     for (int i = path->edgeCount() - 1; i >= 0; --i) {
+//         path->deleteEdge(i);
+//     }
 
     // delete path, push will call ::redo()
     const qint64 id = path->id();
@@ -296,26 +296,26 @@ void Document::deleteNode(Node * node)
 
     // make sure no edge points to the deleted node
     foreach (Path* path, d->paths) {
-        for (int i = path->edgeCount() - 1; i >= 0; --i) {
-            Edge * edge = path->edge(i);
-            const bool startMatches = edge->startNode() == node;
-            const bool endMatches = edge->endNode() == node;
-
-            if (startMatches && endMatches) {
-                // it's a loop to the node, -> simply remove edge
-                path->deleteEdge(edge);
-                // if it was the only edge, just remove entire path
-                if (path->edgeCount() == 0) {
-                    deletePath(path);
-                }
-            } else if (startMatches) {
-                // disconnect start
-                edge->setStartNode(0);
-            } else if (endMatches) {
-                // disonnect end
-                edge->setEndNode(0);
-            }
-        }
+//         for (int i = path->edgeCount() - 1; i >= 0; --i) {
+//             Edge * edge = path->edge(i);
+//             const bool startMatches = edge->startNode() == node;
+//             const bool endMatches = edge->endNode() == node;
+//
+//             if (startMatches && endMatches) {
+//                 // it's a loop to the node, -> simply remove edge
+//                 path->deleteEdge(edge);
+//                 // if it was the only edge, just remove entire path
+//                 if (path->edgeCount() == 0) {
+//                     deletePath(path);
+//                 }
+//             } else if (startMatches) {
+//                 // disconnect start
+//                 edge->setStartNode(0);
+//             } else if (endMatches) {
+//                 // disonnect end
+//                 edge->setEndNode(0);
+//             }
+//         }
     }
 
     // delete node, push will call ::redo()

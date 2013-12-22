@@ -33,7 +33,7 @@ UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
     Q_ASSERT(path);
 
     // the path must be empty here, since we only save the path style
-    Q_ASSERT(path->edgeCount() == 0);
+//     Q_ASSERT(path->edgeCount() == 0); FIXME
 
     // save properties
     m_style.setStyle(*path->style());

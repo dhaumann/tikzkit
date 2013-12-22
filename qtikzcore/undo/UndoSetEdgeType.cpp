@@ -35,10 +35,10 @@ UndoSetEdgeType::UndoSetEdgeType(qint64 pathId,
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
 
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    m_undoType = edge->type();
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     m_undoType = edge->type();
 }
 
 UndoSetEdgeType::~UndoSetEdgeType()
@@ -51,10 +51,10 @@ void UndoSetEdgeType::undo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    edge->setType(m_undoType);
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     edge->setType(m_undoType);
 
     document()->setUndoActive(wasActive);
 }
@@ -65,10 +65,10 @@ void UndoSetEdgeType::redo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    edge->setType(m_redoType);
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     edge->setType(m_redoType);
 
     document()->setUndoActive(wasActive);
 }

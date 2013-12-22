@@ -38,16 +38,16 @@ UndoSetEdgePos::UndoSetEdgePos(qint64 pathId,
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
 
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        Q_ASSERT(edge->startNode() == 0);
-        m_oldPos = edge->startPos();
-    } else {
-        Q_ASSERT(edge->endNode() == 0);
-        m_oldPos = edge->endPos();
-    }
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     if (m_isStart) {
+//         Q_ASSERT(edge->startNode() == 0);
+//         m_oldPos = edge->startPos();
+//     } else {
+//         Q_ASSERT(edge->endNode() == 0);
+//         m_oldPos = edge->endPos();
+//     }
 }
 
 UndoSetEdgePos::~UndoSetEdgePos()
@@ -60,14 +60,14 @@ void UndoSetEdgePos::undo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        edge->setStartPos(m_oldPos);
-    } else {
-        edge->setEndPos(m_oldPos);
-    }
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     if (m_isStart) {
+//         edge->setStartPos(m_oldPos);
+//     } else {
+//         edge->setEndPos(m_oldPos);
+//     }
 
 
     document()->setUndoActive(wasActive);
@@ -79,14 +79,14 @@ void UndoSetEdgePos::redo()
 
     Path * path = document()->pathFromId(m_pathId);
     Q_ASSERT(path != 0);
-    Edge * edge = path->edge(m_edgeIndex);
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        edge->setStartPos(m_newPos);
-    } else {
-        edge->setEndPos(m_newPos);
-    }
+//     Edge * edge = path->edge(m_edgeIndex);
+//     Q_ASSERT(edge != 0);
+//
+//     if (m_isStart) {
+//         edge->setStartPos(m_newPos);
+//     } else {
+//         edge->setEndPos(m_newPos);
+//     }
 
     document()->setUndoActive(wasActive);
 }

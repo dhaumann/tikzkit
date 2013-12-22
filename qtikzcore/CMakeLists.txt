@@ -7,6 +7,7 @@ include_directories(
     .
     undo/
     visitor/
+    paths/
     ${QJSON_INCLUDE_DIR}
 )
 
@@ -22,6 +23,8 @@ set(qtikzcore_SOURCES
     NodeStyle.cpp
     EdgeStyle.cpp
     StyleManager.cpp
+
+    paths/EdgePath.cpp
 
     undo/UndoItem.cpp
     undo/UndoCreateNode.cpp

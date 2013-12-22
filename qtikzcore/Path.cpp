@@ -107,111 +107,111 @@ void Path::setStyle(const EdgeStyle & style)
     }
 }
 
-Edge * Path::createEdge(int index)
-{
-    // sanity check
-    Q_ASSERT(index <= d->edges.size());
-
-    // negative index: append item
-    if (index < 0) {
-        index = d->edges.size();
-    }
-
-    Edge * edge = 0;
-
-    if (document()->undoActive()) {
-        beginConfig();
-
-        // create and insert edge
-        edge = new Edge(this);
-
-        // insert edge
-        d->edges.insert(index, edge);
-
-        endConfig();
-    } else {
-        // create edge via undo system
-        document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
-        Q_ASSERT(index < d->edges.size());
-
-        // return newly created edge
-        edge = d->edges[index];
-    }
-
-    return edge;
-}
-
-void Path::deleteEdge(Edge * edge)
-{
-    const int index = d->edges.indexOf(edge);
-    Q_ASSERT(index >= 0);
-
-    deleteEdge(index);
-}
-
-void Path::deleteEdge(int index)
-{
-    Q_ASSERT(index >= 0);
-    Q_ASSERT(index < d->edges.size());
-
-    if (document()->undoActive()) {
-        beginConfig();
-
-        // get edge to delete
-        Edge * edge = d->edges[index];
-
-        // remove edge
-        d->edges.remove(index);
-
-        // finally delete edge
-        delete edge;
-
-        endConfig();
-    } else {
-        // create edge via undo system
-        document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));
-    }
-}
-
-Edge* Path::edge(int i)
-{
-    Q_ASSERT(i >= 0);
-    Q_ASSERT(i < d->edges.count());
-
-    return d->edges[i];
-}
-
-int Path::edgeIndex(const Edge * edge) const
-{
-    Q_ASSERT(edge != 0);
-    const int index = d->edges.indexOf(const_cast<Edge*>(edge));
-    Q_ASSERT(index >= 0);
-    return index;
-}
-
-int Path::edgeCount() const
-{
-    return d->edges.count();
-}
-
-bool Path::isClosed() const
-{
-    // FIXME: implement
-    return false;
-}
-
-void Path::setClosed(bool closed)
-{
-    if (closed == isClosed())
-        return;
-
-    if (closed) {
-        Edge * edge = createEdge();
-        // FIXME: implement
-    } else {
-        // FIXME: implement
-    }
-}
+// Edge * Path::createEdge(int index)
+// {
+//     // sanity check
+//     Q_ASSERT(index <= d->edges.size());
+//
+//     // negative index: append item
+//     if (index < 0) {
+//         index = d->edges.size();
+//     }
+//
+//     Edge * edge = 0;
+//
+//     if (document()->undoActive()) {
+//         beginConfig();
+//
+//         // create and insert edge
+//         edge = new Edge(this);
+//
+//         // insert edge
+//         d->edges.insert(index, edge);
+//
+//         endConfig();
+//     } else {
+//         // create edge via undo system
+//         document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
+//         Q_ASSERT(index < d->edges.size());
+//
+//         // return newly created edge
+//         edge = d->edges[index];
+//     }
+//
+//     return edge;
+// }
+//
+// void Path::deleteEdge(Edge * edge)
+// {
+//     const int index = d->edges.indexOf(edge);
+//     Q_ASSERT(index >= 0);
+//
+//     deleteEdge(index);
+// }
+//
+// void Path::deleteEdge(int index)
+// {
+//     Q_ASSERT(index >= 0);
+//     Q_ASSERT(index < d->edges.size());
+//
+//     if (document()->undoActive()) {
+//         beginConfig();
+//
+//         // get edge to delete
+//         Edge * edge = d->edges[index];
+//
+//         // remove edge
+//         d->edges.remove(index);
+//
+//         // finally delete edge
+//         delete edge;
+//
+//         endConfig();
+//     } else {
+//         // create edge via undo system
+//         document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));
+//     }
+// }
+//
+// Edge* Path::edge(int i)
+// {
+//     Q_ASSERT(i >= 0);
+//     Q_ASSERT(i < d->edges.count());
+//
+//     return d->edges[i];
+// }
+//
+// int Path::edgeIndex(const Edge * edge) const
+// {
+//     Q_ASSERT(edge != 0);
+//     const int index = d->edges.indexOf(const_cast<Edge*>(edge));
+//     Q_ASSERT(index >= 0);
+//     return index;
+// }
+//
+// int Path::edgeCount() const
+// {
+//     return d->edges.count();
+// }
+//
+// bool Path::isClosed() const
+// {
+//     // FIXME: implement
+//     return false;
+// }
+//
+// void Path::setClosed(bool closed)
+// {
+//     if (closed == isClosed())
+//         return;
+//
+//     if (closed) {
+//         Edge * edge = createEdge();
+//         // FIXME: implement
+//     } else {
+//         // FIXME: implement
+//     }
+// }
 
 void Path::beginConfig()
 {

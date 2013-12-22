@@ -34,15 +34,15 @@ UndoDeleteEdge::UndoDeleteEdge(qint64 id, int index, Document * doc)
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    Edge* edge = path->edge(index);
-    Q_ASSERT(edge);
+//     Edge* edge = path->edge(index);FIXME
+//     Q_ASSERT(edge);
 
     // save properties
-    m_startPos = edge->startPos();
-    m_endPos = edge->endPos();
-    m_startId = edge->startNode() ? edge->startNode()->id() : -1;
-    m_endId = edge->endNode() ? edge->endNode()->id() : -1;
-    m_style.setStyle(*edge->style());
+//     m_startPos = edge->startPos();
+//     m_endPos = edge->endPos();
+//     m_startId = edge->startNode() ? edge->startNode()->id() : -1;
+//     m_endId = edge->endNode() ? edge->endNode()->id() : -1;
+//     m_style.setStyle(*edge->style());
 }
 
 UndoDeleteEdge::~UndoDeleteEdge()
@@ -60,24 +60,24 @@ void UndoDeleteEdge::undo()
     path->beginConfig();
 
     // create edge
-    Edge * edge = path->createEdge(m_index);
-    Q_ASSERT(edge);
-
-    edge->beginConfig();
-    edge->setStartPos(m_startPos);
-    edge->setEndPos(m_endPos);
-    if (m_startId >= 0) {
-        Node* node = document()->nodeFromId(m_startId);
-        Q_ASSERT(node);
-        edge->setStartNode(node);
-    }
-    if (m_endId >= 0) {
-        Node* node = document()->nodeFromId(m_endId);
-        Q_ASSERT(node);
-        edge->setEndNode(node);
-    }
-    edge->style()->setStyle(m_style);
-    edge->endConfig();
+//     Edge * edge = path->createEdge(m_index);
+//     Q_ASSERT(edge);
+//
+//     edge->beginConfig();
+//     edge->setStartPos(m_startPos);
+//     edge->setEndPos(m_endPos);
+//     if (m_startId >= 0) {
+//         Node* node = document()->nodeFromId(m_startId);
+//         Q_ASSERT(node);
+//         edge->setStartNode(node);
+//     }
+//     if (m_endId >= 0) {
+//         Node* node = document()->nodeFromId(m_endId);
+//         Q_ASSERT(node);
+//         edge->setEndNode(node);
+//     }
+//     edge->style()->setStyle(m_style);
+//     edge->endConfig();
 
     path->endConfig();
 
@@ -91,7 +91,7 @@ void UndoDeleteEdge::redo()
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    path->deleteEdge(m_index);
+//     path->deleteEdge(m_index);
 
     document()->setUndoActive(wasActive);
 }

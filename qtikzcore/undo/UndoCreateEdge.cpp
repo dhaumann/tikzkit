@@ -41,7 +41,7 @@ void UndoCreateEdge::undo()
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    path->deleteEdge(m_index);
+//     path->deleteEdge(m_index);FIXME
 
     document()->setUndoActive(wasActive);
 }
@@ -53,7 +53,7 @@ void UndoCreateEdge::redo()
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    path->createEdge(m_index);
+//     path->createEdge(m_index); FIXME
 
     // FIXME: which type???
 
