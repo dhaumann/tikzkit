@@ -29,6 +29,7 @@
 #include "UndoConnectEdge.h"
 #include "UndoDisconnectEdge.h"
 #include "UndoSetEdgeAnchor.h"
+#include "UndoSetEdgePos.h"
 
 #include <QVector>
 
@@ -170,8 +171,8 @@ void EdgePath::setStartPos(const QPointF& pos)
         // first set start node to 0
         setStartNode(0);
         // then set position
-//         document()->undoManager()->push(
-//             new UndoSetEdgePos(d->path->id(), index(), pos, true, document()));
+        document()->undoManager()->push(
+            new UndoSetEdgePos(id(), pos, true, document()));
     }
 }
 
@@ -189,8 +190,8 @@ void EdgePath::setEndPos(const QPointF& pos)
         // first set end node to 0
         setEndNode(0);
         // then set position
-//         document()->undoManager()->push(
-//             new UndoSetEdgePos(d->path->id(), index(), pos, false, document()));
+        document()->undoManager()->push(
+            new UndoSetEdgePos(id(), pos, false, document()));
     }
 }
 

@@ -20,7 +20,6 @@
 #include "UndoSetEdgeAnchor.h"
 #include "Document.h"
 #include "EdgePath.h"
-#include "Edge.h"
 #include "Node.h"
 
 namespace tikz {

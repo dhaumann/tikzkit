@@ -23,8 +23,6 @@
 #include "UndoItem.h"
 #include "tikz.h"
 
-#include <QPointF>
-
 namespace tikz
 {
 

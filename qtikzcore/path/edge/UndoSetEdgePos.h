@@ -34,7 +34,7 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEdgePos(qint64 pathId, int index,
+        UndoSetEdgePos(qint64 pathId,
                        const QPointF & newPos,
                        bool isStartNode, Document * doc);
 
@@ -60,19 +60,14 @@ class UndoSetEdgePos : public UndoItem
         const qint64 m_pathId;
 
         /**
-         * The index of the edge in the path.
-         */
-        int m_edgeIndex;
-
-        /**
          * old anchor of the connection
          */
-        QPointF m_oldPos;
+        QPointF m_undoPos;
 
         /**
          * new anchor of the connection
          */
-        QPointF m_newPos;
+        QPointF m_redoPos;
 
         /**
          * Is it start or end node?

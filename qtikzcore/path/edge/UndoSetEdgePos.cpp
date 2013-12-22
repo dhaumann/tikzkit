@@ -19,35 +19,29 @@
 
 #include "UndoSetEdgePos.h"
 #include "Document.h"
-#include "Path.h"
-#include "Edge.h"
+#include "EdgePath.h"
 
 namespace tikz {
 
 UndoSetEdgePos::UndoSetEdgePos(qint64 pathId,
-                               int index,
                                const QPointF & newPos,
                                bool isStartNode,
                                Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)
-    , m_edgeIndex(index)
-    , m_newPos(newPos)
+    , m_redoPos(newPos)
     , m_isStart(isStartNode)
 {
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
 
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     if (m_isStart) {
-//         Q_ASSERT(edge->startNode() == 0);
-//         m_oldPos = edge->startPos();
-//     } else {
-//         Q_ASSERT(edge->endNode() == 0);
-//         m_oldPos = edge->endPos();
-//     }
+    if (m_isStart) {
+        Q_ASSERT(edge->startNode() == 0);
+        m_undoPos = edge->startPos();
+    } else {
+        Q_ASSERT(edge->endNode() == 0);
+        m_undoPos = edge->endPos();
+    }
 }
 
 UndoSetEdgePos::~UndoSetEdgePos()
@@ -58,17 +52,14 @@ void UndoSetEdgePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     if (m_isStart) {
-//         edge->setStartPos(m_oldPos);
-//     } else {
-//         edge->setEndPos(m_oldPos);
-//     }
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
 
+    if (m_isStart) {
+        edge->setStartPos(m_undoPos);
+    } else {
+        edge->setEndPos(m_undoPos);
+    }
 
     document()->setUndoActive(wasActive);
 }
@@ -77,16 +68,14 @@ void UndoSetEdgePos::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     if (m_isStart) {
-//         edge->setStartPos(m_newPos);
-//     } else {
-//         edge->setEndPos(m_newPos);
-//     }
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
+
+    if (m_isStart) {
+        edge->setStartPos(m_redoPos);
+    } else {
+        edge->setEndPos(m_redoPos);
+    }
 
     document()->setUndoActive(wasActive);
 }
