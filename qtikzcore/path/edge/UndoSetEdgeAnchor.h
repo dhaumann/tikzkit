@@ -34,8 +34,7 @@ class UndoSetEdgeAnchor : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEdgeAnchor(qint64 pathId, int index,
-                          Anchor newAnchor, bool isStartNode, Document * doc);
+        UndoSetEdgeAnchor(qint64 pathId, Anchor newAnchor, bool isStartNode, Document * doc);
 
         /**
          * Destructor
@@ -57,11 +56,6 @@ class UndoSetEdgeAnchor : public UndoItem
          * The unique Edge id.
          */
         const qint64 m_pathId;
-
-        /**
-         * The index of the edge in the path.
-         */
-        int m_edgeIndex;
 
         /**
          * old anchor of the connection

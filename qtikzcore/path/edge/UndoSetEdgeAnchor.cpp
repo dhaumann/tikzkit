@@ -19,31 +19,26 @@
 
 #include "UndoSetEdgeAnchor.h"
 #include "Document.h"
-#include "Path.h"
+#include "EdgePath.h"
 #include "Edge.h"
 #include "Node.h"
 
 namespace tikz {
 
 UndoSetEdgeAnchor::UndoSetEdgeAnchor(qint64 pathId,
-                                    int index,
                                     Anchor newAnchor,
                                     bool isStartNode,
                                     Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)
-    , m_edgeIndex(index)
     , m_undoAnchor(Anchor::NoAnchor)
     , m_redoAnchor(newAnchor)
     , m_isStart(isStartNode)
 {
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
 
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
+    m_undoAnchor = m_isStart ? edge->startAnchor() : edge->endAnchor();
 }
 
 UndoSetEdgeAnchor::~UndoSetEdgeAnchor()
@@ -54,16 +49,14 @@ void UndoSetEdgeAnchor::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     if (m_isStart) {
-//         edge->setStartAnchor(m_undoAnchor);
-//     } else {
-//         edge->setEndAnchor(m_undoAnchor);
-//     }
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
+
+    if (m_isStart) {
+        edge->setStartAnchor(m_undoAnchor);
+    } else {
+        edge->setEndAnchor(m_undoAnchor);
+    }
 
     document()->setUndoActive(wasActive);
 }
@@ -72,16 +65,14 @@ void UndoSetEdgeAnchor::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path * path = document()->pathFromId(m_pathId);
-    Q_ASSERT(path != 0);
-//     Edge * edge = path->edge(m_edgeIndex);
-//     Q_ASSERT(edge != 0);
-//
-//     if (m_isStart) {
-//         edge->setStartAnchor(m_redoAnchor);
-//     } else {
-//         edge->setEndAnchor(m_redoAnchor);
-//     }
+    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(edge != 0);
+
+    if (m_isStart) {
+        edge->setStartAnchor(m_redoAnchor);
+    } else {
+        edge->setEndAnchor(m_redoAnchor);
+    }
 
     document()->setUndoActive(wasActive);
 }

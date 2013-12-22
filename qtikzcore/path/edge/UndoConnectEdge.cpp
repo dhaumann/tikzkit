@@ -19,10 +19,9 @@
 
 #include "UndoConnectEdge.h"
 #include "Document.h"
-#include "Path.h"
+#include "EdgePath.h"
 #include "Edge.h"
 #include "Node.h"
-#include "EdgePath.h"
 
 namespace tikz {
 

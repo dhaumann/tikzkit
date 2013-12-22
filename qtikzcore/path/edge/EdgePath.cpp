@@ -26,12 +26,9 @@
 #include "Visitor.h"
 #include "Document.h"
 
-#include "UndoSetPathStyle.h"
-#include "UndoCreateEdge.h"
-#include "UndoDeleteEdge.h"
-
 #include "UndoConnectEdge.h"
 #include "UndoDisconnectEdge.h"
+#include "UndoSetEdgeAnchor.h"
 
 #include <QVector>
 
@@ -219,8 +216,8 @@ void EdgePath::setStartAnchor(tikz::Anchor anchor)
         d->start.setAnchor(anchor);
         endConfig();
     } else {
-//         document()->undoManager()->push(
-//             new UndoSetEdgeAnchor(d->path->id(), index(), anchor, true, document()));
+        document()->undoManager()->push(
+            new UndoSetEdgeAnchor(id(), anchor, true, document()));
     }
 }
 
@@ -236,8 +233,8 @@ void EdgePath::setEndAnchor(tikz::Anchor anchor)
         d->end.setAnchor(anchor);
         endConfig();
     } else {
-//         document()->undoManager()->push(
-//             new UndoSetEdgeAnchor(d->path->id(), index(), anchor, false, document()));
+        document()->undoManager()->push(
+            new UndoSetEdgeAnchor(id(), anchor, false, document()));
     }
 }
 
