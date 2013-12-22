@@ -211,6 +211,11 @@ class TIKZCORE_EXPORT EdgePath : public Path
          */
         EdgePath(Path::Type type, qint64 id, Document* doc);
 
+        /**
+         * Destruct the node by saving the start and end pos or node connection.
+         */
+        virtual void deconstruct() override;
+
     //
     // internal
     //

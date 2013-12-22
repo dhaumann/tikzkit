@@ -65,6 +65,17 @@ EdgePath::~EdgePath()
     delete d;
 }
 
+void EdgePath::deconstruct()
+{
+    // just set both the start and end pos to (0, 0).
+    // undo (i.e., creating the node again), will then restore the initial
+    // connections correctly.
+    beginConfig();
+    setStartPos(QPointF(0, 0));
+    setEndPos(QPointF(0, 0));
+    endConfig();
+}
+
 Path::Type EdgePath::type() const
 {
     return d->type;

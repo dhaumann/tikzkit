@@ -242,11 +242,10 @@ void Document::deletePath(Path * path)
     Q_ASSERT(d->pathMap.contains(path->id()));
 
     // TODO: not yet the case, but maybe in future: remove child nodes here?
+    //       or: probably move this to Path::deconstruct()!
 
-    // remove all edges
-//     for (int i = path->edgeCount() - 1; i >= 0; --i) {
-//         path->deleteEdge(i);
-//     }
+    // destruct path, so that it fully constructs itself again in undo
+    path->deconstruct();
 
     // delete path, push will call ::redo()
     const qint64 id = path->id();

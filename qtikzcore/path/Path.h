@@ -146,6 +146,19 @@ class TIKZCORE_EXPORT Path : public QObject
          */
         Path(qint64 id, Document* doc);
 
+        /**
+         * This function is called by Document::deletePath() right before the
+         * Path is deleted. Invoking the undo action will construct the path
+         * again. Therefore, this function needs to add all undo items so that
+         * the respective call of undo() will add properties of the Path again.
+         *
+         * @note: the EdgeStyle of this path is taken care of. No need to put
+         *        this into the undo stack again.
+         *
+         * The default implementation is empty.
+         */
+        virtual void deconstruct();
+
     //
     // internal
     //

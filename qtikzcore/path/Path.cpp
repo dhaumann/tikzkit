@@ -72,6 +72,10 @@ Path::~Path()
     delete d;
 }
 
+void Path::deconstruct()
+{
+}
+
 Document * Path::document() const
 {
     return d->doc;
