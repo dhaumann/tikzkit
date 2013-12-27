@@ -18,18 +18,11 @@
  */
 
 #include "Path.h"
-#include "Coord.h"
-#include "Edge.h"
 #include "EdgeStyle.h"
-#include "MetaPos.h"
 #include "Visitor.h"
 #include "Document.h"
 
 #include "UndoSetPathStyle.h"
-#include "UndoCreateEdge.h"
-#include "UndoDeleteEdge.h"
-
-#include <QVector>
 
 namespace tikz {
 
@@ -47,8 +40,6 @@ class PathPrivate
 
         // this edge's style
         EdgeStyle style;
-
-        QVector<Edge*> edges;
 };
 
 Path::Path(qint64 id, Document* doc)

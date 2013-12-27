@@ -30,7 +30,6 @@
 
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
-#include "UndoSetEdgeType.h"
 
 #include <QUndoStack>
 

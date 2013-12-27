@@ -7,6 +7,7 @@ include_directories(
     .
     undo/
     visitor/
+    node
     path
     path/edge
     path/ellipse
@@ -17,7 +18,7 @@ set(qtikzcore_SOURCES
     Coord.cpp
     Value.cpp
     Edge.cpp
-    Node.cpp
+    node/Node.cpp
     MetaPos.cpp
     Document.cpp
     Style.cpp
@@ -27,6 +28,9 @@ set(qtikzcore_SOURCES
 
     path/Path.cpp
     path/UndoSetPathStyle.cpp
+    path/UndoCreatePath.cpp
+    path/UndoDeletePath.cpp
+
     path/edge/EdgePath.cpp
     path/edge/UndoConnectEdge.cpp
     path/edge/UndoDisconnectEdge.cpp
@@ -40,16 +44,12 @@ set(qtikzcore_SOURCES
     path/ellipse/UndoSetEllipsePos.cpp
 
     undo/UndoItem.cpp
-    undo/UndoCreateNode.cpp
-    undo/UndoDeleteNode.cpp
-    undo/UndoCreatePath.cpp
-    undo/UndoDeletePath.cpp
-    undo/UndoCreateEdge.cpp
-    undo/UndoDeleteEdge.cpp
-    undo/UndoSetNodePos.cpp
-    undo/UndoSetNodeText.cpp
-    undo/UndoSetNodeStyle.cpp
-    undo/UndoSetEdgeType.cpp
+
+    node/UndoCreateNode.cpp
+    node/UndoDeleteNode.cpp
+    node/UndoSetNodePos.cpp
+    node/UndoSetNodeText.cpp
+    node/UndoSetNodeStyle.cpp
 
     visitor/Visitor.cpp
     visitor/SerializeVisitor.cpp
@@ -60,7 +60,7 @@ set(qtikzcore_SOURCES
 
 set(qtikzcore_HEADERS
     Coord.h
-    Node.h
+    node/Node.h
     MetaPos.h
     Edge.h
     path/Path.h
