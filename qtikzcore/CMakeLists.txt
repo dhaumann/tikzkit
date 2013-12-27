@@ -7,6 +7,7 @@ include_directories(
     .
     undo/
     visitor/
+    style/
     node
     path
     path/edge
@@ -21,10 +22,9 @@ set(qtikzcore_SOURCES
     node/Node.cpp
     MetaPos.cpp
     Document.cpp
-    Style.cpp
-    NodeStyle.cpp
-    EdgeStyle.cpp
-    StyleManager.cpp
+    style/Style.cpp
+    style/NodeStyle.cpp
+    style/EdgeStyle.cpp
 
     path/Path.cpp
     path/UndoSetPathStyle.cpp
@@ -63,12 +63,15 @@ set(qtikzcore_HEADERS
     node/Node.h
     MetaPos.h
     Edge.h
+
     path/Path.h
     path/edge/EdgePath.h
     path/ellipse/EllipsePath.h
-    Style.h
-    NodeStyle.h
-    EdgeStyle.h
+
+    style/Style.h
+    style/NodeStyle.h
+    style/EdgeStyle.h
+
     Document.h
     tikz.h
 )

@@ -8,6 +8,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qtikzcore
     ${CMAKE_SOURCE_DIR}/qtikzcore/path
     ${CMAKE_SOURCE_DIR}/qtikzcore/node
+    ${CMAKE_SOURCE_DIR}/qtikzcore/style
     ${CMAKE_SOURCE_DIR}/qtikzgui
     ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
     #${POPPLER_QT4_INCLUDE_DIR}
