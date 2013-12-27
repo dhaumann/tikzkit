@@ -105,7 +105,7 @@ void TikzEdgePrivate::updateCache()
     const qreal len = QVector2D(diff).length();
 
     // compute shorten < and shorten > so it can be used to adapt startAnchor and endAnchor
-    const qreal shortenStart = style()->shortenStart() +  arrowTail->rightExtend();
+    const qreal shortenStart = style()->shortenStart() + arrowTail->rightExtend();
     const qreal shortenEnd = style()->shortenEnd() + arrowHead->rightExtend();
 
     switch (edge->type()) {
