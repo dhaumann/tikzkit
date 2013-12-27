@@ -126,22 +126,22 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         /**
          * Create a new node associated with this document with @p id.
          */
-        virtual tikz::Node * createNode(qint64 id) override;
+        tikz::Node * createNode(qint64 id) override;
 
         /**
          * Delete node @p id associated with this document.
          */
-        virtual void deleteNode(qint64 id) override;
+        void deleteNode(qint64 id) override;
 
         /**
          * Create a new path associated with this document with @p id.
          */
-        virtual tikz::Path * createPath(qint64 id) override;
+        tikz::Path * createPath(tikz::Path::Type type, qint64 id) override;
 
         /**
          * Delete path @p id associated with this document.
          */
-        virtual void deletePath(qint64 id) override;
+        void deletePath(qint64 id) override;
 
     private:
         TikzDocumentPrivate * d;

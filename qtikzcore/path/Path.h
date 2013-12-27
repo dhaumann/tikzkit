@@ -52,6 +52,7 @@ class TIKZCORE_EXPORT Path : public QObject
             Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
             Rectangle, // (a) rectangle (b)
             Grid, // (a) grid (b)
+            Invalid
         };
 
         /**

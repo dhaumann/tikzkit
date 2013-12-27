@@ -5,6 +5,8 @@ find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 include_directories(
     .
     ${CMAKE_SOURCE_DIR}/qtikzcore
+    ${CMAKE_SOURCE_DIR}/qtikzcore/node
+    ${CMAKE_SOURCE_DIR}/qtikzcore/path
     ${CMAKE_SOURCE_DIR}/qtikzgui/shapes
     ${CMAKE_SOURCE_DIR}/qtikzgui/arrows
     ${CMAKE_SOURCE_DIR}/qtikzgui/tex

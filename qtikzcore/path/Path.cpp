@@ -63,6 +63,11 @@ Path::~Path()
     delete d;
 }
 
+Path::Type Path::type() const
+{
+    return Invalid;
+}
+
 void Path::deconstruct()
 {
 }

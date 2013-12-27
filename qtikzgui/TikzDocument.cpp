@@ -174,9 +174,9 @@ void TikzDocument::deleteNode(qint64 id)
     tikz::Document::deleteNode(id);
 }
 
-tikz::Path * TikzDocument::createPath(qint64 id)
+tikz::Path * TikzDocument::createPath(tikz::Path::Type type, qint64 id)
 {
-    tikz::Path * path = tikz::Document::createPath(id);
+    tikz::Path * path = tikz::Document::createPath(type, id);
     Q_ASSERT(id == path->id());
     Q_ASSERT(! d->pathMap.contains(id));
 

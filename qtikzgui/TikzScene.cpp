@@ -140,9 +140,10 @@ void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             // create edge
             d->currentPath = document()->createTikzPath();
 
-            tikz::Edge * edge = d->currentPath->path()->createEdge();
-            edge->setStartPos(mouseEvent->scenePos());
-            edge->setEndPos(mouseEvent->scenePos());
+            // FIXME
+//             tikz::Edge * edge = d->currentPath->path()->createEdge();
+//             edge->setStartPos(mouseEvent->scenePos());
+//             edge->setEndPos(mouseEvent->scenePos());
 
             // update selected item
             clearSelection();
