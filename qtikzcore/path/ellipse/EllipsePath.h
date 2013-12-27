@@ -49,23 +49,23 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         virtual ~EllipsePath();
 
     //
-    // Node start / end manipulation
+    // Node manipulation
     //
     public:
 
         /**
-         * Returns the start Coord.
+         * Returns the Coord.
          */
         Coord& coord() const;
 
         /**
-         * Get the start node, which was set with setStart(Node*).
+         * Get the node, which was set with setNode(Node*).
          */
         Node* node() const;
 
     public Q_SLOTS:
         /**
-         * Sets the start coordinate of the edge to @p node;
+         * Attach the ellipse to @p node;
          */
         void setNode(Node* node);
 
@@ -74,16 +74,15 @@ class TIKZCORE_EXPORT EllipsePath : public Path
     //
     public:
         /**
-         * Get the position of the current start node.
-         * @note This is the same as start()->pos().
+         * Get the position of the ellipse.
+         * @note This is the same as node()->pos().
          */
         const QPointF & pos() const;
 
     public Q_SLOTS:
         /**
-         * Set the position of the current start node to @p pos.
-         * @param pos the new start position
-         * @see complement: start()->pos()
+         * Set the position of the ellipse to @p pos.
+         * @param pos the new position
          */
         void setPos(const QPointF& pos);
 
@@ -128,7 +127,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         EllipsePath(qint64 id, Document* doc);
 
         /**
-         * Destruct the node by saving the start and end pos or node connection.
+         * Destruct the ellipse by saving the position or node connection.
          */
         void deconstruct() override;
 

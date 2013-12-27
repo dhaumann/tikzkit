@@ -65,6 +65,7 @@ set(qtikzcore_HEADERS
     Edge.h
     path/Path.h
     path/edge/EdgePath.h
+    path/ellipse/EllipsePath.h
     Style.h
     NodeStyle.h
     EdgeStyle.h
