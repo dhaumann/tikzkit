@@ -306,8 +306,8 @@ void Style::setLineWidthType(tikz::LineWidth type)
 void Style::setLineWidth(qreal width)
 {
     if (!propertySet(s_lineWidth)
-        || (d->lineWidthType == CustomLineWidth
-            && d->lineWidth != width)
+        || d->lineWidthType != CustomLineWidth
+        || d->lineWidth != width
     ) {
         beginConfig();
         addProperty(s_lineWidth);
