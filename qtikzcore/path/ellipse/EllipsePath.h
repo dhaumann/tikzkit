@@ -28,7 +28,7 @@ namespace tikz
 {
 
 class Node;
-
+class Coord;
 class EllipsePathPrivate;
 
 /**
@@ -130,7 +130,12 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         /**
          * Destruct the node by saving the start and end pos or node connection.
          */
-        virtual void deconstruct() override;
+        void deconstruct() override;
+
+        /**
+         * Detach the ellipse from @p node, since @p node is about to be deleted.
+         */
+        void detachFromNode(Node * node) override;
 
     //
     // internal

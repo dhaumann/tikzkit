@@ -76,6 +76,10 @@ void Path::deconstruct()
 {
 }
 
+void Path::detachFromNode(Node * node)
+{
+}
+
 Document * Path::document() const
 {
     return d->doc;

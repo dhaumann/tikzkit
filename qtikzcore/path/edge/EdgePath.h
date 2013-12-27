@@ -28,7 +28,7 @@ namespace tikz
 {
 
 class Node;
-
+class Coord;
 class EdgePathPrivate;
 
 /**
@@ -181,6 +181,11 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Destruct the node by saving the start and end pos or node connection.
          */
         virtual void deconstruct() override;
+
+        /**
+         * Detach the edge from @p node, since @p node is about to be deleted.
+         */
+        void detachFromNode(Node * node) override;
 
     //
     // internal

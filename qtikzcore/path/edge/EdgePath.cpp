@@ -74,6 +74,23 @@ void EdgePath::deconstruct()
     endConfig();
 }
 
+void EdgePath::detachFromNode(Node * node)
+{
+    Q_ASSERT(node != 0);
+
+    // disconnect start from node, if currently attached
+    if (d->start.node() == node) {
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(id(), d->start.node()->id(), true, document()));
+    }
+
+    // disconnect end from node, if currently attached
+    if (d->end.node() == node) {
+        document()->undoManager()->push(
+            new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
+    }
+}
+
 Path::Type EdgePath::type() const
 {
     return d->type;

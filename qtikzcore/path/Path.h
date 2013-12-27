@@ -29,8 +29,7 @@ namespace tikz
 {
 
 class Document;
-class Coord;
-class Edge;
+class Node;
 class EdgeStyle;
 class Visitor;
 class PathPrivate;
@@ -157,6 +156,17 @@ class TIKZCORE_EXPORT Path : public QObject
          * The default implementation is empty.
          */
         virtual void deconstruct();
+
+        /**
+         * This function is called for all paths to notify that @p node is
+         * about to be deleted. If a path is attached to this node,
+         * detach it here such that the path is still consistent.
+         *
+         * The default implementation is empty.
+         *
+         * @p node Node that is about to be deleted
+         */
+        virtual void detachFromNode(Node * node);
 
     //
     // internal

@@ -60,6 +60,17 @@ void EllipsePath::deconstruct()
     endConfig();
 }
 
+void EllipsePath::detachFromNode(Node * node)
+{
+    Q_ASSERT(node != 0);
+
+    // disconnect from node, if currently attached
+    if (d->pos.node() == node) {
+        document()->undoManager()->push(
+            new UndoDisconnectEllipse(id(), node->id(), document()));
+    }
+}
+
 void EllipsePath::setNode(Node* node)
 {
     if (d->pos.node() == node) {
