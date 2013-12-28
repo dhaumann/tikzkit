@@ -1,3 +1,5 @@
 *.aux
 *.log
 build/
+.directory
+.kdev4/
