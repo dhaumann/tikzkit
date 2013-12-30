@@ -20,10 +20,11 @@
 #ifndef GUI_TIKZ_ELLIPSE_PATH_H
 #define GUI_TIKZ_ELLIPSE_PATH_H
 
-#include "tikzgui_export.h"
-#include "TikzItem.h"
+#include "AbstractTikzPath.h"
 
 #include <tikz.h>
+
+#include <QPointer>
 
 namespace tikz {
     class Edge;
@@ -34,9 +35,10 @@ class QPainter;
 
 class TikzDocument;
 class TikzNode;
+class TikzPath;
 class TikzEllipsePathPrivate;
 
-class TIKZGUI_EXPORT TikzEllipsePath :  public AbstractTikzPath
+class TikzEllipsePath : public AbstractTikzPath
 {
     Q_OBJECT
 
@@ -60,18 +62,6 @@ class TIKZGUI_EXPORT TikzEllipsePath :  public AbstractTikzPath
          * Return the tikz::Path::Type type.
          */
         tikz::Path::Type type() const override;
-
-        /**
-         * Returns the pointer to the associated Edge.
-         * @warning Use setStartNode() and setEndNode() to change nodes
-         */
-        tikz::Edge * edge();
-
-        /**
-         * Get the EdgeStyle of this edge.
-         * The returned pointer is always valid.
-         */
-        tikz::EdgeStyle* style() const;
 
         /**
          * Set the node to @p node.
@@ -138,8 +128,6 @@ class TIKZGUI_EXPORT TikzEllipsePath :  public AbstractTikzPath
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
-        virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
-
     private Q_SLOTS:
         void slotUpdate();
 
@@ -150,9 +138,31 @@ class TIKZGUI_EXPORT TikzEllipsePath :  public AbstractTikzPath
          */
         void updateNode(tikz::Node * node);
 
+        /**
+         * Updates the cache of the ellipse.
+         */
+        void updateCache();
+
     private:
         // the TikzNode this ellipse possibly is anchored at
-        QPointer<TikzNode> node;
+        QPointer<TikzNode> m_node;
+
+        //
+        // cached paths
+        //
+        bool m_dirty;
+
+        // the ellipse path
+        QPainterPath m_ellipse;
+
+        // a stroked path, used to hover the contour on mouse over
+        QPainterPath m_hoverPath;
+
+        // the shape, including all possible spacings
+        QPainterPath m_shapePath;
+
+        // the bounding rect around m_hoverPath
+        QRectF m_boundingRect;
 };
 
 #endif // GUI_TIKZ_ELLIPSE_PATH_H

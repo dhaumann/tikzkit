@@ -75,6 +75,11 @@ class AbstractTikzPath : public QObject
 
     public:
         /**
+         * Request a repaint of this item.
+         */
+        void update();
+
+        /**
          * Paint this item.
          */
         virtual void paint(QPainter *painter,

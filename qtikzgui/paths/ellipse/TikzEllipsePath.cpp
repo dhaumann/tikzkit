@@ -18,47 +18,42 @@
  */
 
 #include "TikzEllipsePath.h"
-#include "TikzEllipsePath_p.h"
 
-#include <Edge.h>
+#include <EllipsePath.h>
+
+#include "TikzPath.h"
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "EdgeStyle.h"
-#include "NodeStyle.h"
-#include "AnchorHandle.h"
-#include "CurveHandle.h"
-#include "BezierCurve.h"
-#include "AbstractArrow.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QTextLayout>
-#include <QGraphicsTextItem>
 #include <QDebug>
 #include <PaintHelper.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainterPathStroker>
-#include <QVector2D>
-
-#include <cmath>
 
 TikzEllipsePath::TikzEllipsePath(TikzPath * path)
     : AbstractTikzPath(path)
 {
-    // initialization of member varialbes in TikzEllipsePathPrivate constructor
-    d->init(edge);
+    // FIXME: some sort of init needed?
+//     init();
+
+    // catch if the tikz::Node::pos() changes behind our back:
+    // we need to track the TikzNode the ellipse is attached to
+    connect(path->path(), SIGNAL(nodeChanged(tikz::Node*)),
+            this, SLOT(updateNode(tikz::Node*)));
 }
 
 TikzEllipsePath::~TikzEllipsePath()
 {
-    delete d;
 }
 
 TikzDocument * TikzEllipsePath::document() const
 {
-    Q_ASSERT(qobject_cast<TikzDocument*>(d->edge->document()) != nullptr);
-    return qobject_cast<TikzDocument*>(d->edge->document());
+    Q_ASSERT(qobject_cast<TikzDocument*>(path()->document()) != nullptr);
+    return qobject_cast<TikzDocument*>(path()->document());
 }
 
 tikz::Path::Type TikzEllipsePath::type() const
@@ -68,20 +63,17 @@ tikz::Path::Type TikzEllipsePath::type() const
 
 void TikzEllipsePath::setNode(TikzNode* node)
 {
-    if (d->node != node) {
-        d->node = node;
-        d->edge->setNode(end ? end->node() : 0);
+    if (m_node != node) {
+        m_node = node;
+        tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
+        Q_ASSERT(ellipsePath != nullptr);
+        ellipsePath->setNode(node ? node->node() : 0);
     }
 }
 
-TikzNode* TikzEllipsePath::startNode() const
+TikzNode* TikzEllipsePath::node() const
 {
-    return d->start;
-}
-
-TikzNode* TikzEllipsePath::endNode() const
-{
-    return d->end;
+    return m_node;
 }
 
 QPointF TikzEllipsePath::pos() const
@@ -99,35 +91,25 @@ QPointF TikzEllipsePath::pos() const
     }
 }
 
-QPointF TikzEllipsePath::startPos(qreal rad) const
-{
-    if (d->start) {
-        return mapFromItem(d->start, d->start->contactPoint(startAnchor(), rad));
-    } else {
-        return mapFromScene(d->edge->start().pos());
-    }
-}
-
 tikz::Anchor TikzEllipsePath::anchor() const
 {
-    return d->edge->startAnchor();
+    tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
+    Q_ASSERT(ellipsePath != nullptr);
+    return ellipsePath->anchor();
 }
 
 void TikzEllipsePath::setAnchor(tikz::Anchor anchor)
 {
-    path()->setStartAnchor(anchor);
+    tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
+    Q_ASSERT(ellipsePath != nullptr);
+    ellipsePath->setAnchor(anchor);
 }
 
 void TikzEllipsePath::slotUpdate()
 {
-    prepareGeometryChange();
+    path()->prepareGeometryChange();
 
-    d->dirty = true;
-
-    // setPos() to the middle of start and end
-    QPointF startScenePos = d->edge->start().pos();
-    QPointF endScenePos = d->edge->end().pos();
-    setPos(0.5 * (startScenePos + endScenePos));
+    m_dirty = true;
 }
 
 void TikzEllipsePath::paint(QPainter *painter,
@@ -137,51 +119,28 @@ void TikzEllipsePath::paint(QPainter *painter,
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
-    if (d->dirty) {
-        d->updateCache();
+    if (m_dirty) {
+        updateCache();
     }
 
-    painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
     PaintHelper sh(painter, style());
     QPen p = sh.pen();
 
-    if (isHovered() && !d->dragging) {
-        painter->fillPath(d->hoverPath, Qt::magenta);
+    if (path()->isHovered() /*&& !dragging*/) {
+        painter->fillPath(m_hoverPath, Qt::magenta);
     }
     
     painter->setPen(p);
     // draw line
-    painter->drawPath(d->linePath);
+    painter->drawPath(m_ellipse);
 
     if (style()->doubleLine()) {
         p.setWidthF(style()->innerLineWidth());
         p.setColor(Qt::white);
         painter->setPen(p);
-        painter->drawPath(d->linePath);
-    }
-
-    // draw arrows
-    painter->save();
-        painter->translate(d->startAnchor.x(), d->startAnchor.y());
-        painter->rotate(180 - d->linePath.angleAtPercent(0.0));
-        d->arrowTail->draw(painter);
-    painter->restore();
-    painter->save();
-        painter->translate(d->endAnchor.x(), d->endAnchor.y());
-        painter->rotate(-d->linePath.angleAtPercent(1.0));
-        d->arrowHead->draw(painter);
-    painter->restore();
-
-    // TODO: create d->paths
-    if (isHovered() && !d->dragging) {
-        QPointF startAnchor = startPos();
-        QPointF endAnchor = endPos();
-        QPointF diff(endAnchor - startAnchor);
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
-//         d->drawHandle(painter, startAnchor, d->start != 0);
-//         d->drawHandle(painter, endAnchor, d->end != 0);
+        painter->drawPath(m_ellipse);
     }
 
     painter->restore();
@@ -189,85 +148,87 @@ void TikzEllipsePath::paint(QPainter *painter,
 
 QRectF TikzEllipsePath::boundingRect() const
 {
-    // make sure the start and end nodes positions are up-to-date
-    d->updateCache();
+    // make sure the cache is up-to-date
+    const_cast<TikzEllipsePath*>(this)->updateCache();
 
-    QRectF br = d->hoverPath.boundingRect();
-    br = br.normalized();
-    br.adjust(-0.05, -0.05, 0.05, 0.05);
-    return br;
+    return m_boundingRect; //.adjusted(-0.05, -0.05, 0.05, 0.05);
 }
 
 QPainterPath TikzEllipsePath::shape() const
 {
-    d->updateCache();
+    const_cast<TikzEllipsePath*>(this)->updateCache();
 
-    return d->shapePath;
+    return m_shapePath;
 }
 
 bool TikzEllipsePath::contains(const QPointF & point) const
 {
-    if (d->dirty) {
-        return TikzItem::contains(point);
+    // make sure the cache is up-to-date
+    const_cast<TikzEllipsePath*>(this)->updateCache();
+
+    // contains depends on the type of fill color/brush
+    if (style()->fillColor() == Qt::transparent) {
+        return m_hoverPath.contains(point);
     } else {
-        return d->hoverPath.contains(point);
+        return m_ellipse.contains(point)
+            || m_hoverPath.contains(point);
     }
 }
 
 void TikzEllipsePath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (!d->dragging) {
-        event->ignore();
-        TikzItem::mouseMoveEvent(event);
-        return;
-    }
+//     if (!d->dragging) {
+//         event->ignore();
+//         TikzItem::mouseMoveEvent(event);
+//         return;
+//     }
 
-    QList<QGraphicsItem *> items = scene()->items(event->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
-    items.removeOne(this);
-
-    bool connected = false;
-    if (items.size()) {
-        foreach (QGraphicsItem* item, items) {
-            if (item->type() == UserType + 2) {
-                TikzNode* node = dynamic_cast<TikzNode*>(item);
-                Q_ASSERT(node);
-                if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
-                    if (d->start != node) {
-                        qDeleteAll(d->nodeHandles);
-                        d->nodeHandles.clear();
-                        setStartNode(node);
-
-                        foreach (tikz::Anchor anchor, node->supportedAnchors()) {
-                            d->nodeHandles.append(new AnchorHandle(this, anchor, true));
-                        }
-                    }
-                }
-                connected = true;
-                break;
-            }
-        }
-
-        if (!connected) {
-            // mouse does not hover over node anymore, but maybe it
-            // still hovers over an anchor?
-            foreach (QGraphicsItem* item, items) {
-                if (d->nodeHandles.contains(item)) {
-                    connected = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!connected) {
-        qDeleteAll(d->nodeHandles);
-        d->nodeHandles.clear();
-
-        if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
-            setStartNode(0);
-            d->edge->start().setPos(event->scenePos());
-        }
-    }
+//     QList<QGraphicsItem *> items = scene()->items(event->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
+//     items.removeOne(this);
+//
+//     bool connected = false;
+//     if (items.size()) {
+//         foreach (QGraphicsItem* item, items) {
+//             if (item->type() == UserType + 2) {
+//                 TikzNode* node = dynamic_cast<TikzNode*>(item);
+//                 Q_ASSERT(node);
+//                 if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
+//                     if (d->start != node) {
+//                         qDeleteAll(d->nodeHandles);
+//                         d->nodeHandles.clear();
+//                         setStartNode(node);
+//
+//                         foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+//                             d->nodeHandles.append(new AnchorHandle(this, anchor, true));
+//                         }
+//                     }
+//                 }
+//                 connected = true;
+//                 break;
+//             }
+//         }
+//
+//         if (!connected) {
+//             // mouse does not hover over node anymore, but maybe it
+//             // still hovers over an anchor?
+//             foreach (QGraphicsItem* item, items) {
+//                 if (d->nodeHandles.contains(item)) {
+//                     connected = true;
+//                     break;
+//                 }
+//             }
+//         }
+//     }
+//
+//     if (!connected) {
+//         qDeleteAll(d->nodeHandles);
+//         d->nodeHandles.clear();
+//
+//         if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
+//             setStartNode(0);
+//             d->edge->start().setPos(event->scenePos());
+//         }
+//     }
 }
 
 void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
@@ -278,31 +239,24 @@ void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
         event->accept();
 
 //         grabMouse();
-        d->dragging = true;
-        const qreal distToStart = (event->scenePos() - d->edge->start().pos()).manhattanLength();
-        const qreal distToEnd = (event->scenePos() - d->edge->end().pos()).manhattanLength();
-        if (distToStart < distToEnd) {
-            d->dragMode = TikzEllipsePathPrivate::DM_Start;
-        } else {
-            d->dragMode = TikzEllipsePathPrivate::DM_End;
-        }
+//         d->dragging = true;
     }
 }
 
 void TikzEllipsePath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (d->dragging) {
-        d->dragging = false;
-//         ungrabMouse();
-
-        // clear node handles, if needed
-        qDeleteAll(d->nodeHandles);
-        d->nodeHandles.clear();
-
-        event->accept();
-    } else {
-        event->ignore();
-    }
+//     if (d->dragging) {
+//         d->dragging = false;
+// //         ungrabMouse();
+//
+//         // clear node handles, if needed
+//         qDeleteAll(d->nodeHandles);
+//         d->nodeHandles.clear();
+//
+//         event->accept();
+//     } else {
+//         event->ignore();
+//     }
 
     update();
 }
@@ -312,14 +266,39 @@ void TikzEllipsePath::updateNode(tikz::Node * node)
     TikzNode * newNode = 0;
 
     if (node) {
-        newNode = q->document()->tikzNodeFromId(node->id());
+        newNode = document()->tikzNodeFromId(node->id());
     }
 
-
-    if ( != newNode) {
-    prepareGeometryChange();
-        end = newNode;
+    if (m_node != newNode) {
+        path()->prepareGeometryChange();
+        m_node = newNode;
     }
+}
+
+void TikzEllipsePath::updateCache()
+{
+    if (!m_dirty) return;
+    m_dirty = false;
+
+    // reset old paths
+    m_ellipse = QPainterPath();
+    m_hoverPath = QPainterPath();
+    m_boundingRect = QRectF();
+
+    // draw line
+    m_ellipse.addEllipse(pos(), 2.0, 1.0); // FIXME: 2.0 is x-radius, 1.0 is y-radius
+
+    //
+    // cache hover and shape path
+    //
+    QPainterPathStroker pps;
+    pps.setWidth(style()->penWidth() + 0.1); // 0.1mm
+    m_hoverPath = pps.createStroke(m_ellipse);
+
+    pps.setWidth(style()->penWidth() + 0.2); // 0.2mm
+    m_shapePath = pps.createStroke(m_ellipse);
+
+    m_boundingRect = m_shapePath.boundingRect();
 }
 
 // kate: indent-width 4; replace-tabs on;

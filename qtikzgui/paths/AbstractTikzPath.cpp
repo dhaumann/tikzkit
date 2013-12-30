@@ -54,6 +54,11 @@ tikz::EdgeStyle* AbstractTikzPath::style() const
     return m_path->style();
 }
 
+void AbstractTikzPath::update()
+{
+    m_path->update();
+}
+
 void AbstractTikzPath::paint(QPainter *painter,
                              const QStyleOptionGraphicsItem *option,
                              QWidget *widget)

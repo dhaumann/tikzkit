@@ -40,6 +40,9 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
 {
     Q_OBJECT
 
+    friend class AbstractTikzPath;
+    friend class TikzEllipsePath;
+
     public:
         /**
          * Constructor for @p path and parent @p parent.

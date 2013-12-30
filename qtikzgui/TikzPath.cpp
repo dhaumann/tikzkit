@@ -21,16 +21,11 @@
 #include "TikzPath_p.h"
 
 #include "AbstractTikzPath.h"
+#include "TikzEllipsePath.h"
 
 #include <Path.h>
-#include "TikzNode.h"
 #include "TikzDocument.h"
 #include "EdgeStyle.h"
-#include "NodeStyle.h"
-#include "AnchorHandle.h"
-#include "CurveHandle.h"
-#include "BezierCurve.h"
-#include "AbstractArrow.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -51,8 +46,24 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
 {
     d->path = path;
 
+    d->backendPath = 0;
     // backend path
-    AbstractTikzPath * backendPath;
+    switch (d->path->type()) {
+        case tikz::Path::Line: break;
+        case tikz::Path::HVLine: break;
+        case tikz::Path::VHLine: break;
+        case tikz::Path::BendCurve: break;
+        case tikz::Path::InOutCurve: break;
+        case tikz::Path::BezierCurve: break;
+        case tikz::Path::Ellipse: {
+//             d->backendPath = new TikzEllipsePath(this);
+            break;
+        }
+        case tikz::Path::Rectangle: break;
+        case tikz::Path::Grid: break;
+        case tikz::Path::Invalid:
+        default: break;
+    }
 
     // setPos needed?
     setPos(0, 0);
