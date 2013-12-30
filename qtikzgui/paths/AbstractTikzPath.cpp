@@ -20,6 +20,8 @@
 #include "AbstractTikzPath.h"
 #include "AbstractTikzPath.h"
 
+#include "TikzPath.h"
+
 #include <Path.h>
 
 #include <QPainter>
@@ -28,14 +30,13 @@
 
 AbstractTikzPath::AbstractTikzPath(TikzPath * path)
     : QObject(path)
-    , path(path)
+    , m_path(path)
 {
-    Q_ASSERT(path != 0)
+    Q_ASSERT(m_path != 0);
 }
 
 AbstractTikzPath::~AbstractTikzPath()
 {
-    delete d;
 }
 
 TikzDocument * AbstractTikzPath::document() const

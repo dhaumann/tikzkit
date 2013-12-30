@@ -20,13 +20,22 @@
 #ifndef GUI_ABSTRACT_TIKZ_PATH_H
 #define GUI_ABSTRACT_TIKZ_PATH_H
 
+#include "Path.h"
 
 #include <QObject>
+#include <QRectF>
+#include <QPainterPath>
+
+namespace tikz {
+    class EdgeStyle;
+}
 
 class QPainter;
+class QStyleOptionGraphicsItem;
+class QGraphicsSceneMouseEvent;
 
 class TikzDocument;
-class TikzNode;
+class TikzPath;
 
 class AbstractTikzPath : public QObject
 {
@@ -49,9 +58,9 @@ class AbstractTikzPath : public QObject
         TikzDocument * document() const;
 
         /**
-         * Reimplment to return a proper UserType + 3.
+         * Return a the tikz::Path type.
          */
-        virtual int type() const = 0;
+        virtual tikz::Path::Type type() const = 0;
 
         /**
          * Returns the pointer to the associated Path.

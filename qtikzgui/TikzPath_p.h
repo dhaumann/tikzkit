@@ -20,87 +20,20 @@
 #ifndef GUI_TIKZ_PATH_PRIVATE_ITEM_H
 #define GUI_TIKZ_PATH_PRIVATE_ITEM_H
 
-#include <QPainterPath>
-#include <QPointer>
-#include <QObject>
-
 namespace tikz {
-    class Node;
     class Path;
-    class EdgeStyle;
 }
 
-class QPainter;
+class AbstractTikzPath;
 
-class TikzPath;
-class TikzNode;
-class AnchorHandle;
-class CurveHandle;
-class AbstractArrow;
-class QGraphicsItem;
-
-class TikzPathPrivate : public QObject
+class TikzPathPrivate
 {
-    Q_OBJECT
-
-    TikzPath* q;
-
-    public:
-        enum DragMode {
-            DM_Start = 0,
-            DM_End,
-        };
-
-        TikzPathPrivate(TikzPath* path);
-        virtual ~TikzPathPrivate();
-
-        void init(tikz::Path * p);
-
     public:
         // edge and nodes
-        tikz::Path* path;
+        tikz::Path * path;
 
-        // anchors for arrows
-        QPointF startAnchor;
-        QPointF endAnchor;
-
-        // Arrow tail and arrow head
-        AbstractArrow * arrowTail;
-        AbstractArrow * arrowHead;
-
-        // draging state
-        bool dragging;      // true: mouse is grabbed
-        DragMode dragMode;
-
-        // cached painter paths
-        bool dirty;             // true: needs recalculation of paths
-        QPainterPath linePath;
-        QPainterPath headPath;
-        QPainterPath tailPath;
-
-        QPainterPath hoverPath;
-        QPainterPath shapePath;
-
-        // node handles on mouse over nodes
-        QVector<QGraphicsItem*> nodeHandles;
-
-    //
-    // helper functions
-    //
-    public:
-        void updateCache();
-
-        /**
-         * Creates a painter path @p path that represents the arrow at position @p arrowHead.
-         * The arrow is rotated by @p rad units.
-         */
-        void createArrow(QPainterPath& path, const QPointF& arrowHead, qreal rad);
-
-        void drawArrow(QPainter* painter, const QPainterPath& path);
-        void drawHandle(QPainter* painter, const QPointF& pos, bool connected);
-
-    private:
-        inline tikz::EdgeStyle* style() const;
+        // backend path
+        AbstractTikzPath * backendPath;
 };
 
 #endif // GUI_TIKZ_PATH_PRIVATE_ITEM_H
