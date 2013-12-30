@@ -63,8 +63,8 @@ void TikzEdgePrivate::init(tikz::Edge * e)
     arrowTail = new AbstractArrow(style());
     arrowHead = new AbstractArrow(style());
 
-    startControlPoint = new CurveHandle(q);
-    endControlPoint = new CurveHandle(q);
+    startControlPoint = new CurveHandle(); // FIXME: pass q as argument
+    endControlPoint = new CurveHandle();
     startControlPoint->setVisible(false);
     endControlPoint->setVisible(false);
 

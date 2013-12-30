@@ -32,6 +32,7 @@ namespace tikz {
 
 class QPainter;
 
+class CurveHandle;
 class TikzDocument;
 class TikzNode;
 class TikzPath;
@@ -168,6 +169,17 @@ class TikzEllipsePath : public AbstractTikzPath
 
         // the bounding rect around m_hoverPath
         QRectF m_boundingRect;
+
+    private:
+        CurveHandle * m_topLeft;
+        CurveHandle * m_top;
+        CurveHandle * m_topRight;
+        CurveHandle * m_left;
+        CurveHandle * m_center;
+        CurveHandle * m_right;
+        CurveHandle * m_bottomLeft;
+        CurveHandle * m_bottom;
+        CurveHandle * m_bottomRight;
 };
 
 #endif // GUI_TIKZ_ELLIPSE_PATH_H

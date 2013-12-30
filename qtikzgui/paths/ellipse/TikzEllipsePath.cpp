@@ -120,7 +120,7 @@ void TikzEllipsePath::paint(QPainter *painter,
     QPen p = sh.pen();
 
     if (path()->isHovered() /*&& !dragging*/) {
-        painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: magenty color
+        painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: make color configurable
     }
 
     painter->setPen(p);

@@ -18,15 +18,9 @@
  */
 
 #include "CurveHandle.h"
-#include "NodeStyle.h"
-#include "TikzNode.h"
-#include "TikzEdge.h"
+#include "TikzPath.h"
 
-#include <QPointer>
 #include <QPainter>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -36,16 +30,13 @@
 class CurveHandlePrivate
 {
     public:
-        QPointer<TikzEdge> edge;
 };
 
-CurveHandle::CurveHandle(TikzEdge * edge)
-    : TikzItem(edge)
+CurveHandle::CurveHandle(TikzPath * path)
+    : TikzItem(path)
     , d(new CurveHandlePrivate())
 {
-    d->edge = edge;
-
-    // set above edge
+    // show above paths
     setZValue(10.0);
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -86,8 +77,8 @@ QRectF CurveHandle::boundingRect() const
 
 bool CurveHandle::contains(const QPointF &point) const
 {
-    // within circle of 1.5 mm?
-    return (point.x() * point.x() + point.y() * point.y()) < (0.25 * 0.25);
+    // within circle of 2.5 mm?
+    return (point.x() * point.x() + point.y() * point.y()) <= (0.25 * 0.25);
 }
 
 void CurveHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)

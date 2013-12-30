@@ -69,9 +69,6 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
     // setPos needed?
     setPos(0, 0);
 
-    // FIXME:
-//     connect(d->path, SIGNAL(changed()), this, SLOT(slotUpdate()));
-
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
@@ -105,14 +102,6 @@ qint64 TikzPath::id() const
 tikz::EdgeStyle* TikzPath::style() const
 {
     return d->path->style();
-}
-
-void TikzPath::slotUpdate()
-{
-    // FIXME: what to do?
-//     prepareGeometryChange();
-
-//     d->dirty = true;
 }
 
 void TikzPath::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

@@ -115,9 +115,6 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
 
         virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
-    private Q_SLOTS:
-        void slotUpdate();
-
     //
     // internal
     //

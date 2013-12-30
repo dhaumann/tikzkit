@@ -26,10 +26,8 @@
 #include "TikzItem.h"
 
 class QPainter;
-class TikzNode;
-class TikzEdge;
+class TikzPath;
 class CurveHandlePrivate;
-class Style;
 
 class CurveHandle : public TikzItem
 {
@@ -39,7 +37,7 @@ class CurveHandle : public TikzItem
         /**
          * Constructor.
          */
-        CurveHandle(TikzEdge * edge);
+        CurveHandle(TikzPath * path = 0);
 
         /**
          * Destructor
@@ -49,9 +47,13 @@ class CurveHandle : public TikzItem
         /**
          * Reimplment to return a proper UserType + 4.
          */
-        virtual int type() const;
+        int type() const override;
 
     Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the position of this handle
+         * changed through user interaction.
+         */
         void positionChanged(const QPointF & pos);
 
     //
@@ -66,12 +68,12 @@ class CurveHandle : public TikzItem
         /**
          * Returns the bounding rect of this item.
          */
-        QRectF boundingRect() const;
+        QRectF boundingRect() const override;
 
         /**
          * Returns @p true, if @p point is contained in this handle.
          */
-        bool contains(const QPointF &point) const;
+        bool contains(const QPointF &point) const override;
 
     //
     // protected overrides
