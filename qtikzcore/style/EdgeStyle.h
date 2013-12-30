@@ -32,6 +32,8 @@ class EdgeStylePrivate;
 class TIKZCORE_EXPORT EdgeStyle : public Style
 {
     Q_OBJECT
+        Q_PROPERTY(qreal radiusX READ radiusX WRITE setRadiusX RESET unsetRadiusX)
+        Q_PROPERTY(qreal radiusY READ radiusY WRITE setRadiusY RESET unsetRadiusY)
         Q_PROPERTY(qreal bendAngle READ bendAngle WRITE setBendAngle RESET unsetBendAngle)
         Q_PROPERTY(qreal looseness READ looseness WRITE setLooseness RESET unsetLooseness)
         Q_PROPERTY(qreal outAngle READ outAngle WRITE setOutAngle RESET unsetOutAngle)
@@ -56,6 +58,55 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Set the properties of this style to all properties of @p other.
          */
         virtual void setStyle(const EdgeStyle& other);
+
+    //
+    // Ellipse properties
+    //
+    public:
+        /**
+         * Get the "x radius" of an ellipse path. The default value is 0.0.
+         * @note This value has an effect only if the path is of type Path::Ellipse.
+         */
+        qreal radiusX() const;
+
+        /**
+         * Get the "y radius" of an ellipse path. The default value is 0.0.
+         * @note This value has an effect only if the path is of type Path::Ellipse.
+         */
+        qreal radiusY() const;
+
+        /**
+         * Check whether the "x radius" property is set.
+         */
+        bool radiusXSet() const;
+
+        /**
+         * Check whether the "y radius" property is set.
+         */
+        bool radiusYSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the "x radius" of the ellipse to @p xradius.
+         * This value is used by tikz::EllipsePath.
+         */
+        void setRadiusX(qreal xradius);
+
+        /**
+         * Set the "y radius" of the ellipse to @p yradius.
+         * This value is used by tikz::EllipsePath.
+         */
+        void setRadiusY(qreal yradius);
+
+        /**
+         * Unset the "x radius" property.
+         */
+        void unsetRadiusX();
+
+        /**
+         * Unset the "y radius" property.
+         */
+        void unsetRadiusY();
 
     public:
         /**

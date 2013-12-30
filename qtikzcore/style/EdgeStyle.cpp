@@ -21,6 +21,8 @@
 
 namespace tikz {
 
+static const char * s_radiusX = "radiusX";
+static const char * s_radiusY = "radiusY";
 static const char * s_bendAngle = "bendAngle";
 static const char * s_looseness = "looseness";
 static const char * s_outAngle = "outAngle";
@@ -36,6 +38,9 @@ static const char * s_shortenEnd = "shortenEnd";
 class EdgeStylePrivate
 {
 public:
+    qreal radiusX;
+    qreal radiusY;
+
     qreal bendAngle; // in degree
     qreal looseness;
     qreal outAngle; // in degree
@@ -49,6 +54,9 @@ public:
 
     void init()
     {
+        radiusX = 0.0;
+        radiusY = 0.0;
+
         bendAngle = 0.0;
         looseness = 1.0;
         outAngle = 45;
@@ -87,6 +95,84 @@ void EdgeStyle::setStyle(const EdgeStyle& other)
     Style::setStyle(other);
     *d = *other.d;
     endConfig();
+}
+
+qreal EdgeStyle::radiusX() const
+{
+    if (propertySet(s_radiusX)) {
+        return d->radiusX;
+    }
+
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->radiusX();
+    }
+
+    return 0.0;
+}
+
+qreal EdgeStyle::radiusY() const
+{
+    if (propertySet(s_radiusY)) {
+        return d->radiusY;
+    }
+
+    EdgeStyle * style = qobject_cast<EdgeStyle*>(parentStyle());
+    if (style) {
+        return style->radiusY();
+    }
+
+    return 0.0;
+}
+
+bool EdgeStyle::radiusXSet() const
+{
+    return propertySet(s_radiusX);
+}
+
+bool EdgeStyle::radiusYSet() const
+{
+    return propertySet(s_radiusY);
+}
+
+void EdgeStyle::setRadiusX(qreal xradius)
+{
+    if (!propertySet(s_radiusX) || d->radiusX != xradius) {
+        beginConfig();
+        addProperty(s_radiusX);
+        d->radiusX = xradius;
+        endConfig();
+    }
+}
+
+void EdgeStyle::setRadiusY(qreal yradius)
+{
+    if (!propertySet(s_radiusY) || d->radiusY != yradius) {
+        beginConfig();
+        addProperty(s_radiusY);
+        d->radiusY = yradius;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetRadiusX()
+{
+    if (propertySet(s_radiusX)) {
+        beginConfig();
+        removeProperty(s_radiusX);
+        d->radiusX = 0.0;
+        endConfig();
+    }
+}
+
+void EdgeStyle::unsetRadiusY()
+{
+    if (propertySet(s_radiusY)) {
+        beginConfig();
+        removeProperty(s_radiusY);
+        d->radiusY = 0.0;
+        endConfig();
+    }
 }
 
 qreal EdgeStyle::bendAngle() const
