@@ -108,10 +108,10 @@ TikzNode * TikzDocument::createTikzNode()
     return d->nodeMap[node->id()];
 }
 
-TikzPath * TikzDocument::createTikzPath()
+TikzPath * TikzDocument::createTikzPath(tikz::Path::Type type)
 {
     // create path
-    tikz::Path * path = Document::createPath();
+    tikz::Path * path = Document::createPath(type);
     Q_ASSERT(d->pathMap.contains(path->id()));
 
     return d->pathMap[path->id()];

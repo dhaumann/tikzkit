@@ -89,7 +89,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
          * If the path is not needed anymore, delete it by
          * calling deleteTikzPath(tikzPath).
          */
-        TikzPath * createTikzPath();
+        TikzPath * createTikzPath(tikz::Path::Type type = tikz::Path::Line);
 
         /**
          * Remove @p node from the document by deleting the node object.

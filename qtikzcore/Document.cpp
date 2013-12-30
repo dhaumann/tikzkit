@@ -347,6 +347,7 @@ Path * Document::createPath(Path::Type type, qint64 id)
         }
         case Path::Ellipse:
             path = new EllipsePath(id, this);
+            break;
         default:
             Q_ASSERT(false);
     }

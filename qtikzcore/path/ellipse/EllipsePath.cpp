@@ -50,6 +50,11 @@ EllipsePath::~EllipsePath()
     delete d;
 }
 
+Path::Type EllipsePath::type() const
+{
+    return Path::Ellipse;
+}
+
 void EllipsePath::deconstruct()
 {
     // just set both the start and end pos to (0, 0).

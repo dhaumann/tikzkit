@@ -27,8 +27,7 @@
 #include <QPointer>
 
 namespace tikz {
-    class Edge;
-    class EdgeStyle;
+    class EllipsePath;
 }
 
 class QPainter;
@@ -103,22 +102,22 @@ class TikzEllipsePath : public AbstractTikzPath
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
         /**
          * Returns the bounding rect of this item.
          */
-        QRectF boundingRect() const;
+        QRectF boundingRect() const override;
 
         /**
          * Returns an exact shape as painter path
          */
-        QPainterPath shape() const;
+        QPainterPath shape() const override;
 
         /**
          * Returns @p true, if @p point is contained in the edge.
          */
-        bool contains(const QPointF & point) const;
+        bool contains(const QPointF & point) const override;
 
     //
     // Mouse handling and overrides
@@ -138,10 +137,16 @@ class TikzEllipsePath : public AbstractTikzPath
          */
         void updateNode(tikz::Node * node);
 
+    private:
         /**
          * Updates the cache of the ellipse.
          */
         void updateCache();
+
+        /**
+         * Returns the tikz::Path object, casted to tikz::EllipsePath
+         */
+        tikz::EllipsePath * ellipsePath() const;
 
     private:
         // the TikzNode this ellipse possibly is anchored at

@@ -47,6 +47,7 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
     d->path = path;
 
     d->backendPath = 0;
+    qDebug() << d->path->type();
     // backend path
     switch (d->path->type()) {
         case tikz::Path::Line: break;
@@ -56,7 +57,7 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
         case tikz::Path::InOutCurve: break;
         case tikz::Path::BezierCurve: break;
         case tikz::Path::Ellipse: {
-//             d->backendPath = new TikzEllipsePath(this);
+            d->backendPath = new TikzEllipsePath(this);
             break;
         }
         case tikz::Path::Rectangle: break;

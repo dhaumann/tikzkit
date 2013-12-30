@@ -101,7 +101,7 @@ MainWindow::MainWindow()
 
     m_textEdit = new QTextEdit(splitter);
     splitter->addWidget(m_textEdit);
-    
+
     splitter->setStretchFactor(0, 20);
     splitter->setStretchFactor(1, 1);
 
@@ -125,11 +125,14 @@ MainWindow::MainWindow()
     item2->node()->setText("$\\Leftrightarrow$");
 
     // an path
-    TikzPath* path = m_doc->createTikzPath();
+    TikzPath* path = m_doc->createTikzPath(tikz::Path::Ellipse);
+    path->path()->style()->setRadiusX(2.0);
+    path->path()->style()->setRadiusY(1.0);
 //     path->setStartNode(item1);
 //     path->setEndNode(item2);
     path->path()->style()->setLineWidthType(tikz::SemiThick);
 
+#if 0
 
 
     item1 = m_doc->createTikzNode();
@@ -365,6 +368,7 @@ MainWindow::MainWindow()
         path->path()->style()->setPenColor(QColor(122, 122, 122));
 //         path->path()->setStartAnchor(tikz::East);
     }
+#endif
 
     setupActions();
 

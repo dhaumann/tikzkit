@@ -44,6 +44,8 @@ TikzEllipsePath::TikzEllipsePath(TikzPath * path)
     // we need to track the TikzNode the ellipse is attached to
     connect(path->path(), SIGNAL(nodeChanged(tikz::Node*)),
             this, SLOT(updateNode(tikz::Node*)));
+
+    connect(path->path(), SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
 
 TikzEllipsePath::~TikzEllipsePath()
@@ -65,9 +67,7 @@ void TikzEllipsePath::setNode(TikzNode* node)
 {
     if (m_node != node) {
         m_node = node;
-        tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
-        Q_ASSERT(ellipsePath != nullptr);
-        ellipsePath->setNode(node ? node->node() : 0);
+        ellipsePath()->setNode(node ? node->node() : 0);
     }
 }
 
@@ -78,31 +78,24 @@ TikzNode* TikzEllipsePath::node() const
 
 QPointF TikzEllipsePath::pos() const
 {
-    tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
-    Q_ASSERT(ellipsePath != nullptr);
-
-    if (ellipsePath->node()) {
-        TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath->node()->id());
+    if (ellipsePath()->node()) {
+        TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath()->node()->id());
         Q_ASSERT(tikzNode != nullptr);
 
         return tikzNode->anchor(anchor());
     } else {
-        return ellipsePath->pos();
+        return ellipsePath()->pos();
     }
 }
 
 tikz::Anchor TikzEllipsePath::anchor() const
 {
-    tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
-    Q_ASSERT(ellipsePath != nullptr);
-    return ellipsePath->anchor();
+    return ellipsePath()->anchor();
 }
 
 void TikzEllipsePath::setAnchor(tikz::Anchor anchor)
 {
-    tikz::EllipsePath * ellipsePath = qobject_cast<tikz::EllipsePath*>(path()->path());
-    Q_ASSERT(ellipsePath != nullptr);
-    ellipsePath->setAnchor(anchor);
+    ellipsePath()->setAnchor(anchor);
 }
 
 void TikzEllipsePath::slotUpdate()
@@ -116,12 +109,10 @@ void TikzEllipsePath::paint(QPainter *painter,
                             const QStyleOptionGraphicsItem *option,
                             QWidget *widget)
 {
-    Q_UNUSED(widget);
     Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-    if (m_dirty) {
-        updateCache();
-    }
+    updateCache();
 
     painter->setRenderHints(QPainter::Antialiasing);
 
@@ -129,16 +120,16 @@ void TikzEllipsePath::paint(QPainter *painter,
     QPen p = sh.pen();
 
     if (path()->isHovered() /*&& !dragging*/) {
-        painter->fillPath(m_hoverPath, Qt::magenta);
+        painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: magenty color
     }
-    
+
     painter->setPen(p);
     // draw line
     painter->drawPath(m_ellipse);
 
     if (style()->doubleLine()) {
         p.setWidthF(style()->innerLineWidth());
-        p.setColor(Qt::white);
+        p.setColor(Qt::white); // FIXME: inner line color
         painter->setPen(p);
         painter->drawPath(m_ellipse);
     }
@@ -285,20 +276,28 @@ void TikzEllipsePath::updateCache()
     m_hoverPath = QPainterPath();
     m_boundingRect = QRectF();
 
-    // draw line
-    m_ellipse.addEllipse(pos(), 2.0, 1.0); // FIXME: 2.0 is x-radius, 1.0 is y-radius
+    // draw ellipse path
+    m_ellipse.addEllipse(pos(), style()->radiusX(), style()->radiusY());
 
-    //
-    // cache hover and shape path
-    //
+    // cache hover path
     QPainterPathStroker pps;
     pps.setWidth(style()->penWidth() + 0.1); // 0.1mm
     m_hoverPath = pps.createStroke(m_ellipse);
 
+    // cache shape path
     pps.setWidth(style()->penWidth() + 0.2); // 0.2mm
     m_shapePath = pps.createStroke(m_ellipse);
 
+    // cache bounding rect
     m_boundingRect = m_shapePath.boundingRect();
+}
+
+tikz::EllipsePath * TikzEllipsePath::ellipsePath() const
+{
+    tikz::EllipsePath * p = qobject_cast<tikz::EllipsePath*>(path()->path());
+    Q_ASSERT(p != nullptr);
+
+    return p;
 }
 
 // kate: indent-width 4; replace-tabs on;
