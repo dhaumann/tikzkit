@@ -32,7 +32,7 @@ namespace tikz {
 
 class QPainter;
 
-class CurveHandle;
+class PathHandle;
 class TikzDocument;
 class TikzNode;
 class TikzPath;
@@ -138,12 +138,30 @@ class TikzEllipsePath : public AbstractTikzPath
          */
         void updateNode(tikz::Node * node);
 
-    private:
+    private Q_SLOTS:
         /**
          * Updates the cache of the ellipse.
          */
         void updateCache();
 
+        /**
+         * Show / hide resize, move and rotate handles according to @p show.
+         */
+        void setShowHandles(bool show);
+
+        /**
+         * set the handle positions.
+         */
+        void updateHandlePositions();
+
+        /**
+         * This slot is called whenever a handle moved.
+         * The ellipse then is either moved, resized or rotated according to
+         * the sender @p handle.
+         */
+        void handleMoved(PathHandle * handle, const QPointF & pos);
+
+    private:
         /**
          * Returns the tikz::Path object, casted to tikz::EllipsePath
          */
@@ -171,15 +189,15 @@ class TikzEllipsePath : public AbstractTikzPath
         QRectF m_boundingRect;
 
     private:
-        CurveHandle * m_topLeft;
-        CurveHandle * m_top;
-        CurveHandle * m_topRight;
-        CurveHandle * m_left;
-        CurveHandle * m_center;
-        CurveHandle * m_right;
-        CurveHandle * m_bottomLeft;
-        CurveHandle * m_bottom;
-        CurveHandle * m_bottomRight;
+        PathHandle * m_topLeft;
+        PathHandle * m_top;
+        PathHandle * m_topRight;
+        PathHandle * m_left;
+        PathHandle * m_center;
+        PathHandle * m_right;
+        PathHandle * m_bottomLeft;
+        PathHandle * m_bottom;
+        PathHandle * m_bottomRight;
 };
 
 #endif // GUI_TIKZ_ELLIPSE_PATH_H

@@ -54,6 +54,11 @@ tikz::EdgeStyle* AbstractTikzPath::style() const
     return m_path->style();
 }
 
+QGraphicsScene * AbstractTikzPath::scene() const
+{
+    return m_path->scene();
+}
+
 void AbstractTikzPath::update()
 {
     m_path->update();

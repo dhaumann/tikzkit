@@ -30,6 +30,7 @@ set(qtikzgui_SOURCES
 
     paths/AbstractTikzPath.cpp
     paths/ellipse/TikzEllipsePath.cpp
+    paths/PathHandle.cpp
 
     TikzScene.cpp
     TikzView.cpp
@@ -73,6 +74,7 @@ set(qtikzgui_HEADERS
 
     paths/AbstractTikzPath.h
     paths/ellipse/TikzEllipsePath.h
+    paths/PathHandle.h
 
     TikzScene.h
     TikzView.h

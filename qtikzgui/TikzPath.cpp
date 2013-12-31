@@ -135,11 +135,13 @@ void TikzPath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void TikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     d->backendPath->mousePressEvent(event);
+    TikzItem::mousePressEvent(event);
 }
 
 void TikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     d->backendPath->mouseReleaseEvent(event);
+    TikzItem::mouseReleaseEvent(event);
 }
 
 QVariant TikzPath::itemChange(GraphicsItemChange change, const QVariant & value)
@@ -147,8 +149,7 @@ QVariant TikzPath::itemChange(GraphicsItemChange change, const QVariant & value)
     if (change == ItemSelectedHasChanged) {
         // show / hide handles if selected
         const bool selected = value.toBool();
-
-        // FIXME: implement ?
+        emit itemSelected(selected);
     }
 
     return QGraphicsObject::itemChange(change, value);

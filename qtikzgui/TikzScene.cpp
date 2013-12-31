@@ -191,7 +191,7 @@ void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     const QRectF br(itemsBoundingRect());
     if (br.isValid()) {
-        setSceneRect(itemsBoundingRect());
+//         setSceneRect(itemsBoundingRect()); // FIXME: needed?
     } else {
         qWarning() << "TikzScene::mouseMoveEvent: invalid bounding rect, ignoring";
     }

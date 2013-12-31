@@ -25,6 +25,7 @@
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "EdgeStyle.h"
+#include "PathHandle.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -37,6 +38,16 @@
 TikzEllipsePath::TikzEllipsePath(TikzPath * path)
     : AbstractTikzPath(path)
 {
+    m_topLeft = 0;
+    m_top = 0;
+    m_topRight = 0;
+    m_left = 0;
+    m_center = 0;
+    m_right = 0;
+    m_bottomLeft = 0;
+    m_bottom = 0;
+    m_bottomRight = 0;
+
     // FIXME: some sort of init needed?
 //     init();
 
@@ -46,6 +57,7 @@ TikzEllipsePath::TikzEllipsePath(TikzPath * path)
             this, SLOT(updateNode(tikz::Node*)));
 
     connect(path->path(), SIGNAL(changed()), this, SLOT(slotUpdate()));
+    connect(path, SIGNAL(itemSelected(bool)), this, SLOT(setShowHandles(bool)));
 }
 
 TikzEllipsePath::~TikzEllipsePath()
@@ -103,6 +115,8 @@ void TikzEllipsePath::slotUpdate()
     path()->prepareGeometryChange();
 
     m_dirty = true;
+
+    updateHandlePositions();
 }
 
 void TikzEllipsePath::paint(QPainter *painter,
@@ -133,8 +147,6 @@ void TikzEllipsePath::paint(QPainter *painter,
         painter->setPen(p);
         painter->drawPath(m_ellipse);
     }
-
-    painter->restore();
 }
 
 QRectF TikzEllipsePath::boundingRect() const
@@ -158,16 +170,18 @@ bool TikzEllipsePath::contains(const QPointF & point) const
     const_cast<TikzEllipsePath*>(this)->updateCache();
 
     // contains depends on the type of fill color/brush
-    if (style()->fillColor() == Qt::transparent) {
-        return m_hoverPath.contains(point);
-    } else {
+//     if (style()->fillColor() == Qt::transparent) {
+//         return m_hoverPath.contains(point);
+//     } else {
         return m_ellipse.contains(point)
             || m_hoverPath.contains(point);
-    }
+//     }
 }
 
 void TikzEllipsePath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
+    ellipsePath()->setPos(event->scenePos());
+    updateHandlePositions();
 //     if (!d->dragging) {
 //         event->ignore();
 //         TikzItem::mouseMoveEvent(event);
@@ -224,6 +238,10 @@ void TikzEllipsePath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    qDebug() << "Path selected" << path()->isSelected();
+    if (path()->isSelected()) {
+        updateHandlePositions();
+    }
     /*if (!contains(event->pos()) || !isSelected()) {
         TikzItem::mousePressEvent(event);
     } else*/ {
@@ -298,6 +316,103 @@ tikz::EllipsePath * TikzEllipsePath::ellipsePath() const
     Q_ASSERT(p != nullptr);
 
     return p;
+}
+
+void TikzEllipsePath::setShowHandles(bool show)
+{
+    // handles already visible?
+    if (show && m_topLeft != nullptr) {
+        return;
+    }
+
+    // delete handles, if hide
+    if (!show && m_topLeft != nullptr) {
+        delete m_topLeft;
+        delete m_top;
+        delete m_topRight;
+        delete m_left;
+        delete m_center;
+        delete m_right;
+        delete m_bottomLeft;
+        delete m_bottom;
+        delete m_bottomRight;
+
+        m_topLeft = 0;
+        m_top = 0;
+        m_topRight = 0;
+        m_left = 0;
+        m_center = 0;
+        m_right = 0;
+        m_bottomLeft = 0;
+        m_bottom = 0;
+        m_bottomRight = 0;
+
+        return;
+    }
+
+    m_topLeft = new PathHandle();
+    m_top = new PathHandle();
+    m_topRight = new PathHandle();
+    m_left = new PathHandle();
+    m_center = new PathHandle();
+    m_right = new PathHandle();
+    m_bottomLeft = new PathHandle();
+    m_bottom = new PathHandle();
+    m_bottomRight = new PathHandle();
+
+    QGraphicsScene * s = scene();
+    s->addItem(m_topLeft);
+    s->addItem(m_top);
+    s->addItem(m_topRight);
+    s->addItem(m_left);
+    s->addItem(m_center);
+    s->addItem(m_right);
+    s->addItem(m_bottomLeft);
+    s->addItem(m_bottom);
+    s->addItem(m_bottomRight);
+
+    updateHandlePositions();
+
+    m_topLeft->show();
+    m_top->show();
+    m_topRight->show();
+    m_left->show();
+    m_center->show();
+    m_right->show();
+    m_bottomLeft->show();
+    m_bottom->show();
+    m_bottomRight->show();
+    connect(m_topLeft, SIGNAL(positionChanged(PathHandle *, const QPointF &)),
+            this, SLOT(handleMoved(PathHandle *, const QPointF &)));
+}
+
+void TikzEllipsePath::updateHandlePositions()
+{
+    if (!m_topLeft) return;
+
+    const qreal rx = style()->radiusX();
+    const qreal ry = style()->radiusY();
+
+    m_topLeft->setPos(ellipsePath()->pos() + QPointF(-rx, ry));
+    m_top->setPos(ellipsePath()->pos() + QPointF(0, ry));
+    m_topRight->setPos(ellipsePath()->pos() + QPointF(rx, ry));
+    m_left->setPos(ellipsePath()->pos() + QPointF(-rx, 0));
+    m_center->setPos(ellipsePath()->pos() + QPointF(0, 0));
+    m_right->setPos(ellipsePath()->pos() + QPointF(rx, 0));
+    m_bottomLeft->setPos(ellipsePath()->pos() + QPointF(-rx, -ry));
+    m_bottom->setPos(ellipsePath()->pos() + QPointF(0, -ry));
+    m_bottomRight->setPos(ellipsePath()->pos() + QPointF(rx, -ry));
+}
+
+void TikzEllipsePath::handleMoved(PathHandle * handle, const QPointF & pos)
+{
+    const QPointF center = ellipsePath()->pos();
+    const qreal dx = qAbs(center.x() - pos.x());
+    const qreal dy = qAbs(center.y() - pos.y());
+
+    qDebug() << "updating: " << dx << dy;
+    style()->setRadiusX(dx);
+    style()->setRadiusY(dy);
 }
 
 // kate: indent-width 4; replace-tabs on;

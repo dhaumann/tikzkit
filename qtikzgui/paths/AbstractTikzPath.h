@@ -33,6 +33,7 @@ namespace tikz {
 class QPainter;
 class QStyleOptionGraphicsItem;
 class QGraphicsSceneMouseEvent;
+class QGraphicsScene;
 
 class TikzDocument;
 class TikzPath;
@@ -74,6 +75,11 @@ class AbstractTikzPath : public QObject
         tikz::EdgeStyle* style() const;
 
     public:
+        /**
+         * Get the graphics scene this item is associated with.
+         */
+        QGraphicsScene * scene() const;
+
         /**
          * Request a repaint of this item.
          */

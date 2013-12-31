@@ -105,6 +105,13 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
          */
         bool contains(const QPointF & point) const;
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the item selection changes.
+         * @param selected @p true, if the item is selected, otherwise @p false
+         */
+        void itemSelected(bool selected);
+
     //
     // Mouse handling and overrides
     //
