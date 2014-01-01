@@ -35,6 +35,7 @@ static const char * s_penOpacity = "penOpacity";
 static const char * s_fillOpacity = "fillOpacity";
 static const char * s_penColor = "penColor";
 static const char * s_fillColor = "fillColor";
+static const char * s_rotation = "rotation";
 
 /**
  * Private data and helper functions of class Style.
@@ -74,6 +75,8 @@ public:
     qreal penOpacity;
     qreal fillOpacity;
 
+    qreal rotation;
+
     void init();
 };
 
@@ -99,6 +102,8 @@ void StylePrivate::init()
 
     penColor = Qt::black;
     fillColor = Qt::transparent;
+
+    rotation = 0.0;
 }
 
 Style::Style()
@@ -616,6 +621,44 @@ void Style::unsetFillColor()
         beginConfig();
         removeProperty(s_fillColor);
         d->fillColor = Qt::transparent;
+        endConfig();
+    }
+}
+
+qreal Style::rotation() const
+{
+    if (propertySet(s_rotation)) {
+        return d->rotation;
+    }
+
+    if (parentStyle()) {
+        return parentStyle()->rotation();
+    }
+
+    return 0.0;
+}
+
+bool Style::rotationSet() const
+{
+    return propertySet(s_rotation);
+}
+
+void Style::setRotation(qreal angle)
+{
+    if (!propertySet(s_rotation) || d->rotation != angle) {
+        beginConfig();
+        addProperty(s_rotation);
+        d->rotation = angle;
+        endConfig();
+    }
+}
+
+void Style::unsetRotation()
+{
+    if (propertySet(s_rotation)) {
+        beginConfig();
+        removeProperty(s_rotation);
+        d->rotation = 0.0;
         endConfig();
     }
 }

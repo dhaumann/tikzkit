@@ -23,7 +23,6 @@ namespace tikz {
 
 static const char * s_align = "align";
 static const char * s_shape = "shape";
-static const char * s_rotation = "rotation";
 static const char * s_scale = "scale";
 static const char * s_innerSep = "innerSep";
 static const char * s_outerSep = "outerSep";
@@ -39,7 +38,6 @@ public:
     // Node styles
     TextAlignment align;
     Shape shape;
-    qreal rotation;
     qreal scale;
     qreal innerSep;
     qreal outerSep;
@@ -53,7 +51,6 @@ NodeStyle::NodeStyle()
 {
     d->align = NoAlign;
     d->shape = ShapeRectangle;
-    d->rotation = 0.0;
     d->scale = 1.0;
     d->innerSep = 0.3333; // 0.3333em
     d->outerSep = 0.5; // 0.5 \pgflinewidth
@@ -154,45 +151,6 @@ void NodeStyle::unsetShape()
         beginConfig();
         removeProperty(s_shape);
         d->shape = ShapeRectangle;
-        endConfig();
-    }
-}
-
-qreal NodeStyle::rotation() const
-{
-    if (propertySet(s_rotation)) {
-        return d->rotation;
-    }
-
-    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->rotation();
-    }
-
-    return 0.0;
-}
-
-bool NodeStyle::rotationSet() const
-{
-    return propertySet(s_rotation);
-}
-
-void NodeStyle::setRotation(qreal angle)
-{
-    if (!propertySet(s_rotation) || d->rotation != angle) {
-        beginConfig();
-        addProperty(s_rotation);
-        d->rotation = angle;
-        endConfig();
-    }
-}
-
-void NodeStyle::unsetRotation()
-{
-    if (propertySet(s_rotation)) {
-        beginConfig();
-        removeProperty(s_rotation);
-        d->rotation = 0.0;
         endConfig();
     }
 }

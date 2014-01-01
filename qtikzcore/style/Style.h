@@ -49,6 +49,8 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_PROPERTY(tikz::LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
     Q_PROPERTY(qreal innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
 
+    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
+
     public:
         /**
          * Default constructor.
@@ -410,6 +412,32 @@ class TIKZCORE_EXPORT Style : public QObject
          * style, or the default Qt::transparent.
          */
         void unsetFillColor();
+
+    //
+    // rotation
+    //
+    public:
+        /**
+         * Get the rotation in degrees.
+         */
+        qreal rotation() const;
+
+        /**
+         * Check whether the rotation is set.
+         */
+        bool rotationSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the rotation to @p angle degrees.
+         */
+        void setRotation(qreal angle);
+
+        /**
+         * Unset the rotation attribute.
+         * Afterwards, the rotation falls back to the value of parent()->rotation().
+         */
+        void unsetRotation();
 
     //
     // internal to tikz::Document

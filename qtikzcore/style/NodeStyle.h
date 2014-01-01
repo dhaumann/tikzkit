@@ -33,7 +33,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
     Q_PROPERTY(tikz::TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
-    Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
     Q_PROPERTY(qreal scale READ scale WRITE setScale RESET unsetScale)
     Q_PROPERTY(qreal innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
     Q_PROPERTY(qreal outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
@@ -106,35 +105,9 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
         /**
          * Unset the shape attribute.
-         * Afterwards, the rotation falls back to the value of parent()->shape().
+         * Afterwards, the shape falls back to the value of parent()->shape().
          */
         void unsetShape();
-
-    //
-    // rotation
-    //
-    public:
-        /**
-         * Get the rotation in degrees.
-         */
-        qreal rotation() const;
-
-        /**
-         * Check whether the rotation is set.
-         */
-        bool rotationSet() const;
-
-    public Q_SLOTS:
-        /**
-         * Set the rotation to @p angle degrees.
-         */
-        void setRotation(qreal angle);
-
-        /**
-         * Unset the rotation attribute.
-         * Afterwards, the rotation falls back to the value of parent()->rotation().
-         */
-        void unsetRotation();
 
     //
     // scaling methods
