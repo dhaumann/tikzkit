@@ -123,6 +123,8 @@ class Handle : public TikzItem
     private:
         Type m_type;
         Position m_position;
+        QRectF m_handleRect;
+        TikzPath * m_path;
 };
 
 #endif // TIKZ_PATH_HANDLE_H

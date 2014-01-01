@@ -419,10 +419,12 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
     dx = qAbs(dx);
     dy = qAbs(dy);
 
-    style()->beginConfig();
-    style()->setRadiusX(dx);
-    style()->setRadiusY(dy);
-    style()->endConfig();
+    tikz::EdgeStyle s;
+    s.setStyle(*style());
+    s.setRadiusX(dx);
+    s.setRadiusY(dy);
+
+    path()->path()->setStyle(s);
 }
 
 // kate: indent-width 4; replace-tabs on;

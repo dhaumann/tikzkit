@@ -19,6 +19,7 @@
 
 #include "Handle.h"
 #include "TikzPath.h"
+#include "TikzDocument.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -31,6 +32,8 @@ Handle::Handle(TikzPath * path, Type type, Position position)
     : TikzItem(path)
     , m_type(type)
     , m_position(position)
+    , m_handleRect(-0.1, -0.1, 0.2, 0.2)
+    , m_path(path)
 {
     // show above paths
     setZValue(10.0);
@@ -72,9 +75,9 @@ void Handle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setBrush(isHovered() || isSelected() ? Qt::yellow : Qt::green);
 
     if (m_type == ResizeHandle) {
-        painter->drawRect(QRectF(-0.1, -0.1, 0.2, 0.2));
+        painter->drawRect(m_handleRect);
     } else {
-        painter->drawEllipse(QPointF(0, 0), 0.2, 0.2);
+        painter->drawEllipse(m_handleRect);
     }
 
     painter->restore();
@@ -99,11 +102,13 @@ void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    m_path->document()->beginUndoGroup("change tikz item");
     event->accept();
 }
 
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+    m_path->document()->endUndoGroup();
     event->accept();
 }
 
