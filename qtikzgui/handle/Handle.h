@@ -27,9 +27,9 @@
 
 class QPainter;
 class TikzPath;
-class PathHandlePrivate;
+class HandlePrivate;
 
-class PathHandle : public TikzItem
+class Handle : public TikzItem
 {
     Q_OBJECT
 
@@ -61,12 +61,12 @@ class PathHandle : public TikzItem
         /**
          * Constructor.
          */
-        PathHandle(TikzPath * path = 0, Type type = ResizeHandle, Position position = Position::UserPos);
+        Handle(TikzPath * path = 0, Type type = ResizeHandle, Position position = Position::UserPos);
 
         /**
          * Destructor
          */
-        virtual ~PathHandle();
+        virtual ~Handle();
 
         /**
          * Reimplment to return a proper UserType + 4.
@@ -88,7 +88,7 @@ class PathHandle : public TikzItem
          * This signal is emitted whenever the position of this handle
          * changed through user interaction.
          */
-        void positionChanged(PathHandle * handle, const QPointF & pos);
+        void positionChanged(Handle * handle, const QPointF & pos);
 
     //
     // reimplemented from QGraphicsItem

@@ -25,7 +25,7 @@
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "EdgeStyle.h"
-#include "PathHandle.h"
+#include "Handle.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -38,19 +38,6 @@
 TikzEllipsePath::TikzEllipsePath(TikzPath * path)
     : AbstractTikzPath(path)
 {
-    m_topLeft = 0;
-    m_top = 0;
-    m_topRight = 0;
-    m_left = 0;
-    m_center = 0;
-    m_right = 0;
-    m_bottomLeft = 0;
-    m_bottom = 0;
-    m_bottomRight = 0;
-
-    // FIXME: some sort of init needed?
-//     init();
-
     // catch if the tikz::Node::pos() changes behind our back:
     // we need to track the TikzNode the ellipse is attached to
     connect(path->path(), SIGNAL(nodeChanged(tikz::Node*)),
@@ -320,97 +307,117 @@ tikz::EllipsePath * TikzEllipsePath::ellipsePath() const
     return p;
 }
 
+QPointF TikzEllipsePath::handlePos(Handle::Position pos)
+{
+    const QPointF c = ellipsePath()->pos();
+    const qreal rx = style()->radiusX();
+    const qreal ry = style()->radiusY();
+
+    switch (pos) {
+        case Handle::TopLeftCorner: return c + QPointF(-rx, ry);
+        case Handle::TopBorder: return c + QPointF(0, ry);
+        case Handle::TopRightCorner: return c + QPointF(rx, ry);
+        case Handle::LeftBorder: return c + QPointF(-rx, 0);
+        case Handle::Center: return c;
+        case Handle::RightBorder: return c + QPointF(rx, 0);
+        case Handle::BottomLeftCorner: return c + QPointF(-rx, -ry);
+        case Handle::BottomBorder: return c + QPointF(0, -ry);
+        case Handle::BottomRightCorner: return c + QPointF(rx, -ry);
+        case Handle::ResizePos: return c + QPointF(0, -ry - 0.5);
+        default: Q_ASSERT(false);
+    }
+    return QPointF(0, 0);
+}
+
 void TikzEllipsePath::setShowHandles(bool show)
 {
-    // handles already visible?
-    if (show && m_topLeft != nullptr) {
-        return;
-    }
+    // on hide, just delte all handles
+    if (!show) {
+        foreach (Handle * handle, m_handles) {
+            delete handle;
+        }
 
-    // delete handles, if hide
-    if (!show && m_topLeft != nullptr) {
-        delete m_topLeft;
-        delete m_top;
-        delete m_topRight;
-        delete m_left;
-        delete m_center;
-        delete m_right;
-        delete m_bottomLeft;
-        delete m_bottom;
-        delete m_bottomRight;
-
-        m_topLeft = 0;
-        m_top = 0;
-        m_topRight = 0;
-        m_left = 0;
-        m_center = 0;
-        m_right = 0;
-        m_bottomLeft = 0;
-        m_bottom = 0;
-        m_bottomRight = 0;
+        m_handles.clear();
 
         return;
     }
 
-    m_topLeft = new PathHandle(path());
-    m_top = new PathHandle(path());
-    m_topRight = new PathHandle(path());
-    m_left = new PathHandle(path());
-    m_center = new PathHandle(path());
-    m_right = new PathHandle(path());
-    m_bottomLeft = new PathHandle(path());
-    m_bottom = new PathHandle(path());
-    m_bottomRight = new PathHandle(path());
+    // create and show handles
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopLeftCorner));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopRightCorner));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomLeftCorner));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomRightCorner));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::LeftBorder));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopBorder));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::RightBorder));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomBorder));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopLeftCorner));
+    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::Center));
+    m_handles.append(new Handle(path(), Handle::RotateHandle, Handle::ResizePos));
 
-//     QGraphicsScene * s = scene();
-//     s->addItem(m_topLeft);
-//     s->addItem(m_top);
-//     s->addItem(m_topRight);
-//     s->addItem(m_left);
-//     s->addItem(m_center);
-//     s->addItem(m_right);
-//     s->addItem(m_bottomLeft);
-//     s->addItem(m_bottom);
-//     s->addItem(m_bottomRight);
-
+    // make sure the handles are positioned correctly
     updateHandlePositions();
 
-    m_topLeft->show();
-    m_top->show();
-    m_topRight->show();
-    m_left->show();
-    m_center->show();
-    m_right->show();
-    m_bottomLeft->show();
-    m_bottom->show();
-    m_bottomRight->show();
-    connect(m_topLeft, SIGNAL(positionChanged(PathHandle *, const QPointF &)),
-            this, SLOT(handleMoved(PathHandle *, const QPointF &)));
+    // show and connect to get handle movements
+    foreach (Handle * handle, m_handles) {
+        handle->show();
+        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &)),
+                this, SLOT(handleMoved(Handle *, const QPointF &)));
+    }
 }
 
 void TikzEllipsePath::updateHandlePositions()
 {
-    if (!m_topLeft) return;
-
-    const qreal rx = style()->radiusX();
-    const qreal ry = style()->radiusY();
-
-    m_topLeft->setPos(ellipsePath()->pos() + QPointF(-rx, ry));
-    m_top->setPos(ellipsePath()->pos() + QPointF(0, ry));
-    m_topRight->setPos(ellipsePath()->pos() + QPointF(rx, ry));
-    m_left->setPos(ellipsePath()->pos() + QPointF(-rx, 0));
-    m_center->setPos(ellipsePath()->pos() + QPointF(0, 0));
-    m_right->setPos(ellipsePath()->pos() + QPointF(rx, 0));
-    m_bottomLeft->setPos(ellipsePath()->pos() + QPointF(-rx, -ry));
-    m_bottom->setPos(ellipsePath()->pos() + QPointF(0, -ry));
-    m_bottomRight->setPos(ellipsePath()->pos() + QPointF(rx, -ry));
+    foreach (Handle * handle, m_handles) {
+        handle->setPos(handlePos(handle->handlePos()));
+    }
 }
 
-void TikzEllipsePath::handleMoved(PathHandle * handle, const QPointF & scenePos)
+void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
 {
     const QPointF delta = ellipsePath()->pos() - path()->mapFromScene(scenePos);
-    const qreal dx = qAbs(delta.x());
-    const qreal dy = qAbs(delta.y());
+
+    // rotate
+    if (handle->handleType() == Handle::RotateHandle) {
+        return;
+    }
+
+    // move
+    if (handle->handlePos() == Handle::Center) {
+        ellipsePath()->setPos(scenePos);
+        return;
+    }
+
+    // resize
+    qreal dx = style()->radiusX();
+    qreal dy = style()->radiusY();
+
+    switch (handle->handlePos()) {
+        case Handle::TopLeftCorner:
+        case Handle::TopRightCorner:
+        case Handle::BottomLeftCorner:
+        case Handle::BottomRightCorner: {
+            dx = delta.x();
+            dy = delta.y();
+            break;
+        }
+        case Handle::TopBorder:
+        case Handle::BottomBorder: {
+            dy = delta.y();
+            break;
+        }
+        case Handle::LeftBorder:
+        case Handle::RightBorder: {
+            dx = delta.x();
+            break;
+        }
+        case Handle::Center: Q_ASSERT(false);
+        case Handle::ResizePos: Q_ASSERT(false);
+        default: Q_ASSERT(false);
+    }
+
+    dx = qAbs(dx);
+    dy = qAbs(dy);
 
     style()->beginConfig();
     style()->setRadiusX(dx);

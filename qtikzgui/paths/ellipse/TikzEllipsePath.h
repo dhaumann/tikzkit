@@ -21,6 +21,7 @@
 #define GUI_TIKZ_ELLIPSE_PATH_H
 
 #include "AbstractTikzPath.h"
+#include "Handle.h"
 
 #include <tikz.h>
 
@@ -32,7 +33,6 @@ namespace tikz {
 
 class QPainter;
 
-class PathHandle;
 class TikzDocument;
 class TikzNode;
 class TikzPath;
@@ -161,13 +161,18 @@ class TikzEllipsePath : public AbstractTikzPath
          * @param handle the handle that moved
          * @param scenePos the mouse move position in scene coordinates
          */
-        void handleMoved(PathHandle * handle, const QPointF & scenePos);
+        void handleMoved(Handle * handle, const QPointF & scenePos);
 
     private:
         /**
          * Returns the tikz::Path object, casted to tikz::EllipsePath
          */
         tikz::EllipsePath * ellipsePath() const;
+
+        /**
+         * Get the handle position for a specific handle in item coordinates.
+         */
+        QPointF handlePos(Handle::Position pos);
 
     private:
         // the TikzNode this ellipse possibly is anchored at
@@ -191,15 +196,7 @@ class TikzEllipsePath : public AbstractTikzPath
         QRectF m_boundingRect;
 
     private:
-        PathHandle * m_topLeft;
-        PathHandle * m_top;
-        PathHandle * m_topRight;
-        PathHandle * m_left;
-        PathHandle * m_center;
-        PathHandle * m_right;
-        PathHandle * m_bottomLeft;
-        PathHandle * m_bottom;
-        PathHandle * m_bottomRight;
+        QVector<Handle*> m_handles;
 };
 
 #endif // GUI_TIKZ_ELLIPSE_PATH_H

@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "PathHandle.h"
+#include "Handle.h"
 #include "TikzPath.h"
 
 #include <QPainter>
@@ -27,7 +27,7 @@
 
 #include <QDebug>
 
-PathHandle::PathHandle(TikzPath * path, Type type, Position position)
+Handle::Handle(TikzPath * path, Type type, Position position)
     : TikzItem(path)
     , m_type(type)
     , m_position(position)
@@ -38,26 +38,26 @@ PathHandle::PathHandle(TikzPath * path, Type type, Position position)
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-PathHandle::~PathHandle()
+Handle::~Handle()
 {
 }
 
-int PathHandle::type() const
+int Handle::type() const
 {
     return UserType + 5;
 }
 
-PathHandle::Position PathHandle::handlePos() const
+Handle::Position Handle::handlePos() const
 {
     return m_position;
 }
 
-PathHandle::Type PathHandle::handleType() const
+Handle::Type Handle::handleType() const
 {
     return m_type;
 }
 
-void PathHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Handle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -80,29 +80,29 @@ void PathHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->restore();
 }
 
-QRectF PathHandle::boundingRect() const
+QRectF Handle::boundingRect() const
 {
     return QRectF(-0.25, -0.25, 0.5, 0.5);
 }
 
-bool PathHandle::contains(const QPointF &point) const
+bool Handle::contains(const QPointF &point) const
 {
     // within circle of 2.5 mm?
     return (point.x() * point.x() + point.y() * point.y()) <= (0.25 * 0.25);
 }
 
-void PathHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
+void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
     emit positionChanged(this, event->scenePos());
 }
 
-void PathHandle::mousePressEvent(QGraphicsSceneMouseEvent * event)
+void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
 }
 
-void PathHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
 }
