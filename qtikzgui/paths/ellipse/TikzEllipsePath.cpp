@@ -27,6 +27,7 @@
 #include "EdgeStyle.h"
 #include "Handle.h"
 
+#include <QApplication>
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -375,10 +376,19 @@ void TikzEllipsePath::updateHandlePositions()
 
 void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
 {
-    const QPointF delta = ellipsePath()->pos() - path()->mapFromScene(scenePos);
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
     // rotate
     if (handle->handleType() == Handle::RotateHandle) {
+        const QPointF delta = ellipsePath()->pos() - scenePos;
+        const qreal rad = atan2(-delta.y(), -delta.x());
+        qreal deg = rad * 180 / M_PI + 90;
+        if (snap) deg = qRound(deg / 15) * 15;
+        tikz::EdgeStyle s;
+        s.setStyle(*style());
+        s.setRotation(deg);
+
+        path()->path()->setStyle(s);
         return;
     }
 
@@ -389,6 +399,7 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
     }
 
     // resize
+    const QPointF delta = ellipsePath()->pos() - path()->mapFromScene(scenePos);
     qreal dx = style()->radiusX();
     qreal dy = style()->radiusY();
 
@@ -399,16 +410,25 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
         case Handle::BottomRightCorner: {
             dx = delta.x();
             dy = delta.y();
+
+            // snap to raster
+            if (snap) dx = qRound(dx / 0.2) * 0.2;
+            if (snap) dy = qRound(dy / 0.2) * 0.2;
+
             break;
         }
         case Handle::TopBorder:
         case Handle::BottomBorder: {
             dy = delta.y();
+            // snap to raster
+            if (snap) dy = qRound(dy / 0.2) * 0.2;
             break;
         }
         case Handle::LeftBorder:
         case Handle::RightBorder: {
             dx = delta.x();
+            // snap to raster
+            if (snap) dx = qRound(dx / 0.2) * 0.2;
             break;
         }
         case Handle::Center: Q_ASSERT(false);
