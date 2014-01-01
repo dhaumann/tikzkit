@@ -27,8 +27,10 @@
 
 #include <QDebug>
 
-PathHandle::PathHandle(TikzPath * path)
+PathHandle::PathHandle(TikzPath * path, Type type, Position position)
     : TikzItem(path)
+    , m_type(type)
+    , m_position(position)
 {
     // show above paths
     setZValue(10.0);
@@ -45,6 +47,16 @@ int PathHandle::type() const
     return UserType + 5;
 }
 
+PathHandle::Position PathHandle::handlePos() const
+{
+    return m_position;
+}
+
+PathHandle::Type PathHandle::handleType() const
+{
+    return m_type;
+}
+
 void PathHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -56,9 +68,14 @@ void PathHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    painter->setPen(isHovered() || isSelected() ? Qt::green : Qt::blue);
-    painter->setBrush(isHovered() || isSelected() ? QColor(0, 255, 0, 125) : QColor(0, 0, 255, 125));
-    painter->drawEllipse(QPointF(0, 0), 0.2, 0.2);
+    painter->setPen(Qt::darkGreen);
+    painter->setBrush(isHovered() || isSelected() ? Qt::yellow : Qt::green);
+
+    if (m_type == ResizeHandle) {
+        painter->drawRect(QRectF(-0.1, -0.1, 0.2, 0.2));
+    } else {
+        painter->drawEllipse(QPointF(0, 0), 0.2, 0.2);
+    }
 
     painter->restore();
 }

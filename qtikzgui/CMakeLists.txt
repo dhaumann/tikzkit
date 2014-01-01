@@ -10,6 +10,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qtikzcore/path/ellipse
     ${CMAKE_SOURCE_DIR}/qtikzcore/style
 
+    ${CMAKE_SOURCE_DIR}/qtikzgui/handle
     ${CMAKE_SOURCE_DIR}/qtikzgui/paths
     ${CMAKE_SOURCE_DIR}/qtikzgui/paths/ellipse
     ${CMAKE_SOURCE_DIR}/qtikzgui/shapes
@@ -30,7 +31,8 @@ set(qtikzgui_SOURCES
 
     paths/AbstractTikzPath.cpp
     paths/ellipse/TikzEllipsePath.cpp
-    paths/PathHandle.cpp
+
+    handle/PathHandle.cpp
 
     TikzScene.cpp
     TikzView.cpp
@@ -70,11 +72,11 @@ set(qtikzgui_HEADERS
     TikzEdge.h
     TikzEdge_p.h
     TikzPath.h
-    TikzPath_p.h
 
     paths/AbstractTikzPath.h
     paths/ellipse/TikzEllipsePath.h
-    paths/PathHandle.h
+
+    handle/PathHandle.h
 
     TikzScene.h
     TikzView.h

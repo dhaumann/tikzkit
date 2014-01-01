@@ -34,10 +34,34 @@ class PathHandle : public TikzItem
     Q_OBJECT
 
     public:
+        enum Position {
+            TopLeftCorner = 0,
+            TopRightCorner,
+            BottomLeftCorner,
+            BottomRightCorner,
+
+            LeftBorder,
+            TopBorder,
+            RightBorder,
+            BottomBorder,
+
+            ResizePos,
+
+            Center,
+
+            UserPos
+        };
+
+        enum Type {
+            ResizeHandle,
+            RotateHandle
+        };
+
+    public:
         /**
          * Constructor.
          */
-        PathHandle(TikzPath * path = 0);
+        PathHandle(TikzPath * path = 0, Type type = ResizeHandle, Position position = Position::UserPos);
 
         /**
          * Destructor
@@ -48,6 +72,16 @@ class PathHandle : public TikzItem
          * Reimplment to return a proper UserType + 4.
          */
         int type() const override;
+
+        /**
+         * Get the handle position.
+         */
+        Position handlePos() const;
+
+        /**
+         * Get the handle type.
+         */
+        Type handleType() const;
 
     Q_SIGNALS:
         /**
@@ -82,6 +116,13 @@ class PathHandle : public TikzItem
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
+    //
+    // private data
+    //
+    private:
+        Type m_type;
+        Position m_position;
 };
 
 #endif // TIKZ_PATH_HANDLE_H

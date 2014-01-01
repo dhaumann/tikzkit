@@ -158,8 +158,10 @@ class TikzEllipsePath : public AbstractTikzPath
          * This slot is called whenever a handle moved.
          * The ellipse then is either moved, resized or rotated according to
          * the sender @p handle.
+         * @param handle the handle that moved
+         * @param scenePos the mouse move position in scene coordinates
          */
-        void handleMoved(PathHandle * handle, const QPointF & pos);
+        void handleMoved(PathHandle * handle, const QPointF & scenePos);
 
     private:
         /**

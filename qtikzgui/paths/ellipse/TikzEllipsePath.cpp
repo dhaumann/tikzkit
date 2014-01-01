@@ -115,6 +115,8 @@ void TikzEllipsePath::slotUpdate()
     path()->prepareGeometryChange();
 
     m_dirty = true;
+    path()->setTransformOriginPoint(ellipsePath()->pos());
+    path()->setRotation(path()->style()->rotation());
 
     updateHandlePositions();
 }
@@ -350,26 +352,26 @@ void TikzEllipsePath::setShowHandles(bool show)
         return;
     }
 
-    m_topLeft = new PathHandle();
-    m_top = new PathHandle();
-    m_topRight = new PathHandle();
-    m_left = new PathHandle();
-    m_center = new PathHandle();
-    m_right = new PathHandle();
-    m_bottomLeft = new PathHandle();
-    m_bottom = new PathHandle();
-    m_bottomRight = new PathHandle();
+    m_topLeft = new PathHandle(path());
+    m_top = new PathHandle(path());
+    m_topRight = new PathHandle(path());
+    m_left = new PathHandle(path());
+    m_center = new PathHandle(path());
+    m_right = new PathHandle(path());
+    m_bottomLeft = new PathHandle(path());
+    m_bottom = new PathHandle(path());
+    m_bottomRight = new PathHandle(path());
 
-    QGraphicsScene * s = scene();
-    s->addItem(m_topLeft);
-    s->addItem(m_top);
-    s->addItem(m_topRight);
-    s->addItem(m_left);
-    s->addItem(m_center);
-    s->addItem(m_right);
-    s->addItem(m_bottomLeft);
-    s->addItem(m_bottom);
-    s->addItem(m_bottomRight);
+//     QGraphicsScene * s = scene();
+//     s->addItem(m_topLeft);
+//     s->addItem(m_top);
+//     s->addItem(m_topRight);
+//     s->addItem(m_left);
+//     s->addItem(m_center);
+//     s->addItem(m_right);
+//     s->addItem(m_bottomLeft);
+//     s->addItem(m_bottom);
+//     s->addItem(m_bottomRight);
 
     updateHandlePositions();
 
@@ -404,15 +406,16 @@ void TikzEllipsePath::updateHandlePositions()
     m_bottomRight->setPos(ellipsePath()->pos() + QPointF(rx, -ry));
 }
 
-void TikzEllipsePath::handleMoved(PathHandle * handle, const QPointF & pos)
+void TikzEllipsePath::handleMoved(PathHandle * handle, const QPointF & scenePos)
 {
-    const QPointF center = ellipsePath()->pos();
-    const qreal dx = qAbs(center.x() - pos.x());
-    const qreal dy = qAbs(center.y() - pos.y());
+    const QPointF delta = ellipsePath()->pos() - path()->mapFromScene(scenePos);
+    const qreal dx = qAbs(delta.x());
+    const qreal dy = qAbs(delta.y());
 
-    qDebug() << "updating: " << dx << dy;
+    style()->beginConfig();
     style()->setRadiusX(dx);
     style()->setRadiusY(dy);
+    style()->endConfig();
 }
 
 // kate: indent-width 4; replace-tabs on;
