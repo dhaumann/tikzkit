@@ -53,6 +53,7 @@ class Handle : public TikzItem
         };
 
         enum Type {
+            MoveHandle,
             ResizeHandle,
             RotateHandle
         };
@@ -117,6 +118,8 @@ class Handle : public TikzItem
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
+        virtual void keyPressEvent ( QKeyEvent * event );
+
     //
     // private data
     //
@@ -125,6 +128,8 @@ class Handle : public TikzItem
         Position m_position;
         QRectF m_handleRect;
         TikzPath * m_path;
+        bool m_isComposing;
+        int m_undoIndex;
 };
 
 #endif // TIKZ_PATH_HANDLE_H

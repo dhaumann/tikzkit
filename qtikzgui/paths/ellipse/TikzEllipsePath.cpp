@@ -170,68 +170,24 @@ bool TikzEllipsePath::contains(const QPointF & point) const
 
 void TikzEllipsePath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    ellipsePath()->setPos(event->scenePos());
     updateHandlePositions();
-//     if (!d->dragging) {
-//         event->ignore();
-//         TikzItem::mouseMoveEvent(event);
-//         return;
-//     }
-
-//     QList<QGraphicsItem *> items = scene()->items(event->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
-//     items.removeOne(this);
-//
-//     bool connected = false;
-//     if (items.size()) {
-//         foreach (QGraphicsItem* item, items) {
-//             if (item->type() == UserType + 2) {
-//                 TikzNode* node = dynamic_cast<TikzNode*>(item);
-//                 Q_ASSERT(node);
-//                 if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
-//                     if (d->start != node) {
-//                         qDeleteAll(d->nodeHandles);
-//                         d->nodeHandles.clear();
-//                         setStartNode(node);
-//
-//                         foreach (tikz::Anchor anchor, node->supportedAnchors()) {
-//                             d->nodeHandles.append(new AnchorHandle(this, anchor, true));
-//                         }
-//                     }
-//                 }
-//                 connected = true;
-//                 break;
-//             }
-//         }
-//
-//         if (!connected) {
-//             // mouse does not hover over node anymore, but maybe it
-//             // still hovers over an anchor?
-//             foreach (QGraphicsItem* item, items) {
-//                 if (d->nodeHandles.contains(item)) {
-//                     connected = true;
-//                     break;
-//                 }
-//             }
-//         }
-//     }
-//
-//     if (!connected) {
-//         qDeleteAll(d->nodeHandles);
-//         d->nodeHandles.clear();
-//
-//         if (d->dragMode == TikzEllipsePathPrivate::DM_Start) {
-//             setStartNode(0);
-//             d->edge->start().setPos(event->scenePos());
-//         }
-//     }
+    AbstractTikzPath::mouseMoveEvent(event);
 }
 
 void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    // show the anchor handles when moving this item
+    setAnchorTrackingEnabled(true);
+
     qDebug() << "Path selected" << path()->isSelected();
     if (path()->isSelected()) {
         updateHandlePositions();
+    } else {
+        qDebug() << "1, I thought this cannot happen!";
     }
+
+    AbstractTikzPath::mousePressEvent(event);
+
     /*if (!contains(event->pos()) || !isSelected()) {
         TikzItem::mousePressEvent(event);
     } else*/ {
@@ -244,7 +200,8 @@ void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEllipsePath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-//     if (d->dragging) {
+    AbstractTikzPath::mouseReleaseEvent(event);
+    //     if (d->dragging) {
 //         d->dragging = false;
 // //         ungrabMouse();
 //
@@ -270,6 +227,7 @@ void TikzEllipsePath::updateNode(tikz::Node * node)
 
     if (m_node != newNode) {
         path()->prepareGeometryChange();
+        m_dirty = true;
         m_node = newNode;
     }
 }
@@ -394,7 +352,12 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
 
     // move
     if (handle->handlePos() == Handle::Center) {
-        ellipsePath()->setPos(scenePos);
+        QPointF p = scenePos;
+        if (snap) {
+            p.rx() = qRound(p.x() / 0.2) * 0.2;
+            p.ry() = qRound(p.y() / 0.2) * 0.2;
+        }
+        ellipsePath()->setPos(p);
         return;
     }
 

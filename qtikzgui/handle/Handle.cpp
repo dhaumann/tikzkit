@@ -25,6 +25,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
+#include <QUndoStack>
 
 #include <QDebug>
 
@@ -34,11 +36,14 @@ Handle::Handle(TikzPath * path, Type type, Position position)
     , m_position(position)
     , m_handleRect(-0.1, -0.1, 0.2, 0.2)
     , m_path(path)
+    , m_isComposing(false)
+    , m_undoIndex(-1)
 {
     // show above paths
     setZValue(10.0);
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
 Handle::~Handle()
@@ -102,13 +107,37 @@ void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    qDebug() << "START UNDO";
+    m_undoIndex = m_path->document()->undoManager()->index();
     m_path->document()->beginUndoGroup("change tikz item");
+    m_isComposing = true;
+
+    if (m_type == MoveHandle) {
+//         emit startMo
+    }
+
     event->accept();
 }
 
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    m_path->document()->endUndoGroup();
+    if (m_isComposing) {
+        m_isComposing = false;
+        qDebug() << "END UNDO";
+        m_path->document()->endUndoGroup();
+    }
+    event->accept();
+}
+
+void Handle::keyPressEvent ( QKeyEvent * event )
+{
+    qDebug() << "ASDFASDFASDF";
+    if (m_isComposing && event->key() == Qt::Key_Escape) {
+        m_isComposing = false;
+        qDebug() << "END composing in esc UNDO";
+        m_path->document()->endUndoGroup();
+        m_path->document()->undoManager()->setIndex(m_undoIndex);
+    }
     event->accept();
 }
 

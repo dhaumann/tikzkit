@@ -24,8 +24,8 @@ set(qtikzgui_SOURCES
     TikzItem.cpp
     TikzNode.cpp
     NodeHandle.cpp
-    TikzEdge.cpp
-    TikzEdge_p.cpp
+#     TikzEdge.cpp
+#     TikzEdge_p.cpp
     TikzPath.cpp
     TikzPath_p.cpp
 
@@ -69,8 +69,8 @@ set(qtikzgui_HEADERS
     TikzItem.h
     TikzNode.h
     NodeHandle.h
-    TikzEdge.h
-    TikzEdge_p.h
+#     TikzEdge.h
+#     TikzEdge_p.h
     TikzPath.h
 
     paths/AbstractTikzPath.h

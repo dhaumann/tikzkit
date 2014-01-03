@@ -27,9 +27,12 @@
 
 class QPainter;
 class TikzNode;
-class TikzEdge;
 class AnchorHandlePrivate;
 class Style;
+
+namespace tikz {
+    class MetaPos;
+}
 
 class AnchorHandle : public QGraphicsObject
 {
@@ -39,7 +42,7 @@ class AnchorHandle : public QGraphicsObject
         /**
          * Constructor.
          */
-        AnchorHandle(TikzEdge * edge, tikz::Anchor anchor, bool isStart);
+        AnchorHandle(TikzNode * node, tikz::Anchor anchor);
 
         /**
          * Destructor
@@ -50,6 +53,12 @@ class AnchorHandle : public QGraphicsObject
          * Reimplment to return a proper UserType + 2.
          */
         virtual int type() const;
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the mouse overs above this anchor.
+         */
+        void anchorHovered(const tikz::MetaPos & metaPos);
 
     //
     // reimplemented from QGraphicsItem

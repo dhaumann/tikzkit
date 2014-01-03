@@ -20,8 +20,10 @@
 #include "AnchorHandle.h"
 #include "NodeStyle.h"
 #include "TikzNode.h"
-#include "TikzEdge.h"
 #include "PaintHelper.h"
+#include "TikzDocument.h"
+
+#include <MetaPos.h>
 
 #include <QPointer>
 #include <QPainter>
@@ -37,30 +39,26 @@
 class AnchorHandlePrivate
 {
     public:
-        bool isStart;
-        QPointer<TikzNode> node;
-        QPointer<TikzEdge> edge;
+        TikzNode * node;
         tikz::Anchor anchor;
 
         bool isHovered;
 };
 
-AnchorHandle::AnchorHandle(TikzEdge * edge, tikz::Anchor anchor, bool isStart)
-    : QGraphicsObject(isStart ? edge->startNode() : edge->endNode())
+AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
+    : QGraphicsObject(node)
     , d(new AnchorHandlePrivate())
 {
-    d->isStart = isStart;
-    d->node = isStart ? edge->startNode() : edge->endNode();
-    d->edge = edge;
+    d->node = node;
     d->anchor = anchor;
     d->isHovered = false;
 
     // set position depending on the anchor
-    setZValue(d->anchor == tikz::NoAnchor ? 10.0 : 20.0);
-    setPos(d->node->anchor(anchor));
+    setZValue(anchor == tikz::NoAnchor ? 20.0 : 10.0);
+    setPos(node->anchor(anchor));
 
     // catch mouse-move events while dragging the TikzEdge
-    edge->installSceneEventFilter(this);
+//     edge->installSceneEventFilter(this); // FIXME: how does the anchor know the mouse is over?
 }
 
 AnchorHandle::~AnchorHandle()
@@ -120,7 +118,8 @@ bool AnchorHandle::contains(const QPointF &point) const
 
 bool AnchorHandle::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
 {
-    if (d->edge == watched && event->type() == QEvent::GraphicsSceneMouseMove) {
+    Q_UNUSED(watched)
+    if (event->type() == QEvent::GraphicsSceneMouseMove) {
         // get all AnchorHandle items under the mouse (should be at max 2)
         QGraphicsSceneMouseEvent* ev = static_cast<QGraphicsSceneMouseEvent*>(event);
         QList<QGraphicsItem *> items = scene()->items(ev->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
@@ -137,12 +136,12 @@ bool AnchorHandle::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
         if (d->isHovered != hov) {
             d->isHovered = hov;
 
+
             if (d->isHovered) {
-                if (d->isStart) {
-                    d->edge->setStartAnchor(d->anchor);
-                } else {
-                    d->edge->setEndAnchor(d->anchor);
-                }
+                tikz::MetaPos pos;
+                pos.setNode(d->node->node());
+                pos.setAnchor(d->anchor);
+                emit anchorHovered(pos);
             }
 
             update();

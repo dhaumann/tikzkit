@@ -37,6 +37,7 @@ class QGraphicsScene;
 
 class TikzDocument;
 class TikzPath;
+class AbstractTikzPathPrivate;
 
 class AbstractTikzPath : public QObject
 {
@@ -108,12 +109,31 @@ class AbstractTikzPath : public QObject
         virtual bool contains(const QPointF & point) const;
 
     public:
+        /**
+         * Called whenever the mouse moves in the TikzPath item.
+         */
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+
+        /**
+         * Called whenever the mouse is pressed in the TikzPath item.
+         */
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+        /**
+         * Called whenever the mouse is released in the TikzPath item.
+         */
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
+    public:
+        /**
+         * Call this function to enable tracking of node anchors.
+         * This is useful e.g. if a vertex of a path is dragged and may
+         * be connected to some anchor of a node.
+         */
+        void setAnchorTrackingEnabled(bool enable);
+
     private:
-        TikzPath * const m_path;
+        AbstractTikzPathPrivate * const d;
 };
 
 #endif // GUI_ABSTRACT_TIKZ_PATH_H

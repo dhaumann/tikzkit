@@ -21,7 +21,6 @@
 
 #include "TikzDocument.h"
 #include "TikzNode.h"
-#include "TikzEdge.h"
 #include "TikzPath.h"
 
 #include <Edge.h>

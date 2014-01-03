@@ -67,7 +67,7 @@ class TikzDocumentPrivate : public QObject
         QVector<TikzNode*> nodes;
 
         /**
-         * List of TikzEdge%s.
+         * List of TikzPath%s.
          */
         QVector<TikzPath*> paths;
 

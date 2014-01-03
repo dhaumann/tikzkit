@@ -9,7 +9,6 @@
 #include <Edge.h>
 #include <TikzDocument.h>
 #include <TikzNode.h>
-#include <TikzEdge.h>
 
 QTEST_MAIN(TikzDocumentTest)
 

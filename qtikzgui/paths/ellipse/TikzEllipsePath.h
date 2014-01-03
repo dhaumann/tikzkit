@@ -132,9 +132,9 @@ class TikzEllipsePath : public AbstractTikzPath
         void slotUpdate();
 
         /**
-         * This function is called whenever the tikz::Node::setEndNode()
+         * This function is called whenever the tikz::EllipsePath::setNode()
          * changes. This is required, since otherwise the model is updated,
-         * without the TikzEdge being notified.
+         * without the TikzPath being notified.
          */
         void updateNode(tikz::Node * node);
 

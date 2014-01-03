@@ -128,20 +128,20 @@ bool TikzPath::contains(const QPointF & point) const
 
 void TikzPath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    d->backendPath->mouseMoveEvent(event);
     TikzItem::mouseMoveEvent(event);
+    d->backendPath->mouseMoveEvent(event);
 }
 
 void TikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    d->backendPath->mousePressEvent(event);
     TikzItem::mousePressEvent(event);
+    d->backendPath->mousePressEvent(event);
 }
 
 void TikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    d->backendPath->mouseReleaseEvent(event);
     TikzItem::mouseReleaseEvent(event);
+    d->backendPath->mouseReleaseEvent(event);
 }
 
 QVariant TikzPath::itemChange(GraphicsItemChange change, const QVariant & value)

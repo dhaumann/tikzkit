@@ -21,47 +21,112 @@
 #include "AbstractTikzPath.h"
 
 #include "TikzPath.h"
+#include "TikzNode.h"
 
 #include <Path.h>
+#include <AnchorHandle.h>
 
 #include <QPainter>
+#include <QDebug>
+#include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
 
 #include <cmath>
 
+class AbstractTikzPathPrivate
+{
+public:
+    TikzPath * path;
+
+    //
+    // dragging of items.
+    //
+    bool anchorTrackingEnabled;
+    QVector<AnchorHandle*> anchorHandles;
+    TikzNode * anchorNode;
+
+    /**
+     * Remove all anchor handles, if there are any.
+     */
+    void clearAnchorsHandles()
+    {
+        qDeleteAll(anchorHandles);
+        anchorHandles.clear();
+        anchorNode = 0;
+    }
+
+    /**
+     * Show anchor handles for the node at @p scenePos.
+     */
+    void showAnchorHandles(QGraphicsScene * scene, const QPointF & scenePos)
+    {
+        QList<QGraphicsItem *> items = scene->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
+        if (items.size()) {
+            foreach (QGraphicsItem* item, items) {
+                TikzNode* node = dynamic_cast<TikzNode*>(item);
+                if (!node) {
+                    continue;
+                }
+
+                if (anchorNode != node) {
+                    clearAnchorsHandles();
+                    anchorNode = node;
+
+                    foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+                        anchorHandles.append(new AnchorHandle(node, anchor));
+                    }
+                }
+                break;
+            }
+            foreach(AnchorHandle * handle, anchorHandles) {
+                handle->show(); // FIXME: NEEDED?
+            }
+            qDebug() << "showing  handles:" << anchorHandles.size();
+        }
+    }
+};
+
 AbstractTikzPath::AbstractTikzPath(TikzPath * path)
     : QObject(path)
-    , m_path(path)
+    , d(new AbstractTikzPathPrivate())
 {
-    Q_ASSERT(m_path != 0);
+    Q_ASSERT(path != 0);
+
+    d->path = path;
+    d->anchorTrackingEnabled = false;
+    d->anchorNode = 0;
 }
 
 AbstractTikzPath::~AbstractTikzPath()
 {
+    d->clearAnchorsHandles();
+
+    delete d;
 }
 
 TikzDocument * AbstractTikzPath::document() const
 {
-    return m_path->document();
+    return d->path->document();
 }
 
 TikzPath * AbstractTikzPath::path() const
 {
-    return m_path;
+    return d->path;
 }
 
 tikz::EdgeStyle* AbstractTikzPath::style() const
 {
-    return m_path->style();
+    return d->path->style();
 }
 
 QGraphicsScene * AbstractTikzPath::scene() const
 {
-    return m_path->scene();
+    return d->path->scene();
 }
 
 void AbstractTikzPath::update()
 {
-    m_path->update();
+    d->path->update();
 }
 
 void AbstractTikzPath::paint(QPainter *painter,
@@ -87,14 +152,34 @@ bool AbstractTikzPath::contains(const QPointF & point) const
 
 void AbstractTikzPath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
+    if (d->anchorTrackingEnabled) {
+        d->showAnchorHandles(scene(), event->scenePos());
+    }
 }
 
 void AbstractTikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    if (d->anchorTrackingEnabled) {
+        d->showAnchorHandles(scene(), event->scenePos());
+    }
 }
 
 void AbstractTikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+    d->clearAnchorsHandles();
+}
+
+void AbstractTikzPath::setAnchorTrackingEnabled(bool enable)
+{
+    if (d->anchorTrackingEnabled == enable) {
+        return;
+    }
+
+    d->anchorTrackingEnabled = enable;
+
+    if (! d->anchorTrackingEnabled) {
+        d->clearAnchorsHandles();
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;
