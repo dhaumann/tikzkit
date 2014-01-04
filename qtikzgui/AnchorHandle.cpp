@@ -54,7 +54,7 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     d->isHovered = false;
 
     // set position depending on the anchor
-    setZValue(anchor == tikz::NoAnchor ? 20.0 : 10.0);
+    setZValue(anchor == tikz::NoAnchor ? 10.0 : 20.0);
     setPos(node->anchor(anchor));
 
     // catch mouse-move events while dragging the TikzEdge

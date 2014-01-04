@@ -339,7 +339,7 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
 
     // rotate
     if (handle->handleType() == Handle::RotateHandle) {
-        const QPointF delta = ellipsePath()->pos() - scenePos;
+        const QPointF delta = pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
@@ -376,7 +376,7 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
     }
 
     // resize
-    const QPointF delta = ellipsePath()->pos() - path()->mapFromScene(scenePos);
+    const QPointF delta = pos() - path()->mapFromScene(scenePos);
     qreal dx = style()->radiusX();
     qreal dy = style()->radiusY();
 

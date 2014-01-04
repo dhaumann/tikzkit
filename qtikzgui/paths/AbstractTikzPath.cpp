@@ -137,6 +137,18 @@ void AbstractTikzPath::hideAnchors()
 
 void AbstractTikzPath::showAnchors(const QPointF & scenePos)
 {
+    // if the anchors are already around, and the mouse hovers over
+    // one of the anchors, then just keep them
+    foreach(AnchorHandle * handle, d->anchorHandles) {
+        if (handle->contains(handle->mapFromScene(scenePos))) {
+            return;
+        }
+    }
+
+    //
+    // get the node and possibly show the items
+    //
+    bool nodeFound = false;
     QList<QGraphicsItem *> items = scene()->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
     if (items.size()) {
         foreach (QGraphicsItem* item, items) {
@@ -145,6 +157,9 @@ void AbstractTikzPath::showAnchors(const QPointF & scenePos)
                 continue;
             }
 
+            nodeFound = true;
+
+            // recreate anchors only if the node changes
             if (d->anchorNode != node) {
                 d->clearAnchorsHandles();
                 d->anchorNode = node;
@@ -160,17 +175,30 @@ void AbstractTikzPath::showAnchors(const QPointF & scenePos)
         }
         qDebug() << "showing  handles:" << d->anchorHandles.size();
     }
+
+    //
+    // if we have no node, just hide all anchors
+    //
+    if (!nodeFound) {
+        d->clearAnchorsHandles();
+    }
 }
 
 tikz::Node * AbstractTikzPath::anchorAt(const QPointF & scenePos, tikz::Anchor & anchor)
 {
+    qreal zValue = -100000;
+    tikz::Node * node = 0;
+
     foreach(AnchorHandle * handle, d->anchorHandles) {
         if (handle->contains(handle->mapFromScene(scenePos))) {
-            anchor = handle->anchor();
-            return handle->node()->node();
+            if (!node || zValue < handle->zValue()) {
+                zValue = handle->zValue();
+                node = handle->node()->node();
+                anchor = handle->anchor();
+            }
         }
     }
-    return 0;
+    return node;
 }
 
 // kate: indent-width 4; replace-tabs on;
