@@ -22,6 +22,8 @@
 
 #include "Path.h"
 
+#include <MetaPos.h>
+
 #include <QObject>
 #include <QRectF>
 #include <QPainterPath>
@@ -124,13 +126,27 @@ class AbstractTikzPath : public QObject
          */
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
+    //
+    // tikz::Node anchor handles
+    //
+    public Q_SLOTS:
+        /**
+         * Removes all anchor handles.
+         */
+        void hideAnchors();
+
+        /**
+         * Show the anchor handles for the node located at @p scenePos
+         * if applicable.
+         */
+        void showAnchors(const QPointF & scenePos);
+
     public:
         /**
-         * Call this function to enable tracking of node anchors.
-         * This is useful e.g. if a vertex of a path is dragged and may
-         * be connected to some anchor of a node.
+         * Get the node with anchor for the scene position @p scenePos.
+         * If valid, the returned tikz::MetaPos contains the node and anchor.
          */
-        void setAnchorTrackingEnabled(bool enable);
+        tikz::Node * anchorAt(const QPointF & scenePos, tikz::Anchor & anchor);
 
     private:
         AbstractTikzPathPrivate * const d;

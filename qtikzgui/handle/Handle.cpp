@@ -107,6 +107,9 @@ void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    emit mousePressed(this, event->scenePos());
+
+
     qDebug() << "START UNDO";
     m_undoIndex = m_path->document()->undoManager()->index();
     m_path->document()->beginUndoGroup("change tikz item");
@@ -121,6 +124,8 @@ void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+    emit mouseReleased(this, event->scenePos());
+
     if (m_isComposing) {
         m_isComposing = false;
         qDebug() << "END UNDO";

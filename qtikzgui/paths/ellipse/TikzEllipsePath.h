@@ -163,6 +163,16 @@ class TikzEllipsePath : public AbstractTikzPath
          */
         void handleMoved(Handle * handle, const QPointF & scenePos);
 
+        /**
+         * This slot is called whenever a handle was pressed with the mouse.
+         */
+        void handleMousePressed(Handle * handle, const QPointF & scenePos);
+
+        /**
+         * This slot is called whenever a handle was released with the mouse.
+         */
+        void handleMouseReleased(Handle * handle, const QPointF & scenePos);
+
     private:
         /**
          * Returns the tikz::Path object, casted to tikz::EllipsePath

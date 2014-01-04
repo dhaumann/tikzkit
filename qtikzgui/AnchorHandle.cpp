@@ -71,6 +71,16 @@ int AnchorHandle::type() const
     return UserType + 4;
 }
 
+TikzNode * AnchorHandle::node() const
+{
+    return d->node;
+}
+
+tikz::Anchor AnchorHandle::anchor() const
+{
+    return d->anchor;
+}
+
 void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);

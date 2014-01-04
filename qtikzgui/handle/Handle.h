@@ -88,8 +88,21 @@ class Handle : public TikzItem
         /**
          * This signal is emitted whenever the position of this handle
          * changed through user interaction.
+         * @param pos position in scene coordinates
          */
         void positionChanged(Handle * handle, const QPointF & pos);
+
+        /**
+         * This signal is emitted whenever the mouse is pressed on the handle.
+         * @param pos position in scene coordinates
+         */
+        void mousePressed(Handle * handle, const QPointF & pos);
+
+        /**
+         * This signal is emitted whenever the mouse is released on the handle.
+         * @param pos position in scene coordinates
+         */
+        void mouseReleased(Handle * handle, const QPointF & pos);
 
     //
     // reimplemented from QGraphicsItem

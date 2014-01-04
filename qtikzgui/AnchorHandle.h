@@ -29,6 +29,7 @@ class QPainter;
 class TikzNode;
 class AnchorHandlePrivate;
 class Style;
+class TizkNode;
 
 namespace tikz {
     class MetaPos;
@@ -53,6 +54,16 @@ class AnchorHandle : public QGraphicsObject
          * Reimplment to return a proper UserType + 2.
          */
         virtual int type() const;
+
+        /**
+         * Get the node this anchor handle.
+         */
+        TikzNode * node() const;
+
+        /**
+         * Get the anchor of this anchor handle.
+         */
+        tikz::Anchor anchor() const;
 
     Q_SIGNALS:
         /**

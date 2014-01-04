@@ -66,7 +66,6 @@ tikz::Path::Type TikzEllipsePath::type() const
 void TikzEllipsePath::setNode(TikzNode* node)
 {
     if (m_node != node) {
-        m_node = node;
         ellipsePath()->setNode(node ? node->node() : 0);
     }
 }
@@ -82,7 +81,7 @@ QPointF TikzEllipsePath::pos() const
         TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath()->node()->id());
         Q_ASSERT(tikzNode != nullptr);
 
-        return tikzNode->anchor(anchor());
+        return tikzNode->mapToScene(tikzNode->anchor(anchor()));
     } else {
         return ellipsePath()->pos();
     }
@@ -103,7 +102,7 @@ void TikzEllipsePath::slotUpdate()
     path()->prepareGeometryChange();
 
     m_dirty = true;
-    path()->setTransformOriginPoint(ellipsePath()->pos());
+    path()->setTransformOriginPoint(pos());
     path()->setRotation(path()->style()->rotation());
 
     updateHandlePositions();
@@ -176,9 +175,6 @@ void TikzEllipsePath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    // show the anchor handles when moving this item
-    setAnchorTrackingEnabled(true);
-
     qDebug() << "Path selected" << path()->isSelected();
     if (path()->isSelected()) {
         updateHandlePositions();
@@ -243,6 +239,7 @@ void TikzEllipsePath::updateCache()
     m_boundingRect = QRectF();
 
     // draw ellipse path
+    qDebug() << pos();
     m_ellipse.addEllipse(pos(), style()->radiusX(), style()->radiusY());
 
     // cache hover path
@@ -268,7 +265,7 @@ tikz::EllipsePath * TikzEllipsePath::ellipsePath() const
 
 QPointF TikzEllipsePath::handlePos(Handle::Position pos)
 {
-    const QPointF c = ellipsePath()->pos();
+    const QPointF c = this->pos();
     const qreal rx = style()->radiusX();
     const qreal ry = style()->radiusY();
 
@@ -311,7 +308,7 @@ void TikzEllipsePath::setShowHandles(bool show)
     m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::RightBorder));
     m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomBorder));
     m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopLeftCorner));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::Center));
+    m_handles.append(new Handle(path(), Handle::MoveHandle, Handle::Center));
     m_handles.append(new Handle(path(), Handle::RotateHandle, Handle::ResizePos));
 
     // make sure the handles are positioned correctly
@@ -322,6 +319,10 @@ void TikzEllipsePath::setShowHandles(bool show)
         handle->show();
         connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &)),
                 this, SLOT(handleMoved(Handle *, const QPointF &)));
+        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &)),
+                this, SLOT(handleMousePressed(Handle *, const QPointF &)));
+        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &)),
+                this, SLOT(handleMouseReleased(Handle *, const QPointF &)));
     }
 }
 
@@ -357,7 +358,20 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
             p.rx() = qRound(p.x() / 0.2) * 0.2;
             p.ry() = qRound(p.y() / 0.2) * 0.2;
         }
-        ellipsePath()->setPos(p);
+
+        showAnchors(scenePos);
+
+        tikz::Anchor anchor;
+        tikz::Node * node = anchorAt(scenePos, anchor);
+//         qDebug() << node << anchor;
+        if (node) {
+            ellipsePath()->beginConfig();
+            ellipsePath()->setNode(node);
+            ellipsePath()->setAnchor(anchor);
+            ellipsePath()->endConfig();
+        } else {
+            ellipsePath()->setPos(p);
+        }
         return;
     }
 
@@ -408,6 +422,20 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
     s.setRadiusY(dy);
 
     path()->path()->setStyle(s);
+}
+
+void TikzEllipsePath::handleMousePressed(Handle * handle, const QPointF & scenePos)
+{
+    if (handle->handleType() == Handle::MoveHandle) {
+        showAnchors(scenePos);
+    }
+}
+
+void TikzEllipsePath::handleMouseReleased(Handle * handle, const QPointF & scenePos)
+{
+    if (handle->handleType() == Handle::MoveHandle) {
+        hideAnchors();
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;

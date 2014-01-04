@@ -122,6 +122,7 @@ void EllipsePath::setPos(const QPointF& pos)
 
     if (document()->undoActive()) {
         beginConfig();
+        d->pos.setNode(0);
         d->pos.setPos(pos);
         endConfig();
     } else {

@@ -41,7 +41,6 @@ public:
     //
     // dragging of items.
     //
-    bool anchorTrackingEnabled;
     QVector<AnchorHandle*> anchorHandles;
     TikzNode * anchorNode;
 
@@ -54,36 +53,6 @@ public:
         anchorHandles.clear();
         anchorNode = 0;
     }
-
-    /**
-     * Show anchor handles for the node at @p scenePos.
-     */
-    void showAnchorHandles(QGraphicsScene * scene, const QPointF & scenePos)
-    {
-        QList<QGraphicsItem *> items = scene->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
-        if (items.size()) {
-            foreach (QGraphicsItem* item, items) {
-                TikzNode* node = dynamic_cast<TikzNode*>(item);
-                if (!node) {
-                    continue;
-                }
-
-                if (anchorNode != node) {
-                    clearAnchorsHandles();
-                    anchorNode = node;
-
-                    foreach (tikz::Anchor anchor, node->supportedAnchors()) {
-                        anchorHandles.append(new AnchorHandle(node, anchor));
-                    }
-                }
-                break;
-            }
-            foreach(AnchorHandle * handle, anchorHandles) {
-                handle->show(); // FIXME: NEEDED?
-            }
-            qDebug() << "showing  handles:" << anchorHandles.size();
-        }
-    }
 };
 
 AbstractTikzPath::AbstractTikzPath(TikzPath * path)
@@ -93,7 +62,6 @@ AbstractTikzPath::AbstractTikzPath(TikzPath * path)
     Q_ASSERT(path != 0);
 
     d->path = path;
-    d->anchorTrackingEnabled = false;
     d->anchorNode = 0;
 }
 
@@ -152,34 +120,57 @@ bool AbstractTikzPath::contains(const QPointF & point) const
 
 void AbstractTikzPath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (d->anchorTrackingEnabled) {
-        d->showAnchorHandles(scene(), event->scenePos());
-    }
 }
 
 void AbstractTikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    if (d->anchorTrackingEnabled) {
-        d->showAnchorHandles(scene(), event->scenePos());
-    }
 }
 
 void AbstractTikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+}
+
+void AbstractTikzPath::hideAnchors()
+{
     d->clearAnchorsHandles();
 }
 
-void AbstractTikzPath::setAnchorTrackingEnabled(bool enable)
+void AbstractTikzPath::showAnchors(const QPointF & scenePos)
 {
-    if (d->anchorTrackingEnabled == enable) {
-        return;
-    }
+    QList<QGraphicsItem *> items = scene()->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
+    if (items.size()) {
+        foreach (QGraphicsItem* item, items) {
+            TikzNode* node = dynamic_cast<TikzNode*>(item);
+            if (!node) {
+                continue;
+            }
 
-    d->anchorTrackingEnabled = enable;
+            if (d->anchorNode != node) {
+                d->clearAnchorsHandles();
+                d->anchorNode = node;
 
-    if (! d->anchorTrackingEnabled) {
-        d->clearAnchorsHandles();
+                foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+                    d->anchorHandles.append(new AnchorHandle(node, anchor));
+                }
+            }
+            break;
+        }
+        foreach(AnchorHandle * handle, d->anchorHandles) {
+            handle->show(); // FIXME: NEEDED?
+        }
+        qDebug() << "showing  handles:" << d->anchorHandles.size();
     }
+}
+
+tikz::Node * AbstractTikzPath::anchorAt(const QPointF & scenePos, tikz::Anchor & anchor)
+{
+    foreach(AnchorHandle * handle, d->anchorHandles) {
+        if (handle->contains(handle->mapFromScene(scenePos))) {
+            anchor = handle->anchor();
+            return handle->node()->node();
+        }
+    }
+    return 0;
 }
 
 // kate: indent-width 4; replace-tabs on;
