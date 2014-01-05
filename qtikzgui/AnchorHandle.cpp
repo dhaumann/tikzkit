@@ -56,9 +56,6 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     // set position depending on the anchor
     setZValue(anchor == tikz::NoAnchor ? 10.0 : 20.0);
     setPos(node->anchor(anchor));
-
-    // catch mouse-move events while dragging the TikzEdge
-//     edge->installSceneEventFilter(this); // FIXME: how does the anchor know the mouse is over?
 }
 
 AnchorHandle::~AnchorHandle()
@@ -88,6 +85,11 @@ void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
     // debugging
 //     painter->drawRect(boundingRect());
+
+//     double scaleX = painter->transform().m11();
+//     if (scale() != 1 / scaleX * painter->device()->physicalDpiX()) {
+//         setScale(1 / scaleX * painter->device()->physicalDpiX());
+//     }
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
@@ -123,42 +125,7 @@ bool AnchorHandle::contains(const QPointF &point) const
     }
 
     // within circle of 1.5 mm?
-    return (point.x() * point.x() + point.y() * point.y()) < (0.15 * 0.15);
-}
-
-bool AnchorHandle::sceneEventFilter(QGraphicsItem * watched, QEvent * event)
-{
-    Q_UNUSED(watched)
-    if (event->type() == QEvent::GraphicsSceneMouseMove) {
-        // get all AnchorHandle items under the mouse (should be at max 2)
-        QGraphicsSceneMouseEvent* ev = static_cast<QGraphicsSceneMouseEvent*>(event);
-        QList<QGraphicsItem *> items = scene()->items(ev->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
-        for (int i = 0; i < items.size(); ) {
-            if (items[i]->type() != type()) {
-                items.removeAt(i);
-            } else {
-                ++i;
-            }
-        }
-
-        // if this is the item under the mouse, update isHovered state, if necessary
-        const bool hov = (!items.isEmpty()) && (items[0] == this);
-        if (d->isHovered != hov) {
-            d->isHovered = hov;
-
-
-            if (d->isHovered) {
-                tikz::MetaPos pos;
-                pos.setNode(d->node->node());
-                pos.setAnchor(d->anchor);
-                emit anchorHovered(pos);
-            }
-
-            update();
-            return true;
-        }
-    }
-    return false;
+    return (point.x() * point.x() + point.y() * point.y()) < (0.1 * 0.1);
 }
 
 // kate: indent-width 4; replace-tabs on;

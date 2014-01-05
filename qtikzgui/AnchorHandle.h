@@ -65,12 +65,6 @@ class AnchorHandle : public QGraphicsObject
          */
         tikz::Anchor anchor() const;
 
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever the mouse overs above this anchor.
-         */
-        void anchorHovered(const tikz::MetaPos & metaPos);
-
     //
     // reimplemented from QGraphicsItem
     //
@@ -89,9 +83,6 @@ class AnchorHandle : public QGraphicsObject
          * Returns @p true, if @p point is contained in this handle.
          */
         bool contains(const QPointF &point) const;
-
-    protected:
-        virtual bool sceneEventFilter(QGraphicsItem * watched, QEvent * event);
 
     private:
         AnchorHandlePrivate * const d;
