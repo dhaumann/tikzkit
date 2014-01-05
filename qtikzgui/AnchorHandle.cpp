@@ -41,17 +41,14 @@ class AnchorHandlePrivate
     public:
         TikzNode * node;
         tikz::Anchor anchor;
-
-        bool isHovered;
 };
 
 AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
-    : QGraphicsObject(node)
+    : TikzItem(node)
     , d(new AnchorHandlePrivate())
 {
     d->node = node;
     d->anchor = anchor;
-    d->isHovered = false;
 
     // set position depending on the anchor
     setZValue(anchor == tikz::NoAnchor ? 10.0 : 20.0);
@@ -95,11 +92,11 @@ void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setRenderHints(QPainter::Antialiasing);
 
     painter->setPen(QColor(100, 100, 255));
-    painter->setBrush(d->isHovered ? Qt::green : Qt::white);
+    painter->setBrush(isHovered() ? Qt::green : Qt::white);
     painter->drawEllipse(QPointF(0, 0), 0.1, 0.1);
 //     painter->drawRect(QRectF(-0.1, -0.1, 0.2, 0.2));
 
-    QPen pen(d->isHovered ? Qt::red : Qt::darkGray);
+    QPen pen(isHovered() ? Qt::red : Qt::darkGray);
     pen.setWidthF(0.03); // 0.5mm
     painter->setPen(pen);
 

@@ -20,10 +20,9 @@
 #ifndef TIKZ_ANCHOR_HANDLE_H
 #define TIKZ_ANCHOR_HANDLE_H
 
-#include "tikzgui_export.h"
 #include "tikz.h"
 
-#include <QGraphicsObject>
+#include "TikzItem.h"
 
 class QPainter;
 class TikzNode;
@@ -35,7 +34,7 @@ namespace tikz {
     class MetaPos;
 }
 
-class AnchorHandle : public QGraphicsObject
+class AnchorHandle : public TikzItem
 {
     Q_OBJECT
 
