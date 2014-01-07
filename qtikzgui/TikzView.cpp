@@ -31,8 +31,8 @@ class TikzViewPrivate
 {
 public:
     TikzDocument * doc;
-    TikzRuler * m_horizRuler;
-    TikzRuler * m_vertRuler;
+    TikzRuler * m_hRuler;
+    TikzRuler * m_vRuler;
     QPointF lastMousePos;
     bool handTool;
 };
@@ -50,18 +50,18 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
 
-    d->m_horizRuler = new TikzRuler(Qt::Horizontal, this);
-    d->m_vertRuler = new TikzRuler(Qt::Vertical, this);
+    d->m_hRuler = new TikzRuler(Qt::Horizontal, this);
+    d->m_vRuler = new TikzRuler(Qt::Vertical, this);
 
-    d->m_horizRuler->setUnit(tikz::Unit::Centimeter);
-    d->m_vertRuler->setUnit(tikz::Unit::Centimeter);
+    d->m_hRuler->setUnit(tikz::Unit::Centimeter);
+    d->m_vRuler->setUnit(tikz::Unit::Centimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
     top->setFixedSize(s_ruler_size, s_ruler_size);
     gridLayout->addWidget(top, 0, 0);
-    gridLayout->addWidget(d->m_horizRuler, 0, 1);
-    gridLayout->addWidget(d->m_vertRuler, 1, 0);
+    gridLayout->addWidget(d->m_hRuler, 0, 1);
+    gridLayout->addWidget(d->m_vRuler, 1, 0);
     gridLayout->addWidget(viewport(), 1, 1);
 
     setLayout(gridLayout);
@@ -107,11 +107,11 @@ void TikzView::mouseMoveEvent(QMouseEvent* event)
     }
 
     // update mouse indicator on rulers
-    d->m_horizRuler->setOrigin(d->m_horizRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->m_vertRuler->setOrigin(d->m_vertRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    d->m_hRuler->setOrigin(d->m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    d->m_vRuler->setOrigin(d->m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
 
-    d->m_horizRuler->setMousePos(event->globalPos());
-    d->m_vertRuler->setMousePos(event->globalPos());
+    d->m_hRuler->setMousePos(event->globalPos());
+    d->m_vRuler->setMousePos(event->globalPos());
 
     // track last mouse position
     d->lastMousePos = event->pos();
@@ -145,10 +145,10 @@ void TikzView::wheelEvent(QWheelEvent* event)
 
 bool TikzView::viewportEvent(QEvent * event)
 {
-    d->m_horizRuler->setOrigin(d->m_horizRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->m_vertRuler->setOrigin(d->m_vertRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
-    d->m_horizRuler->setZoom(transform().m11() / physicalDpiX() * 2.540);
-    d->m_vertRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * 2.540);
+    d->m_hRuler->setOrigin(d->m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    d->m_vRuler->setOrigin(d->m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    d->m_hRuler->setZoom(transform().m11() / physicalDpiX() * 2.540);
+    d->m_vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * 2.540);
 
     return QGraphicsView::viewportEvent(event);
 }
