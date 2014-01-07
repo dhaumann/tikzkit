@@ -48,9 +48,11 @@ class TIKZGUI_EXPORT TikzView : public QGraphicsView
         TikzDocument * document() const;
 
     protected:
-        virtual void mouseMoveEvent(QMouseEvent* event) override;
-        virtual void wheelEvent(QWheelEvent* event) override;
-        virtual bool viewportEvent(QEvent * event) override;
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
+        void wheelEvent(QWheelEvent* event) override;
+        bool viewportEvent(QEvent * event) override;
 
 
     private:

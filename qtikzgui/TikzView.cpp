@@ -23,6 +23,7 @@
 
 #include <math.h>
 #include <QDebug>
+#include <QScrollBar>
 
 static const int s_ruler_size = 16;
 
@@ -32,6 +33,8 @@ public:
     TikzDocument * doc;
     TikzRuler * m_horizRuler;
     TikzRuler * m_vertRuler;
+    QPointF lastMousePos;
+    bool handTool;
 };
 
 TikzView::TikzView(TikzDocument * doc, QWidget * parent)
@@ -39,6 +42,7 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     , d(new TikzViewPrivate())
 {
     d->doc = doc;
+    d->handTool = false;
 
     // add rulers
     setViewportMargins(s_ruler_size, s_ruler_size, 0, 0);
@@ -73,14 +77,56 @@ TikzDocument * TikzView::document() const
     return d->doc;
 }
 
+void TikzView::mousePressEvent(QMouseEvent* event)
+{
+    d->lastMousePos = event->pos();
+
+    // start scrolling with middle mouse button
+    if (event->button() == Qt::MidButton) {
+        setCursor(Qt::SizeAllCursor);
+        d->handTool = true;
+        event->accept();
+    } else {
+        QGraphicsView::mousePressEvent(event);
+    }
+}
+
 void TikzView::mouseMoveEvent(QMouseEvent* event)
 {
-    QGraphicsView::mouseMoveEvent(event);
+    // on middle mouse button down: move
+    if (d->handTool) {
+        const QPointF diff = event->pos() - d->lastMousePos;
+        QScrollBar * h = horizontalScrollBar();
+        QScrollBar * v = verticalScrollBar();
+        h->setValue(h->value() - diff.x());
+        v->setValue(v->value() - diff.y());
+
+        event->accept();
+    } else {
+        QGraphicsView::mouseMoveEvent(event);
+    }
+
+    // update mouse indicator on rulers
     d->m_horizRuler->setOrigin(d->m_horizRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
     d->m_vertRuler->setOrigin(d->m_vertRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
 
     d->m_horizRuler->setMousePos(event->globalPos());
     d->m_vertRuler->setMousePos(event->globalPos());
+
+    // track last mouse position
+    d->lastMousePos = event->pos();
+}
+
+void TikzView::mouseReleaseEvent(QMouseEvent* event)
+{
+    // end scrolling with middle mouse button
+    if (event->button() == Qt::MidButton) {
+        unsetCursor();
+        d->handTool = false;
+        event->accept();
+    } else {
+        QGraphicsView::mousePressEvent(event);
+    }
 }
 
 void TikzView::wheelEvent(QWheelEvent* event)
