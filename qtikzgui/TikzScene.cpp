@@ -22,6 +22,7 @@
 #include "TikzDocument.h"
 #include "TikzNode.h"
 #include "TikzPath.h"
+#include "AbstractTool.h"
 
 #include <Edge.h>
 #include <Path.h>
@@ -48,14 +49,8 @@ public:
     // Mouse edit mode
     TikzEditMode editMode;
 
-    // The item being dragged.
-    QGraphicsItem *dragged;
-
-    // The distance from the top left of the item to the mouse position.
-    QPointF dragOffset;
-
-    // currently edited edge
-    TikzPath * currentPath;
+    // currently active tool
+    AbstractTool * tool;
 };
 
 TikzScene::TikzScene(TikzDocument * doc)
@@ -65,7 +60,7 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->doc = doc;
     d->subDivisions = 1;
     d->editMode = TikzEditMode::ModeSelect;
-    d->currentPath = 0;
+    d->tool = 0;
 
     // set sane scene rect
     setSceneRect(-10, -10, 20, 20);
@@ -119,115 +114,60 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
     painter->restore();
 }
 
-void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    switch (d->editMode) {
-        case TikzEditMode::ModeSelect: break;
-        case TikzEditMode::ModePlaceCoord: break;
-        case TikzEditMode::ModePlaceNode: {
-            TikzNode * node = document()->createTikzNode();
-            node->setPos(mouseEvent->scenePos());
-
-            // update selected item
-            clearSelection();
-            node->setSelected(true);
-
-            setEditMode(TikzEditMode::ModeSelect);
-            return;
-        }
-        case TikzEditMode::ModePlaceEdge: {
-            // create edge
-            d->currentPath = document()->createTikzPath();
-
-            // FIXME
-//             tikz::Edge * edge = d->currentPath->path()->createEdge();
-//             edge->setStartPos(mouseEvent->scenePos());
-//             edge->setEndPos(mouseEvent->scenePos());
-
-            // update selected item
-            clearSelection();
-            d->currentPath->setSelected(true);
-
-            // connect start to node, if applicable
-            QList<QGraphicsItem *> itemList = items(mouseEvent->scenePos(), Qt::ContainsItemShape, Qt::DescendingOrder);
-            foreach (QGraphicsItem* item, itemList) {
-                if (item->type() == QGraphicsItem::UserType + 2) {
-                    TikzNode* node = dynamic_cast<TikzNode*>(item);
-                    Q_ASSERT(node);
-                    // FIXME
-//                     d->currentPath->path()->edge(0)->setStartNode(node);
-                    break;
-                }
-            }
-
-            // pass mouse click to edge
-            sendEvent(d->currentPath, mouseEvent);
-
-            mouseEvent->ignore(); // TODO, FIXME: accept or ignore?
-            return; // TODO, FIXME: return or break?
-        }
-        default: break;
-    }
-
-    QGraphicsScene::mousePressEvent(mouseEvent);
-    return;
-    QGraphicsItem* item = qgraphicsitem_cast<QGraphicsItem*>(itemAt(mouseEvent->scenePos(), QTransform()));
-    if (item && item->flags() & QGraphicsItem::ItemIsMovable)
-        d->dragged = item;
-    if (d->dragged) {
-	d->dragOffset = mouseEvent->scenePos() - d->dragged->pos();
-    } else
-	QGraphicsScene::mousePressEvent(mouseEvent);
-}
-
-void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
-{
-    if (d->currentPath) {
-        sendEvent(d->currentPath, mouseEvent);
-        mouseEvent->ignore();
+    // first let QGraphicsScene do its work
+    QGraphicsScene::mousePressEvent(event);
+    if (event->isAccepted()) {
         return;
     }
 
-    const QRectF br(itemsBoundingRect());
-    if (br.isValid()) {
-//         setSceneRect(itemsBoundingRect()); // FIXME: needed?
-    } else {
-        qWarning() << "TikzScene::mouseMoveEvent: invalid bounding rect, ignoring";
+    // event not accepted, so pass it on to the tool
+    if (d->tool) {
+        d->tool->mousePressEvent(event);
+        event->accept();
     }
-    QGraphicsScene::mouseMoveEvent(mouseEvent);
-    return;
-    if (d->dragged) {
-	// Ensure that the item's offset from the mouse cursor stays the same.
-	d->dragged->setPos(mouseEvent->scenePos() - d->dragOffset);
-    } else
-	QGraphicsScene::mouseMoveEvent(mouseEvent);
 }
 
-void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void TikzScene::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    // still in edge placing mode
-    if (d->currentPath) {
-        Q_ASSERT(d->editMode == TikzEditMode::ModePlaceEdge);
-        sendEvent(d->currentPath, mouseEvent);
-        mouseEvent->ignore();
-        d->currentPath = 0;
-        setEditMode(TikzEditMode::ModeSelect);
+    // first let QGraphicsScene do its work
+    QGraphicsScene::mouseMoveEvent(event);
+    if (event->isAccepted()) {
         return;
     }
 
-    QGraphicsScene::mouseReleaseEvent(mouseEvent);
-    return;
-    if (d->dragged) {
-	int x = floor(mouseEvent->scenePos().x() / d->subDivisions) * d->subDivisions;
-	int y = floor(mouseEvent->scenePos().y() / d->subDivisions) * d->subDivisions;
-	d->dragged->setPos(x, y);
-	d->dragged = 0;
-    } else
-	QGraphicsScene::mouseReleaseEvent(mouseEvent);
+    // event not accepted, so pass it on to the tool
+    if (d->tool) {
+        d->tool->mouseMoveEvent(event);
+        event->accept();
+    }
+}
+
+void TikzScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    // first let QGraphicsScene do its work
+    QGraphicsScene::mouseReleaseEvent(event);
+    if (event->isAccepted()) {
+        return;
+    }
+
+    if (d->tool) {
+        d->tool->mouseReleaseEvent(event);
+        event->accept();
+    }
 }
 
 void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
 {
+    // pass key event to current tool, if possible
+    if (d->tool) {
+        d->tool->keyPressEvent(keyEvent);
+        if (keyEvent->isAccepted()) {
+            return;
+        }
+    }
+
     // on Del, remove selected items
     if (keyEvent->key() == Qt::Key_Delete) {
         d->doc->undoManager()->beginMacro("remove items");
@@ -247,6 +187,8 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
         keyEvent->accept();
         return;
     }
+
+    // nothing done with the event, pass on
     QGraphicsScene::keyPressEvent(keyEvent);
 }
 

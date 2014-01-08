@@ -72,10 +72,10 @@ class AbstractTool : public QObject
         virtual void mouseLeftScene();
 
         /**
-         * This function is called whenever the mouse moves in the graphics scene.
-         * @param pos mouse position in scene coordinates
+         * This function is called whenever the mouse moves in the graphics
+         * scene.
          */
-        virtual void mouseMoveEvent(const QPointF & pos) = 0;
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event) = 0;
 
         /**
          * This function is called whenever a mouse button is pressed in the

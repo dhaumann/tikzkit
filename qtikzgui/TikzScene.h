@@ -75,13 +75,25 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
         // For more information: http://www.qtcentre.org/threads/5609-Drawing-grids-efficiently-in-QGraphicsScene?p=28905#post28905
         void drawBackground(QPainter *painter, const QRectF &rect);
 
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
+        /**
+         * Reimplemented to pass mouse press events to tool handler.
+         */
+        void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
 
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
+        /**
+         * Reimplemented to pass mouse move events to tool handler.
+         */
+        void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
 
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
+        /**
+         * Reimplemented to pass mouse release events to tool handler.
+         */
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent) override;
 
-        virtual void keyPressEvent(QKeyEvent * keyEvent) override;
+        /**
+         * Reimplemented to pass key press events to tool handler.
+         */
+        void keyPressEvent(QKeyEvent * keyEvent) override;
 
     private:
         TikzScenePrivate * const d;
