@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -20,14 +20,11 @@
 #ifndef TIKZ_PATH_HANDLE_H
 #define TIKZ_PATH_HANDLE_H
 
-#include "tikzgui_export.h"
 #include "tikz.h"
 
 #include "TikzItem.h"
 
 class QPainter;
-class TikzPath;
-class HandlePrivate;
 
 class Handle : public TikzItem
 {
@@ -62,7 +59,7 @@ class Handle : public TikzItem
         /**
          * Constructor.
          */
-        Handle(TikzPath * path = 0, Type type = ResizeHandle, Position position = Position::UserPos);
+        Handle(Type type = ResizeHandle, Position position = Position::UserPos);
 
         /**
          * Destructor
@@ -70,7 +67,7 @@ class Handle : public TikzItem
         virtual ~Handle();
 
         /**
-         * Reimplment to return a proper UserType + 4.
+         * Reimplment to return a proper UserType + 5.
          */
         int type() const override;
 
@@ -83,6 +80,18 @@ class Handle : public TikzItem
          * Get the handle type.
          */
         Type handleType() const;
+
+    public:
+        /**
+         * Returns the rect in local coordinates
+         */
+        QRectF rect() const;
+
+    public Q_SLOTS:
+        /**
+         * Sets this Handle's rect to @p rect
+         */
+        void setRect(const QRectF & rect);
 
     Q_SIGNALS:
         /**
@@ -111,27 +120,31 @@ class Handle : public TikzItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
         /**
          * Returns the bounding rect of this item.
          */
         QRectF boundingRect() const override;
 
-        /**
-         * Returns @p true, if @p point is contained in this handle.
-         */
-        bool contains(const QPointF &point) const override;
-
     //
     // protected overrides
     //
     protected:
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+        /**
+         * Reimplement to emit signal mousePressed()
+         */
+        void mouseMoveEvent(QGraphicsSceneMouseEvent * event) override;
 
-        virtual void keyPressEvent ( QKeyEvent * event );
+        /**
+         * Reimplement to emit signal positionChanged()
+         */
+        void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
+
+        /**
+         * Reimplement to emit signal mouseReleased()
+         */
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent * event) override;
 
     //
     // private data
@@ -140,9 +153,6 @@ class Handle : public TikzItem
         Type m_type;
         Position m_position;
         QRectF m_handleRect;
-        TikzPath * m_path;
-        bool m_isComposing;
-        int m_undoIndex;
 };
 
 #endif // TIKZ_PATH_HANDLE_H

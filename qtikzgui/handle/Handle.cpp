@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -18,32 +18,29 @@
  */
 
 #include "Handle.h"
-#include "TikzPath.h"
-#include "TikzDocument.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QKeyEvent>
-#include <QUndoStack>
 
 #include <QDebug>
 
-Handle::Handle(TikzPath * path, Type type, Position position)
-    : TikzItem(path)
+Handle::Handle(Type type, Position position)
+    : TikzItem()
     , m_type(type)
     , m_position(position)
-    , m_handleRect(-0.1, -0.1, 0.2, 0.2)
-    , m_path(path)
-    , m_isComposing(false)
-    , m_undoIndex(-1)
 {
-    // show above paths
+    // by default, only left mouse button triggers events
+    setAcceptedMouseButtons(Qt::LeftButton);
+
+    // show above paths and nodes
     setZValue(10.0);
 
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-    setFlag(QGraphicsItem::ItemIsFocusable, true);
+    // force visually the same size, independent of zooming
+    setFlag(ItemIgnoresTransformations, true);
+
+    // set correct rect size
+    setRect(QRectF(-4, -4, 8, 8));
 }
 
 Handle::~Handle()
@@ -65,6 +62,18 @@ Handle::Type Handle::handleType() const
     return m_type;
 }
 
+QRectF Handle::rect() const
+{
+    return m_handleRect;
+}
+
+void Handle::setRect(const QRectF & rect)
+{
+    prepareGeometryChange();
+    m_handleRect = rect;
+    update();
+}
+
 void Handle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
@@ -72,78 +81,36 @@ void Handle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 
     // debugging
 //     painter->drawRect(boundingRect());
-
-    painter->save();
-    painter->setRenderHints(QPainter::Antialiasing);
-
-    painter->setPen(Qt::darkGreen);
-    painter->setBrush(isHovered() || isSelected() ? Qt::yellow : Qt::green);
-
-    if (m_type == ResizeHandle) {
-        painter->drawRect(m_handleRect);
-    } else {
-        painter->drawEllipse(m_handleRect);
-    }
-
-    painter->restore();
 }
 
 QRectF Handle::boundingRect() const
 {
-    return QRectF(-0.25, -0.25, 0.5, 0.5);
-}
-
-bool Handle::contains(const QPointF &point) const
-{
-    // within circle of 2.5 mm?
-    return (point.x() * point.x() + point.y() * point.y()) <= (0.25 * 0.25);
+    return m_handleRect.adjusted(0, 0, 1, 1);
 }
 
 void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    event->accept();
     emit positionChanged(this, event->scenePos());
+
+    event->accept();
 }
 
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    emit mousePressed(this, event->scenePos());
+    if (event->button() == Qt::LeftButton) {
+        emit mousePressed(this, event->scenePos());
 
-
-    qDebug() << "START UNDO";
-    m_undoIndex = m_path->document()->undoManager()->index();
-    m_path->document()->beginUndoGroup("change tikz item");
-    m_isComposing = true;
-
-    if (m_type == MoveHandle) {
-//         emit startMo
+        event->accept();
     }
-
-    event->accept();
 }
 
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    emit mouseReleased(this, event->scenePos());
+    if (event->button() == Qt::LeftButton) {
+        emit mouseReleased(this, event->scenePos());
 
-    if (m_isComposing) {
-        m_isComposing = false;
-        qDebug() << "END UNDO";
-        m_path->document()->endUndoGroup();
+        event->accept();
     }
-    event->accept();
-}
-
-void Handle::keyPressEvent ( QKeyEvent * event )
-{
-    qDebug() << "ASDFASDFASDF";
-    if (m_isComposing && event->key() == Qt::Key_Escape) {
-        m_isComposing = false;
-        qDebug() << "END composing in esc UNDO";
-        m_path->document()->endUndoGroup();
-        m_path->document()->undoManager()->setIndex(m_undoIndex);
-    }
-    event->accept();
 }
 
 // kate: indent-width 4; replace-tabs on;

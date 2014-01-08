@@ -170,10 +170,6 @@ void AbstractTikzPath::showAnchors(const QPointF & scenePos)
             }
             break;
         }
-        foreach(AnchorHandle * handle, d->anchorHandles) {
-            handle->show(); // FIXME: NEEDED?
-        }
-        qDebug() << "showing  handles:" << d->anchorHandles.size();
     }
 
     //

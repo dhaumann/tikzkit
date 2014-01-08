@@ -25,7 +25,9 @@
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "EdgeStyle.h"
-#include "Handle.h"
+#include "ResizeHandle.h"
+#include "MoveHandle.h"
+#include "RotateHandle.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -197,19 +199,6 @@ void TikzEllipsePath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void TikzEllipsePath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     AbstractTikzPath::mouseReleaseEvent(event);
-    //     if (d->dragging) {
-//         d->dragging = false;
-// //         ungrabMouse();
-//
-//         // clear node handles, if needed
-//         qDeleteAll(d->nodeHandles);
-//         d->nodeHandles.clear();
-//
-//         event->accept();
-//     } else {
-//         event->ignore();
-//     }
-
     update();
 }
 
@@ -268,21 +257,24 @@ QPointF TikzEllipsePath::handlePos(Handle::Position pos)
     const QPointF c = this->pos();
     const qreal rx = style()->radiusX();
     const qreal ry = style()->radiusY();
+    QPointF p(0, 0);
 
     switch (pos) {
-        case Handle::TopLeftCorner: return c + QPointF(-rx, ry);
-        case Handle::TopBorder: return c + QPointF(0, ry);
-        case Handle::TopRightCorner: return c + QPointF(rx, ry);
-        case Handle::LeftBorder: return c + QPointF(-rx, 0);
-        case Handle::Center: return c;
-        case Handle::RightBorder: return c + QPointF(rx, 0);
-        case Handle::BottomLeftCorner: return c + QPointF(-rx, -ry);
-        case Handle::BottomBorder: return c + QPointF(0, -ry);
-        case Handle::BottomRightCorner: return c + QPointF(rx, -ry);
-        case Handle::ResizePos: return c + QPointF(0, -ry - 0.5);
+        case Handle::TopLeftCorner: p = QPointF(-rx, ry); break;
+        case Handle::TopBorder: p = QPointF(0, ry); break;
+        case Handle::TopRightCorner: p = QPointF(rx, ry); break;
+        case Handle::LeftBorder: p = QPointF(-rx, 0); break;
+        case Handle::Center: break;
+        case Handle::RightBorder: p = QPointF(rx, 0); break;
+        case Handle::BottomLeftCorner: p = QPointF(-rx, -ry); break;
+        case Handle::BottomBorder: p = QPointF(0, -ry); break;
+        case Handle::BottomRightCorner: p = QPointF(rx, -ry); break;
+        case Handle::ResizePos: p = QPointF(0, -ry - 0.5); break;
         default: Q_ASSERT(false);
     }
-    return QPointF(0, 0);
+    QTransform t;
+    t.rotate(path()->style()->rotation());
+    return c + t.map(p);
 }
 
 void TikzEllipsePath::setShowHandles(bool show)
@@ -299,23 +291,24 @@ void TikzEllipsePath::setShowHandles(bool show)
     }
 
     // create and show handles
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopLeftCorner));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopRightCorner));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomLeftCorner));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomRightCorner));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::LeftBorder));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopBorder));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::RightBorder));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::BottomBorder));
-    m_handles.append(new Handle(path(), Handle::ResizeHandle, Handle::TopLeftCorner));
-    m_handles.append(new Handle(path(), Handle::MoveHandle, Handle::Center));
-    m_handles.append(new Handle(path(), Handle::RotateHandle, Handle::ResizePos));
+    m_handles.append(new ResizeHandle(Handle::TopLeftCorner));
+    m_handles.append(new ResizeHandle(Handle::TopRightCorner));
+    m_handles.append(new ResizeHandle(Handle::BottomLeftCorner));
+    m_handles.append(new ResizeHandle(Handle::BottomRightCorner));
+    m_handles.append(new ResizeHandle(Handle::LeftBorder));
+    m_handles.append(new ResizeHandle(Handle::TopBorder));
+    m_handles.append(new ResizeHandle(Handle::RightBorder));
+    m_handles.append(new ResizeHandle(Handle::BottomBorder));
+    m_handles.append(new ResizeHandle(Handle::TopLeftCorner));
+    m_handles.append(new MoveHandle(Handle::Center));
+    m_handles.append(new RotateHandle(Handle::ResizePos));
 
     // make sure the handles are positioned correctly
     updateHandlePositions();
 
     // show and connect to get handle movements
     foreach (Handle * handle, m_handles) {
+        scene()->addItem(handle);
         handle->show();
         connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &)),
                 this, SLOT(handleMoved(Handle *, const QPointF &)));
@@ -330,6 +323,7 @@ void TikzEllipsePath::updateHandlePositions()
 {
     foreach (Handle * handle, m_handles) {
         handle->setPos(handlePos(handle->handlePos()));
+        handle->setRotation(-path()->style()->rotation());
     }
 }
 
@@ -426,6 +420,7 @@ void TikzEllipsePath::handleMoved(Handle * handle, const QPointF & scenePos)
 
 void TikzEllipsePath::handleMousePressed(Handle * handle, const QPointF & scenePos)
 {
+    qDebug() << "________" <<scenePos;
     if (handle->handleType() == Handle::MoveHandle) {
         showAnchors(scenePos);
     }
@@ -433,6 +428,7 @@ void TikzEllipsePath::handleMousePressed(Handle * handle, const QPointF & sceneP
 
 void TikzEllipsePath::handleMouseReleased(Handle * handle, const QPointF & scenePos)
 {
+    qDebug() << "________ 2" <<scenePos;
     if (handle->handleType() == Handle::MoveHandle) {
         hideAnchors();
     }

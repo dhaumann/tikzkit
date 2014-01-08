@@ -33,6 +33,9 @@ set(qtikzgui_SOURCES
     paths/ellipse/TikzEllipsePath.cpp
 
     handle/Handle.cpp
+    handle/ResizeHandle.cpp
+    handle/RotateHandle.cpp
+    handle/MoveHandle.cpp
 
     TikzScene.cpp
     TikzView.cpp
@@ -77,6 +80,9 @@ set(qtikzgui_HEADERS
     paths/ellipse/TikzEllipsePath.h
 
     handle/Handle.h
+    handle/ResizeHandle.h
+    handle/RotateHandle.h
+    handle/MoveHandle.h
 
     TikzScene.h
     TikzView.h
