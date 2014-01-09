@@ -113,7 +113,7 @@ MainWindow::MainWindow()
     TikzNode* item1 = m_doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, 3));
     item1->node()->style()->setLineWidthType(tikz::VeryThin);
-    item1->node()->style()->setShape(tikz::ShapeCircle);
+    item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("$\\int f(x) dx$");
 

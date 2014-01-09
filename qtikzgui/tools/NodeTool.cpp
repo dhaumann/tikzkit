@@ -165,7 +165,9 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
     }
 
     // resize
-    const QPointF delta = 2 * (m_node->node()->pos() - scenePos);
+    QTransform t;
+    t.rotate(-m_node->style()->rotation());
+    const QPointF delta = 2 * t.map(m_node->node()->pos() - scenePos);
     qreal w = m_node->style()->minimumWidth();
     qreal h = m_node->style()->minimumHeight();
 
