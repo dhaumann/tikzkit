@@ -125,7 +125,7 @@ void TikzView::mouseReleaseEvent(QMouseEvent* event)
         d->handTool = false;
         event->accept();
     } else {
-        QGraphicsView::mousePressEvent(event);
+        QGraphicsView::mouseReleaseEvent(event);
     }
 }
 
