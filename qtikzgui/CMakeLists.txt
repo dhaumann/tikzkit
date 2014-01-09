@@ -31,6 +31,7 @@ set(qtikzgui_SOURCES
     TikzPath_p.cpp
 
     tools/AbstractTool.cpp
+    tools/SelectTool.cpp
 
     paths/AbstractTikzPath.cpp
     paths/ellipse/TikzEllipsePath.cpp
@@ -80,6 +81,7 @@ set(qtikzgui_HEADERS
     TikzPath.h
 
     tools/AbstractTool.h
+    tools/SelectTool.h
 
     paths/AbstractTikzPath.h
     paths/ellipse/TikzEllipsePath.h

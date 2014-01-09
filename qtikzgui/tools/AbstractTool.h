@@ -41,7 +41,7 @@ class AbstractTool : public QObject
 
     public:
         /**
-         * Constructor with optional @p parent.
+         * Constructor with graphics scene @p scene.
          */
         AbstractTool(QGraphicsScene * scene);
 
