@@ -55,8 +55,10 @@ void CircleShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) c
     const qreal r = std::sqrt(w * w + h * h);
 
     // make sure the circle around textRect is contained in shapeRect
-    if (2.0 * r > shapeRect.width() || 2.0 * r > shapeRect.height()) {
+    if (2.0 * r > shapeRect.width()) {
         shapeRect.setWidth(2.0 * r);
+    }
+    if (2.0 * r > shapeRect.height()) {
         shapeRect.setHeight(2.0 * r);
     }
 }
