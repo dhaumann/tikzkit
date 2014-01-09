@@ -47,7 +47,7 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
     d->path = path;
 
     d->backendPath = 0;
-    qDebug() << d->path->type();
+
     // backend path
     switch (d->path->type()) {
         case tikz::Path::Line: break;

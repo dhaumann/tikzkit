@@ -98,19 +98,18 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
         qWarning() << "Scene bounding rect is invalid. Something is wrong!";
         return;
     }
-    qDebug() << rect;
+
     qreal left = int(rect.left()) - (int(rect.left()) % d->subDivisions);
     qreal top = int(rect.top()) - (int(rect.top()) % d->subDivisions);
 
     QVarLengthArray<QLineF, 100> lines;
 
     for (qreal x = left; x < rect.right(); x += d->subDivisions)
-	lines.append(QLineF(x, rect.top(), x, rect.bottom()));
+        lines.append(QLineF(x, rect.top(), x, rect.bottom()));
     for (qreal y = top; y < rect.bottom(); y += d->subDivisions)
-	lines.append(QLineF(rect.left(), y, rect.right(), y));
+        lines.append(QLineF(rect.left(), y, rect.right(), y));
 
     painter->save();
-//     painter->setRenderHints(QPainter::Antialiasing);
     painter->setPen(QColor(243, 243, 243));
     painter->drawLines(lines.data(), lines.size());
     painter->restore();
