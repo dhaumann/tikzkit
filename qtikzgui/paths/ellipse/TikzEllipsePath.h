@@ -120,14 +120,6 @@ class TikzEllipsePath : public AbstractTikzPath
          */
         bool contains(const QPointF & point) const override;
 
-    //
-    // Mouse handling and overrides
-    //
-    protected:
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
-
     private Q_SLOTS:
         void slotUpdate();
 
@@ -144,45 +136,11 @@ class TikzEllipsePath : public AbstractTikzPath
          */
         void updateCache();
 
-        /**
-         * Show / hide resize, move and rotate handles according to @p show.
-         */
-        void setShowHandles(bool show);
-
-        /**
-         * set the handle positions.
-         */
-        void updateHandlePositions();
-
-        /**
-         * This slot is called whenever a handle moved.
-         * The ellipse then is either moved, resized or rotated according to
-         * the sender @p handle.
-         * @param handle the handle that moved
-         * @param scenePos the mouse move position in scene coordinates
-         */
-        void handleMoved(Handle * handle, const QPointF & scenePos);
-
-        /**
-         * This slot is called whenever a handle was pressed with the mouse.
-         */
-        void handleMousePressed(Handle * handle, const QPointF & scenePos);
-
-        /**
-         * This slot is called whenever a handle was released with the mouse.
-         */
-        void handleMouseReleased(Handle * handle, const QPointF & scenePos);
-
     private:
         /**
          * Returns the tikz::Path object, casted to tikz::EllipsePath
          */
         tikz::EllipsePath * ellipsePath() const;
-
-        /**
-         * Get the handle position for a specific handle in item coordinates.
-         */
-        QPointF handlePos(Handle::Position pos);
 
     private:
         // the TikzNode this ellipse possibly is anchored at
@@ -204,9 +162,6 @@ class TikzEllipsePath : public AbstractTikzPath
 
         // the bounding rect around m_hoverPath
         QRectF m_boundingRect;
-
-    private:
-        QVector<Handle*> m_handles;
 };
 
 #endif // GUI_TIKZ_ELLIPSE_PATH_H

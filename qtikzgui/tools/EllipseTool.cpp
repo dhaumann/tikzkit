@@ -17,12 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "NodeTool.h"
+#include "EllipseTool.h"
 #include "ResizeHandle.h"
 #include "RotateHandle.h"
 #include "MoveHandle.h"
-#include "TikzNode.h"
-#include <NodeStyle.h>
+#include "TikzPath.h"
+#include <EdgeStyle.h>
+#include <EllipsePath.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -30,38 +31,38 @@
 
 #include <QDebug>
 
-NodeTool::NodeTool(TikzNode * node, QGraphicsScene * scene)
+EllipseTool::EllipseTool(TikzPath * path, QGraphicsScene * scene)
     : AbstractTool(scene)
-    , m_node(node)
+    , m_path(path)
 {
-    // show all node handles
-    createNodeHandles();
+    // show all path handles
+    createPathHandles();
 
-    connect(m_node, SIGNAL(changed()), this, SLOT(updateHandlePositions()));
+    connect(m_path->path(), SIGNAL(changed()), this, SLOT(updateHandlePositions()));
 }
 
-NodeTool::~NodeTool()
+EllipseTool::~EllipseTool()
 {
     qDeleteAll(m_handles);
     m_handles.clear();
 }
 
-void NodeTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
+void EllipseTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse move event";
+    qDebug() << "ellipse path tool: mouse move event";
 }
 
-void NodeTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
+void EllipseTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse press event";
+    qDebug() << "ellipse path tool: mouse press event";
 }
 
-void NodeTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+void EllipseTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse release event";
+    qDebug() << "ellipse path tool: mouse release event";
 }
 
-void NodeTool::createNodeHandles()
+void EllipseTool::createPathHandles()
 {
     // on hide, just delte all handles
     qDeleteAll(m_handles);
@@ -96,20 +97,19 @@ void NodeTool::createNodeHandles()
     }
 }
 
-void NodeTool::updateHandlePositions()
+void EllipseTool::updateHandlePositions()
 {
     foreach (Handle * handle, m_handles) {
         handle->setPos(handlePos(handle->handlePos()));
-        handle->setRotation(-m_node->style()->rotation());
+        handle->setRotation(-m_path->style()->rotation());
     }
 }
 
-QPointF NodeTool::handlePos(Handle::Position pos)
+QPointF EllipseTool::handlePos(Handle::Position pos)
 {
-    const QPointF c = m_node->node()->pos();
-    const QRectF r = m_node->shapeRect();
-    const qreal w = r.width() / 2.0;
-    const qreal h = r.height() / 2.0;
+    const QPointF c = static_cast<tikz::EllipsePath*>(m_path->path())->pos();
+    const qreal w = m_path->style()->radiusX();
+    const qreal h = m_path->style()->radiusY();
     QPointF p(0, 0);
 
     switch (pos) {
@@ -126,11 +126,11 @@ QPointF NodeTool::handlePos(Handle::Position pos)
         default: Q_ASSERT(false);
     }
     QTransform t;
-    t.rotate(m_node->style()->rotation());
+    t.rotate(m_path->style()->rotation());
     return c + t.map(p);
 }
 
-void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
@@ -138,15 +138,15 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
     // rotate
     //
     if (handle->handleType() == Handle::RotateHandle) {
-        const QPointF delta = m_node->node()->pos() - scenePos;
+        const QPointF delta = static_cast<tikz::EllipsePath*>(m_path->path())->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
-        tikz::NodeStyle s;
-        s.setStyle(*m_node->style());
+        tikz::EdgeStyle s;
+        s.setStyle(*m_path->style());
         s.setRotation(deg);
 
-        m_node->node()->setStyle(s);
+        m_path->path()->setStyle(s);
         return;
     }
 
@@ -160,7 +160,23 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
             p.ry() = qRound(p.y() / 0.2) * 0.2;
         }
 
-        m_node->node()->setPos(p);
+        // FIXME: show anchors to attach path to node
+//         showAnchors(scenePos);
+//
+//         tikz::Anchor anchor;
+//         tikz::Node * node = anchorAt(scenePos, anchor);
+// //         qDebug() << node << anchor;
+//         if (node) {
+//             ellipsePath()->beginConfig();
+//             ellipsePath()->setNode(node);
+//             ellipsePath()->setAnchor(anchor);
+//             ellipsePath()->endConfig();
+//         } else {
+//             ellipsePath()->setPos(p);
+//         }
+//         return;
+
+        static_cast<tikz::EllipsePath*>(m_path->path())->setPos(p);
         return;
     }
 
@@ -168,12 +184,12 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
     // resize
     //
     QTransform t;
-    t.rotate(-m_node->style()->rotation());
+    t.rotate(-m_path->style()->rotation());
 
-    // honor rotation of node
-    const QPointF delta = 2 * t.map(m_node->node()->pos() - scenePos);
-    qreal w = m_node->style()->minimumWidth();
-    qreal h = m_node->style()->minimumHeight();
+    // honor rotation of path
+    const QPointF delta = t.map(static_cast<tikz::EllipsePath*>(m_path->path())->pos() - scenePos);
+    qreal w = m_path->style()->radiusX();
+    qreal h = m_path->style()->radiusY();
 
     switch (handle->handlePos()) {
         case Handle::TopLeftCorner:
@@ -212,22 +228,22 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
     w = qAbs(w);
     h = qAbs(h);
 
-    tikz::NodeStyle s;
-    s.setStyle(*m_node->style());
-    s.setMinimumWidth(w);
-    s.setMinimumHeight(h);
+    tikz::EdgeStyle s;
+    s.setStyle(*m_path->style());
+    s.setRadiusX(w);
+    s.setRadiusY(h);
 
-    m_node->node()->setStyle(s);
+    m_path->path()->setStyle(s);
 }
 
-void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos)
 {
-    qDebug() << "mouse handle pressed " << scenePos;
+    qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
 }
 
-void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos)
 {
-    qDebug() << "mouse handle released" << scenePos;
+    qDebug() << "ellipse tool:mouse handle released" << scenePos;
 }
 
 // kate: indent-width 4; replace-tabs on;

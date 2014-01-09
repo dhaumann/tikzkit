@@ -32,6 +32,7 @@ set(qtikzgui_SOURCES
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
     tools/NodeTool.cpp
+    tools/EllipseTool.cpp
     tools/SelectTool.cpp
 
     paths/AbstractTikzPath.cpp
@@ -83,6 +84,7 @@ set(qtikzgui_HEADERS
     tools/AbstractTool.h
     tools/ProxyTool.h
     tools/NodeTool.h
+    tools/EllipseTool.h
     tools/SelectTool.h
 
     paths/AbstractTikzPath.h

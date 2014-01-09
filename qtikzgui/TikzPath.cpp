@@ -71,6 +71,9 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
 
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+
+    // forward changed() signal
+    connect(d->path, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
 TikzPath::~TikzPath()
@@ -142,17 +145,6 @@ void TikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     TikzItem::mouseReleaseEvent(event);
     d->backendPath->mouseReleaseEvent(event);
-}
-
-QVariant TikzPath::itemChange(GraphicsItemChange change, const QVariant & value)
-{
-    if (change == ItemSelectedHasChanged) {
-        // show / hide handles if selected
-        const bool selected = value.toBool();
-        emit itemSelected(selected);
-    }
-
-    return QGraphicsObject::itemChange(change, value);
 }
 
 // kate: indent-width 4; replace-tabs on;

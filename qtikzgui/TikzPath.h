@@ -107,10 +107,10 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
 
     Q_SIGNALS:
         /**
-         * This signal is emitted whenever the item selection changes.
-         * @param selected @p true, if the item is selected, otherwise @p false
+         * This signal is emitted whenever this path changes in any way.
+         * This is the same as the signal path()->changed().
          */
-        void itemSelected(bool selected);
+        void changed();
 
     //
     // Mouse handling and overrides
@@ -119,8 +119,6 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
-
-        virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
     //
     // internal

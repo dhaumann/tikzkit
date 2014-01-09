@@ -20,7 +20,11 @@
 #include "ProxyTool.h"
 #include "SelectTool.h"
 #include "NodeTool.h"
+#include "EllipseTool.h"
 #include "TikzNode.h"
+#include "TikzPath.h"
+
+#include <Path.h>
 
 #include <QGraphicsScene>
 #include <QKeyEvent>
@@ -81,8 +85,26 @@ void ProxyTool::updateTool()
     }
 
     QList<QGraphicsItem *> items = scene()->selectedItems();
-    if (items.size() == 1 && dynamic_cast<TikzNode *>(items[0])) {
-        m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
+    if (items.size() == 1) {
+        if (dynamic_cast<TikzNode *>(items[0])) {
+            m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
+        } else if (dynamic_cast<TikzPath*>(items[0])) {
+            TikzPath * path = static_cast<TikzPath *>(items[0]);
+            const tikz::Path::Type type = path->path()->type();
+            switch (type) {
+                case tikz::Path::Line: break;
+                case tikz::Path::HVLine: break;
+                case tikz::Path::VHLine: break;
+                case tikz::Path::BendCurve: break;
+                case tikz::Path::InOutCurve: break;
+                case tikz::Path::BezierCurve: break;
+                case tikz::Path::Ellipse: m_tool = new EllipseTool(static_cast<TikzPath *>(items[0]), scene()); break;
+                case tikz::Path::Rectangle: break;
+                case tikz::Path::Grid: break;
+                case tikz::Path::Invalid: break;
+                default: Q_ASSERT(false);
+            }
+        }
     }
 
     //
