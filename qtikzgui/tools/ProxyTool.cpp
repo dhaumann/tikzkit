@@ -29,7 +29,7 @@
 
 ProxyTool::ProxyTool(QGraphicsScene * graphicsScene)
     : AbstractTool(graphicsScene)
-    , m_tool(0)
+    , m_tool(nullptr)
 {
     // keep track of selected items to always select correct tool
     connect(scene(), SIGNAL(selectionChanged()), this, SLOT(updateTool()));
@@ -44,62 +44,51 @@ ProxyTool::~ProxyTool()
 
 void ProxyTool::mouseEnteredScene()
 {
-    qDebug() << "proxy: mouse entered scene";
-    if (m_tool) {
-        m_tool->mouseEnteredScene();
-    }
+    m_tool->mouseEnteredScene();
 }
 
 void ProxyTool::mouseLeftScene()
 {
-    qDebug() << "proxy: mouse left scene";
-    if (m_tool) {
-        m_tool->mouseLeftScene();
-    }
+    m_tool->mouseLeftScene();
 }
 
 void ProxyTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "proxy: mouse move event";
-    if (m_tool) {
-        m_tool->mouseMoveEvent(event);
-    }
+    m_tool->mouseMoveEvent(event);
 }
 
 void ProxyTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "proxy: mouse press event";
-    if (m_tool) {
-        m_tool->mousePressEvent(event);
-    }
+    m_tool->mousePressEvent(event);
 }
 
 void ProxyTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "proxy: mouse release event";
-    if (m_tool) {
-        m_tool->mouseReleaseEvent(event);
-    }
+    m_tool->mouseReleaseEvent(event);
 }
 
 void ProxyTool::keyPressEvent(QKeyEvent * event)
 {
-    qDebug() << "proxy: key press event";
-    if (m_tool) {
-        m_tool->keyPressEvent(event);
-    }
+    m_tool->keyPressEvent(event);
 }
 
 void ProxyTool::updateTool()
 {
+    qDebug() << "ProxyTool::updateTool(): Changing tool";
     if (m_tool) {
         delete m_tool;
+        m_tool = nullptr;
     }
 
     QList<QGraphicsItem *> items = scene()->selectedItems();
     if (items.size() == 1 && dynamic_cast<TikzNode *>(items[0])) {
         m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
-    } else {
+    }
+
+    //
+    // make sure we always have a valid tool
+    //
+    if (! m_tool) {
         m_tool = new SelectTool(scene());
     }
 }
