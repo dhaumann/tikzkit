@@ -22,7 +22,6 @@
 #include "NodeText.h"
 #include "PaintHelper.h"
 #include "AbstractShape.h"
-#include "NodeHandle.h"
 #include "TikzDocument.h"
 
 #include <QPainter>
@@ -53,8 +52,6 @@ class TikzNodePrivate
         bool itemChangeRunning : 1;
         bool dirty : 1;
         QPainterPath shapePath;
-
-        NodeHandle* nodeHandle;
 
     public:
         void updateCache()
@@ -95,9 +92,6 @@ TikzNode::TikzNode(tikz::Node * node, QGraphicsItem * parent)
 
     d->textItem = new NodeText(this);
     d->textItem->setPos(boundingRect().center());
-
-    d->nodeHandle = new NodeHandle(this);
-    d->nodeHandle->setVisible(false);
 
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
@@ -253,17 +247,6 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
         setPos(newPos);
         d->node->setPos(newPos);
         d->itemChangeRunning = false;
-    } else if (change == ItemSelectedHasChanged) {
-        // show / hide scale&rotate handles if selected
-        const bool selected = value.toBool();
-        if (selected) {
-            d->nodeHandle->setVisible(true);
-        } else if (scene()) {
-            QList<QGraphicsItem *> items = scene()->selectedItems();
-            if (items.count() != 1 || items[0] != d->nodeHandle) {
-                d->nodeHandle->setVisible(false);
-            }
-        }
     }
 
     return QGraphicsObject::itemChange(change, value);

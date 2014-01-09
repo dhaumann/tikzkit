@@ -24,7 +24,6 @@ set(qtikzgui_SOURCES
     TikzDocument.cpp
     TikzItem.cpp
     TikzNode.cpp
-    NodeHandle.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
     TikzPath.cpp
@@ -32,6 +31,7 @@ set(qtikzgui_SOURCES
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
+    tools/NodeTool.cpp
     tools/SelectTool.cpp
 
     paths/AbstractTikzPath.cpp
@@ -76,13 +76,13 @@ set(qtikzgui_HEADERS
     TikzDocument_p.h
     TikzItem.h
     TikzNode.h
-    NodeHandle.h
 #     TikzEdge.h
 #     TikzEdge_p.h
     TikzPath.h
 
     tools/AbstractTool.h
     tools/ProxyTool.h
+    tools/NodeTool.h
     tools/SelectTool.h
 
     paths/AbstractTikzPath.h

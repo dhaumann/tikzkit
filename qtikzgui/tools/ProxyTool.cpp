@@ -19,6 +19,8 @@
 
 #include "ProxyTool.h"
 #include "SelectTool.h"
+#include "NodeTool.h"
+#include "TikzNode.h"
 
 #include <QGraphicsScene>
 #include <QKeyEvent>
@@ -94,7 +96,12 @@ void ProxyTool::updateTool()
         delete m_tool;
     }
 
-    m_tool = new SelectTool(scene());
+    QList<QGraphicsItem *> items = scene()->selectedItems();
+    if (items.size() == 1 && dynamic_cast<TikzNode *>(items[0])) {
+        m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
+    } else {
+        m_tool = new SelectTool(scene());
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;
