@@ -17,16 +17,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_SELECT_TOOL_H
-#define TIKZ_SELECT_TOOL_H
+#ifndef TIKZ_PROXY_TOOL_H
+#define TIKZ_PROXY_TOOL_H
 
 #include "AbstractTool.h"
 
 /**
- * The SelectTool allows to select items and modify them, e.g.
- * resize, rotate and move.
+ * Depending on the selected items in the graphics scene, the ProxyTool
+ * redirects all events to the correct tool. For instance, if a TikzNode
+ * is selected, all events are redirected to the NodeTool.
  */
-class SelectTool : public AbstractTool
+class ProxyTool : public AbstractTool
 {
     Q_OBJECT
 
@@ -34,17 +35,29 @@ class SelectTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        SelectTool(QGraphicsScene * scene);
+        ProxyTool(QGraphicsScene * scene);
 
         /**
          * Virtual destructor.
          */
-        virtual ~SelectTool();
+        virtual ~ProxyTool();
 
     //
     // sub classes: reimplement as needed
     //
     public:
+        /**
+         * This function is called whenever the mouse enters the graphics scene.
+         * The default implementation does nothing.
+         */
+        void mouseEnteredScene() override;
+
+        /**
+         * This function is called whenever the mouse leaves the graphics scene.
+         * The default implementation does nothing.
+         */
+        void mouseLeftScene() override;
+
         /**
          * This function is called whenever the mouse moves in the graphics
          * scene.
@@ -63,9 +76,28 @@ class SelectTool : public AbstractTool
          */
         void mouseReleaseEvent(QGraphicsSceneMouseEvent * event) override;
 
+        /**
+         * This function is called whenever a key is pressed.
+         * By default, the key press event is ignored.
+         * @param event key event
+         */
+        void keyPressEvent(QKeyEvent * event) override;
+
+    //
+    // internal to ProxyTool
+    //
+    protected Q_SLOTS:
+        /**
+         * This slot is called whenever the selection in the scene() changed.
+         * The correct tool to forward all events needs to be instantiated then.
+         */
+        void updateTool();
+
     private:
+        // all events are redirected to this tool
+        AbstractTool * m_tool;
 };
 
-#endif // TIKZ_SELECT_TOOL_H
+#endif // TIKZ_PROXY_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

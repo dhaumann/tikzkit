@@ -31,6 +31,7 @@ set(qtikzgui_SOURCES
     TikzPath_p.cpp
 
     tools/AbstractTool.cpp
+    tools/ProxyTool.cpp
     tools/SelectTool.cpp
 
     paths/AbstractTikzPath.cpp
@@ -81,6 +82,7 @@ set(qtikzgui_HEADERS
     TikzPath.h
 
     tools/AbstractTool.h
+    tools/ProxyTool.h
     tools/SelectTool.h
 
     paths/AbstractTikzPath.h

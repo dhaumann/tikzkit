@@ -23,7 +23,8 @@
 #include "TikzNode.h"
 #include "TikzPath.h"
 #include "AbstractTool.h"
-#include "SelectTool.h" // only temporarily
+#include "SelectTool.h" // FIXME: only temporarily
+#include "ProxyTool.h" // FIXME: only temporarily
 
 #include <Edge.h>
 #include <Path.h>
@@ -61,7 +62,7 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->doc = doc;
     d->subDivisions = 1;
     d->editMode = TikzEditMode::ModeSelect;
-    d->tool = new SelectTool(this);
+    d->tool = new ProxyTool(this);
 
     // set sane scene rect
     setSceneRect(-10, -10, 20, 20);
