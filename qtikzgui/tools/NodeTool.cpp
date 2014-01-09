@@ -138,7 +138,9 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
+    //
     // rotate
+    //
     if (handle->handleType() == Handle::RotateHandle) {
         const QPointF delta = m_node->node()->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
@@ -152,7 +154,9 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
         return;
     }
 
+    //
     // move
+    //
     if (handle->handlePos() == Handle::Center) {
         QPointF p = scenePos;
         if (snap) {
@@ -164,9 +168,13 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
         return;
     }
 
+    //
     // resize
+    //
     QTransform t;
     t.rotate(-m_node->style()->rotation());
+
+    // honor rotation of node
     const QPointF delta = 2 * t.map(m_node->node()->pos() - scenePos);
     qreal w = m_node->style()->minimumWidth();
     qreal h = m_node->style()->minimumHeight();
@@ -204,6 +212,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
         default: Q_ASSERT(false);
     }
 
+    // for now, only allow positive values
     w = qAbs(w);
     h = qAbs(h);
 
