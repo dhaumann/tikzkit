@@ -18,6 +18,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/arrows
     ${CMAKE_SOURCE_DIR}/src/ui/tex
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
+    ${CMAKE_SOURCE_DIR}/src/ui/utils
 )
 
 set(qtikzui_SOURCES
@@ -42,6 +43,8 @@ set(qtikzui_SOURCES
     handle/ResizeHandle.cpp
     handle/RotateHandle.cpp
     handle/MoveHandle.cpp
+
+    utils/AnchorManager.cpp
 
     TikzScene.cpp
     TikzView.cpp
@@ -94,6 +97,8 @@ set(qtikzui_HEADERS
     handle/ResizeHandle.h
     handle/RotateHandle.h
     handle/MoveHandle.h
+
+    utils/AnchorManager.h
 
     TikzScene.h
     TikzView.h

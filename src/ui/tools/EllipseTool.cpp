@@ -22,6 +22,7 @@
 #include "RotateHandle.h"
 #include "MoveHandle.h"
 #include "TikzPath.h"
+#include "AnchorManager.h"
 #include <EdgeStyle.h>
 #include <EllipsePath.h>
 
@@ -34,6 +35,7 @@
 EllipseTool::EllipseTool(TikzPath * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(path)
+    , m_anchorManager(new AnchorManager(scene, this))
 {
     // show all path handles
     createPathHandles();
@@ -107,6 +109,8 @@ void EllipseTool::updateHandlePositions()
 
 QPointF EllipseTool::handlePos(Handle::Position pos)
 {
+    // FIXME: using tikz::core::EllipsePath is wrong. Instad, the TikzEllipsePath
+    //        from ui/ should be used. TODO: refactor backendPath architecture...
     const QPointF c = static_cast<tikz::core::EllipsePath*>(m_path->path())->pos();
     const qreal w = m_path->style()->radiusX();
     const qreal h = m_path->style()->radiusY();
@@ -160,23 +164,22 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
             p.ry() = qRound(p.y() / 0.2) * 0.2;
         }
 
-        // FIXME: show anchors to attach path to node
-//         showAnchors(scenePos);
-//
-//         tikz::Anchor anchor;
-//         tikz::core::MetaPos::Ptr metaPos = anchorAt(scenePos);
-// //         qDebug() << node << anchor;
-//         if (metaPos->node()) {
-//             ellipsePath()->beginConfig();
-//             ellipsePath()->setNode(metaPos->node());
-//             ellipsePath()->setAnchor(metaPos->anchor());
-//             ellipsePath()->endConfig();
-//         } else {
-//             ellipsePath()->setPos(p);
-//         }
-//         return;
+        // try to attach to anchor
+        bool found = m_anchorManager->showAnchors(scenePos);
+        if (!found) {
+            m_anchorManager->clear();
+        }
 
-        static_cast<tikz::core::EllipsePath*>(m_path->path())->setPos(p);
+        tikz::core::EllipsePath * ep = static_cast<tikz::core::EllipsePath*>(m_path->path());
+        tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos);
+        if (metaPos->node()) {
+            ep->beginConfig();
+            ep->setNode(metaPos->node());
+            ep->setAnchor(metaPos->anchor());
+            ep->endConfig();
+        } else {
+            ep->setPos(p);
+        }
         return;
     }
 

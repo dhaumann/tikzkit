@@ -37,22 +37,6 @@ class AbstractTikzPathPrivate
 {
 public:
     TikzPath * path;
-
-    //
-    // dragging of items.
-    //
-    QVector<AnchorHandle*> anchorHandles;
-    TikzNode * anchorNode;
-
-    /**
-     * Remove all anchor handles, if there are any.
-     */
-    void clearAnchorsHandles()
-    {
-        qDeleteAll(anchorHandles);
-        anchorHandles.clear();
-        anchorNode = 0;
-    }
 };
 
 AbstractTikzPath::AbstractTikzPath(TikzPath * path)
@@ -62,13 +46,10 @@ AbstractTikzPath::AbstractTikzPath(TikzPath * path)
     Q_ASSERT(path != 0);
 
     d->path = path;
-    d->anchorNode = 0;
 }
 
 AbstractTikzPath::~AbstractTikzPath()
 {
-    d->clearAnchorsHandles();
-
     delete d;
 }
 
@@ -128,74 +109,6 @@ void AbstractTikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 void AbstractTikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-}
-
-void AbstractTikzPath::hideAnchors()
-{
-    d->clearAnchorsHandles();
-}
-
-void AbstractTikzPath::showAnchors(const QPointF & scenePos)
-{
-    // if the anchors are already around, and the mouse hovers over
-    // one of the anchors, then just keep them
-    foreach(AnchorHandle * handle, d->anchorHandles) {
-        if (handle->contains(handle->mapFromScene(scenePos))) {
-            return;
-        }
-    }
-
-    //
-    // get the node and possibly show the items
-    //
-    bool nodeFound = false;
-    QList<QGraphicsItem *> items = scene()->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
-    if (items.size()) {
-        foreach (QGraphicsItem* item, items) {
-            TikzNode* node = dynamic_cast<TikzNode*>(item);
-            if (!node) {
-                continue;
-            }
-
-            nodeFound = true;
-
-            // recreate anchors only if the node changes
-            if (d->anchorNode != node) {
-                d->clearAnchorsHandles();
-                d->anchorNode = node;
-
-                foreach (tikz::Anchor anchor, node->supportedAnchors()) {
-                    d->anchorHandles.append(new AnchorHandle(node, anchor));
-                }
-            }
-            break;
-        }
-    }
-
-    //
-    // if we have no node, just hide all anchors
-    //
-    if (!nodeFound) {
-        d->clearAnchorsHandles();
-    }
-}
-
-tikz::core::MetaPos::Ptr AbstractTikzPath::anchorAt(const QPointF & scenePos)
-{
-    qreal zValue = -100000;
-    tikz::core::MetaPos::Ptr metaPos(new tikz::core::MetaPos());
-
-    foreach(AnchorHandle * handle, d->anchorHandles) {
-        if (handle->contains(handle->mapFromScene(scenePos))) {
-            if (metaPos->node() || zValue < handle->zValue()) {
-                zValue = handle->zValue();
-                metaPos->setNode(handle->node()->node());
-                metaPos->setAnchor(handle->anchor());
-            }
-        }
-    }
-
-    return metaPos;
 }
 
 // kate: indent-width 4; replace-tabs on;

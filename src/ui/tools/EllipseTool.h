@@ -27,6 +27,7 @@
 
 class TikzPath;
 class Handle;
+class AnchorManager;
 
 /**
  * The EllipseTool allows to modify a TikzPath that represents an ellipse.
@@ -112,6 +113,7 @@ class EllipseTool : public AbstractTool
     private:
         TikzPath * m_path;
         QVector<Handle *> m_handles;
+        AnchorManager * m_anchorManager;
 };
 
 #endif // TIKZ_ELLIPSE_TOOL_H

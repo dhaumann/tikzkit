@@ -22,8 +22,6 @@
 
 #include "Path.h"
 
-#include <MetaPos.h>
-
 #include <QObject>
 #include <QRectF>
 #include <QPainterPath>
@@ -127,28 +125,6 @@ class AbstractTikzPath : public QObject
          * Called whenever the mouse is released in the TikzPath item.
          */
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
-
-    //
-    // tikz::core::Node anchor handles
-    //
-    public Q_SLOTS:
-        /**
-         * Removes all anchor handles.
-         */
-        void hideAnchors();
-
-        /**
-         * Show the anchor handles for the node located at @p scenePos
-         * if applicable.
-         */
-        void showAnchors(const QPointF & scenePos);
-
-    public:
-        /**
-         * Get the node with anchor for the scene position @p scenePos.
-         * If valid, the returned tikz::core::MetaPos contains the node and anchor.
-         */
-        tikz::core::MetaPos::Ptr anchorAt(const QPointF & scenePos);
 
     private:
         AbstractTikzPathPrivate * const d;
