@@ -83,7 +83,6 @@ TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
     d->shape = new AbstractShape(this);
     d->itemChangeRunning = false;
 
-    connect(d->node, SIGNAL(changed(QPointF)), this, SLOT(slotSetPos(QPointF)));
     connect(d->node, SIGNAL(changed()), this, SLOT(styleChanged()));
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -94,6 +93,8 @@ TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
     d->textItem->setPos(boundingRect().center());
 
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
+
+    slotSetPos(node->pos());
 }
 
 TikzNode::~TikzNode()
@@ -265,6 +266,7 @@ void TikzNode::styleChanged()
 {
     prepareGeometryChange();
     d->dirty = true;
+    if (d->node->pos() != pos()) slotSetPos(d->node->pos());
     emit changed();
 }
 

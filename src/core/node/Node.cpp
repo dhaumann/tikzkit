@@ -46,6 +46,9 @@ class NodePrivate
         // document-wide uniq id >= 0
         qint64 id;
 
+        // node position
+        QPointF pos;
+
         // node text
         QString text;
 
@@ -54,7 +57,7 @@ class NodePrivate
 };
 
 Node::Node(qint64 id, Document* doc)
-    : Coord(doc)
+    : QObject(doc)
     , d(new NodePrivate())
 {
     // valid document and uniq id required
@@ -64,9 +67,9 @@ Node::Node(qint64 id, Document* doc)
     d->refCounter = 0;
     d->doc = doc;
     d->id = id;
+    d->pos = QPointF(0, 0);
     d->style.setParentStyle(d->doc->style());
 
-    connect(this, SIGNAL(changed(QPointF)), this, SLOT(emitChangedIfNeeded()));
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
@@ -93,19 +96,26 @@ bool Node::accept(Visitor & visitor)
 void Node::setPos(const QPointF& pos)
 {
     // only continue when change is required
-    if (pos == this->pos()) {
+    if (pos == d->pos) {
         return;
     }
 
     if (document()->undoActive()) {
-        Coord::setPos(pos);
+        beginConfig();
+        d->pos = pos;
+        endConfig();
     } else {
         // create new undo item, push will call ::redo()
         document()->undoManager()->push(new UndoSetNodePos(id(), pos, document()));
 
         // now the position should be updated
-        Q_ASSERT(this->pos() == pos);
+        Q_ASSERT(d->pos == pos);
     }
+}
+
+QPointF Node::pos() const
+{
+    return d->pos;
 }
 
 void Node::setText(const QString& text)

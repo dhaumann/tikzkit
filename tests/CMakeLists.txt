@@ -14,14 +14,6 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# Test: Coord
-set(TestCoordSrc TestCoord.cpp)
-QT4_AUTOMOC(${TestCoordSrc} TestCoord.h)
-QT4_WRAP_CPP(TestCoordMocs)
-add_executable(TestCoord ${TestCoordSrc} ${TestCoordMocs})
-target_link_libraries(TestCoord ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
-add_test(NAME TestCoord COMMAND TestCoord)
-
 # Test: Node
 set(TestNodeSrc TestNode.cpp)
 QT4_AUTOMOC(${TestNodeSrc} TestNode.h)

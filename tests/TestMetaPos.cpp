@@ -45,14 +45,9 @@ void MetaPosTest::testMetaPos()
 
     // test changed signal
     connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
-    connect(&m.coord(), SIGNAL(changed(const QPointF & )), this, SLOT(posChangedEmitted(const QPointF & )));
 
     // reset signal counter
     m_changeCount = 0;
-    m_posChangeCount = 0;
-
-    // reset pos
-    m_changedPos = QPointF(-1, -1);
 
     // perform change
     m.setPos(QPointF(1, 1));
@@ -60,21 +55,10 @@ void MetaPosTest::testMetaPos()
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
-    QCOMPARE(m_posChangeCount, 1);
-
-    // make sure position via signal is correct
-    QCOMPARE(m_changedPos, QPointF(1, 1));
 
     // make sure setNode with null pointer has no effect
     QVERIFY( ! m.setNode(0));
     QCOMPARE(m_changeCount, 1);
-    QCOMPARE(m_posChangeCount, 1);
-}
-
-void MetaPosTest::posChangedEmitted(const QPointF & coord)
-{
-    ++m_posChangeCount;
-    m_changedPos = coord;
 }
 
 void MetaPosTest::changedEmitted()
@@ -88,49 +72,56 @@ void MetaPosTest::testMetaPosWithNode()
     tikz::core::MetaPos m;
     tikz::core::Node * n = doc.createNode();
 
-    // get pointer to coord
-    tikz::core::Coord & c = m.coord();
+    // set distinct node position
+    n->setPos(QPointF(5, 5));
+    QCOMPARE(n->pos(), QPointF(5, 5));
+
+    // connect to changed signal
+    connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
+
+    // reset changed counter
+    m_changeCount = 0;
 
     // check setting node
     QVERIFY(m.setNode(n));
     QCOMPARE(m.node(), n);
+    QCOMPARE(m_changeCount, 1);
 
     // make sure setting same node again does nothing
     QVERIFY(! m.setNode(n));
+    QCOMPARE(m_changeCount, 1);
 
-    // should still be (0, 0)
-    QCOMPARE(m.pos(), QPointF(0, 0));
-    QCOMPARE(m.coord().pos(), m.pos());
-    QCOMPARE(c.pos(), m.pos()); // cache tracks attached node
-
-    // test changed signal
-    connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
-    connect(&m.coord(), SIGNAL(changed(const QPointF & )), this, SLOT(posChangedEmitted(const QPointF & )));
+    // should be same as node pos
+    QCOMPARE(m.pos(), QPointF(5, 5));
 
     // reset signal counter
     m_changeCount = 0;
-    m_posChangeCount = 0;
-
-    // reset pos
-    m_changedPos = QPointF(-1, -1);
 
     // perform change
     m.setPos(QPointF(1, 1));
     QCOMPARE(m.pos(), QPointF(1, 1));
-    QCOMPARE(m.coord().pos(), m.pos());
-    QCOMPARE(c.pos(), m.pos()); // cache tracks attached node
+
+    // using setPos() resets node, test this
+    QCOMPARE(m.node(), (tikz::core::Node*)0);
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
-    QCOMPARE(m_posChangeCount, 1);
 
-    // make sure position via signal is correct
-    QCOMPARE(m_changedPos, QPointF(1, 1));
+    //
+    // now connect to node again and change node position.
+    // The MetaPos.pos() should adapt automatically
+    //
+    QVERIFY(m.setNode(n));
+    QCOMPARE(m.node(), n);
+    QCOMPARE(n->pos(), QPointF(5, 5));
+    QCOMPARE(m.pos(), QPointF(5, 5));
 
-    // setNode with null pointer changes meta node, but it does not change pos
-    QVERIFY(m.setNode(0));
-    QCOMPARE(m_changeCount, 2);
-    QCOMPARE(m_posChangeCount, 1);
+    // now change node position
+    m_changeCount = 0;
+    n->setPos(QPointF(10, 10));
+    QCOMPARE(n->pos(), QPointF(10, 10));
+    QCOMPARE(m.pos(), QPointF(10, 10));
+    QCOMPARE(m_changeCount, 1);
 }
 
 // kate: indent-width 4; replace-tabs on;

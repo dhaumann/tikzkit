@@ -16,7 +16,6 @@ include_directories(
 )
 
 set(qtikzcore_SOURCES
-    Coord.cpp
     Value.cpp
     node/Node.cpp
     MetaPos.cpp
@@ -58,7 +57,6 @@ set(qtikzcore_SOURCES
 )
 
 set(qtikzcore_HEADERS
-    Coord.h
     node/Node.h
     MetaPos.h
 

@@ -28,7 +28,6 @@ namespace tikz {
 namespace core {
 
 class Node;
-class Coord;
 class EllipsePathPrivate;
 
 /**
@@ -59,11 +58,6 @@ class TIKZCORE_EXPORT EllipsePath : public Path
     public:
 
         /**
-         * Returns the Coord.
-         */
-        Coord& coord() const;
-
-        /**
          * Get the node, which was set with setNode(Node*).
          */
         Node* node() const;
@@ -82,7 +76,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Get the position of the ellipse.
          * @note This is the same as node()->pos().
          */
-        const QPointF & pos() const;
+        QPointF pos() const;
 
     public Q_SLOTS:
         /**

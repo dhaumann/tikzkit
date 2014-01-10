@@ -29,7 +29,7 @@ namespace core{
 class MetaPosPrivate
 {
     public:
-        Coord coord;
+        QPointF pos;
         QPointer<Node> node;
         Anchor anchor;
 };
@@ -38,7 +38,6 @@ MetaPos::MetaPos(QObject * parent)
     : QObject(parent)
     , d(new MetaPosPrivate())
 {
-    connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
 }
 
 MetaPos::~MetaPos()
@@ -46,20 +45,35 @@ MetaPos::~MetaPos()
     delete d;
 }
 
-const QPointF& MetaPos::pos() const
+QPointF MetaPos::pos() const
 {
     return d->node ? d->node->pos()
-                   : d->coord.pos();
+                   : d->pos;
 }
 
 void MetaPos::setPos(const QPointF& pos)
 {
-    coord().setPos(pos);
-}
+    bool change = false;
 
-Coord & MetaPos::coord() const
-{
-    return d->node ? *d->node : d->coord;
+    if (d->node != nullptr) {
+        // disconnect changed() signal ...
+        disconnect(d->node, 0, this, 0);
+        d->node = nullptr;
+        
+        change = true;
+    }
+
+    if (d->pos != pos) {
+        // update pos
+        d->pos = pos;
+
+        change = true;
+    }
+
+    if (change) {
+        // notify about change
+        emit changed();
+    }
 }
 
 bool MetaPos::setNode(Node* node)
@@ -71,22 +85,15 @@ bool MetaPos::setNode(Node* node)
 
     // disconnect changed() signal ...
     if (d->node != 0) {
-        disconnect(d->node, 0, &d->coord, 0);
         disconnect(d->node, 0, this, 0);
 
-        // ... and connect coord
-        connect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
+        // update pos om case the new node is 0
+        d->pos = node->pos();
     }
 
-    // set new Coord and connect cache if applicable
+    // set new node and connect cache if applicable
     d->node = node;
     if (d->node) {
-        // we want to emit changed() only once: either forward by the node
-        disconnect(&d->coord, SIGNAL(changed(QPointF)), this, SIGNAL(changed()));
-
-        d->coord.setPos(d->node->pos());
-
-        connect(d->node, SIGNAL(changed(QPointF)), &d->coord, SLOT(setPos(QPointF)));
         connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
     }
 

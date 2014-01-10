@@ -22,7 +22,6 @@
 
 #include "tikz_export.h"
 #include "tikz.h"
-#include "Coord.h"
 
 #include <QPointF>
 #include <QString>
@@ -36,10 +35,11 @@ class NodeStyle;
 class Document;
 class Visitor;
 
-class TIKZCORE_EXPORT Node : public Coord
+class TIKZCORE_EXPORT Node : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 
     public:
         /**
@@ -75,17 +75,24 @@ class TIKZCORE_EXPORT Node : public Coord
     //
     // position, style and text
     //
-    public:
+    public Q_SLOTS:
         /**
          * Set the coordinates to @p pos.
          * @see pos()
          */
-        virtual void setPos(const QPointF& pos) override;
+        void setPos(const QPointF& pos);
 
         /**
          * Sets the text of this node to @p text.
          */
         void setText(const QString& text);
+
+    public:
+        /**
+         * Set the coordinates to @p pos.
+         * @see pos()
+         */
+        QPointF pos() const;
 
         /**
          * Returns the text of this node.

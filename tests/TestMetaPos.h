@@ -35,12 +35,9 @@ private slots:
     void testMetaPosWithNode();
 
 public slots:
-    void posChangedEmitted(const QPointF & coord);
     void changedEmitted();
 
 private:
-    QPointF m_changedPos;
-    int m_posChangeCount;
     int m_changeCount;
 };
 

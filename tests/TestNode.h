@@ -20,7 +20,6 @@
 #define TEST_NODE_H
 
 #include <QObject>
-#include <QPointF>
 
 class NodeTest : public QObject
 {
@@ -31,13 +30,7 @@ public slots:
     void cleanupTestCase();
 
 private slots:
-    void testCoord();
-
-public slots:
-    void newCoord(const QPointF & coord);
-
-private:
-    QPointF m_pos;
+    void testPos();
 };
 
 #endif // TEST_NODE_H

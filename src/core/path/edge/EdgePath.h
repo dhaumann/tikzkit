@@ -28,7 +28,6 @@ namespace tikz {
 namespace core {
 
 class Node;
-class Coord;
 class EdgePathPrivate;
 
 /**
@@ -58,17 +57,6 @@ class TIKZCORE_EXPORT EdgePath : public Path
     // Node start / end manipulation
     //
     public:
-
-        /**
-         * Returns the start Coord.
-         */
-        Coord& start() const;
-
-        /**
-         * Returns the end Coord.
-         * The returned pointer is always valid.
-         */
-        Coord& end() const;
 
         /**
          * Get the start node, which was set with setStart(Node*).

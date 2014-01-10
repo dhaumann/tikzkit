@@ -18,7 +18,6 @@
  */
 
 #include "EdgePath.h"
-#include "Coord.h"
 #include "Node.h"
 #include "EdgeStyle.h"
 #include "MetaPos.h"
@@ -120,11 +119,6 @@ void EdgePath::setStartNode(Node* node)
     }
 }
 
-Coord& EdgePath::start() const
-{
-    return d->start.coord();
-}
-
 void EdgePath::setEndNode(Node* node)
 {
     if (d->end.node() == node) {
@@ -159,19 +153,14 @@ Node* EdgePath::endNode()
     return d->end.node();
 }
 
-Coord& EdgePath::end() const
-{
-    return d->end.coord();
-}
-
 QPointF EdgePath::startPos() const
 {
-    return start().pos();
+    return d->start.pos();
 }
 
 QPointF EdgePath::endPos() const
 {
-    return end().pos();
+    return d->end.pos();
 }
 
 void EdgePath::setStartPos(const QPointF& pos)

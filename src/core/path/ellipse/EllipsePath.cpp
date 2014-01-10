@@ -18,7 +18,6 @@
  */
 
 #include "EllipsePath.h"
-#include "Coord.h"
 #include "Node.h"
 #include "EdgeStyle.h"
 #include "MetaPos.h"
@@ -100,19 +99,14 @@ void EllipsePath::setNode(Node* node)
     }
 }
 
-Coord& EllipsePath::coord() const
-{
-    return d->pos.coord();
-}
-
 Node* EllipsePath::node() const
 {
     return d->pos.node();
 }
 
-const QPointF & EllipsePath::pos() const
+QPointF EllipsePath::pos() const
 {
-    return coord().pos();
+    return d->pos.pos();
 }
 
 void EllipsePath::setPos(const QPointF& pos)
@@ -123,7 +117,6 @@ void EllipsePath::setPos(const QPointF& pos)
 
     if (document()->undoActive()) {
         beginConfig();
-        d->pos.setNode(0);
         d->pos.setPos(pos);
         endConfig();
     } else {

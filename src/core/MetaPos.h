@@ -30,7 +30,6 @@ namespace core {
 
 class MetaPosPrivate;
 class Node;
-class Coord;
 
 /**
  * MetaPos describes a position in the tikz scene.
@@ -52,11 +51,6 @@ class MetaPos : public QObject
          */
         virtual ~MetaPos();
 
-        /**
-         * Get the Coord object of this node.
-         */
-        Coord & coord() const;
-
     //
     // x/y-position methods
     //
@@ -64,7 +58,7 @@ class MetaPos : public QObject
         /**
          * Get the coordinate of this node.
          */
-        const QPointF& pos() const;
+        QPointF pos() const;
 
     public Q_SLOTS:
         /**
