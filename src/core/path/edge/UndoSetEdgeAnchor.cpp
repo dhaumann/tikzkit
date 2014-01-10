@@ -23,6 +23,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetEdgeAnchor::UndoSetEdgeAnchor(qint64 pathId,
                                     Anchor newAnchor,
@@ -76,6 +77,7 @@ void UndoSetEdgeAnchor::redo()
     document()->setUndoActive(wasActive);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -60,7 +60,7 @@ void ArrowComboBoxPrivate::fillComboBox()
     comboBox->setIconSize(iconSize);
 
     // create horizontal edge from 0.1cm to 0.9cm
-    tikz::EdgeStyle style;
+    tikz::core::EdgeStyle style;
     style.setLineWidthType(tikz::VeryThick);
 //     style.setInnerLineWidthType(tikz::VeryThick);
 //     style.setDoubleLine(true);
@@ -148,7 +148,7 @@ ArrowComboBox::~ArrowComboBox()
     delete d;
 }
 
-// void ArrowComboBox::setStyle(tikz::EdgeStyle * style)
+// void ArrowComboBox::setStyle(tikz::core::EdgeStyle * style)
 // {
 //
 // }

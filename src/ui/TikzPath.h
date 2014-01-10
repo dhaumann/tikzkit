@@ -26,8 +26,10 @@
 #include <tikz.h>
 
 namespace tikz {
+namespace core {
     class Path;
     class EdgeStyle;
+}
 }
 
 class QPainter;
@@ -47,7 +49,7 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
         /**
          * Constructor for @p path and parent @p parent.
          */
-        TikzPath(tikz::Path * path, QGraphicsItem * parent = 0);
+        TikzPath(tikz::core::Path * path, QGraphicsItem * parent = 0);
 
         /**
          * Destructor
@@ -68,7 +70,7 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
          * Returns the pointer to the associated Path.
          * @warning Use setStartNode() and setEndNode() to change nodes
          */
-        tikz::Path * path();
+        tikz::core::Path * path();
 
         /**
          * Returns path().id();
@@ -79,7 +81,7 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
          * Get the EdgeStyle of this path.
          * The returned pointer is always valid.
          */
-        tikz::EdgeStyle* style() const;
+        tikz::core::EdgeStyle* style() const;
 
     //
     // reimplemented from QGraphicsItem

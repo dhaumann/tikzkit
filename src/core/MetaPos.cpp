@@ -24,6 +24,7 @@
 #include <QDebug>
 
 namespace tikz {
+namespace core{
 
 class MetaPosPrivate
 {
@@ -120,6 +121,7 @@ Anchor MetaPos::anchor() const
     return d->node ? d->anchor : tikz::NoAnchor;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

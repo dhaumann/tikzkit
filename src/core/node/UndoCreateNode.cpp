@@ -21,6 +21,7 @@
 #include "Document.h"
 
 namespace tikz {
+namespace core {
 
 UndoCreateNode::UndoCreateNode(qint64 id, Document * doc)
     : UndoItem(doc)
@@ -42,6 +43,7 @@ void UndoCreateNode::redo()
     document()->createNode(m_id);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

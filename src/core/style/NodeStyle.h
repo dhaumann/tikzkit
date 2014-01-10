@@ -23,6 +23,7 @@
 #include "Style.h"
 
 namespace tikz {
+namespace core {
 
 class Document;
 class NodeStylePrivate;
@@ -256,6 +257,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         NodeStylePrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_NODE_STYLE_H

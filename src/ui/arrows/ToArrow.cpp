@@ -30,7 +30,7 @@ class ToArrowPrivate
     public:
 };
 
-ToArrow::ToArrow(tikz::EdgeStyle * style)
+ToArrow::ToArrow(tikz::core::EdgeStyle * style)
     : AbstractArrow(style)
     , d(new ToArrowPrivate())
 {
@@ -113,7 +113,7 @@ class ReversedToArrowPrivate
     public:
 };
 
-ReversedToArrow::ReversedToArrow(tikz::EdgeStyle * style)
+ReversedToArrow::ReversedToArrow(tikz::core::EdgeStyle * style)
     : AbstractArrow(style)
     , d(new ReversedToArrowPrivate())
 {

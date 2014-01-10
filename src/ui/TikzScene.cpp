@@ -26,7 +26,6 @@
 #include "SelectTool.h" // FIXME: only temporarily
 #include "ProxyTool.h" // FIXME: only temporarily
 
-#include <Edge.h>
 #include <Path.h>
 
 #include <QGraphicsItem>

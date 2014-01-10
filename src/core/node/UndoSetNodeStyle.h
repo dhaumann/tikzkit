@@ -23,8 +23,8 @@
 #include "UndoItem.h"
 #include <NodeStyle.h>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -79,6 +79,7 @@ class UndoSetNodeStyle : public UndoItem
         NodeStyle m_redoStyle;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_NODE_STYLE_H

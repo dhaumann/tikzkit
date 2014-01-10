@@ -32,6 +32,7 @@
 #include <QDebug>
 
 namespace tikz {
+namespace core {
 
 class NodePrivate
 {
@@ -84,7 +85,7 @@ qint64 Node::id() const
     return d->id;
 }
 
-bool Node::accept(tikz::Visitor & visitor)
+bool Node::accept(Visitor & visitor)
 {
     visitor.visit(this);
 }
@@ -178,6 +179,7 @@ void Node::emitChangedIfNeeded()
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

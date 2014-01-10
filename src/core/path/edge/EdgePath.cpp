@@ -20,7 +20,6 @@
 #include "EdgePath.h"
 #include "Coord.h"
 #include "Node.h"
-#include "Edge.h"
 #include "EdgeStyle.h"
 #include "MetaPos.h"
 #include "Visitor.h"
@@ -34,6 +33,7 @@
 #include <QVector>
 
 namespace tikz {
+namespace core {
 
 class EdgePathPrivate
 {
@@ -256,6 +256,7 @@ void EdgePath::setEndAnchor(tikz::Anchor anchor)
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

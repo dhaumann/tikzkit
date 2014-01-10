@@ -40,7 +40,7 @@
 
 #include <cmath>
 
-TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
+TikzPath::TikzPath(tikz::core::Path * path, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzPathPrivate())
 {
@@ -50,19 +50,19 @@ TikzPath::TikzPath(tikz::Path * path, QGraphicsItem * parent)
 
     // backend path
     switch (d->path->type()) {
-        case tikz::Path::Line: break;
-        case tikz::Path::HVLine: break;
-        case tikz::Path::VHLine: break;
-        case tikz::Path::BendCurve: break;
-        case tikz::Path::InOutCurve: break;
-        case tikz::Path::BezierCurve: break;
-        case tikz::Path::Ellipse: {
+        case tikz::core::Path::Line: break;
+        case tikz::core::Path::HVLine: break;
+        case tikz::core::Path::VHLine: break;
+        case tikz::core::Path::BendCurve: break;
+        case tikz::core::Path::InOutCurve: break;
+        case tikz::core::Path::BezierCurve: break;
+        case tikz::core::Path::Ellipse: {
             d->backendPath = new TikzEllipsePath(this);
             break;
         }
-        case tikz::Path::Rectangle: break;
-        case tikz::Path::Grid: break;
-        case tikz::Path::Invalid:
+        case tikz::core::Path::Rectangle: break;
+        case tikz::core::Path::Grid: break;
+        case tikz::core::Path::Invalid:
         default: break;
     }
 
@@ -92,7 +92,7 @@ int TikzPath::type() const
     return UserType + 3;
 }
 
-tikz::Path * TikzPath::path()
+tikz::core::Path * TikzPath::path()
 {
     return d->path;
 }
@@ -102,7 +102,7 @@ qint64 TikzPath::id() const
     return d->path->id();
 }
 
-tikz::EdgeStyle* TikzPath::style() const
+tikz::core::EdgeStyle* TikzPath::style() const
 {
     return d->path->style();
 }

@@ -24,8 +24,8 @@
 #include <QPointF>
 #include <NodeStyle.h>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -75,6 +75,7 @@ class UndoDeleteNode : public UndoItem
         NodeStyle m_style;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_DELETE_NODE_H

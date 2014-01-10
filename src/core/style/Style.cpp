@@ -24,6 +24,7 @@
 #include <QSet>
 
 namespace tikz {
+namespace core {
 
 // NOTE: these strings have to match the Q_PROPERTY strings, otherise
 //       serialization will not work correctly.
@@ -663,6 +664,7 @@ void Style::unsetRotation()
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

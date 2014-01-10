@@ -6,7 +6,7 @@
 
 #include <Document.h>
 #include <Node.h>
-#include <Edge.h>
+#include <Path.h>
 #include <TikzDocument.h>
 #include <TikzNode.h>
 
@@ -32,7 +32,7 @@ void TikzDocumentTest::documentTest()
 
 //     QCOMPARE(doc.toJson(), QByteArray("[  ]"));
 
-//     tikz::Node * node = doc.createNode();
+//     tikz::core::Node * node = doc.createNode();
 }
 
 // kate: indent-width 4; replace-tabs on;

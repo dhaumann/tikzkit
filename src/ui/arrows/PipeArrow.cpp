@@ -30,7 +30,7 @@ class PipeArrowPrivate
     public:
 };
 
-PipeArrow::PipeArrow(tikz::EdgeStyle * style)
+PipeArrow::PipeArrow(tikz::core::EdgeStyle * style)
     : AbstractArrow(style)
     , d(new PipeArrowPrivate())
 {

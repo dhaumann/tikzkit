@@ -23,6 +23,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetEllipseAnchor::UndoSetEllipseAnchor(qint64 pathId,
                                     Anchor newAnchor,
@@ -66,6 +67,7 @@ void UndoSetEllipseAnchor::redo()
     document()->setUndoActive(wasActive);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

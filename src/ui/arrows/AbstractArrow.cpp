@@ -26,10 +26,10 @@
 class AbstractArrowPrivate
 {
     public:
-        tikz::EdgeStyle* style;
+        tikz::core::EdgeStyle* style;
 };
 
-AbstractArrow::AbstractArrow(tikz::EdgeStyle* style)
+AbstractArrow::AbstractArrow(tikz::core::EdgeStyle* style)
     : d(new AbstractArrowPrivate())
 {
     d->style = style;
@@ -40,7 +40,7 @@ AbstractArrow::~AbstractArrow()
     delete d;
 }
 
-tikz::EdgeStyle* AbstractArrow::style() const
+tikz::core::EdgeStyle* AbstractArrow::style() const
 {
     return d->style;
 }
@@ -98,7 +98,7 @@ QPainterPath AbstractArrow::contour(qreal width) const
 #include "PipeArrow.h"
 #include "StealthTickArrow.h"
 
-AbstractArrow *createArrow(tikz::Arrow type, tikz::EdgeStyle* style)
+AbstractArrow *createArrow(tikz::Arrow type, tikz::core::EdgeStyle* style)
 {
     switch (type) {
         case tikz::NoArrow: return new AbstractArrow(style);

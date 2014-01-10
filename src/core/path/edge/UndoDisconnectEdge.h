@@ -25,8 +25,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoDisconnectEdge : public UndoItem
 {
@@ -78,6 +78,7 @@ class UndoDisconnectEdge : public UndoItem
         QPointF m_redoPos;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_DISCONNECT_EDGE_H

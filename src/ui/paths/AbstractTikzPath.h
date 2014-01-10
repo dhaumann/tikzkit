@@ -29,7 +29,9 @@
 #include <QPainterPath>
 
 namespace tikz {
+namespace core {
     class EdgeStyle;
+}
 }
 
 class QPainter;
@@ -62,9 +64,9 @@ class AbstractTikzPath : public QObject
         TikzDocument * document() const;
 
         /**
-         * Return a the tikz::Path type.
+         * Return a the tikz::core::Path type.
          */
-        virtual tikz::Path::Type type() const = 0;
+        virtual tikz::core::Path::Type type() const = 0;
 
         /**
          * Returns the pointer to the associated Path.
@@ -75,7 +77,7 @@ class AbstractTikzPath : public QObject
          * Get the EdgeStyle of this path.
          * The returned pointer is always valid.
          */
-        tikz::EdgeStyle* style() const;
+        tikz::core::EdgeStyle* style() const;
 
     public:
         /**
@@ -127,7 +129,7 @@ class AbstractTikzPath : public QObject
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
     //
-    // tikz::Node anchor handles
+    // tikz::core::Node anchor handles
     //
     public Q_SLOTS:
         /**
@@ -144,9 +146,9 @@ class AbstractTikzPath : public QObject
     public:
         /**
          * Get the node with anchor for the scene position @p scenePos.
-         * If valid, the returned tikz::MetaPos contains the node and anchor.
+         * If valid, the returned tikz::core::MetaPos contains the node and anchor.
          */
-        tikz::Node * anchorAt(const QPointF & scenePos, tikz::Anchor & anchor);
+        tikz::core::Node * anchorAt(const QPointF & scenePos, tikz::Anchor & anchor);
 
     private:
         AbstractTikzPathPrivate * const d;

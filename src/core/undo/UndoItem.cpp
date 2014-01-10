@@ -21,6 +21,7 @@
 #include "Document.h"
 
 namespace tikz {
+namespace core {
 
 UndoItem::UndoItem(Document * doc)
     : QUndoCommand()
@@ -37,6 +38,7 @@ Document* UndoItem::document()
     return m_document;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

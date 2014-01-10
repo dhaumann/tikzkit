@@ -23,6 +23,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoConnectEllipse::UndoConnectEllipse(qint64 pathId,
                                        qint64 nodeId,
@@ -91,6 +92,7 @@ void UndoConnectEllipse::redo()
     document()->setUndoActive(wasActive);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

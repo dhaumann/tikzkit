@@ -23,8 +23,8 @@
 #include "UndoItem.h"
 #include "tikz.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoSetEdgeAnchor : public UndoItem
 {
@@ -71,6 +71,7 @@ class UndoSetEdgeAnchor : public UndoItem
         bool m_isStart;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_EDGE_ANCHOR_H

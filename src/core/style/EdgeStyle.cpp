@@ -20,6 +20,7 @@
 #include "EdgeStyle.h"
 
 namespace tikz {
+namespace core {
 
 static const char * s_radiusX = "radiusX";
 static const char * s_radiusY = "radiusY";
@@ -511,6 +512,7 @@ void EdgeStyle::unsetShortenEnd()
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

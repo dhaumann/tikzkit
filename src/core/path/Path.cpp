@@ -25,6 +25,7 @@
 #include "UndoSetPathStyle.h"
 
 namespace tikz {
+namespace core {
 
 class PathPrivate
 {
@@ -86,7 +87,7 @@ qint64 Path::id() const
     return d->id;
 }
 
-bool Path::accept(tikz::Visitor & visitor)
+bool Path::accept(Visitor & visitor)
 {
     visitor.visit(this);
 }
@@ -242,6 +243,7 @@ void Path::emitChangedIfNeeded()
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -22,6 +22,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * doc)
     : UndoItem(doc)
@@ -78,6 +79,7 @@ bool UndoSetNodeText::mergeWith(const QUndoCommand * command)
     return other;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

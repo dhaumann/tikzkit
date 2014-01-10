@@ -28,8 +28,8 @@
 #include <QString>
 #include <QVariant>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class NodePrivate;
 class NodeStyle;
@@ -70,7 +70,7 @@ class TIKZCORE_EXPORT Node : public Coord
          * Visitor pattern.
          * Visits all elements of the document.
          */
-        bool accept(tikz::Visitor & visitor);
+        bool accept(Visitor & visitor);
 
     //
     // position, style and text
@@ -163,6 +163,7 @@ class TIKZCORE_EXPORT Node : public Coord
         NodePrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_NODE_H

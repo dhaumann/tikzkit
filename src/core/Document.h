@@ -30,8 +30,8 @@
 class QUndoStack;
 class QPointF;
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class DocumentPrivate;
 class Style;
@@ -64,7 +64,7 @@ class TIKZCORE_EXPORT Document : public QObject
          * Visitor pattern.
          * Visits all elements of the document.
          */
-        bool accept(tikz::Visitor & visitor);
+        bool accept(Visitor & visitor);
 
     public Q_SLOTS:
         /**
@@ -195,14 +195,14 @@ class TIKZCORE_EXPORT Document : public QObject
          * If the path is not needed anymore, delete it with deletePath().
          * @param type the path type
          */
-        Path * createPath(Path::Type type = Path::Line);
+        Path * createPath(tikz::core::Path::Type type = Path::Line);
 
         /**
          * Remove @p path from the document by deleting the path object.
          * Afterwards, the pointer is invalid.
          * @param path path to delete
          */
-        void deletePath(Path * path);
+        void deletePath(tikz::core::Path * path);
 
     //
     // internal: Undo / redo items manipulate with ID
@@ -248,6 +248,7 @@ class TIKZCORE_EXPORT Document : public QObject
         friend class UndoDeletePath;
 };
 
+}
 }
 
 #endif // TIKZ_DOCUMENT_H

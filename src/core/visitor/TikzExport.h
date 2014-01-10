@@ -23,8 +23,8 @@
 #include <QVector>
 #include <QString>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class TikzLine
 {
@@ -80,6 +80,7 @@ class TikzExport
         QVector<TikzLine> m_lines;
 };
 
+}
 }
 
 #endif // TIKZ_EXPORTER_H

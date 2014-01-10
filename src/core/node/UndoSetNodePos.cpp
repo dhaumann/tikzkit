@@ -22,6 +22,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetNodePos::UndoSetNodePos(qint64 id, const QPointF & newPos, Document * doc)
     : UndoItem(doc)
@@ -78,6 +79,7 @@ bool UndoSetNodePos::mergeWith(const QUndoCommand * command)
     return other != 0;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

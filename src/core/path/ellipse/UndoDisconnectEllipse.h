@@ -25,8 +25,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoDisconnectEllipse : public UndoItem
 {
@@ -73,6 +73,7 @@ class UndoDisconnectEllipse : public UndoItem
         QPointF m_redoPos;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_DISCONNECT_ELLIPSE_H

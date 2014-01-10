@@ -21,7 +21,7 @@
 
 #include "Document.h"
 #include "Node.h"
-#include "Edge.h"
+#include "Path.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -33,8 +33,8 @@
 
 #include <qjson/serializer.h>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 SerializeVisitor::SerializeVisitor()
     : Visitor()
@@ -58,7 +58,7 @@ bool SerializeVisitor::save(const QString & filename)
     // build final tree
     QVariantMap root = m_root;
     root.insert("nodes", m_nodes);
-    root.insert("edges", m_edges);
+    root.insert("paths", m_paths);
     root.insert("node-styles", m_nodeStyles);
     root.insert("edge-styles", m_edgeStyles);
 
@@ -85,7 +85,7 @@ bool SerializeVisitor::save(const QString & filename)
     return true;
 }
 
-void SerializeVisitor::visit(tikz::Document * doc)
+void SerializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list;
@@ -110,7 +110,7 @@ void SerializeVisitor::visit(tikz::Document * doc)
     m_root.insert("document-style", docStyle);
 }
 
-void SerializeVisitor::visit(tikz::Node * node)
+void SerializeVisitor::visit(Node * node)
 {
     QVariantMap map;
     
@@ -128,7 +128,7 @@ void SerializeVisitor::visit(tikz::Node * node)
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
-void SerializeVisitor::visit(tikz::Edge * edge)
+void SerializeVisitor::visit(Path * path)
 {
     QVariantMap map;
 // FIXME
@@ -156,19 +156,19 @@ void SerializeVisitor::visit(tikz::Edge * edge)
     styleMap.insert("properties", serializeStyle(edge->style()));
     map.insert("style", styleMap);
 
-    m_edges.insert(QString("edge-%1").arg(edge->id()), map);
+    m_paths.insert(QString("edge-%1").arg(edge->id()), map);
 #endif
 }
 
-void SerializeVisitor::visit(tikz::NodeStyle * style)
+void SerializeVisitor::visit(NodeStyle * style)
 {
 }
 
-void SerializeVisitor::visit(tikz::EdgeStyle * style)
+void SerializeVisitor::visit(EdgeStyle * style)
 {
 }
 
-QVariantMap SerializeVisitor::serializeStyle(tikz::Style * style)
+QVariantMap SerializeVisitor::serializeStyle(Style * style)
 {
     QVariantMap map;
 
@@ -210,6 +210,7 @@ QVariantMap SerializeVisitor::serializeStyle(tikz::Style * style)
     return map;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

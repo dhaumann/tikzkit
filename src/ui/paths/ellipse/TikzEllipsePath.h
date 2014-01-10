@@ -28,7 +28,9 @@
 #include <QPointer>
 
 namespace tikz {
+namespace core {
     class EllipsePath;
+}
 }
 
 class QPainter;
@@ -59,9 +61,9 @@ class TikzEllipsePath : public AbstractTikzPath
         TikzDocument * document() const;
 
         /**
-         * Return the tikz::Path::Type type.
+         * Return the tikz::core::Path::Type type.
          */
-        tikz::Path::Type type() const override;
+        tikz::core::Path::Type type() const override;
 
         /**
          * Set the node to @p node.
@@ -124,11 +126,11 @@ class TikzEllipsePath : public AbstractTikzPath
         void slotUpdate();
 
         /**
-         * This function is called whenever the tikz::EllipsePath::setNode()
+         * This function is called whenever the tikz::core::EllipsePath::setNode()
          * changes. This is required, since otherwise the model is updated,
          * without the TikzPath being notified.
          */
-        void updateNode(tikz::Node * node);
+        void updateNode(tikz::core::Node * node);
 
     private Q_SLOTS:
         /**
@@ -138,9 +140,9 @@ class TikzEllipsePath : public AbstractTikzPath
 
     private:
         /**
-         * Returns the tikz::Path object, casted to tikz::EllipsePath
+         * Returns the tikz::core::Path object, casted to tikz::core::EllipsePath
          */
-        tikz::EllipsePath * ellipsePath() const;
+        tikz::core::EllipsePath * ellipsePath() const;
 
     private:
         // the TikzNode this ellipse possibly is anchored at

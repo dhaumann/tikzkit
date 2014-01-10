@@ -25,6 +25,7 @@
 #include <QPointF>
 
 namespace tikz {
+namespace core {
 
 class Document;
 class EdgeStylePrivate;
@@ -347,6 +348,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         EdgeStylePrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_EDGE_STYLE_H

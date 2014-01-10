@@ -24,7 +24,9 @@
 #include <QPen>
 
 namespace tikz {
+namespace core{
     class Style;
+}
 }
 
 class PaintHelperPrivate;
@@ -35,7 +37,7 @@ class PaintHelper
         /**
          * Default constructor.
          */
-        PaintHelper(QPainter * p, tikz::Style * style);
+        PaintHelper(QPainter * p, tikz::core::Style * style);
 
         /**
          * Destructor

@@ -32,7 +32,7 @@ class TikzPath;
 
 class TikzDocumentPrivate;
 
-class TIKZGUI_EXPORT TikzDocument : public tikz::Document
+class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
 {
     Q_OBJECT
 
@@ -89,7 +89,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
          * If the path is not needed anymore, delete it by
          * calling deleteTikzPath(tikzPath).
          */
-        TikzPath * createTikzPath(tikz::Path::Type type = tikz::Path::Line);
+        TikzPath * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
 
         /**
          * Remove @p node from the document by deleting the node object.
@@ -126,7 +126,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         /**
          * Create a new node associated with this document with @p id.
          */
-        tikz::Node * createNode(qint64 id) override;
+        tikz::core::Node * createNode(qint64 id) override;
 
         /**
          * Delete node @p id associated with this document.
@@ -136,7 +136,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::Document
         /**
          * Create a new path associated with this document with @p id.
          */
-        tikz::Path * createPath(tikz::Path::Type type, qint64 id) override;
+        tikz::core::Path * createPath(tikz::core::Path::Type type, qint64 id) override;
 
         /**
          * Delete path @p id associated with this document.

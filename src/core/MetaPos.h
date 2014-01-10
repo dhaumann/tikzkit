@@ -25,8 +25,8 @@
 #include <QObject>
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class MetaPosPrivate;
 class Node;
@@ -114,6 +114,7 @@ class MetaPos : public QObject
         MetaPosPrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_METAPOS_H

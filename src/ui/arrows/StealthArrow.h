@@ -27,7 +27,7 @@ class StealthArrowPrivate;
 class StealthArrow : public AbstractArrow
 {
     public:
-        StealthArrow(tikz::EdgeStyle* style);
+        StealthArrow(tikz::core::EdgeStyle* style);
         virtual ~StealthArrow();
 
     //
@@ -82,7 +82,7 @@ class StealthArrow : public AbstractArrow
 class ReversedStealthArrow : public StealthArrow
 {
 public:
-    ReversedStealthArrow(tikz::EdgeStyle * style);
+    ReversedStealthArrow(tikz::core::EdgeStyle * style);
 
 public:
     virtual tikz::Arrow type() const;

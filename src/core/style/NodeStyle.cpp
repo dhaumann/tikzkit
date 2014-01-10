@@ -20,6 +20,7 @@
 #include "NodeStyle.h"
 
 namespace tikz {
+namespace core {
 
 static const char * s_align = "align";
 static const char * s_shape = "shape";
@@ -340,5 +341,5 @@ void NodeStyle::unsetMinimumWidth()
 }
 
 }
-
+}
 // kate: indent-width 4; replace-tabs on;

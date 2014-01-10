@@ -26,7 +26,6 @@
 #include "EdgeStyle.h"
 #include "TikzToolBox.h"
 #include "tikz.h"
-#include <Edge.h>
 #include <Path.h>
 
 #include <ArrowComboBox.h>
@@ -125,7 +124,7 @@ MainWindow::MainWindow()
     item2->node()->setText("$\\Leftrightarrow$");
 
     // an path
-    TikzPath* path = m_doc->createTikzPath(tikz::Path::Ellipse);
+    TikzPath* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
     path->path()->style()->setRadiusX(2.0);
     path->path()->style()->setRadiusY(1.0);
 //     path->setStartNode(item1);

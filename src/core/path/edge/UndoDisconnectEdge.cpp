@@ -23,6 +23,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoDisconnectEdge::UndoDisconnectEdge(qint64 pathId, qint64 nodeId, bool isStartNode, Document * doc)
     : UndoItem(doc)
@@ -89,6 +90,7 @@ void UndoDisconnectEdge::redo()
     document()->setUndoActive(wasActive);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

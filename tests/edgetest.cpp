@@ -4,7 +4,7 @@
 
 #include "Coord.h"
 #include "Node.h"
-#include "Edge.h"
+#include "Path.h"
 #include "Document.h"
 
 QTEST_MAIN(EdgeTest)
@@ -22,8 +22,8 @@ void EdgeTest::cleanupTestCase()
 void EdgeTest::edgeTest()
 {
 #if  0
-    tikz::Document doc;
-    tikz::Edge * edge = doc.createEdge();
+    tikz::core::Document doc;
+    tikz::core::Path * path = doc.createPath();
 
     QCOMPARE(edge->start().pos(), QPointF(0, 0));
     QCOMPARE(edge->end().pos(), QPointF(0, 0));
@@ -33,7 +33,7 @@ void EdgeTest::edgeTest()
     QCOMPARE(edge->end().pos(), QPointF(0, 0));
 
     {
-        tikz::Node * node = doc.createNode();
+        tikz::core::Node * node = doc.createNode();
         node->setPos(QPointF(2, 2));
         QCOMPARE(node->pos(), QPointF(2, 2));
 

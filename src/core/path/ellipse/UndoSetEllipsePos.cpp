@@ -22,6 +22,7 @@
 #include "EllipsePath.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetEllipsePos::UndoSetEllipsePos(qint64 pathId,
                                      const QPointF & newPos,
@@ -66,5 +67,5 @@ void UndoSetEllipsePos::redo()
 }
 
 }
-
+}
 // kate: indent-width 4; replace-tabs on;

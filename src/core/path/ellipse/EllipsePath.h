@@ -24,8 +24,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Coord;
@@ -49,7 +49,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         virtual ~EllipsePath();
 
         /**
-         * Returns type tikz::Path::Ellipse.
+         * Returns type tikz::core::Path::Ellipse.
          */
         Path::Type type() const override;
 
@@ -115,7 +115,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * This signal is emitted whenever the node of this ellipse changes.
          * @param node may be 0
          */
-        void nodeChanged(tikz::Node * node);
+        void nodeChanged(tikz::core::Node * node);
 
     //
     // internal to tikz::Document
@@ -153,6 +153,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         EllipsePathPrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_ELLIPSE_PATH_H

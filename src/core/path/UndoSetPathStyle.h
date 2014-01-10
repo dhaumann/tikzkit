@@ -23,8 +23,8 @@
 #include "UndoItem.h"
 #include <EdgeStyle.h>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -79,6 +79,7 @@ class UndoSetPathStyle : public UndoItem
         EdgeStyle m_redoStyle;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_PATH_STYLE_H

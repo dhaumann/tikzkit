@@ -24,8 +24,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Coord;
@@ -155,16 +155,16 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * This signal is emitted whenever the start node of this edge changes.
          * The node @p start may be 0.
          */
-        void startNodeChanged(tikz::Node * start);
+        void startNodeChanged(tikz::core::Node * start);
 
         /**
          * This signal is emitted whenever the end node of this edge changes.
          * The node @p start may be 0.
          */
-        void endNodeChanged(tikz::Node * start);
+        void endNodeChanged(tikz::core::Node * start);
 
     //
-    // internal to tikz::Document
+    // internal to tikz::core::Document
     //
     protected:
         friend class Document;
@@ -199,6 +199,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
         EdgePathPrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_EDGE_PATH_H

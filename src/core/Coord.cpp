@@ -21,6 +21,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 class CoordPrivate
 {
@@ -64,6 +65,7 @@ bool Coord::operator!=(const Coord& other) const
     return d->pos != other.d->pos;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

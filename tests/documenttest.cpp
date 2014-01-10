@@ -6,7 +6,7 @@
 
 #include "Document.h"
 #include "Node.h"
-#include "Edge.h"
+#include "Path.h"
 
 QTEST_MAIN(DocumentTest)
 
@@ -23,11 +23,11 @@ void DocumentTest::cleanupTestCase()
 void DocumentTest::documentTest()
 {
 #if 0
-    tikz::Document doc;
+    tikz::core::Document doc;
 
     QCOMPARE(doc.toJson(), QByteArray("[  ]"));
 
-    tikz::Node * node = doc.createNode();
+    tikz::core::Node * node = doc.createNode();
     QCOMPARE(QString(doc.toJson()), QString("[ { \"node\" : 1 } ]"));
 
     node = doc.createNode();
@@ -39,7 +39,7 @@ void DocumentTest::documentTest()
     doc.undoManager()->redo();
     QCOMPARE(QString(doc.toJson()), QString("[ { \"node\" : 1 }, { \"node\" : 2 } ]"));
 
-    tikz::Edge * edge = doc.createEdge();
+    tikz::core::Path * path = doc.createPath();
     QCOMPARE(QString(doc.toJson()), QString("[ { \"node\" : 1 }, { \"node\" : 2 }, { \"edge\" : 3 } ]"));
 
     edge->setStartNode(doc.nodeFromId(1));

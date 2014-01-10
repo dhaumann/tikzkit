@@ -107,7 +107,7 @@ void EllipseTool::updateHandlePositions()
 
 QPointF EllipseTool::handlePos(Handle::Position pos)
 {
-    const QPointF c = static_cast<tikz::EllipsePath*>(m_path->path())->pos();
+    const QPointF c = static_cast<tikz::core::EllipsePath*>(m_path->path())->pos();
     const qreal w = m_path->style()->radiusX();
     const qreal h = m_path->style()->radiusY();
     QPointF p(0, 0);
@@ -138,11 +138,11 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
     // rotate
     //
     if (handle->handleType() == Handle::RotateHandle) {
-        const QPointF delta = static_cast<tikz::EllipsePath*>(m_path->path())->pos() - scenePos;
+        const QPointF delta = static_cast<tikz::core::EllipsePath*>(m_path->path())->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
-        tikz::EdgeStyle s;
+        tikz::core::EdgeStyle s;
         s.setStyle(*m_path->style());
         s.setRotation(deg);
 
@@ -164,7 +164,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
 //         showAnchors(scenePos);
 //
 //         tikz::Anchor anchor;
-//         tikz::Node * node = anchorAt(scenePos, anchor);
+//         tikz::core::Node * node = anchorAt(scenePos, anchor);
 // //         qDebug() << node << anchor;
 //         if (node) {
 //             ellipsePath()->beginConfig();
@@ -176,7 +176,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
 //         }
 //         return;
 
-        static_cast<tikz::EllipsePath*>(m_path->path())->setPos(p);
+        static_cast<tikz::core::EllipsePath*>(m_path->path())->setPos(p);
         return;
     }
 
@@ -187,7 +187,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
     t.rotate(-m_path->style()->rotation());
 
     // honor rotation of path
-    const QPointF delta = t.map(static_cast<tikz::EllipsePath*>(m_path->path())->pos() - scenePos);
+    const QPointF delta = t.map(static_cast<tikz::core::EllipsePath*>(m_path->path())->pos() - scenePos);
     qreal w = m_path->style()->radiusX();
     qreal h = m_path->style()->radiusY();
 
@@ -228,7 +228,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
     w = qAbs(w);
     h = qAbs(h);
 
-    tikz::EdgeStyle s;
+    tikz::core::EdgeStyle s;
     s.setStyle(*m_path->style());
     s.setRadiusX(w);
     s.setRadiusY(h);

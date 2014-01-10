@@ -24,8 +24,8 @@
 
 #include "Path.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Document;
 
@@ -64,6 +64,7 @@ class UndoCreatePath : public UndoItem
         const Path::Type m_type;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_CREATE_PATH_H

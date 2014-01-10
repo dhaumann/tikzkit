@@ -90,18 +90,18 @@ void ProxyTool::updateTool()
             m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
         } else if (dynamic_cast<TikzPath*>(items[0])) {
             TikzPath * path = static_cast<TikzPath *>(items[0]);
-            const tikz::Path::Type type = path->path()->type();
+            const tikz::core::Path::Type type = path->path()->type();
             switch (type) {
-                case tikz::Path::Line: break;
-                case tikz::Path::HVLine: break;
-                case tikz::Path::VHLine: break;
-                case tikz::Path::BendCurve: break;
-                case tikz::Path::InOutCurve: break;
-                case tikz::Path::BezierCurve: break;
-                case tikz::Path::Ellipse: m_tool = new EllipseTool(static_cast<TikzPath *>(items[0]), scene()); break;
-                case tikz::Path::Rectangle: break;
-                case tikz::Path::Grid: break;
-                case tikz::Path::Invalid: break;
+                case tikz::core::Path::Line: break;
+                case tikz::core::Path::HVLine: break;
+                case tikz::core::Path::VHLine: break;
+                case tikz::core::Path::BendCurve: break;
+                case tikz::core::Path::InOutCurve: break;
+                case tikz::core::Path::BezierCurve: break;
+                case tikz::core::Path::Ellipse: m_tool = new EllipseTool(static_cast<TikzPath *>(items[0]), scene()); break;
+                case tikz::core::Path::Rectangle: break;
+                case tikz::core::Path::Grid: break;
+                case tikz::core::Path::Invalid: break;
                 default: Q_ASSERT(false);
             }
         }

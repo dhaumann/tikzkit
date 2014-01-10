@@ -34,6 +34,7 @@
 #include <QUndoStack>
 
 namespace tikz {
+namespace core {
 
 class EdgePrivate
 {
@@ -330,6 +331,7 @@ void Edge::emitChangedIfNeeded()
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

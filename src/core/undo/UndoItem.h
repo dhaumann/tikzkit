@@ -22,8 +22,8 @@
 
 #include <QUndoCommand>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Edge;
@@ -54,6 +54,7 @@ class UndoItem : public QUndoCommand
         Document* m_document;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_ITEM_H

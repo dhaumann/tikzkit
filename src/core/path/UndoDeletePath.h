@@ -24,8 +24,8 @@
 #include "Path.h"
 #include "EdgeStyle.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoDeletePath : public UndoItem
 {
@@ -67,6 +67,7 @@ class UndoDeletePath : public UndoItem
         EdgeStyle m_style;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_DELETE_PATH_H

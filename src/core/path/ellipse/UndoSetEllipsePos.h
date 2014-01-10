@@ -25,8 +25,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoSetEllipsePos : public UndoItem
 {
@@ -68,6 +68,7 @@ class UndoSetEllipsePos : public UndoItem
         QPointF m_redoPos;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_ELLIPSE_POS_H

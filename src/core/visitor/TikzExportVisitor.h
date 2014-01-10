@@ -26,18 +26,18 @@
 #include <QVector>
 #include <QString>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Document;
 class Style;
 class Node;
-class Edge;
+class Path;
 class NodeStyle;
 class EdgeStyle;
 
 /**
- * Visitor exporint the tikz::Document to PGF/TikZ.
+ * Visitor exporint the tikz::core::Document to PGF/TikZ.
  */
 class TikzExportVisitor : public Visitor
 {
@@ -57,7 +57,7 @@ class TikzExportVisitor : public Visitor
     //
     public:
         /**
-         * Convert the tikz::Document to tikzCode.
+         * Convert the tikz::core::Document to tikzCode.
          */
         QString tikzCode();
 
@@ -68,35 +68,35 @@ class TikzExportVisitor : public Visitor
         /**
          * Serializes document @p doc document.
          */
-        virtual void visit(tikz::Document * doc) override;
+        virtual void visit(Document * doc) override;
 
         /**
          * Serializes @p node.
          */
-        virtual void visit(tikz::Node * node) override;
+        virtual void visit(Node * node) override;
 
         /**
-         * Serializes @p edge.
+         * Serializes @p path.
          */
-        virtual void visit(tikz::Edge * edge) override;
-
-        /**
-         * Serializes @p style.
-         */
-        virtual void visit(tikz::NodeStyle * style) override;
+        virtual void visit(Path * path) override;
 
         /**
          * Serializes @p style.
          */
-        virtual void visit(tikz::EdgeStyle * style) override;
+        virtual void visit(NodeStyle * style) override;
+
+        /**
+         * Serializes @p style.
+         */
+        virtual void visit(EdgeStyle * style) override;
 
     //
     // helper functions
     //
     private:
-        QStringList styleOptions(tikz::Style * style);
-        QStringList edgeStyleOptions(tikz::EdgeStyle * style);
-        QStringList nodeStyleOptions(tikz::NodeStyle * style);
+        QStringList styleOptions(Style * style);
+        QStringList edgeStyleOptions(EdgeStyle * style);
+        QStringList nodeStyleOptions(NodeStyle * style);
         
 
     //
@@ -106,6 +106,7 @@ class TikzExportVisitor : public Visitor
         TikzExport m_tikzExport;
 };
 
+}
 }
 
 #endif // TIKZ_EXPORT_VISITOR_H

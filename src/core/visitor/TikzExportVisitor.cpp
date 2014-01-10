@@ -21,7 +21,7 @@
 
 #include "Document.h"
 #include "Node.h"
-#include "Edge.h"
+#include "Path.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -31,8 +31,8 @@
 #include <QFile>
 #include <QDebug>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 static QString colorToString(const QColor & color)
 {
@@ -94,7 +94,7 @@ QString TikzExportVisitor::tikzCode()
     return m_tikzExport.tikzCode();
 }
 
-void TikzExportVisitor::visit(tikz::Document * doc)
+void TikzExportVisitor::visit(Document * doc)
 {
     //
     // export the global options for the tikzpicture
@@ -103,7 +103,7 @@ void TikzExportVisitor::visit(tikz::Document * doc)
     m_tikzExport.setDocumentOptions(options.join(", "));
 }
 
-void TikzExportVisitor::visit(tikz::Node * node)
+void TikzExportVisitor::visit(Node * node)
 {
     QString cmd = QString("\\node[%1] (%2) at (%3, %4) {%5};")
         .arg(nodeStyleOptions(node->style()).join(", "))
@@ -120,10 +120,11 @@ void TikzExportVisitor::visit(tikz::Node * node)
     m_tikzExport.addTikzLine(line);
 }
 
-void TikzExportVisitor::visit(tikz::Edge * edge)
+void TikzExportVisitor::visit(Path * path)
 {
-    QString options = edgeStyleOptions(edge->style()).join(", ");
+    QString options = edgeStyleOptions(path->style()).join(", ");
 
+#if 0
     //
     // \draw startCoord -- endCoord;
     //
@@ -133,11 +134,11 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     //
     // compute start
     //
-    if (edge->startNode()) {
-        QString anchor = anchorToString(edge->startAnchor());
-        startCoord = "(" + QString::number(edge->startNode()->id()) + anchor + ")";
+    if (path->startNode()) {
+        QString anchor = anchorToString(path->startAnchor());
+        startCoord = "(" + QString::number(path->startNode()->id()) + anchor + ")";
     } else {
-        const QPointF & pos = edge->startPos();
+        const QPointF & pos = path->startPos();
         startCoord = QString("(%1, %2)")
             .arg(pos.x())
             .arg(pos.y());
@@ -146,11 +147,11 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     //
     // compute end
     //
-    if (edge->endNode()) {
-        QString anchor = anchorToString(edge->endAnchor());
-        endCoord = "(" + QString::number(edge->endNode()->id()) + anchor + ")";
+    if (path->endNode()) {
+        QString anchor = anchorToString(path->endAnchor());
+        endCoord = "(" + QString::number(path->endNode()->id()) + anchor + ")";
     } else {
-        const QPointF & pos = edge->endPos();
+        const QPointF & pos = path->endPos();
         endCoord = QString("(%1, %2)")
             .arg(pos.x())
             .arg(pos.y());
@@ -160,13 +161,13 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     // build connection string
     //
     QString to;
-    switch (edge->type()) {
-        case Edge::Type::LineTo: to = "--"; break;
-        case Edge::Type::HVLineTo: to = "-|"; break;
-        case Edge::Type::VHLineTo: to = "|-"; break;
-        case Edge::Type::BendCurve: to = "to"; break;
-        case Edge::Type::InOutCurve: to = "to"; break;
-        case Edge::Type::BezierCurve: to = "to"; break; // TODO: implement correctly
+    switch (path->type()) {
+        case Path::Type::Line: to = "--"; break;
+        case Path::Type::HVLine: to = "-|"; break;
+        case Path::Type::VHLine: to = "|-"; break;
+        case Path::Type::BendCurve: to = "to"; break;
+        case Path::Type::InOutCurve: to = "to"; break;
+        case Path::Type::BezierCurve: to = "to"; break; // TODO: implement correctly
         default: break;
     }
 
@@ -180,22 +181,23 @@ void TikzExportVisitor::visit(tikz::Edge * edge)
     cmd += "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
 
     //
-    // finally add edge to picture
+    // finally add path to picture
     //
     TikzLine line;
     line.contents = cmd;
     m_tikzExport.addTikzLine(line);
+#endif
 }
 
-void TikzExportVisitor::visit(tikz::NodeStyle * style)
+void TikzExportVisitor::visit(NodeStyle * style)
 {
 }
 
-void TikzExportVisitor::visit(tikz::EdgeStyle * style)
+void TikzExportVisitor::visit(EdgeStyle * style)
 {
 }
 
-QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
+QStringList TikzExportVisitor::styleOptions(Style * style)
 {
     QStringList options;
 
@@ -281,9 +283,9 @@ QStringList TikzExportVisitor::styleOptions(tikz::Style * style)
     return options;
 }
 
-QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
+QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
 {
-    QStringList options = styleOptions(style);;
+    QStringList options = styleOptions(style);
 
     //
     // export arrow tail
@@ -392,7 +394,7 @@ QStringList TikzExportVisitor::edgeStyleOptions(tikz::EdgeStyle * style)
     return options;
 }
 
-QStringList TikzExportVisitor::nodeStyleOptions(tikz::NodeStyle * style)
+QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
 {
     QStringList options = styleOptions(style);
 
@@ -466,6 +468,7 @@ QStringList TikzExportVisitor::nodeStyleOptions(tikz::NodeStyle * style)
     return options;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

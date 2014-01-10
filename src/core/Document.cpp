@@ -40,6 +40,7 @@
 #include <qjson/serializer.h>
 
 namespace tikz {
+namespace core {
 
 class DocumentPrivate
 {
@@ -104,7 +105,7 @@ Document::~Document()
     delete d;
 }
 
-bool Document::accept(tikz::Visitor & visitor)
+bool Document::accept(Visitor & visitor)
 {
     // visit this document
     visitor.visit(this);
@@ -152,7 +153,7 @@ bool Document::load(const QString & file)
     clear();
 
     // open the file contents
-    tikz::DeserializeVisitor dv;
+    DeserializeVisitor dv;
     if (dv.load(file)) {
         accept(dv);
         return true;
@@ -162,7 +163,7 @@ bool Document::load(const QString & file)
 
 bool Document::save(const QString & file)
 {
-    tikz::SerializeVisitor sv;
+    SerializeVisitor sv;
     accept(sv);
 
     sv.save(file);
@@ -171,7 +172,7 @@ bool Document::save(const QString & file)
 
 QString Document::tikzCode()
 {
-    tikz::TikzExportVisitor tev;
+    TikzExportVisitor tev;
     accept(tev);
 
     return tev.tikzCode();
@@ -399,6 +400,7 @@ Path * Document::pathFromId(qint64 id)
     return d->pathMap[id];
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -21,8 +21,8 @@
 
 #include <QDebug>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 TikzExport::TikzExport()
 {
@@ -70,6 +70,7 @@ void TikzExport::addTikzLine(const TikzLine & line)
     m_lines.append(line);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

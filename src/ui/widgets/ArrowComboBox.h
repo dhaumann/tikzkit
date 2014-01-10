@@ -45,7 +45,7 @@ class TIKZGUI_EXPORT ArrowComboBox : public QWidget
         /**
          * Set the currently worked on edge style to @p style.
          */
-//         void setStyle(tikz::EdgeStyle * style);
+//         void setStyle(tikz::core::EdgeStyle * style);
 
     private:
         ArrowComboBoxPrivate * const d;

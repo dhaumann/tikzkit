@@ -18,7 +18,6 @@ include_directories(
 set(qtikzcore_SOURCES
     Coord.cpp
     Value.cpp
-    Edge.cpp
     node/Node.cpp
     MetaPos.cpp
     Document.cpp
@@ -62,7 +61,6 @@ set(qtikzcore_HEADERS
     Coord.h
     node/Node.h
     MetaPos.h
-    Edge.h
 
     path/Path.h
     path/edge/EdgePath.h

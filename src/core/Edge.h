@@ -26,8 +26,8 @@
 #include "tikz_export.h"
 #include "tikz.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class EdgePrivate;
 class Coord;
@@ -91,7 +91,7 @@ class TIKZCORE_EXPORT Edge : public QObject
          * Visitor pattern.
          * Visits all elements of the document.
          */
-        bool accept(tikz::Visitor & visitor);
+        bool accept(Visitor & visitor);
 
     //
     // Node start / end manipulation
@@ -273,6 +273,7 @@ class TIKZCORE_EXPORT Edge : public QObject
         EdgePrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_EDGE_H

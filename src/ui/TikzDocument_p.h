@@ -54,12 +54,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * The associated TikzDocument.
          */
-        TikzDocument * tikzDoc;
-
-        /**
-         * The associated tikz Document.
-         */
-        tikz::Document * doc;
+        TikzDocument * tikzDoc; // FIXME: tikzDoc needed nowhere! remove?
 
         /**
          * List of TikzNode%s.

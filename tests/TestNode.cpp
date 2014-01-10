@@ -36,8 +36,8 @@ void NodeTest::cleanupTestCase()
 
 void NodeTest::testCoord()
 {
-    tikz::Document doc;
-    tikz::Node * n = doc.createNode();
+    tikz::core::Document doc;
+    tikz::core::Node * n = doc.createNode();
 
     // initially (0, 0)
     QCOMPARE(n->pos(), QPointF(0, 0));
@@ -52,7 +52,7 @@ void NodeTest::testCoord()
     QCOMPARE(m_pos, QPointF(1, 1));
 
     // test operators
-    tikz::Coord c2;
+    tikz::core::Coord c2;
     QVERIFY(*n != c2);
 
     c2.setPos(n->pos());

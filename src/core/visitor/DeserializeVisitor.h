@@ -23,18 +23,18 @@
 #include "Visitor.h"
 #include <QVariantMap>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Document;
 class Style;
 class Node;
-class Edge;
+class Path;
 class NodeStyle;
 class EdgeStyle;
 
 /**
- * Deserializes a tikz::Document from a json file.
+ * Deserializes a tikz::core::Document from a json file.
  */
 class DeserializeVisitor : public Visitor
 {
@@ -66,33 +66,33 @@ class DeserializeVisitor : public Visitor
         /**
          * Serializes document @p doc document.
          */
-        virtual void visit(tikz::Document * doc) override;
+        virtual void visit(Document * doc) override;
 
         /**
          * Serializes @p node.
          */
-        virtual void visit(tikz::Node * node) override;
+        virtual void visit(Node * node) override;
 
         /**
-         * Serializes @p edge.
+         * Serializes @p path.
          */
-        virtual void visit(tikz::Edge * edge) override;
-
-        /**
-         * Serializes @p style.
-         */
-        virtual void visit(tikz::NodeStyle * style) override;
+        virtual void visit(Path * path) override;
 
         /**
          * Serializes @p style.
          */
-        virtual void visit(tikz::EdgeStyle * style) override;
+        virtual void visit(NodeStyle * style) override;
+
+        /**
+         * Serializes @p style.
+         */
+        virtual void visit(EdgeStyle * style) override;
 
     //
     // helper functions
     //
     private:
-        void deserializeStyle(tikz::Style * style, const QVariantMap & map);
+        void deserializeStyle(Style * style, const QVariantMap & map);
 
     //
     // private data
@@ -100,11 +100,12 @@ class DeserializeVisitor : public Visitor
     private:
         QVariantMap m_root;
         QVariantMap m_nodes;
-        QVariantMap m_edges;
+        QVariantMap m_paths;
         QVariantMap m_nodeStyles;
         QVariantMap m_edgeStyles;
 };
 
+}
 }
 
 #endif // TIKZ_DESERIALIZE_VISITOR_H

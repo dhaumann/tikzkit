@@ -19,8 +19,8 @@
 
 #include "Visitor.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 Visitor::Visitor()
 {
@@ -30,6 +30,7 @@ Visitor::~Visitor()
 {
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

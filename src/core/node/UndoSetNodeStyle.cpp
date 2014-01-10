@@ -23,6 +23,7 @@
 #include "Document.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc)
     : UndoItem(doc)
@@ -80,6 +81,7 @@ bool UndoSetNodeStyle::mergeWith(const QUndoCommand * command)
     return otherStyle;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

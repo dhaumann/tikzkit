@@ -21,6 +21,7 @@
 #include "Document.h"
 
 namespace tikz {
+namespace core {
 
 UndoCreatePath::UndoCreatePath(Path::Type type, qint64 id, Document * doc)
     : UndoItem(doc)
@@ -43,6 +44,7 @@ void UndoCreatePath::redo()
     document()->createPath(m_type, m_id);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -23,6 +23,7 @@
 #include "Node.h"
 
 namespace tikz {
+namespace core {
 
 UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
     : UndoItem(doc)
@@ -59,6 +60,7 @@ void UndoDeletePath::redo()
     document()->deletePath(m_id);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

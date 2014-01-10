@@ -30,6 +30,7 @@
 #include "UndoSetEllipsePos.h"
 
 namespace tikz {
+namespace core {
 
 class EllipsePathPrivate
 {
@@ -156,6 +157,7 @@ void EllipsePath::setAnchor(tikz::Anchor anchor)
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

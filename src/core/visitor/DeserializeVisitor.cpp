@@ -21,7 +21,7 @@
 
 #include "Document.h"
 #include "Node.h"
-#include "Edge.h"
+#include "Path.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -33,8 +33,8 @@
 
 #include <qjson/parser.h>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 DeserializeVisitor::DeserializeVisitor()
     : Visitor()
@@ -72,12 +72,12 @@ bool DeserializeVisitor::load(const QString & filename)
 
     // build tree
     m_nodes = m_root["nodes"].toMap();
-    m_edges = m_root["edges"].toMap();
+    m_paths = m_root["paths"].toMap();
 
     return true;
 }
 
-void DeserializeVisitor::visit(tikz::Document * doc)
+void DeserializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list = m_root["node-ids"].toString().split(", ");
@@ -88,16 +88,16 @@ void DeserializeVisitor::visit(tikz::Document * doc)
 // FIXME
 #if 0
     // aggregate edge ids
-    list = m_root["edge-ids"].toString().split(", ");
+    list = m_root["path-ids"].toString().split(", ");
     foreach (const QString & id, list) {
-        doc->createEdge(id.toLongLong());
+        doc->createPath(id.toLongLong());
     }
 #endif
     // load document style
     deserializeStyle(doc->style(), m_root["document-style"].toMap()["properties"].toMap());
 }
 
-void DeserializeVisitor::visit(tikz::Node * node)
+void DeserializeVisitor::visit(Node * node)
 {
     const QVariantMap & map = m_nodes[QString("node-%1").arg(node->id())].toMap();
 
@@ -116,12 +116,12 @@ void DeserializeVisitor::visit(tikz::Node * node)
     deserializeStyle(node->style(), propertyMap);
 }
 
-void DeserializeVisitor::visit(tikz::Edge * edge)
+void DeserializeVisitor::visit(Path * path)
 {
 // FIXME
 #if 0
 
-    const QVariantMap & map = m_edges[QString("edge-%1").arg(edge->id())].toMap();
+    const QVariantMap & map = m_paths[QString("edge-%1").arg(edge->id())].toMap();
 
     // serialize node
     if (map.contains("start.node")) {
@@ -151,15 +151,15 @@ void DeserializeVisitor::visit(tikz::Edge * edge)
 #endif
 }
 
-void DeserializeVisitor::visit(tikz::NodeStyle * style)
+void DeserializeVisitor::visit(NodeStyle * style)
 {
 }
 
-void DeserializeVisitor::visit(tikz::EdgeStyle * style)
+void DeserializeVisitor::visit(EdgeStyle * style)
 {
 }
 
-void DeserializeVisitor::deserializeStyle(tikz::Style * style, const QVariantMap & map)
+void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map)
 {
     QVariantMap::const_iterator it = map.constBegin();
     for ( ; it != map.constEnd(); ++it) {
@@ -170,6 +170,7 @@ void DeserializeVisitor::deserializeStyle(tikz::Style * style, const QVariantMap
     }
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

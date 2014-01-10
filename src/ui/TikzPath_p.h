@@ -21,7 +21,9 @@
 #define GUI_TIKZ_PATH_PRIVATE_ITEM_H
 
 namespace tikz {
+namespace core {
     class Path;
+}
 }
 
 class AbstractTikzPath;
@@ -30,7 +32,7 @@ class TikzPathPrivate
 {
     public:
         // edge and nodes
-        tikz::Path * path;
+        tikz::core::Path * path;
 
         // backend path
         AbstractTikzPath * backendPath;

@@ -22,8 +22,8 @@
 
 #include "UndoItem.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -58,6 +58,7 @@ class UndoCreateNode : public UndoItem
         const qint64 m_id;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_CREATE_NODE_H

@@ -58,16 +58,6 @@ add_test(NAME EdgeTest COMMAND EdgeTest)
 
 
 
-# style manager test
-set(StyleManagerSrc stylemanagertest.cpp)
-QT4_AUTOMOC(${StyleManagerSrc} stylemanagertest.h)
-QT4_WRAP_CPP(StyleManagerMocs)
-add_executable(StyleManagerTest ${StyleManagerSrc} ${StyleManagerMocs})
-target_link_libraries(StyleManagerTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore)
-add_test(NAME StyleManagerTest COMMAND StyleManagerTest)
-
-
-
 # TikzDocument test
 set(TikzDocumentSrc tikzdocumenttest.cpp)
 QT4_AUTOMOC(${TikzDocumentSrc} tikzdocumenttest.h)

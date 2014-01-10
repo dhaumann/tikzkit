@@ -26,8 +26,8 @@
 #include <QObject>
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class CoordPrivate;
 class Node;
@@ -94,6 +94,7 @@ class TIKZCORE_EXPORT Coord : public QObject
         CoordPrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_COORDINATE_H

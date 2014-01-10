@@ -24,8 +24,8 @@
 
 #include <QString>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -80,6 +80,7 @@ class UndoSetNodeText : public UndoItem
         QString m_redoText;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_NODE_TEXT_H

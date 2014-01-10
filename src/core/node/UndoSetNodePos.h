@@ -24,8 +24,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Node;
 class Document;
@@ -80,6 +80,7 @@ class UndoSetNodePos : public UndoItem
         QPointF m_redoPos;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_NODE_POS_H

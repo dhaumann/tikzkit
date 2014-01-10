@@ -82,7 +82,7 @@ TikzPath * AbstractTikzPath::path() const
     return d->path;
 }
 
-tikz::EdgeStyle* AbstractTikzPath::style() const
+tikz::core::EdgeStyle* AbstractTikzPath::style() const
 {
     return d->path->style();
 }
@@ -180,10 +180,10 @@ void AbstractTikzPath::showAnchors(const QPointF & scenePos)
     }
 }
 
-tikz::Node * AbstractTikzPath::anchorAt(const QPointF & scenePos, tikz::Anchor & anchor)
+tikz::core::Node * AbstractTikzPath::anchorAt(const QPointF & scenePos, tikz::Anchor & anchor)
 {
     qreal zValue = -100000;
-    tikz::Node * node = 0;
+    tikz::core::Node * node = 0;
 
     foreach(AnchorHandle * handle, d->anchorHandles) {
         if (handle->contains(handle->mapFromScene(scenePos))) {

@@ -19,11 +19,11 @@
 
 #include "UndoSetPathStyle.h"
 #include "Path.h"
-#include "Edge.h"
 #include "EdgeStyle.h"
 #include "Document.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc)
     : UndoItem(doc)
@@ -83,6 +83,7 @@ bool UndoSetPathStyle::mergeWith(const QUndoCommand * command)
     return otherStyle;
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

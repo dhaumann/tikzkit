@@ -22,6 +22,7 @@
 #include "EdgePath.h"
 
 namespace tikz {
+namespace core {
 
 UndoSetEdgePos::UndoSetEdgePos(qint64 pathId,
                                const QPointF & newPos,
@@ -80,6 +81,7 @@ void UndoSetEdgePos::redo()
     document()->setUndoActive(wasActive);
 }
 
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

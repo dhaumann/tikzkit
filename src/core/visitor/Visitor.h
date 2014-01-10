@@ -22,13 +22,12 @@
 
 #include "tikz_export.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Document;
 class Style;
 class Node;
-class Edge;
 class Path;
 class NodeStyle;
 class EdgeStyle;
@@ -55,37 +54,33 @@ class TIKZCORE_EXPORT Visitor
     //
     public:
         /**
-         * This function is called exactly once for the tikz::Document
-         * of the tikz::Document.
+         * This function is called exactly once for the tikz::core::Document
+         * of the tikz::core::Document.
          */
-        virtual void visit(tikz::Document * doc) = 0;
+        virtual void visit(tikz::core::Document * doc) = 0;
 
         /**
-         * This function is called for every tikz::Node in the document.
+         * This function is called for every tikz::core::Node in the document.
          */
-        virtual void visit(tikz::Node * node) = 0;
+        virtual void visit(tikz::core::Node * node) = 0;
 
         /**
-         * This function is called for every tikz::Edge in the document.
+         * This function is called for every tikz::core::Path in the document.
          */
-        virtual void visit(tikz::Edge * edge) = 0;
+        virtual void visit(tikz::core::Path * path) = 0;
 
         /**
-         * This function is called for every tikz::Path in the document.
+         * This function is called for every tikz::core::NodeStyle in the document.
          */
-        virtual void visit(tikz::Path * path) {} // FIXME: pure virtual!
+        virtual void visit(tikz::core::NodeStyle * style) = 0;
 
         /**
-         * This function is called for every tikz::NodeStyle in the document.
+         * This function is called for every tikz::core::EdgeNode in the document.
          */
-        virtual void visit(tikz::NodeStyle * style) = 0;
-
-        /**
-         * This function is called for every tikz::EdgeNode in the document.
-         */
-        virtual void visit(tikz::EdgeStyle * style) = 0;
+        virtual void visit(tikz::core::EdgeStyle * style) = 0;
 };
 
+}
 }
 
 #endif // TIKZ_VISITOR_H

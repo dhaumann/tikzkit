@@ -45,10 +45,9 @@ TikzDocumentPrivate::TikzDocumentPrivate(TikzDocument * tikzDocument)
 
 
 TikzDocument::TikzDocument(QObject * parent)
-    : tikz::Document(parent)
+    : tikz::core::Document(parent)
 {
     d = new TikzDocumentPrivate(this);
-    d->doc = new tikz::Document(d);
     d->scene = new TikzScene(this);
 
     connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
@@ -102,16 +101,16 @@ TikzEditMode TikzDocument::editMode() const
 TikzNode * TikzDocument::createTikzNode()
 {
     // create node
-    tikz::Node * node = Document::createNode();
+    tikz::core::Node * node = Document::createNode();
     Q_ASSERT(d->nodeMap.contains(node->id()));
 
     return d->nodeMap[node->id()];
 }
 
-TikzPath * TikzDocument::createTikzPath(tikz::Path::Type type)
+TikzPath * TikzDocument::createTikzPath(tikz::core::Path::Type type)
 {
     // create path
-    tikz::Path * path = Document::createPath(type);
+    tikz::core::Path * path = Document::createPath(type);
     Q_ASSERT(d->pathMap.contains(path->id()));
 
     return d->pathMap[path->id()];
@@ -135,10 +134,10 @@ void TikzDocument::deleteTikzPath(TikzPath * path)
     Q_ASSERT(! d->pathMap.contains(id));
 }
 
-tikz::Node * TikzDocument::createNode(qint64 id)
+tikz::core::Node * TikzDocument::createNode(qint64 id)
 {
-    // create node by tikz::Document
-    tikz::Node * node = Document::createNode(id);
+    // create node by tikz::core::Document
+    tikz::core::Node * node = Document::createNode(id);
     Q_ASSERT(id == node->id());
     Q_ASSERT(! d->nodeMap.contains(id));
 
@@ -171,12 +170,12 @@ void TikzDocument::deleteNode(qint64 id)
     d->nodes.remove(index);
     delete tikzNode;
 
-    tikz::Document::deleteNode(id);
+    tikz::core::Document::deleteNode(id);
 }
 
-tikz::Path * TikzDocument::createPath(tikz::Path::Type type, qint64 id)
+tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 id)
 {
-    tikz::Path * path = tikz::Document::createPath(type, id);
+    tikz::core::Path * path = Document::createPath(type, id);
     Q_ASSERT(id == path->id());
     Q_ASSERT(! d->pathMap.contains(id));
 
@@ -209,7 +208,7 @@ void TikzDocument::deletePath(qint64 id)
     d->paths.remove(index);
     delete tikzPath;
 
-    tikz::Document::deletePath(id);
+    tikz::core::Document::deletePath(id);
 }
 
 TikzNode * TikzDocument::tikzNodeFromId(qint64 id)

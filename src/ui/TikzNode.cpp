@@ -45,7 +45,7 @@ class TikzNodePrivate
     public:
         TikzNodePrivate(TikzNode * tikzNode) : q(tikzNode) {}
 
-        tikz::Node* node;
+        tikz::core::Node* node;
         NodeText* textItem;
         AbstractShape * shape;
 
@@ -74,7 +74,7 @@ class TikzNodePrivate
         }
 };
 
-TikzNode::TikzNode(tikz::Node * node, QGraphicsItem * parent)
+TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzNodePrivate(this))
 {
@@ -113,7 +113,7 @@ int TikzNode::type() const
     return UserType + 2;
 }
 
-tikz::Node * TikzNode::node()
+tikz::core::Node * TikzNode::node()
 {
     return d->node;
 }
@@ -123,7 +123,7 @@ qint64 TikzNode::id() const
     return d->node->id();
 }
 
-tikz::NodeStyle* TikzNode::style() const
+tikz::core::NodeStyle* TikzNode::style() const
 {
     return d->node->style();
 }
@@ -256,7 +256,7 @@ void TikzNode::slotSetPos(const QPointF& pos)
 {
     if (d->itemChangeRunning) return;
 
-    // the tikz::Node position changed.
+    // the tikz::core::Node position changed.
     // propagate this to this TikzNode::setPos().
     setPos(pos);
 }

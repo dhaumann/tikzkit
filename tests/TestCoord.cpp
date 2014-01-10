@@ -35,7 +35,7 @@ void CoordTest::cleanupTestCase()
 
 void CoordTest::testCoord()
 {
-    tikz::Coord c;
+    tikz::core::Coord c;
 
     // initially (0, 0)
     QCOMPARE(c.pos(), QPointF(0, 0));
@@ -50,7 +50,7 @@ void CoordTest::testCoord()
     QCOMPARE(m_pos, QPointF(1, 1));
 
     // test operators
-    tikz::Coord c2;
+    tikz::core::Coord c2;
     QVERIFY(c != c2);
 
     c2.setPos(c.pos());

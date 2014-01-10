@@ -37,11 +37,11 @@ void MetaPosTest::cleanupTestCase()
 
 void MetaPosTest::testMetaPos()
 {
-    tikz::MetaPos m;
+    tikz::core::MetaPos m;
 
     // initially (0, 0)
     QCOMPARE(m.pos(), QPointF(0, 0));
-    QCOMPARE(m.node(), (tikz::Node*)0);
+    QCOMPARE(m.node(), (tikz::core::Node*)0);
 
     // test changed signal
     connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
@@ -84,12 +84,12 @@ void MetaPosTest::changedEmitted()
 
 void MetaPosTest::testMetaPosWithNode()
 {
-    tikz::Document doc;
-    tikz::MetaPos m;
-    tikz::Node * n = doc.createNode();
+    tikz::core::Document doc;
+    tikz::core::MetaPos m;
+    tikz::core::Node * n = doc.createNode();
 
     // get pointer to coord
-    tikz::Coord & c = m.coord();
+    tikz::core::Coord & c = m.coord();
 
     // check setting node
     QVERIFY(m.setNode(n));

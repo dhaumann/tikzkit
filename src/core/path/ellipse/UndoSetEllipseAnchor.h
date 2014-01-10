@@ -23,8 +23,8 @@
 #include "UndoItem.h"
 #include "tikz.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoSetEllipseAnchor : public UndoItem
 {
@@ -66,6 +66,7 @@ class UndoSetEllipseAnchor : public UndoItem
         Anchor m_redoAnchor;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_ELLIPSE_ANCHOR_H

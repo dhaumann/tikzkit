@@ -28,6 +28,7 @@
 #include <QVariant>
 
 namespace tikz {
+namespace core {
 
 class Document;
 class StylePrivate;
@@ -455,7 +456,7 @@ class TIKZCORE_EXPORT Style : public QObject
 };
 
 }
-
+}
 #endif // TIKZ_STYLE_H
 
 // kate: indent-width 4; replace-tabs on;

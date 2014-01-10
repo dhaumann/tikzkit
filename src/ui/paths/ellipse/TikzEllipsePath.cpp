@@ -41,10 +41,10 @@
 TikzEllipsePath::TikzEllipsePath(TikzPath * path)
     : AbstractTikzPath(path)
 {
-    // catch if the tikz::Node::pos() changes behind our back:
+    // catch if the tikz::core::Node::pos() changes behind our back:
     // we need to track the TikzNode the ellipse is attached to
-    connect(path->path(), SIGNAL(nodeChanged(tikz::Node*)),
-            this, SLOT(updateNode(tikz::Node*)));
+    connect(path->path(), SIGNAL(nodeChanged(tikz::core::Node*)),
+            this, SLOT(updateNode(tikz::core::Node*)));
 
     connect(path->path(), SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
@@ -59,9 +59,9 @@ TikzDocument * TikzEllipsePath::document() const
     return qobject_cast<TikzDocument*>(path()->document());
 }
 
-tikz::Path::Type TikzEllipsePath::type() const
+tikz::core::Path::Type TikzEllipsePath::type() const
 {
-    return tikz::Path::Ellipse;
+    return tikz::core::Path::Ellipse;
 }
 
 void TikzEllipsePath::setNode(TikzNode* node)
@@ -166,7 +166,7 @@ bool TikzEllipsePath::contains(const QPointF & point) const
     }
 }
 
-void TikzEllipsePath::updateNode(tikz::Node * node)
+void TikzEllipsePath::updateNode(tikz::core::Node * node)
 {
     TikzNode * newNode = 0;
 
@@ -207,9 +207,9 @@ void TikzEllipsePath::updateCache()
     m_boundingRect = m_shapePath.boundingRect();
 }
 
-tikz::EllipsePath * TikzEllipsePath::ellipsePath() const
+tikz::core::EllipsePath * TikzEllipsePath::ellipsePath() const
 {
-    tikz::EllipsePath * p = qobject_cast<tikz::EllipsePath*>(path()->path());
+    tikz::core::EllipsePath * p = qobject_cast<tikz::core::EllipsePath*>(path()->path());
     Q_ASSERT(p != nullptr);
 
     return p;

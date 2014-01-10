@@ -30,7 +30,7 @@ class StealthTickArrowPrivate
     public:
 };
 
-StealthTickArrow::StealthTickArrow(tikz::EdgeStyle * style)
+StealthTickArrow::StealthTickArrow(tikz::core::EdgeStyle * style)
     : AbstractArrow(style)
     , d(new StealthTickArrowPrivate())
 {
@@ -107,7 +107,7 @@ QPainterPath StealthTickArrow::path() const
 
 
 
-ReversedStealthTickArrow::ReversedStealthTickArrow(tikz::EdgeStyle * style)
+ReversedStealthTickArrow::ReversedStealthTickArrow(tikz::core::EdgeStyle * style)
     : StealthTickArrow(style)
 {
 }

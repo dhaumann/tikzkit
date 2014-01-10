@@ -40,7 +40,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         /**
          * Constructor for @p node and parent @p parent.
          */
-        TikzNode(tikz::Node * node, QGraphicsItem * parent = 0);
+        TikzNode(tikz::core::Node * node, QGraphicsItem * parent = 0);
 
         /**
          * Destructor
@@ -60,7 +60,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         /**
          * Returns the pointer to the associated Node.
          */
-        tikz::Node * node();
+        tikz::core::Node * node();
 
         /**
          * Returns node().id();
@@ -71,7 +71,7 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
          * Returns the style of this node.
          * This is the same as node().style().
          */
-        tikz::NodeStyle* style() const;
+        tikz::core::NodeStyle* style() const;
 
     //
     // anchor methods

@@ -25,10 +25,10 @@ class PaintHelperPrivate
 {
     public:
         QPainter* painter;
-        tikz::Style* style;
+        tikz::core::Style* style;
 };
 
-PaintHelper::PaintHelper(QPainter * painter, tikz::Style * style)
+PaintHelper::PaintHelper(QPainter * painter, tikz::core::Style * style)
     : d(new PaintHelperPrivate())
 {
     d->painter = painter;

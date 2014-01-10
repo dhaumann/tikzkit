@@ -28,7 +28,9 @@
 class QPainter;
 
 namespace tikz {
+namespace core {
     class EdgeStyle;
+}
 }
 
 class AbstractArrowPrivate;
@@ -39,7 +41,7 @@ class AbstractArrow
         /**
          * Constructor with @p edge.
          */
-        AbstractArrow(tikz::EdgeStyle* style);
+        AbstractArrow(tikz::core::EdgeStyle* style);
 
         /**
          * Destructor.
@@ -49,7 +51,7 @@ class AbstractArrow
         /**
          * Returns the pointer to the edge passed in the constructor.
          */
-        tikz::EdgeStyle* style() const;
+        tikz::core::EdgeStyle* style() const;
 
     //
     // Arrow properties
@@ -103,7 +105,7 @@ class AbstractArrow
 /**
  * Factory function to get arrow instances for arrow type @p type.
  */
-extern AbstractArrow *createArrow(tikz::Arrow type, tikz::EdgeStyle* style);
+extern AbstractArrow *createArrow(tikz::Arrow type, tikz::core::EdgeStyle* style);
 
 #endif // TIKZGUI_ABSTRACT_ARROW_H
 

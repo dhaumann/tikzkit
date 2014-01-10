@@ -25,8 +25,8 @@
 
 #include <QPointF>
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class UndoSetEdgePos : public UndoItem
 {
@@ -75,6 +75,7 @@ class UndoSetEdgePos : public UndoItem
         bool m_isStart;
 };
 
+}
 }
 
 #endif // TIKZ_UNDO_SET_EDGE_POS_H

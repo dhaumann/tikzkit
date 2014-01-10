@@ -30,7 +30,7 @@ class LatexArrowPrivate
     public:
 };
 
-LatexArrow::LatexArrow(tikz::EdgeStyle * style)
+LatexArrow::LatexArrow(tikz::core::EdgeStyle * style)
     : AbstractArrow(style)
     , d(new LatexArrowPrivate())
 {
@@ -121,7 +121,7 @@ QPainterPath LatexArrow::contour(qreal width) const
 
 
 
-ReversedLatexArrow::ReversedLatexArrow(tikz::EdgeStyle * style)
+ReversedLatexArrow::ReversedLatexArrow(tikz::core::EdgeStyle * style)
     : LatexArrow(style)
 {
 }

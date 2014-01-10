@@ -25,8 +25,8 @@
 #include "tikz_export.h"
 #include "tikz.h"
 
-namespace tikz
-{
+namespace tikz {
+namespace core {
 
 class Document;
 class Node;
@@ -116,7 +116,7 @@ class TIKZCORE_EXPORT Path : public QObject
          * Visitor pattern.
          * Visits all elements of the document.
          */
-        bool accept(tikz::Visitor & visitor);
+        bool accept(Visitor & visitor);
 
     //
     // path properties
@@ -181,6 +181,7 @@ class TIKZCORE_EXPORT Path : public QObject
         PathPrivate * const d;
 };
 
+}
 }
 
 #endif // TIKZ_PATH_H
