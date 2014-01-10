@@ -164,12 +164,12 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
 //         showAnchors(scenePos);
 //
 //         tikz::Anchor anchor;
-//         tikz::core::Node * node = anchorAt(scenePos, anchor);
+//         tikz::core::MetaPos::Ptr metaPos = anchorAt(scenePos);
 // //         qDebug() << node << anchor;
-//         if (node) {
+//         if (metaPos->node()) {
 //             ellipsePath()->beginConfig();
-//             ellipsePath()->setNode(node);
-//             ellipsePath()->setAnchor(anchor);
+//             ellipsePath()->setNode(metaPos->node());
+//             ellipsePath()->setAnchor(metaPos->anchor());
 //             ellipsePath()->endConfig();
 //         } else {
 //             ellipsePath()->setPos(p);

@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include <QSharedPointer>
 
 namespace tikz {
 namespace core {
@@ -39,6 +40,24 @@ class Node;
 class MetaPos : public QObject
 {
     Q_OBJECT
+    
+    //
+    // types
+    //
+    public:
+        /**
+         * Define a shared pointer for MetaPos.
+         *
+         * MetaPos is derived from QObject, meaning that it is not copyable.
+         * Sometimes, a MetaPos is returned by a function. Without this typedef,
+         * a pointer would have to be returned and the caller would need to take
+         * care of deleting the MetaPos object correctly.
+         *
+         * However, to avoid having to take care of deletin, this typedef
+         * delets the MetaPos object automatically if no reference to the object
+         * exists anymore.
+         */
+        typedef QSharedPointer<MetaPos> Ptr;
 
     public:
         /**

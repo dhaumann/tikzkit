@@ -180,21 +180,22 @@ void AbstractTikzPath::showAnchors(const QPointF & scenePos)
     }
 }
 
-tikz::core::Node * AbstractTikzPath::anchorAt(const QPointF & scenePos, tikz::Anchor & anchor)
+tikz::core::MetaPos::Ptr AbstractTikzPath::anchorAt(const QPointF & scenePos)
 {
     qreal zValue = -100000;
-    tikz::core::Node * node = 0;
+    tikz::core::MetaPos::Ptr metaPos(new tikz::core::MetaPos());
 
     foreach(AnchorHandle * handle, d->anchorHandles) {
         if (handle->contains(handle->mapFromScene(scenePos))) {
-            if (!node || zValue < handle->zValue()) {
+            if (metaPos->node() || zValue < handle->zValue()) {
                 zValue = handle->zValue();
-                node = handle->node()->node();
-                anchor = handle->anchor();
+                metaPos->setNode(handle->node()->node());
+                metaPos->setAnchor(handle->anchor());
             }
         }
     }
-    return node;
+
+    return metaPos;
 }
 
 // kate: indent-width 4; replace-tabs on;

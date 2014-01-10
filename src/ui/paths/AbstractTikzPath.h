@@ -148,7 +148,7 @@ class AbstractTikzPath : public QObject
          * Get the node with anchor for the scene position @p scenePos.
          * If valid, the returned tikz::core::MetaPos contains the node and anchor.
          */
-        tikz::core::Node * anchorAt(const QPointF & scenePos, tikz::Anchor & anchor);
+        tikz::core::MetaPos::Ptr anchorAt(const QPointF & scenePos);
 
     private:
         AbstractTikzPathPrivate * const d;
