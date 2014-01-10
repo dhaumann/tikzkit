@@ -7,14 +7,11 @@ set(CMAKE_MODULE_PATH
 
 add_definitions("-std=c++11")
 
-add_subdirectory(qtikzcore)
-add_subdirectory(qtikzgui)
-add_subdirectory(app)
+add_subdirectory(src/core)
+add_subdirectory(src/ui)
+add_subdirectory(src/app)
 
 enable_testing()
 add_subdirectory(tests)
 
 # kate: indent-width 4; replace-tabs on;
-
-# notes:
-# http://stackoverflow.com/questions/15054117/aligning-qgraphicsitems-to-a-grid-when-dragging-and-dropping

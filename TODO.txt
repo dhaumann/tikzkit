@@ -1,36 +1,30 @@
-qtikzcore
+core
 - tikz::Document (priority: high)
-  - register tikz::Nodes
-  - register tikz::Edges
-  - register tikz::NodeStyles
-  - register tikz::EdgeStyles
   - maybe use pgf layers: background, nodes, edges, foreground
 
-- exporter to TikZ (priority: high)
-  - based on TikZ::Document
+- visitors (priority: high)
+  - fix TikZ export Visitor
+  - fix load visitor
+  - fix save visitor
 
-- tikz::Path (priority: medium)
-  - idea: create (open and closed) polygons with a list of edges
-  - does this influence the API of tikz::Edge?
+- tikz::Path (priority: high)
+  - add support for rectangle primitive
+  - add support for grid primitive
+  - add support for simple edges (straight, bending, bezier)
+  - add support for polygonal lines and shapes
 
-- undo/redo system (priority: medium)
-  - find appropriate undo/redo mechanism
-  - add session wide uniq id to all items, so they can be referenced
-    even after e.g. a node was removed and readded through undo?
-  - undo: save state before changing an item
-  - redo: save state after changing an item is finished
-  - state := coordinate + tikz::{Edge,Node}Style
+- tikz::Node (priority: medium)
+  - support anchors above, left, below, right and combinations
+  - support anchoring on other anchors
 
-- tikz::Node (priority: low)
-  - would be nice to support 'fit'
+gui
 
-qtikzgui
-- TikzEdge (priority: high)
-  - fix hovering items: implement through mouse move events in TikzScene
-    (currently, hovering is based on the bounding rect and not the path)
-  - properly implement curve types (Bending, Bezier, ...?)
+- shapes
+  - add more shapes
+  - add more arrows
 
-app: TikZKit
+app
+- TikZKit
 
 integration test (priority: medium)
 - implement testing suite:

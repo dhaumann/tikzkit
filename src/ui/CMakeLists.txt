@@ -1,26 +1,26 @@
-project(qtikzgui)
+project(qtikzui)
 
 find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/qtikzcore
-    ${CMAKE_SOURCE_DIR}/qtikzcore/node
-    ${CMAKE_SOURCE_DIR}/qtikzcore/path
-    ${CMAKE_SOURCE_DIR}/qtikzcore/path/ellipse
-    ${CMAKE_SOURCE_DIR}/qtikzcore/style
+    ${CMAKE_SOURCE_DIR}/src/core
+    ${CMAKE_SOURCE_DIR}/src/core/node
+    ${CMAKE_SOURCE_DIR}/src/core/path
+    ${CMAKE_SOURCE_DIR}/src/core/path/ellipse
+    ${CMAKE_SOURCE_DIR}/src/core/style
 
-    ${CMAKE_SOURCE_DIR}/qtikzgui/tools
-    ${CMAKE_SOURCE_DIR}/qtikzgui/handle
-    ${CMAKE_SOURCE_DIR}/qtikzgui/paths
-    ${CMAKE_SOURCE_DIR}/qtikzgui/paths/ellipse
-    ${CMAKE_SOURCE_DIR}/qtikzgui/shapes
-    ${CMAKE_SOURCE_DIR}/qtikzgui/arrows
-    ${CMAKE_SOURCE_DIR}/qtikzgui/tex
-    ${CMAKE_SOURCE_DIR}/qtikzgui/widgets
+    ${CMAKE_SOURCE_DIR}/src/ui/tools
+    ${CMAKE_SOURCE_DIR}/src/ui/handle
+    ${CMAKE_SOURCE_DIR}/src/ui/paths
+    ${CMAKE_SOURCE_DIR}/src/ui/paths/ellipse
+    ${CMAKE_SOURCE_DIR}/src/ui/shapes
+    ${CMAKE_SOURCE_DIR}/src/ui/arrows
+    ${CMAKE_SOURCE_DIR}/src/ui/tex
+    ${CMAKE_SOURCE_DIR}/src/ui/widgets
 )
 
-set(qtikzgui_SOURCES
+set(qtikzui_SOURCES
     TikzDocument.cpp
     TikzItem.cpp
     TikzNode.cpp
@@ -72,7 +72,7 @@ set(qtikzgui_SOURCES
     widgets/ArrowComboBox.cpp
 )
 
-set(qtikzgui_HEADERS
+set(qtikzui_HEADERS
     TikzDocument.h
     TikzDocument_p.h
     TikzItem.h
@@ -109,11 +109,11 @@ set(qtikzgui_HEADERS
     widgets/ArrowComboBox.h
 )
 
-QT4_WRAP_CPP(qtikzgui_HEADERS_MOC ${qtikzgui_HEADERS})
+QT4_WRAP_CPP(qtikzui_HEADERS_MOC ${qtikzui_HEADERS})
 
 # add icon resource
-set(qtikzgui_RESOURCES icons.qrc)
-qt4_add_resources(qtikzgui_RESOURCES_RCC ${qtikzgui_RESOURCES})
+set(qtikzui_RESOURCES icons.qrc)
+qt4_add_resources(qtikzui_RESOURCES_RCC ${qtikzui_RESOURCES})
 
 include(${QT_USE_FILE})
 add_definitions(
@@ -121,13 +121,13 @@ add_definitions(
     ${QT_DEFINITIONS}
 )
 
-add_library(qtikzgui SHARED
-    ${qtikzgui_SOURCES}
-    ${qtikzgui_HEADERS_MOC}
-    ${qtikzgui_RESOURCES_RCC}
+add_library(qtikzui SHARED
+    ${qtikzui_SOURCES}
+    ${qtikzui_HEADERS_MOC}
+    ${qtikzui_RESOURCES_RCC}
 )
 
-target_link_libraries(qtikzgui
+target_link_libraries(qtikzui
   ${QT_LIBRARIES}
   qtikzcore
 )

@@ -6,11 +6,11 @@ add_definitions(
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}/qtikzcore
-  ${CMAKE_SOURCE_DIR}/qtikzcore/style
-  ${CMAKE_SOURCE_DIR}/qtikzcore/node
-  ${CMAKE_SOURCE_DIR}/qtikzcore/path
-  ${CMAKE_SOURCE_DIR}/qtikzgui
+  ${CMAKE_SOURCE_DIR}/src/core
+  ${CMAKE_SOURCE_DIR}/src/core/style
+  ${CMAKE_SOURCE_DIR}/src/core/node
+  ${CMAKE_SOURCE_DIR}/src/core/path
+  ${CMAKE_SOURCE_DIR}/src/ui
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -73,7 +73,7 @@ set(TikzDocumentSrc tikzdocumenttest.cpp)
 QT4_AUTOMOC(${TikzDocumentSrc} tikzdocumenttest.h)
 QT4_WRAP_CPP(${TikzDocumentSrc})
 add_executable(TikzDocumentTest ${TikzDocumentSrc} ${TikzDocumentMocs})
-target_link_libraries(TikzDocumentTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore qtikzgui)
+target_link_libraries(TikzDocumentTest ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} qtikzcore qtikzui)
 add_test(NAME TikzDocumentTest COMMAND TikzDocumentTest)
 
 # kate: indent-width 4; replace-tabs on;
