@@ -2,7 +2,6 @@
 
 #include <QtTest/QTest>
 
-#include "Coord.h"
 #include "Node.h"
 #include "Path.h"
 #include "Document.h"
