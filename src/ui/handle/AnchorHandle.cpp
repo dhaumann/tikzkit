@@ -40,6 +40,11 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     m_metaPos->setNode(node->node());
     m_metaPos->setAnchor(anchor);
 
+    // set transform property correctly in case of NoAnchor type
+    if (anchor == tikz::NoAnchor) {
+        setFlag(ItemIgnoresTransformations, false);
+    }
+
     // set position depending on the anchor
     setPos(node->mapToScene(node->anchor(anchor)));
 }
@@ -63,20 +68,52 @@ tikz::Anchor AnchorHandle::anchor() const
     return m_metaPos->anchor();
 }
 
+tikz::core::MetaPos::Ptr AnchorHandle::metaPos() const
+{
+    return m_metaPos;
+}
+
 void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
-qDebug() << "is under mouse:" << isUnderMouse();
+
+    // do not draw at all if the anchor matches the entire node shape
+    if (anchor() == tikz::NoAnchor) {
+        return;
+    }
+
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
     painter->setPen(QColor(164, 0, 0)); // dark red
     painter->setBrush(isHovered() ? Qt::yellow : QColor(221, 99, 99));
 
+    if (!isActive()) {
+        painter->setOpacity(0.5);
+    }
+
     painter->drawEllipse(rect());
 
     painter->restore();
+}
+
+QRectF AnchorHandle::boundingRect() const
+{
+    if (anchor() == tikz::NoAnchor) {
+        return m_node->boundingRect();
+    } else {
+        return Handle::boundingRect();
+    }
+}
+
+bool AnchorHandle::contains(const QPointF &point) const
+{
+    if (anchor() == tikz::NoAnchor) {
+        return m_node->contains(point);
+    }
+
+    return Handle::contains(point);
 }
 
 // kate: indent-width 4; replace-tabs on;

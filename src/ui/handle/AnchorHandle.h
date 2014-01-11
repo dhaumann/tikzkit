@@ -45,6 +45,10 @@ class AnchorHandle : public Handle
          */
         virtual int type() const;
 
+    //
+    // node/anchor accessors
+    //
+    public:
         /**
          * Get the node this anchor handle.
          */
@@ -55,6 +59,11 @@ class AnchorHandle : public Handle
          */
         tikz::Anchor anchor() const;
 
+        /**
+         * Get the tikz::core::Node and anchor as MetaPos.
+         */
+        tikz::core::MetaPos::Ptr metaPos() const;
+
     //
     // reimplemented from QGraphicsItem
     //
@@ -62,7 +71,17 @@ class AnchorHandle : public Handle
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+
+        /**
+         * Reimplemented, depending on tikz::Anchor type.
+         */
+        QRectF boundingRect() const override;
+
+        /**
+         * Reimplemented, depending on tikz::Anchor type.
+         */
+        bool contains(const QPointF &point) const override;
 
     //
     // internal

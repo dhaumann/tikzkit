@@ -170,9 +170,10 @@ tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos, QGrap
         const QPoint p = view->viewportTransform().map(scenePos).toPoint();
         const QList<QGraphicsItem *> items = view->items(p);
         AnchorHandle * handle = first<AnchorHandle>(items);
-        if (handle) {
-            metaPos->setNode(handle->node()->node());
-            metaPos->setAnchor(handle->anchor());
+        if (handle &&
+            handle->contains(handle->mapFromScene(scenePos)))
+        {
+            metaPos = handle->metaPos();
         }
     }
 
