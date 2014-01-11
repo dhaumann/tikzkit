@@ -18,12 +18,8 @@
  */
 
 #include "AnchorHandle.h"
-#include "NodeStyle.h"
 #include "TikzNode.h"
 #include "PaintHelper.h"
-#include "TikzDocument.h"
-
-#include <MetaPos.h>
 
 #include <QPointer>
 #include <QPainter>
@@ -36,28 +32,20 @@
 
 #include <QDebug>
 
-class AnchorHandlePrivate
-{
-    public:
-        TikzNode * node;
-        tikz::Anchor anchor;
-};
-
 AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
-    : TikzItem(node)
-    , d(new AnchorHandlePrivate())
+    : Handle(Handle::AnchorHandle)
+    , m_metaPos(new tikz::core::MetaPos())
+    , m_node(node)
 {
-    d->node = node;
-    d->anchor = anchor;
+    m_metaPos->setNode(node->node());
+    m_metaPos->setAnchor(anchor);
 
     // set position depending on the anchor
-    setZValue(anchor == tikz::NoAnchor ? 10.0 : 20.0);
-    setPos(node->anchor(anchor));
+    setPos(node->mapToScene(node->anchor(anchor)));
 }
 
 AnchorHandle::~AnchorHandle()
 {
-    delete d;
 }
 
 int AnchorHandle::type() const
@@ -67,62 +55,28 @@ int AnchorHandle::type() const
 
 TikzNode * AnchorHandle::node() const
 {
-    return d->node;
+    return m_node;
 }
 
 tikz::Anchor AnchorHandle::anchor() const
 {
-    return d->anchor;
+    return m_metaPos->anchor();
 }
 
 void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
-
-    // debugging
-//     painter->drawRect(boundingRect());
-
-//     double scaleX = painter->transform().m11();
-//     if (scale() != 1 / scaleX * painter->device()->physicalDpiX()) {
-//         setScale(1 / scaleX * painter->device()->physicalDpiX());
-//     }
-
+qDebug() << "is under mouse:" << isUnderMouse();
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    painter->setPen(QColor(100, 100, 255));
-    painter->setBrush(isHovered() ? Qt::green : Qt::white);
-    painter->drawEllipse(QPointF(0, 0), 0.1, 0.1);
-//     painter->drawRect(QRectF(-0.1, -0.1, 0.2, 0.2));
+    painter->setPen(QColor(164, 0, 0)); // dark red
+    painter->setBrush(isHovered() ? Qt::yellow : QColor(221, 99, 99));
 
-    QPen pen(isHovered() ? Qt::red : Qt::darkGray);
-    pen.setWidthF(0.03); // 0.5mm
-    painter->setPen(pen);
-
-    painter->drawLine(QPointF(0.04, 0.04), QPointF(-0.04, -0.04));
-    painter->drawLine(QPointF(0.04, -0.04), QPointF(-0.04, 0.04));
+    painter->drawEllipse(rect());
 
     painter->restore();
-}
-
-QRectF AnchorHandle::boundingRect() const
-{
-    if (d->anchor == tikz::NoAnchor) {
-        return d->node->boundingRect();
-    } else {
-        return QRectF(-0.15, -0.15, 0.3, 0.3);
-    }
-}
-
-bool AnchorHandle::contains(const QPointF &point) const
-{
-    if (d->anchor == tikz::NoAnchor) {
-        return d->node->contains(point);
-    }
-
-    // within circle of 1.5 mm?
-    return (point.x() * point.x() + point.y() * point.y()) < (0.1 * 0.1);
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -20,21 +20,12 @@
 #ifndef TIKZ_ANCHOR_HANDLE_H
 #define TIKZ_ANCHOR_HANDLE_H
 
-#include "tikz.h"
+#include "Handle.h"
+#include <MetaPos.h>
 
-#include "TikzItem.h"
-
-class QPainter;
 class TikzNode;
-class AnchorHandlePrivate;
-class Style;
-class TizkNode;
 
-namespace tikz {
-    class MetaPos;
-}
-
-class AnchorHandle : public TikzItem
+class AnchorHandle : public Handle
 {
     Q_OBJECT
 
@@ -73,18 +64,19 @@ class AnchorHandle : public TikzItem
          */
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-        /**
-         * Returns the bounding rect of this item.
-         */
-        QRectF boundingRect() const;
-
-        /**
-         * Returns @p true, if @p point is contained in this handle.
-         */
-        bool contains(const QPointF &point) const;
-
+    //
+    // internal
+    //
     private:
-        AnchorHandlePrivate * const d;
+        /**
+         * The position with anchor of the node.
+         */
+        tikz::core::MetaPos::Ptr m_metaPos;
+
+        /**
+         * The associated TikzNode.
+         */
+        TikzNode * m_node;
 };
 
 #endif // TIKZ_ANCHOR_HANDLE_H

@@ -43,6 +43,7 @@ set(qtikzui_SOURCES
     handle/ResizeHandle.cpp
     handle/RotateHandle.cpp
     handle/MoveHandle.cpp
+    handle/AnchorHandle.cpp
 
     utils/AnchorManager.cpp
 
@@ -50,7 +51,6 @@ set(qtikzui_SOURCES
     TikzView.cpp
     TikzRuler.cpp
     PaintHelper.cpp
-    AnchorHandle.cpp
     CurveHandle.cpp
     BezierCurve.cpp
     NodeText.cpp
@@ -97,13 +97,13 @@ set(qtikzui_HEADERS
     handle/ResizeHandle.h
     handle/RotateHandle.h
     handle/MoveHandle.h
+    handle/AnchorHandle.h
 
     utils/AnchorManager.h
 
     TikzScene.h
     TikzView.h
     TikzRuler.h
-    AnchorHandle.h
     CurveHandle.h
     NodeText_p.h
     TikzToolBox.h
