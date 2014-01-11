@@ -23,6 +23,7 @@
 
 #include <QDebug>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 
 AnchorManager::AnchorManager(QGraphicsScene * scene, QObject * parent)
     : QObject(parent)
@@ -161,15 +162,18 @@ void AnchorManager::nodeDestroyed(QObject * obj)
     Q_ASSERT(false);
 }
 
-tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos)
+tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos, QGraphicsView * view)
 {
     tikz::core::MetaPos::Ptr metaPos(new tikz::core::MetaPos());
 
-    const QList<QGraphicsItem *> items = scene()->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
-    AnchorHandle * handle = first<AnchorHandle>(items);
-    if (handle) {
-        metaPos->setNode(handle->node()->node());
-        metaPos->setAnchor(handle->anchor());
+    if (view) {
+        const QPoint p = view->viewportTransform().map(scenePos).toPoint();
+        const QList<QGraphicsItem *> items = view->items(p);
+        AnchorHandle * handle = first<AnchorHandle>(items);
+        if (handle) {
+            metaPos->setNode(handle->node()->node());
+            metaPos->setAnchor(handle->anchor());
+        }
     }
 
     return metaPos;
