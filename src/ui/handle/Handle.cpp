@@ -31,6 +31,7 @@ Handle::Handle(Type type, Position position)
     : TikzItem()
     , m_type(type)
     , m_position(position)
+    , m_active(false)
 {
     // by default, only left mouse button triggers events
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -90,6 +91,27 @@ QRectF Handle::boundingRect() const
     return m_handleRect.adjusted(0, 0, 1, 1);
 }
 
+bool Handle::isActive() const
+{
+    return m_active;
+}
+
+void Handle::activate()
+{
+    if (!m_active) {
+        m_active = true;
+        update();
+    }
+}
+
+void Handle::deactivate()
+{
+    if (m_active) {
+        m_active = false;
+        update();
+    }
+}
+
 /**
  * Helper to find the QGraphicsView that sent this @p event.
  * The return value may be 0 for user-generated mouse events.
@@ -115,6 +137,8 @@ void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
     if (event->button() == Qt::LeftButton) {
         emit mousePressed(this, event->scenePos(), viewForEvent(event));
 
+        activate();
+
         event->accept();
     }
 }
@@ -123,6 +147,8 @@ void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton) {
         emit mouseReleased(this, event->scenePos(), viewForEvent(event));
+
+        deactivate();
 
         event->accept();
     }

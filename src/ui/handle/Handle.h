@@ -83,6 +83,9 @@ class Handle : public TikzItem
          */
         Type handleType() const;
 
+    //
+    // geometry
+    //
     public:
         /**
          * Returns the rect in local coordinates
@@ -94,6 +97,37 @@ class Handle : public TikzItem
          * Sets this Handle's rect to @p rect
          */
         void setRect(const QRectF & rect);
+
+    //
+    // active flag
+    //
+    public:
+        /**
+         * Check whether the handle is set active or not.
+         *
+         * The handle is active either when the mouse is pressed, or if you
+         * manually call activate().
+         *
+         * Depending on isActive(), handles can change the appearance.
+         *
+         * @see activate(), deactivate()
+         */
+        bool isActive() const;
+
+    public Q_SLOTS:
+        /**
+         * Activates this item.
+         *
+         * @see isActive()
+         */
+        void activate();
+
+        /**
+         * Deactivates this item.
+         *
+         * @see isActive()
+         */
+        void deactivate();
 
     Q_SIGNALS:
         /**
@@ -161,6 +195,7 @@ class Handle : public TikzItem
         Type m_type;
         Position m_position;
         QRectF m_handleRect;
+        bool m_active;
 };
 
 #endif // TIKZ_PATH_HANDLE_H
