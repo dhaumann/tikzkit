@@ -22,8 +22,10 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
 
 #include <QDebug>
+
 
 Handle::Handle(Type type, Position position)
     : TikzItem()
@@ -88,9 +90,22 @@ QRectF Handle::boundingRect() const
     return m_handleRect.adjusted(0, 0, 1, 1);
 }
 
+/**
+ * Helper to find the QGraphicsView that sent this @p event.
+ * The return value may be 0 for user-generated mouse events.
+ */
+static QGraphicsView * viewForEvent(QGraphicsSceneEvent * event)
+{
+    QWidget *viewport = event->widget();
+    if (viewport) {
+        return qobject_cast<QGraphicsView *>(viewport->parent());
+    }
+    return 0;
+}
+
 void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    emit positionChanged(this, event->scenePos());
+    emit positionChanged(this, event->scenePos(), viewForEvent(event));
 
     event->accept();
 }
@@ -98,7 +113,7 @@ void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit mousePressed(this, event->scenePos());
+        emit mousePressed(this, event->scenePos(), viewForEvent(event));
 
         event->accept();
     }
@@ -107,7 +122,7 @@ void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit mouseReleased(this, event->scenePos());
+        emit mouseReleased(this, event->scenePos(), viewForEvent(event));
 
         event->accept();
     }

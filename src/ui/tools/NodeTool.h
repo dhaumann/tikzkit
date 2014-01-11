@@ -89,18 +89,19 @@ class NodeTool : public AbstractTool
          * the sender @p handle.
          * @param handle the handle that moved
          * @param scenePos the mouse move position in scene coordinates
+         * @param view the view that generated this event
          */
-        void handleMoved(Handle * handle, const QPointF & scenePos);
+        void handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was pressed with the mouse.
          */
-        void handleMousePressed(Handle * handle, const QPointF & scenePos);
+        void handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was released with the mouse.
          */
-        void handleMouseReleased(Handle * handle, const QPointF & scenePos);
+        void handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
     protected:
         /**

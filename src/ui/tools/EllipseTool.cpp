@@ -90,12 +90,12 @@ void EllipseTool::createPathHandles()
     foreach (Handle * handle, m_handles) {
         scene()->addItem(handle);
         handle->show();
-        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &)),
-                this, SLOT(handleMoved(Handle *, const QPointF &)));
-        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &)),
-                this, SLOT(handleMousePressed(Handle *, const QPointF &)));
-        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &)),
-                this, SLOT(handleMouseReleased(Handle *, const QPointF &)));
+        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMoved(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMousePressed(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMouseReleased(Handle *, const QPointF &, QGraphicsView *)));
     }
 }
 
@@ -134,7 +134,7 @@ QPointF EllipseTool::handlePos(Handle::Position pos)
     return c + t.map(p);
 }
 
-void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
@@ -239,12 +239,12 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos)
     m_path->path()->setStyle(s);
 }
 
-void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
 }
 
-void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos)
+void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool:mouse handle released" << scenePos;
 }

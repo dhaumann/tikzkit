@@ -87,12 +87,12 @@ void NodeTool::createNodeHandles()
     foreach (Handle * handle, m_handles) {
         scene()->addItem(handle);
         handle->show();
-        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &)),
-                this, SLOT(handleMoved(Handle *, const QPointF &)));
-        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &)),
-                this, SLOT(handleMousePressed(Handle *, const QPointF &)));
-        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &)),
-                this, SLOT(handleMouseReleased(Handle *, const QPointF &)));
+        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMoved(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMousePressed(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMouseReleased(Handle *, const QPointF &, QGraphicsView *)));
     }
 }
 
@@ -130,7 +130,7 @@ QPointF NodeTool::handlePos(Handle::Position pos)
     return c + t.map(p);
 }
 
-void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
+void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
@@ -220,12 +220,12 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos)
     m_node->node()->setStyle(s);
 }
 
-void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos)
+void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle pressed " << scenePos;
 }
 
-void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos)
+void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
 }

@@ -25,6 +25,7 @@
 #include "TikzItem.h"
 
 class QPainter;
+class QGraphicsView;
 
 class Handle : public TikzItem
 {
@@ -52,7 +53,8 @@ class Handle : public TikzItem
         enum Type {
             MoveHandle,
             ResizeHandle,
-            RotateHandle
+            RotateHandle,
+            AnchorHandle
         };
 
     public:
@@ -97,21 +99,27 @@ class Handle : public TikzItem
         /**
          * This signal is emitted whenever the position of this handle
          * changed through user interaction.
+         * @param handle the handle object that sent this signal
          * @param pos position in scene coordinates
+         * @param view the view the user interacted with
          */
-        void positionChanged(Handle * handle, const QPointF & pos);
+        void positionChanged(Handle * handle, const QPointF & pos, QGraphicsView * view);
 
         /**
          * This signal is emitted whenever the mouse is pressed on the handle.
+         * @param handle the handle object that sent this signal
          * @param pos position in scene coordinates
+         * @param view the view the user interacted with
          */
-        void mousePressed(Handle * handle, const QPointF & pos);
+        void mousePressed(Handle * handle, const QPointF & pos, QGraphicsView * view);
 
         /**
          * This signal is emitted whenever the mouse is released on the handle.
+         * @param handle the handle object that sent this signal
          * @param pos position in scene coordinates
+         * @param view the view the user interacted with
          */
-        void mouseReleased(Handle * handle, const QPointF & pos);
+        void mouseReleased(Handle * handle, const QPointF & pos, QGraphicsView * view);
 
     //
     // reimplemented from QGraphicsItem
