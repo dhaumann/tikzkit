@@ -19,7 +19,7 @@
 
 #include "PipeArrow.h"
 
-#include <EdgeStyle.h>
+#include <tikz/core/EdgeStyle.h>
 
 #include <QPainter>
 

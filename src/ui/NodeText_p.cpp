@@ -23,7 +23,7 @@
 
 #include "TexGenerator.h"
 
-#include <Node.h>
+#include <tikz/core/Node.h>
 
 #include <QDebug>
 

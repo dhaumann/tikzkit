@@ -5,10 +5,7 @@ find_package(Qt4 REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src/core
-    ${CMAKE_SOURCE_DIR}/src/core/path
-    ${CMAKE_SOURCE_DIR}/src/core/node
-    ${CMAKE_SOURCE_DIR}/src/core/style
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/ui
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
     #${POPPLER_QT4_INCLUDE_DIR}

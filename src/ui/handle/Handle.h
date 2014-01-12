@@ -20,7 +20,7 @@
 #ifndef TIKZ_PATH_HANDLE_H
 #define TIKZ_PATH_HANDLE_H
 
-#include "tikz.h"
+#include <tikz/core/tikz.h>
 
 #include "TikzItem.h"
 

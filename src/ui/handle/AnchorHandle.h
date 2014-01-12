@@ -21,7 +21,7 @@
 #define TIKZ_ANCHOR_HANDLE_H
 
 #include "Handle.h"
-#include <MetaPos.h>
+#include <tikz/core/MetaPos.h>
 
 class TikzNode;
 

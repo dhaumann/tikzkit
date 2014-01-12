@@ -4,11 +4,7 @@ find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src/core
-    ${CMAKE_SOURCE_DIR}/src/core/node
-    ${CMAKE_SOURCE_DIR}/src/core/path
-    ${CMAKE_SOURCE_DIR}/src/core/path/ellipse
-    ${CMAKE_SOURCE_DIR}/src/core/style
+    ${CMAKE_SOURCE_DIR}/src
 
     ${CMAKE_SOURCE_DIR}/src/ui/tools
     ${CMAKE_SOURCE_DIR}/src/ui/handle
@@ -26,7 +22,7 @@ set(qtikzui_SOURCES
     TikzNode.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
-    TikzPath.cpp
+    Path.cpp
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
@@ -43,10 +39,10 @@ set(qtikzui_SOURCES
     handle/AnchorHandle.cpp
 
     utils/AnchorManager.cpp
+    utils/Ruler.cpp
 
     TikzScene.cpp
     TikzView.cpp
-    TikzRuler.cpp
     PaintHelper.cpp
     CurveHandle.cpp
     BezierCurve.cpp
@@ -79,7 +75,7 @@ set(qtikzui_HEADERS
     TikzNode.h
 #     TikzEdge.h
 #     TikzEdge_p.h
-    TikzPath.h
+    Path.h
 
     tools/AbstractTool.h
     tools/ProxyTool.h
@@ -96,10 +92,10 @@ set(qtikzui_HEADERS
     handle/AnchorHandle.h
 
     utils/AnchorManager.h
+    utils/Ruler.h
 
     TikzScene.h
     TikzView.h
-    TikzRuler.h
     CurveHandle.h
     NodeText_p.h
     TikzToolBox.h

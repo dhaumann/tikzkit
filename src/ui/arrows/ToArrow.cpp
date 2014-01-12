@@ -19,7 +19,7 @@
 
 #include "ToArrow.h"
 
-#include <EdgeStyle.h>
+#include <tikz/core/EdgeStyle.h>
 
 #include <QPainter>
 

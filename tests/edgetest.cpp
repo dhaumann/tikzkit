@@ -2,9 +2,9 @@
 
 #include <QtTest/QTest>
 
-#include "Node.h"
-#include "Path.h"
-#include "Document.h"
+#include <tikz/core/Node.h>
+#include <tikz/core/Path.h>
+#include <tikz/core/Document.h>
 
 QTEST_MAIN(EdgeTest)
 

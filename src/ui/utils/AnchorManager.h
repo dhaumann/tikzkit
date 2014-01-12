@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QHash>
 
-#include <MetaPos.h>
+#include <tikz/core/MetaPos.h>
 
 class QGraphicsScene;
 class QGraphicsView;

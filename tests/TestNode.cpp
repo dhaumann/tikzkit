@@ -21,8 +21,8 @@
 
 #include <QtTest/QTest>
 
-#include "Document.h"
-#include "Node.h"
+#include <tikz/core/Document.h>
+#include <tikz/core/Node.h>
 
 QTEST_MAIN(NodeTest)
 

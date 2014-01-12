@@ -20,7 +20,7 @@
 #ifndef GUI_TIKZ_ELLIPSE_PATH_H
 #define GUI_TIKZ_ELLIPSE_PATH_H
 
-#include "TikzPath.h"
+#include <Path.h>
 
 #include <QPointer>
 
@@ -38,7 +38,7 @@ class TikzNode;
 class TikzPath;
 class TikzEllipsePathPrivate;
 
-class TikzEllipsePath : public TikzPath
+class TikzEllipsePath : public tikz::ui::Path
 {
     Q_OBJECT
 

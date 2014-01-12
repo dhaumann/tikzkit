@@ -18,7 +18,7 @@
  */
 
 #include "TikzNode.h"
-#include "NodeStyle.h"
+#include <tikz/core/NodeStyle.h>
 #include "NodeText.h"
 #include "PaintHelper.h"
 #include "AbstractShape.h"

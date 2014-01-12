@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzPath.h"
+#include "Path.h"
 
 #include "TikzEllipsePath.h"
 
@@ -26,16 +26,19 @@
 
 #include <QDebug>
 
-class TikzPathPrivate
+namespace tikz {
+namespace ui {
+
+class PathPrivate
 {
     public:
         // edge and nodes
         tikz::core::Path * path;
 };
 
-TikzPath::TikzPath(tikz::core::Path * path, QGraphicsItem * parent)
+Path::Path(tikz::core::Path * path, QGraphicsItem * parent)
     : TikzItem(parent)
-    , d(new TikzPathPrivate())
+    , d(new PathPrivate())
 {
     d->path = path;
 
@@ -49,35 +52,38 @@ TikzPath::TikzPath(tikz::core::Path * path, QGraphicsItem * parent)
     connect(d->path, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
-TikzPath::~TikzPath()
+Path::~Path()
 {
     delete d;
 }
 
-TikzDocument * TikzPath::document() const
+TikzDocument * Path::document() const
 {
     Q_ASSERT(qobject_cast<TikzDocument*>(d->path->document()) != nullptr);
     return qobject_cast<TikzDocument*>(d->path->document());
 }
 
-int TikzPath::type() const
+int Path::type() const
 {
     return UserType + 3;
 }
 
-tikz::core::Path * TikzPath::path() const
+tikz::core::Path * Path::path() const
 {
     return d->path;
 }
 
-qint64 TikzPath::id() const
+qint64 Path::id() const
 {
     return d->path->id();
 }
 
-tikz::core::EdgeStyle* TikzPath::style() const
+tikz::core::EdgeStyle* Path::style() const
 {
     return d->path->style();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

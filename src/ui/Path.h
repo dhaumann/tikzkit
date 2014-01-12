@@ -17,24 +17,26 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_TIKZ_PATH_ITEM_H
-#define GUI_TIKZ_PATH_ITEM_H
+#ifndef TIKZ_UI_PATH_ITEM_H
+#define TIKZ_UI_PATH_ITEM_H
 
 #include "TikzItem.h"
 
-#include <tikz.h>
+#include <tikz/core/tikz.h>
+
+class TikzDocument;
 
 namespace tikz {
 namespace core {
     class Path;
     class EdgeStyle;
 }
-}
 
-class TikzDocument;
-class TikzPathPrivate;
+namespace ui {
 
-class TIKZGUI_EXPORT TikzPath :  public TikzItem
+class PathPrivate;
+
+class TIKZGUI_EXPORT Path :  public TikzItem
 {
     Q_OBJECT
 
@@ -42,12 +44,12 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
         /**
          * Constructor for @p path and parent @p parent.
          */
-        TikzPath(tikz::core::Path * path, QGraphicsItem * parent = 0);
+        Path(tikz::core::Path * path, QGraphicsItem * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~TikzPath();
+        virtual ~Path();
 
         /**
          * Returns the associated document, if available.
@@ -90,12 +92,15 @@ class TIKZGUI_EXPORT TikzPath :  public TikzItem
         /**
          * Private default constructor, not implemented
          */
-        TikzPath();
+        Path();
 
     private:
-        TikzPathPrivate * const d;
+        PathPrivate * const d;
 };
 
-#endif // GUI_TIKZ_PATH_ITEM_H
+}
+}
+
+#endif // TIKZ_UI_PATH_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

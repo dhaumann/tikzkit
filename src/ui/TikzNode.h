@@ -24,7 +24,7 @@
 
 #include "TikzItem.h"
 
-#include <Node.h>
+#include <tikz/core/Node.h>
 
 class QPainter;
 

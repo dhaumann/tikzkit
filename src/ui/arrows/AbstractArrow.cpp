@@ -18,7 +18,8 @@
  */
 
 #include "AbstractArrow.h"
-#include "EdgeStyle.h"
+
+#include <tikz/core/EdgeStyle.h>
 
 #include <QObject>
 #include <QPainterPathStroker>

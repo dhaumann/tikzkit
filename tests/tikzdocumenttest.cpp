@@ -4,9 +4,10 @@
 #include <QDebug>
 #include <QUndoStack>
 
-#include <Document.h>
-#include <Node.h>
-#include <Path.h>
+#include <tikz/core/Document.h>
+#include <tikz/core/Node.h>
+#include <tikz/core/Path.h>
+
 #include <TikzDocument.h>
 #include <TikzNode.h>
 

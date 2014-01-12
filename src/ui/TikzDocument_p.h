@@ -25,14 +25,19 @@
 #include <QHash>
 
 namespace tikz {
+namespace core {
     class Document;
     class Node;
     class Path;
 }
 
+namespace ui {
+    class Path;
+}
+}
+
 class TikzDocument;
 class TikzNode;
-class TikzPath;
 class TikzScene;
 
 class QGraphicsView;
@@ -62,9 +67,9 @@ class TikzDocumentPrivate : public QObject
         QVector<TikzNode*> nodes;
 
         /**
-         * List of TikzPath%s.
+         * List of tikz::ui::Path%s.
          */
-        QVector<TikzPath*> paths;
+        QVector<tikz::ui::Path *> paths;
 
         /**
          * Node lookup map
@@ -74,7 +79,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * Edge lookup map
          */
-        QHash<qint64, TikzPath*> pathMap;
+        QHash<qint64, tikz::ui::Path*> pathMap;
 
         /**
          * Graphics scene for the document.

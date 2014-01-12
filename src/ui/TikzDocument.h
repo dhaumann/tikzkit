@@ -23,13 +23,17 @@
 #include "tikzgui_export.h"
 #include "tikzgui.h"
 
-#include <Document.h>
+#include <tikz/core/Document.h>
 
 class QGraphicsView;
 
-class TikzNode;
-class TikzPath;
+namespace tikz {
+namespace ui {
+    class Path;
+}
+}
 
+class TikzNode;
 class TikzDocumentPrivate;
 
 class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
@@ -89,7 +93,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
          * If the path is not needed anymore, delete it by
          * calling deleteTikzPath(tikzPath).
          */
-        TikzPath * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
+        tikz::ui::Path * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
 
         /**
          * Remove @p node from the document by deleting the node object.
@@ -103,7 +107,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
          * Afterwards, the pointer is invalid.
          * @param path path to delete
          */
-        void deleteTikzPath(TikzPath * path);
+        void deleteTikzPath(tikz::ui::Path * path);
 
         /**
          * Get the TikzNode with @p id.
@@ -113,11 +117,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
         TikzNode * tikzNodeFromId(qint64 id);
 
         /**
-         * Get the TikzPath with @p id.
+         * Get the tikz::ui::Path with @p id.
          * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        TikzPath * tikzPathFromId(qint64 id);
+        tikz::ui::Path * tikzPathFromId(qint64 id);
 
     //
     // internal: Undo / redo items manipulate with ID

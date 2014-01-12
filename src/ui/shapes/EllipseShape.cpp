@@ -19,9 +19,9 @@
 
 #include "EllipseShape.h"
 #include "TikzNode.h"
-#include "NodeStyle.h"
 
-#include "tikz.h"
+#include <tikz/core/NodeStyle.h>
+#include <tikz/core/tikz.h>
 
 #include <cmath>
 

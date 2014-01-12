@@ -25,13 +25,18 @@
 
 #include <QVector>
 
-class TikzPath;
+namespace tikz {
+namespace ui {
+    class Path;
+}
+}
+
 class TikzEllipsePath;
 class Handle;
 class AnchorManager;
 
 /**
- * The EllipseTool allows to modify a TikzPath that represents an ellipse.
+ * The EllipseTool allows to modify a tikz::ui::Path that represents an ellipse.
  * The supported operations are: move, resize, rotate.
  */
 class EllipseTool : public AbstractTool
@@ -42,7 +47,7 @@ class EllipseTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        EllipseTool(TikzPath * path, QGraphicsScene * scene);
+        EllipseTool(tikz::ui::Path * path, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.

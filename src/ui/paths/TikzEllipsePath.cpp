@@ -19,15 +19,15 @@
 
 #include "TikzEllipsePath.h"
 
-#include <EllipsePath.h>
-
-#include "TikzPath.h"
+#include "Path.h"
 #include "TikzNode.h"
 #include "TikzDocument.h"
-#include "EdgeStyle.h"
 #include "ResizeHandle.h"
 #include "MoveHandle.h"
 #include "RotateHandle.h"
+
+#include <tikz/core/EllipsePath.h>
+#include <tikz/core/EdgeStyle.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -39,7 +39,7 @@
 #include <QPainterPathStroker>
 
 TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
-    : TikzPath(path)
+    : tikz::ui::Path(path)
 {
     // catch if the tikz::core::Node::pos() changes behind our back:
     // we need to track the TikzNode the ellipse is attached to

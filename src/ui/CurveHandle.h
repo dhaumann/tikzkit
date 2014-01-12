@@ -21,12 +21,18 @@
 #define TIKZ_CURVE_HANDLE_H
 
 #include "tikzgui_export.h"
-#include "tikz.h"
+
+#include <tikz/core/tikz.h>
 
 #include "TikzItem.h"
 
+namespace tikz {
+namespace ui {
+    class Path;
+}
+}
+
 class QPainter;
-class TikzPath;
 class CurveHandlePrivate;
 
 class CurveHandle : public TikzItem
@@ -37,7 +43,7 @@ class CurveHandle : public TikzItem
         /**
          * Constructor.
          */
-        CurveHandle(TikzPath * path = 0);
+        CurveHandle(tikz::ui::Path * path = 0);
 
         /**
          * Destructor

@@ -23,16 +23,15 @@
 #include "MoveHandle.h"
 #include "TikzEllipsePath.h"
 #include "AnchorManager.h"
-#include <EdgeStyle.h>
-#include <EllipsePath.h>
+#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/EllipsePath.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
-#include <QKeyEvent>
 
 #include <QDebug>
 
-EllipseTool::EllipseTool(TikzPath * path, QGraphicsScene * scene)
+EllipseTool::EllipseTool(tikz::ui::Path * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(qobject_cast<TikzEllipsePath *>(path))
     , m_anchorManager(new AnchorManager(scene, this))

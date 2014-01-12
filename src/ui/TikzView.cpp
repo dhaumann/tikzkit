@@ -18,8 +18,9 @@
  */
 
 #include "TikzView.h"
-#include <Document.h>
-#include <TikzRuler.h>
+#include "Ruler.h"
+
+#include <tikz/core/Document.h>
 
 #include <math.h>
 #include <QDebug>
@@ -31,8 +32,8 @@ class TikzViewPrivate
 {
 public:
     TikzDocument * doc;
-    TikzRuler * m_hRuler;
-    TikzRuler * m_vRuler;
+    tikz::ui::Ruler * m_hRuler;
+    tikz::ui::Ruler * m_vRuler;
     QPointF lastMousePos;
     bool handTool;
 };
@@ -50,8 +51,8 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
 
-    d->m_hRuler = new TikzRuler(Qt::Horizontal, this);
-    d->m_vRuler = new TikzRuler(Qt::Vertical, this);
+    d->m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
+    d->m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
 
     d->m_hRuler->setUnit(tikz::Unit::Centimeter);
     d->m_vRuler->setUnit(tikz::Unit::Centimeter);

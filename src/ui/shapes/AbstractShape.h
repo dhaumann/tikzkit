@@ -23,7 +23,7 @@
 #include <QPointF>
 #include <QPainterPath>
 
-#include <tikz.h>
+#include <tikz/core/tikz.h>
 
 class TikzNode;
 class AbstractShapePrivate;

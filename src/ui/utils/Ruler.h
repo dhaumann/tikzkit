@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -21,15 +21,19 @@
 #define TIKZGUI_RULER_H
 
 #include "tikzgui_export.h"
-#include "tikz.h"
-#include "Value.h"
+
+#include <tikz/core/Value.h>
+#include <tikz/core/tikz.h>
 
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QGridLayout>
 
-class TIKZGUI_EXPORT TikzRuler : public QWidget
+namespace tikz {
+namespace ui {
+
+class TIKZGUI_EXPORT Ruler : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(qreal origin READ origin WRITE setOrigin)
@@ -37,7 +41,7 @@ class TIKZGUI_EXPORT TikzRuler : public QWidget
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
 
 public:
-    TikzRuler(Qt::Orientation orientation, QWidget* parent = 0);
+    Ruler(Qt::Orientation orientation, QWidget* parent = 0);
 
     QSize minimumSizeHint() const;
 
@@ -88,6 +92,9 @@ private:
     qreal m_zoom;
     QPoint m_mousePos;
 };
+
+}
+}
 
 #endif // TIKZGUI_RULER_H
 

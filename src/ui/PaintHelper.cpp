@@ -18,8 +18,9 @@
  */
 
 #include "PaintHelper.h"
-#include "Style.h"
-#include "tikz.h"
+
+#include <tikz/core/Style.h>
+#include <tikz/core/tikz.h>
 
 class PaintHelperPrivate
 {

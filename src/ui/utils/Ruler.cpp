@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,13 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzRuler.h"
-#include <Document.h>
+#include "Ruler.h"
+
+#include <tikz/core/Document.h>
+
 #include <QDebug>
+
+namespace tikz {
+namespace ui {
 
 static const int s_ruler_size = 16;
 
-TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
+Ruler::Ruler(Qt::Orientation orientation, QWidget* parent)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_origin(0.0)
@@ -37,32 +42,32 @@ TikzRuler::TikzRuler(Qt::Orientation orientation, QWidget* parent)
     setMouseTracking(true);
 }
 
-QSize TikzRuler::minimumSizeHint() const
+QSize Ruler::minimumSizeHint() const
 {
     return QSize(s_ruler_size, s_ruler_size);
 }
 
-Qt::Orientation TikzRuler::orientation() const
+Qt::Orientation Ruler::orientation() const
 {
     return m_orientation;
 }
 
-qreal TikzRuler::origin() const
+qreal Ruler::origin() const
 {
     return m_origin;
 }
 
-tikz::Unit TikzRuler::unit() const
+tikz::Unit Ruler::unit() const
 {
     return m_unit;
 }
 
-qreal TikzRuler::zoom() const
+qreal Ruler::zoom() const
 {
     return m_zoom;
 }
 
-void TikzRuler::setOrigin(qreal origin)
+void Ruler::setOrigin(qreal origin)
 {
     if (m_origin != origin) {
         m_origin = origin;
@@ -70,7 +75,7 @@ void TikzRuler::setOrigin(qreal origin)
     }
 }
 
-void TikzRuler::setUnit(tikz::Unit unit)
+void Ruler::setUnit(tikz::Unit unit)
 {
     if (m_unit != unit) {
         m_unit = unit;
@@ -78,7 +83,7 @@ void TikzRuler::setUnit(tikz::Unit unit)
     }
 }
 
-void TikzRuler::setZoom(qreal zoom)
+void Ruler::setZoom(qreal zoom)
 {
     if (m_zoom != zoom)
     {
@@ -87,20 +92,20 @@ void TikzRuler::setZoom(qreal zoom)
     }
 }
 
-void TikzRuler::setMousePos(const QPoint & cursorPos)
+void Ruler::setMousePos(const QPoint & cursorPos)
 {
     m_mousePos = mapFromGlobal(cursorPos);
     update();
 }
 
-void TikzRuler::mouseMoveEvent(QMouseEvent* event)
+void Ruler::mouseMoveEvent(QMouseEvent* event)
 {
     QWidget::mouseMoveEvent(event);
     m_mousePos = event->pos();
     update();
 }
 
-void TikzRuler::paintEvent(QPaintEvent* event)
+void Ruler::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.setRenderHints(QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing);
@@ -139,7 +144,7 @@ void TikzRuler::paintEvent(QPaintEvent* event)
     drawMouseTick(&painter);
 }
 
-void TikzRuler::drawMouseTick(QPainter* painter)
+void Ruler::drawMouseTick(QPainter* painter)
 {
     QPainterPath triangle;
     if (Qt::Horizontal == m_orientation) {
@@ -156,9 +161,12 @@ void TikzRuler::drawMouseTick(QPainter* painter)
     painter->fillPath(triangle, Qt::black);
 }
 
-qreal TikzRuler::physicalDpi() const
+qreal Ruler::physicalDpi() const
 {
     return (m_orientation == Qt::Horizontal) ? physicalDpiX() : physicalDpiY();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

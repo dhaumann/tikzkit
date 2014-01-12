@@ -21,8 +21,8 @@
 
 #include "AbstractArrow.h"
 
-#include <EdgeStyle.h>
-#include <tikz.h>
+#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/tikz.h>
 
 #include <QStylePainter>
 #include <QHBoxLayout>

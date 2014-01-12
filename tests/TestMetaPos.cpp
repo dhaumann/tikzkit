@@ -21,9 +21,9 @@
 
 #include <QtTest/QTest>
 
-#include "Document.h"
-#include "MetaPos.h"
-#include "Node.h"
+#include <tikz/core/Document.h>
+#include <tikz/core/MetaPos.h>
+#include <tikz/core/Node.h>
 
 QTEST_MAIN(MetaPosTest)
 

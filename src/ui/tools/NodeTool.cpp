@@ -22,7 +22,7 @@
 #include "RotateHandle.h"
 #include "MoveHandle.h"
 #include "TikzNode.h"
-#include <NodeStyle.h>
+#include <tikz/core/NodeStyle.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
