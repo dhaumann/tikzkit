@@ -18,9 +18,7 @@
  */
 
 #include "TikzPath.h"
-#include "TikzPath_p.h"
 
-#include "AbstractTikzPath.h"
 #include "TikzEllipsePath.h"
 
 #include <Path.h>
@@ -39,6 +37,13 @@
 #include <QVector2D>
 
 #include <cmath>
+
+class TikzPathPrivate
+{
+    public:
+        // edge and nodes
+        tikz::core::Path * path;
+};
 
 TikzPath::TikzPath(tikz::core::Path * path, QGraphicsItem * parent)
     : TikzItem(parent)

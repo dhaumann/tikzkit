@@ -27,7 +27,6 @@ set(qtikzui_SOURCES
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
     TikzPath.cpp
-    TikzPath_p.cpp
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
@@ -35,8 +34,7 @@ set(qtikzui_SOURCES
     tools/EllipseTool.cpp
     tools/SelectTool.cpp
 
-    paths/AbstractTikzPath.cpp
-    paths/ellipse/TikzEllipsePath.cpp
+    paths/TikzEllipsePath.cpp
 
     handle/Handle.cpp
     handle/ResizeHandle.cpp
@@ -89,8 +87,7 @@ set(qtikzui_HEADERS
     tools/EllipseTool.h
     tools/SelectTool.h
 
-    paths/AbstractTikzPath.h
-    paths/ellipse/TikzEllipsePath.h
+    paths/TikzEllipsePath.h
 
     handle/Handle.h
     handle/ResizeHandle.h
