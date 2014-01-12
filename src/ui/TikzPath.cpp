@@ -46,26 +46,6 @@ TikzPath::TikzPath(tikz::core::Path * path, QGraphicsItem * parent)
 {
     d->path = path;
 
-    d->backendPath = 0;
-
-    // backend path
-    switch (d->path->type()) {
-        case tikz::core::Path::Line: break;
-        case tikz::core::Path::HVLine: break;
-        case tikz::core::Path::VHLine: break;
-        case tikz::core::Path::BendCurve: break;
-        case tikz::core::Path::InOutCurve: break;
-        case tikz::core::Path::BezierCurve: break;
-        case tikz::core::Path::Ellipse: {
-            d->backendPath = new TikzEllipsePath(this);
-            break;
-        }
-        case tikz::core::Path::Rectangle: break;
-        case tikz::core::Path::Grid: break;
-        case tikz::core::Path::Invalid:
-        default: break;
-    }
-
     // setPos needed?
     setPos(0, 0);
 
@@ -92,7 +72,7 @@ int TikzPath::type() const
     return UserType + 3;
 }
 
-tikz::core::Path * TikzPath::path()
+tikz::core::Path * TikzPath::path() const
 {
     return d->path;
 }
@@ -105,46 +85,6 @@ qint64 TikzPath::id() const
 tikz::core::EdgeStyle* TikzPath::style() const
 {
     return d->path->style();
-}
-
-void TikzPath::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    painter->save();
-    d->backendPath->paint(painter, option, widget);
-    painter->restore();
-}
-
-QRectF TikzPath::boundingRect() const
-{
-    return d->backendPath->boundingRect();
-}
-
-QPainterPath TikzPath::shape() const
-{
-    return d->backendPath->shape();
-}
-
-bool TikzPath::contains(const QPointF & point) const
-{
-    return d->backendPath->contains(point);
-}
-
-void TikzPath::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
-{
-    TikzItem::mouseMoveEvent(event);
-    d->backendPath->mouseMoveEvent(event);
-}
-
-void TikzPath::mousePressEvent(QGraphicsSceneMouseEvent * event)
-{
-    TikzItem::mousePressEvent(event);
-    d->backendPath->mousePressEvent(event);
-}
-
-void TikzPath::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
-{
-    TikzItem::mouseReleaseEvent(event);
-    d->backendPath->mouseReleaseEvent(event);
 }
 
 // kate: indent-width 4; replace-tabs on;

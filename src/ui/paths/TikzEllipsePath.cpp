@@ -38,15 +38,15 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainterPathStroker>
 
-TikzEllipsePath::TikzEllipsePath(TikzPath * path)
-    : AbstractTikzPath(path)
+TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
+    : TikzPath(path)
 {
     // catch if the tikz::core::Node::pos() changes behind our back:
     // we need to track the TikzNode the ellipse is attached to
-    connect(path->path(), SIGNAL(nodeChanged(tikz::core::Node*)),
+    connect(path, SIGNAL(nodeChanged(tikz::core::Node*)),
             this, SLOT(updateNode(tikz::core::Node*)));
 
-    connect(path->path(), SIGNAL(changed()), this, SLOT(slotUpdate()));
+    connect(path, SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
 
 TikzEllipsePath::~TikzEllipsePath()
@@ -57,11 +57,6 @@ TikzDocument * TikzEllipsePath::document() const
 {
     Q_ASSERT(qobject_cast<TikzDocument*>(path()->document()) != nullptr);
     return qobject_cast<TikzDocument*>(path()->document());
-}
-
-tikz::core::Path::Type TikzEllipsePath::type() const
-{
-    return tikz::core::Path::Ellipse;
 }
 
 void TikzEllipsePath::setNode(TikzNode* node)
@@ -100,11 +95,11 @@ void TikzEllipsePath::setAnchor(tikz::Anchor anchor)
 
 void TikzEllipsePath::slotUpdate()
 {
-    path()->prepareGeometryChange();
+    prepareGeometryChange();
 
     m_dirty = true;
-    path()->setTransformOriginPoint(pos());
-    path()->setRotation(path()->style()->rotation());
+    setTransformOriginPoint(pos());
+    setRotation(style()->rotation());
 }
 
 void TikzEllipsePath::paint(QPainter *painter,
@@ -121,7 +116,7 @@ void TikzEllipsePath::paint(QPainter *painter,
     PaintHelper sh(painter, style());
     QPen p = sh.pen();
 
-    if (path()->isHovered() /*&& !dragging*/) {
+    if (isHovered() /*&& !dragging*/) {
         painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: make color configurable
     }
 
@@ -175,7 +170,7 @@ void TikzEllipsePath::updateNode(tikz::core::Node * node)
     }
 
     if (m_node != newNode) {
-        path()->prepareGeometryChange();
+        prepareGeometryChange();
         m_dirty = true;
         m_node = newNode;
     }
@@ -209,7 +204,7 @@ void TikzEllipsePath::updateCache()
 
 tikz::core::EllipsePath * TikzEllipsePath::ellipsePath() const
 {
-    tikz::core::EllipsePath * p = qobject_cast<tikz::core::EllipsePath*>(path()->path());
+    tikz::core::EllipsePath * p = qobject_cast<tikz::core::EllipsePath*>(path());
     Q_ASSERT(p != nullptr);
 
     return p;

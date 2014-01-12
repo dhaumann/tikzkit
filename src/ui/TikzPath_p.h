@@ -26,16 +26,11 @@ namespace core {
 }
 }
 
-class AbstractTikzPath;
-
 class TikzPathPrivate
 {
     public:
         // edge and nodes
         tikz::core::Path * path;
-
-        // backend path
-        AbstractTikzPath * backendPath;
 };
 
 #endif // GUI_TIKZ_PATH_PRIVATE_ITEM_H

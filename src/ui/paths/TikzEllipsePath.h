@@ -20,16 +20,14 @@
 #ifndef GUI_TIKZ_ELLIPSE_PATH_H
 #define GUI_TIKZ_ELLIPSE_PATH_H
 
-#include "AbstractTikzPath.h"
-#include "Handle.h"
-
-#include <tikz.h>
+#include "TikzPath.h"
 
 #include <QPointer>
 
 namespace tikz {
 namespace core {
     class EllipsePath;
+    class Node;
 }
 }
 
@@ -40,15 +38,15 @@ class TikzNode;
 class TikzPath;
 class TikzEllipsePathPrivate;
 
-class TikzEllipsePath : public AbstractTikzPath
+class TikzEllipsePath : public TikzPath
 {
     Q_OBJECT
 
     public:
         /**
-         * Constructor for @p edge and parent @p parent.
+         * Constructor with assigned @p path.
          */
-        TikzEllipsePath(TikzPath * path);
+        TikzEllipsePath(tikz::core::Path * path);
 
         /**
          * Destructor
@@ -59,11 +57,6 @@ class TikzEllipsePath : public AbstractTikzPath
          * Returns the associated document, if available.
          */
         TikzDocument * document() const;
-
-        /**
-         * Return the tikz::core::Path::Type type.
-         */
-        tikz::core::Path::Type type() const override;
 
         /**
          * Set the node to @p node.

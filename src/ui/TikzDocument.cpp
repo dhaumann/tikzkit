@@ -29,6 +29,7 @@
 
 #include "TikzNode.h"
 #include "TikzPath.h"
+#include "TikzEllipsePath.h"
 #include "TikzScene.h"
 
 #include <QDebug>
@@ -180,7 +181,28 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     Q_ASSERT(! d->pathMap.contains(id));
 
     // create GUI item
-    TikzPath * tikzPath = new TikzPath(path);
+    TikzPath * tikzPath = nullptr;
+    switch (type) {
+        case tikz::core::Path::Line: break;
+        case tikz::core::Path::HVLine: break;
+        case tikz::core::Path::VHLine: break;
+        case tikz::core::Path::BendCurve: break;
+        case tikz::core::Path::InOutCurve: break;
+        case tikz::core::Path::BezierCurve: break;
+        case tikz::core::Path::Ellipse: {
+            tikzPath = new TikzEllipsePath(path);
+            break;
+        }
+        case tikz::core::Path::Rectangle: break;
+        case tikz::core::Path::Grid: break;
+        case tikz::core::Path::Invalid:
+        default: break;
+    }
+
+    // we should always have a valid ui tikz path
+    Q_ASSERT(tikzPath);
+
+    // register path
     d->paths.append(tikzPath);
     d->pathMap.insert(id, tikzPath);
 

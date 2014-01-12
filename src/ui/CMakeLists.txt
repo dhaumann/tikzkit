@@ -13,7 +13,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/tools
     ${CMAKE_SOURCE_DIR}/src/ui/handle
     ${CMAKE_SOURCE_DIR}/src/ui/paths
-    ${CMAKE_SOURCE_DIR}/src/ui/paths/ellipse
     ${CMAKE_SOURCE_DIR}/src/ui/shapes
     ${CMAKE_SOURCE_DIR}/src/ui/arrows
     ${CMAKE_SOURCE_DIR}/src/ui/tex
