@@ -21,7 +21,7 @@
 #include "ResizeHandle.h"
 #include "RotateHandle.h"
 #include "MoveHandle.h"
-#include "TikzPath.h"
+#include "TikzEllipsePath.h"
 #include "AnchorManager.h"
 #include <EdgeStyle.h>
 #include <EllipsePath.h>
@@ -34,7 +34,7 @@
 
 EllipseTool::EllipseTool(TikzPath * path, QGraphicsScene * scene)
     : AbstractTool(scene)
-    , m_path(path)
+    , m_path(qobject_cast<TikzEllipsePath *>(path))
     , m_anchorManager(new AnchorManager(scene, this))
 {
     // show all path handles
@@ -109,9 +109,7 @@ void EllipseTool::updateHandlePositions()
 
 QPointF EllipseTool::handlePos(Handle::Position pos)
 {
-    // FIXME: using tikz::core::EllipsePath is wrong. Instad, the TikzEllipsePath
-    //        from ui/ should be used. TODO: refactor backendPath architecture...
-    const QPointF c = static_cast<tikz::core::EllipsePath*>(m_path->path())->pos();
+    const QPointF c = m_path->pos();
     const qreal w = m_path->style()->radiusX();
     const qreal h = m_path->style()->radiusY();
     QPointF p(0, 0);
@@ -142,7 +140,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     // rotate
     //
     if (handle->handleType() == Handle::RotateHandle) {
-        const QPointF delta = static_cast<tikz::core::EllipsePath*>(m_path->path())->pos() - scenePos;
+        const QPointF delta = m_path->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
@@ -170,7 +168,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
             m_anchorManager->clear();
         }
 
-        tikz::core::EllipsePath * ep = static_cast<tikz::core::EllipsePath*>(m_path->path());
+        tikz::core::EllipsePath * ep = m_path->ellipsePath();
         tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
         if (metaPos->node()) {
             ep->beginConfig();
@@ -190,7 +188,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     t.rotate(-m_path->style()->rotation());
 
     // honor rotation of path
-    const QPointF delta = t.map(static_cast<tikz::core::EllipsePath*>(m_path->path())->pos() - scenePos);
+    const QPointF delta = t.map(m_path->pos() - scenePos);
     qreal w = m_path->style()->radiusX();
     qreal h = m_path->style()->radiusY();
 

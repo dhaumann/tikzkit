@@ -59,6 +59,11 @@ class TikzEllipsePath : public TikzPath
         TikzDocument * document() const;
 
         /**
+         * Returns the tikz::core::Path object, casted to tikz::core::EllipsePath
+         */
+        tikz::core::EllipsePath * ellipsePath() const;
+
+        /**
          * Set the node to @p node.
          * @param node node of the ellipse. 0 is allowed.
          */
@@ -130,12 +135,6 @@ class TikzEllipsePath : public TikzPath
          * Updates the cache of the ellipse.
          */
         void updateCache();
-
-    private:
-        /**
-         * Returns the tikz::core::Path object, casted to tikz::core::EllipsePath
-         */
-        tikz::core::EllipsePath * ellipsePath() const;
 
     private:
         // the TikzNode this ellipse possibly is anchored at

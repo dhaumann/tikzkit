@@ -26,6 +26,7 @@
 #include <QVector>
 
 class TikzPath;
+class TikzEllipsePath;
 class Handle;
 class AnchorManager;
 
@@ -112,7 +113,7 @@ class EllipseTool : public AbstractTool
 
 
     private:
-        TikzPath * m_path;
+        TikzEllipsePath * m_path;
         QVector<Handle *> m_handles;
         AnchorManager * m_anchorManager;
 };
