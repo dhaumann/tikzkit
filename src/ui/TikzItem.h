@@ -20,15 +20,11 @@
 #ifndef TIKZGUI_ITEM_H
 #define TIKZGUI_ITEM_H
 
-#include <QPointF>
 #include <QGraphicsObject>
 
 #include "tikzgui_export.h"
 
-class QPainter;
-
 class TikzItemPrivate;
-class Style;
 
 class TIKZGUI_EXPORT TikzItem : public QGraphicsObject
 {

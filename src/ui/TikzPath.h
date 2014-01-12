@@ -20,7 +20,6 @@
 #ifndef GUI_TIKZ_PATH_ITEM_H
 #define GUI_TIKZ_PATH_ITEM_H
 
-#include "tikzgui_export.h"
 #include "TikzItem.h"
 
 #include <tikz.h>
@@ -31,8 +30,6 @@ namespace core {
     class EdgeStyle;
 }
 }
-
-class QPainter;
 
 class TikzDocument;
 class TikzPathPrivate;

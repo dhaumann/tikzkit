@@ -23,20 +23,8 @@
 
 #include <Path.h>
 #include "TikzDocument.h"
-#include "EdgeStyle.h"
 
-#include <QPainter>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QTextLayout>
-#include <QGraphicsTextItem>
 #include <QDebug>
-#include <PaintHelper.h>
-#include <QGraphicsSceneMouseEvent>
-#include <QPainterPathStroker>
-#include <QVector2D>
-
-#include <cmath>
 
 class TikzPathPrivate
 {
