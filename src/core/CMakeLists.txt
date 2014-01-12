@@ -90,4 +90,42 @@ target_link_libraries(qtikzcore
     ${QJSON_LIBRARIES}
 )
 
+#
+# copy include files
+#
+
+set(qtikzcore_EXPORT_HEADERS
+    node/Node.h
+    MetaPos.h
+    path/Path.h
+    path/ellipse/EllipsePath.h
+    style/Style.h
+    style/NodeStyle.h
+    style/EdgeStyle.h
+    Document.h
+    Value.h
+    tikz.h
+    tikz_export.h
+)
+
+foreach(Header IN LISTS qtikzcore_EXPORT_HEADERS)
+    get_filename_component(HeaderFilename "${Header}" NAME)
+    set(Output "~/out/project/${HeaderFilename}")
+    list(APPEND PublishedHeaders "${Output}")
+    add_custom_command(
+        OUTPUT "${Output}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/src/core/${Header}"
+        "${CMAKE_SOURCE_DIR}/src/tikz/core/${HeaderFilename}"
+        MAIN_DEPENDENCY "${Header}"
+        COMMENT "Publishing ${HeaderFilename}"
+        VERBATIM
+    )
+endforeach()
+add_custom_target(
+ publish_headers
+ ALL
+ DEPENDS qtikzcore
+ SOURCES ${qtikzcore_EXPORT_HEADERS}
+)
+
 # kate: indent-width 4; replace-tabs on;

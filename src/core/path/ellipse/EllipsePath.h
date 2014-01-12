@@ -20,7 +20,7 @@
 #ifndef TIKZ_ELLIPSE_PATH_H
 #define TIKZ_ELLIPSE_PATH_H
 
-#include <Path.h>
+#include "Path.h"
 
 #include <QPointF>
 
