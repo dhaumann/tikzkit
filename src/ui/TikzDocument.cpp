@@ -27,7 +27,7 @@
 #include "TikzView.h"
 
 #include "TikzNode.h"
-#include "Path.h"
+#include "PathItem.h"
 #include "TikzEllipsePath.h"
 #include "TikzScene.h"
 
@@ -58,7 +58,7 @@ TikzDocument::TikzDocument(QObject * parent)
 
 TikzDocument::~TikzDocument()
 {
-    foreach (tikz::ui::Path * path, d->paths) {
+    foreach (tikz::ui::PathItem * path, d->paths) {
         deletePath(path->id());
     }
 
@@ -110,7 +110,7 @@ TikzNode * TikzDocument::createTikzNode()
     return d->nodeMap[node->id()];
 }
 
-tikz::ui::Path * TikzDocument::createTikzPath(tikz::core::Path::Type type)
+tikz::ui::PathItem * TikzDocument::createTikzPath(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
@@ -128,7 +128,7 @@ void TikzDocument::deleteTikzNode(TikzNode * node)
     Q_ASSERT(! d->nodeMap.contains(id));
 }
 
-void TikzDocument::deleteTikzPath(tikz::ui::Path * path)
+void TikzDocument::deleteTikzPath(tikz::ui::PathItem * path)
 {
     // delete path from id
     const int id = path->id();
@@ -183,7 +183,7 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     Q_ASSERT(! d->pathMap.contains(id));
 
     // create GUI item
-    tikz::ui::Path * tikzPath = nullptr;
+    tikz::ui::PathItem * tikzPath = nullptr;
     switch (type) {
         case tikz::core::Path::Line: break;
         case tikz::core::Path::HVLine: break;
@@ -218,8 +218,8 @@ void TikzDocument::deletePath(qint64 id)
 {
     Q_ASSERT(d->pathMap.contains(id));
 
-    // get tikz::ui::Path
-    tikz::ui::Path * tikzPath = d->pathMap[id];
+    // get tikz::ui::PathItem
+    tikz::ui::PathItem * tikzPath = d->pathMap[id];
 
     // remove from scene
     d->scene->removeItem(tikzPath);
@@ -245,7 +245,7 @@ TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
     return d->nodeMap[id];
 }
 
-tikz::ui::Path * TikzDocument::tikzPathFromId(qint64 id)
+tikz::ui::PathItem * TikzDocument::tikzPathFromId(qint64 id)
 {
     if (id < 0) {
         return 0;

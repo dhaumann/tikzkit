@@ -21,12 +21,10 @@
 
 #include "TikzDocument.h"
 #include "TikzNode.h"
-#include "Path.h"
+#include "PathItem.h"
 #include "AbstractTool.h"
 #include "SelectTool.h" // FIXME: only temporarily
 #include "ProxyTool.h" // FIXME: only temporarily
-
-#include <Path.h>
 
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -180,7 +178,7 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
                 Q_ASSERT(node);
                 d->doc->deleteTikzNode(node);
             } else if (item->type() == QGraphicsItem::UserType + 3) {
-                tikz::ui::Path * path = dynamic_cast<tikz::ui::Path*>(item);
+                tikz::ui::PathItem * path = dynamic_cast<tikz::ui::PathItem*>(item);
                 Q_ASSERT(path);
                 d->doc->deleteTikzPath(path);
             }

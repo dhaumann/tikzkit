@@ -22,7 +22,7 @@ set(qtikzui_SOURCES
     TikzNode.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
-    Path.cpp
+    PathItem.cpp
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
@@ -75,7 +75,7 @@ set(qtikzui_HEADERS
     TikzNode.h
 #     TikzEdge.h
 #     TikzEdge_p.h
-    Path.h
+    PathItem.h
 
     tools/AbstractTool.h
     tools/ProxyTool.h

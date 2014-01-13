@@ -19,7 +19,7 @@
 
 #include "TikzEllipsePath.h"
 
-#include "Path.h"
+#include "PathItem.h"
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "ResizeHandle.h"
@@ -42,7 +42,7 @@ namespace tikz {
 namespace ui {
 
 TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
-    : tikz::ui::Path(path)
+    : tikz::ui::PathItem(path)
 {
     // catch if the tikz::core::Node::pos() changes behind our back:
     // we need to track the TikzNode the ellipse is attached to

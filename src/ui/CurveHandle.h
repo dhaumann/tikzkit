@@ -28,7 +28,7 @@
 
 namespace tikz {
 namespace ui {
-    class Path;
+    class PathItem;
 }
 }
 
@@ -43,7 +43,7 @@ class CurveHandle : public TikzItem
         /**
          * Constructor.
          */
-        CurveHandle(tikz::ui::Path * path = 0);
+        CurveHandle(tikz::ui::PathItem * path = 0);
 
         /**
          * Destructor

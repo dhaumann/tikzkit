@@ -34,7 +34,7 @@
 namespace tikz {
 namespace ui {
 
-EllipseTool::EllipseTool(tikz::ui::Path * path, QGraphicsScene * scene)
+EllipseTool::EllipseTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(qobject_cast<tikz::ui::TikzEllipsePath *>(path))
     , m_anchorManager(new AnchorManager(scene, this))

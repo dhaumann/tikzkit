@@ -29,7 +29,7 @@
 namespace tikz {
 namespace ui {
 
-class Path;
+class PathItem;
 class TikzEllipsePath;
 
 class AnchorManager;
@@ -47,7 +47,7 @@ class EllipseTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        EllipseTool(tikz::ui::Path * path, QGraphicsScene * scene);
+        EllipseTool(tikz::ui::PathItem * path, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.

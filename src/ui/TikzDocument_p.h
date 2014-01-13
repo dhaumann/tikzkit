@@ -36,7 +36,7 @@ namespace core {
 
 namespace ui {
 
-class Path;
+class PathItem;
 
 class TikzDocument;
 class TikzScene;
@@ -67,9 +67,9 @@ class TikzDocumentPrivate : public QObject
         QVector<TikzNode*> nodes;
 
         /**
-         * List of tikz::ui::Path%s.
+         * List of tikz::ui::PathItem%s.
          */
-        QVector<tikz::ui::Path *> paths;
+        QVector<tikz::ui::PathItem *> paths;
 
         /**
          * Node lookup map
@@ -79,7 +79,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * Edge lookup map
          */
-        QHash<qint64, tikz::ui::Path*> pathMap;
+        QHash<qint64, tikz::ui::PathItem *> pathMap;
 
         /**
          * Graphics scene for the document.

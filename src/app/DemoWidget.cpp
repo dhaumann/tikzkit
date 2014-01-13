@@ -20,7 +20,7 @@
 
 #include "TikzDocument.h"
 #include "TikzNode.h"
-#include "Path.h"
+#include "PathItem.h"
 #include "TikzScene.h"
 #include "TikzToolBox.h"
 
@@ -125,7 +125,7 @@ MainWindow::MainWindow()
     item2->node()->setText("$\\Leftrightarrow$");
 
     // an path
-    tikz::ui::Path* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
+    tikz::ui::PathItem* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
     path->path()->style()->setRadiusX(2.0);
     path->path()->style()->setRadiusY(1.0);
 //     path->setStartNode(item1);
@@ -318,7 +318,7 @@ MainWindow::MainWindow()
         //
         // paths
         //
-        tikz::ui::Path* path = m_doc->createTikzPath();
+        tikz::ui::PathItem* path = m_doc->createTikzPath();
 //         path->setStartNode(n1);
 //         path->setEndNode(n2);
         path->path()->style()->setLineWidthType(tikz::Thick);

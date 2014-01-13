@@ -31,7 +31,7 @@ namespace tikz {
 namespace ui {
 
 class TikzNode;
-class Path;
+class PathItem;
 class TikzDocumentPrivate;
 
 class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
@@ -91,7 +91,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
          * If the path is not needed anymore, delete it by
          * calling deleteTikzPath(tikzPath).
          */
-        tikz::ui::Path * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
+        tikz::ui::PathItem * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
 
         /**
          * Remove @p node from the document by deleting the node object.
@@ -105,7 +105,7 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
          * Afterwards, the pointer is invalid.
          * @param path path to delete
          */
-        void deleteTikzPath(tikz::ui::Path * path);
+        void deleteTikzPath(tikz::ui::PathItem * path);
 
         /**
          * Get the TikzNode with @p id.
@@ -115,11 +115,11 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
         TikzNode * tikzNodeFromId(qint64 id);
 
         /**
-         * Get the tikz::ui::Path with @p id.
+         * Get the tikz::ui::PathItem with @p id.
          * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        tikz::ui::Path * tikzPathFromId(qint64 id);
+        tikz::ui::PathItem * tikzPathFromId(qint64 id);
 
     //
     // internal: Undo / redo items manipulate with ID

@@ -17,11 +17,11 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "Path.h"
+#include "PathItem.h"
 
 #include "TikzEllipsePath.h"
 
-#include <Path.h>
+#include <tikz/core/Path.h>
 #include "TikzDocument.h"
 
 #include <QDebug>
@@ -36,7 +36,7 @@ class PathPrivate
         tikz::core::Path * path;
 };
 
-Path::Path(tikz::core::Path * path, QGraphicsItem * parent)
+PathItem::PathItem(tikz::core::Path * path, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new PathPrivate())
 {
@@ -52,33 +52,33 @@ Path::Path(tikz::core::Path * path, QGraphicsItem * parent)
     connect(d->path, SIGNAL(changed()), this, SIGNAL(changed()));
 }
 
-Path::~Path()
+PathItem::~PathItem()
 {
     delete d;
 }
 
-TikzDocument * Path::document() const
+TikzDocument * PathItem::document() const
 {
     Q_ASSERT(qobject_cast<TikzDocument*>(d->path->document()) != nullptr);
     return qobject_cast<TikzDocument*>(d->path->document());
 }
 
-int Path::type() const
+int PathItem::type() const
 {
     return UserType + 3;
 }
 
-tikz::core::Path * Path::path() const
+tikz::core::Path * PathItem::path() const
 {
     return d->path;
 }
 
-qint64 Path::id() const
+qint64 PathItem::id() const
 {
     return d->path->id();
 }
 
-tikz::core::EdgeStyle* Path::style() const
+tikz::core::EdgeStyle* PathItem::style() const
 {
     return d->path->style();
 }

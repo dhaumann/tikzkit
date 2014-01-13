@@ -18,7 +18,7 @@
  */
 
 #include "CurveHandle.h"
-#include "Path.h"
+#include "PathItem.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -32,7 +32,7 @@ class CurveHandlePrivate
     public:
 };
 
-CurveHandle::CurveHandle(tikz::ui::Path * path)
+CurveHandle::CurveHandle(tikz::ui::PathItem * path)
     : TikzItem(path)
     , d(new CurveHandlePrivate())
 {

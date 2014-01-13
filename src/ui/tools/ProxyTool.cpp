@@ -22,7 +22,7 @@
 #include "NodeTool.h"
 #include "EllipseTool.h"
 #include "TikzNode.h"
-#include "Path.h"
+#include "PathItem.h"
 
 #include <tikz/core/Path.h>
 
@@ -91,8 +91,8 @@ void ProxyTool::updateTool()
     if (items.size() == 1) {
         if (dynamic_cast<TikzNode *>(items[0])) {
             m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
-        } else if (dynamic_cast<tikz::ui::Path*>(items[0])) {
-            tikz::ui::Path * path = static_cast<tikz::ui::Path *>(items[0]);
+        } else if (dynamic_cast<tikz::ui::PathItem*>(items[0])) {
+            tikz::ui::PathItem * path = static_cast<tikz::ui::PathItem *>(items[0]);
             const tikz::core::Path::Type type = path->path()->type();
             switch (type) {
                 case tikz::core::Path::Line: break;
@@ -101,7 +101,7 @@ void ProxyTool::updateTool()
                 case tikz::core::Path::BendCurve: break;
                 case tikz::core::Path::InOutCurve: break;
                 case tikz::core::Path::BezierCurve: break;
-                case tikz::core::Path::Ellipse: m_tool = new EllipseTool(static_cast<tikz::ui::Path *>(items[0]), scene()); break;
+                case tikz::core::Path::Ellipse: m_tool = new EllipseTool(path, scene()); break;
                 case tikz::core::Path::Rectangle: break;
                 case tikz::core::Path::Grid: break;
                 case tikz::core::Path::Invalid: break;

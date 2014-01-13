@@ -20,12 +20,11 @@
 #ifndef TIKZ_UI_ELLIPSE_PATH_ITEM_H
 #define TIKZ_UI_ELLIPSE_PATH_ITEM_H
 
-#include <Path.h>
+#include <PathItem.h>
 
 #include <QPointer>
 
 class QPainter;
-
 
 namespace tikz {
 namespace core {
@@ -39,7 +38,7 @@ class TikzDocument;
 class TikzNode;
 class TikzEllipsePathPrivate;
 
-class TikzEllipsePath : public tikz::ui::Path
+class TikzEllipsePath : public tikz::ui::PathItem
 {
     Q_OBJECT
 

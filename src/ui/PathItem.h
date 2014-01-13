@@ -36,7 +36,7 @@ namespace ui {
 class TikzDocument;
 class PathPrivate;
 
-class TIKZGUI_EXPORT Path :  public TikzItem
+class TIKZGUI_EXPORT PathItem :  public TikzItem
 {
     Q_OBJECT
 
@@ -44,12 +44,12 @@ class TIKZGUI_EXPORT Path :  public TikzItem
         /**
          * Constructor for @p path and parent @p parent.
          */
-        Path(tikz::core::Path * path, QGraphicsItem * parent = 0);
+        PathItem(tikz::core::Path * path, QGraphicsItem * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~Path();
+        virtual ~PathItem();
 
         /**
          * Returns the associated document, if available.
@@ -92,7 +92,7 @@ class TIKZGUI_EXPORT Path :  public TikzItem
         /**
          * Private default constructor, not implemented
          */
-        Path();
+        PathItem();
 
     private:
         PathPrivate * const d;
