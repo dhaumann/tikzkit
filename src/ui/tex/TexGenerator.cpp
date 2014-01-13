@@ -30,6 +30,8 @@
 
 #include <QDebug>
 
+namespace tex {
+
 class TexGeneratorPrivate
 {
     public:
@@ -154,6 +156,8 @@ void TexGenerator::processError(QProcess::ProcessError error)
 void TexGenerator::outputReady()
 {
 //     qDebug() << "output ready" << d->process->readAllStandardError();
+}
+
 }
 
 // kate: indent-width 4; replace-tabs on;

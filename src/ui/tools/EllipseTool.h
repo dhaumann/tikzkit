@@ -17,23 +17,23 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_ELLIPSE_TOOL_H
-#define TIKZ_ELLIPSE_TOOL_H
+#ifndef TIKZ_UI_ELLIPSE_TOOL_H
+#define TIKZ_UI_ELLIPSE_TOOL_H
 
 #include "AbstractTool.h"
 #include "Handle.h"
 
 #include <QVector>
 
+
 namespace tikz {
 namespace ui {
-    class Path;
-}
-}
 
+class Path;
 class TikzEllipsePath;
-class Handle;
+
 class AnchorManager;
+class Handle;
 
 /**
  * The EllipseTool allows to modify a tikz::ui::Path that represents an ellipse.
@@ -98,17 +98,17 @@ class EllipseTool : public AbstractTool
          * @param scenePos the mouse move position in scene coordinates
          * @param view the view that generated this event
          */
-        void handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMoved(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was pressed with the mouse.
          */
-        void handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMousePressed(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was released with the mouse.
          */
-        void handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMouseReleased(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
     protected:
         /**
@@ -118,11 +118,14 @@ class EllipseTool : public AbstractTool
 
 
     private:
-        TikzEllipsePath * m_path;
+        tikz::ui::TikzEllipsePath * m_path;
         QVector<Handle *> m_handles;
         AnchorManager * m_anchorManager;
 };
 
-#endif // TIKZ_ELLIPSE_TOOL_H
+}
+}
+
+#endif // TIKZ_UI_ELLIPSE_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

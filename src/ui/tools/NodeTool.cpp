@@ -30,6 +30,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 NodeTool::NodeTool(TikzNode * node, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_node(node)
@@ -87,12 +90,12 @@ void NodeTool::createNodeHandles()
     foreach (Handle * handle, m_handles) {
         scene()->addItem(handle);
         handle->show();
-        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMoved(Handle *, const QPointF &, QGraphicsView *)));
-        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMousePressed(Handle *, const QPointF &, QGraphicsView *)));
-        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMouseReleased(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(positionChanged(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMoved(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mousePressed(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMousePressed(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mouseReleased(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMouseReleased(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
     }
 }
 
@@ -228,6 +231,9 @@ void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGr
 void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

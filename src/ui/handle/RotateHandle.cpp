@@ -24,6 +24,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 RotateHandle::RotateHandle(Position position)
     : Handle(Handle::RotateHandle, position)
 {
@@ -52,6 +55,9 @@ void RotateHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawEllipse(rect());
 
     painter->restore();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

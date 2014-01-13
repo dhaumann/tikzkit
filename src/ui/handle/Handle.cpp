@@ -26,6 +26,8 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
 
 Handle::Handle(Type type, Position position)
     : TikzItem()
@@ -152,6 +154,9 @@ void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 
         event->accept();
     }
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

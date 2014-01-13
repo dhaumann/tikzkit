@@ -22,6 +22,9 @@
 #include <QGraphicsScene>
 #include <QKeyEvent>
 
+namespace tikz {
+namespace ui {
+
 AbstractTool::AbstractTool(QGraphicsScene * scene)
     : QObject(scene)
     , m_scene(scene)
@@ -48,6 +51,9 @@ void AbstractTool::mouseLeftScene()
 void AbstractTool::keyPressEvent(QKeyEvent * event)
 {
     event->ignore();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

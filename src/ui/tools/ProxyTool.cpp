@@ -31,6 +31,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 ProxyTool::ProxyTool(QGraphicsScene * graphicsScene)
     : AbstractTool(graphicsScene)
     , m_tool(nullptr)
@@ -113,6 +116,9 @@ void ProxyTool::updateTool()
     if (! m_tool) {
         m_tool = new SelectTool(scene());
     }
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

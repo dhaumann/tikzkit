@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,16 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_TIKZ_SCENE_H
-#define TIKZGUI_TIKZ_SCENE_H
+#ifndef TIKZ_UI_TIKZ_SCENE_H
+#define TIKZ_UI_TIKZ_SCENE_H
 
 #include <QGraphicsScene>
 
 #include "tikzgui_export.h"
 #include "tikzgui.h"
 
-class TikzDocument;
+namespace tikz {
+namespace ui {
 
+class TikzDocument;
 class TikzScenePrivate;
 
 class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
@@ -99,6 +101,9 @@ class TIKZGUI_EXPORT TikzScene : public QGraphicsScene
         TikzScenePrivate * const d;
 };
 
-#endif // TIKZGUI_TIKZ_SCENE_H
+}
+}
+
+#endif // TIKZ_UI_TIKZ_SCENE_H
 
 // kate: indent-width 4; replace-tabs on;

@@ -24,6 +24,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 MoveHandle::MoveHandle(Position position)
     : Handle(Handle::MoveHandle, position)
 {
@@ -52,6 +55,9 @@ void MoveHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawEllipse(rect());
 
     painter->restore();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

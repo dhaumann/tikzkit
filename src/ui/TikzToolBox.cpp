@@ -27,6 +27,9 @@
 #include <QButtonGroup>
 #include <QToolButton>
 
+namespace tikz {
+namespace ui {
+
 class TikzToolBoxPrivate
 {
 public:
@@ -125,6 +128,9 @@ void TikzToolBox::setEditModeInternal(int mode)
 {
     Q_ASSERT(mode >= 0);
     document()->setEditMode(static_cast<TikzEditMode>(mode));
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,18 +17,24 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_NODE_TEXT_ITEM_PRIVATE_H
-#define TIKZ_NODE_TEXT_ITEM_PRIVATE_H
+#ifndef TIKZ_UI_NODE_TEXT_ITEM_PRIVATE_H
+#define TIKZ_UI_NODE_TEXT_ITEM_PRIVATE_H
 
 #include <QObject>
 #include <QSvgRenderer>
 
 #include "TexGenerator.h"
 
+namespace tex {
+    class TexGenerator;
+    class PdfRenderer;
+}
+
+namespace tikz {
+namespace ui {
+
 class TikzNode;
 class NodeText;
-class TexGenerator;
-class PdfRenderer;
 
 class NodeTextPrivate : public QObject
 {
@@ -42,7 +48,7 @@ class NodeTextPrivate : public QObject
         TikzNode* node;
 
         QSvgRenderer svgRenderer;
-        TexGenerator texGenerator;
+        tex::TexGenerator texGenerator;
 
     public:
         void updateCache();
@@ -54,7 +60,9 @@ class NodeTextPrivate : public QObject
         void readSvgFile(const QString& file);
 };
 
+}
+}
 
-#endif // TIKZ_NODE_TEXT_ITEM_PRIVATE_H
+#endif // TIKZ_UI_NODE_TEXT_ITEM_PRIVATE_H
 
 // kate: indent-width 4; replace-tabs on;

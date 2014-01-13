@@ -32,6 +32,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     : Handle(Handle::AnchorHandle)
     , m_metaPos(new tikz::core::MetaPos())
@@ -114,6 +117,9 @@ bool AnchorHandle::contains(const QPointF &point) const
     }
 
     return Handle::contains(point);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

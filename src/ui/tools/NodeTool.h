@@ -17,16 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_NODE_TOOL_H
-#define TIKZ_NODE_TOOL_H
+#ifndef TIKZ_UI_NODE_TOOL_H
+#define TIKZ_UI_NODE_TOOL_H
 
 #include "AbstractTool.h"
 #include "Handle.h"
 
 #include <QVector>
 
+namespace tikz {
+namespace ui {
+
 class TikzNode;
-class Handle;
 
 /**
  * The NodeTool allows to modify a TikzNode.
@@ -91,17 +93,17 @@ class NodeTool : public AbstractTool
          * @param scenePos the mouse move position in scene coordinates
          * @param view the view that generated this event
          */
-        void handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMoved(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was pressed with the mouse.
          */
-        void handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMousePressed(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
         /**
          * This slot is called whenever a handle was released with the mouse.
          */
-        void handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view);
+        void handleMouseReleased(tikz::ui::Handle * handle, const QPointF & scenePos, QGraphicsView * view);
 
     protected:
         /**
@@ -115,6 +117,9 @@ class NodeTool : public AbstractTool
         QVector<Handle *> m_handles;
 };
 
-#endif // TIKZ_NODE_TOOL_H
+}
+}
+
+#endif // TIKZ_UI_NODE_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

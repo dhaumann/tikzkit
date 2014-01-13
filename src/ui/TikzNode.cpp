@@ -38,6 +38,9 @@
 
 #include <cmath>
 
+namespace tikz {
+namespace ui {
+
 class TikzNodePrivate
 {
     TikzNode* q;
@@ -268,6 +271,9 @@ void TikzNode::styleChanged()
     d->dirty = true;
     if (d->node->pos() != pos()) slotSetPos(d->node->pos());
     emit changed();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -25,9 +25,9 @@ void TikzDocumentTest::cleanupTestCase()
 
 void TikzDocumentTest::documentTest()
 {
-    TikzDocument doc;
+    tikz::ui::TikzDocument doc;
 
-    TikzNode * node = doc.createTikzNode();
+    tikz::ui::TikzNode * node = doc.createTikzNode();
 
     Q_ASSERT(node != 0);
 

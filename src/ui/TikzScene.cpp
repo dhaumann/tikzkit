@@ -38,6 +38,9 @@
 
 #include <math.h>
 
+namespace tikz {
+namespace ui {
+
 class TikzScenePrivate
 {
 public:
@@ -190,6 +193,9 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
 
     // nothing done with the event, pass on
     QGraphicsScene::keyPressEvent(keyEvent);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

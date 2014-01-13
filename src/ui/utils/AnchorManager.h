@@ -28,6 +28,10 @@
 
 class QGraphicsScene;
 class QGraphicsView;
+
+namespace tikz {
+namespace ui {
+
 class TikzNode;
 class AnchorHandle;
 
@@ -119,6 +123,9 @@ class AnchorManager : public QObject
         QVector <TikzNode *> m_nodes;
         QHash <TikzNode *, QVector<AnchorHandle *>> m_handleMap;
 };
+
+}
+}
 
 #endif // TIKZ_UI_ANCHOR_MANAGER_H
 

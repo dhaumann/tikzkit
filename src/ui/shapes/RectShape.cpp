@@ -27,6 +27,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 class RectShapePrivate
 {
     public:
@@ -123,6 +126,9 @@ QPointF RectShape::contactPoint(tikz::Anchor anchor, qreal rad) const
         }
     }
     return QPointF(x, y);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

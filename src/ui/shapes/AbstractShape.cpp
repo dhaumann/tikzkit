@@ -18,8 +18,14 @@
  */
 
 #include "AbstractShape.h"
+#include "RectShape.h"
+#include "CircleShape.h"
+#include "EllipseShape.h"
 
 #include <cmath>
+
+namespace tikz {
+namespace ui {
 
 class AbstractShapePrivate
 {
@@ -77,9 +83,6 @@ QPointF AbstractShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     return QPointF(0, 0);
 }
 
-#include "RectShape.h"
-#include "CircleShape.h"
-#include "EllipseShape.h"
 
 AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
 {
@@ -91,6 +94,9 @@ AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
         default: break;
     }
     return new AbstractShape(node);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

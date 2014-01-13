@@ -26,6 +26,9 @@
 #include <QDebug>
 #include <QScrollBar>
 
+namespace tikz {
+namespace ui {
+
 static const int s_ruler_size = 16;
 
 class TikzViewPrivate
@@ -152,6 +155,9 @@ bool TikzView::viewportEvent(QEvent * event)
     d->m_vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * 2.540);
 
     return QGraphicsView::viewportEvent(event);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,14 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_NODE_TEXT_ITEM_H
-#define TIKZ_NODE_TEXT_ITEM_H
+#ifndef TIKZ_UI_NODE_TEXT_ITEM_H
+#define TIKZ_UI_NODE_TEXT_ITEM_H
 
 #include "tikzgui_export.h"
 
 #include <QGraphicsSimpleTextItem>
 
 class QPainter;
+
+namespace tikz {
+namespace ui {
+
 class TikzNode;
 class NodeTextPrivate;
 
@@ -47,6 +51,9 @@ class NodeText : public QGraphicsSimpleTextItem
         NodeTextPrivate * const d;
 };
 
-#endif // TIKZ_NODE_TEXT_ITEM_H
+}
+}
+
+#endif // TIKZ_UI_NODE_TEXT_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

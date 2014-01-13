@@ -26,6 +26,8 @@
 
 #include <poppler-qt4.h>
 
+namespace tex {
+
 class PdfRendererPrivate
 {
     public:
@@ -84,6 +86,8 @@ QPixmap PdfRenderer::render(qreal physicalDpiX, qreal physicalDpiY)
     //END hack
     d->pixmap = QPixmap::fromImage(image);
     return d->pixmap;
+}
+
 }
 
 // kate: indent-width 4; replace-tabs on;

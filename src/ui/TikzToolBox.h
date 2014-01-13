@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,16 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_TIKZ_TOOL_BOX_H
-#define TIKZGUI_TIKZ_TOOL_BOX_H
+#ifndef TIKZ_UI_TIKZ_TOOL_BOX_H
+#define TIKZ_UI_TIKZ_TOOL_BOX_H
 
 #include <QWidget>
 
 #include "tikzgui_export.h"
 #include "tikzgui.h"
 
-class TikzDocument;
+namespace tikz {
+namespace ui {
 
+class TikzDocument;
 class TikzToolBoxPrivate;
 
 class TIKZGUI_EXPORT TikzToolBox : public QWidget
@@ -77,6 +79,9 @@ class TIKZGUI_EXPORT TikzToolBox : public QWidget
         TikzToolBoxPrivate * const d;
 };
 
-#endif // TIKZGUI_TIKZ_TOOL_BOX_H
+}
+}
+
+#endif // TIKZ_UI_TIKZ_TOOL_BOX_H
 
 // kate: indent-width 4; replace-tabs on;

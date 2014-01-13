@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -37,6 +37,9 @@
 #include <PaintHelper.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainterPathStroker>
+
+namespace tikz {
+namespace ui {
 
 TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
     : tikz::ui::Path(path)
@@ -210,4 +213,6 @@ tikz::core::EllipsePath * TikzEllipsePath::ellipsePath() const
     return p;
 }
 
+}
+}
 // kate: indent-width 4; replace-tabs on;

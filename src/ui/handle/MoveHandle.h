@@ -17,10 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_MOVE_HANDLE_H
-#define TIKZ_MOVE_HANDLE_H
+#ifndef TIKZ_UI_MOVE_HANDLE_H
+#define TIKZ_UI_MOVE_HANDLE_H
 
 #include "Handle.h"
+
+namespace tikz {
+namespace ui {
 
 class MoveHandle : public Handle
 {
@@ -52,6 +55,9 @@ class MoveHandle : public Handle
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 };
 
-#endif // TIKZ_MOVE_HANDLE_H
+}
+}
+
+#endif // TIKZ_UI_MOVE_HANDLE_H
 
 // kate: indent-width 4; replace-tabs on;

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -26,6 +26,8 @@
 
 class PdfRendererPrivate;
 class TikzNode;
+
+namespace tex {
 
 class PdfRenderer : public QObject
 {
@@ -59,6 +61,8 @@ class PdfRenderer : public QObject
     private:
         PdfRendererPrivate * const d;
 };
+
+}
 
 #endif // TIKZ_PDF_RENDERER_H
 

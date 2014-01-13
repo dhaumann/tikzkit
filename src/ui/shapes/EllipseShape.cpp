@@ -25,6 +25,9 @@
 
 #include <cmath>
 
+namespace tikz {
+namespace ui {
+
 class EllipseShapePrivate
 {
     public:
@@ -128,6 +131,9 @@ QPointF EllipseShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     const qreal d = qFuzzyCompare(denominator, 0.0) ? 0 : rx * ry / denominator;
 
     return d * QPointF(std::cos(rad), std::sin(rad));
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

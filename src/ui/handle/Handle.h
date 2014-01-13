@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_PATH_HANDLE_H
-#define TIKZ_PATH_HANDLE_H
+#ifndef TIKZ_UI_PATH_HANDLE_H
+#define TIKZ_UI_PATH_HANDLE_H
 
 #include <tikz/core/tikz.h>
 
@@ -26,6 +26,9 @@
 
 class QPainter;
 class QGraphicsView;
+
+namespace tikz {
+namespace ui {
 
 class Handle : public TikzItem
 {
@@ -137,7 +140,7 @@ class Handle : public TikzItem
          * @param pos position in scene coordinates
          * @param view the view the user interacted with
          */
-        void positionChanged(Handle * handle, const QPointF & pos, QGraphicsView * view);
+        void positionChanged(tikz::ui::Handle * handle, const QPointF & pos, QGraphicsView * view);
 
         /**
          * This signal is emitted whenever the mouse is pressed on the handle.
@@ -145,7 +148,7 @@ class Handle : public TikzItem
          * @param pos position in scene coordinates
          * @param view the view the user interacted with
          */
-        void mousePressed(Handle * handle, const QPointF & pos, QGraphicsView * view);
+        void mousePressed(tikz::ui::Handle * handle, const QPointF & pos, QGraphicsView * view);
 
         /**
          * This signal is emitted whenever the mouse is released on the handle.
@@ -153,7 +156,7 @@ class Handle : public TikzItem
          * @param pos position in scene coordinates
          * @param view the view the user interacted with
          */
-        void mouseReleased(Handle * handle, const QPointF & pos, QGraphicsView * view);
+        void mouseReleased(tikz::ui::Handle * handle, const QPointF & pos, QGraphicsView * view);
 
     //
     // reimplemented from QGraphicsItem
@@ -198,6 +201,9 @@ class Handle : public TikzItem
         bool m_active;
 };
 
-#endif // TIKZ_PATH_HANDLE_H
+}
+}
+
+#endif // TIKZ_UI_PATH_HANDLE_H
 
 // kate: indent-width 4; replace-tabs on;

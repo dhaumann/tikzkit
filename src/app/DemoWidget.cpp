@@ -44,7 +44,7 @@
 
 #include <QDebug>
 
-static TikzNode* a;
+static tikz::ui::TikzNode* a;
 
 MainWindow::MainWindow()
     : QMainWindow()
@@ -63,9 +63,9 @@ MainWindow::MainWindow()
     QHBoxLayout * hbox = new QHBoxLayout(top);
     top->setLayout(hbox);
 
-    m_doc = new TikzDocument(this);
+    m_doc = new tikz::ui::TikzDocument(this);
 
-    TikzToolBox * toolBox = new TikzToolBox(m_doc, this);
+    tikz::ui::TikzToolBox * toolBox = new tikz::ui::TikzToolBox(m_doc, this);
     hbox->addWidget(toolBox);
 
     QVBoxLayout* v = new QVBoxLayout();
@@ -110,14 +110,14 @@ MainWindow::MainWindow()
 
     m_view->show();
 
-    TikzNode* item1 = m_doc->createTikzNode();
+    tikz::ui::TikzNode* item1 = m_doc->createTikzNode();
     item1->node()->setPos(QPointF(-3, 3));
     item1->node()->style()->setLineWidthType(tikz::VeryThin);
     item1->node()->style()->setShape(tikz::ShapeRectangle);
     item1->node()->style()->setInnerSep(0.2);
     item1->node()->setText("$\\int f(x) dx$");
 
-    TikzNode* item2 = m_doc->createTikzNode();
+    tikz::ui::TikzNode* item2 = m_doc->createTikzNode();
     item2->node()->setPos(QPointF(3, 3));
     item2->node()->style()->setLineWidthType(tikz::Thin);
     item2->node()->style()->setShape(tikz::ShapeCircle);

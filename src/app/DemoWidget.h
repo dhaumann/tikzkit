@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,12 @@
 
 class QGraphicsView;
 class QTextEdit;
-class TikzDocument;
+
+namespace tikz {
+namespace ui {
+    class TikzDocument;
+}
+}
 
 namespace Ui {
     class MainWindow;
@@ -58,7 +63,7 @@ class MainWindow : public QMainWindow
 
         std::unique_ptr<Ui::MainWindow> m_ui;
 
-        TikzDocument * m_doc;
+        tikz::ui::TikzDocument * m_doc;
 
         QTextEdit * m_textEdit;
 };

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_NODE_ITEM_H
-#define TIKZ_NODE_ITEM_H
+#ifndef TIKZ_UI_NODE_ITEM_H
+#define TIKZ_UI_NODE_ITEM_H
 
 #include "tikzgui_export.h"
 
@@ -28,7 +28,14 @@
 
 class QPainter;
 
-class Style;
+namespace tikz {
+
+namespace core {
+    class Style;
+}
+
+namespace ui {
+
 class TikzDocument;
 class TikzNodePrivate;
 
@@ -155,6 +162,9 @@ class TIKZGUI_EXPORT TikzNode : public TikzItem
         TikzNodePrivate * const d;
 };
 
-#endif // TIKZ_NODE_ITEM_H
+}
+}
+
+#endif // TIKZ_UI_NODE_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

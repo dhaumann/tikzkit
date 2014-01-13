@@ -25,6 +25,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+namespace tikz {
+namespace ui {
+
 AnchorManager::AnchorManager(QGraphicsScene * scene, QObject * parent)
     : QObject(parent)
     , m_scene(scene)
@@ -178,6 +181,9 @@ tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos, QGrap
     }
 
     return metaPos;
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

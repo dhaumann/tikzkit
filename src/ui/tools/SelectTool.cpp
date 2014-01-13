@@ -24,6 +24,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 SelectTool::SelectTool(QGraphicsScene * scene)
     : AbstractTool(scene)
 {
@@ -46,6 +49,9 @@ void SelectTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void SelectTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     qDebug() << "mouse release event";
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

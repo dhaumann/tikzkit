@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,12 +17,15 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_DOCUMENT_PRIVATE_H
-#define TIKZGUI_DOCUMENT_PRIVATE_H
+#ifndef TIKZ_UI_DOCUMENT_PRIVATE_H
+#define TIKZ_UI_DOCUMENT_PRIVATE_H
 
 #include <QObject>
 #include <QVector>
 #include <QHash>
+
+class TikzNode;
+class QGraphicsView;
 
 namespace tikz {
 namespace core {
@@ -32,15 +35,12 @@ namespace core {
 }
 
 namespace ui {
-    class Path;
-}
-}
+
+class Path;
 
 class TikzDocument;
-class TikzNode;
 class TikzScene;
 
-class QGraphicsView;
 
 class TikzDocumentPrivate : public QObject
 {
@@ -92,6 +92,9 @@ class TikzDocumentPrivate : public QObject
         QVector<QGraphicsView*> views;
 };
 
-#endif // TIKZGUI_DOCUMENT_PRIVATE_H
+}
+}
+
+#endif // TIKZ_UI_DOCUMENT_PRIVATE_H
 
 // kate: indent-width 4; replace-tabs on;

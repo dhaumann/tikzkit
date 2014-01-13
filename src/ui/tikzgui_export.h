@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_GUI_EXPORT_H
-#define TIKZ_GUI_EXPORT_H
+#ifndef TIKZ_UI_EXPORT_H
+#define TIKZ_UI_EXPORT_H
 
 #include <QtCore/QtGlobal>
 
@@ -28,6 +28,6 @@
 #  define TIKZGUI_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // TIKZ_GUI_EXPORT_H
+#endif // TIKZ_UI_EXPORT_H
 
 // kate: indent-width 4; replace-tabs on;

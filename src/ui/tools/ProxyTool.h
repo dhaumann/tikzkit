@@ -17,10 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_PROXY_TOOL_H
-#define TIKZ_PROXY_TOOL_H
+#ifndef TIKZ_UI_PROXY_TOOL_H
+#define TIKZ_UI_PROXY_TOOL_H
 
 #include "AbstractTool.h"
+
+namespace tikz {
+namespace ui {
 
 /**
  * Depending on the selected items in the graphics scene, the ProxyTool
@@ -98,6 +101,9 @@ class ProxyTool : public AbstractTool
         AbstractTool * m_tool;
 };
 
-#endif // TIKZ_PROXY_TOOL_H
+}
+}
+
+#endif // TIKZ_UI_PROXY_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

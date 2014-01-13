@@ -34,6 +34,9 @@
 #include <QDebug>
 #include <QGraphicsView>
 
+namespace tikz {
+namespace ui {
+
 //BEGIN private data
 TikzDocumentPrivate::TikzDocumentPrivate(TikzDocument * tikzDocument)
     : QObject(tikzDocument)
@@ -189,7 +192,7 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
         case tikz::core::Path::InOutCurve: break;
         case tikz::core::Path::BezierCurve: break;
         case tikz::core::Path::Ellipse: {
-            tikzPath = new TikzEllipsePath(path);
+            tikzPath = new tikz::ui::TikzEllipsePath(path);
             break;
         }
         case tikz::core::Path::Rectangle: break;
@@ -250,6 +253,9 @@ tikz::ui::Path * TikzDocument::tikzPathFromId(qint64 id)
 
     Q_ASSERT(d->pathMap.contains(id));
     return d->pathMap[id];
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

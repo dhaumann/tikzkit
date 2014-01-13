@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -16,8 +16,8 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef TIKZ_GUI_H
-#define TIKZ_GUI_H
+#ifndef TIKZ_UI_H
+#define TIKZ_UI_H
 
 enum TikzEditMode {
     ModeSelect = 0,
@@ -26,6 +26,6 @@ enum TikzEditMode {
     ModePlaceEdge
 };
 
-#endif // TIKZ_GUI_H
+#endif // TIKZ_UI_H
 
 // kate: indent-width 4; replace-tabs on;

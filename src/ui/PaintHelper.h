@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_PAINT_HELPER_H
-#define TIKZ_PAINT_HELPER_H
+#ifndef TIKZ_UI_PAINT_HELPER_H
+#define TIKZ_UI_PAINT_HELPER_H
 
 #include <Qt>
 #include <QPen>
@@ -62,6 +62,6 @@ class PaintHelper
         PaintHelperPrivate * const d;
 };
 
-#endif // TIKZ_PAINT_HELPER_H
+#endif // TIKZ_UI_PAINT_HELPER_H
 
 // kate: indent-width 4; replace-tabs on;

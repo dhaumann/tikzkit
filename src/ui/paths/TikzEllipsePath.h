@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,25 +17,26 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_TIKZ_ELLIPSE_PATH_H
-#define GUI_TIKZ_ELLIPSE_PATH_H
+#ifndef TIKZ_UI_ELLIPSE_PATH_ITEM_H
+#define TIKZ_UI_ELLIPSE_PATH_ITEM_H
 
 #include <Path.h>
 
 #include <QPointer>
+
+class QPainter;
+
 
 namespace tikz {
 namespace core {
     class EllipsePath;
     class Node;
 }
-}
 
-class QPainter;
+namespace ui {
 
 class TikzDocument;
 class TikzNode;
-class TikzPath;
 class TikzEllipsePathPrivate;
 
 class TikzEllipsePath : public tikz::ui::Path
@@ -158,6 +159,9 @@ class TikzEllipsePath : public tikz::ui::Path
         QRectF m_boundingRect;
 };
 
-#endif // GUI_TIKZ_ELLIPSE_PATH_H
+}
+}
+
+#endif // TIKZ_UI_ELLIPSE_PATH_ITEM_H
 
 // kate: indent-width 4; replace-tabs on;

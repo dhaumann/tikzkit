@@ -32,6 +32,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 NodeText::NodeText(TikzNode* node)
     : QGraphicsSimpleTextItem(node)
     , d(new NodeTextPrivate(node, this))
@@ -76,6 +79,9 @@ QRectF NodeText::textRect() const
     } else {
         return QRectF(0.0, 0.0, 0.0, 0.0);
     }
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

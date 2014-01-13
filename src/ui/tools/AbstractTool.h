@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_ABSTRACT_TOOL_H
-#define TIKZ_ABSTRACT_TOOL_H
+#ifndef TIKZ_UI_ABSTRACT_TOOL_H
+#define TIKZ_UI_ABSTRACT_TOOL_H
 
 #include <QObject>
 
@@ -26,6 +26,9 @@ class QGraphicsSceneMouseEvent;
 class QKeyEvent;
 class QPointF;
 class QGraphicsScene;
+
+namespace tikz {
+namespace ui {
 
 /**
  * The AbstractTool provides an interface for arbitrary tools operating on the
@@ -101,6 +104,9 @@ class AbstractTool : public QObject
         QGraphicsScene * m_scene;
 };
 
-#endif // TIKZ_ABSTRACT_TOOL_H
+}
+}
+
+#endif // TIKZ_UI_ABSTRACT_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

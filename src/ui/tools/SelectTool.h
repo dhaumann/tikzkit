@@ -17,10 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_SELECT_TOOL_H
-#define TIKZ_SELECT_TOOL_H
+#ifndef TIKZ_UI_SELECT_TOOL_H
+#define TIKZ_UI_SELECT_TOOL_H
 
 #include "AbstractTool.h"
+
+namespace tikz {
+namespace ui {
 
 /**
  * The SelectTool allows to select items and modify them, e.g.
@@ -66,6 +69,9 @@ class SelectTool : public AbstractTool
     private:
 };
 
-#endif // TIKZ_SELECT_TOOL_H
+}
+}
+
+#endif // TIKZ_UI_SELECT_TOOL_H
 
 // kate: indent-width 4; replace-tabs on;

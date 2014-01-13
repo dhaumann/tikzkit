@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_RULER_H
-#define TIKZGUI_RULER_H
+#ifndef TIKZ_UI_RULER_H
+#define TIKZ_UI_RULER_H
 
 #include "tikzgui_export.h"
 
@@ -96,6 +96,6 @@ private:
 }
 }
 
-#endif // TIKZGUI_RULER_H
+#endif // TIKZ_UI_RULER_H
 
 // kate: indent-width 4; replace-tabs on;

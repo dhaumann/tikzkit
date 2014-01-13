@@ -17,11 +17,14 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_ANCHOR_HANDLE_H
-#define TIKZ_ANCHOR_HANDLE_H
+#ifndef TIKZ_UI_ANCHOR_HANDLE_H
+#define TIKZ_UI_ANCHOR_HANDLE_H
 
 #include "Handle.h"
 #include <tikz/core/MetaPos.h>
+
+namespace tikz {
+namespace ui {
 
 class TikzNode;
 
@@ -98,6 +101,9 @@ class AnchorHandle : public Handle
         TikzNode * m_node;
 };
 
-#endif // TIKZ_ANCHOR_HANDLE_H
+}
+}
+
+#endif // TIKZ_UI_ANCHOR_HANDLE_H
 
 // kate: indent-width 4; replace-tabs on;

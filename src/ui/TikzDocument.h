@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_DOCUMENT_H
-#define TIKZGUI_DOCUMENT_H
+#ifndef TIKZ_UI_DOCUMENT_H
+#define TIKZ_UI_DOCUMENT_H
 
 #include "tikzgui_export.h"
 #include "tikzgui.h"
@@ -29,11 +29,9 @@ class QGraphicsView;
 
 namespace tikz {
 namespace ui {
-    class Path;
-}
-}
 
 class TikzNode;
+class Path;
 class TikzDocumentPrivate;
 
 class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
@@ -151,6 +149,9 @@ class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
         TikzDocumentPrivate * d;
 };
 
-#endif // TIKZGUI_DOCUMENT_H
+}
+}
+
+#endif // TIKZ_UI_DOCUMENT_H
 
 // kate: indent-width 4; replace-tabs on;

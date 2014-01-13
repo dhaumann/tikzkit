@@ -31,9 +31,12 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 EllipseTool::EllipseTool(tikz::ui::Path * path, QGraphicsScene * scene)
     : AbstractTool(scene)
-    , m_path(qobject_cast<TikzEllipsePath *>(path))
+    , m_path(qobject_cast<tikz::ui::TikzEllipsePath *>(path))
     , m_anchorManager(new AnchorManager(scene, this))
 {
     // show all path handles
@@ -89,12 +92,12 @@ void EllipseTool::createPathHandles()
     foreach (Handle * handle, m_handles) {
         scene()->addItem(handle);
         handle->show();
-        connect(handle, SIGNAL(positionChanged(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMoved(Handle *, const QPointF &, QGraphicsView *)));
-        connect(handle, SIGNAL(mousePressed(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMousePressed(Handle *, const QPointF &, QGraphicsView *)));
-        connect(handle, SIGNAL(mouseReleased(Handle *, const QPointF &, QGraphicsView *)),
-                this, SLOT(handleMouseReleased(Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(positionChanged(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMoved(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mousePressed(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMousePressed(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
+        connect(handle, SIGNAL(mouseReleased(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
+                this, SLOT(handleMouseReleased(tikz::ui::Handle *, const QPointF &, QGraphicsView *)));
     }
 }
 
@@ -244,6 +247,9 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool:mouse handle released" << scenePos;
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

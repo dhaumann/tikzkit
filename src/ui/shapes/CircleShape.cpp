@@ -26,6 +26,9 @@
 #include <QDebug>
 #include <cmath>
 
+namespace tikz {
+namespace ui {
+
 class CircleShapePrivate
 {
     public:
@@ -122,6 +125,9 @@ QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
                          node()->shapeRect().height()) / 2.0;
 
     return QPointF(r * std::cos(rad), r * std::sin(rad));
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

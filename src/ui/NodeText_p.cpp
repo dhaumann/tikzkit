@@ -27,6 +27,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 NodeTextPrivate::NodeTextPrivate(TikzNode* tikzNode, NodeText* nodeText)
     : QObject()
     , svgRenderer(this)
@@ -48,6 +51,9 @@ void NodeTextPrivate::readSvgFile(const QString& file)
     q->prepareGeometryChange();
     svgRenderer.load(file);
     emit svgChanged();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

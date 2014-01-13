@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,10 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZGUI_RECT_SHAPE_H
-#define TIKZGUI_RECT_SHAPE_H
+#ifndef TIKZ_UI_RECT_SHAPE_H
+#define TIKZ_UI_RECT_SHAPE_H
 
 #include "AbstractShape.h"
+
+namespace tikz {
+namespace ui {
 
 class RectShapePrivate;
 
@@ -71,6 +74,9 @@ class RectShape : public AbstractShape
         RectShapePrivate * const d;
 };
 
-#endif // TIKZGUI_RECT_SHAPE_H
+}
+}
+
+#endif // TIKZ_UI_RECT_SHAPE_H
 
 // kate: indent-width 4; replace-tabs on;

@@ -24,6 +24,9 @@
 
 #include <QDebug>
 
+namespace tikz {
+namespace ui {
+
 ResizeHandle::ResizeHandle(Position position)
     : Handle(Handle::ResizeHandle, position)
 {
@@ -52,6 +55,9 @@ void ResizeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawRect(rect());
 
     painter->restore();
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;
