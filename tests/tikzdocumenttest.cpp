@@ -8,8 +8,8 @@
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 
-#include <TikzDocument.h>
-#include <TikzNode.h>
+#include <tikz/ui/TikzDocument.h>
+#include <tikz/ui/TikzNode.h>
 
 QTEST_MAIN(TikzDocumentTest)
 

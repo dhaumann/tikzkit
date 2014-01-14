@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -19,17 +19,13 @@
 
 #include "EdgePath.h"
 #include "Node.h"
-#include "EdgeStyle.h"
 #include "MetaPos.h"
-#include "Visitor.h"
 #include "Document.h"
 
 #include "UndoConnectEdge.h"
 #include "UndoDisconnectEdge.h"
 #include "UndoSetEdgeAnchor.h"
 #include "UndoSetEdgePos.h"
-
-#include <QVector>
 
 namespace tikz {
 namespace core {
@@ -88,6 +84,9 @@ void EdgePath::detachFromNode(Node * node)
         document()->undoManager()->push(
             new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
     }
+
+    Q_ASSERT(d->start.node() != node);
+    Q_ASSERT(d->end.node() != node);
 }
 
 Path::Type EdgePath::type() const
@@ -104,10 +103,8 @@ void EdgePath::setStartNode(Node* node)
     // set start node
     if (document()->undoActive()) {
         beginConfig();
-
         d->start.setNode(node);
         emit startNodeChanged(node);
-
         endConfig();
     } else if (node) {
         document()->undoManager()->push(
@@ -128,10 +125,8 @@ void EdgePath::setEndNode(Node* node)
     // set end node
     if (document()->undoActive()) {
         beginConfig();
-
         d->end.setNode(node);
         emit endNodeChanged(node);
-
         endConfig();
     } else if (node) {
         document()->undoManager()->push(

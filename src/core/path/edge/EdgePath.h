@@ -31,12 +31,18 @@ class Node;
 class EdgePathPrivate;
 
 /**
- * This class represents a TikZ path from one position to another position.
- * For instance, a typical edge looks like this:
- * @code
- * \draw (1, 1) -- (b);
- * @endcode
- * The type of the edge is defined by type().
+ * This class represents a TikZ path with one single line element
+ * from one coordinate/node to another coordinate/node.
+ *
+ * Examples are:
+ * - Straight line:
+ *   \draw (a) -- (b);
+ * - horizonal/vertical lines:
+ *   \draw (a) -| (b);
+ *   \draw (a) |- (b);
+ * - bending curve
+ *   \draw (a) to[bend left=30] (b);
+ * - ...
  */
 class TIKZCORE_EXPORT EdgePath : public Path
 {
@@ -183,6 +189,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Private default constructor, not implemented
          */
         EdgePath();
+
     private:
         EdgePathPrivate * const d;
 };

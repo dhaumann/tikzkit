@@ -6,8 +6,7 @@ add_definitions(
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/ui
+  ${CMAKE_SOURCE_DIR}/src/include
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 

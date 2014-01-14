@@ -41,6 +41,9 @@ class Node;
 class TIKZCORE_EXPORT MetaPos : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+    Q_PROPERTY(tikz::core::Node* node READ node WRITE setNode)
+    Q_PROPERTY(tikz::Anchor anchor READ anchor WRITE setAnchor)
 
     //
     // types
@@ -77,6 +80,8 @@ class TIKZCORE_EXPORT MetaPos : public QObject
     public:
         /**
          * Get the coordinate of this node.
+         * If no Node is associated, the position set with setPos() is returned.
+         * If node() is non-null, node()->pos() is returned.
          */
         QPointF pos() const;
 

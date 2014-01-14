@@ -19,7 +19,6 @@
 
 #include "EllipsePath.h"
 #include "Node.h"
-#include "EdgeStyle.h"
 #include "MetaPos.h"
 #include "Document.h"
 

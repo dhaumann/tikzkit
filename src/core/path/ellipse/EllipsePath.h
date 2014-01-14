@@ -143,6 +143,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Private default constructor, not implemented
          */
         EllipsePath();
+
     private:
         EllipsePathPrivate * const d;
 };
