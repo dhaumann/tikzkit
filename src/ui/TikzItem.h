@@ -26,7 +26,7 @@
 
 class TikzItemPrivate;
 
-class TIKZGUI_EXPORT TikzItem : public QGraphicsObject
+class TIKZUI_EXPORT TikzItem : public QGraphicsObject
 {
     Q_OBJECT
 

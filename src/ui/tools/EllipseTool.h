@@ -30,7 +30,7 @@ namespace tikz {
 namespace ui {
 
 class PathItem;
-class TikzEllipsePath;
+class EllipsePathItem;
 
 class AnchorManager;
 class Handle;
@@ -118,7 +118,7 @@ class EllipseTool : public AbstractTool
 
 
     private:
-        tikz::ui::TikzEllipsePath * m_path;
+        tikz::ui::EllipsePathItem * m_path;
         QVector<Handle *> m_handles;
         AnchorManager * m_anchorManager;
 };

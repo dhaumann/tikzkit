@@ -31,7 +31,7 @@ namespace ui {
 class TikzDocument;
 class TikzViewPrivate;
 
-class TIKZGUI_EXPORT TikzView : public QGraphicsView
+class TIKZUI_EXPORT TikzView : public QGraphicsView
 {
     Q_OBJECT
 

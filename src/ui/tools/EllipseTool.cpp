@@ -21,7 +21,7 @@
 #include "ResizeHandle.h"
 #include "RotateHandle.h"
 #include "MoveHandle.h"
-#include "TikzEllipsePath.h"
+#include "EllipsePathItem.h"
 #include "AnchorManager.h"
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EllipsePath.h>
@@ -36,7 +36,7 @@ namespace ui {
 
 EllipseTool::EllipseTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(scene)
-    , m_path(qobject_cast<tikz::ui::TikzEllipsePath *>(path))
+    , m_path(qobject_cast<tikz::ui::EllipsePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, this))
 {
     // show all path handles

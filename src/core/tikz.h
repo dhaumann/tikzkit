@@ -19,6 +19,8 @@
 #ifndef TIKZ_H
 #define TIKZ_H
 
+// TIKZCORE_EXPORT: this like exists just to copy the include files
+
 #include <QObject>
 #ifndef Q_MOC_RUN
 namespace tikz {

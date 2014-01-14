@@ -39,7 +39,7 @@ namespace ui {
 class TikzDocument;
 class TikzNodePrivate;
 
-class TIKZGUI_EXPORT TikzNode : public TikzItem
+class TIKZUI_EXPORT TikzNode : public TikzItem
 {
     Q_OBJECT
 

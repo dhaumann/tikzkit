@@ -17,9 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzEllipsePath.h"
+#include "EllipsePathItem.h"
 
-#include "PathItem.h"
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "ResizeHandle.h"
@@ -41,7 +40,7 @@
 namespace tikz {
 namespace ui {
 
-TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
+EllipsePathItem::EllipsePathItem(tikz::core::Path * path)
     : tikz::ui::PathItem(path)
 {
     // catch if the tikz::core::Node::pos() changes behind our back:
@@ -52,29 +51,29 @@ TikzEllipsePath::TikzEllipsePath(tikz::core::Path * path)
     connect(path, SIGNAL(changed()), this, SLOT(slotUpdate()));
 }
 
-TikzEllipsePath::~TikzEllipsePath()
+EllipsePathItem::~EllipsePathItem()
 {
 }
 
-TikzDocument * TikzEllipsePath::document() const
+TikzDocument * EllipsePathItem::document() const
 {
     Q_ASSERT(qobject_cast<TikzDocument*>(path()->document()) != nullptr);
     return qobject_cast<TikzDocument*>(path()->document());
 }
 
-void TikzEllipsePath::setNode(TikzNode* node)
+void EllipsePathItem::setNode(TikzNode* node)
 {
     if (m_node != node) {
         ellipsePath()->setNode(node ? node->node() : 0);
     }
 }
 
-TikzNode* TikzEllipsePath::node() const
+TikzNode* EllipsePathItem::node() const
 {
     return m_node;
 }
 
-QPointF TikzEllipsePath::pos() const
+QPointF EllipsePathItem::pos() const
 {
     if (ellipsePath()->node()) {
         TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath()->node()->id());
@@ -86,17 +85,17 @@ QPointF TikzEllipsePath::pos() const
     }
 }
 
-tikz::Anchor TikzEllipsePath::anchor() const
+tikz::Anchor EllipsePathItem::anchor() const
 {
     return ellipsePath()->anchor();
 }
 
-void TikzEllipsePath::setAnchor(tikz::Anchor anchor)
+void EllipsePathItem::setAnchor(tikz::Anchor anchor)
 {
     ellipsePath()->setAnchor(anchor);
 }
 
-void TikzEllipsePath::slotUpdate()
+void EllipsePathItem::slotUpdate()
 {
     prepareGeometryChange();
 
@@ -105,7 +104,7 @@ void TikzEllipsePath::slotUpdate()
     setRotation(style()->rotation());
 }
 
-void TikzEllipsePath::paint(QPainter *painter,
+void EllipsePathItem::paint(QPainter *painter,
                             const QStyleOptionGraphicsItem *option,
                             QWidget *widget)
 {
@@ -135,25 +134,25 @@ void TikzEllipsePath::paint(QPainter *painter,
     }
 }
 
-QRectF TikzEllipsePath::boundingRect() const
+QRectF EllipsePathItem::boundingRect() const
 {
     // make sure the cache is up-to-date
-    const_cast<TikzEllipsePath*>(this)->updateCache();
+    const_cast<EllipsePathItem*>(this)->updateCache();
 
     return m_boundingRect; //.adjusted(-0.05, -0.05, 0.05, 0.05);
 }
 
-QPainterPath TikzEllipsePath::shape() const
+QPainterPath EllipsePathItem::shape() const
 {
-    const_cast<TikzEllipsePath*>(this)->updateCache();
+    const_cast<EllipsePathItem*>(this)->updateCache();
 
     return m_shapePath;
 }
 
-bool TikzEllipsePath::contains(const QPointF & point) const
+bool EllipsePathItem::contains(const QPointF & point) const
 {
     // make sure the cache is up-to-date
-    const_cast<TikzEllipsePath*>(this)->updateCache();
+    const_cast<EllipsePathItem*>(this)->updateCache();
 
     // contains depends on the type of fill color/brush
     if (style()->fillColor() == Qt::transparent) {
@@ -164,7 +163,7 @@ bool TikzEllipsePath::contains(const QPointF & point) const
     }
 }
 
-void TikzEllipsePath::updateNode(tikz::core::Node * node)
+void EllipsePathItem::updateNode(tikz::core::Node * node)
 {
     TikzNode * newNode = 0;
 
@@ -179,7 +178,7 @@ void TikzEllipsePath::updateNode(tikz::core::Node * node)
     }
 }
 
-void TikzEllipsePath::updateCache()
+void EllipsePathItem::updateCache()
 {
     if (!m_dirty) return;
     m_dirty = false;
@@ -205,7 +204,7 @@ void TikzEllipsePath::updateCache()
     m_boundingRect = m_shapePath.boundingRect();
 }
 
-tikz::core::EllipsePath * TikzEllipsePath::ellipsePath() const
+tikz::core::EllipsePath * EllipsePathItem::ellipsePath() const
 {
     tikz::core::EllipsePath * p = qobject_cast<tikz::core::EllipsePath*>(path());
     Q_ASSERT(p != nullptr);

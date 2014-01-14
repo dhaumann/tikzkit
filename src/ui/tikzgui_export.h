@@ -23,9 +23,9 @@
 #include <QtCore/QtGlobal>
 
 #if defined(MAKE_TIKZGUI)
-#  define TIKZGUI_EXPORT Q_DECL_EXPORT
+#  define TIKZUI_EXPORT Q_DECL_EXPORT
 #else
-#  define TIKZGUI_EXPORT Q_DECL_IMPORT
+#  define TIKZUI_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // TIKZ_UI_EXPORT_H

@@ -18,18 +18,17 @@
 #include "DemoWidget.h"
 #include "ui_MainWindow.h"
 
-#include "TikzDocument.h"
-#include "TikzNode.h"
-#include "PathItem.h"
-#include "TikzScene.h"
-#include "TikzToolBox.h"
+#include <tikz/ui/TikzDocument.h>
+#include <tikz/ui/TikzNode.h>
+#include <tikz/ui/PathItem.h>
+#include <tikz/ui/TikzScene.h>
+#include <tikz/ui/TikzToolBox.h>
+#include <tikz/ui/ArrowComboBox.h>
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/tikz.h>
 #include <tikz/core/Path.h>
-
-#include <ArrowComboBox.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>

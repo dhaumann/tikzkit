@@ -4,7 +4,7 @@ find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/include
 
     ${CMAKE_SOURCE_DIR}/src/ui/tools
     ${CMAKE_SOURCE_DIR}/src/ui/handle
@@ -22,7 +22,6 @@ set(qtikzui_SOURCES
     TikzNode.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
-    PathItem.cpp
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp
@@ -30,7 +29,8 @@ set(qtikzui_SOURCES
     tools/EllipseTool.cpp
     tools/SelectTool.cpp
 
-    paths/TikzEllipsePath.cpp
+    paths/PathItem.cpp
+    paths/EllipsePathItem.cpp
 
     handle/Handle.cpp
     handle/ResizeHandle.cpp
@@ -75,7 +75,6 @@ set(qtikzui_HEADERS
     TikzNode.h
 #     TikzEdge.h
 #     TikzEdge_p.h
-    PathItem.h
 
     tools/AbstractTool.h
     tools/ProxyTool.h
@@ -83,7 +82,8 @@ set(qtikzui_HEADERS
     tools/EllipseTool.h
     tools/SelectTool.h
 
-    paths/TikzEllipsePath.h
+    paths/PathItem.h
+    paths/EllipsePathItem.h
 
     handle/Handle.h
     handle/ResizeHandle.h
@@ -114,7 +114,7 @@ qt4_add_resources(qtikzui_RESOURCES_RCC ${qtikzui_RESOURCES})
 
 include(${QT_USE_FILE})
 add_definitions(
-    -DMAKE_TIKZGUI
+    -DMAKE_TIKZUI
     ${QT_DEFINITIONS}
 )
 

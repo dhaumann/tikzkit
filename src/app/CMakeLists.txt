@@ -5,9 +5,7 @@ find_package(Qt4 REQUIRED)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/ui
-    ${CMAKE_SOURCE_DIR}/src/ui/widgets
+    ${CMAKE_SOURCE_DIR}/src/include
     #${POPPLER_QT4_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 )

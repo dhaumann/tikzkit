@@ -36,7 +36,7 @@ class TikzDocument;
 class TikzNode;
 class TikzEdgePrivate;
 
-class TIKZGUI_EXPORT TikzEdge :  public TikzItem
+class TIKZUI_EXPORT TikzEdge :  public TikzItem
 {
     Q_OBJECT
 

@@ -38,7 +38,7 @@ class TikzDocument;
 class TikzNode;
 class TikzEllipsePathPrivate;
 
-class TikzEllipsePath : public tikz::ui::PathItem
+class EllipsePathItem : public tikz::ui::PathItem
 {
     Q_OBJECT
 
@@ -46,12 +46,12 @@ class TikzEllipsePath : public tikz::ui::PathItem
         /**
          * Constructor with assigned @p path.
          */
-        TikzEllipsePath(tikz::core::Path * path);
+        EllipsePathItem(tikz::core::Path * path);
 
         /**
          * Destructor
          */
-        virtual ~TikzEllipsePath();
+        virtual ~EllipsePathItem();
 
         /**
          * Returns the associated document, if available.

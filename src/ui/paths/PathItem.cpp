@@ -19,8 +19,6 @@
 
 #include "PathItem.h"
 
-#include "TikzEllipsePath.h"
-
 #include <tikz/core/Path.h>
 #include "TikzDocument.h"
 

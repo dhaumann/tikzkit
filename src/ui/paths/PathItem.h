@@ -36,7 +36,7 @@ namespace ui {
 class TikzDocument;
 class PathPrivate;
 
-class TIKZGUI_EXPORT PathItem :  public TikzItem
+class TIKZUI_EXPORT PathItem :  public TikzItem
 {
     Q_OBJECT
 

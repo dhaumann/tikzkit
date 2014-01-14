@@ -34,7 +34,7 @@ class TikzNode;
 class PathItem;
 class TikzDocumentPrivate;
 
-class TIKZGUI_EXPORT TikzDocument : public tikz::core::Document
+class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
 {
     Q_OBJECT
 

@@ -28,7 +28,7 @@
 
 #include "TikzNode.h"
 #include "PathItem.h"
-#include "TikzEllipsePath.h"
+#include "EllipsePathItem.h"
 #include "TikzScene.h"
 
 #include <QDebug>
@@ -192,7 +192,7 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
         case tikz::core::Path::InOutCurve: break;
         case tikz::core::Path::BezierCurve: break;
         case tikz::core::Path::Ellipse: {
-            tikzPath = new tikz::ui::TikzEllipsePath(path);
+            tikzPath = new tikz::ui::EllipsePathItem(path);
             break;
         }
         case tikz::core::Path::Rectangle: break;

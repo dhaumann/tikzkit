@@ -21,6 +21,7 @@
 #define TIKZ_METAPOS_H
 
 #include "tikz.h"
+#include "tikz_export.h"
 
 #include <QObject>
 #include <QPointF>
@@ -37,10 +38,10 @@ class Node;
  * This position may either be a simple coordinate, or a node.
  * In case of a node, the anchor additionally takes effect.
  */
-class MetaPos : public QObject
+class TIKZCORE_EXPORT MetaPos : public QObject
 {
     Q_OBJECT
-    
+
     //
     // types
     //
@@ -57,7 +58,7 @@ class MetaPos : public QObject
          * delets the MetaPos object automatically if no reference to the object
          * exists anymore.
          */
-        typedef QSharedPointer<MetaPos> Ptr;
+        typedef QSharedPointer<tikz::core::MetaPos> Ptr;
 
     public:
         /**
