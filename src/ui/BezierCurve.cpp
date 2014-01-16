@@ -125,6 +125,48 @@ QPainterPath BezierCurve::toPath(qreal t1, qreal t2, int samplePoints) const
     return path;
 }
 
+BezierCurve BezierCurve::subPath(qreal t1, qreal t2) const
+{
+    Q_ASSERT(t1 >= 0.0);
+    Q_ASSERT(t1 < 1.0);
+    Q_ASSERT(t2 > 0.0);
+    Q_ASSERT(t2 <= 1.0);
+    Q_ASSERT(t1 < t2);
+
+    // copy this curve
+    BezierCurve c(*this);
+
+    // adapt start, if requried
+    if (t1 > 0.0) {
+        const QPointF x0 = c.m_p1 + t1 * (c.m_c1 - c.m_p1);
+        const QPointF x1 = c.m_c1 + t1 * (c.m_c2 - c.m_c1);
+        const QPointF x2 = c.m_c2 + t1 * (c.m_p2 - c.m_c2);
+
+        const QPointF x3 = x0 + t1 * (x1 - x0);
+        const QPointF x4 = x1 + t1 * (x2 - x1);
+
+        c.m_p1 = x3 + t1 * (x4 - x3);
+        c.m_c1 = x4;
+        c.m_c2 = x2;
+    }
+
+    // adapt end, if requried
+    if (t2 < 1.0) {
+        const QPointF x0 = c.m_p1 + t2 * (c.m_c1 - c.m_p1);
+        const QPointF x1 = c.m_c1 + t2 * (c.m_c2 - c.m_c1);
+        const QPointF x2 = c.m_c2 + t2 * (c.m_p2 - c.m_c2);
+
+        const QPointF x3 = x0 + t2 * (x1 - x0);
+        const QPointF x4 = x1 + t2 * (x2 - x1);
+
+        c.m_c1 = x0;
+        c.m_c2 = x3;
+        c.m_p2 = x3 + t2 * (x4 - x3);
+    }
+
+    return c;
+}
+
 qreal BezierCurve::intersect(const QPainterPath & path)
 {
     const int samplePoints = 50;

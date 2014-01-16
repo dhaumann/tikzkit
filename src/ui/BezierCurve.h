@@ -23,7 +23,9 @@
 #include <QPointF>
 #include <QPainterPath>
 
-class BezierCurve
+#include "tikzgui_export.h"
+
+class TIKZUI_EXPORT BezierCurve
 {
     public:
         /**
@@ -58,6 +60,8 @@ class BezierCurve
 
         QPainterPath toPath(int samplePoints = 50) const;
         QPainterPath toPath(qreal t1, qreal t2, int samplePoints = 50) const;
+
+        BezierCurve subPath(qreal t1, qreal t2) const;
 
         qreal intersect(const QPainterPath & path);
 
