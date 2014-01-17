@@ -178,6 +178,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
             ep->setAnchor(metaPos->anchor());
             ep->endConfig();
         } else {
+            m_anchorManager->clear();
             ep->setPos(p);
         }
         return;
@@ -247,6 +248,7 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool:mouse handle released" << scenePos;
+    m_anchorManager->clear();
 }
 
 }

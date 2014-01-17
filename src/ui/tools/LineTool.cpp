@@ -113,25 +113,27 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
+    QPointF p = scenePos;
+    if (snap) {
+        p.rx() = qRound(p.x() / 0.2) * 0.2;
+        p.ry() = qRound(p.y() / 0.2) * 0.2;
+    }
+
+    // try to attach to anchor
+    bool found = m_anchorManager->showAnchors(scenePos);
+
+    tikz::core::EdgePath * ep = m_path->edgePath();
+    tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
+
+    if (! metaPos->node()) {
+        m_anchorManager->clear();
+    }
+
     //
     // move start / end
     //
     switch (handle->handlePos()) {
         case Handle::StartPos: {
-            QPointF p = scenePos;
-            if (snap) {
-                p.rx() = qRound(p.x() / 0.2) * 0.2;
-                p.ry() = qRound(p.y() / 0.2) * 0.2;
-            }
-            
-            // try to attach to anchor
-            bool found = m_anchorManager->showAnchors(scenePos);
-            if (!found) {
-                m_anchorManager->clear();
-            }
-            
-            tikz::core::EdgePath * ep = m_path->edgePath();
-            tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
             if (metaPos->node()) {
                 ep->beginConfig();
                 ep->setStartNode(metaPos->node());
@@ -144,20 +146,6 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
             break;
         }
         case Handle::EndPos: {
-            QPointF p = scenePos;
-            if (snap) {
-                p.rx() = qRound(p.x() / 0.2) * 0.2;
-                p.ry() = qRound(p.y() / 0.2) * 0.2;
-            }
-
-            // try to attach to anchor
-            bool found = m_anchorManager->showAnchors(scenePos);
-            if (!found) {
-                m_anchorManager->clear();
-            }
-
-            tikz::core::EdgePath * ep = m_path->edgePath();
-            tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
             if (metaPos->node()) {
                 ep->beginConfig();
                 ep->setEndNode(metaPos->node());
@@ -181,6 +169,7 @@ void LineTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGr
 void LineTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "line tool: mouse handle released" << scenePos;
+    m_anchorManager->clear();
 }
 
 }
