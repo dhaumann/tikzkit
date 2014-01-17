@@ -89,13 +89,21 @@ inline static qreal interpolateBezierCurve(qreal t,
     return (-p1 + 3*c1 -3*c2 + p2) * t*t*t + (3*p1 - 6*c1 + 3*c2) * t*t + (-3*p1 + 3*c1) * t + p1;
 }
 
+inline static QPointF interpolateBezierCurve(qreal t,
+                                             const QPointF& p1,
+                                             const QPointF& p2,
+                                             const QPointF& c1,
+                                             const QPointF& c2)
+{
+    return (-p1 + 3*c1 -3*c2 + p2) * t*t*t + (3*p1 - 6*c1 + 3*c2) * t*t + (-3*p1 + 3*c1) * t + p1;
+}
+
 QPointF BezierCurve::pointAtPercent(qreal t) const
 {
-    Q_ASSERT(t >= 0);
-    Q_ASSERT(t <= 1);
+    Q_ASSERT(t >= 0.0);
+    Q_ASSERT(t <= 1.0);
 
-    return QPointF(interpolateBezierCurve(t, m_p1.x(), m_p2.x(), m_c1.x(), m_c2.x()),
-                   interpolateBezierCurve(t, m_p1.y(), m_p2.y(), m_c1.y(), m_c2.y()));
+    return interpolateBezierCurve(t, m_p1, m_p2, m_c1, m_c2);
 }
 
 QPainterPath BezierCurve::toPath(int samplePoints) const
