@@ -248,7 +248,6 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
     if (change == ItemPositionChange && scene() && !d->itemChangeRunning) {
         d->itemChangeRunning = true;
         QPointF newPos = value.toPointF();
-        setPos(newPos);
         d->node->setPos(newPos);
         d->itemChangeRunning = false;
     }

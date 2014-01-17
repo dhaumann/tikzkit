@@ -234,7 +234,7 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     if (isHovered()) {
         painter->fillPath(m_hoverPath, Qt::magenta);
     }
-    
+
     painter->setPen(p);
     // draw line
     painter->drawPath(m_edgePath);
@@ -299,11 +299,9 @@ QPainterPath EdgePathItem::shape() const
 
 bool EdgePathItem::contains(const QPointF & point) const
 {
-    if (m_dirty) {
-        return PathItem::contains(point);
-    } else {
-        return m_hoverPath.contains(point);
-    }
+    const_cast<EdgePathItem*>(this)->updateCache();
+
+    return m_hoverPath.contains(point);
 }
 
 void EdgePathItem::updateCache()
@@ -311,7 +309,6 @@ void EdgePathItem::updateCache()
     if (! m_dirty) {
         return;
     }
-
     m_dirty = false;
 
     // update arrow head and arrow tail if needed

@@ -212,7 +212,7 @@ void EdgePath::setStartAnchor(tikz::Anchor anchor)
         return;
     }
 
-    // set end node
+    // set start node
     if (document()->undoActive()) {
         beginConfig();
         d->start.setAnchor(anchor);
