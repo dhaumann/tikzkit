@@ -29,6 +29,7 @@
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/tikz.h>
 #include <tikz/core/Path.h>
+#include <tikz/core/EdgePath.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -123,13 +124,24 @@ MainWindow::MainWindow()
     item2->node()->style()->setInnerSep(0.2);
     item2->node()->setText("$\\Leftrightarrow$");
 
-    // an path
+    // an ellipse path
     tikz::ui::PathItem* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
     path->path()->style()->setRadiusX(2.0);
     path->path()->style()->setRadiusY(1.0);
 //     path->setStartNode(item1);
 //     path->setEndNode(item2);
     path->path()->style()->setLineWidthType(tikz::SemiThick);
+
+    // add a line path
+    path = m_doc->createTikzPath(tikz::core::Path::Line);
+    path->path()->style()->setLineWidthType(tikz::SemiThick);
+    path->path()->style()->setDoubleLine(true);
+    path->path()->style()->setArrowTail(tikz::LatexArrow);
+    path->path()->style()->setArrowHead(tikz::ToArrow);
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartNode(item1->node());
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndNode(item2->node());
+//     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(QPointF(0, 0));
+//     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(QPointF(3, 3));
 
 #if 0
 

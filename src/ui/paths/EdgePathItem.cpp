@@ -21,25 +21,15 @@
 
 #include "TikzNode.h"
 #include "TikzDocument.h"
-#include "AnchorHandle.h"
-#include "CurveHandle.h"
-#include "BezierCurve.h"
 #include "AbstractArrow.h"
 
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/EdgeStyle.h>
-#include <tikz/core/NodeStyle.h>
 
 #include <QPainter>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QTextLayout>
-#include <QGraphicsTextItem>
 #include <QDebug>
 #include <PaintHelper.h>
-#include <QGraphicsSceneMouseEvent>
 #include <QPainterPathStroker>
-#include <QVector2D>
 
 #include <cmath>
 
@@ -326,20 +316,16 @@ void EdgePathItem::updateCache()
     m_headPath = QPainterPath();
     m_tailPath = QPainterPath();
 
-    // draw line
-    m_startAnchor = startPos();
-    m_endAnchor = endPos();
-    const QPointF diff = m_endAnchor - m_startAnchor;
-
     // compute shorten < and shorten > so it can be used to adapt m_startAnchor and m_endAnchor
     const qreal shortenStart = style()->shortenStart() + m_arrowTail->rightExtend();
     const qreal shortenEnd = style()->shortenEnd() + m_arrowHead->rightExtend();
 
-    const qreal startRad = std::atan2(diff.y(), diff.x()); // startAngle();
-    const qreal endRad = std::atan2(-diff.y(), -diff.x()); // endAngle();
+    const qreal startRad = startAngle();
+    const qreal endRad = endAngle();
 
-    m_startAnchor += shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
-    m_endAnchor += shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
+    // final line
+    m_startAnchor = startPos() + shortenStart * QPointF(std::cos(startRad), std::sin(startRad));
+    m_endAnchor = endPos() + shortenEnd * QPointF(std::cos(endRad), std::sin(endRad));
 
     // create line: first vertical, then horizontal
     m_edgePath.moveTo(m_startAnchor);
