@@ -29,6 +29,7 @@
 #include "TikzNode.h"
 #include "PathItem.h"
 #include "EllipsePathItem.h"
+#include "EdgePathItem.h"
 #include "TikzScene.h"
 
 #include <QDebug>
@@ -185,7 +186,10 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     // create GUI item
     tikz::ui::PathItem * tikzPath = nullptr;
     switch (type) {
-        case tikz::core::Path::Line: break;
+        case tikz::core::Path::Line: {
+            tikzPath = new tikz::ui::EdgePathItem(path);
+            break;
+        }
         case tikz::core::Path::HVLine: break;
         case tikz::core::Path::VHLine: break;
         case tikz::core::Path::BendCurve: break;

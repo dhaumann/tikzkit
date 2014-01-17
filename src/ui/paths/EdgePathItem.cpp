@@ -49,6 +49,8 @@ namespace ui {
 EdgePathItem::EdgePathItem(tikz::core::Path * path, QGraphicsItem * parent)
     : PathItem(path, parent)
     , m_dirty(true)
+    , m_arrowTail(new AbstractArrow(style()))
+    , m_arrowHead(new AbstractArrow(style()))
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
