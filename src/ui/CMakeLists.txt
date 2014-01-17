@@ -31,6 +31,7 @@ set(qtikzui_SOURCES
 
     paths/PathItem.cpp
     paths/EllipsePathItem.cpp
+    paths/EdgePathItem.cpp
 
     handle/Handle.cpp
     handle/ResizeHandle.cpp
@@ -84,6 +85,7 @@ set(qtikzui_HEADERS
 
     paths/PathItem.h
     paths/EllipsePathItem.h
+    paths/EdgePathItem.h
 
     handle/Handle.h
     handle/ResizeHandle.h

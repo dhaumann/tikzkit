@@ -20,7 +20,7 @@
 #ifndef TIKZ_EDGE_PATH_H
 #define TIKZ_EDGE_PATH_H
 
-#include <Path.h>
+#include "Path.h"
 
 #include <QPointF>
 
@@ -91,13 +91,13 @@ class TIKZCORE_EXPORT EdgePath : public Path
     public:
         /**
          * Get the position of the current start node.
-         * @note This is the same as start()->pos().
+         * @note This is the same as startNode()->Pos().
          */
         QPointF startPos() const;
 
         /**
          * Set the position of the current end node.
-         * @note This is the same as end()->pos().
+         * @note This is the same as endNode()->pos().
          */
         QPointF endPos() const;
 
@@ -105,14 +105,14 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Set the position of the current start node to @p pos.
          * @param pos the new start position
-         * @see complement: start()->pos()
+         * @see complement: startPos()
          */
         void setStartPos(const QPointF& pos);
 
         /**
          * Set the position of the current end node to @p pos.
          * @param pos the new end position
-         * @see complement: end()->pos()
+         * @see complement: endPos()
          */
         void setEndPos(const QPointF& pos);
 
