@@ -124,4 +124,26 @@ void MetaPosTest::testMetaPosWithNode()
     QCOMPARE(m_changeCount, 1);
 }
 
+void MetaPosTest::testSet0()
+{
+    tikz::core::Document doc;
+    tikz::core::MetaPos m;
+    tikz::core::Node * n = doc.createNode();
+
+    // set distinct node position
+    n->setPos(QPointF(5, 5));
+    QCOMPARE(n->pos(), QPointF(5, 5));
+
+    // check setting node
+    QVERIFY(m.setNode(n));
+    QCOMPARE(m.node(), n);
+
+    // now set node to 0 again
+    QVERIFY(m.setNode(0));
+
+    // make sure the node is 0 and the position is kept
+    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m.pos(), QPointF(5, 5));
+}
+
 // kate: indent-width 4; replace-tabs on;

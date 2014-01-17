@@ -33,6 +33,7 @@ public slots:
 private slots:
     void testMetaPos();
     void testMetaPosWithNode();
+    void testSet0();
 
 public slots:
     void changedEmitted();

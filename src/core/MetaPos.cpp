@@ -56,7 +56,7 @@ void MetaPos::setPos(const QPointF& pos)
 {
     bool change = false;
 
-    if (d->node != nullptr) {
+    if (d->node) {
         // disconnect changed() signal ...
         disconnect(d->node, 0, this, 0);
         d->node = nullptr;
@@ -85,11 +85,11 @@ bool MetaPos::setNode(Node* node)
     }
 
     // disconnect changed() signal ...
-    if (d->node != 0) {
+    if (d->node) {
         disconnect(d->node, 0, this, 0);
 
-        // update pos om case the new node is 0
-        d->pos = node->pos();
+        // update pos in case the new node is 0
+        d->pos = d->node->pos();
     }
 
     // set new node and forward change() signal if applicable
