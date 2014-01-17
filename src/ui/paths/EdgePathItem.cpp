@@ -203,9 +203,14 @@ qreal EdgePathItem::endAngle() const
 
 void EdgePathItem::slotUpdate()
 {
+    // propagate change in geometry
     prepareGeometryChange();
 
+    // mark as dirty
     m_dirty = true;
+
+    // absolutely necessary to request repaint
+    update();
 }
 
 void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
