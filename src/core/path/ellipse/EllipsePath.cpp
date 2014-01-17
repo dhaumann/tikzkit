@@ -95,6 +95,7 @@ void EllipsePath::setNode(Node* node)
         Q_ASSERT(d->pos.node() != 0);
         document()->undoManager()->push(
             new UndoDisconnectEllipse(id(), d->pos.node()->id(), document()));
+        Q_ASSERT(d->pos.node() == 0);
     }
 }
 

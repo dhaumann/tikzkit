@@ -113,6 +113,7 @@ void EdgePath::setStartNode(Node* node)
         Q_ASSERT(d->start.node() != 0);
         document()->undoManager()->push(
             new UndoDisconnectEdge(id(), d->start.node()->id(), true, document()));
+        Q_ASSERT(d->start.node() == 0);
     }
 }
 
@@ -135,6 +136,7 @@ void EdgePath::setEndNode(Node* node)
         Q_ASSERT(d->end.node() != 0);
         document()->undoManager()->push(
             new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
+        Q_ASSERT(d->end.node() == 0);
     }
 }
 

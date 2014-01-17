@@ -80,10 +80,16 @@ void UndoDisconnectEdge::redo()
     Q_ASSERT(edge != 0);
 
     if (m_isStart) {
+        edge->beginConfig();
+        edge->setStartNode(0);
         edge->setStartPos(m_redoPos);
+        edge->endConfig();
         Q_ASSERT(edge->startNode() == 0);
     } else {
+        edge->beginConfig();
+        edge->setEndNode(0);
         edge->setEndPos(m_redoPos);
+        edge->endConfig();
         Q_ASSERT(edge->endNode() == 0);
     }
 

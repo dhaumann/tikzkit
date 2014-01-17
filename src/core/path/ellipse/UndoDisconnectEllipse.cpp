@@ -72,7 +72,10 @@ void UndoDisconnectEllipse::redo()
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
     Q_ASSERT(path != 0);
 
+    path->beginConfig();
+    path->setNode(0);
     path->setPos(m_redoPos);
+    path->endConfig();
     Q_ASSERT(path->node() == 0);
 
     document()->setUndoActive(wasActive);

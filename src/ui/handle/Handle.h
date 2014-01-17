@@ -50,6 +50,10 @@ class Handle : public TikzItem
 
             Center,
 
+            // used for lines
+            StartPos,
+            EndPos,
+
             UserPos
         };
 

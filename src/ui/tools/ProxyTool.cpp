@@ -21,6 +21,7 @@
 #include "SelectTool.h"
 #include "NodeTool.h"
 #include "EllipseTool.h"
+#include "LineTool.h"
 #include "TikzNode.h"
 #include "PathItem.h"
 
@@ -95,7 +96,7 @@ void ProxyTool::updateTool()
             tikz::ui::PathItem * path = static_cast<tikz::ui::PathItem *>(items[0]);
             const tikz::core::Path::Type type = path->path()->type();
             switch (type) {
-                case tikz::core::Path::Line: break;
+                case tikz::core::Path::Line: m_tool = new LineTool(path, scene()); break;
                 case tikz::core::Path::HVLine: break;
                 case tikz::core::Path::VHLine: break;
                 case tikz::core::Path::BendCurve: break;
