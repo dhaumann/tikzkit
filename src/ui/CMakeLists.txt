@@ -68,6 +68,7 @@ set(qtikzui_SOURCES
 #    tex/PdfRenderer.cpp
 
     widgets/ArrowComboBox.cpp
+    widgets/IconComboBox.cpp
 )
 
 set(qtikzui_HEADERS
@@ -108,6 +109,7 @@ set(qtikzui_HEADERS
 #    tex/PdfRenderer.h
 
     widgets/ArrowComboBox.h
+    widgets/IconComboBox.h
 )
 
 QT4_WRAP_CPP(qtikzui_HEADERS_MOC ${qtikzui_HEADERS})

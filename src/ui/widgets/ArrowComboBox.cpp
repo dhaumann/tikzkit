@@ -20,13 +20,13 @@
 #include "ArrowComboBox.h"
 
 #include "AbstractArrow.h"
+#include "IconComboBox.h"
 
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/tikz.h>
 
 #include <QStylePainter>
 #include <QHBoxLayout>
-#include <QComboBox>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include <QAbstractItemView>
@@ -135,7 +135,7 @@ ArrowComboBox::ArrowComboBox(bool arrowHead, QWidget* parent)
     d->arrowHead = arrowHead;
 
     QHBoxLayout * hBox = new QHBoxLayout(this);
-    d->comboBox = new QComboBox(this);
+    d->comboBox = new IconComboBox(this);
 
     hBox->addWidget(d->comboBox);
 
