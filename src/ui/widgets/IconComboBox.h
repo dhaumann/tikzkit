@@ -24,20 +24,42 @@
 
 #include <QComboBox>
 
+/**
+ * An icon-only combo box.
+ *
+ * The IconComboBox shows icons only in the combo box itself.
+ * However, the popup still shows the text and icons, exactly like QComboBox.
+ */
 class TIKZUI_EXPORT IconComboBox : public QComboBox
 {
     Q_OBJECT
 
 public:
+    /**
+     * Constructor with optional @p parennt widget.
+     */
     explicit IconComboBox(QWidget *parent = 0);
-    virtual ~IconComboBox() {}
 
+    /**
+     * Override sizeHint() to return a size without text.
+     * The size matches the required size of the icons.
+     */
     virtual QSize sizeHint() const;
+
+    /**
+     * See sizeHint() for details.
+     */
     virtual QSize minimumSizeHint() const;
 
+    /**
+     * Overridden to adapt the width of the popup.
+     */
     virtual void showPopup();
 
 protected:
+    /**
+     * Overridden to draw the combo box and icon without text.
+     */
     virtual void paintEvent(QPaintEvent *e);
 };
 
