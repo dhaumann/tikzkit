@@ -68,19 +68,20 @@ static QRect popupGeometry(int screen)
 void IconComboBox::showPopup()
 {
     QComboBox::showPopup();
+
+    // now adapt popup to original QComboBox width
     QWidget * popup = findChild<QFrame*>();
-    popup->resize(150, popup->height());
+    popup->resize(QComboBox::sizeHint().width(), popup->height());
 
-    QRect listRect = popup->rect();
+    // make sure the popup is on screen
+    QRect popupRect = popup->rect();
+    const QRect screen = popupGeometry(QApplication::desktop()->screenNumber(this));
+    const int right = mapToGlobal(popupRect.bottomRight()).x();
 
-    QRect screen = popupGeometry(QApplication::desktop()->screenNumber(this));
-    const int right = mapToGlobal(listRect.bottomRight()).x();
-
-    qDebug() << listRect;
     if (right > screen.right()) {
-	listRect.moveRight(listRect.right() - (right - screen.right()));
+	popupRect.moveRight(popupRect.right() - (right - screen.right()));
     }
-    popup->move(mapToGlobal(listRect.topLeft()).x(), popup->y());
+    popup->move(mapToGlobal(popupRect.topLeft()).x(), popup->y());
 }
 
 void IconComboBox::paintEvent(QPaintEvent *)
