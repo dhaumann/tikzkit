@@ -242,6 +242,8 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
 
     // draw arrows
+    p.setStyle(Qt::SolidLine);
+    painter->setPen(p);
     painter->save();
         painter->translate(m_startAnchor.x(), m_startAnchor.y());
         painter->rotate(180 - m_edgePath.angleAtPercent(0.0));

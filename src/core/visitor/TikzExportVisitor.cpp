@@ -220,7 +220,6 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
             case PenStyle::DashDotDottedLine: options << "dash dotdotted"; break;
             case PenStyle::DenselyDashDotDottedLine: options << "densely dashdotdotted"; break;
             case PenStyle::LooselyDashDotDottedLine: options << "loosely dashdotdotted"; break;
-            case PenStyle::NoPen:
             default: Q_ASSERT(false);
         }
     }

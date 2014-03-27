@@ -27,6 +27,7 @@ class QTextEdit;
 namespace tikz {
 namespace ui {
     class TikzDocument;
+    class LinePropertyWidget;
 }
 }
 
@@ -57,6 +58,7 @@ class MainWindow : public QMainWindow
 
     protected:
         void setupActions();
+        void setupUi();
 
     private:
         QGraphicsView* m_view;
@@ -66,6 +68,8 @@ class MainWindow : public QMainWindow
         tikz::ui::TikzDocument * m_doc;
 
         QTextEdit * m_textEdit;
+
+        tikz::ui::LinePropertyWidget * m_linePropertyWidget;
 };
 
 #endif // DEMO_WIDGET_H

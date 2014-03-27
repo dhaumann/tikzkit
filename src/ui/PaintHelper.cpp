@@ -44,7 +44,6 @@ PaintHelper::~PaintHelper()
 Qt::PenStyle PaintHelper::penStyle() const
 {
     switch (d->style->penStyle()) {
-        case tikz::NoPen: return Qt::NoPen;
         case tikz::SolidLine: return Qt::SolidLine;
         case tikz::DottedLine: return Qt::DotLine;
         case tikz::DenselyDottedLine: return Qt::DotLine; // no Qt style
@@ -80,6 +79,7 @@ QPen PaintHelper::pen() const
     // construct valid pen
     QPen pen(c);
     pen.setWidthF(d->style->penWidth());
+    pen.setStyle(ps);
     pen.setCapStyle(Qt::FlatCap);
     pen.setJoinStyle(Qt::MiterJoin);
 //    setMiterLimit

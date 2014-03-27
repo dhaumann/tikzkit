@@ -24,6 +24,7 @@
 #include <tikz/ui/TikzScene.h>
 #include <tikz/ui/TikzToolBox.h>
 #include <tikz/ui/ArrowComboBox.h>
+#include <tikz/ui/LinePropertyWidget.h>
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
@@ -31,6 +32,7 @@
 #include <tikz/core/Path.h>
 #include <tikz/core/EdgePath.h>
 
+#include <QDockWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGraphicsView>
@@ -52,10 +54,11 @@ MainWindow::MainWindow()
 {
     m_ui->setupUi(this);
 
+    setupUi();
+
     QSplitter * splitter = new QSplitter(Qt::Vertical, this);
     setCentralWidget(splitter);
 
-  
     // create toplevel widget
     QWidget * top = new QWidget(splitter);
     splitter->addWidget(top);
@@ -139,6 +142,7 @@ MainWindow::MainWindow()
     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(QPointF(0, 0));
     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(QPointF(3, 3));
 
+    m_linePropertyWidget->setLineStyle(path->path()->style());
 #if 0
 
 
@@ -385,6 +389,16 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::setupUi()
+{
+    auto dockWidget = new QDockWidget("Properties", this);
+    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
+
+    dockWidget->setWidget(m_linePropertyWidget);
+
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 }
 
 void MainWindow::setupActions()

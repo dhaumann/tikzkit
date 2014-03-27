@@ -14,6 +14,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/tex
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
     ${CMAKE_SOURCE_DIR}/src/ui/utils
+
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set(qtikzui_SOURCES
@@ -69,6 +71,7 @@ set(qtikzui_SOURCES
 
     widgets/ArrowComboBox.cpp
     widgets/IconComboBox.cpp
+    widgets/LinePropertyWidget.cpp
 )
 
 set(qtikzui_HEADERS
@@ -110,9 +113,14 @@ set(qtikzui_HEADERS
 
     widgets/ArrowComboBox.h
     widgets/IconComboBox.h
+    widgets/LinePropertyWidget.h
+    widgets/LinePropertyWidget_p.h
 )
 
 QT4_WRAP_CPP(qtikzui_HEADERS_MOC ${qtikzui_HEADERS})
+
+set(qtikzui_FORMS forms/LinePropertyWidget.ui)
+QT4_WRAP_UI(qtikzui_FORMS_HEADERS ${qtikzui_FORMS})
 
 # add icon resource
 set(qtikzui_RESOURCES icons.qrc)
@@ -128,6 +136,7 @@ add_library(qtikzui SHARED
     ${qtikzui_SOURCES}
     ${qtikzui_HEADERS_MOC}
     ${qtikzui_RESOURCES_RCC}
+    ${qtikzui_FORMS_HEADERS}
 )
 
 target_link_libraries(qtikzui
