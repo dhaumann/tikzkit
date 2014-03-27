@@ -74,18 +74,14 @@ MainWindow::MainWindow()
     QHBoxLayout* h = new QHBoxLayout();
     v->addLayout(h);
 
-    QToolButton * undoButton = new QToolButton(this);
-    undoButton->setText("undo");
-    connect(undoButton, SIGNAL(clicked()), m_doc->undoManager(), SLOT(undo()));
-    connect(m_doc->undoManager(), SIGNAL(canUndoChanged(bool)), undoButton, SLOT(setEnabled(bool)));
+    // undo and redo
+    QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
+    undoAction->setIcon(QIcon::fromTheme("edit-undo"));
+    m_ui->toolBar->addAction(undoAction);
 
-    QToolButton * redoButton = new QToolButton(this);
-    redoButton->setText("redo");
-    connect(redoButton, SIGNAL(clicked()), m_doc->undoManager(), SLOT(redo()));
-    connect(m_doc->undoManager(), SIGNAL(canRedoChanged(bool)), redoButton, SLOT(setEnabled(bool)));
-
-    h->addWidget(undoButton);
-    h->addWidget(redoButton);
+    QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
+    redoAction->setIcon(QIcon::fromTheme("edit-redo"));
+    m_ui->toolBar->addAction(redoAction);
 
     // add arrow head/tail combos
     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
@@ -138,10 +134,10 @@ MainWindow::MainWindow()
     path->path()->style()->setDoubleLine(true);
     path->path()->style()->setArrowTail(tikz::LatexArrow);
     path->path()->style()->setArrowHead(tikz::ToArrow);
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartNode(item1->node());
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndNode(item2->node());
-//     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(QPointF(0, 0));
-//     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(QPointF(3, 3));
+//     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartNode(item1->node());
+//     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndNode(item2->node());
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(QPointF(0, 0));
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(QPointF(3, 3));
 
 #if 0
 
