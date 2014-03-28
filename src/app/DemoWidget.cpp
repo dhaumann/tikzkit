@@ -142,7 +142,7 @@ MainWindow::MainWindow()
     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(QPointF(0, 0));
     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(QPointF(3, 3));
 
-    m_linePropertyWidget->setLineStyle(path->path()->style());
+    m_linePropertyWidget->setLineStyle(m_doc->style());
 #if 0
 
 
