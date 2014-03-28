@@ -22,6 +22,10 @@
 #include <tikz/core/Style.h>
 #include <tikz/core/tikz.h>
 
+#include <QPainter>
+#include <QPainterPath>
+#include <QDebug>
+
 class PaintHelperPrivate
 {
     public:
@@ -62,6 +66,42 @@ Qt::PenStyle PaintHelper::penStyle() const
     return Qt::SolidLine;
 }
 
+/**
+ * This functions returns a dash pattern for the respective pen style.
+ * The generated dash pattern follows the dash patterns defined by PGF/TikZ,
+ * see file generic/pgf/frontendlayer/tikz/tikz.code.tex fur further details.
+ *
+ * If @p style has a tikz::SolidLine as pen style, an empty vector is returned.
+ */
+static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
+{
+    QVector<qreal> pattern;
+    const qreal pt = 0.3527;
+    lineWidth *= 10.0;
+
+    switch (style) {
+        case tikz::SolidLine: break; // leave empty
+        case tikz::DottedLine: pattern << lineWidth << 2*pt; break;
+        case tikz::DenselyDottedLine: pattern << lineWidth << 1*pt; break;
+        case tikz::LooselyDottedLine: pattern << lineWidth << 4*pt; break;
+        case tikz::DashedLine: pattern << 3*pt << 3*pt; break;
+        case tikz::DenselyDashedLine: pattern << 3*pt << 2*pt; break;
+        case tikz::LooselyDashedLine: pattern << 3*pt << 6*pt; break;
+        case tikz::DashDottedLine: pattern << 3*pt << 2*pt << lineWidth << 2*pt; break;
+        case tikz::DenselyDashDottedLine: pattern << 3*pt << 1*pt << lineWidth << 1*pt; break;
+        case tikz::LooselyDashDottedLine: pattern << 3*pt << 4*pt << lineWidth << 4*pt; break;
+        case tikz::DashDotDottedLine: pattern << 3*pt << 2*pt << lineWidth << 2*pt << lineWidth << 2*pt; break;
+        case tikz::DenselyDashDotDottedLine: pattern << 3*pt << 1*pt << lineWidth << 1*pt << lineWidth << 1*pt; break;
+        case tikz::LooselyDashDotDottedLine: pattern << 3*pt << 4*pt << lineWidth << 4*pt << lineWidth << 4*pt; break;
+        default: break;
+    }
+
+    for (int i = 0; i < pattern.size(); ++i) {
+        pattern[i] /= lineWidth;
+    }
+    return pattern;
+}
+
 QPen PaintHelper::pen() const
 {
     // invalid color -> NoPen
@@ -84,6 +124,37 @@ QPen PaintHelper::pen() const
     pen.setJoinStyle(Qt::MiterJoin);
 //    setMiterLimit
     return pen;
+}
+
+void PaintHelper::drawPath(const QPainterPath & path)
+{
+    QPen p = pen();
+
+    p.setWidthF(d->style->penWidth());
+    QVector<qreal> pattern = ::penStyle(d->style->penWidth(), d->style->penStyle());
+    if (d->style->penStyle() != tikz::SolidLine) {
+        p.setDashPattern(pattern);
+    }
+
+    // first pass: draw line
+    d->painter->setPen(p);
+    d->painter->drawPath(path);
+
+    // second pass: draw inner line
+    if (d->style->doubleLine()) {
+        p.setWidthF(d->style->innerLineWidth());
+        if (d->style->penStyle() != tikz::SolidLine) {
+            // scale by different line widths to match distances
+            for (int i = 0; i < pattern.size(); ++i) {
+                pattern[i] *= d->style->penWidth() / d->style->innerLineWidth();
+            }
+            p.setDashPattern(pattern);
+        }
+
+        p.setColor(Qt::red);
+        d->painter->setPen(p);
+        d->painter->drawPath(path);
+    }
 }
 
 //     rgb

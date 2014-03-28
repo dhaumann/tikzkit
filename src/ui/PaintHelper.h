@@ -58,6 +58,11 @@ class PaintHelper
          */
         QPen pen() const;
 
+        /**
+         * Draw the path with all its style.
+         */
+        void drawPath(const QPainterPath & path);
+
     private:
         PaintHelperPrivate * const d;
 };
