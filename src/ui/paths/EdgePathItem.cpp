@@ -230,16 +230,8 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->fillPath(m_hoverPath, Qt::magenta);
     }
 
-    painter->setPen(p);
     // draw line
-    painter->drawPath(m_edgePath);
-
-    if (style()->doubleLine()) {
-        p.setWidthF(style()->innerLineWidth());
-        p.setColor(Qt::white);
-        painter->setPen(p);
-        painter->drawPath(m_edgePath);
-    }
+    sh.drawPath(m_edgePath);
 
     // draw arrows
     p.setStyle(Qt::SolidLine);

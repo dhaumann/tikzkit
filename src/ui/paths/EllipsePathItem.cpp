@@ -115,23 +115,13 @@ void EllipsePathItem::paint(QPainter *painter,
 
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(painter, style());
-    QPen p = sh.pen();
-
     if (isHovered() /*&& !dragging*/) {
         painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: make color configurable
     }
 
-    painter->setPen(p);
     // draw line
-    painter->drawPath(m_ellipse);
-
-    if (style()->doubleLine()) {
-        p.setWidthF(style()->innerLineWidth());
-        p.setColor(Qt::white); // FIXME: inner line color
-        painter->setPen(p);
-        painter->drawPath(m_ellipse);
-    }
+    PaintHelper sh(painter, style());
+    sh.drawPath(m_ellipse);
 }
 
 QRectF EllipsePathItem::boundingRect() const

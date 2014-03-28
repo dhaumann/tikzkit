@@ -204,22 +204,13 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     d->updateCache();
 
     PaintHelper sh(painter, style());
-    QPen p = sh.pen();
     QBrush brush(style()->fillColor());
-    painter->setPen(p);
-    painter->setBrush(brush);
 
-    painter->drawPath(d->shapePath);
+    // fill shape
+    painter->fillPath(d->shapePath, brush);
 
-    // draw double line, if wanted
-    if (style()->doubleLine()) {
-        painter->setBrush(Qt::NoBrush);
-        p.setWidthF(style()->innerLineWidth());
-        p.setColor(Qt::white);
-        painter->setPen(p);
-        painter->drawPath(d->shapePath);
-    }
-
+    // draw shape
+    sh.drawPath(d->shapePath);
 
     painter->restore();
 }
