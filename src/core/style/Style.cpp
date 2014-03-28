@@ -400,29 +400,33 @@ void Style::unsetDoubleLine()
 
 qreal Style::innerLineWidth() const
 {
-    if (propertySet(s_innerLineWidth)) {
-        const qreal cm = 0.03527;
-        qreal pt = 0.0;
-        switch (innerLineWidthType()) {
-            case tikz::UltraThin : pt = 0.1; break; // 0.03527 cm
-            case tikz::VeryThin  : pt = 0.2; break; // 0.07054 cm
-            case tikz::Thin      : pt = 0.4; break; // 0.14108 cm
-            case tikz::SemiThick : pt = 0.6; break; // 0.21162 cm
-            case tikz::Thick     : pt = 0.8; break; // 0.28216 cm
-            case tikz::VeryThick : pt = 1.2; break; // 0.42324 cm
-            case tikz::UltraThick: pt = 1.6; break; // 0.56432 cm
-            case tikz::CustomLineWidth: return d->innerLineWidth;
-            default: break;
+    if (propertySet(s_doubleLine)) {
+        if (propertySet(s_innerLineWidth)) {
+            const qreal cm = 0.03527;
+            qreal pt = 0.0;
+            switch (innerLineWidthType()) {
+                case tikz::UltraThin : pt = 0.1; break; // 0.03527 cm
+                case tikz::VeryThin  : pt = 0.2; break; // 0.07054 cm
+                case tikz::Thin      : pt = 0.4; break; // 0.14108 cm
+                case tikz::SemiThick : pt = 0.6; break; // 0.21162 cm
+                case tikz::Thick     : pt = 0.8; break; // 0.28216 cm
+                case tikz::VeryThick : pt = 1.2; break; // 0.42324 cm
+                case tikz::UltraThick: pt = 1.6; break; // 0.56432 cm
+                case tikz::CustomLineWidth: return d->innerLineWidth;
+                default: break;
+            }
+            return pt * cm;
         }
-        return pt * cm;
+
+        // return SemiThick in cm
+        return 0.021162;
     }
 
     if (parentStyle()) {
         return parentStyle()->innerLineWidth();
     }
 
-    // SemiThick in cm on double line, otherwise 0
-    return propertySet(s_doubleLine) ? 0.021162 : 0.0;
+    return 0.0;
 }
 
 bool Style::innerLineWidthSet() const
