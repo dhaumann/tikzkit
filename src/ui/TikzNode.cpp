@@ -261,6 +261,7 @@ void TikzNode::styleChanged()
     d->dirty = true;
     if (d->node->pos() != pos()) slotSetPos(d->node->pos());
     emit changed();
+    update();
 }
 
 }
