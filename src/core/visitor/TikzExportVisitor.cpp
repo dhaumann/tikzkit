@@ -137,8 +137,10 @@ void TikzExportVisitor::visit(Document * doc)
 
 void TikzExportVisitor::visit(Node * node)
 {
-    QString cmd = QString("\\node[%1] (%2) at (%3, %4) {%5};")
-        .arg(nodeStyleOptions(node->style()).join(", "))
+    QString options = nodeStyleOptions(node->style()).join(", ");
+
+    QString cmd = QString("\\node[%1,draw] (%2) at (%3, %4) {%5};")
+        .arg(options)
         .arg(node->id())
         .arg(node->pos().x())
         .arg(node->pos().y())
