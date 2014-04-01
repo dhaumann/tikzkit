@@ -76,6 +76,17 @@ QPainterPath CircleShape::shape() const
     return path;
 }
 
+QPainterPath CircleShape::outline() const
+{
+    const qreal lw = node()->style()->penWidth() / 2;
+    const qreal r = qMax(node()->shapeRect().width(),
+                         node()->shapeRect().height()) / 2.0 + lw;
+
+    QPainterPath path;
+    path.addEllipse(QPointF(0, 0), r, r);
+    return path;
+}
+
 QVector<tikz::Anchor> CircleShape::supportedAnchors() const
 {
     // by default, just return NoAnchor

@@ -66,7 +66,7 @@ class AbstractShape
          * The shape 'rectangle' does not need to modify the @p shapeRect,
          * since the @p textRect perfectly fits into @p shapeRect.
          * The shape 'circle' however needs to increase the @p shapeRect such
-         * that the circlie filling @p shapeRect includes the @p textRect.
+         * that the circle filling @p shapeRect includes the @p textRect.
          *
          * @param textRect the bounding box of the textRect
          * @param shapeRect the rect of the shape, inner sep already included.
@@ -78,6 +78,21 @@ class AbstractShape
          * This path is also used to draw the shape.
          */
         virtual QPainterPath shape() const;
+
+        /**
+         * Returns the outline of this shape.
+         *
+         * Think of the outline as the shape(), stroked with a thick pen.
+         * As result, the shape 'grows' a bit in all directions, depending on
+         * the pen's width. Every shape should reimplement this function to
+         * ensure the outline contains exactly the \e drawn shape.
+         *
+         * The outline is used to check mouse click & move events, and also
+         * to check for collisions.
+         *
+         * The default implementation returns shape().
+         */
+        virtual QPainterPath outline() const;
 
         /**
          * Returns a list of anchors the shape supports.

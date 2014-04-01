@@ -55,6 +55,7 @@ class TikzNodePrivate
         bool itemChangeRunning : 1;
         bool dirty : 1;
         QPainterPath shapePath;
+        QPainterPath outlinePath;
 
     public:
         void updateCache()
@@ -68,10 +69,12 @@ class TikzNodePrivate
             }
 
             shapePath = shape->shape();
+            outlinePath = shape->outline();
 
             QTransform trans;
             trans.scale(node->style()->scale(), node->style()->scale());
             shapePath = trans.map(shapePath);
+            outlinePath = trans.map(outlinePath); // NOTE/FIXME: this also scales the added pen width, which is wrong.
 
             q->setRotation(node->style()->rotation());
         }
@@ -220,10 +223,7 @@ QRectF TikzNode::boundingRect() const
     // make sure cache is up-to-date
     d->updateCache();
 
-    QRectF br = d->shapePath.boundingRect();
-    br.adjust(-0.2, -0.2, 0.2, 0.2);
-
-    return br;
+    return d->outlinePath.boundingRect();
 }
 
 QPainterPath TikzNode::shape() const
@@ -231,7 +231,7 @@ QPainterPath TikzNode::shape() const
     // make sure cache is up-to-date
     d->updateCache();
 
-    return d->shapePath;
+    return d->outlinePath;
 }
 
 QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)

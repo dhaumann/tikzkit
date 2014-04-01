@@ -65,6 +65,11 @@ QPainterPath AbstractShape::shape() const
     return QPainterPath();
 }
 
+QPainterPath AbstractShape::outline() const
+{
+    return shape();
+}
+
 QVector<tikz::Anchor> AbstractShape::supportedAnchors() const
 {
     // by default, just return NoAnchor

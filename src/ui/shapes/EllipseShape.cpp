@@ -76,6 +76,17 @@ QPainterPath EllipseShape::shape() const
     return path;
 }
 
+QPainterPath EllipseShape::outline() const
+{
+    const qreal lw = node()->style()->penWidth() / 2;
+    QRectF rect = node()->shapeRect();
+    rect.adjust(-lw, -lw, lw, lw);
+
+    QPainterPath path;
+    path.addEllipse(rect);
+    return path;
+}
+
 QVector<tikz::Anchor> EllipseShape::supportedAnchors() const
 {
     // by default, just return NoAnchor

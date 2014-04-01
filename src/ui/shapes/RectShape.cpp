@@ -58,6 +58,17 @@ QPainterPath RectShape::shape() const
     return path;
 }
 
+QPainterPath RectShape::outline() const
+{
+    const qreal lw = node()->style()->penWidth() / 2;
+    QRectF rect = node()->shapeRect();
+    rect.adjust(-lw, -lw, lw, lw);
+
+    QPainterPath path;
+    path.addRect(rect);
+    return path;
+}
+
 QVector<tikz::Anchor> RectShape::supportedAnchors() const
 {
     // by default, just return NoAnchor

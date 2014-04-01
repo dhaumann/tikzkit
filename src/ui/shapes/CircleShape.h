@@ -47,34 +47,40 @@ class CircleShape : public AbstractShape
         /**
          * Returns the type of this shape.
          */
-        virtual tikz::Shape type() const;
+        tikz::Shape type() const override;
 
         /**
          * Reimplemented such that the circle inside @p shapeRect completely
          * includes the @p textRect.
          */
-        virtual void adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const;
+        void adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const override;
 
         /**
          * Returns the painter path of this shape.
          * This path is also used to draw the shape.
          */
-        virtual QPainterPath shape() const;
+        QPainterPath shape() const override;
+
+        /**
+         * Returns the outline of this shape, i.e. the shape() extended
+         * by the pen's width.
+         */
+        QPainterPath outline() const override;
 
         /**
          * Returns a list of anchors the shape supports.
          */
-        virtual QVector<tikz::Anchor> supportedAnchors() const;
+        QVector<tikz::Anchor> supportedAnchors() const override;
 
         /**
          * Returns the position of @p anchor in local node coordinates.
          */
-        virtual QPointF anchorPos(tikz::Anchor anchor) const;
+        QPointF anchorPos(tikz::Anchor anchor) const override;
 
         /**
          * Returns the contact point for @p anchor and angle @p rad.
          */
-        virtual QPointF contactPoint(tikz::Anchor anchor, qreal rad) const;
+        QPointF contactPoint(tikz::Anchor anchor, qreal rad) const override;
 
     private:
         CircleShapePrivate * const d;
