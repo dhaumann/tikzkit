@@ -257,60 +257,6 @@ void TikzExportVisitor::visit(Path * path)
         default: break;
     }
 
-#if 0
-    //
-    // \draw startCoord -- endCoord;
-    //
-    QString startCoord;
-    QString endCoord;
-
-    //
-    // compute start
-    //
-    if (path->startNode()) {
-        QString anchor = anchorToString(path->startAnchor());
-        startCoord = "(" + QString::number(path->startNode()->id()) + anchor + ")";
-    } else {
-        const QPointF & pos = path->startPos();
-        startCoord = QString("(%1, %2)")
-            .arg(pos.x())
-            .arg(pos.y());
-    }
-
-    //
-    // compute end
-    //
-    if (path->endNode()) {
-        QString anchor = anchorToString(path->endAnchor());
-        endCoord = "(" + QString::number(path->endNode()->id()) + anchor + ")";
-    } else {
-        const QPointF & pos = path->endPos();
-        endCoord = QString("(%1, %2)")
-            .arg(pos.x())
-            .arg(pos.y());
-    }
-
-    //
-    // build connection string
-    //
-    QString to;
-    switch (path->type()) {
-        case Path::Type::Line: to = "--"; break;
-        case Path::Type::HVLine: to = "-|"; break;
-        case Path::Type::VHLine: to = "|-"; break;
-        case Path::Type::BendCurve: to = "to"; break;
-        case Path::Type::InOutCurve: to = "to"; break;
-        case Path::Type::BezierCurve: to = "to"; break; // TODO: implement correctly
-        default: break;
-    }
-
-    //
-    // build draw command
-    //
-    QString cmd;
-    cmd += "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
-#endif
-
     //
     // finally add path to picture
     //
