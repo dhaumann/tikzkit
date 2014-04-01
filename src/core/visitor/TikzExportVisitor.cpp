@@ -22,6 +22,7 @@
 #include "Document.h"
 #include "Node.h"
 #include "Path.h"
+#include "EllipsePath.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -153,6 +154,76 @@ void TikzExportVisitor::visit(Node * node)
 void TikzExportVisitor::visit(Path * path)
 {
     QString options = edgeStyleOptions(path->style()).join(", ");
+    if (!options.isEmpty()) {
+        options = "[" + options + "]";
+    }
+
+    QString cmd;
+
+    switch (path->type()) {
+        case Path::Line: {
+            break;
+        }
+        case Path::HVLine: {
+            break;
+        }
+        case Path::VHLine: {
+            break;
+        }
+        case Path::BendCurve: {
+            break;
+        }
+        case Path::InOutCurve: {
+            break;
+        }
+        case Path::BezierCurve: {
+            break;
+        }
+        case Path::Ellipse: {
+            auto ellipsePath = static_cast<tikz::core::EllipsePath*>(path);
+            QString center;
+
+            //
+            // compute start
+            //
+            if (ellipsePath->node()) {
+                const QString anchor = anchorToString(ellipsePath->anchor());
+                center = "(" + QString::number(ellipsePath->node()->id()) + anchor + ")";
+            } else {
+                const QPointF & pos = ellipsePath->pos();
+                center = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
+            }
+
+            //
+            // compute radius
+            //
+            QString radius;
+            if (ellipsePath->style()->radiusX() == ellipsePath->style()->radiusY()) {
+                radius = "radius=" + QString::number(ellipsePath->style()->radiusX()) + "cm";
+            } else {
+                radius = "x radius=" + QString::number(ellipsePath->style()->radiusX()) + "cm";
+                radius += ", y radius=" + QString::number(ellipsePath->style()->radiusY()) + "cm";
+            }
+
+            //
+            // export rotation
+            //
+            if (style->rotationSet()) {
+                radius += QString(", rotate=%1").arg(style->rotation());
+            }
+
+            // build path
+            cmd += "\\draw" + options + " " + center + " circle [" + radius + "];";
+            break;
+        }
+        case Path::Rectangle: {
+            break;
+        }
+        case Path::Grid: {
+            break;
+        }
+        default: break;
+    }
 
 #if 0
     //
@@ -209,6 +280,7 @@ void TikzExportVisitor::visit(Path * path)
     }
     QString cmd;
     cmd += "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
+#endif
 
     //
     // finally add path to picture
@@ -216,7 +288,6 @@ void TikzExportVisitor::visit(Path * path)
     TikzLine line;
     line.contents = cmd;
     m_tikzExport.addTikzLine(line);
-#endif
 }
 
 void TikzExportVisitor::visit(NodeStyle * style)
@@ -445,13 +516,6 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
             case Shape::ShapeEllipse: options << "ellipse";  break;
             default: Q_ASSERT(false);
         }
-    }
-
-    //
-    // export rotation
-    //
-    if (style->rotationSet()) {
-        options << QString("rotate=%1").arg(style->rotation());
     }
 
     //
