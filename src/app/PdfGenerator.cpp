@@ -91,6 +91,7 @@ void PdfGenerator::generatePdf(const QString& texCode)
         "\\usepackage{amssymb}\n"
         "\\usepackage{amsfonts}\n"
         "\\usepackage{tikz}\n"
+        "\\usetikzlibrary{shapes}\n"
         "\\begin{document}\n"
 //         "\\begin{preview}\n"
         "\\small\n"

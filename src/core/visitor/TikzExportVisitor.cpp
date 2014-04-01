@@ -488,6 +488,7 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
             case Shape::NoShape: break;
             case Shape::ShapeRectangle: options << "rectangle";  break;
             case Shape::ShapeCircle: options << "circle";  break;
+            case Shape::ShapeDiamond: options << "diamond";  break;
             case Shape::ShapeEllipse: options << "ellipse";  break;
             default: Q_ASSERT(false);
         }

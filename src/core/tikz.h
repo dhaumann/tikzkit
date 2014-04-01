@@ -64,6 +64,7 @@ enum Shape {
     NoShape = 0,
     ShapeRectangle,
     ShapeCircle,
+    ShapeDiamond,
     ShapeEllipse
 };
 

@@ -57,6 +57,7 @@ set(qtikzui_SOURCES
     shapes/AbstractShape.cpp
     shapes/RectShape.cpp
     shapes/CircleShape.cpp
+    shapes/DiamondShape.cpp
     shapes/EllipseShape.cpp
 
     arrows/AbstractArrow.cpp

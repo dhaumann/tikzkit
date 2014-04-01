@@ -20,6 +20,7 @@
 #include "AbstractShape.h"
 #include "RectShape.h"
 #include "CircleShape.h"
+#include "DiamondShape.h"
 #include "EllipseShape.h"
 
 #include <cmath>
@@ -95,6 +96,7 @@ AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
         case tikz::NoShape: return new AbstractShape(node);
         case tikz::ShapeRectangle: return new RectShape(node);
         case tikz::ShapeCircle: return new CircleShape(node);
+        case tikz::ShapeDiamond: return new DiamondShape(node);
         case tikz::ShapeEllipse: return new EllipseShape(node);
         default: break;
     }
