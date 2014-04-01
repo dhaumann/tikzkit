@@ -49,6 +49,7 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_PROPERTY(bool doubleLine READ doubleLine WRITE setDoubleLine RESET unsetDoubleLine)
     Q_PROPERTY(tikz::LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
     Q_PROPERTY(qreal innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
+    Q_PROPERTY(QColor innerLineColor READ innerLineColor WRITE setInnerLineColor RESET unsetInnerLineColor)
 
     Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
 
@@ -376,6 +377,18 @@ class TIKZCORE_EXPORT Style : public QObject
         bool penColorSet() const;
 
         /**
+         * Gets the inner line pen color for drawing double line paths.
+         * If the color is not explicitly set, the returned color is Qt::white.
+         */
+        QColor innerLineColor() const;
+
+        /**
+         * Check whether the inner line color property is set.
+         * @return true, if this style has an own inner line color property
+         */
+        bool innerLineColorSet() const;
+
+        /**
          * Gets the fill color for filling paths.
          * If the color is not explicitly set, the returned color is Qt::transparent.
          */
@@ -400,6 +413,19 @@ class TIKZCORE_EXPORT Style : public QObject
          * style, or the default color Qt::black.
          */
         void unsetPenColor();
+
+        /**
+         * Sets the inner line color used for drawing double paths to @p color.
+         * @param color draw color
+         */
+        void setInnerLineColor(const QColor & color);
+
+        /**
+         * Unsets the inner line color used for drawing double line paths.
+         * Afterwards, innerLineColor() returns either the color of the parent()
+         * style, or the default color Qt::white.
+         */
+        void unsetInnerLineColor();
 
         /**
          * Sets the fill color used for filling paths to @p color.

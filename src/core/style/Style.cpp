@@ -35,6 +35,7 @@ static const char * s_innerLineWidth = "innerLineWidth";
 static const char * s_penOpacity = "penOpacity";
 static const char * s_fillOpacity = "fillOpacity";
 static const char * s_penColor = "penColor";
+static const char * s_innerLineColor = "innerLineColor";
 static const char * s_fillColor = "fillColor";
 static const char * s_rotation = "rotation";
 
@@ -71,6 +72,7 @@ public:
 
     // colors
     QColor penColor;
+    QColor innerLineColor;
     QColor fillColor;
 
     qreal penOpacity;
@@ -102,6 +104,7 @@ void StylePrivate::init()
     fillOpacity = 1.0;
 
     penColor = Qt::black;
+    innerLineColor = Qt::white;
     fillColor = Qt::transparent;
 
     rotation = 0.0;
@@ -572,6 +575,24 @@ bool Style::penColorSet() const
     return propertySet(s_penColor);
 }
 
+QColor Style::innerLineColor() const
+{
+    if (propertySet(s_innerLineColor)) {
+        return d->innerLineColor;
+    }
+
+    if (parentStyle()) {
+        return parentStyle()->innerLineColor();
+    }
+
+    return Qt::white;
+}
+
+bool Style::innerLineColorSet() const
+{
+    return propertySet(s_innerLineColor);
+}
+
 QColor Style::fillColor() const
 {
     if (propertySet(s_fillColor)) {
@@ -606,6 +627,26 @@ void Style::unsetPenColor()
         beginConfig();
         removeProperty(s_penColor);
         d->penColor = Qt::black;
+        endConfig();
+    }
+}
+
+void Style::setInnerLineColor(const QColor & color)
+{
+    if (!propertySet(s_innerLineColor) || d->innerLineColor != color) {
+        beginConfig();
+        addProperty(s_innerLineColor);
+        d->innerLineColor = color;
+        endConfig();
+    }
+}
+
+void Style::unsetInnerLineColor()
+{
+    if (propertySet(s_innerLineColor)) {
+        beginConfig();
+        removeProperty(s_innerLineColor);
+        d->innerLineColor = Qt::white;
         endConfig();
     }
 }
