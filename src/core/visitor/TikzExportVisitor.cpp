@@ -293,7 +293,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
             case PenStyle::DashDottedLine: options << "dashdotted"; break;
             case PenStyle::DenselyDashDottedLine: options << "densely dashdotted"; break;
             case PenStyle::LooselyDashDottedLine: options << "loosely dashdotted"; break;
-            case PenStyle::DashDotDottedLine: options << "dash dotdotted"; break;
+            case PenStyle::DashDotDottedLine: options << "dashdotdotted"; break;
             case PenStyle::DenselyDashDotDottedLine: options << "densely dashdotdotted"; break;
             case PenStyle::LooselyDashDotDottedLine: options << "loosely dashdotdotted"; break;
             default: Q_ASSERT(false);
@@ -518,10 +518,20 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
         && style->minimumWidth() == style->minimumHeight())
     {
         options << QString("minimum size=%1cm").arg(style->minimumWidth());
-    } else if (style->minimumWidthSet()) {
-        options << QString("minimum width=%1cm").arg(style->minimumWidth());
-    } else if (style->minimumHeightSet()) {
-        options << QString("minimum height=%1cm").arg(style->minimumHeight());
+    } else {
+        if (style->minimumWidthSet()) {
+            options << QString("minimum width=%1cm").arg(style->minimumWidth());
+        }
+        if (style->minimumHeightSet()) {
+            options << QString("minimum height=%1cm").arg(style->minimumHeight());
+        }
+    }
+
+    //
+    // export rotation
+    //
+    if (style->rotationSet()) {
+        options << QString("rotate=%1").arg(style->rotation());
     }
 
     return options;
