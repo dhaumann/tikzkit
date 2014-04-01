@@ -24,6 +24,10 @@
 class QGraphicsView;
 class QTextEdit;
 
+namespace tex {
+    class PdfGenerator;
+}
+
 namespace tikz {
 namespace ui {
     class TikzDocument;
@@ -55,6 +59,8 @@ class MainWindow : public QMainWindow
         void loadFile();
 
         void updateTikzCode();
+        void previewPdf();
+        void previewPdf(const QString & pdfFile);
 
     protected:
         void setupActions();
@@ -70,6 +76,8 @@ class MainWindow : public QMainWindow
         QTextEdit * m_textEdit;
 
         tikz::ui::LinePropertyWidget * m_linePropertyWidget;
+        
+        tex::PdfGenerator * m_pdfGenerator;
 };
 
 #endif // DEMO_WIDGET_H

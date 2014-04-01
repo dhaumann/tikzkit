@@ -17,6 +17,7 @@
  */
 #include "DemoWidget.h"
 #include "ui_MainWindow.h"
+#include "PdfGenerator.h"
 
 #include <tikz/ui/TikzDocument.h>
 #include <tikz/ui/TikzNode.h>
@@ -55,6 +56,9 @@ MainWindow::MainWindow()
     m_ui->setupUi(this);
 
     setupUi();
+
+    m_pdfGenerator = 0;
+    connect(m_ui->aPreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 
     QSplitter * splitter = new QSplitter(Qt::Vertical, this);
     setCentralWidget(splitter);
@@ -423,6 +427,21 @@ void MainWindow::loadFile()
 void MainWindow::updateTikzCode()
 {
     m_textEdit->setText(m_doc->tikzCode());
+}
+
+void MainWindow::previewPdf()
+{
+    delete m_pdfGenerator;
+    m_pdfGenerator = new tex::PdfGenerator(this);
+    connect(m_pdfGenerator, SIGNAL(finished(const QString&)), this, SLOT(previewPdf(const QString&)));
+
+    m_pdfGenerator->generatePdf(m_doc->tikzCode());
+}
+
+void MainWindow::previewPdf(const QString & pdfFile)
+{
+    qDebug() << "previewPdF:" << pdfFile;
+    QProcess::startDetached("okular", QStringList() << pdfFile);
 }
 
 // kate: indent-width 4; replace-tabs on;

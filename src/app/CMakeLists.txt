@@ -13,10 +13,12 @@ include_directories(
 set(tikzkit_SOURCES
     main.cpp
     DemoWidget.cpp
+    PdfGenerator.cpp
 )
 
 set(tikzkit_HEADERS
     DemoWidget.h
+    PdfGenerator.h
 )
 
 QT4_WRAP_CPP(tikzkit_HEADERS_MOC ${tikzkit_HEADERS})

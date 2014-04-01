@@ -55,10 +55,13 @@
    <addaction name="separator"/>
    <addaction name="aSave"/>
    <addaction name="separator"/>
+   <addaction name="aPreview"/>
   </widget>
   <action name="aOpen">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;Open</string>
@@ -69,7 +72,9 @@
   </action>
   <action name="aNew">
    <property name="icon">
-    <iconset theme="document-new"/>
+    <iconset theme="document-new">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -80,7 +85,9 @@
   </action>
   <action name="aQuit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -91,7 +98,9 @@
   </action>
   <action name="aSave">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -101,6 +110,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="aPreview">
+   <property name="icon">
+    <iconset theme="application-pdf"/>
+   </property>
+   <property name="text">
+    <string>Preview</string>
    </property>
   </action>
  </widget>
