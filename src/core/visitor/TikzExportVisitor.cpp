@@ -80,6 +80,36 @@ static QString anchorToString(Anchor anchor)
     return str;
 }
 
+static QString toString(tikz::core::Style * style, bool doubleLine = false)
+{
+    const tikz::LineWidth lw = doubleLine ? style->innerLineWidthType() : style->lineWidthType();
+    QString width;
+    switch (lw) {
+        case tikz::LineWidth::UltraThin      : width = "ultra thin"; break;
+        case tikz::LineWidth::VeryThin       : width = "very thin"; break;
+        case tikz::LineWidth::Thin           : width = "thin"; break;
+        case tikz::LineWidth::SemiThick      : width = "semithick"; break;
+        case tikz::LineWidth::Thick          : width = "thick"; break;
+        case tikz::LineWidth::VeryThick      : width = "very thick"; break;
+        case tikz::LineWidth::UltraThick     : width = "ultra thick"; break;
+        case tikz::LineWidth::CustomLineWidth: {
+            width = QString("%1cm").arg(doubleLine ? style->innerLineWidth() : style->lineWidth());
+            break;
+        }
+        default: Q_ASSERT(false); break;
+    }
+
+    if (doubleLine) {
+        return QString("double distance=") + width;
+    } else {
+        if (lw == tikz::LineWidth::CustomLineWidth) {
+            return QString("line width=") + width;
+        } else {
+            return width;
+        }
+    }
+}
+
 TikzExportVisitor::TikzExportVisitor()
     : Visitor()
 {
@@ -228,28 +258,19 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export line width
     //
     if (style->lineWidthSet()) {
-        const LineWidth lw = style->lineWidthType();
-        switch (lw) {
-            case LineWidth::UltraThin: options << "ultra thin"; break;
-            case LineWidth::VeryThin: options << "very thin"; break;
-            case LineWidth::Thin: options << "thin"; break;
-            case LineWidth::SemiThick: options << "semithick"; break;
-            case LineWidth::Thick: options << "thick"; break;
-            case LineWidth::VeryThick: options << "very thick"; break;
-            case LineWidth::UltraThick: options << "ultra thick"; break;
-            case LineWidth::CustomLineWidth: options << QString("line width=%1cm").arg(style->lineWidth()); break;
-            default: Q_ASSERT(false); break;
-        }
+        options << toString(style);
     }
 
     //
     // export double lines
     //
     if (style->doubleLineSet()) {
-        if (!style->innerLineWidthSet()) {
-            options << "double";
-        } else {
-            options << QString("double distance=%1cm").arg(style->innerLineWidth());
+        options << "double" + (style->innerLineColorSet()
+            ? QString("=" + colorToString(style->innerLineColor()))
+            : QString());
+
+        if (style->innerLineWidthSet()) {
+            options << toString(style, true); // 'true' for double line
         }
     }
 

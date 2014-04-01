@@ -97,7 +97,6 @@ class TikzExportVisitor : public Visitor
         QStringList styleOptions(Style * style);
         QStringList edgeStyleOptions(EdgeStyle * style);
         QStringList nodeStyleOptions(NodeStyle * style);
-        
 
     //
     // private data
