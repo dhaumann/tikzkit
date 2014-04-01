@@ -23,6 +23,7 @@
 #include "Node.h"
 #include "Path.h"
 #include "EllipsePath.h"
+#include "EdgePath.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -161,14 +162,45 @@ void TikzExportVisitor::visit(Path * path)
     QString cmd;
 
     switch (path->type()) {
-        case Path::Line: {
-            break;
-        }
-        case Path::HVLine: {
-            break;
-        }
+        case Path::Line:
+        case Path::HVLine:
         case Path::VHLine: {
-            break;
+            auto edge = static_cast<tikz::core::EdgePath*>(path);
+            //
+            // compute start
+            //
+            QString startCoord;
+            if (edge->startNode()) {
+                const QString anchor = anchorToString(edge->startAnchor());
+                startCoord = "(" + QString::number(edge->startNode()->id()) + anchor + ")";
+            } else {
+                const QPointF & pos = edge->startPos();
+                startCoord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
+            }
+
+            //
+            // compute end
+            //
+            QString endCoord;
+            if (edge->endNode()) {
+                const QString anchor = anchorToString(edge->endAnchor());
+                endCoord = "(" + QString::number(edge->endNode()->id()) + anchor + ")";
+            } else {
+                const QPointF & pos = edge->endPos();
+                endCoord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
+            }
+            
+            //
+            // build connection string
+            //
+            QString to;
+            switch (edge->type()) {
+                case Path::Type::Line: to = "--"; break;
+                case Path::Type::HVLine: to = "-|"; break;
+                case Path::Type::VHLine: to = "|-"; break;
+                default: Q_ASSERT(false); break;
+            }
+            cmd = "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
         }
         case Path::BendCurve: {
             break;
@@ -208,12 +240,12 @@ void TikzExportVisitor::visit(Path * path)
             //
             // export rotation
             //
-            if (style->rotationSet()) {
-                radius += QString(", rotate=%1").arg(style->rotation());
+            if (ellipsePath->style()->rotationSet()) {
+                radius += QString(", rotate=%1").arg(ellipsePath->style()->rotation());
             }
 
             // build path
-            cmd += "\\draw" + options + " " + center + " circle [" + radius + "];";
+            cmd = "\\draw" + options + " " + center + " circle [" + radius + "];";
             break;
         }
         case Path::Rectangle: {
@@ -275,9 +307,6 @@ void TikzExportVisitor::visit(Path * path)
     //
     // build draw command
     //
-    if (!options.isEmpty()) {
-        options = "[" + options + "]";
-    }
     QString cmd;
     cmd += "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
 #endif
