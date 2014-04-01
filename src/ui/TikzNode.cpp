@@ -184,7 +184,7 @@ QRectF TikzNode::shapeRect() const
         h = style()->minimumHeight();
     }
 
-    QRectF rect(0.0, 0.0, w, h);
+    QRectF rect(-w/2, -h/2, w, h);
     d->shape->adjustShapeRect(textRect, rect);
 
     // center shape rect at (0, 0)
