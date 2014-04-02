@@ -73,6 +73,7 @@ set(qtikzui_SOURCES
     widgets/ArrowComboBox.cpp
     widgets/IconComboBox.cpp
     widgets/LinePropertyWidget.cpp
+    widgets/ToolLayout.cpp
 )
 
 set(qtikzui_HEADERS

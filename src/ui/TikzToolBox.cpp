@@ -20,10 +20,10 @@
 #include "TikzToolBox.h"
 
 #include "TikzDocument.h"
+#include "ToolLayout.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
-#include <QGridLayout>
 #include <QButtonGroup>
 #include <QToolButton>
 
@@ -49,20 +49,23 @@ TikzToolBox::TikzToolBox(TikzDocument * doc, QWidget * parent)
     QVBoxLayout * vbox = new QVBoxLayout(this);
     setLayout(vbox);
 
-    QGridLayout * grid = new QGridLayout();
+    auto grid = new ToolLayout();
     vbox->addLayout(grid);
     vbox->addStretch();
 
-    QToolButton * selectAction = new QToolButton(this);
-    QToolButton * createCoordAction = new QToolButton(this);
-    QToolButton * createNodeAction = new QToolButton(this);
-    QToolButton * createEdgeAction = new QToolButton(this);
+    auto selectAction = new QToolButton(this);
+    auto createCoordAction = new QToolButton(this);
+    auto createNodeAction = new QToolButton(this);
+    auto createEdgeAction = new QToolButton(this);
 
-    selectAction->setText("s");
-    selectAction->setIcon(QIcon(":/icons/icons/edit-select.png"));
-    createCoordAction->setText("c");
-    createNodeAction->setText("n");
-    createEdgeAction->setText("e");
+    selectAction->setText("Select");
+    selectAction->setIcon(QIcon::fromTheme("edit-select", QIcon(":/icons/icons/edit-select.png")));
+    createCoordAction->setText("Add Coordinate");
+    createCoordAction->setIcon(QIcon::fromTheme("draw-circle", QIcon(":/icons/icons/edit-select.png")));
+    createNodeAction->setText("Create Node");
+    createNodeAction->setIcon(QIcon::fromTheme("draw-ellipse", QIcon(":/icons/icons/edit-select.png")));
+    createEdgeAction->setText("Create Edge");
+    createEdgeAction->setIcon(QIcon::fromTheme("draw-line", QIcon(":/icons/icons/edit-select.png")));
 
     selectAction->setCheckable(true);
     createCoordAction->setCheckable(true);
@@ -74,10 +77,10 @@ TikzToolBox::TikzToolBox(TikzDocument * doc, QWidget * parent)
     createNodeAction->setAutoRaise(true);
     createEdgeAction->setAutoRaise(true);
 
-    grid->addWidget(selectAction, 0, 0);
-    grid->addWidget(createCoordAction, 0, 1);
-    grid->addWidget(createNodeAction, 0, 2);
-    grid->addWidget(createEdgeAction, 0, 3);
+    grid->addWidget(selectAction);
+    grid->addWidget(createCoordAction);
+    grid->addWidget(createNodeAction);
+    grid->addWidget(createEdgeAction);
 
     // create button group
     d->group = new QButtonGroup(this);
