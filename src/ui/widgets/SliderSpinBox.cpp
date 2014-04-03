@@ -124,8 +124,12 @@ int SliderSpinBoxPrivate::valueForX(int x) const
     const int right = correctedProgRect.right();
     const int val = qMax(0, x - left);
 
-    int range = q->maximum() - q->minimum();
+    const int range = q->maximum() - q->minimum();
     qreal percent = static_cast<qreal>(val) / (right - left);
+
+    if (q->layoutDirection() == Qt::RightToLeft) {
+        percent = 1 - percent;
+    }
 
     return q->minimum() + qRound(percent * (range));
 }
