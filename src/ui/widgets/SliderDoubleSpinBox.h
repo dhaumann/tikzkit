@@ -2,10 +2,6 @@
  *
  * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
  *
- * This code is based on the KisSliderSpinBox used in Krita:
- * Copyright (c) 2010 Justin Noel <justin@ics.com>
- * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
  * by the Free Software Foundation, either version 2 of the License, or
@@ -21,17 +17,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZUI_SLIDER_SPINBOX_H
-#define TIKZUI_SLIDER_SPINBOX_H
+#ifndef TIKZUI_SLIDER_DOUBLE_SPINBOX_H
+#define TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 
-#include <QSpinBox>
+#include <QDoubleSpinBox>
 
-class SliderSpinBoxPrivate;
+class SliderDoubleSpinBoxPrivate;
 
 /**
  * A modified QSpinBox showing a progress bar instead of an line edit.
  */
-class SliderSpinBox : public QSpinBox
+class SliderDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 
@@ -39,12 +35,12 @@ public:
     /**
      * Default constructor with an optional @p parent widget.
      */
-    explicit SliderSpinBox(QWidget * parent = 0);
+    explicit SliderDoubleSpinBox(QWidget * parent = 0);
 
     /**
      * Virtual destructor.
      */
-    virtual ~SliderSpinBox();
+    virtual ~SliderDoubleSpinBox();
 
 protected:
     /**
@@ -78,10 +74,10 @@ protected:
     void keyPressEvent(QKeyEvent * event) override;
 
 private:
-    friend SliderSpinBoxPrivate;
-    SliderSpinBoxPrivate * const d;
+    friend SliderDoubleSpinBoxPrivate;
+    SliderDoubleSpinBoxPrivate * const d;
 };
 
-#endif //TIKZUI_SLIDER_SPINBOX_H
+#endif //TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 
 // kate: indent-width 4; replace-tabs on;

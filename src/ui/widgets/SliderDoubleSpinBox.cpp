@@ -2,10 +2,6 @@
  *
  * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
  *
- * This code is based on the KisSliderSpinBox used in Krita:
- * Copyright (c) 2010 Justin Noel <justin@ics.com>
- * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
  * by the Free Software Foundation, either version 2 of the License, or
@@ -21,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "SliderSpinBox.h"
+#include "SliderDoubleSpinBox.h"
 
 #include <cmath>
 
@@ -36,10 +32,10 @@
 #include <QCursor>
 #include <QDebug>
 
-class SliderSpinBoxPrivate
+class SliderDoubleSpinBoxPrivate
 {
 public:
-    SliderSpinBoxPrivate(SliderSpinBox * spinBox)
+    SliderDoubleSpinBoxPrivate(SliderDoubleSpinBox * spinBox)
         : q(spinBox)
     {}
 
@@ -48,15 +44,15 @@ public:
     QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
-    int valueForX(int x) const;
+    double valueForX(int x) const;
     void showLineEdit();
 
 public:
-    SliderSpinBox * const q;
+    SliderDoubleSpinBox * const q;
     bool pressedInButton;
 };
 
-QStyleOptionSpinBox SliderSpinBoxPrivate::spinBoxOptions() const
+QStyleOptionSpinBox SliderDoubleSpinBoxPrivate::spinBoxOptions() const
 {
     QStyleOptionSpinBox opts;
     opts.initFrom(q);
@@ -85,17 +81,20 @@ QStyleOptionSpinBox SliderSpinBoxPrivate::spinBoxOptions() const
     return opts;
 }
 
-QStyleOptionProgressBarV2 SliderSpinBoxPrivate::progressBarOptions() const
+QStyleOptionProgressBarV2 SliderDoubleSpinBoxPrivate::progressBarOptions() const
 {
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
+
+    // scale up to model requrested precision with int
+    const double factor = std::pow(10.0, q->decimals());
 
     //Create opts for drawing the progress portion
     QStyleOptionProgressBarV2 progressOpts;
     progressOpts.initFrom(q);
-    progressOpts.maximum = q->maximum();
-    progressOpts.minimum = q->minimum();
-    progressOpts.progress = q->value();
-    progressOpts.text = QString::number(q->value()) + q->suffix();
+    progressOpts.maximum = q->maximum() * factor;
+    progressOpts.minimum = q->minimum() * factor;
+    progressOpts.progress = q->value() * factor;
+    progressOpts.text = QString::number(q->value(), 'f', q->decimals()) + q->suffix();
     progressOpts.textAlignment = Qt::AlignCenter;
     progressOpts.textVisible = ! q->lineEdit()->isVisible();
 
@@ -105,49 +104,49 @@ QStyleOptionProgressBarV2 SliderSpinBoxPrivate::progressBarOptions() const
     return progressOpts;
 }
 
-QRect SliderSpinBoxPrivate::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect SliderDoubleSpinBoxPrivate::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return q->style()->subControlRect(QStyle::CC_SpinBox,
                                       &spinBoxOptions,
                                       QStyle::SC_SpinBoxEditField);
 }
 
-int SliderSpinBoxPrivate::valueForX(int x) const
+double SliderDoubleSpinBoxPrivate::valueForX(int x) const
 {
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     // adjust for border used in the QStyles (FIXME: probably not exact)
     QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
 
-    const int left = correctedProgRect.left();
-    const int right = correctedProgRect.right();
-    const int val = qMax(0, x - left);
+    const double left = correctedProgRect.left();
+    const double right = correctedProgRect.right();
+    const double val = qMax(0.0 , x - left);
 
-    const int range = q->maximum() - q->minimum();
-    qreal percent = static_cast<qreal>(val) / (right - left);
+    const double range = q->maximum() - q->minimum();
+    double percent = val / (right - left);
 
     if (q->layoutDirection() == Qt::RightToLeft) {
         percent = 1 - percent;
     }
 
-    return q->minimum() + qRound(percent * (range));
+    return q->minimum() + percent * (range);
 }
 
-QRect SliderSpinBoxPrivate::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect SliderDoubleSpinBoxPrivate::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return q->style()->subControlRect(QStyle::CC_SpinBox,
                                       &spinBoxOptions,
                                       QStyle::SC_SpinBoxUp);
 }
 
-QRect SliderSpinBoxPrivate::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect SliderDoubleSpinBoxPrivate::downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return q->style()->subControlRect(QStyle::CC_SpinBox,
                                       &spinBoxOptions,
                                       QStyle::SC_SpinBoxDown);
 }
 
-void SliderSpinBoxPrivate::showLineEdit()
+void SliderDoubleSpinBoxPrivate::showLineEdit()
 {
     if (!q->lineEdit()->isVisible()) {
         q->lineEdit()->setVisible(true);
@@ -162,9 +161,9 @@ void SliderSpinBoxPrivate::showLineEdit()
 
 
 
-SliderSpinBox::SliderSpinBox(QWidget * parent)
-    : QSpinBox(parent)
-    , d(new SliderSpinBoxPrivate(this))
+SliderDoubleSpinBox::SliderDoubleSpinBox(QWidget * parent)
+    : QDoubleSpinBox(parent)
+    , d(new SliderDoubleSpinBoxPrivate(this))
 {
     d->pressedInButton = false;
 
@@ -191,17 +190,17 @@ SliderSpinBox::SliderSpinBox(QWidget * parent)
     connect(this, SIGNAL(editingFinished()), lineEdit(), SLOT(hide()));
 }
 
-SliderSpinBox::~SliderSpinBox()
+SliderDoubleSpinBox::~SliderDoubleSpinBox()
 {
     delete d;
 }
 
-void SliderSpinBox::paintEvent(QPaintEvent* event)
+void SliderDoubleSpinBox::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event)
 
     //
-    // draw the QSpinBox without frame (see spinBoxOptions())
+    // draw the QDoubleSpinBox without frame (see spinBoxOptions())
     //
     QStyleOptionSpinBox opt = d->spinBoxOptions();
     QStylePainter p(this);
@@ -221,7 +220,7 @@ void SliderSpinBox::paintEvent(QPaintEvent* event)
     }
 }
 
-void SliderSpinBox::mousePressEvent(QMouseEvent * event)
+void SliderDoubleSpinBox::mousePressEvent(QMouseEvent * event)
 {
     if (event->buttons() & Qt::LeftButton) {
         QStyleOptionSpinBox spinOpts = d->spinBoxOptions();
@@ -242,7 +241,7 @@ void SliderSpinBox::mousePressEvent(QMouseEvent * event)
             d->pressedInButton = true;
         } else {
             // whatever this mouse press is, just pass it on
-            QSpinBox::mousePressEvent(event);
+            QDoubleSpinBox::mousePressEvent(event);
         }
     } else if (event->buttons() & Qt::RightButton) {
         // right now, RMB switches into line edit mode
@@ -250,16 +249,16 @@ void SliderSpinBox::mousePressEvent(QMouseEvent * event)
     }
 }
 
-void SliderSpinBox::mouseReleaseEvent(QMouseEvent * event)
+void SliderDoubleSpinBox::mouseReleaseEvent(QMouseEvent * event)
 {
     if (d->pressedInButton && event->button() == Qt::LeftButton) {
         d->pressedInButton = false;
     }
 
-    QSpinBox::mouseReleaseEvent(event);
+    QDoubleSpinBox::mouseReleaseEvent(event);
 }
 
-void SliderSpinBox::mouseMoveEvent(QMouseEvent * event)
+void SliderDoubleSpinBox::mouseMoveEvent(QMouseEvent * event)
 {
     if (event->buttons() & Qt::LeftButton) {
         QStyleOptionSpinBox spinOpts = d->spinBoxOptions();
@@ -276,21 +275,21 @@ void SliderSpinBox::mouseMoveEvent(QMouseEvent * event)
     update();
 }
 
-void SliderSpinBox::contextMenuEvent(QContextMenuEvent * event)
+void SliderDoubleSpinBox::contextMenuEvent(QContextMenuEvent * event)
 {
     // we don't want any context menu.
     // Instad, we show the line edit and, thus, change to edit mode.
     event->accept();
 }
 
-void SliderSpinBox::keyPressEvent(QKeyEvent * event)
+void SliderDoubleSpinBox::keyPressEvent(QKeyEvent * event)
 {
     if (lineEdit()->isVisible()) {
         // on Escape, just hide the line edit and do nothing
         if (event->key() == Qt::Key_Escape) {
             lineEdit()->hide();
         }
-        QSpinBox::keyPressEvent(event);
+        QDoubleSpinBox::keyPressEvent(event);
         return;
     }
 
