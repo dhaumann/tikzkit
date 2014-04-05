@@ -25,13 +25,13 @@
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
+#include <QJsonDocument>
 #include <QStringList>
 #include <QTextStream>
 #include <QMetaProperty>
 #include <QFile>
 #include <QDebug>
 
-#include <qjson/parser.h>
 
 namespace tikz {
 namespace core {
@@ -61,18 +61,14 @@ bool DeserializeVisitor::load(const QString & filename)
          return false;
     }
 
-    bool ok = false;
-    QJson::Parser parser;
-    m_root = parser.parse(&file, &ok).toMap();
-    
-    if (!ok) {
-        qCritical() << "Error while parsing JSON file:" << parser.errorString();
-        return false;
-    }
+    QJsonDocument json = QJsonDocument::fromJson(file.readAll());
+    m_root = json.toVariant().toMap();
 
     // build tree
     m_nodes = m_root["nodes"].toMap();
     m_paths = m_root["paths"].toMap();
+
+    qDebug() << m_nodes << m_paths;
 
     return true;
 }

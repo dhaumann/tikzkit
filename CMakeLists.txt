@@ -1,3 +1,7 @@
+#
+# The official cmake documentation for Qt5 is available here:
+# http://qt-project.org/doc/qt-5/cmake-manual.html
+#
 cmake_minimum_required(VERSION 2.8.11)
 
 set(CMAKE_MODULE_PATH

@@ -37,7 +37,6 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QFile>
-#include <qjson/serializer.h>
 
 namespace tikz {
 namespace core {

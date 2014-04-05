@@ -8,7 +8,6 @@ set(CMAKE_AUTOMOC ON)
 
 # find Qt5 modules
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
-find_package(QJSON REQUIRED)
 
 include_directories(
     .
@@ -19,8 +18,6 @@ include_directories(
     path
     path/edge
     path/ellipse
-
-    ${QJSON_INCLUDE_DIR}
 )
 
 set(qtikzcore_SOURCES
@@ -78,7 +75,6 @@ add_library(qtikzcore SHARED
 target_link_libraries(qtikzcore
     Qt5::Core
     Qt5::Widgets
-    ${QJSON_LIBRARIES}
 )
 
 # kate: indent-width 4; replace-tabs on;

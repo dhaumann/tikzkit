@@ -25,13 +25,12 @@
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
+#include <QJsonDocument>
 #include <QStringList>
 #include <QTextStream>
 #include <QMetaProperty>
 #include <QFile>
 #include <QDebug>
-
-#include <qjson/serializer.h>
 
 namespace tikz {
 namespace core {
@@ -62,15 +61,6 @@ bool SerializeVisitor::save(const QString & filename)
     root.insert("node-styles", m_nodeStyles);
     root.insert("edge-styles", m_edgeStyles);
 
-    // convert to JSON
-    bool ok;
-    QJson::Serializer serializer;
-    serializer.setIndentMode(QJson::IndentFull);
-    QByteArray json = serializer.serialize(root, &ok);
-
-    // there is no reason for failure
-    qCritical() << serializer.errorMessage();
-    Q_ASSERT(ok);
 
     // open file
     QFile target(filename);
@@ -80,7 +70,7 @@ bool SerializeVisitor::save(const QString & filename)
 
     // write json to text stream
     QTextStream ts(&target);
-    ts << json;
+    ts << QJsonDocument::fromVariant(root).toJson();
 
     return true;
 }
