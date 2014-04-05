@@ -1,6 +1,14 @@
 project(qtikzui)
 
-find_package(Qt4 COMPONENTS QtCore QtGui QtSvg QtOpenGL REQUIRED)
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+
+# find Qt5 modules
+find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
+
 
 include_directories(
     .
@@ -15,7 +23,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
     ${CMAKE_SOURCE_DIR}/src/ui/utils
 
-    ${CMAKE_CURRENT_BINARY_DIR}
+#     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set(qtikzui_SOURCES
@@ -73,77 +81,29 @@ set(qtikzui_SOURCES
     widgets/ArrowComboBox.cpp
     widgets/IconComboBox.cpp
     widgets/LinePropertyWidget.cpp
+    widgets/SliderSpinBox.cpp
+    widgets/SliderDoubleSpinBox.cpp
     widgets/ToolLayout.cpp
 )
 
-set(qtikzui_HEADERS
-    TikzDocument.h
-    TikzDocument_p.h
-    TikzItem.h
-    TikzNode.h
-#     TikzEdge.h
-#     TikzEdge_p.h
-
-    tools/AbstractTool.h
-    tools/ProxyTool.h
-    tools/NodeTool.h
-    tools/EllipseTool.h
-    tools/LineTool.h
-    tools/SelectTool.h
-
-    paths/PathItem.h
-    paths/EllipsePathItem.h
-    paths/EdgePathItem.h
-
-    handle/Handle.h
-    handle/ResizeHandle.h
-    handle/RotateHandle.h
-    handle/MoveHandle.h
-    handle/AnchorHandle.h
-
-    utils/AnchorManager.h
-    utils/Ruler.h
-
-    TikzScene.h
-    TikzView.h
-    CurveHandle.h
-    NodeText_p.h
-    TikzToolBox.h
-
-    tex/TexGenerator.h
-#    tex/PdfRenderer.h
-
-    widgets/ArrowComboBox.h
-    widgets/IconComboBox.h
-    widgets/LinePropertyWidget.h
-    widgets/LinePropertyWidget_p.h
-)
-
-QT4_WRAP_CPP(qtikzui_HEADERS_MOC ${qtikzui_HEADERS})
-
 set(qtikzui_FORMS forms/LinePropertyWidget.ui)
-QT4_WRAP_UI(qtikzui_FORMS_HEADERS ${qtikzui_FORMS})
+qt5_wrap_ui(qtikzui_FORMS_HEADERS ${qtikzui_FORMS})
 
 # add icon resource
 set(qtikzui_RESOURCES icons.qrc)
-qt4_add_resources(qtikzui_RESOURCES_RCC ${qtikzui_RESOURCES})
-
-include(${QT_USE_FILE})
-add_definitions(
-    -DMAKE_TIKZUI
-    ${QT_DEFINITIONS}
-)
+qt5_add_resources(qtikzui_RESOURCES_RCC ${qtikzui_RESOURCES})
 
 add_library(qtikzui SHARED
     ${qtikzui_SOURCES}
-    ${qtikzui_HEADERS_MOC}
     ${qtikzui_RESOURCES_RCC}
     ${qtikzui_FORMS_HEADERS}
 )
 
 target_link_libraries(qtikzui
-  ${QT_LIBRARIES}
-  qtikzcore
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Svg
+    qtikzcore
 )
 
 # kate: indent-width 4; replace-tabs on;

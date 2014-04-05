@@ -1,6 +1,13 @@
 project(qtikzcore)
 
-find_package(Qt4 REQUIRED)
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+
+# find Qt5 modules
+find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 find_package(QJSON REQUIRED)
 
 include_directories(
@@ -12,10 +19,12 @@ include_directories(
     path
     path/edge
     path/ellipse
+
     ${QJSON_INCLUDE_DIR}
 )
 
 set(qtikzcore_SOURCES
+    tikz.cpp
     Value.cpp
     node/Node.cpp
     MetaPos.cpp
@@ -56,37 +65,19 @@ set(qtikzcore_SOURCES
     visitor/TikzExport.cpp
 )
 
-set(qtikzcore_HEADERS
-    node/Node.h
-    MetaPos.h
-
-    path/Path.h
-    path/edge/EdgePath.h
-    path/ellipse/EllipsePath.h
-
-    style/Style.h
-    style/NodeStyle.h
-    style/EdgeStyle.h
-
-    Document.h
-    tikz.h
-)
-
-QT4_WRAP_CPP(qtikzcore_HEADERS_MOC ${qtikzcore_HEADERS})
-
-include(${QT_USE_FILE})
-add_definitions(
-    -DMAKE_TIKZCORE
-    ${QT_DEFINITIONS}
-)
+# generate the moc-file for tikz.h ourselves.
+# NOTE: The moc file may not have the file ending ".moc", as including
+# the .moc file in tikz.cpp will create an empty tikz.moc file.
+qt5_generate_moc(tikz.h tikzmoc)
 
 add_library(qtikzcore SHARED
     ${qtikzcore_SOURCES}
-    ${qtikzcore_HEADERS_MOC}
+    tikzmoc
 )
 
 target_link_libraries(qtikzcore
-    ${QT_LIBRARIES}
+    Qt5::Core
+    Qt5::Widgets
     ${QJSON_LIBRARIES}
 )
 
