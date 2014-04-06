@@ -84,7 +84,7 @@ TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
     : TikzItem(parent)
     , d(new TikzNodePrivate(this))
 {
-    d->dirty = true;
+    d->dirty = false;
     d->node = node;
     d->shape = new AbstractShape(this);
     d->itemChangeRunning = false;
@@ -220,8 +220,11 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QRectF TikzNode::boundingRect() const
 {
-    // make sure cache is up-to-date
-    d->updateCache();
+    // at this point, the bounding rect must always be up-to-date, otherwise
+    // we have called prepareGeometryChange() without updating the cache.
+    // And updating the cache here is too late, since prepareGeometryChange()
+    // is always followed by a call of boundingRect().
+    Q_ASSERT(d->dirty == false);
 
     return d->outlinePath.boundingRect();
 }
@@ -258,10 +261,14 @@ void TikzNode::slotSetPos(const QPointF& pos)
 void TikzNode::styleChanged()
 {
     prepareGeometryChange();
-    d->dirty = true;
     if (d->node->pos() != pos()) slotSetPos(d->node->pos());
+
+    // prepareGeometryChange() will trigger a call of boundingRect(), therefore
+    // we have to update the cache
+    d->dirty = true;
+    d->updateCache();
+
     emit changed();
-    update();
 }
 
 }
