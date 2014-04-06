@@ -18,6 +18,8 @@
  */
 
 #include "tikz.h"
+#ifdef NDEBUG
 #include "tikzmoc"
+#endif
 
 // kate: indent-width 4; replace-tabs on;
