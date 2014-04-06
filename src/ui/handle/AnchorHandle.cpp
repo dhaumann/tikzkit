@@ -45,7 +45,13 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
 
     // set transform property correctly in case of NoAnchor type
     if (anchor == tikz::NoAnchor) {
+        // no anchor means the tracked area spans the entire contents of the node,
+        // therewith, view transformations must not be ignored
         setFlag(ItemIgnoresTransformations, false);
+
+        // track the rotation of the node
+        // NOTE: right now, QGraphicsItem::scale() is not used, therewith we omit it here.
+        setRotation(node->rotation());
     }
 
     // set position depending on the anchor
