@@ -36,7 +36,6 @@ namespace core {
 class DocumentPrivate;
 class Style;
 class Node;
-class Edge;
 class NodeStyle;
 class EdgeStyle;
 class Visitor;

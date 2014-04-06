@@ -26,13 +26,6 @@
 namespace tikz {
 namespace core {
 
-class Document;
-class Style;
-class Node;
-class Edge;
-class NodeStyle;
-class EdgeStyle;
-
 /**
  * Visitor pattern.
  * Visits all elements of a tikz::core::Document.

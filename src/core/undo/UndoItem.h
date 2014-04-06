@@ -25,8 +25,6 @@
 namespace tikz {
 namespace core {
 
-class Node;
-class Edge;
 class Document;
 
 class UndoItem : public QUndoCommand

@@ -54,14 +54,10 @@ class DocumentPrivate
 
         // node & path list
         QVector<Node*> nodes;
-        QVector<Edge*> edges;
         QVector<Path*> paths;
 
         /// Node lookup map
         QHash<qint64, Node*> nodeMap;
-
-        /// Edge lookup map
-        QHash<qint64, Edge*> edgeMap;
 
         /// Path lookup map
         QHash<qint64, Path*> pathMap;
@@ -92,10 +88,6 @@ Document::~Document()
     qDeleteAll(d->nodes);
     d->nodes.clear();
     d->nodeMap.clear();
-
-    qDeleteAll(d->edges);
-    d->edges.clear();
-    d->edgeMap.clear();
 
     qDeleteAll(d->paths);
     d->paths.clear();

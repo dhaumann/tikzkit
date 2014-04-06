@@ -20,6 +20,8 @@
 #ifndef TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 #define TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 
+#include "tikzgui_export.h"
+
 #include <QDoubleSpinBox>
 
 class SliderDoubleSpinBoxPrivate;
@@ -27,7 +29,7 @@ class SliderDoubleSpinBoxPrivate;
 /**
  * A modified QSpinBox showing a progress bar instead of an line edit.
  */
-class SliderDoubleSpinBox : public QDoubleSpinBox
+class TIKZUI_EXPORT SliderDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 

@@ -110,7 +110,9 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
         lines.append(QLineF(rect.left(), y, rect.right(), y));
 
     painter->save();
-    painter->setPen(QColor(243, 243, 243));
+    QPen pen(QColor(243, 243, 243));
+    pen.setWidth(0);
+    painter->setPen(pen);
     painter->drawLines(lines.data(), lines.size());
     painter->restore();
 }
