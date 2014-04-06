@@ -22,7 +22,7 @@
 
 #include "tikzgui_export.h"
 
-#include <QGraphicsSimpleTextItem>
+#include <QGraphicsItem>
 
 class QPainter;
 
@@ -32,7 +32,7 @@ namespace ui {
 class TikzNode;
 class NodeTextPrivate;
 
-class NodeText : public QGraphicsSimpleTextItem
+class NodeText : public QGraphicsItem
 {
     friend NodeTextPrivate;
     public:
@@ -45,7 +45,6 @@ class NodeText : public QGraphicsSimpleTextItem
         void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
         QRectF textRect() const;
-
 
      private:
         NodeTextPrivate * const d;

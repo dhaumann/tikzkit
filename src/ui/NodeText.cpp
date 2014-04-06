@@ -21,13 +21,8 @@
 #include "NodeText_p.h"
 #include "TikzNode.h"
 
-#include "TexGenerator.h"
-#include "PdfRenderer.h"
-
 #include <QPainter>
-#include <QPainterPath>
 #include <QPixmap>
-#include <QSvgRenderer>
 #include <QStyleOptionGraphicsItem>
 
 #include <QDebug>
@@ -36,14 +31,11 @@ namespace tikz {
 namespace ui {
 
 NodeText::NodeText(TikzNode* node)
-    : QGraphicsSimpleTextItem(node)
+    : QGraphicsItem(node)
     , d(new NodeTextPrivate(node, this))
 {
-//     setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
     setFlag(QGraphicsItem::ItemIsMovable, false);
     setFlag(QGraphicsItem::ItemIsSelectable, false);
-//     scale(25.4 / 101 / 3.97, 25.4 / 101 / 3.97);
-    //text->setText(QString::fromUtf8("a"));
 
     QObject::connect(node->node(), SIGNAL(textChanged(QString)), &d->texGenerator, SLOT(generateImage(QString)));
 }
@@ -60,6 +52,9 @@ QRectF NodeText::boundingRect() const
 
 void NodeText::paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+
     painter->save();
     painter->scale(1.0, -1.0);
 //     painter->drawRect(textRect());
