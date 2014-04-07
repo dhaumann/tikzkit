@@ -124,8 +124,8 @@ static QVariantMap serializeMetaPos(tikz::core::MetaPos::Ptr metaPos)
         map.insert("node", metaPos->node()->id());
         map.insert("anchor", metaPos->anchor());
     } else {
-        map.insert("pos.x", metaPos->pos().x());
-        map.insert("pos.y", metaPos->pos().y());
+        map.insert("x", metaPos->pos().x());
+        map.insert("y", metaPos->pos().y());
     }
     return map;
 }
@@ -139,7 +139,7 @@ static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
 {
     Q_ASSERT(ellipse != 0);
-    map.insert("start", serializeMetaPos(ellipse->metaPos()));
+    map.insert("center", serializeMetaPos(ellipse->metaPos()));
 }
 
 void SerializeVisitor::visit(Path * path)
