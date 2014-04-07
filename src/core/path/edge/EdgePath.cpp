@@ -19,7 +19,6 @@
 
 #include "EdgePath.h"
 #include "Node.h"
-#include "MetaPos.h"
 #include "Document.h"
 
 #include "UndoConnectEdge.h"
@@ -56,6 +55,16 @@ EdgePath::EdgePath(Type type, qint64 id, Document* doc)
 EdgePath::~EdgePath()
 {
     delete d;
+}
+
+tikz::core::MetaPos::Ptr EdgePath::metaStartPos() const
+{
+    return d->start.toPtr();
+}
+
+tikz::core::MetaPos::Ptr EdgePath::metaEndPos() const
+{
+    return d->end.toPtr();
 }
 
 void EdgePath::deconstruct()

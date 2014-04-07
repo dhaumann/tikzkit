@@ -21,6 +21,7 @@
 #define TIKZ_EDGE_PATH_H
 
 #include "Path.h"
+#include "MetaPos.h"
 
 #include <QPointF>
 
@@ -58,6 +59,24 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Returns the element type of this edge.
          */
         Path::Type type() const override;
+
+        /**
+         * Get the start of this edge as a shared MetaPos object.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy of position data.
+         *       Hence, modifying the returned MetaPos::Ptr does not change this object.
+         */
+        tikz::core::MetaPos::Ptr metaStartPos() const;
+
+        /**
+         * Get the end of this edge as a shared MetaPos object.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy of position data.
+         *       Hence, modifying the returned MetaPos::Ptr does not change this object.
+         */
+        tikz::core::MetaPos::Ptr metaEndPos() const;
 
     //
     // Node start / end manipulation
