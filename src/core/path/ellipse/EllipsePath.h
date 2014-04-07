@@ -21,6 +21,7 @@
 #define TIKZ_ELLIPSE_PATH_H
 
 #include "Path.h"
+#include "MetaPos.h"
 
 #include <QPointF>
 
@@ -51,6 +52,16 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Returns type tikz::core::Path::Ellipse.
          */
         Path::Type type() const override;
+
+        /**
+         * Get the position of this ellipse as a shared MetaPos object.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy of this ellipse' data.
+         *       Hence, modifying the returned MetaPos::Ptr does not change
+         *       this ellipse.
+         */
+        tikz::core::MetaPos::Ptr metaPos() const;
 
     //
     // Node manipulation

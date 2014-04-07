@@ -19,7 +19,6 @@
 
 #include "EllipsePath.h"
 #include "Node.h"
-#include "MetaPos.h"
 #include "Document.h"
 
 #include "UndoConnectEllipse.h"
@@ -52,6 +51,11 @@ EllipsePath::~EllipsePath()
 Path::Type EllipsePath::type() const
 {
     return Path::Ellipse;
+}
+
+tikz::core::MetaPos::Ptr EllipsePath::metaPos() const
+{
+    return d->pos.toPtr();
 }
 
 void EllipsePath::deconstruct()
