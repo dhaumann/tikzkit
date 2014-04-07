@@ -46,6 +46,14 @@ MetaPos::~MetaPos()
     delete d;
 }
 
+MetaPos::Ptr MetaPos::toPtr() const
+{
+    // create shared MetaPos and copy private data
+    MetaPos::Ptr pos(new tikz::core::MetaPos());
+    *pos->d = *d;
+    return pos;
+}
+
 QPointF MetaPos::pos() const
 {
     return d->node ? d->node->pos()

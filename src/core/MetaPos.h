@@ -57,7 +57,7 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          * a pointer would have to be returned and the caller would need to take
          * care of deleting the MetaPos object correctly.
          *
-         * However, to avoid having to take care of deletin, this typedef
+         * However, to avoid having to take care of deletion, this typedef
          * delets the MetaPos object automatically if no reference to the object
          * exists anymore.
          */
@@ -73,6 +73,15 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          * Destructor
          */
         virtual ~MetaPos();
+
+        /**
+         * Get a clone of this MetaPos as shared pointer.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy. Hence, modifying the
+         *       returned MetaPos::Ptr does not change this MetaPos.
+         */
+        MetaPos::Ptr toPtr() const;
 
     //
     // x/y-position methods
