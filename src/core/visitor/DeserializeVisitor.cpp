@@ -117,7 +117,7 @@ void DeserializeVisitor::visit(Path * path)
 // FIXME
 #if 0
 
-    const QVariantMap & map = m_paths[QString("edge-%1").arg(edge->id())].toMap();
+    const QVariantMap & map = m_paths[QString("path-%1").arg(edge->id())].toMap();
 
     // serialize node
     if (map.contains("start.node")) {

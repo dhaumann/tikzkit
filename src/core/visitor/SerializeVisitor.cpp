@@ -22,6 +22,8 @@
 #include "Document.h"
 #include "Node.h"
 #include "Path.h"
+#include "EdgePath.h"
+#include "EllipsePath.h"
 #include "NodeStyle.h"
 #include "EdgeStyle.h"
 
@@ -84,15 +86,12 @@ void SerializeVisitor::visit(Document * doc)
     }
     m_root.insert("node-ids", list.join(", "));
 
-// FIXME
-#if 0
-    // aggregate edge ids
+    // aggregate path ids
     list.clear();
-    foreach (Edge * edge, doc->edges()) {
-        list.append(QString::number(edge->id()));
+    foreach (Path * path, doc->paths()) {
+        list.append(QString::number(path->id()));
     }
-#endif
-    m_root.insert("edge-ids", list.join(", "));
+    m_root.insert("path-ids", list.join(", "));
 
     // save document style
     QVariantMap docStyle;
@@ -103,7 +102,7 @@ void SerializeVisitor::visit(Document * doc)
 void SerializeVisitor::visit(Node * node)
 {
     QVariantMap map;
-    
+
     // serialize node
     map.insert("pos.x", node->pos().x());
     map.insert("pos.y", node->pos().y());
@@ -118,12 +117,9 @@ void SerializeVisitor::visit(Node * node)
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
-void SerializeVisitor::visit(Path * path)
+static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 {
-    QVariantMap map;
-// FIXME
-#if 0
-    // serialize node
+    Q_ASSERT(edge != 0);
     if (edge->startNode()) {
         map.insert("start.node", edge->startNode()->id());
         map.insert("start.anchor", edge->startAnchor());
@@ -139,15 +135,80 @@ void SerializeVisitor::visit(Path * path)
         map.insert("end.pos.x", edge->endPos().x());
         map.insert("end.pos.y", edge->endPos().y());
     }
+}
 
-    // serialize edge style
+static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
+{
+    Q_ASSERT(ellipse != 0);
+    if (ellipse->node()) {
+        map.insert("node", ellipse->node()->id());
+        map.insert("anchor", ellipse->anchor());
+    } else {
+        map.insert("pos.x", ellipse->pos().x());
+        map.insert("pos.y", ellipse->pos().y());
+    }
+}
+
+void SerializeVisitor::visit(Path * path)
+{
+    QVariantMap map;
+    auto edge = dynamic_cast<tikz::core::EdgePath*>(path);
+
+    switch (path->type()) {
+        case Path::Line:
+            map.insert("type", "to");
+            serializeEdge(map, edge);
+            break;
+        case Path::HVLine:
+            map.insert("type", "-|");
+            serializeEdge(map, edge);
+            break;
+        case Path::VHLine:
+            map.insert("type", "|-");
+            serializeEdge(map, edge);
+            break;
+        case Path::BendCurve:
+            map.insert("type", "bend");
+            serializeEdge(map, edge);
+            break;
+        case Path::InOutCurve:
+            map.insert("type", "in-out");
+            serializeEdge(map, edge);
+            break;
+        case Path::BezierCurve:
+            map.insert("type", "bezier");
+            serializeEdge(map, edge);
+            break;
+        case Path::Ellipse:
+            map.insert("type", "ellipse");
+            serializeEdge(map, dynamic_cast<tikz::core::EllipsePath*>(path));
+            break;
+        case Path::Rectangle:
+            map.insert("type", "rectangle");
+            serializeEdge(map, edge);
+            break;
+        case Path::Grid:
+            map.insert("type", "grid");
+            serializeEdge(map, edge);
+            break;
+        case Path::Invalid:
+            Q_ASSERT(false);
+            break;
+        default: break;
+    }
+
+    //
+    // serialize common path properties
+    //
     QVariantMap styleMap;
-    styleMap.insert("parent", edge->style()->parentStyle() ? edge->style()->parentStyle()->id() : -1);
-    styleMap.insert("properties", serializeStyle(edge->style()));
+    styleMap.insert("parent", path->style()->parentStyle() ? path->style()->parentStyle()->id() : -1);
+    styleMap.insert("properties", serializeStyle(path->style()));
     map.insert("style", styleMap);
 
-    m_paths.insert(QString("edge-%1").arg(edge->id()), map);
-#endif
+    //
+    // put into paths map
+    //
+    m_paths.insert(QString("path-%1").arg(path->id()), map);
 }
 
 void SerializeVisitor::visit(NodeStyle * style)
