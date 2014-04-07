@@ -154,6 +154,22 @@ void TikzExportVisitor::visit(Node * node)
     m_tikzExport.addTikzLine(line);
 }
 
+/**
+ * Get the position of @p metaPos either in the form (1.2, 5.3) or as (1.center)
+ */
+static QString toCoord(tikz::core::MetaPos::Ptr metaPos)
+{
+    QString coord;
+    if (metaPos->node()) {
+        const QString anchor = anchorToString(metaPos->anchor());
+        coord = "(" + QString::number(metaPos->node()->id()) + anchor + ")";
+    } else {
+        const QPointF & pos = metaPos->pos();
+        coord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
+    }
+    return coord;
+}
+
 void TikzExportVisitor::visit(Path * path)
 {
     QString options = edgeStyleOptions(path->style()).join(", ");
@@ -169,29 +185,11 @@ void TikzExportVisitor::visit(Path * path)
         case Path::VHLine: {
             auto edge = static_cast<tikz::core::EdgePath*>(path);
             //
-            // compute start
+            // compute start & end
             //
-            QString startCoord;
-            if (edge->startNode()) {
-                const QString anchor = anchorToString(edge->startAnchor());
-                startCoord = "(" + QString::number(edge->startNode()->id()) + anchor + ")";
-            } else {
-                const QPointF & pos = edge->startPos();
-                startCoord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
-            }
+            const QString startCoord = toCoord(edge->startMetaPos());
+            const QString endCoord = toCoord(edge->endMetaPos());
 
-            //
-            // compute end
-            //
-            QString endCoord;
-            if (edge->endNode()) {
-                const QString anchor = anchorToString(edge->endAnchor());
-                endCoord = "(" + QString::number(edge->endNode()->id()) + anchor + ")";
-            } else {
-                const QPointF & pos = edge->endPos();
-                endCoord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
-            }
-            
             //
             // build connection string
             //
@@ -215,18 +213,11 @@ void TikzExportVisitor::visit(Path * path)
         }
         case Path::Ellipse: {
             auto ellipsePath = static_cast<tikz::core::EllipsePath*>(path);
-            QString center;
 
             //
-            // compute start
+            // compute center
             //
-            if (ellipsePath->node()) {
-                const QString anchor = anchorToString(ellipsePath->anchor());
-                center = "(" + QString::number(ellipsePath->node()->id()) + anchor + ")";
-            } else {
-                const QPointF & pos = ellipsePath->pos();
-                center = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
-            }
+            const QString center = toCoord(ellipsePath->metaPos());;
 
             //
             // compute radius
