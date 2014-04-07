@@ -146,4 +146,25 @@ void MetaPosTest::testSet0()
     QCOMPARE(m.pos(), QPointF(5, 5));
 }
 
+void MetaPosTest::testMetaPosPtr()
+{
+    // test function MetaPos::toPtr(), and make sure the instance behind the
+    // ::Ptr is a copy that remains unchanged when pos chages.
+    tikz::core::MetaPos pos;
+    tikz::core::MetaPos::Ptr pPos = pos.toPtr();
+
+    pos.setPos(QPointF(3, 3));
+    QCOMPARE(pos.pos(), QPointF(3, 3));
+    QCOMPARE(pPos->pos(), QPointF(0, 0));
+
+    // now test with Node
+    tikz::core::Document doc;
+    tikz::core::Node * n = doc.createNode();
+
+    pos.setNode(n);
+    pPos->setPos(QPointF(1, 1));
+    QCOMPARE(pos.pos(), QPointF(0, 0));
+    QCOMPARE(pPos->pos(), QPointF(1, 1));
+}
+
 // kate: indent-width 4; replace-tabs on;
