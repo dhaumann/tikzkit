@@ -117,36 +117,29 @@ void SerializeVisitor::visit(Node * node)
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
+static QVariantMap serializeMetaPos(tikz::core::MetaPos::Ptr metaPos)
+{
+    QVariantMap map;
+    if (metaPos->node()) {
+        map.insert("node", metaPos->node()->id());
+        map.insert("anchor", metaPos->anchor());
+    } else {
+        map.insert("pos.x", metaPos->pos().x());
+        map.insert("pos.y", metaPos->pos().y());
+    }
+    return map;
+}
 static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 {
     Q_ASSERT(edge != 0);
-    if (edge->startNode()) {
-        map.insert("start.node", edge->startNode()->id());
-        map.insert("start.anchor", edge->startAnchor());
-    } else {
-        map.insert("start.pos.x", edge->startPos().x());
-        map.insert("start.pos.y", edge->startPos().y());
-    }
-
-    if (edge->endNode()) {
-        map.insert("end.node", edge->endNode()->id());
-        map.insert("end.anchor", edge->endAnchor());
-    } else {
-        map.insert("end.pos.x", edge->endPos().x());
-        map.insert("end.pos.y", edge->endPos().y());
-    }
+    map.insert("start", serializeMetaPos(edge->startMetaPos()));
+    map.insert("end", serializeMetaPos(edge->endMetaPos()));
 }
 
 static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
 {
     Q_ASSERT(ellipse != 0);
-    if (ellipse->node()) {
-        map.insert("node", ellipse->node()->id());
-        map.insert("anchor", ellipse->anchor());
-    } else {
-        map.insert("pos.x", ellipse->pos().x());
-        map.insert("pos.y", ellipse->pos().y());
-    }
+    map.insert("start", serializeMetaPos(ellipse->metaPos()));
 }
 
 void SerializeVisitor::visit(Path * path)

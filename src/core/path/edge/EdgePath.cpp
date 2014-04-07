@@ -57,12 +57,12 @@ EdgePath::~EdgePath()
     delete d;
 }
 
-tikz::core::MetaPos::Ptr EdgePath::metaStartPos() const
+tikz::core::MetaPos::Ptr EdgePath::startMetaPos() const
 {
     return d->start.toPtr();
 }
 
-tikz::core::MetaPos::Ptr EdgePath::metaEndPos() const
+tikz::core::MetaPos::Ptr EdgePath::endMetaPos() const
 {
     return d->end.toPtr();
 }
