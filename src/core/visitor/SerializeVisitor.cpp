@@ -129,6 +129,7 @@ static QVariantMap serializeMetaPos(tikz::core::MetaPos::Ptr metaPos)
     }
     return map;
 }
+
 static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 {
     Q_ASSERT(edge != 0);

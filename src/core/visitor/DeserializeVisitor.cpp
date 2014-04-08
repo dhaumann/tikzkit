@@ -73,6 +73,26 @@ bool DeserializeVisitor::load(const QString & filename)
     return true;
 }
 
+static Path::Type pathType(const QString & type)
+{
+    Path::Type t = Path::Invalid;
+
+    t = (type == "to") ? Path::Line
+        : (type == "-|") ? Path::HVLine
+        : (type == "|-") ? Path::VHLine
+        : (type == "bend") ? Path::BendCurve
+        : (type == "in-out") ? Path::InOutCurve
+        : (type == "bezier") ? Path::BezierCurve
+        : (type == "ellipse") ? Path::Ellipse
+        : (type == "rectangle") ? Path::Rectangle
+        : (type == "grid") ? Path::Grid
+        : Path::Invalid;
+
+    Q_ASSERT(t != Path::Invalid);
+
+    return t;
+}
+
 void DeserializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
@@ -81,14 +101,15 @@ void DeserializeVisitor::visit(Document * doc)
         doc->createNode(id.toLongLong());
     }
 
-// FIXME
-#if 0
     // aggregate edge ids
     list = m_root["path-ids"].toString().split(", ");
-    foreach (const QString & id, list) {
-        doc->createPath(id.toLongLong());
+    foreach (const QString & idAsStr, list) {
+        const qint64 id = idAsStr.toLongLong();
+        const QString type = m_root["paths"].toMap()[QString("path-%1").arg(id)].toMap()["type"].toString();
+//         qDebug() << type << pathType(type);
+        doc->createPath(pathType(type), id);
     }
-#endif
+
     // load document style
     deserializeStyle(doc->style(), m_root["document-style"].toMap()["properties"].toMap());
 }
