@@ -132,7 +132,10 @@ Style::~Style()
     }
     Q_ASSERT(d->children.size() == 0);
 
-    // remove from parent's child list, if needed
+    // avoid unnecessary propagation of the changed() signal
+    disconnect(this, SIGNAL(changed()), 0, 0);
+
+    // now: remove from parent's child list, if needed
     setParentStyle(0);
 
     delete d;
