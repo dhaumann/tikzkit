@@ -71,8 +71,10 @@ class TIKZCORE_EXPORT Document : public QObject
     public Q_SLOTS:
         /**
          * Clear all contents of the document.
+         * @warning This functions is called in the Document destructor.
+         *          So never make it virtual!
          */
-        virtual void clear();
+        void clear();
 
         /**
          * Load the tikz document from @p file.
@@ -98,6 +100,14 @@ class TIKZCORE_EXPORT Document : public QObject
          * This signal is emitted whenever the document changed.
          */
         void changed();
+
+        /**
+         * This signal is emitted right before all its Node%s and Path%s
+         * are deleted. Make sure to connect to this signal to cleanup
+         * all references to Nodes and Paths of this Document to avoid
+         * danling pointers.
+         */
+        void aboutToClear();
 
     //
     // Undo / redo management

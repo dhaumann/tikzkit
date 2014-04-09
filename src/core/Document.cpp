@@ -84,14 +84,14 @@ Document::Document(QObject * parent)
 
 Document::~Document()
 {
-    // free all node and edge data
-    qDeleteAll(d->nodes);
-    d->nodes.clear();
-    d->nodeMap.clear();
+    // clear Document contents
+    clear();
 
-    qDeleteAll(d->paths);
-    d->paths.clear();
-    d->pathMap.clear();
+    // make sure things are really gone
+    Q_ASSERT(d->nodeMap.isEmpty());
+    Q_ASSERT(d->nodes.isEmpty());
+    Q_ASSERT(d->pathMap.isEmpty());
+    Q_ASSERT(d->paths.isEmpty());
 
     delete d;
 }
@@ -114,6 +114,9 @@ bool Document::accept(Visitor & visitor)
 
 void Document::clear()
 {
+    // tell the world that all Nodes and Paths are about to be deleted
+    emit aboutToClear();
+
     // free all node and path data
     qDeleteAll(d->nodes);
     d->nodes.clear();

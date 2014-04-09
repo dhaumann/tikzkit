@@ -55,27 +55,24 @@ TikzDocument::TikzDocument(QObject * parent)
     d->scene = new TikzScene(this);
 
     connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
+    connect(this, SIGNAL(aboutToClear()), this, SLOT(clearTikzDocument()));
 }
 
 TikzDocument::~TikzDocument()
 {
-    foreach (tikz::ui::PathItem * path, d->paths) {
-        deletePath(path->id());
-    }
+    // purge all Nodes and Paths
+    clearTikzDocument();
 
-    foreach (TikzNode* node, d->nodes) {
-        deleteNode(node->id());
-    }
-
-    Q_ASSERT(0 == d->nodeMap.size());
-    Q_ASSERT(0 == d->nodes.size());
-    Q_ASSERT(0 == d->pathMap.size());
-    Q_ASSERT(0 == d->paths.size());
+    // make sure they are gone
+    Q_ASSERT(d->nodeMap.isEmpty());
+    Q_ASSERT(d->nodes.isEmpty());
+    Q_ASSERT(d->pathMap.isEmpty());
+    Q_ASSERT(d->paths.isEmpty());
 
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
-void TikzDocument::clear()
+void TikzDocument::clearTikzDocument()
 {
     // free UI part of nodes and paths
     qDeleteAll(d->paths);
@@ -85,9 +82,6 @@ void TikzDocument::clear()
     qDeleteAll(d->nodes);
     d->nodeMap.clear();
     d->nodes.clear();
-
-    // clear model
-    Document::clear();
 }
 
 QGraphicsView * TikzDocument::createView(QWidget * parent)
