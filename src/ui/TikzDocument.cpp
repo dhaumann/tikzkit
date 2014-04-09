@@ -75,6 +75,21 @@ TikzDocument::~TikzDocument()
     // NOTE: d is deleted via QObject parent/child hierarchy
 }
 
+void TikzDocument::clear()
+{
+    // free UI part of nodes and paths
+    qDeleteAll(d->paths);
+    d->pathMap.clear();
+    d->paths.clear();
+
+    qDeleteAll(d->nodes);
+    d->nodeMap.clear();
+    d->nodes.clear();
+
+    // clear model
+    Document::clear();
+}
+
 QGraphicsView * TikzDocument::createView(QWidget * parent)
 {
     // create view

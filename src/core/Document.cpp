@@ -114,23 +114,14 @@ bool Document::accept(Visitor & visitor)
 
 void Document::clear()
 {
-    // delete all Nodes and Paths.
-    // NOTE: deleting nodes and paths _must_ be performed through
-    //       the deleteNode(Node*) and deletePath(Path*) overloads,
-    //       as these functions properly detach connected objects
-    //       such that e.g. dangling pointers are avoided.
-    while (d->nodes.size()) {
-        deleteNode(d->nodes.last());
-    }
+    // free all node and path data
+    qDeleteAll(d->nodes);
+    d->nodes.clear();
+    d->nodeMap.clear();
 
-    while (d->paths.size()) {
-        deletePath(d->paths.last());
-    }
-
-    Q_ASSERT(0 == d->nodeMap.size());
-    Q_ASSERT(0 == d->nodes.size());
-    Q_ASSERT(0 == d->pathMap.size());
-    Q_ASSERT(0 == d->paths.size());
+    qDeleteAll(d->paths);
+    d->paths.clear();
+    d->pathMap.clear();
 
     // reset unique id counter
     d->nextId = 0;

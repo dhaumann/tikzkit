@@ -50,6 +50,13 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
         virtual ~TikzDocument();
 
         /**
+         * Clear all contents of the document.
+         * @note tikz::core::Document::clear() is a Q_SLOT. Hence, this
+         *       overrides the slot, no need to mark it as Q_SLOT again.
+         */
+        void clear() override;
+
+        /**
          * Create a graphics view for this document.
          */
         QGraphicsView * createView(QWidget * parent);

@@ -65,11 +65,14 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         bool accept(Visitor & visitor);
 
+    //
+    // file loading
+    //
     public Q_SLOTS:
         /**
          * Clear all contents of the document.
          */
-        void clear();
+        virtual void clear();
 
         /**
          * Load the tikz document from @p file.
