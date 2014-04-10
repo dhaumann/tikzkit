@@ -83,6 +83,12 @@ class DiamondShape : public AbstractShape
         QPointF contactPoint(tikz::Anchor anchor, qreal rad) const override;
 
     private:
+        /**
+         * Outline as QRectF.
+         */
+        QRectF outlineRect() const;
+
+    private:
         DiamondShapePrivate * const d;
 };
 

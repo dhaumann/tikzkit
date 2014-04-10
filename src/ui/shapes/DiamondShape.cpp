@@ -58,6 +58,7 @@ void DiamondShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) 
     const qreal w = textRect.width();
     const qreal h = textRect.height();
 
+    // FIXME: /pgf/aspect is not supported right now
     const qreal d = w + h + 4 * s;
     QRectF r(-d/2, -d/2, d, d);
 
@@ -83,15 +84,15 @@ QPainterPath DiamondShape::shape() const
 
 QPainterPath DiamondShape::outline() const
 {
-    const qreal lw = node()->style()->penWidth() / 2;
-    QRectF rect = node()->shapeRect();
-    rect.adjust(-lw, -lw, lw, lw); // FIXME: respect miter join...
+    const QRectF rect = outlineRect();
+    const qreal w = rect.width() / 2.0;
+    const qreal h = rect.height() / 2.0;
 
     QPainterPath path;
-    path.moveTo(rect.left(), 0);
-    path.lineTo(0, rect.top());
-    path.lineTo(rect.right(), 0);
-    path.lineTo(0, rect.bottom());
+    path.moveTo(-w, 0);
+    path.lineTo(0, h);
+    path.lineTo(w, 0);
+    path.lineTo(0, -h);
     path.closeSubpath();
     return path;
 }
@@ -115,20 +116,20 @@ QVector<tikz::Anchor> DiamondShape::supportedAnchors() const
 
 QPointF DiamondShape::anchorPos(tikz::Anchor anchor) const
 {
-    const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const QRectF rect = outlineRect();
+    const qreal rx = rect.width() / 2.0;
+    const qreal ry = rect.height() / 2.0;
     switch (anchor) {
         case tikz::NoAnchor:
         case tikz::Center   : return QPointF(0, 0);
         case tikz::North    : return QPointF(0, ry);
-        case tikz::NorthEast: return QPointF(rx, ry) * 0.70710678;
+        case tikz::NorthEast: return QPointF(rx, ry) * 0.5;
         case tikz::East     : return QPointF(rx, 0);
-        case tikz::SouthEast: return QPointF(rx, -ry) * 0.70710678;
+        case tikz::SouthEast: return QPointF(rx, -ry) * 0.5;
         case tikz::South    : return QPointF(0, -ry);
-        case tikz::SouthWest: return QPointF(-rx, -ry) * 0.70710678;
+        case tikz::SouthWest: return QPointF(-rx, -ry) * 0.5;
         case tikz::West     : return QPointF(-rx, 0);
-        case tikz::NorthWest: return QPointF(-rx, ry) * 0.70710678;
+        case tikz::NorthWest: return QPointF(-rx, ry) * 0.5;
     }
 
     return QPointF(0, 0);
@@ -140,17 +141,52 @@ QPointF DiamondShape::contactPoint(tikz::Anchor anchor, qreal rad) const
         return anchorPos(anchor);
     }
 
-    const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const QRectF rect = outlineRect();
+    const qreal rx = rect.width() / 2.0;
+    const qreal ry = rect.height() / 2.0;
+    const qreal len = qMax(rx, ry);
 
-    // use polar coordinates to calculate contact point
-    const qreal xcosphi = ry * std::cos(rad);
-    const qreal ysinphi = rx * std::sin(rad);
-    const qreal denominator = sqrt(xcosphi * xcosphi + ysinphi * ysinphi);
-    const qreal d = qFuzzyCompare(denominator, 0.0) ? 0 : rx * ry / denominator;
+    // create line to intersect with
+    const qreal x = std::cos(rad);
+    const qreal y = std::sin(rad);
+    const QLineF radLine(0, 0, len * x, len * y);
 
-    return d * QPointF(std::cos(rad), std::sin(rad));
+    // create 4 lines of the rect and find intersection
+    const QLineF l1(-rx, 0, 0, ry);
+    const QLineF l2(0, ry, rx, 0);
+    const QLineF l3(rx, 0, 0, -ry);
+    const QLineF l4(0, -ry, -rx, 0);
+
+    QPointF intersectionPoint;
+    if ((l1.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l2.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l3.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l4.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection)
+    ) {
+        return intersectionPoint;
+    }
+
+    Q_ASSERT(false);
+    return intersectionPoint;
+}
+
+QRectF DiamondShape::outlineRect() const
+{
+    const QRectF rect = node()->shapeRect();
+    const qreal rx = rect.width() / 2.0;
+    const qreal ry = rect.height() / 2.0;
+    Q_ASSERT(rx + ry > 0);
+
+    // height of triangle
+    const qreal hypothenuse = std::sqrt(rx * rx + ry * ry);
+    const qreal height = rx * ry / hypothenuse;
+
+    // scale by new height
+    const qreal d = height + node()->style()->outerSep();
+    const qreal dy = ry * d / height;
+    const qreal dx = rx * d / height;
+
+    return QRectF(-dx, -dy, 2 * dx, 2 * dy);
 }
 
 }
