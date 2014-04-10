@@ -54,18 +54,12 @@ void DiamondShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) 
     // see pgflibraryshapes.geometric.code.tex
 
     // calculate radius of textRect
-    qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
-    qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+    const qreal s = node()->style()->innerSep();
+    const qreal w = textRect.width();
+    const qreal h = textRect.height();
 
-    QRect r(-2 * w, -2 * h, 4 * w, 4 * h);
-
-//     if (r.width() < r.height()) {
-//         r.setWidth(r.height());
-//     } else {
-//         r.setHeight(r.width());
-//     }
-//     r.setWidth(1.414213 * r.width());
-//     r.setHeight(1.414213 * r.width());
+    const qreal d = w + h + 4 * s;
+    QRectF r(-d/2, -d/2, d, d);
 
     if (r.width() > shapeRect.width()) {
         shapeRect.setWidth(r.width());
@@ -73,22 +67,6 @@ void DiamondShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) 
     if (r.height() > shapeRect.height()) {
         shapeRect.setHeight(r.height());
     }
-//     qreal x = w + h;
-//     qreal y = h + 1 / x;
-// 
-//     w *= 1.4142136;
-//     h *= 1.4142136;
-
-//     shapeRect.setWidth(1.4142136 * shapeRect.width());
-//     shapeRect.setHeight(1.4142136 * shapeRect.height());
-
-    // make sure the circle around textRect is contained in shapeRect
-//     if (2.0 * w > shapeRect.width()) {
-//         shapeRect.setWidth(2.0 * w);
-//     }
-//     if (2.0 * h > shapeRect.height()) {
-//         shapeRect.setHeight(2.0 * h);
-//     }
 }
 
 QPainterPath DiamondShape::shape() const
