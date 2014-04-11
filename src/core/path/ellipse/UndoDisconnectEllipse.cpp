@@ -30,16 +30,10 @@ UndoDisconnectEllipse::UndoDisconnectEllipse(qint64 pathId, qint64 nodeId, Docum
     , m_pathId(pathId)
     , m_undoNodeId(nodeId)
 {
-    // save position at node
-    Node * node = document()->nodeFromId(m_undoNodeId);
-    Q_ASSERT(node != 0);
-
-    m_redoPos = node->pos();
-
-    // save anchor
+    // save pos and anchor
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
     Q_ASSERT(path != 0);
-
+    m_redoPos = path->pos();
     m_undoAnchor = path->anchor();
 }
 
