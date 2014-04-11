@@ -65,6 +65,58 @@ MetaPos::Ptr MetaPos::copy() const
     return pos;
 }
 
+void MetaPos::set(const MetaPos::Ptr & pos)
+{
+    if (equals(pos)) {
+        return;
+    }
+
+    // for now, only same Document is supported
+    Q_ASSERT(d->doc == pos->d->doc);
+
+    // copy private data
+    {
+        blockSignals(true);
+
+        // call setNode() to properly set up signals & slots
+        setNode(pos->node());
+
+        // now copy rest
+        d->doc = pos->d->doc;
+        d->pos = pos->d->pos;
+        Q_ASSERT(d->nodeId == pos->d->nodeId);
+        d->anchor = pos->d->anchor;
+
+        blockSignals(false);
+    }
+
+    emit changed();
+}
+
+bool MetaPos::equals(const MetaPos::Ptr & other) const
+{
+    return equals(other.data());
+}
+
+bool MetaPos::equals(const MetaPos * other) const
+{
+    if (other == this) {
+        return true;
+    }
+
+    if (! other || d->doc != other->d->doc) {
+        Q_ASSERT(d->doc == other->d->doc);
+        return false;
+    }
+
+    if (d->nodeId >= 0 || other->d->nodeId >= 0) {
+        return d->nodeId == other->d->nodeId
+            && d->anchor == other->d->anchor;
+    }
+
+    return d->pos == other->d->pos;
+}
+
 QPointF MetaPos::pos() const
 {
     const Node * n = node();

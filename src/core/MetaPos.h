@@ -85,13 +85,14 @@ class TIKZCORE_EXPORT MetaPos : public QObject
     //
     public:
         /**
-         * Get a clone of this MetaPos as shared pointer.
-         *
-         * @note This method is provided for convenience.
-         *       The returned shared pointer is a copy. Hence, modifying the
-         *       returned MetaPos::Ptr does not change this MetaPos.
+         * Check for equality of this object with @p other.
          */
-        virtual MetaPos::Ptr copy() const;
+        bool equals(const MetaPos::Ptr & other) const;
+
+        /**
+         * Check for equality of this object with @p other.
+         */
+        bool equals(const MetaPos * other) const;
 
     //
     // x/y-position methods
@@ -104,12 +105,30 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          */
         virtual QPointF pos() const;
 
+        /**
+         * Get a clone of this MetaPos as shared pointer.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy. Hence, modifying the
+         *       returned MetaPos::Ptr does not change this MetaPos.
+         *
+         * @see set()
+         */
+        virtual MetaPos::Ptr copy() const;
+
     public Q_SLOTS:
         /**
          * Set the coordinates to @p pos.
          * Calling this function emits changed(), if @p pos != pos().
          */
         void setPos(const QPointF& pos);
+
+        /**
+         * Copy all properties of @p pos into this MetaPos object.
+         *
+         * @see copy()
+         */
+        void set(const MetaPos::Ptr & pos);
 
     //
     // Node methods
