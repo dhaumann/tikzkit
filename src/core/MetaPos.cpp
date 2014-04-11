@@ -32,7 +32,7 @@ class MetaPosPrivate
     public:
         Document * doc;
         QPointF pos;
-        QPointer<Node> node;
+        qint64 nodeId;
         Anchor anchor;
 };
 
@@ -43,6 +43,7 @@ MetaPos::MetaPos(Document * doc)
     Q_ASSERT(doc != nullptr);
 
     d->doc = doc;
+    d->nodeId = -1;
     d->anchor = tikz::NoAnchor;
 }
 
@@ -66,19 +67,22 @@ MetaPos::Ptr MetaPos::copy() const
 
 QPointF MetaPos::pos() const
 {
-    return d->node ? d->node->pos()
-                   : d->pos;
+    const Node * n = node();
+
+    return n ? n->pos()
+             : d->pos;
 }
 
 void MetaPos::setPos(const QPointF& pos)
 {
     bool change = false;
 
-    if (d->node) {
+    Node * oldNode = node();
+    if (oldNode) {
         // disconnect changed() signal ...
-        disconnect(d->node, 0, this, 0);
-        d->node = nullptr;
-        
+        disconnect(oldNode, 0, this, 0);
+        d->nodeId = -1;
+
         change = true;
     }
 
@@ -95,25 +99,29 @@ void MetaPos::setPos(const QPointF& pos)
     }
 }
 
-bool MetaPos::setNode(Node* node)
+bool MetaPos::setNode(Node* newNode)
 {
+    Node * curNode = node();
+
     // if equal, stop
-    if (d->node == node) {
+    if (curNode == newNode) {
         return false;
     }
 
     // disconnect changed() signal ...
-    if (d->node) {
-        disconnect(d->node, 0, this, 0);
+    if (curNode) {
+        disconnect(curNode, 0, this, 0);
 
-        // update pos in case the new node is 0
-        d->pos = d->node->pos();
+        // update pos in case the newNode is 0
+        d->pos = curNode->pos();
     }
 
     // set new node and forward change() signal if applicable
-    d->node = node;
-    if (d->node) {
-        connect(d->node, SIGNAL(changed()), this, SIGNAL(changed()));
+    d->nodeId = newNode ? newNode->id() : -1;
+    curNode = node();
+
+    if (curNode) {
+        connect(curNode, SIGNAL(changed()), this, SIGNAL(changed()));
     }
 
     // reset anchor
@@ -128,13 +136,13 @@ bool MetaPos::setNode(Node* node)
 
 Node* MetaPos::node() const
 {
-    return d->node;
+    return d->doc->nodeFromId(d->nodeId);
 }
 
 void MetaPos::setAnchor(tikz::Anchor anchor)
 {
     // setting an anchor only makes sense with node
-    Q_ASSERT(d->node);
+    Q_ASSERT(d->nodeId >= 0);
 
     if (d->anchor != anchor) {
         d->anchor = anchor;
@@ -144,7 +152,7 @@ void MetaPos::setAnchor(tikz::Anchor anchor)
 
 Anchor MetaPos::anchor() const
 {
-    return d->node ? d->anchor : tikz::NoAnchor;
+    return (d->nodeId >= 0) ? d->anchor : tikz::NoAnchor;
 }
 
 }
