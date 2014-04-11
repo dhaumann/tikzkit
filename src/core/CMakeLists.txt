@@ -36,9 +36,6 @@ set(qtikzcore_SOURCES
     path/UndoDeletePath.cpp
 
     path/edge/EdgePath.cpp
-    path/edge/UndoConnectEdge.cpp
-    path/edge/UndoDisconnectEdge.cpp
-    path/edge/UndoSetEdgeAnchor.cpp
     path/edge/UndoSetEdgePos.cpp
 
     path/ellipse/EllipsePath.cpp

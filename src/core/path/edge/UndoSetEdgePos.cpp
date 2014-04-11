@@ -24,25 +24,17 @@
 namespace tikz {
 namespace core {
 
-UndoSetEdgePos::UndoSetEdgePos(qint64 pathId,
-                               const QPointF & newPos,
+UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
+                               const MetaPos::Ptr & oldPos,
+                               const MetaPos::Ptr & newPos,
                                bool isStartNode,
                                Document * doc)
     : UndoItem(doc)
-    , m_pathId(pathId)
+    , m_pathId(path->id())
+    , m_undoPos(oldPos)
     , m_redoPos(newPos)
     , m_isStart(isStartNode)
 {
-    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
-    Q_ASSERT(edge != 0);
-
-    if (m_isStart) {
-        Q_ASSERT(edge->startNode() == 0);
-        m_undoPos = edge->startPos();
-    } else {
-        Q_ASSERT(edge->endNode() == 0);
-        m_undoPos = edge->endPos();
-    }
 }
 
 UndoSetEdgePos::~UndoSetEdgePos()
@@ -53,13 +45,13 @@ void UndoSetEdgePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
-    Q_ASSERT(edge != 0);
+    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(path != 0);
 
     if (m_isStart) {
-        edge->setStartPos(m_undoPos);
+        path->setStartMetaPos(m_undoPos);
     } else {
-        edge->setEndPos(m_undoPos);
+        path->setEndMetaPos(m_undoPos);
     }
 
     document()->setUndoActive(wasActive);
@@ -69,13 +61,13 @@ void UndoSetEdgePos::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EdgePath * edge = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
-    Q_ASSERT(edge != 0);
+    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    Q_ASSERT(path != 0);
 
     if (m_isStart) {
-        edge->setStartPos(m_redoPos);
+        path->setStartMetaPos(m_redoPos);
     } else {
-        edge->setEndPos(m_redoPos);
+        path->setEndMetaPos(m_redoPos);
     }
 
     document()->setUndoActive(wasActive);

@@ -104,6 +104,16 @@ class TIKZCORE_EXPORT EdgePath : public Path
          */
         void setEndNode(Node* node);
 
+        /**
+         * Set the start position of this path to @p pos.
+         */
+        void setStartMetaPos(const tikz::core::MetaPos::Ptr & pos);
+
+        /**
+         * Set the end position of this path to @p pos.
+         */
+        void setEndMetaPos(const tikz::core::MetaPos::Ptr & pos);
+
     //
     // x/y-position methods
     //

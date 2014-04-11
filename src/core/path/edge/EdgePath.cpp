@@ -18,13 +18,9 @@
  */
 
 #include "EdgePath.h"
+#include "UndoSetEdgePos.h"
 #include "Node.h"
 #include "Document.h"
-
-#include "UndoConnectEdge.h"
-#include "UndoDisconnectEdge.h"
-#include "UndoSetEdgeAnchor.h"
-#include "UndoSetEdgePos.h"
 
 namespace tikz {
 namespace core {
@@ -86,14 +82,16 @@ void EdgePath::detachFromNode(Node * node)
 
     // disconnect start from node, if currently attached
     if (d->start->node() == node) {
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->start->node()->id(), true, document()));
+        auto newPos = startMetaPos();
+        newPos->setNode(0);
+        setStartMetaPos(newPos);
     }
 
     // disconnect end from node, if currently attached
     if (d->end->node() == node) {
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->end->node()->id(), false, document()));
+        auto newPos = endMetaPos();
+        newPos->setNode(0);
+        setEndMetaPos(newPos);
     }
 
     Q_ASSERT(d->start->node() != node);
@@ -107,48 +105,20 @@ Path::Type EdgePath::type() const
 
 void EdgePath::setStartNode(Node* node)
 {
-    if (d->start->node() == node) {
-        return;
-    }
+    auto newPos = startMetaPos();
+    newPos->setNode(node);
+    setStartMetaPos(newPos);
 
-    // set start node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->start->setNode(node);
-        emit startNodeChanged(node);
-        endConfig();
-    } else if (node) {
-        document()->undoManager()->push(
-            new UndoConnectEdge(id(), node->id(), true, document()));
-    } else {
-        Q_ASSERT(d->start->node() != 0);
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->start->node()->id(), true, document()));
-        Q_ASSERT(d->start->node() == 0);
-    }
+    Q_ASSERT(d->start->node() == node);
 }
 
 void EdgePath::setEndNode(Node* node)
 {
-    if (d->end->node() == node) {
-        return;
-    }
+    auto newPos = endMetaPos();
+    newPos->setNode(node);
+    setEndMetaPos(newPos);
 
-    // set end node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->end->setNode(node);
-        emit endNodeChanged(node);
-        endConfig();
-    } else if (node) {
-        document()->undoManager()->push(
-            new UndoConnectEdge(id(), node->id(), false, document()));
-    } else {
-        Q_ASSERT(d->end->node() != 0);
-        document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->end->node()->id(), false, document()));
-        Q_ASSERT(d->end->node() == 0);
-    }
+    Q_ASSERT(d->end->node() == node);
 }
 
 Node* EdgePath::startNode() const
@@ -173,39 +143,61 @@ QPointF EdgePath::endPos() const
 
 void EdgePath::setStartPos(const QPointF& pos)
 {
-    if (d->start->node() == 0 && d->start->pos() == pos) {
-        return;
-    }
+    auto newPos = startMetaPos();
+    newPos->setPos(pos);
+    setStartMetaPos(newPos);
 
-    if (document()->undoActive()) {
-        beginConfig();
-        d->start->setPos(pos);
-        endConfig();
-    } else {
-        // first set start node to 0
-        setStartNode(0);
-        // then set position
-        document()->undoManager()->push(
-            new UndoSetEdgePos(id(), pos, true, document()));
-    }
+    Q_ASSERT(d->start->pos() == pos);
 }
 
 void EdgePath::setEndPos(const QPointF& pos)
 {
-    if (d->end->node() == 0 && d->end->pos() == pos) {
+    auto newPos = endMetaPos();
+    newPos->setPos(pos);
+    setEndMetaPos(newPos);
+
+    Q_ASSERT(d->end->pos() == pos);
+}
+
+void EdgePath::setStartMetaPos(const tikz::core::MetaPos::Ptr & pos)
+{
+    if (d->start->equals(pos)) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
-        d->end->setPos(pos);
+        auto oldNode = startNode();
+        d->start->set(pos);
+        auto newNode = startNode();
+        if (oldNode != newNode) {
+            emit startNodeChanged(newNode);
+        }
         endConfig();
     } else {
-        // first set end node to 0
-        setEndNode(0);
-        // then set position
         document()->undoManager()->push(
-            new UndoSetEdgePos(id(), pos, false, document()));
+            new UndoSetEdgePos(this, startMetaPos(), pos, true, document()));
+    }
+}
+
+void EdgePath::setEndMetaPos(const tikz::core::MetaPos::Ptr & pos)
+{
+    if (d->end->equals(pos)) {
+        return;
+    }
+
+    if (document()->undoActive()) {
+        beginConfig();
+        auto oldNode = endNode();
+        d->end->set(pos);
+        auto newNode = endNode();
+        if (oldNode != newNode) {
+            emit endNodeChanged(newNode);
+        }
+        endConfig();
+    } else {
+        document()->undoManager()->push(
+            new UndoSetEdgePos(this, endMetaPos(), pos, false, document()));
     }
 }
 
@@ -221,36 +213,20 @@ tikz::Anchor EdgePath::endAnchor() const
 
 void EdgePath::setStartAnchor(tikz::Anchor anchor)
 {
-    if (d->start->anchor() == anchor) {
-        return;
-    }
+    auto newPos = startMetaPos();
+    newPos->setAnchor(anchor);
+    setStartMetaPos(newPos);
 
-    // set start node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->start->setAnchor(anchor);
-        endConfig();
-    } else {
-        document()->undoManager()->push(
-            new UndoSetEdgeAnchor(id(), anchor, true, document()));
-    }
+    Q_ASSERT(d->start->anchor() == anchor);
 }
 
 void EdgePath::setEndAnchor(tikz::Anchor anchor)
 {
-    if (d->end->anchor() == anchor) {
-        return;
-    }
+    auto newPos = endMetaPos();
+    newPos->setAnchor(anchor);
+    setEndMetaPos(newPos);
 
-    // set end node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->end->setAnchor(anchor);
-        endConfig();
-    } else {
-        document()->undoManager()->push(
-            new UndoSetEdgeAnchor(id(), anchor, false, document()));
-    }
+    Q_ASSERT(d->end->anchor() == anchor);
 }
 
 }

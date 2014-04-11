@@ -22,11 +22,12 @@
 
 #include "UndoItem.h"
 #include "tikz.h"
-
-#include <QPointF>
+#include "MetaPos.h"
 
 namespace tikz {
 namespace core {
+
+class EdgePath;
 
 class UndoSetEdgePos : public UndoItem
 {
@@ -34,9 +35,11 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEdgePos(qint64 pathId,
-                       const QPointF & newPos,
-                       bool isStartNode, Document * doc);
+        UndoSetEdgePos(EdgePath * path,
+                       const MetaPos::Ptr & oldPos,
+                       const MetaPos::Ptr & newPos,
+                       bool isStartNode,
+                       Document * doc);
 
         /**
          * Destructor
@@ -46,12 +49,12 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Undo: disconnect edge again.
          */
-        virtual void undo();
+        void undo() override;
 
         /**
          * Redo: connect edge
          */
-        virtual void redo();
+        void redo() override;
 
     private:
         /**
@@ -62,12 +65,12 @@ class UndoSetEdgePos : public UndoItem
         /**
          * old anchor of the connection
          */
-        QPointF m_undoPos;
+        tikz::core::MetaPos::Ptr m_undoPos;
 
         /**
          * new anchor of the connection
          */
-        QPointF m_redoPos;
+        tikz::core::MetaPos::Ptr m_redoPos;
 
         /**
          * Is it start or end node?
