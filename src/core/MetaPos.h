@@ -91,7 +91,7 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          *       The returned shared pointer is a copy. Hence, modifying the
          *       returned MetaPos::Ptr does not change this MetaPos.
          */
-        MetaPos::Ptr copy() const;
+        virtual MetaPos::Ptr copy() const;
 
     //
     // x/y-position methods
@@ -102,7 +102,7 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          * If no Node is associated, the position set with setPos() is returned.
          * If node() is non-null, node()->pos() is returned.
          */
-        QPointF pos() const;
+        virtual QPointF pos() const;
 
     public Q_SLOTS:
         /**

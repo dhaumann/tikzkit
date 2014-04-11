@@ -80,6 +80,13 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     public:
         /**
+         * Creates a MetaPos that is associated with this Document.
+         * The returned MetaPos can be used safely as long as this Document
+         * exists.
+         */
+        virtual tikz::core::MetaPos::Ptr createMetaPos();
+
+        /**
          * Creates a new TikzNode associated with this document.
          * If the node is not needed anymore, delete it by
          * calling deleteTikzNode(tikzNode).
