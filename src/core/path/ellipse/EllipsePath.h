@@ -53,16 +53,6 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          */
         Path::Type type() const override;
 
-        /**
-         * Get the position of this ellipse as a shared MetaPos object.
-         *
-         * @note This method is provided for convenience.
-         *       The returned shared pointer is a copy of this ellipse' data.
-         *       Hence, modifying the returned MetaPos::Ptr does not change
-         *       this ellipse.
-         */
-        tikz::core::MetaPos::Ptr metaPos() const;
-
     //
     // Node manipulation
     //
@@ -89,12 +79,27 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          */
         QPointF pos() const;
 
+        /**
+         * Get the position of this ellipse as a shared MetaPos object.
+         *
+         * @note This method is provided for convenience.
+         *       The returned shared pointer is a copy of this ellipse' data.
+         *       Hence, modifying the returned MetaPos::Ptr does not change
+         *       this ellipse.
+         */
+        tikz::core::MetaPos::Ptr metaPos() const;
+
     public Q_SLOTS:
         /**
          * Set the position of the ellipse to @p pos.
          * @param pos the new position
          */
         void setPos(const QPointF& pos);
+
+        /**
+         * Set the position of this ellipse as a shared MetaPos object.
+         */
+        void setMetaPos(const tikz::core::MetaPos::Ptr & pos);
 
     //
     // anchor methods

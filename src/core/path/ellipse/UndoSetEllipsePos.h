@@ -22,8 +22,7 @@
 
 #include "UndoItem.h"
 #include "tikz.h"
-
-#include <QPointF>
+#include "MetaPos.h"
 
 namespace tikz {
 namespace core {
@@ -34,7 +33,9 @@ class UndoSetEllipsePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEllipsePos(qint64 pathId, const QPointF & newPos, Document * doc);
+        UndoSetEllipsePos(qint64 pathId,
+                          const MetaPos::Ptr & newPos,
+                          Document * doc);
 
         /**
          * Destructor
@@ -60,12 +61,12 @@ class UndoSetEllipsePos : public UndoItem
         /**
          * old anchor of the connection
          */
-        QPointF m_undoPos;
+        tikz::core::MetaPos::Ptr m_undoPos;
 
         /**
          * new anchor of the connection
          */
-        QPointF m_redoPos;
+        tikz::core::MetaPos::Ptr m_redoPos;
 };
 
 }

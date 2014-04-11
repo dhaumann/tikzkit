@@ -25,7 +25,7 @@ namespace tikz {
 namespace core {
 
 UndoSetEllipsePos::UndoSetEllipsePos(qint64 pathId,
-                                     const QPointF & newPos,
+                                     const MetaPos::Ptr & newPos,
                                      Document * doc)
     : UndoItem(doc)
     , m_pathId(pathId)
@@ -34,8 +34,7 @@ UndoSetEllipsePos::UndoSetEllipsePos(qint64 pathId,
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
     Q_ASSERT(path != 0);
 
-    Q_ASSERT(path->node() == 0);
-    m_undoPos = path->pos();
+    m_undoPos = path->metaPos();
 }
 
 UndoSetEllipsePos::~UndoSetEllipsePos()
@@ -49,7 +48,7 @@ void UndoSetEllipsePos::undo()
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
     Q_ASSERT(path != 0);
 
-    path->setPos(m_undoPos);
+    path->setMetaPos(m_undoPos);
 
     document()->setUndoActive(wasActive);
 }
@@ -61,7 +60,7 @@ void UndoSetEllipsePos::redo()
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
     Q_ASSERT(path != 0);
 
-    path->setPos(m_redoPos);
+    path->setMetaPos(m_redoPos);
 
     document()->setUndoActive(wasActive);
 }

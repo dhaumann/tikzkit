@@ -18,13 +18,11 @@
  */
 
 #include "EllipsePath.h"
+#include "UndoSetEllipsePos.h"
 #include "Node.h"
 #include "Document.h"
 
-#include "UndoConnectEllipse.h"
-#include "UndoDisconnectEllipse.h"
-#include "UndoSetEllipseAnchor.h"
-#include "UndoSetEllipsePos.h"
+#include <QDebug>
 
 namespace tikz {
 namespace core {
@@ -55,11 +53,6 @@ Path::Type EllipsePath::type() const
     return Path::Ellipse;
 }
 
-tikz::core::MetaPos::Ptr EllipsePath::metaPos() const
-{
-    return d->pos->copy();
-}
-
 void EllipsePath::deconstruct()
 {
     // just set both the start and end pos to (0, 0).
@@ -76,33 +69,20 @@ void EllipsePath::detachFromNode(Node * node)
 
     // disconnect from node, if currently attached
     if (d->pos->node() == node) {
-        document()->undoManager()->push(
-            new UndoDisconnectEllipse(id(), node->id(), document()));
+        auto newPos = metaPos();
+        newPos->setNode(0);
+        setMetaPos(newPos);
     }
     Q_ASSERT(d->pos->node() != node);
 }
 
 void EllipsePath::setNode(Node* node)
 {
-    if (d->pos->node() == node) {
-        return;
-    }
+    auto newPos = metaPos();
+    newPos->setNode(node);
+    setMetaPos(newPos);
 
-    // set start node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->pos->setNode(node);
-        emit nodeChanged(node);
-        endConfig();
-    } else if (node) {
-        document()->undoManager()->push(
-            new UndoConnectEllipse(id(), node->id(), document()));
-    } else {
-        Q_ASSERT(d->pos->node() != 0);
-        document()->undoManager()->push(
-            new UndoDisconnectEllipse(id(), d->pos->node()->id(), document()));
-        Q_ASSERT(d->pos->node() == 0);
-    }
+    Q_ASSERT(d->pos->node() == node);
 }
 
 Node* EllipsePath::node() const
@@ -117,18 +97,34 @@ QPointF EllipsePath::pos() const
 
 void EllipsePath::setPos(const QPointF& pos)
 {
-    if (d->pos->node() == 0 && d->pos->pos() == pos) {
+    auto newPos = metaPos();
+    newPos->setPos(pos);
+    setMetaPos(newPos);
+
+    Q_ASSERT(d->pos->pos() == pos);
+}
+
+tikz::core::MetaPos::Ptr EllipsePath::metaPos() const
+{
+    return d->pos->copy();
+}
+
+void EllipsePath::setMetaPos(const tikz::core::MetaPos::Ptr & pos)
+{
+    if (d->pos->equals(pos)) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
-        d->pos->setPos(pos);
+        auto oldNode = node();
+        d->pos->set(pos);
+        auto newNode = node();
+        if (oldNode != newNode) {
+            emit nodeChanged(newNode);
+        }
         endConfig();
     } else {
-        // first set start node to 0
-        setNode(0);
-        // then set position
         document()->undoManager()->push(
             new UndoSetEllipsePos(id(), pos, document()));
     }
@@ -141,19 +137,11 @@ tikz::Anchor EllipsePath::anchor() const
 
 void EllipsePath::setAnchor(tikz::Anchor anchor)
 {
-    if (d->pos->anchor() == anchor) {
-        return;
-    }
+    auto newPos = metaPos();
+    newPos->setAnchor(anchor);
+    setMetaPos(newPos);
 
-    // set end node
-    if (document()->undoActive()) {
-        beginConfig();
-        d->pos->setAnchor(anchor);
-        endConfig();
-    } else {
-        document()->undoManager()->push(
-            new UndoSetEllipseAnchor(id(), anchor, document()));
-    }
+    Q_ASSERT(d->pos->anchor() == anchor);
 }
 
 }
