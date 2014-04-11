@@ -23,6 +23,8 @@
 #include "MoveHandle.h"
 #include "EdgePathItem.h"
 #include "AnchorManager.h"
+#include "TikzDocument.h"
+
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EdgePath.h>
 
@@ -37,7 +39,7 @@ namespace ui {
 LineTool::LineTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(qobject_cast<tikz::ui::EdgePathItem *>(path))
-    , m_anchorManager(new AnchorManager(scene, this))
+    , m_anchorManager(new AnchorManager(scene, path->document(), this))
 {
     // show all path handles
     createPathHandles();

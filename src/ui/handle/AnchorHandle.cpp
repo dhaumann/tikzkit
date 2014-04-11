@@ -19,6 +19,7 @@
 
 #include "AnchorHandle.h"
 #include "TikzNode.h"
+#include "TikzDocument.h"
 #include "PaintHelper.h"
 
 #include <QPointer>
@@ -37,7 +38,7 @@ namespace ui {
 
 AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     : Handle(Handle::AnchorHandle)
-    , m_metaPos(new tikz::core::MetaPos())
+    , m_metaPos(node->document()->createMetaPos())
     , m_node(node)
 {
     m_metaPos->setNode(node->node());

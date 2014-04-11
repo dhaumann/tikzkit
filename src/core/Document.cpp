@@ -245,6 +245,10 @@ void Document::deletePath(Path * path)
     Q_ASSERT(!d->pathMap.contains(id));
 }
 
+tikz::core::MetaPos::Ptr Document::createMetaPos()
+{
+    return MetaPos::Ptr(new MetaPos(this));
+}
 
 Node* Document::createNode()
 {

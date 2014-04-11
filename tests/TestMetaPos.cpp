@@ -37,27 +37,28 @@ void MetaPosTest::cleanupTestCase()
 
 void MetaPosTest::testMetaPos()
 {
-    tikz::core::MetaPos m;
+    tikz::core::Document doc;
+    tikz::core::MetaPos::Ptr m = doc.createMetaPos();
 
     // initially (0, 0)
-    QCOMPARE(m.pos(), QPointF(0, 0));
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m->pos(), QPointF(0, 0));
+    QCOMPARE(m->node(), (tikz::core::Node*)0);
 
     // test changed signal
-    connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
+    connect(m.data(), SIGNAL(changed()), this, SLOT(changedEmitted()));
 
     // reset signal counter
     m_changeCount = 0;
 
     // perform change
-    m.setPos(QPointF(1, 1));
-    QCOMPARE(m.pos(), QPointF(1, 1));
+    m->setPos(QPointF(1, 1));
+    QCOMPARE(m->pos(), QPointF(1, 1));
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
 
     // make sure setNode with null pointer has no effect
-    QVERIFY( ! m.setNode(0));
+    QVERIFY( ! m->setNode(0));
     QCOMPARE(m_changeCount, 1);
 }
 
@@ -69,7 +70,7 @@ void MetaPosTest::changedEmitted()
 void MetaPosTest::testMetaPosWithNode()
 {
     tikz::core::Document doc;
-    tikz::core::MetaPos m;
+    tikz::core::MetaPos::Ptr m = doc.createMetaPos();
     tikz::core::Node * n = doc.createNode();
 
     // set distinct node position
@@ -77,32 +78,32 @@ void MetaPosTest::testMetaPosWithNode()
     QCOMPARE(n->pos(), QPointF(5, 5));
 
     // connect to changed signal
-    connect(&m, SIGNAL(changed()), this, SLOT(changedEmitted()));
+    connect(m.data(), SIGNAL(changed()), this, SLOT(changedEmitted()));
 
     // reset changed counter
     m_changeCount = 0;
 
     // check setting node
-    QVERIFY(m.setNode(n));
-    QCOMPARE(m.node(), n);
+    QVERIFY(m->setNode(n));
+    QCOMPARE(m->node(), n);
     QCOMPARE(m_changeCount, 1);
 
     // make sure setting same node again does nothing
-    QVERIFY(! m.setNode(n));
+    QVERIFY(! m->setNode(n));
     QCOMPARE(m_changeCount, 1);
 
     // should be same as node pos
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(m->pos(), QPointF(5, 5));
 
     // reset signal counter
     m_changeCount = 0;
 
     // perform change
-    m.setPos(QPointF(1, 1));
-    QCOMPARE(m.pos(), QPointF(1, 1));
+    m->setPos(QPointF(1, 1));
+    QCOMPARE(m->pos(), QPointF(1, 1));
 
     // using setPos() resets node, test this
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m->node(), (tikz::core::Node*)0);
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
@@ -111,23 +112,23 @@ void MetaPosTest::testMetaPosWithNode()
     // now connect to node again and change node position.
     // The MetaPos.pos() should adapt automatically
     //
-    QVERIFY(m.setNode(n));
-    QCOMPARE(m.node(), n);
+    QVERIFY(m->setNode(n));
+    QCOMPARE(m->node(), n);
     QCOMPARE(n->pos(), QPointF(5, 5));
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(m->pos(), QPointF(5, 5));
 
     // now change node position
     m_changeCount = 0;
     n->setPos(QPointF(10, 10));
     QCOMPARE(n->pos(), QPointF(10, 10));
-    QCOMPARE(m.pos(), QPointF(10, 10));
+    QCOMPARE(m->pos(), QPointF(10, 10));
     QCOMPARE(m_changeCount, 1);
 }
 
 void MetaPosTest::testSet0()
 {
     tikz::core::Document doc;
-    tikz::core::MetaPos m;
+    tikz::core::MetaPos::Ptr m = doc.createMetaPos();
     tikz::core::Node * n = doc.createNode();
 
     // set distinct node position
@@ -135,35 +136,35 @@ void MetaPosTest::testSet0()
     QCOMPARE(n->pos(), QPointF(5, 5));
 
     // check setting node
-    QVERIFY(m.setNode(n));
-    QCOMPARE(m.node(), n);
+    QVERIFY(m->setNode(n));
+    QCOMPARE(m->node(), n);
 
     // now set node to 0 again
-    QVERIFY(m.setNode(0));
+    QVERIFY(m->setNode(0));
 
     // make sure the node is 0 and the position is kept
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(m->node(), (tikz::core::Node*)0);
+    QCOMPARE(m->pos(), QPointF(5, 5));
 }
 
 void MetaPosTest::testMetaPosPtr()
 {
-    // test function MetaPos::toPtr(), and make sure the instance behind the
+    // test function MetaPos::copy(), and make sure the instance behind the
     // ::Ptr is a copy that remains unchanged when pos chages.
-    tikz::core::MetaPos pos;
-    tikz::core::MetaPos::Ptr pPos = pos.toPtr();
+    tikz::core::Document doc;
+    tikz::core::MetaPos::Ptr pos = doc.createMetaPos();
+    tikz::core::MetaPos::Ptr pPos = pos->copy();
 
-    pos.setPos(QPointF(3, 3));
-    QCOMPARE(pos.pos(), QPointF(3, 3));
+    pos->setPos(QPointF(3, 3));
+    QCOMPARE(pos->pos(), QPointF(3, 3));
     QCOMPARE(pPos->pos(), QPointF(0, 0));
 
     // now test with Node
-    tikz::core::Document doc;
     tikz::core::Node * n = doc.createNode();
 
-    pos.setNode(n);
+    pos->setNode(n);
     pPos->setPos(QPointF(1, 1));
-    QCOMPARE(pos.pos(), QPointF(0, 0));
+    QCOMPARE(pos->pos(), QPointF(0, 0));
     QCOMPARE(pPos->pos(), QPointF(1, 1));
 }
 

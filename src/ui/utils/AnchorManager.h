@@ -30,6 +30,10 @@ class QGraphicsScene;
 class QGraphicsView;
 
 namespace tikz {
+namespace core {
+    class Document;
+}
+
 namespace ui {
 
 class TikzNode;
@@ -43,7 +47,7 @@ class AnchorManager : public QObject
         /**
          * Constructor.
          */
-        AnchorManager(QGraphicsScene * scene, QObject * parent = 0);
+        AnchorManager(QGraphicsScene * scene, tikz::core::Document * document, QObject * parent = 0);
 
         /**
          * Destructor.
@@ -119,6 +123,7 @@ class AnchorManager : public QObject
         void nodeDestroyed(QObject * obj);
 
     private:
+        tikz::core::Document * m_doc;
         QGraphicsScene * m_scene;
         QVector <TikzNode *> m_nodes;
         QHash <TikzNode *, QVector<AnchorHandle *>> m_handleMap;

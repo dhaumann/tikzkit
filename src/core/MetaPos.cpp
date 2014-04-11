@@ -18,26 +18,31 @@
  */
 
 #include "MetaPos.h"
+#include "Document.h"
 #include "Node.h"
 
 #include <QPointer>
 #include <QDebug>
 
 namespace tikz {
-namespace core{
+namespace core {
 
 class MetaPosPrivate
 {
     public:
+        Document * doc;
         QPointF pos;
         QPointer<Node> node;
         Anchor anchor;
 };
 
-MetaPos::MetaPos(QObject * parent)
-    : QObject(parent)
+MetaPos::MetaPos(Document * doc)
+    : QObject(doc)
     , d(new MetaPosPrivate())
 {
+    Q_ASSERT(doc != nullptr);
+
+    d->doc = doc;
     d->anchor = tikz::NoAnchor;
 }
 
@@ -46,10 +51,15 @@ MetaPos::~MetaPos()
     delete d;
 }
 
-MetaPos::Ptr MetaPos::toPtr() const
+Document * MetaPos::document() const
+{
+    return d->doc;
+}
+
+MetaPos::Ptr MetaPos::copy() const
 {
     // create shared MetaPos and copy private data
-    MetaPos::Ptr pos(new tikz::core::MetaPos());
+    MetaPos::Ptr pos(new tikz::core::MetaPos(d->doc));
     *pos->d = *d;
     return pos;
 }

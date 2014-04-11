@@ -36,10 +36,10 @@ class EdgePathPrivate
         Path::Type type;
 
         // start meta node this edge points to
-        MetaPos start;
+        MetaPos::Ptr start;
 
         // target/end meta node this edge points to
-        MetaPos end;
+        MetaPos::Ptr end;
 };
 
 EdgePath::EdgePath(Type type, qint64 id, Document* doc)
@@ -47,9 +47,11 @@ EdgePath::EdgePath(Type type, qint64 id, Document* doc)
     , d(new EdgePathPrivate())
 {
     d->type = type;
+    d->start = doc->createMetaPos();
+    d->end = doc->createMetaPos();
 
-    connect(&d->start, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(&d->end, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(d->start.data(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(d->end.data(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 EdgePath::~EdgePath()
@@ -59,12 +61,12 @@ EdgePath::~EdgePath()
 
 tikz::core::MetaPos::Ptr EdgePath::startMetaPos() const
 {
-    return d->start.toPtr();
+    return d->start->copy();
 }
 
 tikz::core::MetaPos::Ptr EdgePath::endMetaPos() const
 {
-    return d->end.toPtr();
+    return d->end->copy();
 }
 
 void EdgePath::deconstruct()
@@ -83,19 +85,19 @@ void EdgePath::detachFromNode(Node * node)
     Q_ASSERT(node != 0);
 
     // disconnect start from node, if currently attached
-    if (d->start.node() == node) {
+    if (d->start->node() == node) {
         document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->start.node()->id(), true, document()));
+            new UndoDisconnectEdge(id(), d->start->node()->id(), true, document()));
     }
 
     // disconnect end from node, if currently attached
-    if (d->end.node() == node) {
+    if (d->end->node() == node) {
         document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
+            new UndoDisconnectEdge(id(), d->end->node()->id(), false, document()));
     }
 
-    Q_ASSERT(d->start.node() != node);
-    Q_ASSERT(d->end.node() != node);
+    Q_ASSERT(d->start->node() != node);
+    Q_ASSERT(d->end->node() != node);
 }
 
 Path::Type EdgePath::type() const
@@ -105,79 +107,79 @@ Path::Type EdgePath::type() const
 
 void EdgePath::setStartNode(Node* node)
 {
-    if (d->start.node() == node) {
+    if (d->start->node() == node) {
         return;
     }
 
     // set start node
     if (document()->undoActive()) {
         beginConfig();
-        d->start.setNode(node);
+        d->start->setNode(node);
         emit startNodeChanged(node);
         endConfig();
     } else if (node) {
         document()->undoManager()->push(
             new UndoConnectEdge(id(), node->id(), true, document()));
     } else {
-        Q_ASSERT(d->start.node() != 0);
+        Q_ASSERT(d->start->node() != 0);
         document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->start.node()->id(), true, document()));
-        Q_ASSERT(d->start.node() == 0);
+            new UndoDisconnectEdge(id(), d->start->node()->id(), true, document()));
+        Q_ASSERT(d->start->node() == 0);
     }
 }
 
 void EdgePath::setEndNode(Node* node)
 {
-    if (d->end.node() == node) {
+    if (d->end->node() == node) {
         return;
     }
 
     // set end node
     if (document()->undoActive()) {
         beginConfig();
-        d->end.setNode(node);
+        d->end->setNode(node);
         emit endNodeChanged(node);
         endConfig();
     } else if (node) {
         document()->undoManager()->push(
             new UndoConnectEdge(id(), node->id(), false, document()));
     } else {
-        Q_ASSERT(d->end.node() != 0);
+        Q_ASSERT(d->end->node() != 0);
         document()->undoManager()->push(
-            new UndoDisconnectEdge(id(), d->end.node()->id(), false, document()));
-        Q_ASSERT(d->end.node() == 0);
+            new UndoDisconnectEdge(id(), d->end->node()->id(), false, document()));
+        Q_ASSERT(d->end->node() == 0);
     }
 }
 
 Node* EdgePath::startNode() const
 {
-    return d->start.node();
+    return d->start->node();
 }
 
 Node* EdgePath::endNode()
 {
-    return d->end.node();
+    return d->end->node();
 }
 
 QPointF EdgePath::startPos() const
 {
-    return d->start.pos();
+    return d->start->pos();
 }
 
 QPointF EdgePath::endPos() const
 {
-    return d->end.pos();
+    return d->end->pos();
 }
 
 void EdgePath::setStartPos(const QPointF& pos)
 {
-    if (d->start.node() == 0 && d->start.pos() == pos) {
+    if (d->start->node() == 0 && d->start->pos() == pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
-        d->start.setPos(pos);
+        d->start->setPos(pos);
         endConfig();
     } else {
         // first set start node to 0
@@ -190,13 +192,13 @@ void EdgePath::setStartPos(const QPointF& pos)
 
 void EdgePath::setEndPos(const QPointF& pos)
 {
-    if (d->end.node() == 0 && d->end.pos() == pos) {
+    if (d->end->node() == 0 && d->end->pos() == pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
-        d->end.setPos(pos);
+        d->end->setPos(pos);
         endConfig();
     } else {
         // first set end node to 0
@@ -209,24 +211,24 @@ void EdgePath::setEndPos(const QPointF& pos)
 
 tikz::Anchor EdgePath::startAnchor() const
 {
-    return d->start.anchor();
+    return d->start->anchor();
 }
 
 tikz::Anchor EdgePath::endAnchor() const
 {
-    return d->end.anchor();
+    return d->end->anchor();
 }
 
 void EdgePath::setStartAnchor(tikz::Anchor anchor)
 {
-    if (d->start.anchor() == anchor) {
+    if (d->start->anchor() == anchor) {
         return;
     }
 
     // set start node
     if (document()->undoActive()) {
         beginConfig();
-        d->start.setAnchor(anchor);
+        d->start->setAnchor(anchor);
         endConfig();
     } else {
         document()->undoManager()->push(
@@ -236,14 +238,14 @@ void EdgePath::setStartAnchor(tikz::Anchor anchor)
 
 void EdgePath::setEndAnchor(tikz::Anchor anchor)
 {
-    if (d->end.anchor() == anchor) {
+    if (d->end->anchor() == anchor) {
         return;
     }
 
     // set end node
     if (document()->undoActive()) {
         beginConfig();
-        d->end.setAnchor(anchor);
+        d->end->setAnchor(anchor);
         endConfig();
     } else {
         document()->undoManager()->push(

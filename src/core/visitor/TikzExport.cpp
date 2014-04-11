@@ -44,6 +44,7 @@ QString TikzExport::tikzCode()
     } else {
         doc += "\\begin{tikzpicture}[" + m_documentOptions + "]\n";
     }
+    doc += "\\draw[help lines, gray] (-3, -2) grid (4, 4);\n";
 
     //
     // add all lines

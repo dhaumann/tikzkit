@@ -32,6 +32,7 @@ namespace core {
 
 class MetaPosPrivate;
 class Node;
+class Document;
 
 /**
  * MetaPos describes a position in the tikz scene.
@@ -58,7 +59,7 @@ class TIKZCORE_EXPORT MetaPos : public QObject
          * care of deleting the MetaPos object correctly.
          *
          * However, to avoid having to take care of deletion, this typedef
-         * delets the MetaPos object automatically if no reference to the object
+         * deletes the MetaPos object automatically if no reference to the object
          * exists anymore.
          */
         typedef QSharedPointer<tikz::core::MetaPos> Ptr;
@@ -67,7 +68,7 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         /**
          * Default constructor.
          */
-        MetaPos(QObject * parent = 0);
+        MetaPos(Document * document);
 
         /**
          * Destructor
@@ -75,13 +76,22 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         virtual ~MetaPos();
 
         /**
+         * Get the associated Document.
+         */
+        Document * document() const;
+
+    //
+    // convenience functions
+    //
+    public:
+        /**
          * Get a clone of this MetaPos as shared pointer.
          *
          * @note This method is provided for convenience.
          *       The returned shared pointer is a copy. Hence, modifying the
          *       returned MetaPos::Ptr does not change this MetaPos.
          */
-        MetaPos::Ptr toPtr() const;
+        MetaPos::Ptr copy() const;
 
     //
     // x/y-position methods
@@ -139,6 +149,14 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         void changed();
 
     private:
+        /**
+         * Disable default constructor.
+         */
+        MetaPos();
+
+        /**
+         * Private data pointer.
+         */
         MetaPosPrivate * const d;
 };
 

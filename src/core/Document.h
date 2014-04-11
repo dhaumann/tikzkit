@@ -23,6 +23,7 @@
 #include "tikz_export.h"
 #include "tikz.h"
 #include "Path.h"
+#include "MetaPos.h"
 
 #include <QObject>
 #include <QVector>
@@ -189,6 +190,13 @@ class TIKZCORE_EXPORT Document : public QObject
     // Node and path creation
     //
     public:
+        /**
+         * Creates a MetaPos that is associated with this Document.
+         * The returned MetaPos can be used safely as long as this Document
+         * exists.
+         */
+        virtual tikz::core::MetaPos::Ptr createMetaPos();
+
         /**
          * Creates a new node associated with this document.
          * If the node is not needed anymore, delete it with deleteNode().
