@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -24,17 +24,14 @@
 namespace tikz {
 namespace core {
 
-UndoSetEllipsePos::UndoSetEllipsePos(qint64 pathId,
+UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      const MetaPos::Ptr & newPos,
                                      Document * doc)
     : UndoItem(doc)
-    , m_pathId(pathId)
+    , m_pathId(path->id())
     , m_redoPos(newPos)
+    , m_undoPos(path->metaPos())
 {
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
-    Q_ASSERT(path != 0);
-
-    m_undoPos = path->metaPos();
 }
 
 UndoSetEllipsePos::~UndoSetEllipsePos()

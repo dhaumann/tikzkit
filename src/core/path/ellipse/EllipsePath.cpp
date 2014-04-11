@@ -126,7 +126,7 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos::Ptr & pos)
         endConfig();
     } else {
         document()->undoManager()->push(
-            new UndoSetEllipsePos(id(), pos, document()));
+            new UndoSetEllipsePos(this, pos, document()));
     }
 }
 

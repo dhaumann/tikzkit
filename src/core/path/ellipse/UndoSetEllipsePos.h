@@ -27,13 +27,15 @@
 namespace tikz {
 namespace core {
 
+class EllipsePath;
+
 class UndoSetEllipsePos : public UndoItem
 {
     public:
         /**
          * Constructor.
          */
-        UndoSetEllipsePos(qint64 pathId,
+        UndoSetEllipsePos(EllipsePath * path,
                           const MetaPos::Ptr & newPos,
                           Document * doc);
 
