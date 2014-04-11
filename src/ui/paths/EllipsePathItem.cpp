@@ -79,7 +79,7 @@ QPointF EllipsePathItem::pos() const
         TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath()->node()->id());
         Q_ASSERT(tikzNode != nullptr);
 
-        return tikzNode->mapToScene(tikzNode->anchor(anchor()));
+        return tikzNode->anchor(anchor());
     } else {
         return ellipsePath()->pos();
     }

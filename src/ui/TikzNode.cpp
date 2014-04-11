@@ -150,7 +150,8 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
 
     QTransform trans;
     trans.scale(style()->scale(), style()->scale());
-    return trans.map(d->shape->anchorPos(anchor));
+    const QPointF p = trans.map(d->shape->anchorPos(anchor));
+    return mapToScene(p);
 }
 
 QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
@@ -163,7 +164,8 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
 
     QTransform trans;
     trans.scale(style()->scale(), style()->scale());
-    return trans.map(d->shape->contactPoint(anchor, rad));
+    const QPointF p = trans.map(d->shape->contactPoint(anchor, rad));
+    return mapToScene(p);
 }
 
 QRectF TikzNode::shapeRect() const

@@ -90,13 +90,13 @@ class TIKZUI_EXPORT TikzNode : public TikzItem
         QVector<tikz::Anchor> supportedAnchors() const;
 
         /**
-         * Returns the @p anchor in local node coordinates.
+         * Returns the @p anchor in scene coordinates.
          */
         QPointF anchor(tikz::Anchor anchor) const;
 
         /**
          * Returns the contact point of this node's shape for the requested
-         * @p anchor and angle @p rad.
+         * @p anchor and angle @p rad in scene coordinates.
          * @param anchor the anchor
          * @param rad the angle in rad
          */

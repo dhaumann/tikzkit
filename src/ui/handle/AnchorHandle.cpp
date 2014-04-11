@@ -56,7 +56,7 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     }
 
     // set position depending on the anchor
-    setPos(node->mapToScene(node->anchor(anchor)));
+    setPos(node->anchor(anchor));
 }
 
 AnchorHandle::~AnchorHandle()

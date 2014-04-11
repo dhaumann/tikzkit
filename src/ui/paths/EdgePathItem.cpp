@@ -137,7 +137,7 @@ QPointF EdgePathItem::startPos() const
 QPointF EdgePathItem::startPos(qreal rad) const
 {
     if (m_startNode) {
-        return mapFromItem(m_startNode, m_startNode->contactPoint(startAnchor(), rad));
+        return mapFromScene(m_startNode->contactPoint(startAnchor(), rad));
     } else {
         return mapFromScene(edgePath()->startPos());
     }
@@ -151,7 +151,7 @@ QPointF EdgePathItem::endPos() const
 QPointF EdgePathItem::endPos(qreal rad) const
 {
     if (m_endNode) {
-        return mapFromItem(m_endNode, m_endNode->contactPoint(endAnchor(), rad));
+        return mapFromScene(m_endNode->contactPoint(endAnchor(), rad));
     } else {
         return mapFromScene(edgePath()->endPos());
     }
@@ -180,11 +180,11 @@ void EdgePathItem::setEndAnchor(tikz::Anchor anchor)
 qreal EdgePathItem::baseAngle() const
 {
     const QPointF startPos =
-        m_startNode ? mapFromItem(m_startNode, m_startNode->anchor(startAnchor()))
+        m_startNode ? mapFromScene(m_startNode->anchor(startAnchor()))
               : mapFromScene(edgePath()->startPos());
 
     const QPointF endPos =
-        m_endNode ? mapFromItem(m_endNode, m_endNode->anchor(endAnchor()))
+        m_endNode ? mapFromScene(m_endNode->anchor(endAnchor()))
             : mapFromScene(edgePath()->endPos());
 
     const QPointF diff = endPos - startPos;

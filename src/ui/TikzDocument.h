@@ -84,7 +84,7 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
          * The returned MetaPos can be used safely as long as this Document
          * exists.
          */
-        virtual tikz::core::MetaPos::Ptr createMetaPos();
+        tikz::core::MetaPos::Ptr createMetaPos() override;
 
         /**
          * Creates a new TikzNode associated with this document.
