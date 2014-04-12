@@ -23,29 +23,24 @@
 #include "tikz.h"
 #include "tikz_export.h"
 
-#include <QObject>
 #include <QPointF>
 #include <QSharedPointer>
 
 namespace tikz {
 namespace core {
 
+class MetaPos;
 class MetaPosPrivate;
 class Node;
 class Document;
 
 /**
- * MetaPos describes a position in the tikz scene.
+ * MetaPos represents a position in the TikZ scene.
  * This position may either be a simple coordinate, or a node.
  * In case of a node, the anchor additionally takes effect.
  */
-class TIKZCORE_EXPORT MetaPos : public QObject
+class TIKZCORE_EXPORT MetaPos
 {
-    Q_OBJECT
-    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
-    Q_PROPERTY(tikz::core::Node* node READ node WRITE setNode)
-    Q_PROPERTY(tikz::Anchor anchor READ anchor WRITE setAnchor)
-
     //
     // types
     //
@@ -67,13 +62,22 @@ class TIKZCORE_EXPORT MetaPos : public QObject
     public:
         /**
          * Default constructor.
+         * The @p document should be a valid pointer, otherwise the behaviour
+         * is undefined.
          */
         MetaPos(Document * document);
 
         /**
-         * Destructor
+         * Copy constructor.
+         *
+         * Copies all data except the signal and slot connections.
          */
-        virtual ~MetaPos();
+        MetaPos(const MetaPos & pos);
+
+        /**
+         * Non-virtual destructor.
+         */
+        ~MetaPos();
 
         /**
          * Get the associated Document.
@@ -81,18 +85,25 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         Document * document() const;
 
     //
-    // convenience functions
+    // operators
     //
     public:
         /**
-         * Check for equality of this object with @p other.
+         * Assignment operator.
+         * The assignment operator copies all data. The notification object
+         * as well as its connection remain unchanged.
          */
-        bool equals(const MetaPos::Ptr & other) const;
+        MetaPos & operator=(const MetaPos & other);
 
         /**
          * Check for equality of this object with @p other.
          */
-        bool equals(const MetaPos * other) const;
+        bool operator==(const MetaPos & other) const;
+
+        /**
+         * Check for inequality of this object with @p other.
+         */
+        bool operator!=(const MetaPos & other) const;
 
     //
     // x/y-position methods
@@ -106,29 +117,10 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         virtual QPointF pos() const;
 
         /**
-         * Get a clone of this MetaPos as shared pointer.
-         *
-         * @note This method is provided for convenience.
-         *       The returned shared pointer is a copy. Hence, modifying the
-         *       returned MetaPos::Ptr does not change this MetaPos.
-         *
-         * @see set()
-         */
-        virtual MetaPos::Ptr copy() const;
-
-    public Q_SLOTS:
-        /**
          * Set the coordinates to @p pos.
          * Calling this function emits changed(), if @p pos != pos().
          */
         void setPos(const QPointF& pos);
-
-        /**
-         * Copy all properties of @p pos into this MetaPos object.
-         *
-         * @see copy()
-         */
-        void set(const MetaPos::Ptr & pos);
 
     //
     // Node methods
@@ -141,13 +133,6 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         Node* node() const;
 
         /**
-         * Get the anchor of this pos.
-         * The return value may be 0.
-         */
-        Anchor anchor() const;
-
-    public Q_SLOTS:
-        /**
          * Set the node to @p node.
          * Calling this function emits changed(), if @p pos != pos().
          * @return @p true, if the node changed, otherwise @p false.
@@ -155,17 +140,28 @@ class TIKZCORE_EXPORT MetaPos : public QObject
         bool setNode(Node* node);
 
         /**
+         * Get the anchor of this pos.
+         * The return value may be 0.
+         */
+        Anchor anchor() const;
+
+        /**
          * Set the anchor of this node to @p anchor.
          */
         void setAnchor(tikz::Anchor anchor);
 
-    Q_SIGNALS:
+    //
+    // Notification object
+    //
+    public:
         /**
-         * This signal is emitted either when a new node is set with setNode(),
-         * when the x/y position of the node changed, or when the associated
-         * NodeStyle of the node changed.
+         * Call this function to get the notification object.
+         * The notification object is a QObject that emits the signal
+         * \p void changed(MetaPos * metaPos).
+         *
+         * Connect to this object if you need to get change signals.
          */
-        void changed();
+        QObject * notificationObject();
 
     private:
         /**

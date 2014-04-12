@@ -30,7 +30,6 @@ set(qtikzui_SOURCES
     TikzDocument.cpp
     TikzItem.cpp
     TikzNode.cpp
-    MetaPos.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
 

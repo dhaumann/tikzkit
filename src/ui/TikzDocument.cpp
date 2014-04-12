@@ -31,7 +31,6 @@
 #include "EllipsePathItem.h"
 #include "EdgePathItem.h"
 #include "TikzScene.h"
-#include "MetaPos.h"
 
 #include <QDebug>
 #include <QGraphicsView>
@@ -110,11 +109,6 @@ void TikzDocument::setEditMode(TikzEditMode mode)
 TikzEditMode TikzDocument::editMode() const
 {
     return d->scene->editMode();
-}
-
-tikz::core::MetaPos::Ptr TikzDocument::createMetaPos()
-{
-    return tikz::ui::MetaPos::Ptr(new tikz::ui::MetaPos(this));
 }
 
 TikzNode * TikzDocument::createTikzNode()

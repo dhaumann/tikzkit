@@ -43,10 +43,11 @@ void MetaPosTest::testMetaPos()
     // initially (0, 0)
     QCOMPARE(m->pos(), QPointF(0, 0));
     QCOMPARE(m->node(), (tikz::core::Node*)0);
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // test changed signal
-    connect(m.data(), SIGNAL(changed()), this, SLOT(changedEmitted()));
+    connect(m->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
+            this, SLOT(changedEmitted()));
 
     // reset signal counter
     m_changeCount = 0;
@@ -54,14 +55,14 @@ void MetaPosTest::testMetaPos()
     // perform change
     m->setPos(QPointF(1, 1));
     QCOMPARE(m->pos(), QPointF(1, 1));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
 
     // make sure setNode with null pointer has no effect
     QVERIFY( ! m->setNode(0));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
     QCOMPARE(m_changeCount, 1);
 }
 
@@ -81,7 +82,8 @@ void MetaPosTest::testMetaPosWithNode()
     QCOMPARE(n->pos(), QPointF(5, 5));
 
     // connect to changed signal
-    connect(m.data(), SIGNAL(changed()), this, SLOT(changedEmitted()));
+    connect(m->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
+            this, SLOT(changedEmitted()));
 
     // reset changed counter
     m_changeCount = 0;
@@ -89,7 +91,7 @@ void MetaPosTest::testMetaPosWithNode()
     // check setting node
     QVERIFY(m->setNode(n));
     QCOMPARE(m->node(), n);
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
     QCOMPARE(m_changeCount, 1);
 
     // make sure setting same node again does nothing
@@ -98,7 +100,7 @@ void MetaPosTest::testMetaPosWithNode()
 
     // should be same as node pos
     QCOMPARE(m->pos(), QPointF(5, 5));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // reset signal counter
     m_changeCount = 0;
@@ -106,7 +108,7 @@ void MetaPosTest::testMetaPosWithNode()
     // perform change
     m->setPos(QPointF(1, 1));
     QCOMPARE(m->pos(), QPointF(1, 1));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // using setPos() resets node, test this
     QCOMPARE(m->node(), (tikz::core::Node*)0);
@@ -122,14 +124,14 @@ void MetaPosTest::testMetaPosWithNode()
     QCOMPARE(m->node(), n);
     QCOMPARE(n->pos(), QPointF(5, 5));
     QCOMPARE(m->pos(), QPointF(5, 5));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // now change node position
     m_changeCount = 0;
     n->setPos(QPointF(10, 10));
     QCOMPARE(n->pos(), QPointF(10, 10));
     QCOMPARE(m->pos(), QPointF(10, 10));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
     QCOMPARE(m_changeCount, 1);
 }
 
@@ -142,12 +144,12 @@ void MetaPosTest::testSet0()
     // set distinct node position
     n->setPos(QPointF(5, 5));
     QCOMPARE(n->pos(), QPointF(5, 5));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // check setting node
     QVERIFY(m->setNode(n));
     QCOMPARE(m->node(), n);
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 
     // now set node to 0 again
     QVERIFY(m->setNode(0));
@@ -155,7 +157,7 @@ void MetaPosTest::testSet0()
     // make sure the node is 0 and the position is kept
     QCOMPARE(m->node(), (tikz::core::Node*)0);
     QCOMPARE(m->pos(), QPointF(5, 5));
-    QVERIFY(m->equals(m));
+    QVERIFY(*m == *m);
 }
 
 void MetaPosTest::testMetaPosPtr()
@@ -164,13 +166,14 @@ void MetaPosTest::testMetaPosPtr()
     // ::Ptr is a copy that remains unchanged when pos chages.
     tikz::core::Document doc;
     tikz::core::MetaPos::Ptr m1 = doc.createMetaPos();
-    tikz::core::MetaPos::Ptr m2 = m1->copy();
-    QVERIFY(m1->equals(m2));
+    tikz::core::MetaPos::Ptr m2 = doc.createMetaPos();
+    *m2 = *m1;
+    QVERIFY(*m1 == *m2);
 
     m1->setPos(QPointF(3, 3));
     QCOMPARE(m1->pos(), QPointF(3, 3));
     QCOMPARE(m2->pos(), QPointF(0, 0));
-    QVERIFY(! m1->equals(m2));
+    QVERIFY(*m1 != *m2);
 
     // now test with Node
     tikz::core::Node * n = doc.createNode();
@@ -179,7 +182,7 @@ void MetaPosTest::testMetaPosPtr()
     m2->setPos(QPointF(1, 1));
     QCOMPARE(m1->pos(), QPointF(0, 0));
     QCOMPARE(m2->pos(), QPointF(1, 1));
-    QVERIFY(! m1->equals(m2));
+    QVERIFY(*m1 != *m2);
 }
 
 // kate: indent-width 4; replace-tabs on;

@@ -46,8 +46,8 @@ EdgePath::EdgePath(Type type, qint64 id, Document* doc)
     d->start = doc->createMetaPos();
     d->end = doc->createMetaPos();
 
-    connect(d->start.data(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
-    connect(d->end.data(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(d->start->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
+    connect(d->end->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
 }
 
 EdgePath::~EdgePath()
@@ -57,12 +57,16 @@ EdgePath::~EdgePath()
 
 tikz::core::MetaPos::Ptr EdgePath::startMetaPos() const
 {
-    return d->start->copy();
+    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
+    *pos = *d->start;
+    return pos;
 }
 
 tikz::core::MetaPos::Ptr EdgePath::endMetaPos() const
 {
-    return d->end->copy();
+    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
+    *pos = *d->end;
+    return pos;
 }
 
 void EdgePath::deconstruct()
@@ -161,14 +165,14 @@ void EdgePath::setEndPos(const QPointF& pos)
 
 void EdgePath::setStartMetaPos(const tikz::core::MetaPos::Ptr & pos)
 {
-    if (d->start->equals(pos)) {
+    if (*d->start == *pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = startNode();
-        d->start->set(pos);
+        *d->start = *pos;
         auto newNode = startNode();
         if (oldNode != newNode) {
             emit startNodeChanged(newNode);
@@ -182,14 +186,14 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos::Ptr & pos)
 
 void EdgePath::setEndMetaPos(const tikz::core::MetaPos::Ptr & pos)
 {
-    if (d->end->equals(pos)) {
+    if (*d->end == *pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = endNode();
-        d->end->set(pos);
+        *d->end = *pos;
         auto newNode = endNode();
         if (oldNode != newNode) {
             emit endNodeChanged(newNode);

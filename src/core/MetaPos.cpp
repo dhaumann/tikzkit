@@ -18,33 +18,24 @@
  */
 
 #include "MetaPos.h"
+#include "MetaPos_p.h"
+
 #include "Document.h"
 #include "Node.h"
 
-#include <QPointer>
 #include <QDebug>
 
 namespace tikz {
 namespace core {
 
-class MetaPosPrivate
-{
-    public:
-        Document * doc;
-        QPointF pos;
-        qint64 nodeId;
-        Anchor anchor;
-};
-
 MetaPos::MetaPos(Document * doc)
-    : QObject(doc)
-    , d(new MetaPosPrivate())
+    : d(new MetaPosPrivate(this))
 {
     Q_ASSERT(doc != nullptr);
-
     d->doc = doc;
-    d->nodeId = -1;
-    d->anchor = tikz::NoAnchor;
+
+    Q_ASSERT(d->nodeId = -1);
+    Q_ASSERT(d->anchor == tikz::NoAnchor);
 }
 
 MetaPos::~MetaPos()
@@ -57,68 +48,60 @@ Document * MetaPos::document() const
     return d->doc;
 }
 
-MetaPos::Ptr MetaPos::copy() const
+MetaPos & MetaPos::operator=(const MetaPos & other)
 {
-    // create shared MetaPos and copy private data
-    MetaPos::Ptr pos(new tikz::core::MetaPos(d->doc));
-    *pos->d = *d;
-    return pos;
-}
-
-void MetaPos::set(const MetaPos::Ptr & pos)
-{
-    if (equals(pos)) {
-        return;
+    if (*this == other) {
+        return *this;
     }
 
     // for now, only same Document is supported
-    Q_ASSERT(d->doc == pos->d->doc);
+    Q_ASSERT(d->doc == other.d->doc);
 
-    // copy private data
-    {
-        blockSignals(true);
+    // start copying private data
+    d->beginChange();
 
-        // call setNode() to properly set up signals & slots
-        setNode(pos->node());
+    // call setNode() to properly set up signals & slots
+    setNode(other.node());
 
-        // now copy rest
-        d->doc = pos->d->doc;
-        d->pos = pos->d->pos;
-        Q_ASSERT(d->nodeId == pos->d->nodeId);
-        d->anchor = pos->d->anchor;
+    // now copy rest
+    d->doc = other.d->doc;
+    d->pos = other.d->pos;
+    Q_ASSERT(d->nodeId == other.d->nodeId);
+    d->anchor = other.d->anchor;
 
-        blockSignals(false);
-    }
+    // calls changed
+    d->endChange();
 
-    emit changed();
+    return *this;
 }
 
-bool MetaPos::equals(const MetaPos::Ptr & other) const
+bool MetaPos::operator==(const MetaPos & other) const
 {
-    return equals(other.data());
-}
-
-bool MetaPos::equals(const MetaPos * other) const
-{
-    if (other == this) {
+    if (&other == this) {
         return true;
     }
 
-    if (! other || d->doc != other->d->doc) {
-        Q_ASSERT(d->doc == other->d->doc);
+    if (d->doc != other.d->doc) {
+        Q_ASSERT(d->doc == other.d->doc);
         return false;
     }
 
-    if (d->nodeId >= 0 || other->d->nodeId >= 0) {
-        return d->nodeId == other->d->nodeId
-            && d->anchor == other->d->anchor;
+    if (d->nodeId >= 0 || other.d->nodeId >= 0) {
+        return d->nodeId == other.d->nodeId
+            && d->anchor == other.d->anchor;
     }
 
-    return d->pos == other->d->pos;
+    return d->pos == other.d->pos;
+}
+
+bool MetaPos::operator!=(const MetaPos & other) const
+{
+    return ! (*this == other);
 }
 
 QPointF MetaPos::pos() const
 {
+    // TODO: query document() to resolve position
     const Node * n = node();
 
     return n ? n->pos()
@@ -129,10 +112,11 @@ void MetaPos::setPos(const QPointF& pos)
 {
     bool change = false;
 
+    // detach from node, if required
     Node * oldNode = node();
     if (oldNode) {
-        // disconnect changed() signal ...
-        disconnect(oldNode, 0, this, 0);
+        // disconnect changed() signal
+        QObject::disconnect(oldNode, 0, d, 0);
         d->nodeId = -1;
 
         change = true;
@@ -145,9 +129,9 @@ void MetaPos::setPos(const QPointF& pos)
         change = true;
     }
 
+    // notify about change
     if (change) {
-        // notify about change
-        emit changed();
+        d->changeRequest();
     }
 }
 
@@ -160,9 +144,13 @@ bool MetaPos::setNode(Node* newNode)
         return false;
     }
 
-    // disconnect changed() signal ...
+    // start changing this MetaPos
+    d->beginChange();
+
+    // detach from old node
     if (curNode) {
-        disconnect(curNode, 0, this, 0);
+        // disconnect changed() signal
+        QObject::disconnect(curNode, 0, d, 0);
 
         // update pos in case the newNode is 0
         d->pos = curNode->pos();
@@ -172,15 +160,17 @@ bool MetaPos::setNode(Node* newNode)
     d->nodeId = newNode ? newNode->id() : -1;
     curNode = node();
 
+    // attach to newNode
     if (curNode) {
-        connect(curNode, SIGNAL(changed()), this, SIGNAL(changed()));
+        // connect changed() signal to helper object
+        QObject::connect(curNode, SIGNAL(changed()), d, SLOT(changeRequest()));
     }
 
     // reset anchor
     d->anchor = NoAnchor;
 
     // notify about change
-    emit changed();
+    d->endChange();
 
     // node was changed
     return true;
@@ -193,18 +183,24 @@ Node* MetaPos::node() const
 
 void MetaPos::setAnchor(tikz::Anchor anchor)
 {
-    // setting an anchor only makes sense with node
+    // setting an anchor only makes sense with a node
     Q_ASSERT(d->nodeId >= 0);
 
     if (d->anchor != anchor) {
+        d->beginChange();
         d->anchor = anchor;
-        emit changed();
+        d->endChange();
     }
 }
 
 Anchor MetaPos::anchor() const
 {
     return (d->nodeId >= 0) ? d->anchor : tikz::NoAnchor;
+}
+
+QObject * MetaPos::notificationObject()
+{
+    return d;
 }
 
 }

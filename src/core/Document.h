@@ -195,7 +195,7 @@ class TIKZCORE_EXPORT Document : public QObject
          * The returned MetaPos can be used safely as long as this Document
          * exists.
          */
-        virtual tikz::core::MetaPos::Ptr createMetaPos();
+        tikz::core::MetaPos::Ptr createMetaPos();
 
         /**
          * Creates a new node associated with this document.

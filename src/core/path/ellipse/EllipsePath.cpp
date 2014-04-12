@@ -40,7 +40,8 @@ EllipsePath::EllipsePath(qint64 id, Document* doc)
 {
     d->pos = doc->createMetaPos();
 
-    connect(d->pos.data(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    connect(d->pos->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
+            this, SLOT(emitChangedIfNeeded()));
 }
 
 EllipsePath::~EllipsePath()
@@ -106,19 +107,21 @@ void EllipsePath::setPos(const QPointF& pos)
 
 tikz::core::MetaPos::Ptr EllipsePath::metaPos() const
 {
-    return d->pos->copy();
+    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
+    *pos = *d->pos;
+    return pos;
 }
 
 void EllipsePath::setMetaPos(const tikz::core::MetaPos::Ptr & pos)
 {
-    if (d->pos->equals(pos)) {
+    if (*d->pos == *pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = node();
-        d->pos->set(pos);
+        *d->pos = *pos;
         auto newNode = node();
         if (oldNode != newNode) {
             emit nodeChanged(newNode);
