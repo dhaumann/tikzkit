@@ -31,18 +31,17 @@ namespace core {
 class Document;
 class MetaPos2;
 class MetaPosHelper;
-class MetaPosFeedback;
 
 /**
  * Private data structure for MetaPos.
  */
-class MetaPos2Private
+class MetaPos2Private : public QObject
 {
+    Q_OBJECT
+
     public:
         MetaPos2 * q;
         Document * doc;
-        MetaPosHelper * help;
-        MetaPosFeedback * feedback;
 
         QPointF pos;
         qint64 nodeId;
@@ -50,9 +49,6 @@ class MetaPos2Private
 
     public:
         MetaPos2Private(MetaPos2 * metaPos);
-        ~MetaPos2Private();
-        MetaPosHelper * helper();
-        void freeHelper();
 
     public:
         /**
@@ -72,39 +68,25 @@ class MetaPos2Private
          */
         void endChange();
 
-    protected:
+    public Q_SLOTS:
         /**
-         * Call this function to tell the registered MetaPosFeedback
-         * object that this MetaPos changed.
+         * This slot is called whenever attached Node%s changed.
          */
-        void changed();
+        void changeRequest();
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted either when a new node is set with setNode(),
+         * when the x/y position of the node changed, or when the associated
+         * NodeStyle of the node changed.
+         */
+        void changed(tikz::core::MetaPos2 * metaPos);
+
+    protected:
         /**
          * Change ref counter;
          */
         int changeRefCounter;
-};
-
-/**
- * QObject-derived helper class to propagate node changes
- * to the associated MetaPos.
- *
- * @note This class exists only to use Qt signals/slots.
- *       Deriving MetaPos from QObject is not an option, since then the
- *       value semantics would be lost.
- */
-class MetaPosHelper : public QObject
-{
-    Q_OBJECT
-
-    public:
-        MetaPosHelper(MetaPos2 * metaPos);
-
-    public Q_SLOTS:
-        void propagateNodeChange();
-
-    private:
-        MetaPos2 * m_metaPos;
 };
 
 }

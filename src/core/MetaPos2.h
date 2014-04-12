@@ -35,22 +35,6 @@ class Node;
 class Document;
 
 /**
- * Feedback class that relays MetaPos changes to this receiver.
- */
-class MetaPosFeedback
-{
-public:
-    virtual ~MetaPosFeedback()
-    {}
-
-    /**
-     * This function is called whenever the @p metaPos changed.
-     */
-    virtual void metaPosChanged(MetaPos2 * metaPos)
-    {}
-};
-
-/**
  * MetaPos represents a position in the TikZ scene.
  * This position may either be a simple coordinate, or a node.
  * In case of a node, the anchor additionally takes effect.
@@ -86,7 +70,7 @@ class TIKZCORE_EXPORT MetaPos2
         /**
          * Copy constructor.
          *
-         * Copies all data except the registered MetaPosFeedback instances.
+         * Copies all data except the signal and slot connections.
          */
         MetaPos2(const MetaPos2 & pos);
 
@@ -106,8 +90,8 @@ class TIKZCORE_EXPORT MetaPos2
     public:
         /**
          * Assignment operator.
-         * The assignment operator copies all data. The registered MetaPosFeedback
-         * instances remain unchanged, though.
+         * The assignment operator copies all data. The notification object
+         * as well as its connection remain unchanged.
          */
         MetaPos2 & operator=(const MetaPos2 & other);
 
@@ -162,15 +146,17 @@ class TIKZCORE_EXPORT MetaPos2
         void setAnchor(tikz::Anchor anchor);
 
     //
-    // MetaPosFeedback
+    // Notification object
     //
     public:
         /**
-         * Call this function to set the @p feedback as receiver of changes
-         * of this MetaPos. Make sure to call setFeedback(0) to unregister
-         * @p receiver again.
+         * Call this function to get the notification object.
+         * The notification object is a QObject that emits the signal
+         * \p void changed(MetaPos * metaPos).
+         *
+         * Connect to this object if you need to get change signals.
          */
-        void setFeedback(MetaPosFeedback * receiver);
+        QObject * notificationObject();
 
     private:
         /**
@@ -182,8 +168,6 @@ class TIKZCORE_EXPORT MetaPos2
          * Private data pointer.
          */
         MetaPos2Private * const d;
-
-        friend class MetaPosHelper;
 };
 
 }

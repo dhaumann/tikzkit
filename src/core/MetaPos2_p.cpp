@@ -24,34 +24,13 @@ namespace tikz {
 namespace core {
 
 MetaPos2Private::MetaPos2Private(MetaPos2 * metaPos)
-    : q(metaPos)
-    , help(0)
-    , feedback(0)
+    : QObject()
+    , q(metaPos)
     , doc(0)
     , nodeId(-1)
     , anchor(tikz::NoAnchor)
     , changeRefCounter(0)
 {
-}
-
-MetaPos2Private::~MetaPos2Private()
-{
-    freeHelper();
-}
-
-MetaPosHelper * MetaPos2Private::helper()
-{
-    if (! help) {
-        help = new MetaPosHelper(q);
-    }
-
-    return help;
-}
-
-void MetaPos2Private::freeHelper()
-{
-    delete help;
-    help = 0;
 }
 
 void MetaPos2Private::beginChange()
@@ -66,30 +45,14 @@ void MetaPos2Private::endChange()
 
     --changeRefCounter;
     if (changeRefCounter == 0) {
-        changed();
+        emit changed(q);
     }
 }
 
-void MetaPos2Private::changed()
+void MetaPos2Private::changeRequest()
 {
-    if (feedback) {
-        feedback->metaPosChanged(q);
-    }
-}
-
-
-
-
-MetaPosHelper::MetaPosHelper(MetaPos2 * metaPos)
-    : QObject()
-    , m_metaPos(metaPos)
-{
-}
-
-void MetaPosHelper::propagateNodeChange()
-{
-    m_metaPos->d->beginChange();
-    m_metaPos->d->endChange();
+    beginChange();
+    endChange();
 }
 
 }

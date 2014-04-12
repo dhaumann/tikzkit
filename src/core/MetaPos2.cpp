@@ -111,8 +111,7 @@ void MetaPos2::setPos(const QPointF& pos)
     Node * oldNode = node();
     if (oldNode) {
         // disconnect changed() signal
-        d->freeHelper();
-
+        QObject::disconnect(oldNode, 0, d, 0);
         d->nodeId = -1;
 
         change = true;
@@ -127,8 +126,7 @@ void MetaPos2::setPos(const QPointF& pos)
 
     // notify about change
     if (change) {
-        d->beginChange();
-        d->endChange();
+        d->changeRequest();
     }
 }
 
@@ -147,7 +145,7 @@ bool MetaPos2::setNode(Node* newNode)
     // detach from old node
     if (curNode) {
         // disconnect changed() signal
-        d->freeHelper();
+        QObject::disconnect(curNode, 0, d, 0);
 
         // update pos in case the newNode is 0
         d->pos = curNode->pos();
@@ -160,8 +158,7 @@ bool MetaPos2::setNode(Node* newNode)
     // attach to newNode
     if (curNode) {
         // connect changed() signal to helper object
-        QObject::connect(curNode, SIGNAL(changed()),
-                         d->helper(), SIGNAL(propagateNodeChange()));
+        QObject::connect(curNode, SIGNAL(changed()), d, SIGNAL(changeRequest()));
     }
 
     // reset anchor
@@ -196,9 +193,9 @@ Anchor MetaPos2::anchor() const
     return (d->nodeId >= 0) ? d->anchor : tikz::NoAnchor;
 }
 
-void MetaPos2::setFeedback(MetaPosFeedback * receiver)
+QObject * MetaPos2::notificationObject()
 {
-    d->feedback = receiver;
+    return d;
 }
 
 }
