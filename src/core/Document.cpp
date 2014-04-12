@@ -200,6 +200,16 @@ bool Document::isModified() const
     return ! d->undoManager.isClean();
 }
 
+QPointF Document::scenePos(const MetaPos & pos) const
+{
+    const auto node = pos.node();
+    if (!node) {
+        return pos.pos();
+    }
+
+    return node->pos();
+}
+
 Style * Document::style() const
 {
     return d->style;

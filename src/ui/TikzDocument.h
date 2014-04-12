@@ -24,6 +24,7 @@
 #include "tikzgui.h"
 
 #include <tikz/core/Document.h>
+#include <tikz/core/MetaPos.h>
 
 class QGraphicsView;
 
@@ -75,6 +76,16 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
          */
         void editModeChanged(TikzEditMode mode) const;
 
+
+    //
+    // convenience functions
+    //
+    public:
+        /**
+         * Returns the position for @p pos in QPointF coordinates.
+         */
+        QPointF scenePos(const tikz::core::MetaPos & pos) const override;
+
     //
     // Node and path creation
     //
@@ -112,14 +123,14 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
          * @param id unique id of the node
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        TikzNode * tikzNodeFromId(qint64 id);
+        TikzNode * tikzNodeFromId(qint64 id) const;
 
         /**
          * Get the tikz::ui::PathItem with @p id.
          * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        tikz::ui::PathItem * tikzPathFromId(qint64 id);
+        tikz::ui::PathItem * tikzPathFromId(qint64 id) const;
 
     //
     // internal: Undo / redo items manipulate with ID

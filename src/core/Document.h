@@ -152,6 +152,15 @@ class TIKZCORE_EXPORT Document : public QObject
         bool isModified() const;
 
     //
+    // convenience functions
+    //
+    public:
+        /**
+         * Returns the position for @p pos in QPointF coordinates.
+         */
+        virtual QPointF scenePos(const MetaPos & pos) const;
+
+    //
     // Node, Path and style management
     //
     public:

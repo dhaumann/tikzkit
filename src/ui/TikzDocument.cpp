@@ -111,6 +111,18 @@ TikzEditMode TikzDocument::editMode() const
     return d->scene->editMode();
 }
 
+QPointF TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
+{
+    const auto node = pos.node();
+    if (node) {
+        const TikzNode * tikzNode = tikzNodeFromId(node->id());
+        Q_ASSERT(tikzNode != nullptr);
+        return tikzNode->anchor(pos.anchor());
+    }
+
+    return Document::scenePos(pos);
+}
+
 TikzNode * TikzDocument::createTikzNode()
 {
     // create node
@@ -248,7 +260,7 @@ void TikzDocument::deletePath(qint64 id)
     tikz::core::Document::deletePath(id);
 }
 
-TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
+TikzNode * TikzDocument::tikzNodeFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;
@@ -258,7 +270,7 @@ TikzNode * TikzDocument::tikzNodeFromId(qint64 id)
     return d->nodeMap[id];
 }
 
-tikz::ui::PathItem * TikzDocument::tikzPathFromId(qint64 id)
+tikz::ui::PathItem * TikzDocument::tikzPathFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;

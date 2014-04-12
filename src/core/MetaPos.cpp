@@ -110,11 +110,13 @@ bool MetaPos::operator!=(const MetaPos & other) const
 
 QPointF MetaPos::pos() const
 {
-    // TODO: query document() to resolve position
-    const Node * n = node();
+    if (d->nodeId < 0) {
+        Q_ASSERT(node() == nullptr);
+        return d->pos;
+    }
 
-    return n ? n->pos()
-             : d->pos;
+    Q_ASSERT(node() != nullptr);
+    return document()->scenePos(*this);
 }
 
 void MetaPos::setPos(const QPointF& pos)
@@ -162,7 +164,7 @@ bool MetaPos::setNode(Node* newNode)
         QObject::disconnect(curNode, 0, d, 0);
 
         // update pos in case the newNode is 0
-        d->pos = curNode->pos();
+        d->pos = pos();
     }
 
     // set new node and forward change() signal if applicable
