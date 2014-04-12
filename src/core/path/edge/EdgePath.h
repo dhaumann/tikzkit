@@ -67,7 +67,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          *       The returned shared pointer is a copy of position data.
          *       Hence, modifying the returned MetaPos::Ptr does not change this object.
          */
-        tikz::core::MetaPos::Ptr startMetaPos() const;
+        const tikz::core::MetaPos & startMetaPos() const;
 
         /**
          * Get the end of this edge as a shared MetaPos object.
@@ -76,7 +76,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          *       The returned shared pointer is a copy of position data.
          *       Hence, modifying the returned MetaPos::Ptr does not change this object.
          */
-        tikz::core::MetaPos::Ptr endMetaPos() const;
+        const tikz::core::MetaPos & endMetaPos() const;
 
     //
     // Node start / end manipulation
@@ -107,12 +107,12 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Set the start position of this path to @p pos.
          */
-        void setStartMetaPos(const tikz::core::MetaPos::Ptr & pos);
+        void setStartMetaPos(const tikz::core::MetaPos & pos);
 
         /**
          * Set the end position of this path to @p pos.
          */
-        void setEndMetaPos(const tikz::core::MetaPos::Ptr & pos);
+        void setEndMetaPos(const tikz::core::MetaPos & pos);
 
     //
     // x/y-position methods

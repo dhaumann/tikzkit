@@ -28,26 +28,29 @@ namespace core {
 class EdgePathPrivate
 {
     public:
+        EdgePathPrivate(Document * doc)
+            : start(doc)
+            , end(doc)
+        {}
+
         // the element type of this edge
         Path::Type type;
 
         // start meta node this edge points to
-        MetaPos::Ptr start;
+        MetaPos start;
 
         // target/end meta node this edge points to
-        MetaPos::Ptr end;
+        MetaPos end;
 };
 
 EdgePath::EdgePath(Type type, qint64 id, Document* doc)
     : Path(id, doc)
-    , d(new EdgePathPrivate())
+    , d(new EdgePathPrivate(doc))
 {
     d->type = type;
-    d->start = doc->createMetaPos();
-    d->end = doc->createMetaPos();
 
-    connect(d->start->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
-    connect(d->end->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
+    connect(d->start.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
+    connect(d->end.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)), this, SLOT(emitChangedIfNeeded()));
 }
 
 EdgePath::~EdgePath()
@@ -55,18 +58,14 @@ EdgePath::~EdgePath()
     delete d;
 }
 
-tikz::core::MetaPos::Ptr EdgePath::startMetaPos() const
+const tikz::core::MetaPos & EdgePath::startMetaPos() const
 {
-    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
-    *pos = *d->start;
-    return pos;
+    return d->start;
 }
 
-tikz::core::MetaPos::Ptr EdgePath::endMetaPos() const
+const tikz::core::MetaPos & EdgePath::endMetaPos() const
 {
-    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
-    *pos = *d->end;
-    return pos;
+    return d->end;
 }
 
 void EdgePath::deconstruct()
@@ -85,21 +84,21 @@ void EdgePath::detachFromNode(Node * node)
     Q_ASSERT(node != 0);
 
     // disconnect start from node, if currently attached
-    if (d->start->node() == node) {
+    if (d->start.node() == node) {
         auto newPos = startMetaPos();
-        newPos->setNode(0);
+        newPos.setNode(0);
         setStartMetaPos(newPos);
     }
 
     // disconnect end from node, if currently attached
-    if (d->end->node() == node) {
+    if (d->end.node() == node) {
         auto newPos = endMetaPos();
-        newPos->setNode(0);
+        newPos.setNode(0);
         setEndMetaPos(newPos);
     }
 
-    Q_ASSERT(d->start->node() != node);
-    Q_ASSERT(d->end->node() != node);
+    Q_ASSERT(d->start.node() != node);
+    Q_ASSERT(d->end.node() != node);
 }
 
 Path::Type EdgePath::type() const
@@ -110,69 +109,69 @@ Path::Type EdgePath::type() const
 void EdgePath::setStartNode(Node* node)
 {
     auto newPos = startMetaPos();
-    newPos->setNode(node);
+    newPos.setNode(node);
     setStartMetaPos(newPos);
 
-    Q_ASSERT(d->start->node() == node);
+    Q_ASSERT(d->start.node() == node);
 }
 
 void EdgePath::setEndNode(Node* node)
 {
     auto newPos = endMetaPos();
-    newPos->setNode(node);
+    newPos.setNode(node);
     setEndMetaPos(newPos);
 
-    Q_ASSERT(d->end->node() == node);
+    Q_ASSERT(d->end.node() == node);
 }
 
 Node* EdgePath::startNode() const
 {
-    return d->start->node();
+    return d->start.node();
 }
 
 Node* EdgePath::endNode()
 {
-    return d->end->node();
+    return d->end.node();
 }
 
 QPointF EdgePath::startPos() const
 {
-    return d->start->pos();
+    return d->start.pos();
 }
 
 QPointF EdgePath::endPos() const
 {
-    return d->end->pos();
+    return d->end.pos();
 }
 
 void EdgePath::setStartPos(const QPointF& pos)
 {
     auto newPos = startMetaPos();
-    newPos->setPos(pos);
+    newPos.setPos(pos);
     setStartMetaPos(newPos);
 
-    Q_ASSERT(d->start->pos() == pos);
+    Q_ASSERT(d->start.pos() == pos);
 }
 
 void EdgePath::setEndPos(const QPointF& pos)
 {
     auto newPos = endMetaPos();
-    newPos->setPos(pos);
+    newPos.setPos(pos);
     setEndMetaPos(newPos);
 
-    Q_ASSERT(d->end->pos() == pos);
+    Q_ASSERT(d->end.pos() == pos);
 }
 
-void EdgePath::setStartMetaPos(const tikz::core::MetaPos::Ptr & pos)
+void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
 {
-    if (*d->start == *pos) {
+    if (d->start == pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = startNode();
-        *d->start = *pos;
+        d->start = pos;
         auto newNode = startNode();
         if (oldNode != newNode) {
             emit startNodeChanged(newNode);
@@ -184,16 +183,16 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos::Ptr & pos)
     }
 }
 
-void EdgePath::setEndMetaPos(const tikz::core::MetaPos::Ptr & pos)
+void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
 {
-    if (*d->end == *pos) {
+    if (d->end == pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = endNode();
-        *d->end = *pos;
+        d->end = pos;
         auto newNode = endNode();
         if (oldNode != newNode) {
             emit endNodeChanged(newNode);
@@ -207,30 +206,30 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos::Ptr & pos)
 
 tikz::Anchor EdgePath::startAnchor() const
 {
-    return d->start->anchor();
+    return d->start.anchor();
 }
 
 tikz::Anchor EdgePath::endAnchor() const
 {
-    return d->end->anchor();
+    return d->end.anchor();
 }
 
 void EdgePath::setStartAnchor(tikz::Anchor anchor)
 {
     auto newPos = startMetaPos();
-    newPos->setAnchor(anchor);
+    newPos.setAnchor(anchor);
     setStartMetaPos(newPos);
 
-    Q_ASSERT(d->start->anchor() == anchor);
+    Q_ASSERT(d->start.anchor() == anchor);
 }
 
 void EdgePath::setEndAnchor(tikz::Anchor anchor)
 {
     auto newPos = endMetaPos();
-    newPos->setAnchor(anchor);
+    newPos.setAnchor(anchor);
     setEndMetaPos(newPos);
 
-    Q_ASSERT(d->end->anchor() == anchor);
+    Q_ASSERT(d->end.anchor() == anchor);
 }
 
 }

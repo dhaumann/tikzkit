@@ -30,17 +30,18 @@ namespace core {
 class EllipsePathPrivate
 {
     public:
+        EllipsePathPrivate(Document * doc)
+            : pos(doc)
+        {}
         // meta node this ellipse
-        MetaPos::Ptr pos;
+        MetaPos pos;
 };
 
 EllipsePath::EllipsePath(qint64 id, Document* doc)
     : Path(id, doc)
-    , d(new EllipsePathPrivate())
+    , d(new EllipsePathPrivate(doc))
 {
-    d->pos = doc->createMetaPos();
-
-    connect(d->pos->notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
+    connect(d->pos.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
             this, SLOT(emitChangedIfNeeded()));
 }
 
@@ -69,59 +70,57 @@ void EllipsePath::detachFromNode(Node * node)
     Q_ASSERT(node != 0);
 
     // disconnect from node, if currently attached
-    if (d->pos->node() == node) {
+    if (d->pos.node() == node) {
         auto newPos = metaPos();
-        newPos->setNode(0);
+        newPos.setNode(0);
         setMetaPos(newPos);
     }
-    Q_ASSERT(d->pos->node() != node);
+    Q_ASSERT(d->pos.node() != node);
 }
 
 void EllipsePath::setNode(Node* node)
 {
     auto newPos = metaPos();
-    newPos->setNode(node);
+    newPos.setNode(node);
     setMetaPos(newPos);
 
-    Q_ASSERT(d->pos->node() == node);
+    Q_ASSERT(d->pos.node() == node);
 }
 
 Node* EllipsePath::node() const
 {
-    return d->pos->node();
+    return d->pos.node();
 }
 
 QPointF EllipsePath::pos() const
 {
-    return d->pos->pos();
+    return d->pos.pos();
 }
 
 void EllipsePath::setPos(const QPointF& pos)
 {
     auto newPos = metaPos();
-    newPos->setPos(pos);
+    newPos.setPos(pos);
     setMetaPos(newPos);
 
-    Q_ASSERT(d->pos->pos() == pos);
+    Q_ASSERT(d->pos.pos() == pos);
 }
 
-tikz::core::MetaPos::Ptr EllipsePath::metaPos() const
+const tikz::core::MetaPos & EllipsePath::metaPos() const
 {
-    tikz::core::MetaPos::Ptr pos(document()->createMetaPos());
-    *pos = *d->pos;
-    return pos;
+    return d->pos;
 }
 
-void EllipsePath::setMetaPos(const tikz::core::MetaPos::Ptr & pos)
+void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
 {
-    if (*d->pos == *pos) {
+    if (d->pos == pos) {
         return;
     }
 
     if (document()->undoActive()) {
         beginConfig();
         auto oldNode = node();
-        *d->pos = *pos;
+        d->pos = pos;
         auto newNode = node();
         if (oldNode != newNode) {
             emit nodeChanged(newNode);
@@ -135,16 +134,16 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos::Ptr & pos)
 
 tikz::Anchor EllipsePath::anchor() const
 {
-    return d->pos->anchor();
+    return d->pos.anchor();
 }
 
 void EllipsePath::setAnchor(tikz::Anchor anchor)
 {
     auto newPos = metaPos();
-    newPos->setAnchor(anchor);
+    newPos.setAnchor(anchor);
     setMetaPos(newPos);
 
-    Q_ASSERT(d->pos->anchor() == anchor);
+    Q_ASSERT(d->pos.anchor() == anchor);
 }
 
 }

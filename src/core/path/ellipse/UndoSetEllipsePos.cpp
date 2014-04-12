@@ -25,7 +25,7 @@ namespace tikz {
 namespace core {
 
 UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
-                                     const MetaPos::Ptr & newPos,
+                                     const MetaPos & newPos,
                                      Document * doc)
     : UndoItem(doc)
     , m_pathId(path->id())

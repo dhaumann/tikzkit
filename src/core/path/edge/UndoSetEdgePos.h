@@ -36,8 +36,8 @@ class UndoSetEdgePos : public UndoItem
          * Constructor.
          */
         UndoSetEdgePos(EdgePath * path,
-                       const MetaPos::Ptr & oldPos,
-                       const MetaPos::Ptr & newPos,
+                       const MetaPos & oldPos,
+                       const MetaPos & newPos,
                        bool isStartNode,
                        Document * doc);
 
@@ -65,12 +65,12 @@ class UndoSetEdgePos : public UndoItem
         /**
          * old anchor of the connection
          */
-        tikz::core::MetaPos::Ptr m_undoPos;
+        tikz::core::MetaPos m_undoPos;
 
         /**
          * new anchor of the connection
          */
-        tikz::core::MetaPos::Ptr m_redoPos;
+        tikz::core::MetaPos m_redoPos;
 
         /**
          * Is it start or end node?

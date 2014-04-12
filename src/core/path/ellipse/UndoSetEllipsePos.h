@@ -36,7 +36,7 @@ class UndoSetEllipsePos : public UndoItem
          * Constructor.
          */
         UndoSetEllipsePos(EllipsePath * path,
-                          const MetaPos::Ptr & newPos,
+                          const MetaPos & newPos,
                           Document * doc);
 
         /**
@@ -63,12 +63,12 @@ class UndoSetEllipsePos : public UndoItem
         /**
          * old anchor of the connection
          */
-        tikz::core::MetaPos::Ptr m_undoPos;
+        tikz::core::MetaPos m_undoPos;
 
         /**
          * new anchor of the connection
          */
-        tikz::core::MetaPos::Ptr m_redoPos;
+        tikz::core::MetaPos m_redoPos;
 };
 
 }

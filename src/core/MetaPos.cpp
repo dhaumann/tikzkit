@@ -38,6 +38,15 @@ MetaPos::MetaPos(Document * doc)
     Q_ASSERT(d->anchor == tikz::NoAnchor);
 }
 
+MetaPos::MetaPos(const MetaPos & pos)
+    : d(new MetaPosPrivate(this))
+{
+    d->doc = pos.d->doc;
+
+    // now copy object
+    *this = pos;
+}
+
 MetaPos::~MetaPos()
 {
     delete d;

@@ -157,14 +157,14 @@ void TikzExportVisitor::visit(Node * node)
 /**
  * Get the position of @p metaPos either in the form (1.2, 5.3) or as (1.center)
  */
-static QString toCoord(tikz::core::MetaPos::Ptr metaPos)
+static QString toCoord(tikz::core::MetaPos metaPos)
 {
     QString coord;
-    if (metaPos->node()) {
-        const QString anchor = anchorToString(metaPos->anchor());
-        coord = "(" + QString::number(metaPos->node()->id()) + anchor + ")";
+    if (metaPos.node()) {
+        const QString anchor = anchorToString(metaPos.anchor());
+        coord = "(" + QString::number(metaPos.node()->id()) + anchor + ")";
     } else {
-        const QPointF & pos = metaPos->pos();
+        const QPointF & pos = metaPos.pos();
         coord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
     }
     return coord;

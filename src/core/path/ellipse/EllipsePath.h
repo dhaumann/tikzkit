@@ -87,7 +87,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          *       Hence, modifying the returned MetaPos::Ptr does not change
          *       this ellipse.
          */
-        tikz::core::MetaPos::Ptr metaPos() const;
+        const tikz::core::MetaPos & metaPos() const;
 
     public Q_SLOTS:
         /**
@@ -99,7 +99,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         /**
          * Set the position of this ellipse as a shared MetaPos object.
          */
-        void setMetaPos(const tikz::core::MetaPos::Ptr & pos);
+        void setMetaPos(const tikz::core::MetaPos & pos);
 
     //
     // anchor methods

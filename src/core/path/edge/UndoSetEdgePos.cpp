@@ -25,8 +25,8 @@ namespace tikz {
 namespace core {
 
 UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
-                               const MetaPos::Ptr & oldPos,
-                               const MetaPos::Ptr & newPos,
+                               const MetaPos & oldPos,
+                               const MetaPos & newPos,
                                bool isStartNode,
                                Document * doc)
     : UndoItem(doc)

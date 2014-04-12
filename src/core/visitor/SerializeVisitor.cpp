@@ -117,15 +117,15 @@ void SerializeVisitor::visit(Node * node)
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
-static QVariantMap serializeMetaPos(tikz::core::MetaPos::Ptr metaPos)
+static QVariantMap serializeMetaPos(const tikz::core::MetaPos & metaPos)
 {
     QVariantMap map;
-    if (metaPos->node()) {
-        map.insert("node", metaPos->node()->id());
-        map.insert("anchor", metaPos->anchor());
+    if (metaPos.node()) {
+        map.insert("node", metaPos.node()->id());
+        map.insert("anchor", metaPos.anchor());
     } else {
-        map.insert("x", metaPos->pos().x());
-        map.insert("y", metaPos->pos().y());
+        map.insert("x", metaPos.pos().x());
+        map.insert("y", metaPos.pos().y());
     }
     return map;
 }
