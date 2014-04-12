@@ -41,6 +41,11 @@ UndoSetEdgePos::~UndoSetEdgePos()
 {
 }
 
+int UndoSetEdgePos::id() const
+{
+    return m_pathId;
+}
+
 void UndoSetEdgePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
@@ -71,6 +76,19 @@ void UndoSetEdgePos::redo()
     }
 
     document()->setUndoActive(wasActive);
+}
+
+bool UndoSetEdgePos::mergeWith(const QUndoCommand * command)
+{
+    Q_ASSERT(id() == command->id());
+
+    auto other = dynamic_cast<const UndoSetEdgePos*>(command);
+    if (other && m_isStart == other->m_isStart) {
+        m_redoPos = other->m_redoPos;
+        return true;
+    }
+
+    return false;
 }
 
 }

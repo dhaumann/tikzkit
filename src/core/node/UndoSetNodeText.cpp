@@ -71,12 +71,12 @@ bool UndoSetNodeText::mergeWith(const QUndoCommand * command)
     Q_ASSERT(id() == command->id());
 
     // only merge when command is of correct type
-    const UndoSetNodeText * other = dynamic_cast<const UndoSetNodeText*>(command);
+    auto other = dynamic_cast<const UndoSetNodeText*>(command);
     if (other) {
         m_redoText = other->m_redoText;
     }
 
-    return other;
+    return other != nullptr;
 }
 
 }

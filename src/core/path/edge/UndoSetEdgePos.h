@@ -46,6 +46,12 @@ class UndoSetEdgePos : public UndoItem
          */
         virtual ~UndoSetEdgePos();
 
+
+        /**
+         * Return node id, which is uniq.
+         */
+        int id() const override;
+
         /**
          * Undo: disconnect edge again.
          */
@@ -55,6 +61,11 @@ class UndoSetEdgePos : public UndoItem
          * Redo: connect edge
          */
         void redo() override;
+
+        /**
+         * Merge undo items, if possible.
+         */
+        bool mergeWith(const QUndoCommand * command) override;
 
     private:
         /**

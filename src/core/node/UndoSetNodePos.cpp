@@ -76,7 +76,7 @@ bool UndoSetNodePos::mergeWith(const QUndoCommand * command)
         m_redoPos = other->m_redoPos;
     }
 
-    return other != 0;
+    return other != nullptr;
 }
 
 }
