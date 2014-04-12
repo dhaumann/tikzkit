@@ -25,6 +25,8 @@ set(qtikzcore_SOURCES
     Value.cpp
     node/Node.cpp
     MetaPos.cpp
+    MetaPos2.cpp
+    MetaPos2_p.cpp
     Document.cpp
     style/Style.cpp
     style/NodeStyle.cpp
