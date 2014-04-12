@@ -38,20 +38,10 @@
 namespace tikz {
 namespace ui {
 
-//BEGIN private data
-TikzDocumentPrivate::TikzDocumentPrivate(TikzDocument * tikzDocument)
-    : QObject(tikzDocument)
-{
-    tikzDoc = tikzDocument;
-}
-//END
-
-
-
 TikzDocument::TikzDocument(QObject * parent)
     : tikz::core::Document(parent)
+    , d(new TikzDocumentPrivate())
 {
-    d = new TikzDocumentPrivate(this);
     d->scene = new TikzScene(this);
 
     connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
@@ -69,7 +59,8 @@ TikzDocument::~TikzDocument()
     Q_ASSERT(d->pathMap.isEmpty());
     Q_ASSERT(d->paths.isEmpty());
 
-    // NOTE: d is deleted via QObject parent/child hierarchy
+    // free private data
+    delete d;
 }
 
 void TikzDocument::clearTikzDocument()

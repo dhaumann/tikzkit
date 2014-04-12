@@ -46,21 +46,10 @@ class TikzDocumentPrivate : public QObject
 {
     Q_OBJECT
 
-    public:
-        /**
-         * Default constructor.
-         */
-        TikzDocumentPrivate(TikzDocument * tikzDocument);
-
     //
     // data types
     //
     public:
-        /**
-         * The associated TikzDocument.
-         */
-        TikzDocument * tikzDoc; // FIXME: tikzDoc needed nowhere! remove?
-
         /**
          * List of TikzNode%s.
          */
