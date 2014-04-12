@@ -23,7 +23,6 @@
 #include "TikzNode.h"
 #include "PathItem.h"
 #include "AbstractTool.h"
-#include "SelectTool.h" // FIXME: only temporarily
 #include "ProxyTool.h" // FIXME: only temporarily
 
 #include <QGraphicsItem>
