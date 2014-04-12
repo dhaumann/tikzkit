@@ -244,11 +244,20 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
 void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
+
+    switch (handle->handleType()) {
+        case Handle::MoveHandle: m_path->document()->beginUndoGroup("Move Ellipse"); break;
+        case Handle::ResizeHandle: m_path->document()->beginUndoGroup("Resize Ellipse"); break;
+        case Handle::RotateHandle: m_path->document()->beginUndoGroup("Rotate Ellipse"); break;
+        default: Q_ASSERT(false);
+    }
 }
 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool:mouse handle released" << scenePos;
+
+    m_path->document()->endUndoGroup();
     m_anchorManager->clear();
 }
 

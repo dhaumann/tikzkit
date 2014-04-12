@@ -22,6 +22,7 @@
 #include "RotateHandle.h"
 #include "MoveHandle.h"
 #include "TikzNode.h"
+#include "TikzDocument.h"
 #include <tikz/core/NodeStyle.h>
 
 #include <QApplication>
@@ -226,11 +227,20 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle pressed " << scenePos;
+
+    switch (handle->handleType()) {
+        case Handle::MoveHandle: m_node->document()->beginUndoGroup("Move Node"); break;
+        case Handle::ResizeHandle: m_node->document()->beginUndoGroup("Resize Node"); break;
+        case Handle::RotateHandle: m_node->document()->beginUndoGroup("Rotate Node"); break;
+        default: Q_ASSERT(false);
+    }
 }
 
 void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
+
+    m_node->document()->endUndoGroup();
 }
 
 }

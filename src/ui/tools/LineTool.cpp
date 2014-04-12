@@ -166,11 +166,14 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 void LineTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "line tool: mouse handle pressed " << scenePos;
+    m_path->document()->beginUndoGroup("Move Line");
 }
 
 void LineTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "line tool: mouse handle released" << scenePos;
+
+    m_path->document()->endUndoGroup();
     m_anchorManager->clear();
 }
 
