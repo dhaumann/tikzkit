@@ -24,7 +24,6 @@ namespace core {
 
 static const char * s_align = "align";
 static const char * s_shape = "shape";
-static const char * s_scale = "scale";
 static const char * s_innerSep = "innerSep";
 static const char * s_outerSep = "outerSep";
 static const char * s_minimumHeight = "minimumHeight";
@@ -39,7 +38,6 @@ public:
     // Node styles
     TextAlignment align;
     Shape shape;
-    qreal scale;
     qreal innerSep;
     qreal outerSep;
     qreal minimumHeight;
@@ -52,7 +50,6 @@ NodeStyle::NodeStyle()
 {
     d->align = NoAlign;
     d->shape = ShapeRectangle;
-    d->scale = 1.0;
     d->innerSep = 0.3333; // 0.3333em
     d->outerSep = 0.5; // 0.5 \pgflinewidth
     d->minimumHeight = 0.0; // mm
@@ -152,45 +149,6 @@ void NodeStyle::unsetShape()
         beginConfig();
         removeProperty(s_shape);
         d->shape = ShapeRectangle;
-        endConfig();
-    }
-}
-
-qreal NodeStyle::scale() const
-{
-    if (propertySet(s_scale)) {
-        return d->scale;
-    }
-
-    NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
-    if (parentStyle) {
-        return parentStyle->scale();
-    }
-
-    return 1.0;
-}
-
-bool NodeStyle::scaleSet() const
-{
-    return propertySet(s_scale);
-}
-
-void NodeStyle::setScale(qreal factor)
-{
-    if (!propertySet(s_scale) || d->scale != factor) {
-        beginConfig();
-        addProperty(s_scale);
-        d->scale = factor;
-        endConfig();
-    }
-}
-
-void NodeStyle::unsetScale()
-{
-    if (propertySet(s_scale)) {
-        beginConfig();
-        removeProperty(s_scale);
-        d->scale = 1.0;
         endConfig();
     }
 }

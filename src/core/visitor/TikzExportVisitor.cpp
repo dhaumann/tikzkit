@@ -488,13 +488,6 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     }
 
     //
-    // export scale
-    //
-    if (style->scaleSet()) {
-        options << QString("scale=%1").arg(style->scale());
-    }
-
-    //
     // export inner sep and outer sep
     //
     if (style->innerSepSet()) {

@@ -71,11 +71,6 @@ class TikzNodePrivate
             shapePath = shape->shape();
             outlinePath = shape->outline();
 
-            QTransform trans;
-            trans.scale(node->style()->scale(), node->style()->scale());
-            shapePath = trans.map(shapePath);
-            outlinePath = trans.map(outlinePath); // NOTE/FIXME: this also scales the added pen width, which is wrong.
-
             q->setRotation(node->style()->rotation());
         }
 };
@@ -148,9 +143,7 @@ QPointF TikzNode::anchor(tikz::Anchor anchor) const
     // make sure cache is up-to-date
     d->updateCache();
 
-    QTransform trans;
-    trans.scale(style()->scale(), style()->scale());
-    const QPointF p = trans.map(d->shape->anchorPos(anchor));
+    const QPointF p = d->shape->anchorPos(anchor);
     return mapToScene(p);
 }
 
@@ -162,9 +155,7 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
     // adapt angle to account for the self rotation of this node
     rad -= rotation() * M_PI / 180.0;
 
-    QTransform trans;
-    trans.scale(style()->scale(), style()->scale());
-    const QPointF p = trans.map(d->shape->contactPoint(anchor, rad));
+    const QPointF p = d->shape->contactPoint(anchor, rad);
     return mapToScene(p);
 }
 

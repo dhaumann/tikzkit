@@ -34,7 +34,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
     Q_PROPERTY(tikz::TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
-    Q_PROPERTY(qreal scale READ scale WRITE setScale RESET unsetScale)
     Q_PROPERTY(qreal innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
     Q_PROPERTY(qreal outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
     Q_PROPERTY(qreal minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
@@ -109,38 +108,6 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Afterwards, the shape falls back to the value of parent()->shape().
          */
         void unsetShape();
-
-    //
-    // scaling methods
-    //
-    public:
-        /**
-         * Get the scale factor.
-         * By default, the scale factor is unset and returns 1.0.
-         */
-        qreal scale() const;
-//         void scaleX(qreal xFactor);
-//         void scaleY(qreal xFactor);
-
-        /**
-         * Check whether the scale is set.
-         */
-        bool scaleSet() const;
-
-    public Q_SLOTS:
-        /**
-         * Set the scale factor to @p factor.
-         * @param factor the scale factor for both x and y directions
-         */
-        void setScale(qreal factor);
-//         void setScaleX(qreal xFactor);
-//         void setScaleY(qreal xFactor);
-
-        /**
-         * Unset the scale attribute.
-         * Afterwards, scale falls back to the value of parent()->scale().
-         */
-        void unsetScale();
 
     //
     // size methods
