@@ -45,14 +45,24 @@ class UndoSetEllipsePos : public UndoItem
         virtual ~UndoSetEllipsePos();
 
         /**
+         * Return node id, which is uniq.
+         */
+        int id() const override;
+
+        /**
          * Undo: disconnect edge again.
          */
-        virtual void undo();
+        void undo() override;
 
         /**
          * Redo: connect edge
          */
-        virtual void redo();
+        void redo() override;
+
+        /**
+         * Merge undo items, if possible.
+         */
+        bool mergeWith(const QUndoCommand * command) override;
 
     private:
         /**

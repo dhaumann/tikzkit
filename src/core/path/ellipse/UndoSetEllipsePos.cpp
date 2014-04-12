@@ -38,6 +38,11 @@ UndoSetEllipsePos::~UndoSetEllipsePos()
 {
 }
 
+int UndoSetEllipsePos::id() const
+{
+    return m_pathId;
+}
+
 void UndoSetEllipsePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
@@ -60,6 +65,18 @@ void UndoSetEllipsePos::redo()
     path->setMetaPos(m_redoPos);
 
     document()->setUndoActive(wasActive);
+}
+
+bool UndoSetEllipsePos::mergeWith(const QUndoCommand * command)
+{
+    Q_ASSERT(id() == command->id());
+
+    auto other = dynamic_cast<const UndoSetEllipsePos*>(command);
+    if (other) {
+        m_redoPos = other->m_redoPos;
+    }
+
+    return other != nullptr;
 }
 
 }
