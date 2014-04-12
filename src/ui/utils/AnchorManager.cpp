@@ -170,7 +170,7 @@ void AnchorManager::nodeDestroyed(QObject * obj)
 
 tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos, QGraphicsView * view)
 {
-    tikz::core::MetaPos::Ptr metaPos = m_doc->createMetaPos();
+    tikz::core::MetaPos::Ptr metaPos(new tikz::core::MetaPos(m_doc));
 
     if (view) {
         const QPoint p = view->viewportTransform().map(scenePos).toPoint();
@@ -179,7 +179,7 @@ tikz::core::MetaPos::Ptr AnchorManager::anchorAt(const QPointF & scenePos, QGrap
         if (handle &&
             handle->contains(handle->mapFromScene(scenePos)))
         {
-            metaPos = handle->metaPos();
+            *metaPos = handle->metaPos();
         }
     }
 

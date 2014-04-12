@@ -80,12 +80,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         QPointF pos() const;
 
         /**
-         * Get the position of this ellipse as a shared MetaPos object.
-         *
-         * @note This method is provided for convenience.
-         *       The returned shared pointer is a copy of this ellipse' data.
-         *       Hence, modifying the returned MetaPos::Ptr does not change
-         *       this ellipse.
+         * Get the position of this ellipse as MetaPos object.
          */
         const tikz::core::MetaPos & metaPos() const;
 

@@ -34,6 +34,7 @@ class NodePrivate;
 class NodeStyle;
 class Document;
 class Visitor;
+class MetaPos;
 
 class TIKZCORE_EXPORT Node : public QObject
 {
@@ -78,9 +79,15 @@ class TIKZCORE_EXPORT Node : public QObject
     public Q_SLOTS:
         /**
          * Set the coordinates to @p pos.
-         * @see pos()
+         * @see pos(), setMetaPos()
          */
         void setPos(const QPointF& pos);
+
+        /**
+         * Set the Node's MetaPos to @p pos.
+         * @see setPos()
+         */
+        void setMetaPos(const tikz::core::MetaPos & pos);
 
         /**
          * Sets the text of this node to @p text.
@@ -93,6 +100,11 @@ class TIKZCORE_EXPORT Node : public QObject
          * @see pos()
          */
         QPointF pos() const;
+
+        /**
+         * Get the position of this ellipse as MetaPos object.
+         */
+        const tikz::core::MetaPos & metaPos() const;
 
         /**
          * Returns the text of this node.

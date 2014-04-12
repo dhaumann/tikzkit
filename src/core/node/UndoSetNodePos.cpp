@@ -24,15 +24,14 @@
 namespace tikz {
 namespace core {
 
-UndoSetNodePos::UndoSetNodePos(qint64 id, const QPointF & newPos, Document * doc)
+UndoSetNodePos::UndoSetNodePos(Node * node,
+                       const MetaPos & newPos,
+                       Document * doc)
     : UndoItem(doc)
-    , m_id(id)
+    , m_id(node->id())
+    , m_undoPos(node->metaPos())
+    , m_redoPos(newPos)
 {
-    Node * node = doc->nodeFromId(id);
-    Q_ASSERT(node);
-
-    m_undoPos = node->pos();
-    m_redoPos = newPos;
 }
 
 UndoSetNodePos::~UndoSetNodePos()
@@ -50,7 +49,8 @@ void UndoSetNodePos::undo()
 
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
-    node->setPos(m_undoPos);
+
+    node->setMetaPos(m_undoPos);
 
     document()->setUndoActive(wasActive);
 }
@@ -61,7 +61,7 @@ void UndoSetNodePos::redo()
 
     Node * node = document()->nodeFromId(m_id);
     Q_ASSERT(node);
-    node->setPos(m_redoPos);
+    node->setMetaPos(m_redoPos);
 
     document()->setUndoActive(wasActive);
 }

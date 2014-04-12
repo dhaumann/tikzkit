@@ -191,13 +191,6 @@ class TIKZCORE_EXPORT Document : public QObject
     //
     public:
         /**
-         * Creates a MetaPos that is associated with this Document.
-         * The returned MetaPos can be used safely as long as this Document
-         * exists.
-         */
-        tikz::core::MetaPos::Ptr createMetaPos();
-
-        /**
          * Creates a new node associated with this document.
          * If the node is not needed anymore, delete it with deleteNode().
          */

@@ -65,7 +65,7 @@ class AnchorHandle : public Handle
         /**
          * Get the tikz::core::Node and anchor as MetaPos.
          */
-        tikz::core::MetaPos::Ptr metaPos() const;
+        const tikz::core::MetaPos & metaPos() const;
 
     //
     // reimplemented from QGraphicsItem
@@ -93,7 +93,7 @@ class AnchorHandle : public Handle
         /**
          * The position with anchor of the node.
          */
-        tikz::core::MetaPos::Ptr m_metaPos;
+        tikz::core::MetaPos m_metaPos;
 
         /**
          * The associated TikzNode.

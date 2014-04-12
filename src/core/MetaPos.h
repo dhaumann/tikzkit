@@ -48,14 +48,13 @@ class TIKZCORE_EXPORT MetaPos
         /**
          * Define a shared pointer for MetaPos.
          *
-         * MetaPos is derived from QObject, meaning that it is not copyable.
-         * Sometimes, a MetaPos is returned by a function. Without this typedef,
-         * a pointer would have to be returned and the caller would need to take
-         * care of deleting the MetaPos object correctly.
+         * MetaPos is designed to be passed by value (value semantics).
+         * However, sometimes a pointer type is needed, e.g. if a MetaPos is
+         * returned by a function. In that case, using a MetaPos::Ptr allows to
+         * safely return a pointer type without risting memory leaks.
          *
-         * However, to avoid having to take care of deletion, this typedef
-         * deletes the MetaPos object automatically if no reference to the object
-         * exists anymore.
+         * The MetaPos::Ptr typedef deletes the MetaPos object automatically if
+         * no reference to the object exists anymore.
          */
         typedef QSharedPointer<tikz::core::MetaPos> Ptr;
 
@@ -137,7 +136,7 @@ class TIKZCORE_EXPORT MetaPos
          * Calling this function emits changed(), if @p pos != pos().
          * @return @p true, if the node changed, otherwise @p false.
          */
-        bool setNode(Node* node);
+        bool setNode(Node * node);
 
         /**
          * Get the anchor of this pos.

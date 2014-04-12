@@ -21,6 +21,7 @@
 #include "NodeStyle.h"
 #include "Document.h"
 #include "Visitor.h"
+#include "MetaPos.h"
 
 #include "UndoSetNodePos.h"
 #include "UndoSetNodeText.h"
@@ -37,6 +38,10 @@ namespace core {
 class NodePrivate
 {
     public:
+        NodePrivate(Document * doc)
+            : pos(doc)
+        {}
+
         // config reference counter
         int refCounter;
 
@@ -47,7 +52,7 @@ class NodePrivate
         qint64 id;
 
         // node position
-        QPointF pos;
+        MetaPos pos;
 
         // node text
         QString text;
@@ -58,7 +63,7 @@ class NodePrivate
 
 Node::Node(qint64 id, Document* doc)
     : QObject(doc)
-    , d(new NodePrivate())
+    , d(new NodePrivate(doc))
 {
     // valid document and uniq id required
     Q_ASSERT(doc);
@@ -67,7 +72,6 @@ Node::Node(qint64 id, Document* doc)
     d->refCounter = 0;
     d->doc = doc;
     d->id = id;
-    d->pos = QPointF(0, 0);
     d->style.setParentStyle(d->doc->style());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
@@ -95,8 +99,21 @@ bool Node::accept(Visitor & visitor)
 
 void Node::setPos(const QPointF& pos)
 {
-    // only continue when change is required
-    if (pos == d->pos) {
+    auto newPos = metaPos();
+    newPos.setPos(pos);
+    setMetaPos(newPos);
+
+    Q_ASSERT(d->pos.pos() == pos);
+}
+
+QPointF Node::pos() const
+{
+    return d->pos.pos();
+}
+
+void Node::setMetaPos(const tikz::core::MetaPos & pos)
+{
+    if (d->pos == pos) {
         return;
     }
 
@@ -105,15 +122,11 @@ void Node::setPos(const QPointF& pos)
         d->pos = pos;
         endConfig();
     } else {
-        // create new undo item, push will call ::redo()
-        document()->undoManager()->push(new UndoSetNodePos(id(), pos, document()));
-
-        // now the position should be updated
-        Q_ASSERT(d->pos == pos);
+        document()->undoManager()->push(new UndoSetNodePos(this, pos, document()));
     }
 }
 
-QPointF Node::pos() const
+const tikz::core::MetaPos & Node::metaPos() const
 {
     return d->pos;
 }

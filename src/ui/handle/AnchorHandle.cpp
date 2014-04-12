@@ -38,11 +38,11 @@ namespace ui {
 
 AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
     : Handle(Handle::AnchorHandle)
-    , m_metaPos(node->document()->createMetaPos())
+    , m_metaPos(node->document())
     , m_node(node)
 {
-    m_metaPos->setNode(node->node());
-    m_metaPos->setAnchor(anchor);
+    m_metaPos.setNode(node->node());
+    m_metaPos.setAnchor(anchor);
 
     // set transform property correctly in case of NoAnchor type
     if (anchor == tikz::NoAnchor) {
@@ -75,10 +75,10 @@ TikzNode * AnchorHandle::node() const
 
 tikz::Anchor AnchorHandle::anchor() const
 {
-    return m_metaPos->anchor();
+    return m_metaPos.anchor();
 }
 
-tikz::core::MetaPos::Ptr AnchorHandle::metaPos() const
+const tikz::core::MetaPos & AnchorHandle::metaPos() const
 {
     return m_metaPos;
 }

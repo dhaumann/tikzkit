@@ -21,8 +21,7 @@
 #define TIKZ_UNDO_SET_NODE_POS_H
 
 #include "UndoItem.h"
-
-#include <QPointF>
+#include "MetaPos.h"
 
 namespace tikz {
 namespace core {
@@ -36,7 +35,9 @@ class UndoSetNodePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodePos(qint64 id, const QPointF & newPos, Document * doc);
+        UndoSetNodePos(Node * node,
+                       const tikz::core::MetaPos & newPos,
+                       Document * doc);
 
         /**
          * Destructor.
@@ -46,22 +47,22 @@ class UndoSetNodePos : public UndoItem
         /**
          * Return node id, which is uniq.
          */
-        virtual int id() const override;
+        int id() const override;
 
         /**
          * Undo: delete node again.
          */
-        virtual void undo() override;
+        void undo() override;
 
         /**
          * Redo: create node again.
          */
-        virtual void redo() override;
+        void redo() override;
 
         /**
          * Merge undo items, if possible.
          */
-        virtual bool mergeWith(const QUndoCommand * command) override;
+        bool mergeWith(const QUndoCommand * command) override;
 
     private:
         /**
@@ -72,12 +73,12 @@ class UndoSetNodePos : public UndoItem
         /**
          * Undo position.
          */
-        QPointF m_undoPos;
+        tikz::core::MetaPos m_undoPos;
 
         /**
          * Redo position.
          */
-        QPointF m_redoPos;
+        tikz::core::MetaPos m_redoPos;
 };
 
 }
