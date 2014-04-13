@@ -25,6 +25,8 @@
 #include "AbstractTool.h"
 #include "ProxyTool.h" // FIXME: only temporarily
 
+#include <tikz/core/Transaction.h>
+
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
@@ -172,7 +174,10 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
 
     // on Del, remove selected items
     if (keyEvent->key() == Qt::Key_Delete && !document()->transactionRunning()) {
-        d->doc->undoManager()->beginMacro("remove items");
+        // group deletion of items
+        tikz::core::Transaction transaction(d->doc);
+
+        // delete all selected items
         foreach (QGraphicsItem* item, selectedItems()) {
             if (item->type() == QGraphicsItem::UserType + 2) {
                 TikzNode* node = dynamic_cast<TikzNode*>(item);
@@ -184,7 +189,6 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
                 d->doc->deleteTikzPath(path);
             }
         }
-        d->doc->undoManager()->endMacro();
 
         keyEvent->accept();
         return;
