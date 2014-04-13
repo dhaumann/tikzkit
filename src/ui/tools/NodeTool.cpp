@@ -37,6 +37,7 @@ namespace ui {
 NodeTool::NodeTool(TikzNode * node, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_node(node)
+    , m_transaction(node->document(), false)
 {
     // show all node handles
     createNodeHandles();
@@ -228,19 +229,22 @@ void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGr
 {
     qDebug() << "mouse handle pressed " << scenePos;
 
+    QString action;
     switch (handle->handleType()) {
-        case Handle::MoveHandle: m_node->document()->beginUndoGroup("Move Node"); break;
-        case Handle::ResizeHandle: m_node->document()->beginUndoGroup("Resize Node"); break;
-        case Handle::RotateHandle: m_node->document()->beginUndoGroup("Rotate Node"); break;
+        case Handle::MoveHandle: action = "Move Node"; break;
+        case Handle::ResizeHandle: action = "Resize Node"; break;
+        case Handle::RotateHandle: action = "Rotate Node"; break;
         default: Q_ASSERT(false);
     }
+
+    m_transaction.start(action);
 }
 
 void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
 
-    m_node->document()->endUndoGroup();
+    m_transaction.finish();
 }
 
 }

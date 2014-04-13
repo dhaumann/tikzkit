@@ -23,6 +23,7 @@
 #include "AbstractTool.h"
 #include "Handle.h"
 
+#include <tikz/core/Transaction.h>
 #include <QVector>
 
 
@@ -121,6 +122,7 @@ class EllipseTool : public AbstractTool
         tikz::ui::EllipsePathItem * m_path;
         QVector<Handle *> m_handles;
         AnchorManager * m_anchorManager;
+        tikz::core::Transaction m_transaction;
 };
 
 }

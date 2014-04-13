@@ -40,6 +40,7 @@ LineTool::LineTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(qobject_cast<tikz::ui::EdgePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, path->document(), this))
+    , m_transaction(path->document(), false)
 {
     // show all path handles
     createPathHandles();
@@ -166,14 +167,14 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 void LineTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "line tool: mouse handle pressed " << scenePos;
-    m_path->document()->beginUndoGroup("Move Line");
+    m_transaction.start("Move Line");
 }
 
 void LineTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "line tool: mouse handle released" << scenePos;
 
-    m_path->document()->endUndoGroup();
+    m_transaction.finish();
     m_anchorManager->clear();
 }
 

@@ -23,6 +23,7 @@
 #include "AbstractTool.h"
 #include "Handle.h"
 
+#include <tikz/core/Transaction.h>
 #include <QVector>
 
 namespace tikz {
@@ -115,6 +116,7 @@ class NodeTool : public AbstractTool
     private:
         TikzNode * m_node;
         QVector<Handle *> m_handles;
+        tikz::core::Transaction m_transaction;
 };
 
 }

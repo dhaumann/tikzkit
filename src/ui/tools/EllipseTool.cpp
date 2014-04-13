@@ -39,6 +39,7 @@ EllipseTool::EllipseTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_path(qobject_cast<tikz::ui::EllipsePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, path->document(), this))
+    , m_transaction(path->document(), false)
 {
     // show all path handles
     createPathHandles();
@@ -245,19 +246,22 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
 {
     qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
 
+    QString action;
     switch (handle->handleType()) {
-        case Handle::MoveHandle: m_path->document()->beginUndoGroup("Move Ellipse"); break;
-        case Handle::ResizeHandle: m_path->document()->beginUndoGroup("Resize Ellipse"); break;
-        case Handle::RotateHandle: m_path->document()->beginUndoGroup("Rotate Ellipse"); break;
+        case Handle::MoveHandle: action = "Move Ellipse"; break;
+        case Handle::ResizeHandle: action = "Resize Ellipse"; break;
+        case Handle::RotateHandle: action = "Rotate Ellipse"; break;
         default: Q_ASSERT(false);
     }
+
+    m_transaction.start(action);
 }
 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "ellipse tool:mouse handle released" << scenePos;
 
-    m_path->document()->endUndoGroup();
+    m_transaction.finish();
     m_anchorManager->clear();
 }
 

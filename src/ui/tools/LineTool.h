@@ -23,8 +23,8 @@
 #include "AbstractTool.h"
 #include "Handle.h"
 
+#include <tikz/core/Transaction.h>
 #include <QVector>
-
 
 namespace tikz {
 namespace ui {
@@ -119,6 +119,7 @@ class LineTool : public AbstractTool
         tikz::ui::EdgePathItem * m_path;
         QVector<Handle *> m_handles;
         AnchorManager * m_anchorManager;
+        tikz::core::Transaction m_transaction;
 };
 
 }
