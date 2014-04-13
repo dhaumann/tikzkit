@@ -46,6 +46,8 @@ class DocumentPrivate
     public:
         // undo manager
         QUndoStack undoManager;
+        // monitor transactions
+        int transactionRefCounter;
         // flag whether operations should add undo items or not
         bool undoActive;
 
@@ -75,6 +77,7 @@ Document::Document(QObject * parent)
     : QObject(parent)
     , d(new DocumentPrivate())
 {
+    d->transactionRefCounter = 0;
     d->undoActive = false;
     d->nextId = 0;
     d->style = new Style(d->uniqueId(), this);
@@ -173,14 +176,33 @@ QUndoStack * Document::undoManager()
     return &d->undoManager;
 }
 
-void Document::beginUndoGroup(const QString & name)
+void Document::beginTransaction(const QString & name)
 {
-    d->undoManager.beginMacro(name);
+    // only call begin macro if required
+    if (d->transactionRefCounter == 0) {
+        d->undoManager.beginMacro(name);
+    }
+
+    ++d->transactionRefCounter;
 }
 
-void Document::endUndoGroup()
+void Document::finishTransaction()
 {
-    d->undoManager.endMacro();
+    // make sure decreasing the ref-counter is valid
+    Q_ASSERT(d->transactionRefCounter > 0);
+
+    // decrease ref counter
+    --d->transactionRefCounter;
+
+    // and finish transaction if applicable
+    if (d->transactionRefCounter == 0) {
+        d->undoManager.endMacro();
+    }
+}
+
+bool Document::transactionRunning() const
+{
+    return d->transactionRefCounter > 0;
 }
 
 bool Document::setUndoActive(bool active)

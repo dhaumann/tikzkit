@@ -121,15 +121,20 @@ class TIKZCORE_EXPORT Document : public QObject
 
         /**
          * Begin undo group @p name.
-         * Each beginUndoGroup() must have a matching endUndoGroup().
+         * Each beginTransaction() must have a matching finishTransaction().
          * The calls may be nested.
          */
-        void beginUndoGroup(const QString & name);
+        void beginTransaction(const QString & name);
 
         /**
          * End undo group @p name.
          */
-        void endUndoGroup();
+        void finishTransaction();
+
+        /**
+         * Check whether a transaction is currently running.
+         */
+        bool transactionRunning() const;
 
         /**
          * If @p active is @e true, modifying Nodes, Paths or the Document

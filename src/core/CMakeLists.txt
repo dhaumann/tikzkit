@@ -27,6 +27,7 @@ set(qtikzcore_SOURCES
     MetaPos.cpp
     MetaPos_p.cpp
     Document.cpp
+    Transaction.cpp
     style/Style.cpp
     style/NodeStyle.cpp
     style/EdgeStyle.cpp
