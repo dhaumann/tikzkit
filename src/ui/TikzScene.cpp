@@ -171,7 +171,7 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
     }
 
     // on Del, remove selected items
-    if (keyEvent->key() == Qt::Key_Delete) {
+    if (keyEvent->key() == Qt::Key_Delete && !document()->transactionRunning()) {
         d->doc->undoManager()->beginMacro("remove items");
         foreach (QGraphicsItem* item, selectedItems()) {
             if (item->type() == QGraphicsItem::UserType + 2) {
