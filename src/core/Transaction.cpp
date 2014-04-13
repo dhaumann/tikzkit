@@ -1,0 +1,90 @@
+/* This file is part of the TikZKit project.
+ *
+ * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as published
+ * by the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
+#include "Transaction.h"
+#include "Document.h"
+
+namespace tikz {
+namespace core {
+
+/**
+ * Private d-pointer type for Transaction
+ */
+class TransactionPrivate {
+    public:
+        /**
+         * real document implementation
+         */
+        Document *document;
+
+        /**
+         * Indicator for running editing transaction
+         */
+        bool transactionRunning;
+};
+
+Transaction::Transaction(Document *document, bool autoStart)
+    : d (new TransactionPrivate())
+{
+    // Alghouth it works in release-mode, we usually want a valid document
+    Q_ASSERT(document != nullptr);
+
+    // initialize d-pointer
+    d->document = document;
+    d->transactionRunning = false;
+
+    // start the editing transaction
+    if (autoStart) {
+        start();
+    }
+}
+
+void Transaction::start(const QString & action)
+{
+    if (d->document && !d->transactionRunning) {
+        d->document->beginTransaction(action);
+        d->transactionRunning = true;
+    }
+}
+
+void Transaction::finish()
+{
+    if (d->document && d->transactionRunning) {
+        d->document->finishTransaction();
+        d->transactionRunning = false;
+    }
+}
+
+Transaction::~Transaction()
+{
+    /**
+     * finish the editing transaction
+     */
+    finish();
+
+    /**
+     * delete our d-pointer
+     */
+    delete d;
+}
+
+}
+}
+
+// kate: indent-width 4; replace-tabs on;
