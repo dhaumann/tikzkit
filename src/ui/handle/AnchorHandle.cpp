@@ -50,6 +50,9 @@ AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
         // therewith, view transformations must not be ignored
         setFlag(ItemIgnoresTransformations, false);
 
+        // do not paint anything, since this Anchor represents the entire node
+        setFlag(ItemHasNoContents, true);
+
         // track the rotation of the node
         // NOTE: right now, QGraphicsItem::scale() is not used, therewith we omit it here.
         setRotation(node->rotation());
@@ -88,10 +91,8 @@ void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
-    // do not draw at all if the anchor matches the entire node shape
-    if (anchor() == tikz::NoAnchor) {
-        return;
-    }
+    // see 'ItemHasNoContents' in constructor
+    Q_ASSERT(anchor() != tikz::NoAnchor);
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
