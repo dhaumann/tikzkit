@@ -171,6 +171,7 @@ void AnchorManager::nodeDestroyed(QObject * obj)
 tikz::core::MetaPos AnchorManager::anchorAt(const QPointF & scenePos, QGraphicsView * view)
 {
     tikz::core::MetaPos metaPos(m_doc);
+    metaPos.setPos(scenePos);
 
     if (view) {
         const QPoint p = view->viewportTransform().map(scenePos).toPoint();

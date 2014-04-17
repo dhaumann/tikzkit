@@ -160,12 +160,6 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     // move
     //
     if (handle->handlePos() == Handle::Center) {
-        QPointF p = scenePos;
-        if (snap) {
-            p.rx() = qRound(p.x() / 0.2) * 0.2;
-            p.ry() = qRound(p.y() / 0.2) * 0.2;
-        }
-
         // try to attach to anchor
         bool found = m_anchorManager->showAnchors(scenePos);
         if (!found) {
@@ -174,7 +168,10 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
 
         tikz::core::EllipsePath * ep = m_path->ellipsePath();
         tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
-        if (! metaPos.node()) {
+        if (snap && ! metaPos.node()) {
+            QPointF p = scenePos;
+            p.rx() = qRound(p.x() / 0.2) * 0.2;
+            p.ry() = qRound(p.y() / 0.2) * 0.2;
             metaPos.setPos(p);
         }
 
@@ -241,7 +238,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
 
 void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
+//     qDebug() << "ellipse tool: mouse handle pressed " << scenePos;
 
     QString action;
     switch (handle->handleType()) {
@@ -256,7 +253,7 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    qDebug() << "ellipse tool:mouse handle released" << scenePos;
+//     qDebug() << "ellipse tool:mouse handle released" << scenePos;
 
     m_transaction.finish();
     m_anchorManager->clear();

@@ -116,20 +116,16 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
 
-    QPointF p = scenePos;
-    if (snap) {
-        p.rx() = qRound(p.x() / 0.2) * 0.2;
-        p.ry() = qRound(p.y() / 0.2) * 0.2;
-    }
-
     // try to attach to anchor
     bool found = m_anchorManager->showAnchors(scenePos);
 
     tikz::core::EdgePath * ep = m_path->edgePath();
     tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
 
-    if (! metaPos.node()) {
-        m_anchorManager->clear();
+    if (snap && ! metaPos.node()) {
+        QPointF p = scenePos;
+        p.rx() = qRound(p.x() / 0.2) * 0.2;
+        p.ry() = qRound(p.y() / 0.2) * 0.2;
         metaPos.setPos(p);
     }
 
@@ -151,16 +147,17 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 
 void LineTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    qDebug() << "line tool: mouse handle pressed " << scenePos;
+//     qDebug() << "line tool: mouse handle pressed " << scenePos;
     m_transaction.start("Move Line");
+    m_anchorManager->showHandles();
 }
 
 void LineTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    qDebug() << "line tool: mouse handle released" << scenePos;
+//     qDebug() << "line tool: mouse handle released" << scenePos;
 
-    m_transaction.finish();
     m_anchorManager->clear();
+    m_transaction.finish();
 }
 
 }

@@ -100,7 +100,8 @@ class AnchorManager : public QObject
         /**
          * Get the node with anchor for the scene position @p scenePos.
          * If a node/anchor qt @p scenePos exists, the returned MetaPos
-         * contains the metaPos->node() and metaPos->anchor().
+         * contains the metaPos->node() and metaPos->anchor(), otherwise
+         * the returned MetaPos points to @p scenePos.
          *
          * The QGraphicsView @p view is required, since @p scenePos must first
          * be transformed into view coordinates as the handles have the flag
