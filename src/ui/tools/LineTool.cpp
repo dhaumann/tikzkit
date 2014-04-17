@@ -126,10 +126,11 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     bool found = m_anchorManager->showAnchors(scenePos);
 
     tikz::core::EdgePath * ep = m_path->edgePath();
-    tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
+    tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
 
-    if (! metaPos->node()) {
+    if (! metaPos.node()) {
         m_anchorManager->clear();
+        metaPos.setPos(p);
     }
 
     //
@@ -137,27 +138,11 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     //
     switch (handle->handlePos()) {
         case Handle::StartPos: {
-            if (metaPos->node()) {
-                ep->beginConfig();
-                ep->setStartNode(metaPos->node());
-                ep->setStartAnchor(metaPos->anchor());
-                ep->endConfig();
-            } else {
-                ep->setStartPos(p);
-            }
-
+            ep->setStartMetaPos(metaPos);
             break;
         }
         case Handle::EndPos: {
-            if (metaPos->node()) {
-                ep->beginConfig();
-                ep->setEndNode(metaPos->node());
-                ep->setEndAnchor(metaPos->anchor());
-                ep->endConfig();
-            } else {
-                ep->setEndPos(p);
-            }
-
+            ep->setEndMetaPos(metaPos);
             break;
         }
         default: Q_ASSERT(false);

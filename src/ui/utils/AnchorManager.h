@@ -105,11 +105,9 @@ class AnchorManager : public QObject
          * The QGraphicsView @p view is required, since @p scenePos must first
          * be transformed into view coordinates as the handles have the flag
          * QGraphicsItem::ItemIgnoresTransformations is set.
-         *
-         * @note The returned shared pointer to MetaPos is always valid.
          */
-        tikz::core::MetaPos::Ptr anchorAt(const QPointF & scenePos,
-                                          QGraphicsView * view);
+        tikz::core::MetaPos anchorAt(const QPointF & scenePos,
+                                     QGraphicsView * view);
 
     //
     // internal to the manager

@@ -173,16 +173,13 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         }
 
         tikz::core::EllipsePath * ep = m_path->ellipsePath();
-        tikz::core::MetaPos::Ptr metaPos = m_anchorManager->anchorAt(scenePos, view);
-        if (metaPos->node()) {
-            ep->beginConfig();
-            ep->setNode(metaPos->node());
-            ep->setAnchor(metaPos->anchor());
-            ep->endConfig();
-        } else {
-            m_anchorManager->clear();
-            ep->setPos(p);
+        tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
+        if (! metaPos.node()) {
+            metaPos.setPos(p);
         }
+
+//         m_anchorManager->clear();
+        ep->setMetaPos(metaPos);
         return;
     }
 
