@@ -114,6 +114,16 @@ QPointF TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
     return Document::scenePos(pos);
 }
 
+QVector<TikzNode*> TikzDocument::tikzNodes() const
+{
+    return d->nodes;
+}
+
+QVector<PathItem*> TikzDocument::tikzPaths() const
+{
+    return d->paths;
+}
+
 TikzNode * TikzDocument::createTikzNode()
 {
     // create node

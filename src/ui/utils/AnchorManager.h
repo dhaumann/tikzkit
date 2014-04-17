@@ -30,12 +30,9 @@ class QGraphicsScene;
 class QGraphicsView;
 
 namespace tikz {
-namespace core {
-    class Document;
-}
-
 namespace ui {
 
+class TikzDocument;
 class TikzNode;
 class AnchorHandle;
 
@@ -47,7 +44,7 @@ class AnchorManager : public QObject
         /**
          * Constructor.
          */
-        AnchorManager(QGraphicsScene * scene, tikz::core::Document * document, QObject * parent = 0);
+        AnchorManager(QGraphicsScene * scene, tikz::ui::TikzDocument * document, QObject * parent = 0);
 
         /**
          * Destructor.
@@ -74,22 +71,19 @@ class AnchorManager : public QObject
         void showAnchors();
 
         /**
-         * Show the anchor handles for the node located at @p scenePos,
-         * if applicable.
-         *
-         * If anchors are located at @p scenePos, true is returned.
+         * Add all Node%s in the document.
          */
-        bool showAnchors(const QPointF & scenePos);
+        void addAllNodes();
 
         /**
          * Add all Node anchors for @p node.
          */
-        void addNodeAnchors(TikzNode * node);
+        void addNode(TikzNode * node);
 
         /**
          * Removes all Node anchors for @p node.
          */
-        void removeNodeAnchors(TikzNode * node);
+        void removeNode(TikzNode * node);
 
         /**
          * Remove all 
@@ -122,7 +116,7 @@ class AnchorManager : public QObject
         void nodeDestroyed(QObject * obj);
 
     private:
-        tikz::core::Document * m_doc;
+        tikz::ui::TikzDocument * m_doc;
         QGraphicsScene * m_scene;
         QVector <TikzNode *> m_nodes;
         QHash <TikzNode *, QVector<AnchorHandle *>> m_handleMap;

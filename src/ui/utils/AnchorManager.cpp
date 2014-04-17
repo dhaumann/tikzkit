@@ -25,12 +25,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
-#include <tikz/core/Document.h>
+#include "TikzDocument.h"
 
 namespace tikz {
 namespace ui {
 
-AnchorManager::AnchorManager(QGraphicsScene * scene, tikz::core::Document * doc, QObject * parent)
+AnchorManager::AnchorManager(QGraphicsScene * scene, tikz::ui::TikzDocument * doc, QObject * parent)
     : QObject(parent)
     , m_doc(doc)
     , m_scene(scene)
@@ -95,31 +95,14 @@ static T *first(const QList<QGraphicsItem *> &items)
     return 0;
 }
 
-bool AnchorManager::showAnchors(const QPointF & scenePos)
+void AnchorManager::addAllNodes()
 {
-    // if the anchors are already around, and the mouse hovers over
-    // one of the anchors, then just keep them
-    foreach (TikzNode * node, m_nodes) {
-        Q_ASSERT(m_handleMap.contains(node));
-        foreach (AnchorHandle * handle, m_handleMap[node]) {
-            if (handle->contains(handle->mapFromScene(scenePos))) {
-                return true;
-            }
-        }
+    foreach (TikzNode * node, m_doc->tikzNodes()) {
+        addNode(node);
     }
-
-    //
-    // get the node and possibly show the items
-    //
-    QList<QGraphicsItem *> items = scene()->items(scenePos, Qt::ContainsItemShape, Qt::DescendingOrder);
-    TikzNode * node = first<TikzNode>(items);
-    if (node) {
-        addNodeAnchors(node);
-    }
-    return node != nullptr;
 }
 
-void AnchorManager::addNodeAnchors(TikzNode * node)
+void AnchorManager::addNode(TikzNode * node)
 {
     if (m_nodes.contains(node)) {
         return;
@@ -136,7 +119,7 @@ void AnchorManager::addNodeAnchors(TikzNode * node)
     }
 }
 
-void AnchorManager::removeNodeAnchors(TikzNode * node)
+void AnchorManager::removeNode(TikzNode * node)
 {
     const int index = m_nodes.indexOf(node);
     if (index < 0) {
@@ -159,7 +142,7 @@ void AnchorManager::nodeDestroyed(QObject * obj)
     for (int i = 0; i < m_nodes.size(); ++i) {
         TikzNode * node = m_nodes[i];
         if (static_cast<QObject *>(node) == obj) {
-            removeNodeAnchors(node);
+            removeNode(node);
             return;
         }
     }

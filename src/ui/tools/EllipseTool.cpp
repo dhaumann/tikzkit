@@ -161,11 +161,6 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     //
     if (handle->handlePos() == Handle::Center) {
         // try to attach to anchor
-        bool found = m_anchorManager->showAnchors(scenePos);
-        if (!found) {
-            m_anchorManager->clear();
-        }
-
         tikz::core::EllipsePath * ep = m_path->ellipsePath();
         tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
         if (snap && ! metaPos.node()) {
@@ -175,7 +170,6 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
             metaPos.setPos(p);
         }
 
-//         m_anchorManager->clear();
         ep->setMetaPos(metaPos);
         return;
     }
@@ -242,9 +236,17 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
 
     QString action;
     switch (handle->handleType()) {
-        case Handle::MoveHandle: action = "Move Ellipse"; break;
-        case Handle::ResizeHandle: action = "Resize Ellipse"; break;
-        case Handle::RotateHandle: action = "Rotate Ellipse"; break;
+        case Handle::MoveHandle:
+            m_anchorManager->addAllNodes();
+            m_anchorManager->showAnchors();
+            action = "Move Ellipse";
+            break;
+        case Handle::ResizeHandle:
+            action = "Resize Ellipse";
+            break;
+        case Handle::RotateHandle:
+            action = "Rotate Ellipse";
+            break;
         default: Q_ASSERT(false);
     }
 

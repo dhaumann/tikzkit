@@ -91,6 +91,16 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     public:
         /**
+         * Returns all TikzNode%s in the TikzDocument.
+         */
+        QVector<TikzNode*> tikzNodes() const;
+
+        /**
+         * Returns all TikzPath%s in the TikzDocument.
+         */
+        QVector<PathItem*> tikzPaths() const;
+
+        /**
          * Creates a new TikzNode associated with this document.
          * If the node is not needed anymore, delete it by
          * calling deleteTikzNode(tikzNode).
