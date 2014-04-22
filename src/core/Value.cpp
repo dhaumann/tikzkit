@@ -19,4 +19,76 @@
 
 #include "Value.h"
 
+#include <QRegularExpression>
+#include <QDebug>
+
+namespace tikz {
+
+QString Value::toString() const noexcept
+{
+    // we require a valid number
+    Q_ASSERT(isValid());
+
+    QString number = QLocale::c().toString(m_value, 'f', 16);
+
+    // TikZ doesn't allow commas as separator
+    Q_ASSERT(! number.contains(QLatin1Char(',')));
+
+    // allow only a single '.' as floating point separator
+    Q_ASSERT(number.count(QLatin1Char('.')) <= 1);
+
+    QString suffix;
+    switch (m_unit) {
+        case Unit::Point: suffix = "pt"; break;
+        case Unit::Millimeter: suffix = "mm"; break;
+        case Unit::Centimeter: suffix = "cm"; break;
+        case Unit::Inch: suffix = "in"; break;
+        default: Q_ASSERT(false);
+    }
+
+    return number + suffix;
+}
+
+Value Value::fromString(const QString & str)
+{
+    // format example: 12.50cm
+    static QRegularExpression re("(\\d*\\.?\\d*)(\\w*)");
+
+    QRegularExpressionMatch match = re.match(str);
+
+    if (! match.hasMatch()) {
+        Q_ASSERT(false);
+        return Value();
+    }
+
+    const QString number = match.captured(0);
+    const QString suffix = match.captured(1);
+
+    qDebug() << str << "wird zu:" << number << suffix;
+
+    Unit u;
+    if (suffix.isEmpty()) {
+        // assume pt
+        u = Unit::Point;
+    } else if (suffix == "pt") {
+        u = Unit::Point;
+    } else if (suffix == "mm") {
+        u = Unit::Millimeter;
+    } else if (suffix == "cm") {
+        u = Unit::Centimeter;
+    } else if (suffix == "in") {
+        u = Unit::Inch;
+    } else {
+        Q_ASSERT(false);
+    }
+
+    bool ok;
+    const double val = number.toDouble(&ok);
+    Q_ASSERT(ok);
+
+    return Value(val, u);
+}
+
+}
+
 // kate: indent-width 4; replace-tabs on;

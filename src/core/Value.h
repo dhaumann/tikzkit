@@ -22,22 +22,23 @@
 #include "tikz_export.h"
 #include "tikz.h"
 
+#include <cmath>
+
 namespace tikz
 {
 
 namespace internal {
-    static qreal units[5][5] = {
-        // invalid, pt, mm      , cm     , in
-        // invalid
-        {0.0,  0.0    ,  0.0    , 0.0    , 0.0},
-        // pt
-        {0.0,  1.0    ,  0.35146, 0.03515, 72.0},
-        // mm
-        {0.0,  2.84526,  1.0    , 0.1    , 0.03937},
-        // cm
-        {0.0, 28.45274, 10.0    , 1.0    , 0.3937},
-        // in
-        {0.0, 72.26999, 25.40013, 2.54   , 1.0}
+    static constexpr qreal units[5][5] = {
+        //pt, mm      , cm     , in
+
+        // conversion from pt
+        { 1.0    ,  0.35146, 0.03515, 72.0},
+        // conversion from mm
+        { 2.84526,  1.0    , 0.1    , 0.03937},
+        // conversion from cm
+        {28.45274, 10.0    , 1.0    , 0.3937},
+        // conversion from in
+        {72.26999, 25.40013, 2.54   , 1.0}
     };
 }
 
@@ -45,7 +46,6 @@ namespace internal {
  * Units.
  */
 enum Unit {
-    Invalid = 0,// invalid unit
     Point,      // =  1.00pt = 0.3515mm
     Millimeter, // =  2.84pt = 0.99826mm
     Centimeter, // = 28.40pt = 9.9826mm
@@ -56,32 +56,26 @@ class TIKZCORE_EXPORT Value
 {
     public:
         /**
-         * Default Constructor, creates an instance of Unit::Invalid.
-         */
-        Value()
-            : m_value(0.0)
-            , m_unit(Invalid)
-        {
-        }
-
-        /**
          * Constructor with value and type.
          */
-        Value(qreal value, Unit unit)
+        constexpr Value(qreal value = 0.0, Unit unit = Unit::Point)
             : m_value(value)
             , m_unit(unit)
         {
         }
 
-        inline bool isValid() const
+        /**
+         * Check whether this value is a finite value, i.e. other than NaN or infinity.
+         */
+        inline constexpr bool isValid() const noexcept
         {
-            return m_unit != Invalid;
+            return ! std::isfinite(m_value);
         }
 
         /**
          * Get the Unit.
          */
-        inline Unit unit() const
+        inline constexpr Unit unit() const noexcept
         {
             return m_unit;
         }
@@ -89,7 +83,7 @@ class TIKZCORE_EXPORT Value
         /**
          * Explicit conversion to value.
          */
-        inline qreal value() const
+        inline constexpr qreal value() const noexcept
         {
             return m_value;
         }
@@ -97,12 +91,20 @@ class TIKZCORE_EXPORT Value
         /**
          *
          */
-        Value convertTo(Unit unit) const
+        inline constexpr Value convertTo(Unit unit) const noexcept
         {
-            const qreal s = internal::units[m_unit][unit];
-            Value val(m_value * s, unit);
-            return val;
+            return Value(m_value * internal::units[m_unit][unit], unit);
         }
+
+        /**
+         * Convert this number to a string.
+         */
+        QString toString() const noexcept;
+
+        /**
+         * Convert @p str to a Value.
+         */
+        static Value fromString(const QString & str);
 
     //
     // operators for equality
@@ -113,7 +115,7 @@ class TIKZCORE_EXPORT Value
          * The value @p other is converted to a compatible unit, meaning that
          * the unit of @p other and this object are allowed to differ.
          */
-        inline bool operator==(const Value & other) const
+        inline constexpr bool operator==(const Value & other) const noexcept
         {
             return m_value == other.convertTo(m_unit);
         }
@@ -121,7 +123,7 @@ class TIKZCORE_EXPORT Value
         /**
          * Check for inequality with (val1 != val2).
          */
-        inline bool operator!=(const Value & other) const
+        inline constexpr bool operator!=(const Value & other) const noexcept
         {
             return !(operator==(other));
         }
@@ -133,9 +135,9 @@ class TIKZCORE_EXPORT Value
         /**
          * Implicit cast to value.
          */
-        inline operator qreal () const
+        inline constexpr operator qreal () const noexcept
         {
-            return m_value;
+            return convertTo(Unit::Point).value();
         }
 
         /**
@@ -172,7 +174,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline Value operator+(const Value & value)
+        inline Value operator+(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
@@ -185,7 +187,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline Value operator-(const Value & value)
+        inline Value operator-(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
@@ -224,7 +226,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline bool operator>(const Value & value)
+        inline bool operator>(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
@@ -237,7 +239,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline bool operator>=(const Value & value)
+        inline bool operator>=(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
@@ -250,7 +252,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline bool operator<(const Value & value)
+        inline bool operator<(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
@@ -263,7 +265,7 @@ class TIKZCORE_EXPORT Value
          * If @p value's unit is different, @p value is first converted to a
          * compatible Unit before adding the value.
          */
-        inline bool operator<=(const Value & value)
+        inline bool operator<=(const Value & value) const noexcept
         {
             Q_ASSERT(isValid());
             Q_ASSERT(value.isValid());
