@@ -64,11 +64,12 @@ Value Value::fromString(const QString & str)
     const QString number = match.captured(0);
     const QString suffix = match.captured(1);
 
-    qDebug() << str << "wird zu:" << number << suffix;
+    qDebug() << str << "converts to:" << number << suffix;
 
     Unit u;
     if (suffix.isEmpty()) {
         // assume pt
+        qDebug() << "no unit given, implicit conversion to pt: " << str;
         u = Unit::Point;
     } else if (suffix == "pt") {
         u = Unit::Point;

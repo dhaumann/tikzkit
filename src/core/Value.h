@@ -28,7 +28,7 @@ namespace tikz
 {
 
 namespace internal {
-    static constexpr qreal units[5][5] = {
+    static constexpr qreal units[4][4] = {
         //pt, mm      , cm     , in
 
         // conversion from pt
