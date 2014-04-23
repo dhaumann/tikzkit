@@ -168,11 +168,13 @@ void MetaPosTest::testMetaPosPtr()
     tikz::core::MetaPos::Ptr m1(new tikz::core::MetaPos(&doc));
     tikz::core::MetaPos::Ptr m2(new tikz::core::MetaPos(&doc));
     *m2 = *m1;
-    QVERIFY(m1 == m2);
+    QVERIFY(*m1 == *m2);
+    QVERIFY(m1 != m2);
 
     m1->setPos(QPointF(3, 3));
     QCOMPARE(m1->pos(), QPointF(3, 3));
     QCOMPARE(m2->pos(), QPointF(0, 0));
+    QVERIFY(*m1 != *m2);
     QVERIFY(m1 != m2);
 
     // now test with Node
@@ -182,6 +184,7 @@ void MetaPosTest::testMetaPosPtr()
     m2->setPos(QPointF(1, 1));
     QCOMPARE(m1->pos(), QPointF(0, 0));
     QCOMPARE(m2->pos(), QPointF(1, 1));
+    QVERIFY(*m1 != *m2);
     QVERIFY(m1 != m2);
 }
 
