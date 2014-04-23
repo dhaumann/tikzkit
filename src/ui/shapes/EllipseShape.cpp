@@ -54,8 +54,8 @@ void EllipseShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) 
     // see pgflibraryshapes.geometric.code.tex
 
     // calculate radius of textRect
-    qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
-    qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+    qreal w = textRect.width() / 2.0 + node()->style()->innerSep().toPoint();
+    qreal h = textRect.height() / 2.0 + node()->style()->innerSep().toPoint();
 
     w *= 1.4142136;
     h *= 1.4142136;
@@ -78,7 +78,7 @@ QPainterPath EllipseShape::shape() const
 
 QPainterPath EllipseShape::outline() const
 {
-    const qreal lw = node()->style()->penWidth() / 2;
+    const qreal lw = node()->style()->penWidth().toPoint() / 2;
     QRectF rect = node()->shapeRect();
     rect.adjust(-lw, -lw, lw, lw);
 
@@ -107,8 +107,8 @@ QVector<tikz::Anchor> EllipseShape::supportedAnchors() const
 QPointF EllipseShape::anchorPos(tikz::Anchor anchor) const
 {
     const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep().toPoint();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep().toPoint();
     switch (anchor) {
         case tikz::NoAnchor:
         case tikz::Center   : return QPointF(0, 0);
@@ -132,8 +132,8 @@ QPointF EllipseShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     }
 
     const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep().toPoint();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep().toPoint();
 
     // use polar coordinates to calculate contact point
     const qreal xcosphi = ry * std::cos(rad);

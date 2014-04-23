@@ -60,7 +60,7 @@ QPainterPath RectShape::shape() const
 
 QPainterPath RectShape::outline() const
 {
-    const qreal lw = node()->style()->penWidth() / 2;
+    const qreal lw = node()->style()->penWidth().toPoint() / 2;
     QRectF rect = node()->shapeRect();
     rect.adjust(-lw, -lw, lw, lw);
 
@@ -89,8 +89,8 @@ QVector<tikz::Anchor> RectShape::supportedAnchors() const
 QPointF RectShape::anchorPos(tikz::Anchor anchor) const
 {
     const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep().toPoint();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep().toPoint();
 
     switch (anchor) {
         case tikz::NoAnchor :
@@ -115,8 +115,8 @@ QPointF RectShape::contactPoint(tikz::Anchor anchor, qreal rad) const
     }
 
     const QRectF shapeRect = node()->shapeRect();
-    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep();
-    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep();
+    const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep().toPoint();
+    const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep().toPoint();
 
     qreal x = std::cos(rad);
     qreal y = std::sin(rad);

@@ -53,8 +53,8 @@ tikz::Shape CircleShape::type() const
 void CircleShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
 {
     // calculate radius of textRect
-    const qreal w = textRect.width() / 2.0 + node()->style()->innerSep();
-    const qreal h = textRect.height() / 2.0 + node()->style()->innerSep();
+    const qreal w = textRect.width() / 2.0 + node()->style()->innerSep().toPoint();
+    const qreal h = textRect.height() / 2.0 + node()->style()->innerSep().toPoint();
     const qreal r = std::sqrt(w * w + h * h);
 
     // make sure the circle around textRect is contained in shapeRect
@@ -78,7 +78,7 @@ QPainterPath CircleShape::shape() const
 
 QPainterPath CircleShape::outline() const
 {
-    const qreal lw = node()->style()->penWidth() / 2;
+    const qreal lw = node()->style()->penWidth().toPoint() / 2;
     const qreal r = qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0 + lw;
 
@@ -106,7 +106,7 @@ QVector<tikz::Anchor> CircleShape::supportedAnchors() const
 
 QPointF CircleShape::anchorPos(tikz::Anchor anchor) const
 {
-    const qreal r = node()->style()->outerSep() +
+    const qreal r = node()->style()->outerSep().toPoint() +
                     qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0;
     switch (anchor) {
@@ -131,7 +131,7 @@ QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
         return anchorPos(anchor);
     }
 
-    const qreal r = node()->style()->outerSep() +
+    const qreal r = node()->style()->outerSep().toPoint() +
                     qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0;
 

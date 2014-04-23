@@ -67,8 +67,7 @@ QRectF NodeText::textRect() const
 {
     if (d->svgRenderer.isValid()) {
         QRectF rect = d->svgRenderer.viewBoxF();
-        // 1 pt = 0.3527 mm
-        rect.setSize(QSizeF(rect.width() * 0.03527, rect.height() * 0.03527));
+        rect.setSize(QSizeF(rect.width(), rect.height()));
         rect.moveCenter(QPointF(0.0, 0.0));
         return rect;
     } else {

@@ -48,7 +48,7 @@ void LinePropertyWidgetPrivate::reload()
     ui.cmbLineWidth->setCurrentIndex(static_cast<int>(style->lineWidthType()));
     ui.cmbLineWidth->blockSignals(false);
     ui.sbLineWidth->blockSignals(true);
-    ui.sbLineWidth->setValue(style->lineWidth() * 10);
+    ui.sbLineWidth->setValue(style->lineWidth().convertTo(tikz::Unit::Millimeter).value());
     ui.sbLineWidth->blockSignals(false);
 
     ui.chkDoubleLine->blockSignals(true);
@@ -58,7 +58,7 @@ void LinePropertyWidgetPrivate::reload()
     ui.cmbInnerLineWidth->setCurrentIndex(static_cast<int>(style->innerLineWidthType()));
     ui.cmbInnerLineWidth->blockSignals(false);
     ui.sbInnerLineWidth->blockSignals(true);
-    ui.sbInnerLineWidth->setValue(style->innerLineWidth() * 10);
+    ui.sbInnerLineWidth->setValue(style->innerLineWidth().convertTo(tikz::Unit::Millimeter).value());
     ui.sbInnerLineWidth->blockSignals(false);
 
     backupStyle.blockSignals(bs);
@@ -83,7 +83,7 @@ void LinePropertyWidgetPrivate::setLineWidthType(int index)
 
 void LinePropertyWidgetPrivate::setLineWidth(double lineWidth)
 {
-    lineStyle()->setLineWidth(lineWidth / 10);
+    lineStyle()->setLineWidth(tikz::Value(lineWidth, tikz::Unit::Millimeter));
     reload();
 }
 
@@ -101,7 +101,7 @@ void LinePropertyWidgetPrivate::setInnerLineWidthType(int index)
 
 void LinePropertyWidgetPrivate::setInnerLineWidth(double lineWidth)
 {
-    lineStyle()->setInnerLineWidth(lineWidth / 10);
+    lineStyle()->setInnerLineWidth(tikz::Value(lineWidth, tikz::Unit::Millimeter));
     reload();
 }
 

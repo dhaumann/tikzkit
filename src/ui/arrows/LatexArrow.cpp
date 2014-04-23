@@ -54,25 +54,25 @@ QString LatexArrow::name() const
 qreal LatexArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
+    tikz::Value dima(0.28);
+    tikz::Value dimb = style()->penWidth();
     if (style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
-    return -1 * dima;
+    return -1 * dima.toPoint();
 }
 
 qreal LatexArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
+    tikz::Value dima(0.28);
+    tikz::Value dimb = style()->penWidth();
         if (style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
-    return 9 * dima;
+    return 9 * dima.toPoint();
 }
 
 void LatexArrow::draw(QPainter* painter) const
@@ -88,10 +88,10 @@ void LatexArrow::draw(QPainter* painter) const
 QPainterPath LatexArrow::path() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
+    qreal dima = tikz::Value(0.28).toPoint();
+    qreal dimb = style()->penWidth().toPoint();
     if (style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth().toPoint();
     }
     dima += 0.3 * dimb;
 

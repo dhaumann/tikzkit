@@ -95,7 +95,7 @@ static QString toString(tikz::core::Style * style, bool doubleLine = false)
         case tikz::LineWidth::VeryThick      : width = "very thick"; break;
         case tikz::LineWidth::UltraThick     : width = "ultra thick"; break;
         case tikz::LineWidth::CustomLineWidth: {
-            width = QString("%1cm").arg(doubleLine ? style->innerLineWidth() : style->lineWidth());
+            width = doubleLine ? style->innerLineWidth().toString() : style->lineWidth().toString();
             break;
         }
         default: Q_ASSERT(false); break;
@@ -491,11 +491,11 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     // export inner sep and outer sep
     //
     if (style->innerSepSet()) {
-        options << QString("inner sep=%1cm").arg(style->innerSep());
+        options << QString("inner sep=%1").arg(style->innerSep().toString());
     }
 
     if (style->outerSepSet()) {
-        options << QString("outer sep=%1cm").arg(style->outerSep());
+        options << QString("outer sep=%1cm").arg(style->outerSep().toString());
     }
 
     //

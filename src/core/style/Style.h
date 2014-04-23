@@ -27,6 +27,8 @@
 #include <QObject>
 #include <QVariant>
 
+#include "Value.h"
+
 namespace tikz {
 namespace core {
 
@@ -44,11 +46,11 @@ class TIKZCORE_EXPORT Style : public QObject
     Q_PROPERTY(tikz::PenStyle penStyle READ penStyle WRITE setPenStyle RESET unsetPenStyle)
 
     Q_PROPERTY(tikz::LineWidth lineWidthType READ lineWidthType WRITE setLineWidthType RESET unsetLineWidth)
-    Q_PROPERTY(qreal lineWidth READ lineWidth WRITE setLineWidth RESET unsetLineWidth)
+    Q_PROPERTY(tikz::Value lineWidth READ lineWidth WRITE setLineWidth RESET unsetLineWidth)
 
     Q_PROPERTY(bool doubleLine READ doubleLine WRITE setDoubleLine RESET unsetDoubleLine)
     Q_PROPERTY(tikz::LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
-    Q_PROPERTY(qreal innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
+    Q_PROPERTY(tikz::Value innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
     Q_PROPERTY(QColor innerLineColor READ innerLineColor WRITE setInnerLineColor RESET unsetInnerLineColor)
 
     Q_PROPERTY(qreal rotation READ rotation WRITE setRotation RESET unsetRotation)
@@ -195,7 +197,7 @@ class TIKZCORE_EXPORT Style : public QObject
         /**
          * Get the lineWidth() in cm.
          */
-        qreal lineWidth() const;
+        tikz::Value lineWidth() const;
 
         /**
          * Get the pen width for drawing in cm.
@@ -203,7 +205,7 @@ class TIKZCORE_EXPORT Style : public QObject
          * If double lines are enabled, the pen width is set to
          * 2 * lineWidth() + innerLineWidth().
          */
-        qreal penWidth() const;
+        tikz::Value penWidth() const;
 
     public Q_SLOTS:
         /**
@@ -221,7 +223,7 @@ class TIKZCORE_EXPORT Style : public QObject
          * @p width the line width [cm]
          * @see Linewidth
          */
-        void setLineWidth(qreal width);
+        void setLineWidth(const tikz::Value & width);
 
         /**
          * Unset the line width.
@@ -266,7 +268,7 @@ class TIKZCORE_EXPORT Style : public QObject
          * Get the inner line width in cm.
          * The inner line width is used for double lines in paths and shapes.
          */
-        qreal innerLineWidth() const;
+        tikz::Value innerLineWidth() const;
 
         /**
          * Check whether the inner line width property is set.
@@ -290,7 +292,7 @@ class TIKZCORE_EXPORT Style : public QObject
          * @p width the line width [cm]
          * @see LineWidth
          */
-        void setInnerLineWidth(qreal width);
+        void setInnerLineWidth(const tikz::Value & width);
 
         /**
          * Set the inner line width type to @p type.

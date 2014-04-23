@@ -183,11 +183,11 @@ void EllipsePathItem::updateCache()
 
     // cache hover path
     QPainterPathStroker pps;
-    pps.setWidth(style()->penWidth() + 0.1); // 0.1mm
+    pps.setWidth(style()->penWidth().toPoint() + tikz::Value(0.1, tikz::Unit::Millimeter).toPoint());
     m_hoverPath = pps.createStroke(m_ellipse);
 
     // cache shape path
-    pps.setWidth(style()->penWidth() + 0.2); // 0.2mm
+    pps.setWidth(style()->penWidth().toPoint() + tikz::Value(0.2, tikz::Unit::Millimeter).toPoint());
     m_shapePath = pps.createStroke(m_ellipse);
 
     // cache bounding rect

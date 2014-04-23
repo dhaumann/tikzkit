@@ -52,11 +52,12 @@ void ArrowComboBoxPrivate::fillComboBox()
 
     // get default icon size
     const int iconHeight = q->style()->pixelMetric(QStyle::PM_SmallIconSize, &option, q);
-    const qreal w = q->physicalDpiX() / 2.540;
-    const qreal h = q->physicalDpiY() / 2.540;
+    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+    const qreal w = q->physicalDpiX() / tikz::in2pt(1); // = pixel per pt
+    const qreal h = q->physicalDpiY() / tikz::in2pt(1); // = pixel per pt
 
     // adjust desired icon size to avoid scaling
-    const QSize iconSize(ceil(0.5 * w), iconHeight);
+    const QSize iconSize(ceil(30 * w), iconHeight); // 30pt * w pixel per pt == [pixel] width
     comboBox->setIconSize(iconSize);
 
     // create horizontal edge from 0.1cm to 0.9cm
@@ -67,10 +68,10 @@ void ArrowComboBoxPrivate::fillComboBox()
 
     // prepare painter pen
     QPen pen(Qt::black);
-    pen.setWidthF(style.penWidth());
+    pen.setWidthF(style.penWidth().toPoint());
 
     QPen innerPen(Qt::white);
-    innerPen.setWidthF(style.innerLineWidth());
+    innerPen.setWidthF(style.innerLineWidth().toPoint());
 
     for (int i = 0; i < tikz::ArrowCount; ++i) {
         if (arrowHead) {
@@ -89,22 +90,23 @@ void ArrowComboBoxPrivate::fillComboBox()
         // now paint to pixmap
         QPainter p(&pixmap);
         p.setRenderHint(QPainter::Antialiasing, true);
-        p.scale(w, -h);
+        const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+        p.scale(w, -h);//q->physicalDpiX() / s, -q->physicalDpiY() / s);
         p.translate(0.0, -iconHeight / (2.0 * h));
 
         // draw line
         p.setPen(pen);
         if (arrowHead) {
-            p.drawLine(QPointF(0.0, 0.0), QPointF(0.5 - arrow->rightExtend(), 0.0));
+            p.drawLine(QPointF(0.0, 0.0), QPointF(tikz::cm2pt(0.5) - arrow->rightExtend(), 0.0));
             if (style.doubleLine()) {
                 p.setPen(innerPen);
-                p.drawLine(QPointF(0.0, 0.0), QPointF(0.5 - arrow->rightExtend(), 0.0));
+                p.drawLine(QPointF(0.0, 0.0), QPointF(tikz::cm2pt(0.5) - arrow->rightExtend(), 0.0));
             }
         } else {
-            p.drawLine(QPointF(0.5, 0.0), QPointF(0.0 + arrow->rightExtend(), 0.0));
+            p.drawLine(QPointF(tikz::cm2pt(0.5), 0.0), QPointF(tikz::cm2pt(0.0) + arrow->rightExtend(), 0.0));
             if (style.doubleLine()) {
                 p.setPen(innerPen);
-                p.drawLine(QPointF(0.5, 0.0), QPointF(0.0 + arrow->rightExtend(), 0.0));
+                p.drawLine(QPointF(tikz::cm2pt(0.5), 0.0), QPointF(tikz::cm2pt(0.0) + arrow->rightExtend(), 0.0));
             }
         }
 
@@ -113,7 +115,7 @@ void ArrowComboBoxPrivate::fillComboBox()
             p.translate(0.0 + arrow->rightExtend(), 0);
             p.rotate(180);
         } else {
-            p.translate(0.5 - arrow->rightExtend(), 0);
+            p.translate(tikz::cm2pt(0.5) - arrow->rightExtend(), 0);
         }
         arrow->draw(&p);
         p.end();

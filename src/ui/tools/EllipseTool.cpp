@@ -128,7 +128,7 @@ QPointF EllipseTool::handlePos(Handle::Position pos)
         case Handle::BottomLeftCorner: p = QPointF(-w, -h); break;
         case Handle::BottomBorder: p = QPointF(0, -h); break;
         case Handle::BottomRightCorner: p = QPointF(w, -h); break;
-        case Handle::ResizePos: p = QPointF(0, -h - 0.5); break;
+        case Handle::ResizePos: p = QPointF(0, -h - tikz::mm2pt(5)); break;
         default: Q_ASSERT(false);
     }
     QTransform t;

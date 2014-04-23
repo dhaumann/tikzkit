@@ -54,7 +54,7 @@ void DiamondShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) 
     // see pgflibraryshapes.geometric.code.tex
 
     // calculate radius of textRect
-    const qreal s = node()->style()->innerSep();
+    const qreal s = node()->style()->innerSep().toPoint();
     const qreal w = textRect.width();
     const qreal h = textRect.height();
 
@@ -182,7 +182,7 @@ QRectF DiamondShape::outlineRect() const
     const qreal height = rx * ry / hypothenuse;
 
     // scale by new height
-    const qreal d = height + node()->style()->outerSep();
+    const qreal d = height + node()->style()->outerSep().toPoint();
     const qreal dy = ry * d / height;
     const qreal dx = rx * d / height;
 

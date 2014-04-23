@@ -26,6 +26,7 @@
 #include "ProxyTool.h" // FIXME: only temporarily
 
 #include <tikz/core/Transaction.h>
+#include <tikz/core/Value.h>
 
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -66,7 +67,8 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->tool = new ProxyTool(this);
 
     // set sane scene rect
-    setSceneRect(-10, -10, 20, 20);
+    setSceneRect(-tikz::cm2pt(10), -tikz::cm2pt(10),
+                 tikz::cm2pt(20), tikz::cm2pt(20));
 }
 
 TikzScene::~TikzScene()
@@ -100,15 +102,23 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
         return;
     }
 
-    qreal left = int(rect.left()) - (int(rect.left()) % d->subDivisions);
-    qreal top = int(rect.top()) - (int(rect.top()) % d->subDivisions);
+    // painting is in unit 'pt'
+
+    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(tikz::Unit::Centimeter).value());
+    left = tikz::Value(std::floor(left.value()), tikz::Unit::Centimeter);
+
+    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(tikz::Unit::Centimeter).value());
+    top = tikz::Value(std::ceil(top.value()), tikz::Unit::Centimeter);
 
     QVarLengthArray<QLineF, 100> lines;
-
-    for (qreal x = left; x < rect.right(); x += d->subDivisions)
-        lines.append(QLineF(x, rect.top(), x, rect.bottom()));
-    for (qreal y = top; y < rect.bottom(); y += d->subDivisions)
-        lines.append(QLineF(rect.left(), y, rect.right(), y));
+    
+    constexpr Value cm(1, tikz::Unit::Centimeter);
+    for (tikz::Value x = left; x.toPoint() < rect.right(); x += cm) {
+        lines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
+    }
+    for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += cm) {
+        lines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
+    }
 
     painter->save();
     QPen pen(QColor(243, 243, 243));

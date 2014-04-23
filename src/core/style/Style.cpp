@@ -63,12 +63,12 @@ public:
 
     // line width
     LineWidth lineWidthType;
-    qreal lineWidth;
+    tikz::Value lineWidth;
 
     // double lines
     bool doubleLine;
     LineWidth innerLineWidthType;
-    qreal innerLineWidth;
+    tikz::Value innerLineWidth;
 
     // colors
     QColor penColor;
@@ -93,12 +93,12 @@ void StylePrivate::init()
     penStyle = SolidLine;
 
     lineWidthType = SemiThick;
-    lineWidth = 0.6 * 0.03527; // SemiThick in cm
+    lineWidth = tikz::Value(0.6); // 'semi thick'
 
     doubleLine = false;
 
     innerLineWidthType = SemiThick;
-    innerLineWidth = 0.6 * 0.03527; // SemiThick in cm
+    innerLineWidth = Value(0.6); // 'semithick'
 
     penOpacity = 1.0;
     fillOpacity = 1.0;
@@ -276,13 +276,13 @@ void Style::unsetPenStyle()
     }
 }
 
-qreal Style::penWidth() const
+tikz::Value Style::penWidth() const
 {
     if (!doubleLine()) {
         return lineWidth();
     } else {
-        const qreal width = lineWidth();
-        const qreal innerWidth = innerLineWidth();
+        const Value width = lineWidth();
+        const Value innerWidth = innerLineWidth();
         return 2.0 * width + innerWidth;
     }
 }
@@ -315,7 +315,7 @@ void Style::setLineWidthType(tikz::LineWidth type)
     }
 }
 
-void Style::setLineWidth(qreal width)
+void Style::setLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_lineWidth)
         || d->lineWidthType != CustomLineWidth
@@ -329,30 +329,27 @@ void Style::setLineWidth(qreal width)
     }
 }
 
-qreal Style::lineWidth() const
+tikz::Value Style::lineWidth() const
 {
     if (propertySet(s_lineWidth)) {
-        const qreal cm = 0.03527;
-        qreal pt = 0.0;
         switch (lineWidthType()) {
-            case tikz::UltraThin : pt = 0.1; break; // 0.03527 cm
-            case tikz::VeryThin  : pt = 0.2; break; // 0.07054 cm
-            case tikz::Thin      : pt = 0.4; break; // 0.14108 cm
-            case tikz::SemiThick : pt = 0.6; break; // 0.21162 cm
-            case tikz::Thick     : pt = 0.8; break; // 0.28216 cm
-            case tikz::VeryThick : pt = 1.2; break; // 0.42324 cm
-            case tikz::UltraThick: pt = 1.6; break; // 0.56432 cm
+            case tikz::UltraThin : return tikz::Value(0.1);
+            case tikz::VeryThin  : return tikz::Value(0.2);
+            case tikz::Thin      : return tikz::Value(0.4);
+            case tikz::SemiThick : return tikz::Value(0.6);
+            case tikz::Thick     : return tikz::Value(0.8);
+            case tikz::VeryThick : return tikz::Value(1.2);
+            case tikz::UltraThick: return tikz::Value(1.6);
             case tikz::CustomLineWidth: return d->lineWidth;
-            default: break;
+            default: Q_ASSERT(false); break;
         }
-        return pt * cm;
     }
 
     if (parentStyle()) {
         return parentStyle()->lineWidth();
     }
 
-    return 0.021162; // SemiThick in cm
+    return tikz::Value(0.6); // SemiThick
 }
 
 void Style::unsetLineWidth()
@@ -361,7 +358,7 @@ void Style::unsetLineWidth()
         beginConfig();
         removeProperty(s_lineWidth);
         d->lineWidthType = SemiThick;
-        d->lineWidth = 0.021162; // SemiThick in cm
+        d->lineWidth = tikz::Value(0.6); // SemiThick
         endConfig();
     }
 }
@@ -404,35 +401,32 @@ void Style::unsetDoubleLine()
     }
 }
 
-qreal Style::innerLineWidth() const
+tikz::Value Style::innerLineWidth() const
 {
     if (propertySet(s_doubleLine)) {
         if (propertySet(s_innerLineWidth)) {
-            const qreal cm = 0.03527;
-            qreal pt = 0.0;
             switch (innerLineWidthType()) {
-                case tikz::UltraThin : pt = 0.1; break; // 0.03527 cm
-                case tikz::VeryThin  : pt = 0.2; break; // 0.07054 cm
-                case tikz::Thin      : pt = 0.4; break; // 0.14108 cm
-                case tikz::SemiThick : pt = 0.6; break; // 0.21162 cm
-                case tikz::Thick     : pt = 0.8; break; // 0.28216 cm
-                case tikz::VeryThick : pt = 1.2; break; // 0.42324 cm
-                case tikz::UltraThick: pt = 1.6; break; // 0.56432 cm
+                case tikz::UltraThin : return tikz::Value(0.1);
+                case tikz::VeryThin  : return tikz::Value(0.2);
+                case tikz::Thin      : return tikz::Value(0.4);
+                case tikz::SemiThick : return tikz::Value(0.6);
+                case tikz::Thick     : return tikz::Value(0.8);
+                case tikz::VeryThick : return tikz::Value(1.2);
+                case tikz::UltraThick: return tikz::Value(1.6);
                 case tikz::CustomLineWidth: return d->innerLineWidth;
-                default: break;
+                default: Q_ASSERT(false); break;
             }
-            return pt * cm;
         }
 
-        // return SemiThick in cm
-        return 0.021162;
+        // return SemiThick
+        return tikz::Value(0.6);
     }
 
     if (parentStyle()) {
         return parentStyle()->innerLineWidth();
     }
 
-    return 0.0;
+    return tikz::Value(0.0);
 }
 
 bool Style::innerLineWidthSet() const
@@ -453,7 +447,7 @@ LineWidth Style::innerLineWidthType() const
     return SemiThick;
 }
 
-void Style::setInnerLineWidth(qreal width)
+void Style::setInnerLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_innerLineWidth) || d->innerLineWidth != width) {
         beginConfig();
@@ -479,7 +473,7 @@ void Style::unsetInnerLineWidth()
         beginConfig();
         removeProperty(s_innerLineWidth);
         d->innerLineWidthType = SemiThick;
-        d->innerLineWidth = 0.021162; // SemiThick in cm
+        d->innerLineWidth = tikz::Value(0.6); // SemiThick
         endConfig();
     }
 }

@@ -88,7 +88,7 @@ QPainterPath AbstractArrow::contour(qreal width) const
     QPainterPathStroker stroker;
     stroker.setJoinStyle(Qt::RoundJoin);
     stroker.setCapStyle(Qt::RoundCap);
-    stroker.setWidth(width + style()->penWidth());
+    stroker.setWidth(width + style()->penWidth().toPoint());
 
     return stroker.createStroke(arrowPath);
 }

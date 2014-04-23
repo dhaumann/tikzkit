@@ -38,8 +38,8 @@ public:
     // Node styles
     TextAlignment align;
     Shape shape;
-    qreal innerSep;
-    qreal outerSep;
+    tikz::Value innerSep;
+    tikz::Value outerSep;
     qreal minimumHeight;
     qreal minimumWidth;
 };
@@ -50,7 +50,7 @@ NodeStyle::NodeStyle()
 {
     d->align = NoAlign;
     d->shape = ShapeRectangle;
-    d->innerSep = 0.3333; // 0.3333em
+    d->innerSep = tikz::Value(3); //FIXME: 0.3333em
     d->outerSep = 0.5; // 0.5 \pgflinewidth
     d->minimumHeight = 0.0; // mm
     d->minimumWidth = 0.0; // mm
@@ -153,7 +153,7 @@ void NodeStyle::unsetShape()
     }
 }
 
-void NodeStyle::setInnerSep(qreal sep)
+void NodeStyle::setInnerSep(const tikz::Value & sep)
 {
     if (!propertySet(s_innerSep) || d->innerSep != sep) {
         beginConfig();
@@ -168,7 +168,7 @@ bool NodeStyle::innerSepSet() const
     return propertySet(s_innerSep);
 }
 
-qreal NodeStyle::innerSep() const
+tikz::Value NodeStyle::innerSep() const
 {
     NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
     if (!propertySet(s_innerSep) && parentStyle) {
@@ -177,7 +177,7 @@ qreal NodeStyle::innerSep() const
     return d->innerSep;
 }
 
-void NodeStyle::setOuterSep(qreal sep)
+void NodeStyle::setOuterSep(const tikz::Value & sep)
 {
     if (!propertySet(s_outerSep) || d->outerSep != sep) {
         beginConfig();
@@ -192,7 +192,7 @@ bool NodeStyle::outerSepSet() const
     return propertySet(s_outerSep);
 }
 
-qreal NodeStyle::outerSep() const
+tikz::Value NodeStyle::outerSep() const
 {
     if (!propertySet(s_outerSep)) {
         return 0.5 * penWidth();
@@ -205,7 +205,7 @@ void NodeStyle::unsetInnerSep()
     if (propertySet(s_innerSep)) {
         beginConfig();
         removeProperty(s_innerSep);
-        d->innerSep = 0.3333;
+        d->innerSep = tikz::Value(3); //FIXME: 0.3333em
         endConfig();
     }
 }
@@ -215,7 +215,7 @@ void NodeStyle::unsetOuterSep()
     if (propertySet(s_outerSep)) {
         beginConfig();
         removeProperty(s_outerSep);
-        d->outerSep = 0.3333;
+        d->outerSep = tikz::Value(3); //FIXME: 0.3333em
         endConfig();
     }
 }

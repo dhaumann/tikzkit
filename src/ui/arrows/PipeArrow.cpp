@@ -54,13 +54,13 @@ QString PipeArrow::name() const
 qreal PipeArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return -0.25 * style()->penWidth();
+    return -0.25 * style()->penWidth().toPoint();
 }
 
 qreal PipeArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    return 0.75 * style()->penWidth();
+    return 0.75 * style()->penWidth().toPoint();
 }
 
 void PipeArrow::draw(QPainter* painter) const
@@ -69,7 +69,7 @@ void PipeArrow::draw(QPainter* painter) const
     QPainterPath p = path();
     painter->save();
     QPen pen = painter->pen();
-    pen.setWidthF(style()->penWidth());
+    pen.setWidthF(style()->penWidth().toPoint());
     pen.setColor(style()->penColor());
     pen.setCapStyle(Qt::SquareCap);
     painter->setPen(pen);
@@ -81,8 +81,8 @@ void PipeArrow::draw(QPainter* painter) const
 QPainterPath PipeArrow::path() const
 {
     // see: pgfcorearrows.code.tex
-    const qreal lineWidth = style()->penWidth();
-    const qreal dima = 2 * 0.03527 + 1.5 * lineWidth;
+    const qreal lineWidth = style()->penWidth().toPoint();
+    const qreal dima = 2 + 1.5 * lineWidth;
     QPainterPath path;
     path.moveTo(QPointF(0.25 * lineWidth, -dima));
     path.lineTo(QPointF(0.25 * lineWidth,  dima));
@@ -95,7 +95,7 @@ QPainterPath PipeArrow::contour(qreal width) const
     QPainterPathStroker stroker;
     stroker.setJoinStyle(Qt::RoundJoin);
     stroker.setCapStyle(Qt::SquareCap);
-    stroker.setWidth(width + style()->penWidth());
+    stroker.setWidth(width + style()->penWidth().toPoint());
 
     return stroker.createStroke(path());
 }

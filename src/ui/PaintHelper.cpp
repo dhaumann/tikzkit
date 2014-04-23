@@ -75,30 +75,30 @@ Qt::PenStyle PaintHelper::penStyle() const
  */
 static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
 {
+    //
+    // NOTE: all calculations have the unit 'pt'
+    //
     QVector<qreal> pattern;
-    const qreal pt = 0.3527;
-    lineWidth *= 10.0;
-
     switch (style) {
         case tikz::SolidLine: break; // leave empty
-        case tikz::DottedLine: pattern << lineWidth << 2*pt; break;
-        case tikz::DenselyDottedLine: pattern << lineWidth << 1*pt; break;
-        case tikz::LooselyDottedLine: pattern << lineWidth << 4*pt; break;
-        case tikz::DashedLine: pattern << 3*pt << 3*pt; break;
-        case tikz::DenselyDashedLine: pattern << 3*pt << 2*pt; break;
-        case tikz::LooselyDashedLine: pattern << 3*pt << 6*pt; break;
-        case tikz::DashDottedLine: pattern << 3*pt << 2*pt << lineWidth << 2*pt; break;
-        case tikz::DenselyDashDottedLine: pattern << 3*pt << 1*pt << lineWidth << 1*pt; break;
-        case tikz::LooselyDashDottedLine: pattern << 3*pt << 4*pt << lineWidth << 4*pt; break;
-        case tikz::DashDotDottedLine: pattern << 3*pt << 2*pt << lineWidth << 2*pt << lineWidth << 2*pt; break;
-        case tikz::DenselyDashDotDottedLine: pattern << 3*pt << 1*pt << lineWidth << 1*pt << lineWidth << 1*pt; break;
-        case tikz::LooselyDashDotDottedLine: pattern << 3*pt << 4*pt << lineWidth << 4*pt << lineWidth << 4*pt; break;
+        case tikz::DottedLine: pattern << lineWidth << 2; break;
+        case tikz::DenselyDottedLine: pattern << lineWidth << 1; break;
+        case tikz::LooselyDottedLine: pattern << lineWidth << 4; break;
+        case tikz::DashedLine: pattern << 3 << 3; break;
+        case tikz::DenselyDashedLine: pattern << 3 << 2; break;
+        case tikz::LooselyDashedLine: pattern << 3 << 6; break;
+        case tikz::DashDottedLine: pattern << 3 << 2 << lineWidth << 2; break;
+        case tikz::DenselyDashDottedLine: pattern << 3 << 1 << lineWidth << 1; break;
+        case tikz::LooselyDashDottedLine: pattern << 3 << 4 << lineWidth << 4; break;
+        case tikz::DashDotDottedLine: pattern << 3 << 2 << lineWidth << 2 << lineWidth << 2; break;
+        case tikz::DenselyDashDotDottedLine: pattern << 3 << 1 << lineWidth << 1 << lineWidth << 1; break;
+        case tikz::LooselyDashDotDottedLine: pattern << 3 << 4 << lineWidth << 4 << lineWidth << 4; break;
         default: break;
     }
 
-    for (int i = 0; i < pattern.size(); ++i) {
-        pattern[i] /= lineWidth;
-    }
+//     for (int i = 0; i < pattern.size(); ++i) {
+//         pattern[i] /= lineWidth;
+//     }
     return pattern;
 }
 
@@ -118,7 +118,7 @@ QPen PaintHelper::pen() const
 
     // construct valid pen
     QPen pen(c);
-    pen.setWidthF(d->style->penWidth());
+    pen.setWidthF(d->style->penWidth().toPoint());
     pen.setStyle(ps);
     pen.setCapStyle(Qt::FlatCap);
     pen.setJoinStyle(Qt::MiterJoin);
@@ -130,8 +130,8 @@ void PaintHelper::drawPath(const QPainterPath & path)
 {
     QPen p = pen();
 
-    p.setWidthF(d->style->penWidth());
-    QVector<qreal> pattern = ::penStyle(d->style->penWidth(), d->style->penStyle());
+    p.setWidthF(d->style->penWidth().toPoint());
+    QVector<qreal> pattern = ::penStyle(d->style->penWidth().toPoint(), d->style->penStyle());
     if (d->style->penStyle() != tikz::SolidLine) {
         p.setDashPattern(pattern);
     }
@@ -142,11 +142,11 @@ void PaintHelper::drawPath(const QPainterPath & path)
 
     // second pass: draw inner line
     if (d->style->doubleLine()) {
-        p.setWidthF(d->style->innerLineWidth());
+        p.setWidthF(d->style->innerLineWidth().toPoint());
         if (d->style->penStyle() != tikz::SolidLine) {
             // scale by different line widths to match distances
             for (int i = 0; i < pattern.size(); ++i) {
-                pattern[i] *= d->style->penWidth() / d->style->innerLineWidth();
+                pattern[i] *= d->style->penWidth().toPoint() / d->style->innerLineWidth().toPoint();
             }
             p.setDashPattern(pattern);
         }

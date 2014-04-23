@@ -54,22 +54,22 @@ QString StealthArrow::name() const
 qreal StealthArrow::leftExtend() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
+    tikz::Value dima(0.28);
+    tikz::Value dimb = style()->penWidth();
     if (style()->innerLineWidth() > 0.0) {
         dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
     }
     dima += 0.3 * dimb;
-    return -3.0 * dima;
+    return -3.0 * dima.toPoint();
 }
 
 qreal StealthArrow::rightExtend() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
-    if (style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
+    qreal dima = 0.28;
+    qreal dimb = style()->penWidth().toPoint();
+    if (style()->innerLineWidth().toPoint() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth().toPoint();
     }
     dima += 0.3 * dimb;
     return 5.0 * dima;
@@ -87,10 +87,10 @@ void StealthArrow::draw(QPainter* painter) const
 QPainterPath StealthArrow::path() const
 {
     // see: pgfcorearrows.code.tex
-    qreal dima = 0.28 * 0.03527;
-    qreal dimb = style()->penWidth();
-    if (style()->innerLineWidth() > 0.0) {
-        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth();
+    qreal dima = 0.28;
+    qreal dimb = style()->penWidth().toPoint();
+    if (style()->innerLineWidth().toPoint() > 0.0) {
+        dimb = 0.6 * dimb - 0.4 * style()->innerLineWidth().toPoint();
     }
     dima += 0.3 * dimb;
 

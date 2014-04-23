@@ -34,8 +34,8 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
     Q_PROPERTY(tikz::TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
-    Q_PROPERTY(qreal innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
-    Q_PROPERTY(qreal outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
+    Q_PROPERTY(tikz::Value innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
+    Q_PROPERTY(tikz::Value outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
     Q_PROPERTY(qreal minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
     Q_PROPERTY(qreal minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
 
@@ -114,10 +114,10 @@ class TIKZCORE_EXPORT NodeStyle : public Style
     //
     public:
         /**
-         * Get the 'inner sep' [mm].
+         * Get the 'inner sep'.
          * Default: 0.3333ex
          */
-        qreal innerSep() const;
+        tikz::Value innerSep() const;
 
         /**
          * Check whether the inner sep is set.
@@ -125,10 +125,10 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         bool innerSepSet() const;
 
         /**
-         * Get the 'outer sep' [mm].
+         * Get the 'outer sep'.
          * Default: 0.5 lineWidth()
          */
-        qreal outerSep() const;
+        tikz::Value outerSep() const;
 
         /**
          * Check whether the inner sep is set.
@@ -137,14 +137,14 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
     public Q_SLOTS:
         /**
-         * Set the 'inner sep' to @p sep [mm].
+         * Set the 'inner sep' to @p sep.
          */
-        void setInnerSep(qreal sep);
+        void setInnerSep(const tikz::Value & sep);
 
         /**
-         * Set the 'outer sep' to @p sep [mm].
+         * Set the 'outer sep' to @p sep.
          */
-        void setOuterSep(qreal sep);
+        void setOuterSep(const tikz::Value & sep);
 
         /**
          * Unset the 'inner sep'.
