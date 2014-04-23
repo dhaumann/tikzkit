@@ -69,7 +69,7 @@ class TIKZCORE_EXPORT Value
          */
         inline constexpr bool isValid() const noexcept
         {
-            return ! std::isfinite(m_value);
+            return std::isfinite(m_value);
         }
 
         /**
@@ -117,7 +117,7 @@ class TIKZCORE_EXPORT Value
          */
         inline constexpr bool operator==(const Value & other) const noexcept
         {
-            return m_value == other.convertTo(m_unit);
+            return m_value == other.convertTo(m_unit).m_value;
         }
 
         /**
@@ -134,6 +134,7 @@ class TIKZCORE_EXPORT Value
     public:
         /**
          * Implicit cast to value.
+         * @warning the returned value \e always is of type Unit::Point!
          */
         inline constexpr operator qreal () const noexcept
         {

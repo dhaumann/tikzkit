@@ -29,13 +29,36 @@ QString Value::toString() const noexcept
     // we require a valid number
     Q_ASSERT(isValid());
 
-    QString number = QLocale::c().toString(m_value, 'f', 16);
+    QString number = QLocale::c().toString(m_value, 'f', 20);
 
     // TikZ doesn't allow commas as separator
     Q_ASSERT(! number.contains(QLatin1Char(',')));
 
     // allow only a single '.' as floating point separator
     Q_ASSERT(number.count(QLatin1Char('.')) <= 1);
+
+    // we have 20 digits after the '.', which is usually too much.
+    // Therefore, search for '00000' after the '.', and if we find these
+    // 5 consecutive zeros, just kill the rest.
+    // Example: the number 3.567 turns into 3.56700000000000017053. After
+    //          the truncation, it'll be '3.5670000000'
+    const int dotIndex = number.indexOf(QLatin1Char('.'));
+    if (dotIndex >= 0) {
+        const int indexOfZeros = number.lastIndexOf(QLatin1String("00000"));
+        if (indexOfZeros > dotIndex) {
+            number.truncate(indexOfZeros);
+        }
+    }
+
+    // beautify step I: remove trailing zeros, e.g. 3.5670000000 -> 3.567
+    while (number.length() && number[number.length() - 1] == QLatin1Char('0')) {
+        number.truncate(number.length() - 1);
+    }
+    
+    // beautify step II: remove trailing dot, if applicable, e.g. 3. -> 3
+    if (number.length() && number[number.length() - 1] == QLatin1Char('.')) {
+        number.truncate(number.length() - 1);
+    }
 
     QString suffix;
     switch (m_unit) {
@@ -52,7 +75,7 @@ QString Value::toString() const noexcept
 Value Value::fromString(const QString & str)
 {
     // format example: 12.50cm
-    static QRegularExpression re("(\\d*\\.?\\d*)(\\w*)");
+    static QRegularExpression re("(\\d*\\.?\\d*)\\s*(\\w*)");
 
     QRegularExpressionMatch match = re.match(str);
 
@@ -61,10 +84,10 @@ Value Value::fromString(const QString & str)
         return Value();
     }
 
-    const QString number = match.captured(0);
-    const QString suffix = match.captured(1);
+    const QString number = match.captured(1);
+    const QString suffix = match.captured(2);
 
-    qDebug() << str << "converts to:" << number << suffix;
+//     qDebug() << str << "converts to:" << number << suffix;
 
     Unit u;
     if (suffix.isEmpty()) {

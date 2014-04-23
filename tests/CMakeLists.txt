@@ -26,6 +26,12 @@ add_executable(TestMetaPos ${TestMetaPosSrc})
 target_link_libraries(TestMetaPos Qt5::Core Qt5::Test qtikzcore)
 add_test(NAME TestMetaPos COMMAND TestMetaPos)
 
+# Test: Value
+set(TestValueSrc TestValue.cpp)
+add_executable(TestValue ${TestValueSrc})
+target_link_libraries(TestValue Qt5::Core Qt5::Test qtikzcore)
+add_test(NAME TestValue COMMAND TestValue)
+
 # Document test
 set(DocumentSrc documenttest.cpp)
 add_executable(DocumentTest ${DocumentSrc})
