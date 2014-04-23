@@ -94,7 +94,7 @@ class TIKZCORE_EXPORT Value
          */
         inline constexpr qreal toPoint() const noexcept
         {
-            return convertTo(tikz::Unit::Millimeter).m_value;
+            return convertTo(tikz::Unit::Point).m_value;
         }
 
         /**
