@@ -23,6 +23,7 @@
 #include "tikz.h"
 
 #include <cmath>
+#include <QDebug>
 
 namespace tikz
 {
@@ -32,13 +33,13 @@ namespace internal {
         //pt, mm      , cm     , in
 
         // conversion from pt
-        { 1.0    ,  0.35146, 0.03515, 72.0},
+        { 1.0    ,  0.35146, 0.03515, 0.013837},
         // conversion from mm
         { 2.84526,  1.0    , 0.1    , 0.03937},
         // conversion from cm
         {28.45274, 10.0    , 1.0    , 0.3937},
         // conversion from in
-        {72.26999, 25.40013, 2.54   , 1.0}
+        {72.27   , 25.40013, 2.54   , 1.0}
     };
 }
 
@@ -89,6 +90,14 @@ class TIKZCORE_EXPORT Value
         }
 
         /**
+         * Explicit conversion to Point.
+         */
+        inline constexpr qreal toPoint() const noexcept
+        {
+            return convertTo(tikz::Unit::Millimeter).m_value;
+        }
+
+        /**
          *
          */
         inline constexpr Value convertTo(Unit unit) const noexcept
@@ -136,10 +145,10 @@ class TIKZCORE_EXPORT Value
          * Implicit cast to value.
          * @warning the returned value \e always is of type Unit::Point!
          */
-        inline constexpr operator qreal () const noexcept
-        {
-            return convertTo(Unit::Point).value();
-        }
+//         inline constexpr operator qreal () const noexcept
+//         {
+//             return convertTo(Unit::Point).value();
+//         }
 
         /**
          * += operator.
@@ -163,6 +172,66 @@ class TIKZCORE_EXPORT Value
             Q_ASSERT(isValid());
             m_value -= value;
             return *this;
+        }
+
+        /**
+         * * operator.
+         * Returns a new Value muliplied by @p value.
+         * This operation is independent of the unit.
+         */
+        inline constexpr Value operator*(qreal value) const
+        {
+            return Value(m_value * value, m_unit);
+        }
+
+        /**
+         * / operator.
+         * Returns a new Value divided by @p value.
+         * This operation is independent of the unit.
+         */
+        inline constexpr Value operator/(qreal value) const
+        {
+            return Value(m_value / value, m_unit);
+        }
+
+        /**
+         * > operator for Value and qreal.
+         * Returns true if this object's value in Point is greater than @p value.
+         */
+        inline bool operator>(qreal value) const noexcept
+        {
+            Q_ASSERT(isValid());
+            return toPoint() > value;
+        }
+
+        /**
+         * >= operator for two Value%s.
+         * Returns true if this object's value in Point is greater than or equal to @p value.
+         */
+        inline bool operator>=(qreal value) const noexcept
+        {
+            Q_ASSERT(isValid());
+            return toPoint() >= value;
+        }
+
+        /**
+         * < operator for two Value%s.
+         * Returns true if this object's value in Point is smaller than @p value.
+         */
+        inline bool operator<(qreal value) const noexcept
+        {
+            Q_ASSERT(isValid());
+            return toPoint() < value;
+        }
+
+        /**
+         * <= operator for two Value%s.
+         * Returns true if this object's value in Point is smaller than or equal to @p value.
+         */
+        inline bool operator<=(qreal value) const noexcept
+        {
+            Q_ASSERT(isValid());
+            return toPoint() <= value;
         }
 
     //
@@ -273,6 +342,19 @@ class TIKZCORE_EXPORT Value
             return m_value <= value.convertTo(m_unit).value();
         }
 
+        /**
+         * QDebug support.
+         */
+        inline friend QDebug operator<<(QDebug s, const tikz::Value & value)
+        {
+            if (&value != nullptr) {
+                s.nospace() << value.toString();
+            } else {
+                s.nospace() << "(null Value)";
+            }
+            return s.space();
+        }
+
     private:
         /**
          * The value.
@@ -284,6 +366,16 @@ class TIKZCORE_EXPORT Value
          */
         Unit m_unit;
 };
+
+/**
+ * * operator.
+ * Returns a new Value muliplied by @p value.
+ * This operation is independent of the unit.
+ */
+inline constexpr Value operator*(qreal lhs, const Value & rhs)
+{
+    return Value(rhs.value() * lhs, rhs.unit());
+}        
 
 inline qreal convertTo(qreal value, Unit from, Unit to)
 {
@@ -377,10 +469,20 @@ inline qreal in2mm(qreal value)
 
 }
 
+namespace QTest
+{
+    // forward declaration of template in qtestcase.h
+    template<typename T> char* toString(const T&);
+    
+    template<>
+    TIKZCORE_EXPORT char *toString(const tikz::Value & value);
+}
+
 /**
  * Declare as movable, since the members of Value are primitive types.
  */
 Q_DECLARE_TYPEINFO(tikz::Value, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(tikz::Value)
 
 #endif // TIKZ_VALUE_H
 

@@ -115,4 +115,14 @@ Value Value::fromString(const QString & str)
 
 }
 
+namespace QTest {
+    // Value: template specialization for QTest::toString()
+    template<>
+    char *toString(const tikz::Value & value)
+    {
+        const QString str = "Value[" + value.toString() + "]";
+        const QByteArray ba = str.toLatin1();
+        return qstrdup(ba.data());
+    }
+}
 // kate: indent-width 4; replace-tabs on;
