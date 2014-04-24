@@ -163,8 +163,7 @@ static QString toCoord(tikz::core::MetaPos metaPos)
         const QString anchor = anchorToString(metaPos.anchor());
         coord = "(" + QString::number(metaPos.node()->id()) + anchor + ")";
     } else {
-        const QPointF & pos = metaPos.pos();
-        coord = QString("(%1, %2)").arg(pos.x()).arg(pos.y());
+        coord = metaPos.pos().toString();
     }
     return coord;
 }
