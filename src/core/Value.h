@@ -261,7 +261,7 @@ class TIKZCORE_EXPORT Value
  */
 inline constexpr bool operator==(const Value & lhs, const Value & rhs) noexcept
 {
-    return qFuzzyCompare(lhs.value(), rhs.convertTo(lhs.unit()).value());
+    return qFuzzyIsNull(lhs.value() - rhs.convertTo(lhs.unit()).value());
 }
 
 /**
