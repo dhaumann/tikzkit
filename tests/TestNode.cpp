@@ -40,10 +40,10 @@ void NodeTest::testPos()
     tikz::core::Node * n = doc.createNode();
 
     // initially (0, 0)
-    QCOMPARE(n->pos(), QPointF(0, 0));
+    QCOMPARE(n->pos(), tikz::Pos(0, 0));
 
-    n->setPos(QPointF(1, 1));
-    QCOMPARE(n->pos(), QPointF(1, 1));
+    n->setPos(tikz::Pos(1, 1));
+    QCOMPARE(n->pos(), tikz::Pos(1, 1));
 }
 
 // kate: indent-width 4; replace-tabs on;

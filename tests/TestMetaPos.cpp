@@ -41,7 +41,7 @@ void MetaPosTest::testMetaPos()
     tikz::core::MetaPos m(&doc);
 
     // initially (0, 0)
-    QCOMPARE(m.pos(), QPointF(0, 0));
+    QCOMPARE(m.pos(), tikz::Pos(0, 0));
     QCOMPARE(m.node(), (tikz::core::Node*)0);
     QVERIFY(m == m);
 
@@ -53,8 +53,8 @@ void MetaPosTest::testMetaPos()
     m_changeCount = 0;
 
     // perform change
-    m.setPos(QPointF(1, 1));
-    QCOMPARE(m.pos(), QPointF(1, 1));
+    m.setPos(tikz::Pos(1, 1));
+    QCOMPARE(m.pos(), tikz::Pos(1, 1));
     QVERIFY(m == m);
 
     // make sure signals are emitted only once
@@ -78,8 +78,8 @@ void MetaPosTest::testMetaPosWithNode()
     tikz::core::Node * n = doc.createNode();
 
     // set distinct node position
-    n->setPos(QPointF(5, 5));
-    QCOMPARE(n->pos(), QPointF(5, 5));
+    n->setPos(tikz::Pos(5, 5));
+    QCOMPARE(n->pos(), tikz::Pos(5, 5));
 
     // connect to changed signal
     connect(m.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
@@ -99,15 +99,15 @@ void MetaPosTest::testMetaPosWithNode()
     QCOMPARE(m_changeCount, 1);
 
     // should be same as node pos
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(m.pos(), tikz::Pos(5, 5));
     QVERIFY(m == m);
 
     // reset signal counter
     m_changeCount = 0;
 
     // perform change
-    m.setPos(QPointF(1, 1));
-    QCOMPARE(m.pos(), QPointF(1, 1));
+    m.setPos(tikz::Pos(1, 1));
+    QCOMPARE(m.pos(), tikz::Pos(1, 1));
     QVERIFY(m == m);
 
     // using setPos() resets node, test this
@@ -122,15 +122,15 @@ void MetaPosTest::testMetaPosWithNode()
     //
     QVERIFY(m.setNode(n));
     QCOMPARE(m.node(), n);
-    QCOMPARE(n->pos(), QPointF(5, 5));
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(n->pos(), tikz::Pos(5, 5));
+    QCOMPARE(m.pos(), tikz::Pos(5, 5));
     QVERIFY(m == m);
 
     // now change node position
     m_changeCount = 0;
-    n->setPos(QPointF(10, 10));
-    QCOMPARE(n->pos(), QPointF(10, 10));
-    QCOMPARE(m.pos(), QPointF(10, 10));
+    n->setPos(tikz::Pos(10, 10));
+    QCOMPARE(n->pos(), tikz::Pos(10, 10));
+    QCOMPARE(m.pos(), tikz::Pos(10, 10));
     QVERIFY(m == m);
     QCOMPARE(m_changeCount, 1);
 }
@@ -142,8 +142,8 @@ void MetaPosTest::testSet0()
     tikz::core::Node * n = doc.createNode();
 
     // set distinct node position
-    n->setPos(QPointF(5, 5));
-    QCOMPARE(n->pos(), QPointF(5, 5));
+    n->setPos(tikz::Pos(5, 5));
+    QCOMPARE(n->pos(), tikz::Pos(5, 5));
     QVERIFY(m == m);
 
     // check setting node
@@ -156,7 +156,7 @@ void MetaPosTest::testSet0()
 
     // make sure the node is 0 and the position is kept
     QCOMPARE(m.node(), (tikz::core::Node*)0);
-    QCOMPARE(m.pos(), QPointF(5, 5));
+    QCOMPARE(m.pos(), tikz::Pos(5, 5));
     QVERIFY(m == m);
 }
 
@@ -171,9 +171,9 @@ void MetaPosTest::testMetaPosPtr()
     QVERIFY(*m1 == *m2);
     QVERIFY(m1 != m2);
 
-    m1->setPos(QPointF(3, 3));
-    QCOMPARE(m1->pos(), QPointF(3, 3));
-    QCOMPARE(m2->pos(), QPointF(0, 0));
+    m1->setPos(tikz::Pos(3, 3));
+    QCOMPARE(m1->pos(), tikz::Pos(3, 3));
+    QCOMPARE(m2->pos(), tikz::Pos(0, 0));
     QVERIFY(*m1 != *m2);
     QVERIFY(m1 != m2);
 
@@ -181,9 +181,9 @@ void MetaPosTest::testMetaPosPtr()
     tikz::core::Node * n = doc.createNode();
 
     m1->setNode(n);
-    m2->setPos(QPointF(1, 1));
-    QCOMPARE(m1->pos(), QPointF(0, 0));
-    QCOMPARE(m2->pos(), QPointF(1, 1));
+    m2->setPos(tikz::Pos(1, 1));
+    QCOMPARE(m1->pos(), tikz::Pos(0, 0));
+    QCOMPARE(m2->pos(), tikz::Pos(1, 1));
     QVERIFY(*m1 != *m2);
     QVERIFY(m1 != m2);
 }

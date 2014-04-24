@@ -23,7 +23,7 @@
 #include "Path.h"
 #include "MetaPos.h"
 
-#include <QPointF>
+#include "Pos.h"
 
 namespace tikz {
 namespace core {
@@ -122,13 +122,13 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Get the position of the current start node.
          * @note This is the same as startNode()->Pos().
          */
-        QPointF startPos() const;
+        tikz::Pos startPos() const;
 
         /**
          * Set the position of the current end node.
          * @note This is the same as endNode()->pos().
          */
-        QPointF endPos() const;
+        tikz::Pos endPos() const;
 
     public Q_SLOTS:
         /**
@@ -136,14 +136,14 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * @param pos the new start position
          * @see complement: startPos()
          */
-        void setStartPos(const QPointF& pos);
+        void setStartPos(const tikz::Pos & pos);
 
         /**
          * Set the position of the current end node to @p pos.
          * @param pos the new end position
          * @see complement: endPos()
          */
-        void setEndPos(const QPointF& pos);
+        void setEndPos(const tikz::Pos & pos);
 
     //
     // anchor methods

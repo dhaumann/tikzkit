@@ -74,8 +74,8 @@ void EdgePath::deconstruct()
     // undo (i.e., creating the node again), will then restore the initial
     // connections correctly.
     beginConfig();
-    setStartPos(QPointF(0, 0));
-    setEndPos(QPointF(0, 0));
+    setStartPos(tikz::Pos());
+    setEndPos(tikz::Pos());
     endConfig();
 }
 
@@ -134,17 +134,17 @@ Node* EdgePath::endNode()
     return d->end.node();
 }
 
-QPointF EdgePath::startPos() const
+tikz::Pos EdgePath::startPos() const
 {
     return d->start.pos();
 }
 
-QPointF EdgePath::endPos() const
+tikz::Pos EdgePath::endPos() const
 {
     return d->end.pos();
 }
 
-void EdgePath::setStartPos(const QPointF& pos)
+void EdgePath::setStartPos(const tikz::Pos & pos)
 {
     auto newPos = startMetaPos();
     newPos.setPos(pos);
@@ -153,7 +153,7 @@ void EdgePath::setStartPos(const QPointF& pos)
     Q_ASSERT(d->start.pos() == pos);
 }
 
-void EdgePath::setEndPos(const QPointF& pos)
+void EdgePath::setEndPos(const tikz::Pos & pos)
 {
     auto newPos = endMetaPos();
     newPos.setPos(pos);

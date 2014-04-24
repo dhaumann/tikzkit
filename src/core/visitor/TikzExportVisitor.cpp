@@ -139,11 +139,10 @@ void TikzExportVisitor::visit(Node * node)
 {
     QString options = nodeStyleOptions(node->style()).join(", ");
 
-    QString cmd = QString("\\node[%1,draw] (%2) at (%3, %4) {%5};")
+    QString cmd = QString("\\node[%1,draw] (%2) at %3 {%4};")
         .arg(options)
         .arg(node->id())
-        .arg(node->pos().x())
-        .arg(node->pos().y())
+        .arg(node->pos().toString())
         .arg(node->text());
 
     //
@@ -391,11 +390,11 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
     // export shorten properties
     //
     if (style->shortenStartSet()) {
-        options << "shorten <=" << style->shortenStart().toString();
+        options << "shorten <=" + style->shortenStart().toString();
     }
 
     if (style->shortenEndSet()) {
-        options << "shorten >=" << style->shortenEnd().toString();
+        options << "shorten >=" + style->shortenEnd().toString();
     }
 
 // FIXME
@@ -491,11 +490,11 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     // export inner sep and outer sep
     //
     if (style->innerSepSet()) {
-        options << QString("inner sep=%1").arg(style->innerSep().toString());
+        options << "inner sep=" + style->innerSep().toString();
     }
 
     if (style->outerSepSet()) {
-        options << QString("outer sep=%1cm").arg(style->outerSep().toString());
+        options << "outer sep=" + style->outerSep().toString();
     }
 
     //
@@ -504,13 +503,13 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     if (style->minimumWidthSet() && style->minimumHeightSet()
         && style->minimumWidth() == style->minimumHeight())
     {
-        options << "minimum size=" << style->minimumWidth().toString();
+        options << "minimum size=" + style->minimumWidth().toString();
     } else {
         if (style->minimumWidthSet()) {
-            options << "minimum width=%1cm" << style->minimumWidth().toString();
+            options << "minimum width=" + style->minimumWidth().toString();
         }
         if (style->minimumHeightSet()) {
-            options << "minimum height=%1cm" << style->minimumHeight().toString();
+            options << "minimum height=" + style->minimumHeight().toString();
         }
     }
 

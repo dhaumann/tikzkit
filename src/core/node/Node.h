@@ -22,8 +22,8 @@
 
 #include "tikz_export.h"
 #include "tikz.h"
+#include "Pos.h"
 
-#include <QPointF>
 #include <QString>
 #include <QVariant>
 
@@ -40,7 +40,7 @@ class TIKZCORE_EXPORT Node : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
-    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+    Q_PROPERTY(tikz::Pos pos READ pos WRITE setPos)
 
     public:
         /**
@@ -81,7 +81,7 @@ class TIKZCORE_EXPORT Node : public QObject
          * Set the coordinates to @p pos.
          * @see pos(), setMetaPos()
          */
-        void setPos(const QPointF& pos);
+        void setPos(const tikz::Pos& pos);
 
         /**
          * Set the Node's MetaPos to @p pos.
@@ -99,7 +99,7 @@ class TIKZCORE_EXPORT Node : public QObject
          * Set the coordinates to @p pos.
          * @see pos()
          */
-        QPointF pos() const;
+        tikz::Pos pos() const;
 
         /**
          * Get the position of this ellipse as MetaPos object.

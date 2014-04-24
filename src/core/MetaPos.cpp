@@ -108,7 +108,7 @@ bool MetaPos::operator!=(const MetaPos & other) const
     return ! (*this == other);
 }
 
-QPointF MetaPos::pos() const
+tikz::Pos MetaPos::pos() const
 {
     if (d->nodeId < 0) {
         Q_ASSERT(node() == nullptr);
@@ -119,7 +119,7 @@ QPointF MetaPos::pos() const
     return document()->scenePos(*this);
 }
 
-void MetaPos::setPos(const QPointF& pos)
+void MetaPos::setPos(const tikz::Pos & pos)
 {
     bool change = false;
 

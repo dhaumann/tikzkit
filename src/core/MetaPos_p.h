@@ -22,7 +22,7 @@
 
 #include "tikz.h"
 
-#include <QPointF>
+#include "Pos.h"
 #include <QSharedPointer>
 
 namespace tikz {
@@ -43,7 +43,7 @@ class MetaPosPrivate : public QObject
         MetaPos * q;
         Document * doc;
 
-        QPointF pos;
+        tikz::Pos pos;
         qint64 nodeId;
         Anchor anchor;
 

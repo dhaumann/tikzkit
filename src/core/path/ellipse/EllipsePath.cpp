@@ -61,7 +61,7 @@ void EllipsePath::deconstruct()
     // undo (i.e., creating the node again), will then restore the initial
     // connections correctly.
     beginConfig();
-    setPos(QPointF(0, 0));
+    setPos(tikz::Pos());
     endConfig();
 }
 
@@ -92,12 +92,12 @@ Node* EllipsePath::node() const
     return d->pos.node();
 }
 
-QPointF EllipsePath::pos() const
+tikz::Pos EllipsePath::pos() const
 {
     return d->pos.pos();
 }
 
-void EllipsePath::setPos(const QPointF& pos)
+void EllipsePath::setPos(const tikz::Pos & pos)
 {
     auto newPos = metaPos();
     newPos.setPos(pos);

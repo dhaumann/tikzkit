@@ -143,7 +143,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     // rotate
     //
     if (handle->handleType() == Handle::RotateHandle) {
-        const QPointF delta = m_node->node()->pos() - scenePos;
+        const QPointF delta = m_node->node()->pos() - tikz::Pos(scenePos);
         const qreal rad = atan2(-delta.y(), -delta.x());
         qreal deg = rad * 180 / M_PI + 90;
         if (snap) deg = qRound(deg / 15) * 15;
@@ -176,7 +176,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     t.rotate(-m_node->style()->rotation());
 
     // honor rotation of node
-    const QPointF delta = 2 * t.map(m_node->node()->pos() - scenePos);
+    const QPointF delta = 2 * t.map(m_node->node()->pos() - tikz::Pos(scenePos));
     qreal w = m_node->style()->minimumWidth().toPoint();
     qreal h = m_node->style()->minimumHeight().toPoint();
 

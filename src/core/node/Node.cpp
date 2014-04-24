@@ -97,7 +97,7 @@ bool Node::accept(Visitor & visitor)
     visitor.visit(this);
 }
 
-void Node::setPos(const QPointF& pos)
+void Node::setPos(const tikz::Pos & pos)
 {
     auto newPos = metaPos();
     newPos.setPos(pos);
@@ -106,7 +106,7 @@ void Node::setPos(const QPointF& pos)
     Q_ASSERT(d->pos.pos() == pos);
 }
 
-QPointF Node::pos() const
+tikz::Pos Node::pos() const
 {
     return d->pos.pos();
 }

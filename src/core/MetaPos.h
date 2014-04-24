@@ -22,8 +22,8 @@
 
 #include "tikz.h"
 #include "tikz_export.h"
+#include "Pos.h"
 
-#include <QPointF>
 #include <QSharedPointer>
 
 namespace tikz {
@@ -113,13 +113,13 @@ class TIKZCORE_EXPORT MetaPos
          * If no Node is associated, the position set with setPos() is returned.
          * If node() is non-null, node()->pos() is returned.
          */
-        virtual QPointF pos() const;
+        tikz::Pos pos() const;
 
         /**
          * Set the coordinates to @p pos.
          * Calling this function emits changed(), if @p pos != pos().
          */
-        void setPos(const QPointF& pos);
+        void setPos(const tikz::Pos & pos);
 
     //
     // Node methods

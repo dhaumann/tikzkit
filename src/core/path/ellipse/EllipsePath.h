@@ -22,8 +22,7 @@
 
 #include "Path.h"
 #include "MetaPos.h"
-
-#include <QPointF>
+#include "Pos.h"
 
 namespace tikz {
 namespace core {
@@ -77,7 +76,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Get the position of the ellipse.
          * @note This is the same as node()->pos().
          */
-        QPointF pos() const;
+        tikz::Pos pos() const;
 
         /**
          * Get the position of this ellipse as MetaPos object.
@@ -89,7 +88,7 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Set the position of the ellipse to @p pos.
          * @param pos the new position
          */
-        void setPos(const QPointF& pos);
+        void setPos(const tikz::Pos & pos);
 
         /**
          * Set the position of this ellipse as a shared MetaPos object.

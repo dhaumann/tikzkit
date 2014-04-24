@@ -104,8 +104,7 @@ void SerializeVisitor::visit(Node * node)
     QVariantMap map;
 
     // serialize node
-    map.insert("pos.x", node->pos().x());
-    map.insert("pos.y", node->pos().y());
+    map.insert("pos", node->pos().toString());
     map.insert("text", node->text());
 
     // serialize node style
@@ -124,8 +123,7 @@ static QVariantMap serializeMetaPos(const tikz::core::MetaPos & metaPos)
         map.insert("node", metaPos.node()->id());
         map.insert("anchor", metaPos.anchor());
     } else {
-        map.insert("x", metaPos.pos().x());
-        map.insert("y", metaPos.pos().y());
+        map.insert("pos", metaPos.pos().toString());
     }
     return map;
 }

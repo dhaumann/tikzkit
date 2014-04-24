@@ -254,7 +254,7 @@ void TikzNode::slotSetPos(const QPointF& pos)
 void TikzNode::styleChanged()
 {
     prepareGeometryChange();
-    if (d->node->pos() != pos()) slotSetPos(d->node->pos());
+    if (d->node->pos() != tikz::Pos(pos())) slotSetPos(d->node->pos());
 
     // prepareGeometryChange() will trigger a call of boundingRect(), therefore
     // we have to update the cache
