@@ -108,7 +108,7 @@ class TIKZCORE_EXPORT Value
         /**
          * Convert this number to a string.
          */
-        QString toString() const noexcept;
+        QString toString() const;
 
         /**
          * Convert @p str to a Value.
@@ -155,7 +155,7 @@ class TIKZCORE_EXPORT Value
          * Returns a reference to this object increased by @p value.
          * This operation is independent of the unit.
          */
-        inline Value & operator+=(qreal value)
+        inline Value & operator+=(qreal value) noexcept
         {
             Q_ASSERT(isValid());
             m_value += value;
@@ -167,7 +167,7 @@ class TIKZCORE_EXPORT Value
          * Returns a reference to this object increased by @p value.
          * This operation is independent of the unit.
          */
-        inline Value & operator-=(qreal value)
+        inline Value & operator-=(qreal value) noexcept
         {
             Q_ASSERT(isValid());
             m_value -= value;

@@ -24,7 +24,7 @@
 
 namespace tikz {
 
-QString Value::toString() const noexcept
+QString Value::toString() const
 {
     // we require a valid number
     Q_ASSERT(isValid());

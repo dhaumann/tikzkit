@@ -23,6 +23,7 @@ include_directories(
 set(qtikzcore_SOURCES
     tikz.cpp
     Value.cpp
+    Pos.cpp
     node/Node.cpp
     MetaPos.cpp
     MetaPos_p.cpp
