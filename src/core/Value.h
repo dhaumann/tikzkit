@@ -141,19 +141,18 @@ class TIKZCORE_EXPORT Value
     // operators for qreal values
     //
     public:
-        /**
-         * Implicit cast to value.
-         * @warning the returned value \e always is of type Unit::Point!
-         */
+//         /**
+//          * Implicit cast to value.
+//          * @warning the returned value \e always is of type Unit::Point!
+//          */
 //         inline constexpr operator qreal () const noexcept
 //         {
 //             return convertTo(Unit::Point).value();
 //         }
 
         /**
-         * += operator.
-         * Returns a reference to this object increased by @p value.
-         * This operation is independent of the unit.
+         * Adds @p value to this Value and returns a reference to this Value.
+         * @warning This operation is independent of the unit.
          */
         inline Value & operator+=(qreal value) noexcept
         {
@@ -163,9 +162,8 @@ class TIKZCORE_EXPORT Value
         }
 
         /**
-         * -= operator.
-         * Returns a reference to this object increased by @p value.
-         * This operation is independent of the unit.
+         * Subtracts @p value from this Value and returns a reference to this Value.
+         * @warning This operation is independent of the unit.
          */
         inline Value & operator-=(qreal value) noexcept
         {
@@ -175,63 +173,25 @@ class TIKZCORE_EXPORT Value
         }
 
         /**
-         * * operator.
-         * Returns a new Value muliplied by @p value.
-         * This operation is independent of the unit.
+         * Multiplies this Value with @p factor and returns a reference to this Value.
+         * @warning This operation is independent of the unit.
          */
-        inline constexpr Value operator*(qreal value) const
-        {
-            return Value(m_value * value, m_unit);
-        }
-
-        /**
-         * / operator.
-         * Returns a new Value divided by @p value.
-         * This operation is independent of the unit.
-         */
-        inline constexpr Value operator/(qreal value) const
-        {
-            return Value(m_value / value, m_unit);
-        }
-
-        /**
-         * > operator for Value and qreal.
-         * Returns true if this object's value in Point is greater than @p value.
-         */
-        inline bool operator>(qreal value) const noexcept
+        inline Value & operator*=(qreal factor) noexcept
         {
             Q_ASSERT(isValid());
-            return toPoint() > value;
+            m_value *= factor;
+            return *this;
         }
 
         /**
-         * >= operator for two Value%s.
-         * Returns true if this object's value in Point is greater than or equal to @p value.
+         * Divides this Value by @p divisor and returns a reference to this Value.
+         * @warning This operation is independent of the unit.
          */
-        inline bool operator>=(qreal value) const noexcept
+        inline Value & operator/=(qreal divisor) noexcept
         {
             Q_ASSERT(isValid());
-            return toPoint() >= value;
-        }
-
-        /**
-         * < operator for two Value%s.
-         * Returns true if this object's value in Point is smaller than @p value.
-         */
-        inline bool operator<(qreal value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            return toPoint() < value;
-        }
-
-        /**
-         * <= operator for two Value%s.
-         * Returns true if this object's value in Point is smaller than or equal to @p value.
-         */
-        inline bool operator<=(qreal value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            return toPoint() <= value;
+            m_value /= divisor;
+            return *this;
         }
 
     //
@@ -291,58 +251,6 @@ class TIKZCORE_EXPORT Value
         }
 
         /**
-         * > operator for two Value%s.
-         * Returns true if this object's value is greater than @p value.
-         * If @p value's unit is different, @p value is first converted to a
-         * compatible Unit before adding the value.
-         */
-        inline bool operator>(const Value & value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            Q_ASSERT(value.isValid());
-            return m_value > value.convertTo(m_unit).value();
-        }
-
-        /**
-         * >= operator for two Value%s.
-         * Returns true if this object's value is greater than or equal to @p value.
-         * If @p value's unit is different, @p value is first converted to a
-         * compatible Unit before adding the value.
-         */
-        inline bool operator>=(const Value & value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            Q_ASSERT(value.isValid());
-            return m_value >= value.convertTo(m_unit).value();
-        }
-
-        /**
-         * < operator for two Value%s.
-         * Returns true if this object's value is smaller than @p value.
-         * If @p value's unit is different, @p value is first converted to a
-         * compatible Unit before adding the value.
-         */
-        inline bool operator<(const Value & value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            Q_ASSERT(value.isValid());
-            return m_value < value.convertTo(m_unit).value();
-        }
-
-        /**
-         * <= operator for two Value%s.
-         * Returns true if this object's value is smaller than or equal to @p value.
-         * If @p value's unit is different, @p value is first converted to a
-         * compatible Unit before adding the value.
-         */
-        inline bool operator<=(const Value & value) const noexcept
-        {
-            Q_ASSERT(isValid());
-            Q_ASSERT(value.isValid());
-            return m_value <= value.convertTo(m_unit).value();
-        }
-
-        /**
          * QDebug support.
          */
         inline friend QDebug operator<<(QDebug s, const tikz::Value & value)
@@ -368,15 +276,125 @@ class TIKZCORE_EXPORT Value
 };
 
 /**
- * * operator.
- * Returns a new Value muliplied by @p value.
- * This operation is independent of the unit.
+ * Returns a Value that is formed by multiplying @p value with @p factor.
+ * @warning This operation is independent of the unit.
  */
-inline constexpr Value operator*(qreal lhs, const Value & rhs)
+inline constexpr Value operator*(const Value & value, qreal factor) noexcept
 {
-    return Value(rhs.value() * lhs, rhs.unit());
-}        
+    return Value(value.value() * factor, value.unit());
+}
 
+/**
+ * Returns a Value that is formed by multiplying @p value with @p factor.
+ * @warning This operation is independent of the unit.
+ */
+inline constexpr Value operator*(qreal factor, const Value & value) noexcept
+{
+    return value * factor;
+}
+
+/**
+ * Returns a Value that is formed by dividing @p value by @p divisor.
+ * @warning This operation is independent of the unit.
+ */
+inline Value operator/(const Value & value, qreal divisor)
+{
+    Q_ASSERT(divisor != 0);
+    return Value(value.value() / divisor, value.unit());
+}
+
+/**
+ * Returns @e true if @p value is greater than @p valInPoints.
+ * @warning @valInPoints is interpreted in Points.
+ */
+inline constexpr bool operator>(const Value & value, qreal valInPoints) noexcept
+{
+    return value.toPoint() > valInPoints;
+}
+
+/**
+ * Returns @e true if @p value is greater than @p valInPoints.
+ * @warning @valInPoints is interpreted in Points.
+ */
+inline constexpr bool operator>(qreal valInPoints, const Value & value) noexcept
+{
+    return valInPoints > value.toPoint();
+}
+
+/**
+ * Returns true if @p value in Point is greater than or equal to @p valInPoints.
+ * @warning @valInPoints is interpreted in Points.
+ */
+inline constexpr bool operator>=(const Value & value, qreal valInPoints) noexcept
+{
+    return value.toPoint() >= valInPoints;
+}
+
+/**
+ * Returns true if @p value in Point is less than @p valInPoints.
+ * @warning @valInPoints is interpreted in Points.
+ */
+inline constexpr bool operator<(const Value & value, qreal valInPoints) noexcept
+{
+    return value.toPoint() < valInPoints;
+}
+
+/**
+ * Returns true if @p value in Point is less than or equal to @p valInPoints.
+ * @warning @valInPoints is interpreted in Points.
+ */
+inline constexpr bool operator<=(const Value & value, qreal valInPoints) noexcept
+{
+    return value.toPoint() <= valInPoints;
+}
+
+/**
+ * Returns true if Value @p lhs is greater than Valule @p rhs.
+ * @note This comparison is unit-aware.
+ */
+inline bool operator>(const Value & lhs, const Value & rhs) noexcept
+{
+    Q_ASSERT(lhs.isValid());
+    Q_ASSERT(rhs.isValid());
+    return lhs.value() > rhs.convertTo(lhs.unit()).value();
+}
+
+/**
+ * Returns true if Value @p lhs is greater than or equal to Valule @p rhs.
+ * @note This comparison is unit-aware.
+ */
+inline bool operator>=(const Value & lhs, const Value & rhs) noexcept
+{
+    Q_ASSERT(lhs.isValid());
+    Q_ASSERT(rhs.isValid());
+    return lhs.value() >= rhs.convertTo(lhs.unit()).value();
+}
+
+/**
+ * Returns true if Value @p lhs is less than Valule @p rhs.
+ * @note This comparison is unit-aware.
+ */
+inline bool operator<(const Value & lhs, const Value & rhs) noexcept
+{
+    Q_ASSERT(lhs.isValid());
+    Q_ASSERT(rhs.isValid());
+    return lhs.value() < rhs.convertTo(lhs.unit()).value();
+}
+
+/**
+ * Returns true if Value @p lhs is less than or equal to Valule @p rhs.
+ * @note This comparison is unit-aware.
+ */
+inline bool operator<=(const Value & lhs, const Value & rhs) noexcept
+{
+    Q_ASSERT(lhs.isValid());
+    Q_ASSERT(rhs.isValid());
+    return lhs.value() <= rhs.convertTo(lhs.unit()).value();
+}
+
+/**
+ * Convert @p value from unit @p from to unit @p to.
+ */
 inline qreal convertTo(qreal value, Unit from, Unit to)
 {
     const qreal s = internal::units[from][to];

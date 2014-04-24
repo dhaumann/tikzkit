@@ -124,7 +124,7 @@ class TIKZCORE_EXPORT Pos
         static Pos fromString(const QString & str);
 
     //
-    // operators for qreal values
+    // operators
     //
     public:
         /**
@@ -158,6 +158,28 @@ class TIKZCORE_EXPORT Pos
             Q_ASSERT(pos.isValid());
             m_x -= pos.m_x;
             m_y -= pos.m_y;
+            return *this;
+        }
+
+        /**
+         * Multiplies this Pos with @p factor and returns a reference to this Pos.
+         */
+        inline Pos & operator*=(qreal factor) noexcept
+        {
+            Q_ASSERT(isValid());
+            m_x *= factor;
+            m_y *= factor;
+            return *this;
+        }
+
+        /**
+         * Divides this Pos by @p divisor and returns a reference to this Pos.
+         */
+        inline Pos & operator/=(qreal divisor) noexcept
+        {
+            Q_ASSERT(isValid());
+            m_x /= divisor;
+            m_y /= divisor;
             return *this;
         }
 
@@ -240,16 +262,18 @@ inline constexpr Pos operator*(qreal factor, const Pos & pos) noexcept
 /**
  * Returns a copy of @p pos, divided by @p factor.
  */
-inline constexpr Pos operator/(const Pos & pos, qreal divisor)
+inline Pos operator/(const Pos & pos, qreal divisor)
 {
+    Q_ASSERT(divisor != 0);
     return Pos(pos.x() / divisor, pos.y() / divisor);
 }
 
 /**
  * Returns a copy of @p pos, divided by @p factor.
  */
-inline constexpr Pos operator/(qreal divisor, const Pos & pos)
+inline Pos operator/(qreal divisor, const Pos & pos)
 {
+    Q_ASSERT(divisor != 0);
     return Pos(pos.x() / divisor, pos.y() / divisor);
 }
 
