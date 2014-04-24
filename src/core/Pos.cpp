@@ -67,9 +67,10 @@ namespace QTest {
     template<>
     char *toString(const tikz::Pos & pos)
     {
-        const QString str = "Pos[" + pos.toString() + "]";
+        const QString str = "Pos[" + pos.convertTo(tikz::Unit::Point).toString() + "]";
         const QByteArray ba = str.toLatin1();
         return qstrdup(ba.data());
     }
 }
+
 // kate: indent-width 4; replace-tabs on;

@@ -32,6 +32,12 @@ add_executable(TestValue ${TestValueSrc})
 target_link_libraries(TestValue Qt5::Core Qt5::Test qtikzcore)
 add_test(NAME TestValue COMMAND TestValue)
 
+# Test: Pos
+set(TestPosSrc TestPos.cpp)
+add_executable(TestPos ${TestPosSrc})
+target_link_libraries(TestPos Qt5::Core Qt5::Test qtikzcore)
+add_test(NAME TestPos COMMAND TestPos)
+
 # Document test
 set(DocumentSrc documenttest.cpp)
 add_executable(DocumentTest ${DocumentSrc})
