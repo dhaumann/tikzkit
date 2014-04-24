@@ -29,17 +29,18 @@ namespace tikz
 {
 
 namespace internal {
+    // see: http://tex.stackexchange.com/questions/8260
     static constexpr qreal units[4][4] = {
-        //pt, mm      , cm     , in
+        // pt          , mm      , cm     , in
 
         // conversion from pt
-        { 1.0    ,  0.35146, 0.03515, 0.013837},
+        {1.0           , 2540.0/7227.0, 254.0/7227.0, 100.0/7227.0},
         // conversion from mm
-        { 2.84526,  1.0    , 0.1    , 0.03937},
+        {7227.0/2540.0 , 1.0          , 0.1         , 5.0/127.0},
         // conversion from cm
-        {28.45274, 10.0    , 1.0    , 0.3937},
+        {7227.0/254.0  , 10.0         , 1.0         , 50.0/127.0},
         // conversion from in
-        {72.27   , 25.40013, 2.54   , 1.0}
+        {7227.0/100.0  , 127.0/5.0    , 127.0/50.0  , 1.0}
     };
 }
 
@@ -114,28 +115,6 @@ class TIKZCORE_EXPORT Value
          * Convert @p str to a Value.
          */
         static Value fromString(const QString & str);
-
-    //
-    // operators for equality
-    //
-    public:
-        /**
-         * Check for equality with (val1 == val2).
-         * The value @p other is converted to a compatible unit, meaning that
-         * the unit of @p other and this object are allowed to differ.
-         */
-        inline constexpr bool operator==(const Value & other) const noexcept
-        {
-            return m_value == other.convertTo(m_unit).m_value;
-        }
-
-        /**
-         * Check for inequality with (val1 != val2).
-         */
-        inline constexpr bool operator!=(const Value & other) const noexcept
-        {
-            return !(operator==(other));
-        }
 
     //
     // operators for qreal values
@@ -274,6 +253,26 @@ class TIKZCORE_EXPORT Value
          */
         Unit m_unit;
 };
+
+/**
+ * Equality operator.
+ * Return @e true, if the Value @p lhs equals the Value @p rhs.
+ * @note The comparison is unit-aware.
+ */
+inline constexpr bool operator==(const Value & lhs, const Value & rhs) noexcept
+{
+    return qFuzzyCompare(lhs.value(), rhs.convertTo(lhs.unit()).value());
+}
+
+/**
+ * Inequality operator.
+ * Return @e true, if the Value @p lhs does not equal the Value @p rhs.
+ * @note The comparison is unit-aware.
+ */
+inline constexpr bool operator!=(const Value & lhs, const Value & rhs) noexcept
+{
+    return ! (lhs == rhs);
+}
 
 /**
  * Returns a Value that is formed by multiplying @p value with @p factor.
