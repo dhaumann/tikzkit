@@ -316,8 +316,8 @@ void EdgePathItem::updateCache()
     m_tailPath = QPainterPath();
 
     // compute shorten < and shorten > so it can be used to adapt m_startAnchor and m_endAnchor
-    const qreal shortenStart = style()->shortenStart() + m_arrowTail->rightExtend();
-    const qreal shortenEnd = style()->shortenEnd() + m_arrowHead->rightExtend();
+    const qreal shortenStart = style()->shortenStart().toPoint() + m_arrowTail->rightExtend();
+    const qreal shortenEnd = style()->shortenEnd().toPoint() + m_arrowHead->rightExtend();
 
     const qreal startRad = startAngle();
     const qreal endRad = endAngle();

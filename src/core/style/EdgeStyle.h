@@ -33,16 +33,16 @@ class EdgeStylePrivate;
 class TIKZCORE_EXPORT EdgeStyle : public Style
 {
     Q_OBJECT
-        Q_PROPERTY(qreal radiusX READ radiusX WRITE setRadiusX RESET unsetRadiusX)
-        Q_PROPERTY(qreal radiusY READ radiusY WRITE setRadiusY RESET unsetRadiusY)
+        Q_PROPERTY(tikz::Value radiusX READ radiusX WRITE setRadiusX RESET unsetRadiusX)
+        Q_PROPERTY(tikz::Value radiusY READ radiusY WRITE setRadiusY RESET unsetRadiusY)
         Q_PROPERTY(qreal bendAngle READ bendAngle WRITE setBendAngle RESET unsetBendAngle)
         Q_PROPERTY(qreal looseness READ looseness WRITE setLooseness RESET unsetLooseness)
         Q_PROPERTY(qreal outAngle READ outAngle WRITE setOutAngle RESET unsetOutAngle)
         Q_PROPERTY(qreal inAngle READ inAngle WRITE setInAngle RESET unsetInAngle)
         Q_PROPERTY(tikz::Arrow arrowTail READ arrowTail WRITE setArrowTail RESET unsetArrowTail)
         Q_PROPERTY(tikz::Arrow arrowHead READ arrowHead WRITE setArrowHead RESET unsetArrowHead)
-        Q_PROPERTY(qreal shortenStart READ shortenStart WRITE setShortenStart RESET unsetShortenStart)
-        Q_PROPERTY(qreal shortenEnd READ shortenEnd WRITE setShortenEnd RESET unsetShortenEnd)
+        Q_PROPERTY(tikz::Value shortenStart READ shortenStart WRITE setShortenStart RESET unsetShortenStart)
+        Q_PROPERTY(tikz::Value shortenEnd READ shortenEnd WRITE setShortenEnd RESET unsetShortenEnd)
 
     public:
         /**
@@ -68,13 +68,13 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Get the "x radius" of an ellipse path. The default value is 0.0.
          * @note This value has an effect only if the path is of type Path::Ellipse.
          */
-        qreal radiusX() const;
+        tikz::Value radiusX() const;
 
         /**
          * Get the "y radius" of an ellipse path. The default value is 0.0.
          * @note This value has an effect only if the path is of type Path::Ellipse.
          */
-        qreal radiusY() const;
+        tikz::Value radiusY() const;
 
         /**
          * Check whether the "x radius" property is set.
@@ -91,13 +91,13 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Set the "x radius" of the ellipse to @p xradius.
          * This value is used by tikz::EllipsePath.
          */
-        void setRadiusX(qreal xradius);
+        void setRadiusX(const tikz::Value & xradius);
 
         /**
          * Set the "y radius" of the ellipse to @p yradius.
          * This value is used by tikz::EllipsePath.
          */
-        void setRadiusY(qreal yradius);
+        void setRadiusY(const tikz::Value & yradius);
 
         /**
          * Unset the "x radius" property.
@@ -294,7 +294,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Shorten amount for the start of the edge in cm.
          * Default: 0.0cm
          */
-        qreal shortenStart() const;
+        tikz::Value shortenStart() const;
 
         /**
          * Check whether shorten start is set.
@@ -305,7 +305,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Shorten amount for the end of the edge in cm.
          * Default: 0.0cm
          */
-        qreal shortenEnd() const;
+        tikz::Value shortenEnd() const;
 
         /**
          * Check whether shorten end is set.
@@ -316,12 +316,12 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         /**
          * Set the start shorten amount to @p shorten cm.
          */
-        void setShortenStart(qreal shorten);
+        void setShortenStart(const tikz::Value & shorten);
 
         /**
          * Set the end shorten amount to @p shorten cm.
          */
-        void setShortenEnd(qreal shorten);
+        void setShortenEnd(const tikz::Value & shorten);
 
         /**
          * Unset the start shorten amount.

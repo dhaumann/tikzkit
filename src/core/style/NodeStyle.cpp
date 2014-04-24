@@ -40,8 +40,8 @@ public:
     Shape shape;
     tikz::Value innerSep;
     tikz::Value outerSep;
-    qreal minimumHeight;
-    qreal minimumWidth;
+    tikz::Value minimumHeight;
+    tikz::Value minimumWidth;
 };
 
 NodeStyle::NodeStyle()
@@ -51,9 +51,7 @@ NodeStyle::NodeStyle()
     d->align = NoAlign;
     d->shape = ShapeRectangle;
     d->innerSep = tikz::Value(3); //FIXME: 0.3333em
-    d->outerSep = 0.5; // 0.5 \pgflinewidth
-    d->minimumHeight = 0.0; // mm
-    d->minimumWidth = 0.0; // mm
+    d->outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
 }
 
 NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
@@ -220,7 +218,7 @@ void NodeStyle::unsetOuterSep()
     }
 }
 
-qreal NodeStyle::minimumHeight() const
+tikz::Value NodeStyle::minimumHeight() const
 {
     if (propertySet(s_minimumHeight)) {
         return d->minimumHeight;
@@ -231,7 +229,7 @@ qreal NodeStyle::minimumHeight() const
         return parentStyle->minimumHeight();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
 bool NodeStyle::minimumHeightSet() const
@@ -239,7 +237,7 @@ bool NodeStyle::minimumHeightSet() const
     return propertySet(s_minimumHeight);
 }
 
-qreal NodeStyle::minimumWidth() const
+tikz::Value NodeStyle::minimumWidth() const
 {
     if (propertySet(s_minimumWidth)) {
         return d->minimumWidth;
@@ -250,7 +248,7 @@ qreal NodeStyle::minimumWidth() const
         return parentStyle->minimumWidth();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
 bool NodeStyle::minimumWidthSet() const
@@ -258,7 +256,7 @@ bool NodeStyle::minimumWidthSet() const
     return propertySet(s_minimumWidth);
 }
 
-void NodeStyle::setMinimumHeight(qreal height)
+void NodeStyle::setMinimumHeight(const tikz::Value & height)
 {
     if (!propertySet(s_minimumHeight) || d->minimumHeight != height) {
         beginConfig();
@@ -268,7 +266,7 @@ void NodeStyle::setMinimumHeight(qreal height)
     }
 }
 
-void NodeStyle::setMinimumWidth(qreal width)
+void NodeStyle::setMinimumWidth(const tikz::Value & width)
 {
     if (!propertySet(s_minimumWidth) || d->minimumWidth != width) {
         beginConfig();
@@ -283,7 +281,7 @@ void NodeStyle::unsetMinimumHeight()
     if (propertySet(s_minimumHeight)) {
         beginConfig();
         removeProperty(s_minimumHeight);
-        d->minimumHeight = 0.0;
+        d->minimumHeight = tikz::Value(0);
         endConfig();
     }
 }
@@ -293,7 +291,7 @@ void NodeStyle::unsetMinimumWidth()
     if (propertySet(s_minimumWidth)) {
         beginConfig();
         removeProperty(s_minimumWidth);
-        d->minimumWidth = 0.0;
+        d->minimumWidth = tikz::Value(0);
         endConfig();
     }
 }

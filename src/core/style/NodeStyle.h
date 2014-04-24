@@ -36,8 +36,8 @@ class TIKZCORE_EXPORT NodeStyle : public Style
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
     Q_PROPERTY(tikz::Value innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
     Q_PROPERTY(tikz::Value outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
-    Q_PROPERTY(qreal minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
-    Q_PROPERTY(qreal minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
+    Q_PROPERTY(tikz::Value minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
+    Q_PROPERTY(tikz::Value minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
 
     public:
         /**
@@ -166,7 +166,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Get the minimum height.
          * Initially unset, and the default value is 0 mm.
          */
-        qreal minimumHeight() const;
+        tikz::Value minimumHeight() const;
 
         /**
          * Check whether the minimum height is set.
@@ -177,7 +177,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Get the minimum width.
          * Initially unset, and the default value is 0 mm.
          */
-        qreal minimumWidth() const;
+        tikz::Value minimumWidth() const;
 
         /**
          * Check whether the minimum width is set.
@@ -189,13 +189,13 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Get the minimum height.
          * Initially unset, and the default value is 0 mm.
          */
-        void setMinimumHeight(qreal height);
+        void setMinimumHeight(const tikz::Value & height);
 
         /**
          * Get the minimum width.
          * Initially unset, and the default value is 0 mm.
          */
-        void setMinimumWidth(qreal width);
+        void setMinimumWidth(const tikz::Value & width);
 
         /**
          * Unset the minimum height.

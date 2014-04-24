@@ -170,11 +170,11 @@ QRectF TikzNode::shapeRect() const
     qreal h = textRect.height() + 2.0 * innerSep.toPoint();
 
     // extend rect, if minimum size is set
-    if (w < style()->minimumWidth()) {
-        w = style()->minimumWidth();
+    if (w < style()->minimumWidth().toPoint()) {
+        w = style()->minimumWidth().toPoint();
     }
-    if (h < style()->minimumHeight()) {
-        h = style()->minimumHeight();
+    if (h < style()->minimumHeight().toPoint()) {
+        h = style()->minimumHeight().toPoint();
     }
 
     QRectF rect(-w/2, -h/2, w, h);

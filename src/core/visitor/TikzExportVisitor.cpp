@@ -224,10 +224,10 @@ void TikzExportVisitor::visit(Path * path)
             //
             QString radius;
             if (ellipsePath->style()->radiusX() == ellipsePath->style()->radiusY()) {
-                radius = "radius=" + QString::number(ellipsePath->style()->radiusX()) + "cm";
+                radius = "radius=" + ellipsePath->style()->radiusX().toString();
             } else {
-                radius = "x radius=" + QString::number(ellipsePath->style()->radiusX()) + "cm";
-                radius += ", y radius=" + QString::number(ellipsePath->style()->radiusY()) + "cm";
+                radius = "x radius=" + ellipsePath->style()->radiusX().toString();
+                radius += ", y radius=" + ellipsePath->style()->radiusY().toString();
             }
 
             //
@@ -391,11 +391,11 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
     // export shorten properties
     //
     if (style->shortenStartSet()) {
-        options << QString("shorten <=cm").arg(style->shortenStart());
+        options << "shorten <=" << style->shortenStart().toString();
     }
 
     if (style->shortenEndSet()) {
-        options << QString("shorten >=cm").arg(style->shortenEnd());
+        options << "shorten >=" << style->shortenEnd().toString();
     }
 
 // FIXME
@@ -504,13 +504,13 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     if (style->minimumWidthSet() && style->minimumHeightSet()
         && style->minimumWidth() == style->minimumHeight())
     {
-        options << QString("minimum size=%1cm").arg(style->minimumWidth());
+        options << "minimum size=" << style->minimumWidth().toString();
     } else {
         if (style->minimumWidthSet()) {
-            options << QString("minimum width=%1cm").arg(style->minimumWidth());
+            options << "minimum width=%1cm" << style->minimumWidth().toString();
         }
         if (style->minimumHeightSet()) {
-            options << QString("minimum height=%1cm").arg(style->minimumHeight());
+            options << "minimum height=%1cm" << style->minimumHeight().toString();
         }
     }
 

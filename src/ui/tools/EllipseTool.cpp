@@ -114,8 +114,8 @@ void EllipseTool::updateHandlePositions()
 QPointF EllipseTool::handlePos(Handle::Position pos)
 {
     const QPointF c = m_path->pos();
-    const qreal w = m_path->style()->radiusX();
-    const qreal h = m_path->style()->radiusY();
+    const qreal w = m_path->style()->radiusX().toPoint();
+    const qreal h = m_path->style()->radiusY().toPoint();
     QPointF p(0, 0);
 
     switch (pos) {
@@ -182,8 +182,8 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
 
     // honor rotation of path
     const QPointF delta = t.map(m_path->pos() - scenePos);
-    qreal w = m_path->style()->radiusX();
-    qreal h = m_path->style()->radiusY();
+    qreal w = m_path->style()->radiusX().toPoint();
+    qreal h = m_path->style()->radiusY().toPoint();
 
     switch (handle->handlePos()) {
         case Handle::TopLeftCorner:

@@ -39,8 +39,8 @@ static const char * s_shortenEnd = "shortenEnd";
 class EdgeStylePrivate
 {
 public:
-    qreal radiusX;
-    qreal radiusY;
+    tikz::Value radiusX;
+    tikz::Value radiusY;
 
     qreal bendAngle; // in degree
     qreal looseness;
@@ -50,13 +50,13 @@ public:
     Arrow arrowTail;
     Arrow arrowHead;
 
-    qreal shortenStart;
-    qreal shortenEnd;
+    tikz::Value shortenStart;
+    tikz::Value shortenEnd;
 
     void init()
     {
-        radiusX = 0.0;
-        radiusY = 0.0;
+        // radiusX/Y = 0 through default constructor
+        // shortenStart/End = 0 through default constructor
 
         bendAngle = 0.0;
         looseness = 1.0;
@@ -65,9 +65,6 @@ public:
 
         arrowTail = tikz::NoArrow;
         arrowHead = tikz::NoArrow;
-
-        shortenStart = 0.0;
-        shortenEnd = 0.0;
     }
 };
 
@@ -98,7 +95,7 @@ void EdgeStyle::setStyle(const EdgeStyle& other)
     endConfig();
 }
 
-qreal EdgeStyle::radiusX() const
+tikz::Value EdgeStyle::radiusX() const
 {
     if (propertySet(s_radiusX)) {
         return d->radiusX;
@@ -109,10 +106,10 @@ qreal EdgeStyle::radiusX() const
         return style->radiusX();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
-qreal EdgeStyle::radiusY() const
+tikz::Value EdgeStyle::radiusY() const
 {
     if (propertySet(s_radiusY)) {
         return d->radiusY;
@@ -123,7 +120,7 @@ qreal EdgeStyle::radiusY() const
         return style->radiusY();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
 bool EdgeStyle::radiusXSet() const
@@ -136,7 +133,7 @@ bool EdgeStyle::radiusYSet() const
     return propertySet(s_radiusY);
 }
 
-void EdgeStyle::setRadiusX(qreal xradius)
+void EdgeStyle::setRadiusX(const tikz::Value & xradius)
 {
     if (!propertySet(s_radiusX) || d->radiusX != xradius) {
         beginConfig();
@@ -146,7 +143,7 @@ void EdgeStyle::setRadiusX(qreal xradius)
     }
 }
 
-void EdgeStyle::setRadiusY(qreal yradius)
+void EdgeStyle::setRadiusY(const tikz::Value & yradius)
 {
     if (!propertySet(s_radiusY) || d->radiusY != yradius) {
         beginConfig();
@@ -161,7 +158,7 @@ void EdgeStyle::unsetRadiusX()
     if (propertySet(s_radiusX)) {
         beginConfig();
         removeProperty(s_radiusX);
-        d->radiusX = 0.0;
+        d->radiusX = tikz::Value(0);
         endConfig();
     }
 }
@@ -171,7 +168,7 @@ void EdgeStyle::unsetRadiusY()
     if (propertySet(s_radiusY)) {
         beginConfig();
         removeProperty(s_radiusY);
-        d->radiusY = 0.0;
+        d->radiusY = tikz::Value(0);
         endConfig();
     }
 }
@@ -434,7 +431,7 @@ void EdgeStyle::unsetArrowHead()
     }
 }
 
-qreal EdgeStyle::shortenStart() const
+tikz::Value EdgeStyle::shortenStart() const
 {
     if (propertySet(s_shortenStart)) {
         return d->shortenStart;
@@ -445,7 +442,7 @@ qreal EdgeStyle::shortenStart() const
         return style->shortenStart();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
 bool EdgeStyle::shortenStartSet() const
@@ -453,7 +450,7 @@ bool EdgeStyle::shortenStartSet() const
     return propertySet(s_shortenStart);
 }
 
-qreal EdgeStyle::shortenEnd() const
+tikz::Value EdgeStyle::shortenEnd() const
 {
     if (propertySet(s_shortenEnd)) {
         return d->shortenEnd;
@@ -464,7 +461,7 @@ qreal EdgeStyle::shortenEnd() const
         return style->shortenEnd();
     }
 
-    return 0.0;
+    return tikz::Value(0);
 }
 
 bool EdgeStyle::shortenEndSet() const
@@ -472,7 +469,7 @@ bool EdgeStyle::shortenEndSet() const
     return propertySet(s_shortenEnd);
 }
 
-void EdgeStyle::setShortenStart(qreal shorten)
+void EdgeStyle::setShortenStart(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenStart) || d->shortenStart != shorten) {
         beginConfig();
@@ -482,7 +479,7 @@ void EdgeStyle::setShortenStart(qreal shorten)
     }
 }
 
-void EdgeStyle::setShortenEnd(qreal shorten)
+void EdgeStyle::setShortenEnd(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenEnd) || d->shortenEnd != shorten) {
         beginConfig();
@@ -497,7 +494,7 @@ void EdgeStyle::unsetShortenStart()
     if (propertySet(s_shortenStart)) {
         beginConfig();
         removeProperty(s_shortenStart);
-        d->shortenStart = 0.0;
+        d->shortenStart = tikz::Value(0);
         endConfig();
     }
 }
@@ -507,7 +504,7 @@ void EdgeStyle::unsetShortenEnd()
     if (propertySet(s_shortenEnd)) {
         beginConfig();
         removeProperty(s_shortenEnd);
-        d->shortenEnd = 0.0;
+        d->shortenEnd = tikz::Value(0);
         endConfig();
     }
 }

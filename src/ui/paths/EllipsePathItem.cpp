@@ -179,7 +179,9 @@ void EllipsePathItem::updateCache()
     m_boundingRect = QRectF();
 
     // draw ellipse path
-    m_ellipse.addEllipse(pos(), style()->radiusX(), style()->radiusY());
+    m_ellipse.addEllipse(pos(),
+                         style()->radiusX().toPoint(),
+                         style()->radiusY().toPoint());
 
     // cache hover path
     QPainterPathStroker pps;

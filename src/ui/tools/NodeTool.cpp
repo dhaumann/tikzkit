@@ -177,8 +177,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 
     // honor rotation of node
     const QPointF delta = 2 * t.map(m_node->node()->pos() - scenePos);
-    qreal w = m_node->style()->minimumWidth();
-    qreal h = m_node->style()->minimumHeight();
+    qreal w = m_node->style()->minimumWidth().toPoint();
+    qreal h = m_node->style()->minimumHeight().toPoint();
 
     switch (handle->handlePos()) {
         case Handle::TopLeftCorner:
