@@ -63,31 +63,27 @@ static QString colorToString(const QColor & color)
 
 static QString toString(tikz::core::Style * style, bool doubleLine = false)
 {
-    const tikz::LineWidth lw = doubleLine ? style->innerLineWidthType() : style->lineWidthType();
-    QString width;
-    switch (lw) {
-        case tikz::LineWidth::UltraThin      : width = "ultra thin"; break;
-        case tikz::LineWidth::VeryThin       : width = "very thin"; break;
-        case tikz::LineWidth::Thin           : width = "thin"; break;
-        case tikz::LineWidth::SemiThick      : width = "semithick"; break;
-        case tikz::LineWidth::Thick          : width = "thick"; break;
-        case tikz::LineWidth::VeryThick      : width = "very thick"; break;
-        case tikz::LineWidth::UltraThick     : width = "ultra thick"; break;
-        case tikz::LineWidth::CustomLineWidth: {
-            width = doubleLine ? style->innerLineWidth().toString() : style->lineWidth().toString();
-            break;
-        }
-        default: Q_ASSERT(false); break;
+    if (doubleLine) {
+        return "double distance=" + style->innerLineWidth().toString();
     }
 
-    if (doubleLine) {
-        return QString("double distance=") + width;
+    const tikz::Value lw = style->lineWidth();
+    if (lw == Value::ultraThin()) {
+        return "ultra thin";
+    } else if (lw == Value::veryThin()) {
+        return "very thin";
+    } else if (lw == Value::thin()) {
+        return "thin";
+    } else if (lw == Value::semiThick()) {
+        return "semithick";
+    } else if (lw == Value::thick()) {
+        return "thick";
+    } else if (lw == Value::veryThick()) {
+        return "very thick";
+    } else if (lw == Value::ultraThick()) {
+        return "ultra thick";
     } else {
-        if (lw == tikz::LineWidth::CustomLineWidth) {
-            return QString("line width=") + width;
-        } else {
-            return width;
-        }
+        return "line width=" + style->lineWidth().toString();
     }
 }
 

@@ -46,7 +46,6 @@ DeserializeVisitor::DeserializeVisitor()
     qRegisterMetaType<tikz::Arrow>("Arrow");
     qRegisterMetaType<tikz::LineCap>("LineCap");
     qRegisterMetaType<tikz::LineJoin>("LineJoin");
-    qRegisterMetaType<tikz::LineWidth>("LineWidth");
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");

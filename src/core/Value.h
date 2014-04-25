@@ -56,6 +56,35 @@ enum Unit {
 
 class TIKZCORE_EXPORT Value
 {
+    //
+    // static functions
+    //
+    public:
+        static inline constexpr Value ultraThin() noexcept {
+            return Value(0.1);
+        }
+        static inline constexpr Value veryThin() noexcept {
+            return Value(0.2);
+        }
+        static inline constexpr Value thin() noexcept {
+            return Value(0.4);
+        }
+        static inline constexpr Value semiThick() noexcept {
+            return Value(0.6);
+        }
+        static inline constexpr Value thick() noexcept {
+            return Value(0.8);
+        }
+        static inline constexpr Value veryThick() noexcept {
+            return Value(1.2);
+        }
+        static inline constexpr Value ultraThick() noexcept {
+            return Value(1.6);
+        }
+        static inline constexpr Value invalid() noexcept {
+            return Value(std::sqrt(-1));
+        }
+
     public:
         /**
          * Constructor with value and type.

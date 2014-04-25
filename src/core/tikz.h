@@ -84,17 +84,6 @@ enum PenStyle {
     LooselyDashDotDottedLine
 };
 
-enum LineWidth {
-    UltraThin = 0,
-    VeryThin,
-    Thin,
-    SemiThick,  // TikZ default
-    Thick,
-    VeryThick,
-    UltraThick,
-    CustomLineWidth
-};
-
 enum LineCap {
     CapUnset = 0,
     RoundCap,

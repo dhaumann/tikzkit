@@ -58,6 +58,10 @@ void ValueTest::testPoint()
 
     // test convertTo() identity
     QCOMPARE(val.convertTo(tikz::Unit::Point), val);
+
+    // test Value::invalid()
+    val = tikz::Value::invalid();
+    QVERIFY(! val.isValid());
 }
 
 void ValueTest::testFromString()

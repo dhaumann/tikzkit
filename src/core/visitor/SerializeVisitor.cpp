@@ -47,7 +47,6 @@ SerializeVisitor::SerializeVisitor()
     qRegisterMetaType<tikz::Arrow>("Arrow");
     qRegisterMetaType<tikz::LineCap>("LineCap");
     qRegisterMetaType<tikz::LineJoin>("LineJoin");
-    qRegisterMetaType<tikz::LineWidth>("LineWidth");
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
@@ -227,14 +226,16 @@ QVariantMap SerializeVisitor::serializeStyle(Style * style)
     if (style->penStyleSet()) {
         map.insert("pen-style", penStyleToString(style->penStyle()));
     }
-    
-    // FIXME line type
+
     // FIXME line width
+//     if (style->penStyleSet()) {
+//         map.insert("pen-style", penStyleToString(style->penStyle()));
+//     }
+    
 
     if (style->doubleLineSet()) {
         map.insert("double-line", "true");
 
-        // FIXME line type
         // FIXME line width
 
         if (style->innerLineColorSet()) {

@@ -62,8 +62,6 @@ void ArrowComboBoxPrivate::fillComboBox()
 
     // create horizontal edge from 0.1cm to 0.9cm
     tikz::core::EdgeStyle style;
-    style.setLineWidthType(tikz::VeryThick);
-//     style.setInnerLineWidthType(tikz::VeryThick);
 //     style.setDoubleLine(true);
 
     // prepare painter pen

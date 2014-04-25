@@ -35,6 +35,41 @@ void LinePropertyWidgetPrivate::init()
     connect(&backupStyle, SIGNAL(changed()), this, SLOT(reload()));
 }
 
+static int indexForLineWidth(const tikz::Value & lw)
+{
+    if (lw == tikz::Value::ultraThin()) {
+        return 0;
+    } else if (lw == tikz::Value::veryThin()) {
+        return 1;
+    } else if (lw == tikz::Value::thin()) {
+        return 2;
+    } else if (lw == tikz::Value::semiThick()) {
+        return 3;
+    } else if (lw == tikz::Value::thick()) {
+        return 4;
+    } else if (lw == tikz::Value::veryThick()) {
+        return 5;
+    } else if (lw == tikz::Value::ultraThick()) {
+        return 6;
+    } else {
+        return 7;
+    }
+}
+
+static tikz::Value lineWidthForIndex(int index)
+{
+    switch (index) {
+	case 0: return tikz::Value::ultraThin();
+	case 1: return tikz::Value::veryThin();
+	case 2: return tikz::Value::thin();
+	case 3: return tikz::Value::semiThick();
+	case 4: return tikz::Value::thick();
+	case 5: return tikz::Value::veryThick();
+	case 6: return tikz::Value::ultraThick();
+	default: return tikz::Value::invalid();
+    }
+}
+
 void LinePropertyWidgetPrivate::reload()
 {
     if (!style) {
@@ -45,7 +80,7 @@ void LinePropertyWidgetPrivate::reload()
 
     ui.cmbPenStyle->setCurrentIndex(static_cast<int>(style->penStyle()));
     ui.cmbLineWidth->blockSignals(true);
-    ui.cmbLineWidth->setCurrentIndex(static_cast<int>(style->lineWidthType()));
+    ui.cmbLineWidth->setCurrentIndex(indexForLineWidth(style->lineWidth()));
     ui.cmbLineWidth->blockSignals(false);
     ui.sbLineWidth->blockSignals(true);
     ui.sbLineWidth->setValue(style->lineWidth().convertTo(tikz::Unit::Millimeter).value());
@@ -55,7 +90,7 @@ void LinePropertyWidgetPrivate::reload()
     ui.chkDoubleLine->setChecked(style->doubleLine());
     ui.chkDoubleLine->blockSignals(false);
     ui.cmbInnerLineWidth->blockSignals(true);
-    ui.cmbInnerLineWidth->setCurrentIndex(static_cast<int>(style->innerLineWidthType()));
+    ui.cmbInnerLineWidth->setCurrentIndex(indexForLineWidth(style->innerLineWidth()));
     ui.cmbInnerLineWidth->blockSignals(false);
     ui.sbInnerLineWidth->blockSignals(true);
     ui.sbInnerLineWidth->setValue(style->innerLineWidth().convertTo(tikz::Unit::Millimeter).value());
@@ -77,8 +112,11 @@ void LinePropertyWidgetPrivate::setPenStyle(int index)
 
 void LinePropertyWidgetPrivate::setLineWidthType(int index)
 {
-    lineStyle()->setLineWidthType(static_cast<tikz::LineWidth>(index));
-    reload();
+    tikz::Value lw = lineWidthForIndex(index);
+    if (lw.isValid()) {
+	lineStyle()->setLineWidth(lw.convertTo(tikz::Unit::Centimeter));
+	reload();
+    }
 }
 
 void LinePropertyWidgetPrivate::setLineWidth(double lineWidth)
@@ -95,8 +133,11 @@ void LinePropertyWidgetPrivate::setDoubleLine(bool doubleLine)
 
 void LinePropertyWidgetPrivate::setInnerLineWidthType(int index)
 {
-    lineStyle()->setInnerLineWidthType(static_cast<tikz::LineWidth>(index));
-    reload();
+    tikz::Value lw = lineWidthForIndex(index);
+    if (lw.isValid()) {
+	lineStyle()->setInnerLineWidth(lw.convertTo(tikz::Unit::Centimeter));
+	reload();
+    }
 }
 
 void LinePropertyWidgetPrivate::setInnerLineWidth(double lineWidth)

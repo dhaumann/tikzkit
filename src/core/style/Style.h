@@ -45,11 +45,9 @@ class TIKZCORE_EXPORT Style : public QObject
 
     Q_PROPERTY(tikz::PenStyle penStyle READ penStyle WRITE setPenStyle RESET unsetPenStyle)
 
-    Q_PROPERTY(tikz::LineWidth lineWidthType READ lineWidthType WRITE setLineWidthType RESET unsetLineWidth)
     Q_PROPERTY(tikz::Value lineWidth READ lineWidth WRITE setLineWidth RESET unsetLineWidth)
 
     Q_PROPERTY(bool doubleLine READ doubleLine WRITE setDoubleLine RESET unsetDoubleLine)
-    Q_PROPERTY(tikz::LineWidth innerLineWidthType READ innerLineWidthType WRITE setInnerLineWidthType RESET unsetInnerLineWidth)
     Q_PROPERTY(tikz::Value innerLineWidth READ innerLineWidth WRITE setInnerLineWidth RESET unsetInnerLineWidth)
     Q_PROPERTY(QColor innerLineColor READ innerLineColor WRITE setInnerLineColor RESET unsetInnerLineColor)
 
@@ -183,12 +181,6 @@ class TIKZCORE_EXPORT Style : public QObject
     //
     public:
         /**
-         * Get the line width.
-         * @see LineWidth
-         */
-        LineWidth lineWidthType() const;
-
-        /**
          * Check whether the line width is set.
          * @return true, if this style has an own line width
          */
@@ -209,14 +201,6 @@ class TIKZCORE_EXPORT Style : public QObject
 
     public Q_SLOTS:
         /**
-         * Set the line width type to @p type.
-         * A cusom line width is achieved by alling setLineWidth().
-         * @p width the line width type
-         * @see LineWidth
-         */
-        void setLineWidthType(tikz::LineWidth type);
-
-        /**
          * Set the line width to @p width cm.
          * Calling this function automatically sets the lineWidth()
          * to LineWidth::CustomLineWidth.
@@ -227,10 +211,10 @@ class TIKZCORE_EXPORT Style : public QObject
 
         /**
          * Unset the line width.
-         * After this, calling lineWidth() or lineWidthType() return the
-         * respective values of the parent() style, if the parent() style exists,
-         * otherwise the returned line width is @e SemiThick.
-         * @see LineWidth, lineWidth(), lineWidthType()
+         * After this, calling lineWidth() returns the respective value
+         * of the parent() style, if the parent() style exists,
+         * otherwise the returned line width is @e Value::semiThick().
+         * @see LineWidth, lineWidth()
          */
         void unsetLineWidth();
 
@@ -276,14 +260,6 @@ class TIKZCORE_EXPORT Style : public QObject
          */
         bool innerLineWidthSet() const;
 
-        /**
-         * Get the line width type.
-         * If the type is LineWidth::CustomLineWidth, use innerLineWidth()
-         * to get the width in cm.
-         * @see LineWidth
-         */
-        LineWidth innerLineWidthType() const;
-
     public Q_SLOTS:
         /**
          * Set the inner line width to @p width cm.
@@ -293,14 +269,6 @@ class TIKZCORE_EXPORT Style : public QObject
          * @see LineWidth
          */
         void setInnerLineWidth(const tikz::Value & width);
-
-        /**
-         * Set the inner line width type to @p type.
-         * A cusom line width is achieved by alling setInnerLineWidth().
-         * @p width the line width
-         * @see LineWidth
-         */
-        void setInnerLineWidthType(tikz::LineWidth type);
 
         /**
          * Unset the inner line width property.

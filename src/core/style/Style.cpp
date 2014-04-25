@@ -62,12 +62,10 @@ public:
     PenStyle penStyle;
 
     // line width
-    LineWidth lineWidthType;
     tikz::Value lineWidth;
 
     // double lines
     bool doubleLine;
-    LineWidth innerLineWidthType;
     tikz::Value innerLineWidth;
 
     // colors
@@ -92,13 +90,11 @@ void StylePrivate::init()
 
     penStyle = SolidLine;
 
-    lineWidthType = SemiThick;
-    lineWidth = tikz::Value(0.6); // 'semi thick'
+    lineWidth = tikz::Value::semiThick();
 
     doubleLine = false;
 
-    innerLineWidthType = SemiThick;
-    innerLineWidth = Value(0.6); // 'semithick'
+    innerLineWidth = tikz::Value::semiThick();
 
     penOpacity = 1.0;
     fillOpacity = 1.0;
@@ -287,43 +283,18 @@ tikz::Value Style::penWidth() const
     }
 }
 
-LineWidth Style::lineWidthType() const
-{
-    if (propertySet(s_lineWidth)) {
-        return d->lineWidthType;
-    }
-
-    if (parentStyle()) {
-        return parentStyle()->lineWidthType();
-    }
-
-    return SemiThick;
-}
-
 bool Style::lineWidthSet() const
 {
     return propertySet(s_lineWidth);
 }
 
-void Style::setLineWidthType(tikz::LineWidth type)
-{
-    if (!propertySet(s_lineWidth) || d->lineWidthType != type) {
-        beginConfig();
-        addProperty(s_lineWidth);
-        d->lineWidthType = type;
-        endConfig();
-    }
-}
-
 void Style::setLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_lineWidth)
-        || d->lineWidthType != CustomLineWidth
         || d->lineWidth != width
     ) {
         beginConfig();
         addProperty(s_lineWidth);
-        d->lineWidthType = CustomLineWidth;
         d->lineWidth = width;
         endConfig();
     }
@@ -332,24 +303,14 @@ void Style::setLineWidth(const tikz::Value & width)
 tikz::Value Style::lineWidth() const
 {
     if (propertySet(s_lineWidth)) {
-        switch (lineWidthType()) {
-            case tikz::UltraThin : return tikz::Value(0.1);
-            case tikz::VeryThin  : return tikz::Value(0.2);
-            case tikz::Thin      : return tikz::Value(0.4);
-            case tikz::SemiThick : return tikz::Value(0.6);
-            case tikz::Thick     : return tikz::Value(0.8);
-            case tikz::VeryThick : return tikz::Value(1.2);
-            case tikz::UltraThick: return tikz::Value(1.6);
-            case tikz::CustomLineWidth: return d->lineWidth;
-            default: Q_ASSERT(false); break;
-        }
+        return d->lineWidth;
     }
 
     if (parentStyle()) {
         return parentStyle()->lineWidth();
     }
 
-    return tikz::Value(0.6); // SemiThick
+    return tikz::Value::semiThick();
 }
 
 void Style::unsetLineWidth()
@@ -357,8 +318,7 @@ void Style::unsetLineWidth()
     if (propertySet(s_lineWidth)) {
         beginConfig();
         removeProperty(s_lineWidth);
-        d->lineWidthType = SemiThick;
-        d->lineWidth = tikz::Value(0.6); // SemiThick
+        d->lineWidth = tikz::Value::semiThick();
         endConfig();
     }
 }
@@ -405,21 +365,10 @@ tikz::Value Style::innerLineWidth() const
 {
     if (propertySet(s_doubleLine)) {
         if (propertySet(s_innerLineWidth)) {
-            switch (innerLineWidthType()) {
-                case tikz::UltraThin : return tikz::Value(0.1);
-                case tikz::VeryThin  : return tikz::Value(0.2);
-                case tikz::Thin      : return tikz::Value(0.4);
-                case tikz::SemiThick : return tikz::Value(0.6);
-                case tikz::Thick     : return tikz::Value(0.8);
-                case tikz::VeryThick : return tikz::Value(1.2);
-                case tikz::UltraThick: return tikz::Value(1.6);
-                case tikz::CustomLineWidth: return d->innerLineWidth;
-                default: Q_ASSERT(false); break;
-            }
+            return d->innerLineWidth;
         }
 
-        // return SemiThick
-        return tikz::Value(0.6);
+        return tikz::Value::semiThick();
     }
 
     if (parentStyle()) {
@@ -434,19 +383,6 @@ bool Style::innerLineWidthSet() const
     return propertySet(s_innerLineWidth);
 }
 
-LineWidth Style::innerLineWidthType() const
-{
-    if (propertySet(s_innerLineWidth)) {
-        return d->innerLineWidthType;
-    }
-
-    if (parentStyle()) {
-        return parentStyle()->innerLineWidthType();
-    }
-
-    return SemiThick;
-}
-
 void Style::setInnerLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_innerLineWidth) || d->innerLineWidth != width) {
@@ -457,23 +393,12 @@ void Style::setInnerLineWidth(const tikz::Value & width)
     }
 }
 
-void Style::setInnerLineWidthType(tikz::LineWidth type)
-{
-    if (!propertySet(s_innerLineWidth) || d->innerLineWidthType != type) {
-        beginConfig();
-        addProperty(s_innerLineWidth);
-        d->innerLineWidthType = type;
-        endConfig();
-    }
-}
-
 void Style::unsetInnerLineWidth()
 {
     if (propertySet(s_innerLineWidth)) {
         beginConfig();
         removeProperty(s_innerLineWidth);
-        d->innerLineWidthType = SemiThick;
-        d->innerLineWidth = tikz::Value(0.6); // SemiThick
+        d->innerLineWidth = tikz::Value::semiThick();
         endConfig();
     }
 }
