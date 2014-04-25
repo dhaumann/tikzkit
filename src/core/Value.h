@@ -242,6 +242,11 @@ class TIKZCORE_EXPORT Value
             return s.space();
         }
 
+        operator QVariant() const
+        {
+            return QVariant::fromValue(*this);
+        }
+
     private:
         /**
          * The value.

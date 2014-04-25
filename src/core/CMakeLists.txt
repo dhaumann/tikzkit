@@ -53,6 +53,7 @@ set(qtikzcore_SOURCES
     node/UndoSetNodeStyle.cpp
 
     visitor/Visitor.cpp
+    visitor/VisitorHelpers.cpp
     visitor/SerializeVisitor.cpp
     visitor/DeserializeVisitor.cpp
     visitor/TikzExportVisitor.cpp

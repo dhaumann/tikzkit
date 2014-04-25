@@ -87,6 +87,8 @@ class SerializeVisitor : public Visitor
     //
     private:
         QVariantMap serializeStyle(Style * style);
+        QVariantMap serializeEdgeStyle(EdgeStyle * style);
+        QVariantMap serializeNodeStyle(NodeStyle * style);
 
     //
     // private data

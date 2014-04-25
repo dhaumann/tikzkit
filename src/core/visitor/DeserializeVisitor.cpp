@@ -65,6 +65,8 @@ DeserializeVisitor::DeserializeVisitor()
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
+    qRegisterMetaType<tikz::Pos>("Pos");
+    qRegisterMetaType<tikz::Value>("Value");
 }
 
 DeserializeVisitor::~DeserializeVisitor()

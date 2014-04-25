@@ -18,6 +18,7 @@
  */
 
 #include "SerializeVisitor.h"
+#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -37,6 +38,8 @@
 namespace tikz {
 namespace core {
 
+using namespace internal;
+
 SerializeVisitor::SerializeVisitor()
     : Visitor()
 {
@@ -48,6 +51,8 @@ SerializeVisitor::SerializeVisitor()
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
+    qRegisterMetaType<tikz::Pos>("Pos");
+    qRegisterMetaType<tikz::Value>("Value");
 }
 
 SerializeVisitor::~SerializeVisitor()
@@ -110,7 +115,7 @@ void SerializeVisitor::visit(Node * node)
     // serialize node style
     QVariantMap styleMap;
     styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->id() : -1);
-    styleMap.insert("properties", serializeStyle(node->style()));
+    styleMap.insert("properties", serializeNodeStyle(node->style()));
     map.insert("style", styleMap);
 
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
@@ -194,7 +199,7 @@ void SerializeVisitor::visit(Path * path)
     //
     QVariantMap styleMap;
     styleMap.insert("parent", path->style()->parentStyle() ? path->style()->parentStyle()->id() : -1);
-    styleMap.insert("properties", serializeStyle(path->style()));
+    styleMap.insert("properties", serializeEdgeStyle(path->style()));
     map.insert("style", styleMap);
 
     //
@@ -215,41 +220,114 @@ QVariantMap SerializeVisitor::serializeStyle(Style * style)
 {
     QVariantMap map;
 
-    // get style's meta object
-    const QMetaObject * metaObject = style->metaObject();
-    const int count = metaObject->propertyCount();
-
-    for (int i = 0; i < count; ++i) {
-        QMetaProperty metaproperty = metaObject->property(i);
-        const char *name = metaproperty.name();
-
-        if ((!style->propertySet(name)) || (!metaproperty.isReadable()))
-            continue;
-
-        QVariant value;
-        if (metaproperty.isEnumType() || metaproperty.type() >= QVariant::UserType) {
-            QVariant metaVariant = style->property(name);
-
-            // remove full qualifier
-            QString typeName = metaproperty.typeName();
-            int i = typeName.lastIndexOf("::");
-            if (i >= 0) {
-                typeName = typeName.right(typeName.length() - i - 2);
-            }
-
-            // convert enum to string
-            const QMetaObject &mo = tikz::staticMetaObject;
-            int enum_index = mo.indexOfEnumerator(typeName.toLatin1());
-            QMetaEnum metaEnum = mo.enumerator(enum_index);
-
-            QByteArray str = metaEnum.valueToKey(*((int*)metaVariant.data()));
-            value = str;
-//             qDebug() << "type:" << metaproperty.type() << name << "value:" << str << enum_index << metaproperty.typeName();
-        } else {
-            value = style->property(name);
-        }
-        map[QLatin1String(name)] = value;
+    if (style->penColorSet()) {
+        map.insert("pen-color", style->penColor());
     }
+
+    if (style->fillColorSet()) {
+        map.insert("fill-color", style->fillColor());
+    }
+
+    if (style->penOpacitySet()) {
+        map.insert("pen-opacity", style->penOpacity());
+    }
+
+    if (style->fillOpacitySet()) {
+        map.insert("fill-opacity", style->fillOpacity());
+    }
+
+    if (style->penStyleSet()) {
+        map.insert("pen-style", penStyleToString(style->penStyle()));
+    }
+    
+    // FIXME line type
+    // FIXME line width
+
+    if (style->doubleLineSet()) {
+        map.insert("double-line", "true");
+
+        // FIXME line type
+        // FIXME line width
+
+        if (style->innerLineColorSet()) {
+            map.insert("double-line-color", style->innerLineColor());
+        }
+    }
+
+    if (style->rotationSet()) {
+        map.insert("rotation", style->rotation());
+    }
+
+    return map;
+}
+
+QVariantMap SerializeVisitor::serializeEdgeStyle(EdgeStyle * style)
+{
+    QVariantMap map = serializeStyle(style);
+
+    if (style->radiusXSet()) {
+        map.insert("radius-x", style->radiusX().toString());
+    }
+
+    if (style->radiusYSet()) {
+        map.insert("radius-y", style->radiusY().toString());
+    }
+
+    if (style->bendAngleSet()) {
+        map.insert("bend-angle", style->bendAngle());
+    }
+
+    if (style->loosenessSet()) {
+        map.insert("looseness", style->looseness());
+    }
+
+    if (style->outAngleSet()) {
+        map.insert("out-angle", style->outAngle());
+    }
+
+    if (style->inAngleSet()) {
+        map.insert("in-angle", style->inAngle());
+    }
+
+    if (style->arrowTailSet()) {
+        map.insert("arrow-tail", arrowToString(style->arrowTail()));
+    }
+
+    if (style->arrowHeadSet()) {
+        map.insert("arrow-head", arrowToString(style->arrowHead()));
+    }
+
+    if (style->shortenStartSet()) {
+        map.insert("shorten-start", style->shortenStart().toString());
+    }
+
+    if (style->shortenEndSet()) {
+        map.insert("shorten-end", style->shortenEnd().toString());
+    }
+
+    return map;
+}
+
+QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
+{
+    QVariantMap map = serializeStyle(style);
+
+    if (style->alignmentSet()) {
+        map.insert("text-align", textAlignmentToString(style->alignment()));
+    }
+
+    if (style->shapeSet()) {
+        map.insert("shape", shapeToString(style->shape()));
+    }
+
+    if (style->minimumWidthSet()) {
+        map.insert("minimum-width", style->minimumWidth().toString());
+    }
+
+    if (style->minimumHeightSet()) {
+        map.insert("minimum-height", style->minimumHeight().toString());
+    }
+
     return map;
 }
 
