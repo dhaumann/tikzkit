@@ -191,6 +191,15 @@ class TIKZCORE_EXPORT MetaPos
 }
 }
 
+namespace QTest
+{
+    // forward declaration of template in qtestcase.h
+    template<typename T> char* toString(const T&);
+    
+    template<>
+    TIKZCORE_EXPORT char *toString(const tikz::core::MetaPos & metaPos);
+}
+
 #endif // TIKZ_METAPOS_H
 
 // kate: indent-width 4; replace-tabs on;

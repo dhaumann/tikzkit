@@ -256,4 +256,16 @@ QObject * MetaPos::notificationObject()
 }
 }
 
+namespace QTest {
+    // Value: template specialization for QTest::toString()
+    template<>
+    char *toString(const tikz::core::MetaPos & metaPos)
+    {
+        // FIXME: Maybe not QCOMPARE fails due to different units, this may need a fix
+        const QString str = "MetaPos[" + metaPos.toString() + "]";
+        const QByteArray ba = str.toLatin1();
+        return qstrdup(ba.data());
+    }
+}
+
 // kate: indent-width 4; replace-tabs on;
