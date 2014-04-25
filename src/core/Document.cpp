@@ -222,7 +222,7 @@ bool Document::isModified() const
     return ! d->undoManager.isClean();
 }
 
-QPointF Document::scenePos(const MetaPos & pos) const
+tikz::Pos Document::scenePos(const MetaPos & pos) const
 {
     const auto node = pos.node();
     if (!node) {

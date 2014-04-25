@@ -161,9 +161,9 @@ class TIKZCORE_EXPORT Document : public QObject
     //
     public:
         /**
-         * Returns the position for @p pos in QPointF coordinates.
+         * Returns the position for @p pos in tikz::Pos coordinates.
          */
-        virtual QPointF scenePos(const MetaPos & pos) const;
+        virtual tikz::Pos scenePos(const MetaPos & pos) const;
 
     //
     // Node, Path and style management

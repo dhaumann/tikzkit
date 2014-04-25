@@ -82,9 +82,9 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     public:
         /**
-         * Returns the position for @p pos in QPointF coordinates.
+         * Returns the position for @p pos in tikz::Pos coordinates.
          */
-        QPointF scenePos(const tikz::core::MetaPos & pos) const override;
+        tikz::Pos scenePos(const tikz::core::MetaPos & pos) const override;
 
     //
     // Node and path creation

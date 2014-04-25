@@ -103,7 +103,7 @@ TikzEditMode TikzDocument::editMode() const
     return d->scene->editMode();
 }
 
-QPointF TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
+tikz::Pos TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
 {
     const auto node = pos.node();
     if (node) {

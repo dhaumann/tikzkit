@@ -138,7 +138,7 @@ QVector<tikz::Anchor> TikzNode::supportedAnchors() const
     return d->shape->supportedAnchors();
 }
 
-QPointF TikzNode::anchor(tikz::Anchor anchor) const
+tikz::Pos TikzNode::anchor(tikz::Anchor anchor) const
 {
     // make sure cache is up-to-date
     d->updateCache();

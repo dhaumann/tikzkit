@@ -92,7 +92,7 @@ class TIKZUI_EXPORT TikzNode : public TikzItem
         /**
          * Returns the @p anchor in scene coordinates.
          */
-        QPointF anchor(tikz::Anchor anchor) const;
+        tikz::Pos anchor(tikz::Anchor anchor) const;
 
         /**
          * Returns the contact point of this node's shape for the requested
