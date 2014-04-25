@@ -45,42 +45,81 @@ namespace internal {
 }
 
 /**
- * Units.
+ * Available units.
  */
 enum Unit {
-    Point,      // =  1.00pt = 0.3515mm
-    Millimeter, // =  2.84pt = 0.99826mm
-    Centimeter, // = 28.40pt = 9.9826mm
-    Inch        // = 72.27pt = 25.402905mm
+    Point,
+    Millimeter,
+    Centimeter,
+    Inch
 };
 
+/**
+ * The Value class provides a unit-aware value.
+ *
+ * The Value is defined by a real number and its unit.
+ * By using the Value class whenever metric values are required,
+ * it is recommended to use Value as it avoids unit conversion errors.
+ */
 class TIKZCORE_EXPORT Value
 {
     //
     // static functions
     //
     public:
+        /**
+         * 'ultra thin' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value ultraThin() noexcept {
             return Value(0.1);
         }
+
+        /**
+         * 'very thin' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value veryThin() noexcept {
             return Value(0.2);
         }
+
+        /**
+         * 'thin' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value thin() noexcept {
             return Value(0.4);
         }
+
+        /**
+         * 'semithick' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value semiThick() noexcept {
             return Value(0.6);
         }
+
+        /**
+         * 'thick' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value thick() noexcept {
             return Value(0.8);
         }
+
+        /**
+         * 'very thick' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value veryThick() noexcept {
             return Value(1.2);
         }
+
+        /**
+         * 'ultra thick' line width according to the PGF/TikZ standard.
+         */
         static inline constexpr Value ultraThick() noexcept {
             return Value(1.6);
         }
+
+        /**
+         * Invalid size, set to NaN.
+         * @see isValid()
+         */
         static inline constexpr Value invalid() noexcept {
             return Value(std::sqrt(-1));
         }
