@@ -29,7 +29,9 @@ QString Value::toString() const
     // we require a valid number
     Q_ASSERT(isValid());
 
-    QString number = QLocale::c().toString(m_value, 'f', 20);
+    QLocale locale = QLocale::c();
+    locale.setNumberOptions(QLocale::OmitGroupSeparator);
+    QString number = locale.toString(m_value, 'f', 20);
 
     // TikZ doesn't allow commas as separator
     Q_ASSERT(! number.contains(QLatin1Char(',')));
