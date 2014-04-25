@@ -49,11 +49,6 @@ class Painter
     //
     public:
         /**
-         * Translates the tikz pen style to a Qt pen style.
-         */
-        Qt::PenStyle penStyle() const;
-
-        /**
          * Returns a pen constructed from the style.
          */
         QPen pen() const;

@@ -48,27 +48,6 @@ Painter::~Painter()
     delete d;
 }
 
-Qt::PenStyle Painter::penStyle() const
-{
-    switch (d->style->penStyle()) {
-        case tikz::SolidLine: return Qt::SolidLine;
-        case tikz::DottedLine: return Qt::DotLine;
-        case tikz::DenselyDottedLine: return Qt::DotLine; // no Qt style
-        case tikz::LooselyDottedLine: return Qt::DotLine; // no Qt style
-        case tikz::DashedLine: return Qt::DashLine;
-        case tikz::DenselyDashedLine: return Qt::DashLine; // no Qt style
-        case tikz::LooselyDashedLine: return Qt::DashLine; // no Qt style
-        case tikz::DashDottedLine: return Qt::DashDotLine;
-        case tikz::DenselyDashDottedLine: return Qt::DashDotLine; // no Qt style
-        case tikz::LooselyDashDottedLine: return Qt::DashDotLine; // no Qt style
-        case tikz::DashDotDottedLine: return Qt::DashDotDotLine;
-        case tikz::DenselyDashDotDottedLine: return Qt::DashDotDotLine; // no Qt style
-        case tikz::LooselyDashDotDottedLine: return Qt::DashDotDotLine; // no Qt style
-        default: break;
-    }
-    return Qt::SolidLine;
-}
-
 /**
  * This functions returns a dash pattern for the respective pen style.
  * The generated dash pattern follows the dash patterns defined by PGF/TikZ,
@@ -84,24 +63,24 @@ static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
     QVector<qreal> pattern;
     switch (style) {
         case tikz::SolidLine: break; // leave empty
-        case tikz::DottedLine: pattern << lineWidth << 2; break;
-        case tikz::DenselyDottedLine: pattern << lineWidth << 1; break;
-        case tikz::LooselyDottedLine: pattern << lineWidth << 4; break;
+        case tikz::DottedLine: pattern << lineWidth*lineWidth << 2; break;
+        case tikz::DenselyDottedLine: pattern << lineWidth*lineWidth << 1; break;
+        case tikz::LooselyDottedLine: pattern << lineWidth*lineWidth << 4; break;
         case tikz::DashedLine: pattern << 3 << 3; break;
         case tikz::DenselyDashedLine: pattern << 3 << 2; break;
         case tikz::LooselyDashedLine: pattern << 3 << 6; break;
         case tikz::DashDottedLine: pattern << 3 << 2 << lineWidth << 2; break;
-        case tikz::DenselyDashDottedLine: pattern << 3 << 1 << lineWidth << 1; break;
-        case tikz::LooselyDashDottedLine: pattern << 3 << 4 << lineWidth << 4; break;
-        case tikz::DashDotDottedLine: pattern << 3 << 2 << lineWidth << 2 << lineWidth << 2; break;
-        case tikz::DenselyDashDotDottedLine: pattern << 3 << 1 << lineWidth << 1 << lineWidth << 1; break;
-        case tikz::LooselyDashDotDottedLine: pattern << 3 << 4 << lineWidth << 4 << lineWidth << 4; break;
+        case tikz::DenselyDashDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1; break;
+        case tikz::LooselyDashDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4; break;
+        case tikz::DashDotDottedLine: pattern << 3 << 2 << lineWidth*lineWidth << 2 << lineWidth*lineWidth << 2; break;
+        case tikz::DenselyDashDotDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1 << lineWidth*lineWidth << 1; break;
+        case tikz::LooselyDashDotDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4 << lineWidth*lineWidth << 4; break;
         default: break;
     }
 
-//     for (int i = 0; i < pattern.size(); ++i) {
-//         pattern[i] /= lineWidth;
-//     }
+    for (int i = 0; i < pattern.size(); ++i) {
+        pattern[i] /= lineWidth;
+    }
     return pattern;
 }
 
@@ -113,16 +92,9 @@ QPen Painter::pen() const
         return Qt::NoPen;
     }
 
-    // NoPen requested?
-    Qt::PenStyle ps = penStyle();
-    if (ps == Qt::NoPen) {
-        return Qt::NoPen;
-    }
-
     // construct valid pen
     QPen pen(c);
     pen.setWidthF(d->style->penWidth().toPoint());
-    pen.setStyle(ps);
     pen.setCapStyle(Qt::FlatCap);
     pen.setJoinStyle(Qt::MiterJoin);
 //    setMiterLimit
