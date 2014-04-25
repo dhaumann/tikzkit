@@ -75,7 +75,7 @@ QString Value::toString() const
 Value Value::fromString(const QString & str)
 {
     // format example: 12.50cm
-    static QRegularExpression re("(\\d*\\.?\\d*)\\s*(\\w*)");
+    static QRegularExpression re("(-?\\d*\\.?\\d*)\\s*(\\w*)");
 
     QRegularExpressionMatch match = re.match(str);
 

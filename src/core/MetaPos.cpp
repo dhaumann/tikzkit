@@ -19,6 +19,7 @@
 
 #include "MetaPos.h"
 #include "MetaPos_p.h"
+#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -55,6 +56,44 @@ MetaPos::~MetaPos()
 Document * MetaPos::document() const
 {
     return d->doc;
+}
+
+QString MetaPos::toString() const
+{
+    if (node()) {
+        return QString("(%1%2)")
+            .arg(d->nodeId)
+            .arg(internal::anchorToString(d->anchor));
+    } else {
+        return d->pos.toString();
+    }
+}
+
+void MetaPos::fromString(const QString & str)
+{
+    if (str.contains(QLatin1Char(','))) {
+        setPos(tikz::Pos::fromString(str));
+    } else {
+        const int openIndex = str.indexOf(QLatin1Char('('));
+        const int dotIndex = str.indexOf(QLatin1Char('.'));
+        const int closeIndex = str.indexOf(QLatin1Char(')'));
+
+        Q_ASSERT(openIndex >= 0);
+        Q_ASSERT(closeIndex >= openIndex);
+
+        d->beginChange();
+        const int endIndex = (dotIndex > 0) ? dotIndex : closeIndex;
+        bool ok;
+        d->nodeId = str.mid(openIndex + 1, endIndex - (openIndex + 1)).toInt(&ok);
+        Q_ASSERT(ok);
+
+        // read tikz::Anchor
+        if (dotIndex > 0) {
+            d->anchor = internal::anchorFromString(
+                str.mid(dotIndex + 1, closeIndex - (dotIndex + 1)));
+        }
+        d->endChange();
+    }
 }
 
 MetaPos & MetaPos::operator=(const MetaPos & other)

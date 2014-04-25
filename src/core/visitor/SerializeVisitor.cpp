@@ -109,7 +109,7 @@ void SerializeVisitor::visit(Node * node)
     QVariantMap map;
 
     // serialize node
-    map.insert("pos", node->pos().toString());
+    map.insert("pos", node->metaPos().toString());
     map.insert("text", node->text());
 
     // serialize node style
@@ -121,29 +121,17 @@ void SerializeVisitor::visit(Node * node)
     m_nodes.insert(QString("node-%1").arg(node->id()), map);
 }
 
-static QVariantMap serializeMetaPos(const tikz::core::MetaPos & metaPos)
-{
-    QVariantMap map;
-    if (metaPos.node()) {
-        map.insert("node", metaPos.node()->id());
-        map.insert("anchor", metaPos.anchor());
-    } else {
-        map.insert("pos", metaPos.pos().toString());
-    }
-    return map;
-}
-
 static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 {
     Q_ASSERT(edge != 0);
-    map.insert("start", serializeMetaPos(edge->startMetaPos()));
-    map.insert("end", serializeMetaPos(edge->endMetaPos()));
+    map.insert("start", edge->startMetaPos().toString());
+    map.insert("end", edge->endMetaPos().toString());
 }
 
 static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
 {
     Q_ASSERT(ellipse != 0);
-    map.insert("center", serializeMetaPos(ellipse->metaPos()));
+    map.insert("center", ellipse->metaPos().toString());
 }
 
 void SerializeVisitor::visit(Path * path)

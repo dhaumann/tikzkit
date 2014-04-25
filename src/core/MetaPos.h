@@ -83,6 +83,20 @@ class TIKZCORE_EXPORT MetaPos
          */
         Document * document() const;
 
+        /**
+         * Convert this MetaPos to a string.
+         * Possible forms are
+         * - "(3cm, 6cm)", "(20.033pt, -12pt)" for simple scene coordinates.
+         * - "(1)" for nodes
+         * - "(4.north east)" for nodes with anchors.
+         */
+        QString toString() const;
+
+        /**
+         * Set this MetaPos from @p str by converting the string.
+         */
+        void fromString(const QString & str);
+
     //
     // operators
     //

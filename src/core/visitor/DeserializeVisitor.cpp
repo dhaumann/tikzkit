@@ -35,21 +35,6 @@
 #include <QFile>
 #include <QDebug>
 
-static tikz::core::MetaPos deserializeMetaPos(tikz::core::Document * doc,
-                                              const QVariantMap & map)
-{
-    tikz::core::MetaPos pos(doc);
-
-    if (map.contains("node")) {
-        pos.setNode(doc->nodeFromId(map["node"].toInt()));
-        pos.setAnchor(static_cast<tikz::Anchor>(map["anchor"].toInt()));
-    } else {
-        pos.setPos(tikz::Pos::fromString(map["pos"].toString()));
-    }
-
-    return pos;
-}
-
 namespace tikz {
 namespace core {
 using namespace internal;
@@ -139,8 +124,9 @@ void DeserializeVisitor::visit(Node * node)
     const QVariantMap & map = m_nodes[QString("node-%1").arg(node->id())].toMap();
 
     // deserialize node
-    node->setPos(QPointF(map["pos.x"].toDouble(),
-                         map["pos.y"].toDouble()));
+    tikz::core::MetaPos mp(node->document());
+    mp.fromString(map["pos"].toString());
+    node->setMetaPos(mp);
     node->setText(map["text"].toString());
 
     // deserialize node style
@@ -156,14 +142,17 @@ void DeserializeVisitor::visit(Node * node)
 void DeserializeVisitor::visit(Path * path)
 {
     const QVariantMap & map = m_paths[QString("path-%1").arg(path->id())].toMap();
+    tikz::core::MetaPos mp(path->document());
 
     switch (path->type()) {
         case Path::Line:
         case Path::HVLine:
         case Path::VHLine: {
             auto edge = static_cast<tikz::core::EdgePath*>(path);
-            edge->setStartMetaPos(deserializeMetaPos(path->document(), map["start"].toMap()));
-            edge->setEndMetaPos(deserializeMetaPos(path->document(), map["end"].toMap()));
+            mp.fromString(map["start"].toString());
+            edge->setStartMetaPos(mp);
+            mp.fromString(map["end"].toString());
+            edge->setEndMetaPos(mp);
             break;
         }
         case Path::BendCurve:
@@ -171,7 +160,8 @@ void DeserializeVisitor::visit(Path * path)
         case Path::BezierCurve:
         case Path::Ellipse: {
             auto ellipse = static_cast<tikz::core::EllipsePath*>(path);
-            ellipse->setMetaPos(deserializeMetaPos(path->document(), map["center"].toMap()));
+            mp.fromString(map["center"].toString());
+            ellipse->setMetaPos(mp);
             break;
         }
         case Path::Rectangle:
