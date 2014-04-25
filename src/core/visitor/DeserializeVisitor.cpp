@@ -18,6 +18,7 @@
  */
 
 #include "DeserializeVisitor.h"
+#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -43,9 +44,7 @@ static tikz::core::MetaPos deserializeMetaPos(tikz::core::Document * doc,
         pos.setNode(doc->nodeFromId(map["node"].toInt()));
         pos.setAnchor(static_cast<tikz::Anchor>(map["anchor"].toInt()));
     } else {
-        QPointF p(map["x"].toDouble(),
-                  map["y"].toDouble());
-        pos.setPos(p);
+        pos.setPos(tikz::Pos::fromString(map["pos"].toString()));
     }
 
     return pos;
@@ -53,6 +52,7 @@ static tikz::core::MetaPos deserializeMetaPos(tikz::core::Document * doc,
 
 namespace tikz {
 namespace core {
+using namespace internal;
 
 DeserializeVisitor::DeserializeVisitor()
     : Visitor()
@@ -150,7 +150,7 @@ void DeserializeVisitor::visit(Node * node)
     // set parent style (TODO: read id?)
     node->style()->setParentStyle(node->document()->style());
 
-    deserializeStyle(node->style(), propertyMap);
+    deserializeNodeStyle(node->style(), propertyMap);
 }
 
 void DeserializeVisitor::visit(Path * path)
@@ -189,7 +189,7 @@ void DeserializeVisitor::visit(Path * path)
     // set parent style (TODO: read id?)
     path->style()->setParentStyle(path->document()->style());
 
-    deserializeStyle(path->style(), propertyMap);
+    deserializeEdgeStyle(path->style(), propertyMap);
 }
 
 void DeserializeVisitor::visit(NodeStyle * style)
@@ -202,13 +202,117 @@ void DeserializeVisitor::visit(EdgeStyle * style)
 
 void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map)
 {
-    QVariantMap::const_iterator it = map.constBegin();
-    for ( ; it != map.constEnd(); ++it) {
-        const QString key = it.key();
-        const QVariant value = it.value();
+    style->beginConfig();
 
-        style->setProperty(key.toLatin1(), value);
+    if (map.contains("pen-color")) {
+        style->setPenColor(map["pen-color"].value<QColor>());
     }
+
+    if (map.contains("fill-color")) {
+        style->setFillColor(map["fill-color"].value<QColor>());
+    }
+
+    if (map.contains("pen-opacity")) {
+        style->setPenOpacity(map["pen-opacity"].toDouble());
+    }
+
+    if (map.contains("fill-opacity")) {
+        style->setFillOpacity(map["fill-opacity"].toDouble());
+    }
+
+    if (map.contains("pen-style")) {
+        style->setPenStyle(penStyleFromString(map["pen-style"].toString()));
+    }
+    
+    // FIXME line type
+    // FIXME line width
+
+    if (map.contains("double-line")) {
+        style->setDoubleLine(true);
+
+        // FIXME line type
+        // FIXME line width
+
+        if (map.contains("double-line-color")) {
+            style->setInnerLineColor(map["double-line-color"].value<QColor>());
+        }
+    }
+
+    if (map.contains("rotation")) {
+        style->setRotation(map["rotation"].toDouble());
+    }
+
+    style->endConfig();
+}
+
+void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantMap & map)
+{
+    style->beginConfig();
+
+    if (map.contains("radius-x")) {
+        style->setRadiusX(tikz::Value::fromString(map["radius-x"].toString()));
+    }
+
+    if (map.contains("radius-y")) {
+        style->setRadiusY(tikz::Value::fromString(map["radius-y"].toString()));
+    }
+
+    if (map.contains("bend-angle")) {
+        style->setBendAngle(map["bend-angle"].toDouble());
+    }
+
+    if (map.contains("looseness")) {
+        style->setLooseness(map["looseness"].toDouble());
+    }
+
+    if (map.contains("out-angle")) {
+        style->setOutAngle(map["out-angle"].toDouble());
+    }
+
+    if (map.contains("in-angle")) {
+        style->setInAngle(map["in-angle"].toDouble());
+    }
+
+    if (map.contains("arrow-tail")) {
+        style->setArrowTail(arrowFromString(map["arrow-tail"].toString()));
+    }
+
+    if (map.contains("arrow-head")) {
+        style->setArrowHead(arrowFromString(map["arrow-head"].toString()));
+    }
+
+    if (map.contains("shorten-start")) {
+        style->setShortenStart(tikz::Value::fromString(map["shorten-start"].toString()));
+    }
+
+    if (map.contains("shorten-end")) {
+        style->setShortenEnd(tikz::Value::fromString(map["shorten-end"].toString()));
+    }
+
+    style->endConfig();
+}
+
+void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantMap & map)
+{
+    style->beginConfig();
+
+    if (map.contains("text-align")) {
+        style->setTextAlign(textAlignmentFromString(map["text-align"].toString()));
+    }
+
+    if (map.contains("shape")) {
+        style->setShape(shapeFromString(map["shape"].toString()));
+    }
+
+    if (map.contains("minimum-width")) {
+        style->setMinimumWidth(tikz::Value::fromString(map["minimum-width"].toString()));
+    }
+
+    if (map.contains("minimum-height")) {
+        style->setMinimumHeight(tikz::Value::fromString(map["minimum-height"].toString()));
+    }
+
+    style->endConfig();
 }
 
 }

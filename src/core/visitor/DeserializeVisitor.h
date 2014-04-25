@@ -93,6 +93,8 @@ class DeserializeVisitor : public Visitor
     //
     private:
         void deserializeStyle(Style * style, const QVariantMap & map);
+        void deserializeEdgeStyle(EdgeStyle * style, const QVariantMap & map);
+        void deserializeNodeStyle(NodeStyle * style, const QVariantMap & map);
 
     //
     // private data
