@@ -35,6 +35,7 @@ private slots:
     void testMetaPosWithNode();
     void testSet0();
     void testMetaPosPtr();
+    void testStringMethods();
 
 public slots:
     void changedEmitted();
