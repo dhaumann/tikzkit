@@ -36,7 +36,7 @@ class NodeStylePrivate
 {
 public:
     // Node styles
-    TextAlignment align;
+    TextAlignment textAlign;
     Shape shape;
     tikz::Value innerSep;
     tikz::Value outerSep;
@@ -48,7 +48,7 @@ NodeStyle::NodeStyle()
     : Style()
     , d(new NodeStylePrivate())
 {
-    d->align = NoAlign;
+    d->textAlign = NoAlign;
     d->shape = ShapeRectangle;
     d->innerSep = tikz::Value(3); //FIXME: 0.3333em
     d->outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
@@ -73,41 +73,41 @@ void NodeStyle::setStyle(const NodeStyle& other)
     endConfig();
 }
 
-TextAlignment NodeStyle::alignment() const
+TextAlignment NodeStyle::textAlign() const
 {
     if (propertySet(s_align)) {
-        return d->align;
+        return d->textAlign;
     }
 
     NodeStyle * parentStyle = qobject_cast<NodeStyle*>(parent());
     if (parentStyle) {
-        return parentStyle->alignment();
+        return parentStyle->textAlign();
     }
 
     return NoAlign;
 }
 
-bool NodeStyle::alignmentSet() const
+bool NodeStyle::textAlignSet() const
 {
     return propertySet(s_align);
 }
 
-void NodeStyle::setAlignment(tikz::TextAlignment align)
+void NodeStyle::setTextAlign(tikz::TextAlignment align)
 {
-    if (!propertySet(s_align) || d->align != align) {
+    if (!propertySet(s_align) || d->textAlign != align) {
         beginConfig();
         addProperty(s_align);
-        d->align = align;
+        d->textAlign = align;
         endConfig();
     }
 }
 
-void NodeStyle::unsetAlignment()
+void NodeStyle::unsetTextAlign()
 {
     if (propertySet(s_align)) {
         beginConfig();
         removeProperty(s_align);
-        d->align = NoAlign;
+        d->textAlign = NoAlign;
         endConfig();
     }
 }

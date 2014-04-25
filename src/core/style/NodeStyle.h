@@ -32,7 +32,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 {
     Q_OBJECT
 
-    Q_PROPERTY(tikz::TextAlignment alignment READ alignment WRITE setAlignment RESET unsetAlignment)
+    Q_PROPERTY(tikz::TextAlignment textAlign READ textAlign WRITE setTextAlign RESET unsetTextAlign)
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
     Q_PROPERTY(tikz::Value minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
     Q_PROPERTY(tikz::Value minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
@@ -60,24 +60,24 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         /**
          * Get the text alignment.
          */
-        TextAlignment alignment() const;
+        TextAlignment textAlign() const;
 
         /**
          * Check whether the alignment is set.
          */
-        bool alignmentSet() const;
+        bool textAlignSet() const;
 
     public Q_SLOTS:
         /**
          * Set the text alignment to @p align.
          */
-        void setAlignment(tikz::TextAlignment align);
+        void setTextAlign(tikz::TextAlignment align);
 
         /**
          * Unset the alignment attribute.
          * The default value is tikz::NoAlign.
          */
-        void unsetAlignment();
+        void unsetTextAlign();
 
     //
     // Node specific attributes

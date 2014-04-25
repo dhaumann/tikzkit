@@ -397,8 +397,8 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     //
     // export align
     //
-    if (style->alignmentSet()) {
-        options << "align=" + textAlignmentToString(style->alignment());
+    if (style->textAlignSet()) {
+        options << "align=" + textAlignmentToString(style->textAlign());
     }
 
     //

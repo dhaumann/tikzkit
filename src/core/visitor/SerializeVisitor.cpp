@@ -312,8 +312,8 @@ QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
 {
     QVariantMap map = serializeStyle(style);
 
-    if (style->alignmentSet()) {
-        map.insert("text-align", textAlignmentToString(style->alignment()));
+    if (style->textAlignSet()) {
+        map.insert("text-align", textAlignmentToString(style->textAlign()));
     }
 
     if (style->shapeSet()) {
