@@ -19,8 +19,6 @@
 
 #include "Pos.h"
 
-#include <QRegularExpression>
-
 namespace tikz {
 
 QString Pos::toString() const
@@ -55,7 +53,7 @@ Pos Pos::fromString(const QString & str)
     const QString p1 = str.mid(indexOfOpen + 1, indexOfComma - (indexOfOpen + 1)).trimmed();
     const QString p2 = str.mid(indexOfComma + 1, indexOfClose - (indexOfComma + 1)).trimmed();
 
-    qDebug() << "reading Pos from" + str + "results in: " << p1 << p2;
+//     qDebug() << "reading Pos from" << str << "results in:" << p1 << p2;
 
     return Pos(Value::fromString(p1), Value::fromString(p2));
 }
