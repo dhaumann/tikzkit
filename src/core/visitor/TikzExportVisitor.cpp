@@ -18,6 +18,7 @@
  */
 
 #include "TikzExportVisitor.h"
+#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -35,6 +36,7 @@
 
 namespace tikz {
 namespace core {
+using namespace internal;
 
 static QString colorToString(const QColor & color)
 {
@@ -57,29 +59,6 @@ static QString colorToString(const QColor & color)
     if (color == Qt::darkGray) return "gray!50!black";
     if (color == Qt::lightGray) return "gray!50";
     return QString("orange");
-}
-
-/**
- * Helper function.
- * Returns e.g. ".north" for a north anchor.
- */
-static QString anchorToString(Anchor anchor)
-{
-    QString str;
-    switch (anchor) {
-        case Anchor::NoAnchor: break;
-        case Anchor::Center: str = ".center"; break;
-        case Anchor::North: str = ".north"; break;
-        case Anchor::NorthEast: str = ".north east"; break;
-        case Anchor::East: str = ".east"; break;
-        case Anchor::SouthEast: str = ".south east"; break;
-        case Anchor::South: str = ".south"; break;
-        case Anchor::SouthWest: str = ".south west"; break;
-        case Anchor::West: str = ".west"; break;
-        case Anchor::NorthWest: str = ".north west"; break;
-        default: break;
-    }
-    return str;
 }
 
 static QString toString(tikz::core::Style * style, bool doubleLine = false)
@@ -272,23 +251,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export pen style
     //
     if (style->penStyleSet()) {
-        const PenStyle ps = style->penStyle();
-        switch (ps) {
-            case PenStyle::SolidLine: options << "solid"; break;
-            case PenStyle::DottedLine: options << "dotted"; break;
-            case PenStyle::DenselyDottedLine: options << "densely dotted"; break;
-            case PenStyle::LooselyDottedLine: options << "loosely dotted"; break;
-            case PenStyle::DashedLine: options << "dashed"; break;
-            case PenStyle::DenselyDashedLine: options << "densely dashed"; break;
-            case PenStyle::LooselyDashedLine: options << "loosely dashed"; break;
-            case PenStyle::DashDottedLine: options << "dashdotted"; break;
-            case PenStyle::DenselyDashDottedLine: options << "densely dashdotted"; break;
-            case PenStyle::LooselyDashDottedLine: options << "loosely dashdotted"; break;
-            case PenStyle::DashDotDottedLine: options << "dashdotdotted"; break;
-            case PenStyle::DenselyDashDotDottedLine: options << "densely dashdotdotted"; break;
-            case PenStyle::LooselyDashDotDottedLine: options << "loosely dashdotdotted"; break;
-            default: Q_ASSERT(false);
-        }
+        options << penStyleToString(style->penStyle());
     }
 
     //
@@ -349,36 +312,12 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
     //
     QString arrowTail;
     if (style->arrowTailSet()) {
-        switch (style->arrowTail()) {
-            case Arrow::NoArrow: arrowTail = ""; break;
-            case Arrow::ToArrow: arrowTail = "to"; break;
-            case Arrow::ReversedToArrow: arrowTail = "to reversed"; break;
-            case Arrow::StealthArrow: arrowTail = "stealth"; break;
-            case Arrow::ReversedStealthArrow: arrowTail = "stealth reversed"; break;
-            case Arrow::LatexArrow: arrowTail = "latex"; break;
-            case Arrow::ReversedLatexArrow: arrowTail = "latex reversed"; break;
-            case Arrow::PipeArrow: arrowTail = "|"; break;
-            case Arrow::StealthTickArrow: arrowTail = "stealth'"; break;
-            case Arrow::ReversedStealthTickArrow: arrowTail = "stealth' reversed"; break;
-            default: Q_ASSERT(false); break;
-        }
+        arrowTail = arrowToString(style->arrowTail());
     }
 
     QString arrowHead;
     if (style->arrowHeadSet()) {
-        switch (style->arrowHead()) {
-            case Arrow::NoArrow: arrowHead = ""; break;
-            case Arrow::ToArrow: arrowHead = "to"; break;
-            case Arrow::ReversedToArrow: arrowHead = "to reversed"; break;
-            case Arrow::StealthArrow: arrowHead = "stealth"; break;
-            case Arrow::ReversedStealthArrow: arrowHead = "stealth reversed"; break;
-            case Arrow::LatexArrow: arrowHead = "latex"; break;
-            case Arrow::ReversedLatexArrow: arrowHead = "latex reversed"; break;
-            case Arrow::PipeArrow: arrowHead = "|"; break;
-            case Arrow::StealthTickArrow: arrowHead = "stealth'"; break;
-            case Arrow::ReversedStealthTickArrow: arrowHead = "stealth' reversed"; break;
-            default: Q_ASSERT(false); break;
-        }
+        arrowHead = arrowToString(style->arrowHead());
     }
 
     if (style->arrowTailSet() || style->arrowHeadSet()) {
@@ -459,30 +398,14 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     // export align
     //
     if (style->alignmentSet()) {
-        const TextAlignment ta = style->alignment();
-        switch (ta) {
-            case TextAlignment::NoAlign: options << "align=none";  break;
-            case TextAlignment::AlignLeft: options << "align=left";  break;
-            case TextAlignment::AlignCenter: options << "align=center";  break;
-            case TextAlignment::AlignRight: options << "align=right";  break;
-            case TextAlignment::AlignJustify: options << "align=justify";  break;
-            default: Q_ASSERT(false);
-        }
+        options << "align=" + textAlignmentToString(style->alignment());
     }
 
     //
     // export shape
     //
     if (style->shapeSet()) {
-        const Shape s = style->shape();
-        switch (s) {
-            case Shape::NoShape: break;
-            case Shape::ShapeRectangle: options << "rectangle";  break;
-            case Shape::ShapeCircle: options << "circle";  break;
-            case Shape::ShapeDiamond: options << "diamond";  break;
-            case Shape::ShapeEllipse: options << "ellipse";  break;
-            default: Q_ASSERT(false);
-        }
+        options << shapeToString(style->shape());
     }
 
     //
