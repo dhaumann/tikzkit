@@ -135,9 +135,29 @@ QPointF NodeTool::handlePos(Handle::Position pos)
     return c + t.map(p);
 }
 
+static void snapPos(tikz::Pos & pos)
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    if (snap) {
+        pos = tikz::Pos(qRound(pos.x().value() / 0.2) * 0.2,
+                        qRound(pos.y().value() / 0.2) * 0.2, pos.x().unit());
+    }
+}
+
+static void snapValue(tikz::Value & val)
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    if (snap) {
+        val = tikz::Value(qRound(val.value() / 0.2) * 0.2, val.unit());
+    }
+}
+
 void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+
+    // later: preferred unit
+    const tikz::Unit unit = tikz::Centimeter;
 
     //
     // rotate
@@ -159,12 +179,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     // move
     //
     if (handle->handlePos() == Handle::Center) {
-        QPointF p = scenePos;
-        if (snap) {
-            p.rx() = qRound(p.x() / 0.2) * 0.2;
-            p.ry() = qRound(p.y() / 0.2) * 0.2;
-        }
-
+        tikz::Pos p = tikz::Pos(scenePos).convertTo(unit);
+        snapPos(p);
         m_node->node()->setPos(p);
         return;
     }
@@ -176,9 +192,9 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     t.rotate(-m_node->style()->rotation());
 
     // honor rotation of node
-    const QPointF delta = 2 * t.map(m_node->node()->pos() - tikz::Pos(scenePos));
-    qreal w = m_node->style()->minimumWidth().toPoint();
-    qreal h = m_node->style()->minimumHeight().toPoint();
+    const tikz::Pos delta = tikz::Pos(2 * t.map(m_node->node()->pos() - tikz::Pos(scenePos))).convertTo(unit);
+    tikz::Value w = m_node->style()->minimumWidth();
+    tikz::Value h = m_node->style()->minimumHeight();
 
     switch (handle->handlePos()) {
         case Handle::TopLeftCorner:
@@ -189,8 +205,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
             h = delta.y();
 
             // snap to raster
-            if (snap) w = qRound(w / 0.2) * 0.2;
-            if (snap) h = qRound(h / 0.2) * 0.2;
+            snapValue(w);
+            snapValue(h);
 
             break;
         }
@@ -198,14 +214,14 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
         case Handle::BottomBorder: {
             h = delta.y();
             // snap to raster
-            if (snap) h = qRound(h / 0.2) * 0.2;
+            snapValue(h);
             break;
         }
         case Handle::LeftBorder:
         case Handle::RightBorder: {
             w = delta.x();
             // snap to raster
-            if (snap) w = qRound(w / 0.2) * 0.2;
+            snapValue(w);
             break;
         }
         case Handle::Center: Q_ASSERT(false);
@@ -214,8 +230,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     }
 
     // for now, only allow positive values
-    w = qAbs(w);
-    h = qAbs(h);
+    w = tikz::Value(qAbs(w.value()), w.unit());
+    h = tikz::Value(qAbs(h.value()), h.unit());
 
     tikz::core::NodeStyle s;
     s.setStyle(*m_node->style());
