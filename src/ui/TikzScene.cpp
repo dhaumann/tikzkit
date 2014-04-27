@@ -104,19 +104,21 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 
     // painting is in unit 'pt'
 
-    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(tikz::Centimeter).value());
-    left = tikz::Value(std::floor(left.value()), tikz::Centimeter);
+    // desired unit
+    const tikz::Unit unit = tikz::Centimeter;
+    const Value one(1, unit);
 
-    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(tikz::Centimeter).value());
-    top = tikz::Value(std::ceil(top.value()), tikz::Centimeter);
+    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(unit).value());
+    left = tikz::Value(std::floor(left.value()), unit);
+
+    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(unit).value());
+    top = tikz::Value(std::ceil(top.value()), unit);
 
     QVarLengthArray<QLineF, 100> lines;
-    
-    constexpr Value cm(1, tikz::Centimeter);
-    for (tikz::Value x = left; x.toPoint() < rect.right(); x += cm) {
+    for (tikz::Value x = left; x.toPoint() < rect.right(); x += one) {
         lines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
     }
-    for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += cm) {
+    for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one) {
         lines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
     }
 
