@@ -45,16 +45,6 @@ namespace internal {
 }
 
 /**
- * Available units.
- */
-enum Unit {
-    Point,
-    Millimeter,
-    Centimeter,
-    Inch
-};
-
-/**
  * The Value class provides a unit-aware value.
  *
  * The Value is defined by a real number and its unit.

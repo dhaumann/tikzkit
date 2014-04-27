@@ -27,6 +27,7 @@ namespace tikz {
 #else
 class tikz {
     Q_GADGET
+    Q_ENUMS(Unit)
     Q_ENUMS(TextAlignment)
     Q_ENUMS(Anchor)
     Q_ENUMS(Shape)
@@ -37,6 +38,16 @@ class tikz {
     Q_ENUMS(Arrow)
 public:
 #endif
+
+/**
+ * Available units.
+ */
+enum Unit {
+    Point,
+    Millimeter,
+    Centimeter,
+    Inch
+};
 
 enum TextAlignment {
     NoAlign = 0,
