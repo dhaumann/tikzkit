@@ -107,6 +107,7 @@ void TikzExportVisitor::visit(Document * doc)
     // export the global options for the tikzpicture
     //
     QStringList options = styleOptions(doc->style());
+    options << "align=center"; // FIXME: temporary hack to make text wrap in nodes work.
     m_tikzExport.setDocumentOptions(options.join(", "));
 }
 
