@@ -55,7 +55,7 @@ set(qtikzui_SOURCES
 
     TikzScene.cpp
     TikzView.cpp
-    PaintHelper.cpp
+    Painter.cpp
     CurveHandle.cpp
     BezierCurve.cpp
     NodeText.cpp

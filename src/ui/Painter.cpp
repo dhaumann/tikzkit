@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "PaintHelper.h"
+#include "Painter.h"
 
 #include <tikz/core/Style.h>
 #include <tikz/core/tikz.h>
@@ -26,26 +26,29 @@
 #include <QPainterPath>
 #include <QDebug>
 
-class PaintHelperPrivate
+namespace tikz {
+namespace ui {
+
+class PainterPrivate
 {
     public:
         QPainter* painter;
         tikz::core::Style* style;
 };
 
-PaintHelper::PaintHelper(QPainter * painter, tikz::core::Style * style)
-    : d(new PaintHelperPrivate())
+Painter::Painter(QPainter * painter, tikz::core::Style * style)
+    : d(new PainterPrivate())
 {
     d->painter = painter;
     d->style = style;
 }
 
-PaintHelper::~PaintHelper()
+Painter::~Painter()
 {
     delete d;
 }
 
-Qt::PenStyle PaintHelper::penStyle() const
+Qt::PenStyle Painter::penStyle() const
 {
     switch (d->style->penStyle()) {
         case tikz::SolidLine: return Qt::SolidLine;
@@ -102,7 +105,7 @@ static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
     return pattern;
 }
 
-QPen PaintHelper::pen() const
+QPen Painter::pen() const
 {
     // invalid color -> NoPen
     QColor c = d->style->penColor();
@@ -126,12 +129,12 @@ QPen PaintHelper::pen() const
     return pen;
 }
 
-void PaintHelper::drawPath(const QPainterPath & path)
+void Painter::drawPath(const QPainterPath & path)
 {
     QPen p = pen();
 
     p.setWidthF(d->style->penWidth().toPoint());
-    QVector<qreal> pattern = ::penStyle(d->style->penWidth().toPoint(), d->style->penStyle());
+    QVector<qreal> pattern = tikz::ui::penStyle(d->style->penWidth().toPoint(), d->style->penStyle());
     if (d->style->penStyle() != tikz::SolidLine) {
         p.setDashPattern(pattern);
     }
@@ -180,5 +183,7 @@ void PaintHelper::drawPath(const QPainterPath & path)
 //     lightgray,.75/.75,.75,.75/0,0,.75/0,0,0,.25;%
 //     white,1/1,1,1/0,0,1/0,0,0,0
 
+}
+}
 
 // kate: indent-width 4; replace-tabs on;

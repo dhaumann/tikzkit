@@ -24,6 +24,7 @@
 #include "ResizeHandle.h"
 #include "MoveHandle.h"
 #include "RotateHandle.h"
+#include "Painter.h"
 
 #include <tikz/core/EllipsePath.h>
 #include <tikz/core/EdgeStyle.h>
@@ -33,7 +34,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDebug>
-#include <PaintHelper.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainterPathStroker>
 
@@ -120,8 +120,8 @@ void EllipsePathItem::paint(QPainter *painter,
     }
 
     // draw line
-    PaintHelper sh(painter, style());
-    sh.drawPath(m_ellipse);
+    Painter p(painter, style());
+    p.drawPath(m_ellipse);
 }
 
 QRectF EllipsePathItem::boundingRect() const

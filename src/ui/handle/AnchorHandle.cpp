@@ -20,7 +20,6 @@
 #include "AnchorHandle.h"
 #include "TikzNode.h"
 #include "TikzDocument.h"
-#include "PaintHelper.h"
 
 #include <QPointer>
 #include <QPainter>

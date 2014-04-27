@@ -20,7 +20,7 @@
 #include "TikzNode.h"
 #include <tikz/core/NodeStyle.h>
 #include "NodeText.h"
-#include "PaintHelper.h"
+#include "Painter.h"
 #include "AbstractShape.h"
 #include "TikzDocument.h"
 
@@ -199,14 +199,14 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     d->updateCache();
 
-    PaintHelper sh(painter, style());
+    Painter p(painter, style());
     QBrush brush(style()->fillColor());
 
     // fill shape
     painter->fillPath(d->shapePath, brush);
 
     // draw shape
-    sh.drawPath(d->shapePath);
+    p.drawPath(d->shapePath);
 
     painter->restore();
 }

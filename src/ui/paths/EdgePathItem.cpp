@@ -22,13 +22,13 @@
 #include "TikzNode.h"
 #include "TikzDocument.h"
 #include "AbstractArrow.h"
+#include "Painter.h"
 
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/EdgeStyle.h>
 
 #include <QPainter>
 #include <QDebug>
-#include <PaintHelper.h>
 #include <QPainterPathStroker>
 
 #include <cmath>
@@ -223,19 +223,19 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
 
-    PaintHelper sh(painter, style());
-    QPen p = sh.pen();
+    Painter p(painter, style());
+    QPen pen = p.pen();
 
     if (isHovered()) {
         painter->fillPath(m_hoverPath, Qt::magenta);
     }
 
     // draw line
-    sh.drawPath(m_edgePath);
+    p.drawPath(m_edgePath);
 
     // draw arrows
-    p.setStyle(Qt::SolidLine);
-    painter->setPen(p);
+    pen.setStyle(Qt::SolidLine);
+    painter->setPen(pen);
     painter->save();
         painter->translate(m_startAnchor.x(), m_startAnchor.y());
         painter->rotate(180 - m_edgePath.angleAtPercent(0.0));

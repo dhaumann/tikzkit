@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UI_PAINT_HELPER_H
-#define TIKZ_UI_PAINT_HELPER_H
+#ifndef TIKZUI_PAINTER_H
+#define TIKZUI_PAINTER_H
 
 #include <Qt>
 #include <QPen>
@@ -27,22 +27,22 @@ namespace tikz {
 namespace core{
     class Style;
 }
-}
+namespace ui {
 
-class PaintHelperPrivate;
+class PainterPrivate;
 
-class PaintHelper
+class Painter
 {
     public:
         /**
          * Default constructor.
          */
-        PaintHelper(QPainter * p, tikz::core::Style * style);
+        Painter(QPainter * p, tikz::core::Style * style);
 
         /**
          * Destructor
          */
-        ~PaintHelper();
+        ~Painter();
 
     //
     // pen helpers
@@ -64,9 +64,12 @@ class PaintHelper
         void drawPath(const QPainterPath & path);
 
     private:
-        PaintHelperPrivate * const d;
+        PainterPrivate * const d;
 };
 
-#endif // TIKZ_UI_PAINT_HELPER_H
+}
+}
+
+#endif // TIKZUI_PAINTER_H
 
 // kate: indent-width 4; replace-tabs on;
