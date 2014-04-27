@@ -363,7 +363,7 @@ void Style::unsetDoubleLine()
 
 tikz::Value Style::innerLineWidth() const
 {
-    if (propertySet(s_doubleLine)) {
+    if (propertySet(s_doubleLine) && doubleLine()) {
         if (propertySet(s_innerLineWidth)) {
             return d->innerLineWidth;
         }
