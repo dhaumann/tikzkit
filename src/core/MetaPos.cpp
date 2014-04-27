@@ -91,6 +91,8 @@ void MetaPos::fromString(const QString & str)
         if (dotIndex > 0) {
             d->anchor = internal::anchorFromString(
                 str.mid(dotIndex + 1, closeIndex - (dotIndex + 1)));
+        } else {
+            d->anchor = tikz::NoAnchor;
         }
         d->endChange();
     }
