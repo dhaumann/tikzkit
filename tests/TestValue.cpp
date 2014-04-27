@@ -135,4 +135,23 @@ void ValueTest::testFromString()
     QCOMPARE(val, tikz::Value::fromString("3.567 mm"));
 }
 
+void ValueTest::testStringAccuracy()
+{
+    // test numbers from 0.01 to 99.99
+    for (int i = 0; i < 100; ++i) {
+        for (int j = 1; j < 100; ++j) {
+            if (j % 10 == 0) continue;
+            QCOMPARE(tikz::Value(i + j * 0.01).toString(), QString("%1.%2pt").arg(i).arg(j, 2, 10, QLatin1Char('0')));
+        }
+    }
+
+    // test negative numbers from -0.01 to -99.99
+    for (int i = 0; i < 100; ++i) {
+        for (int j = 1; j < 100; ++j) {
+            if (j % 10 == 0) continue;
+            QCOMPARE(tikz::Value(-i - j * 0.01).toString(), QString("-%1.%2pt").arg(i).arg(j, 2, 10, QLatin1Char('0')));
+        }
+    }
+}
+
 // kate: indent-width 4; replace-tabs on;

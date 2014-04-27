@@ -41,12 +41,47 @@ QString Value::toString() const
     // allow only a single '.' as floating point separator
     Q_ASSERT(number.count(QLatin1Char('.')) <= 1);
 
+    const int dotIndex = number.indexOf(QLatin1Char('.'));
+
+    // Rounding errors typically result in several consecutive '9' chars.
+    // Catch this case and fix it to get a nice reacable number.
+    int nineIndex;
+    if ((nineIndex = number.indexOf(QLatin1String("099999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "1");
+    } else if ((nineIndex = number.indexOf(QLatin1String("199999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "2");
+    } else if ((nineIndex = number.indexOf(QLatin1String("299999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "3");
+    } else if ((nineIndex = number.indexOf(QLatin1String("399999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "4");
+    } else if ((nineIndex = number.indexOf(QLatin1String("499999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "5");
+    } else if ((nineIndex = number.indexOf(QLatin1String("599999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "6");
+    } else if ((nineIndex = number.indexOf(QLatin1String("699999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "7");
+    } else if ((nineIndex = number.indexOf(QLatin1String("799999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "8");
+    } else if ((nineIndex = number.indexOf(QLatin1String("899999"))) > dotIndex) {
+        number.truncate(nineIndex + 1);
+        number.replace(nineIndex, 1, "9");
+    } else if ((nineIndex = number.indexOf(QLatin1String("999999"))) > dotIndex) {
+//         number.replace(nineIndex, 6, "9");
+    }
+
     // we have 20 digits after the '.', which is usually too much.
     // Therefore, search for '00000' after the '.', and if we find these
     // 5 consecutive zeros, just kill the rest.
     // Example: the number 3.567 turns into 3.56700000000000017053. After
     //          the truncation, it'll be '3.5670000000'
-    const int dotIndex = number.indexOf(QLatin1Char('.'));
     if (dotIndex >= 0) {
         const int indexOfZeros = number.lastIndexOf(QLatin1String("00000"));
         if (indexOfZeros > dotIndex) {
