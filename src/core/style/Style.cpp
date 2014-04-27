@@ -363,16 +363,16 @@ void Style::unsetDoubleLine()
 
 tikz::Value Style::innerLineWidth() const
 {
-    if (propertySet(s_doubleLine) && doubleLine()) {
+    if (doubleLine()) {
         if (propertySet(s_innerLineWidth)) {
             return d->innerLineWidth;
         }
 
-        return tikz::Value::semiThick();
-    }
+        if (parentStyle() && parentStyle()->doubleLine()) {
+            return parentStyle()->innerLineWidth();
+        }
 
-    if (parentStyle()) {
-        return parentStyle()->innerLineWidth();
+        return tikz::Value::semiThick();
     }
 
     return tikz::Value(0.0);
