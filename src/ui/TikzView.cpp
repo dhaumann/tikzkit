@@ -57,8 +57,8 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     d->m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
     d->m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
 
-    d->m_hRuler->setUnit(tikz::Unit::Centimeter);
-    d->m_vRuler->setUnit(tikz::Unit::Centimeter);
+    d->m_hRuler->setUnit(tikz::Centimeter);
+    d->m_vRuler->setUnit(tikz::Centimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
@@ -151,7 +151,7 @@ bool TikzView::viewportEvent(QEvent * event)
 {
     d->m_hRuler->setOrigin(d->m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
     d->m_vRuler->setOrigin(d->m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
-    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
     d->m_hRuler->setZoom(transform().m11() / physicalDpiX() * s);
     d->m_vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * s);
 

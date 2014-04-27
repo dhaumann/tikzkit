@@ -40,8 +40,8 @@ void PosTest::testPos()
     // test initial value
     QCOMPARE(pos.x(), tikz::Value(0.0));
     QCOMPARE(pos.y(), tikz::Value(0.0));
-    QCOMPARE(pos.x().unit(), tikz::Unit::Point);
-    QCOMPARE(pos.y().unit(), tikz::Unit::Point);
+    QCOMPARE(pos.x().unit(), tikz::Point);
+    QCOMPARE(pos.y().unit(), tikz::Point);
     QCOMPARE(pos.toString(), QString("(0pt, 0pt)"));
 }
 
@@ -55,15 +55,15 @@ void PosTest::testFromString()
     QCOMPARE(pos, tikz::Pos::fromString("(0, 0)"));
     QCOMPARE(pos, tikz::Pos::fromString("(0,0)"));
 
-    pos = tikz::Pos(tikz::Value(3, tikz::Unit::Centimeter),
-                    tikz::Value(5, tikz::Unit::Centimeter));
-    QCOMPARE(pos.x(), tikz::Value(3, tikz::Unit::Centimeter));
-    QCOMPARE(pos.y(), tikz::Value(5, tikz::Unit::Centimeter));
+    pos = tikz::Pos(tikz::Value(3, tikz::Centimeter),
+                    tikz::Value(5, tikz::Centimeter));
+    QCOMPARE(pos.x(), tikz::Value(3, tikz::Centimeter));
+    QCOMPARE(pos.y(), tikz::Value(5, tikz::Centimeter));
     QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)"));
-    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Point));
-    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Millimeter));
-    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Centimeter));
-    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Inch));
+    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Point));
+    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Millimeter));
+    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Centimeter));
+    QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Inch));
 }
 
 // kate: indent-width 4; replace-tabs on;

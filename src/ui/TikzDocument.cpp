@@ -85,7 +85,7 @@ QGraphicsView * TikzDocument::createView(QWidget * parent)
     view->setScene(d->scene);
 
     // scale to true display size
-    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
     view->scale(view->physicalDpiX() / s,
                -view->physicalDpiY() / s);
 

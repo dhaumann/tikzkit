@@ -153,7 +153,7 @@ class TIKZCORE_EXPORT Value
          */
         inline constexpr qreal toPoint() const noexcept
         {
-            return convertTo(tikz::Unit::Point).m_value;
+            return convertTo(tikz::Point).m_value;
         }
 
         /**

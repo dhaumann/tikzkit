@@ -122,7 +122,7 @@ namespace QTest {
     template<>
     char *toString(const tikz::Value & value)
     {
-        const QString str = "Value[" + value.convertTo(tikz::Unit::Point).toString() + "]";
+        const QString str = "Value[" + value.convertTo(tikz::Point).toString() + "]";
         const QByteArray ba = str.toLatin1();
         return qstrdup(ba.data());
     }

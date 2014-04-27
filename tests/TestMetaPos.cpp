@@ -197,17 +197,17 @@ void MetaPosTest::testToString()
     QCOMPARE(n->id(), 1);
     QCOMPARE(m.toString(), QString("(0pt, 0pt)"));
 
-    m.setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
+    m.setPos(tikz::Pos(3, 3, tikz::Centimeter));
     QCOMPARE(m.toString(), QString("(3cm, 3cm)"));
 
-    m.setPos(tikz::Pos(-3.2764, -42.17, tikz::Unit::Centimeter));
+    m.setPos(tikz::Pos(-3.2764, -42.17, tikz::Centimeter));
     QCOMPARE(m.toString(), QString("(-3.2764cm, -42.17cm)"));
 
     // now test with Node
     m.setNode(n);
     QCOMPARE(m.anchor(), tikz::NoAnchor);
     QCOMPARE(m.toString(), QString("(1)"));
-    n->setPos(tikz::Pos(-112.2423, 3478.3434, tikz::Unit::Millimeter));
+    n->setPos(tikz::Pos(-112.2423, 3478.3434, tikz::Millimeter));
     QCOMPARE(n->metaPos().toString(), QString("(-112.2423mm, 3478.3434mm)"));
     QCOMPARE(m.pos().toString(), QString("(-112.2423mm, 3478.3434mm)"));
     QCOMPARE(m.toString(), QString("(1)"));
@@ -218,7 +218,7 @@ void MetaPosTest::testToString()
     QCOMPARE(m.toString(), QString("(1.north east)"));
 
     // unset Node again
-    m.setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
+    m.setPos(tikz::Pos(3, 3, tikz::Centimeter));
     QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
     QCOMPARE(m.anchor(), tikz::NoAnchor);
     QCOMPARE(m.toString(), QString("(3cm, 3cm)"));

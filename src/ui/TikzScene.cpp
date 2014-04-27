@@ -104,15 +104,15 @@ void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
 
     // painting is in unit 'pt'
 
-    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(tikz::Unit::Centimeter).value());
-    left = tikz::Value(std::floor(left.value()), tikz::Unit::Centimeter);
+    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(tikz::Centimeter).value());
+    left = tikz::Value(std::floor(left.value()), tikz::Centimeter);
 
-    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(tikz::Unit::Centimeter).value());
-    top = tikz::Value(std::ceil(top.value()), tikz::Unit::Centimeter);
+    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(tikz::Centimeter).value());
+    top = tikz::Value(std::ceil(top.value()), tikz::Centimeter);
 
     QVarLengthArray<QLineF, 100> lines;
     
-    constexpr Value cm(1, tikz::Unit::Centimeter);
+    constexpr Value cm(1, tikz::Centimeter);
     for (tikz::Value x = left; x.toPoint() < rect.right(); x += cm) {
         lines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
     }

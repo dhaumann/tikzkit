@@ -117,20 +117,20 @@ MainWindow::MainWindow()
     item1->node()->setPos(tikz::Pos(-3, 3, tikz::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThin());
     item1->node()->style()->setShape(tikz::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item1->node()->setText("$\\int f(x) dx$");
 
     tikz::ui::TikzNode* item2 = m_doc->createTikzNode();
-    item2->node()->setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
+    item2->node()->setPos(tikz::Pos(3, 3, tikz::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::thin());
     item2->node()->style()->setShape(tikz::ShapeCircle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item2->node()->setText("$\\Leftrightarrow$");
 
     // an ellipse path
     tikz::ui::PathItem* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
-    path->path()->style()->setRadiusX(tikz::Value(2.0, tikz::Unit::Centimeter));
-    path->path()->style()->setRadiusY(tikz::Value(1.0, tikz::Unit::Centimeter));
+    path->path()->style()->setRadiusX(tikz::Value(2.0, tikz::Centimeter));
+    path->path()->style()->setRadiusY(tikz::Value(1.0, tikz::Centimeter));
 //     path->setStartNode(item1);
 //     path->setEndNode(item2);
     path->path()->style()->setLineWidth(tikz::Value::semiThick());
@@ -143,25 +143,25 @@ MainWindow::MainWindow()
     path->path()->style()->setArrowHead(tikz::ToArrow);
 //     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartNode(item1->node());
 //     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndNode(item2->node());
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(tikz::Pos(0, 0, tikz::Unit::Centimeter));
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(tikz::Pos(0, 0, tikz::Centimeter));
+    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(tikz::Pos(3, 3, tikz::Centimeter));
 
     m_linePropertyWidget->setLineStyle(m_doc->style());
 #if 0
 
 
     item1 = m_doc->createTikzNode();
-    item1->setPos(tikz::Pos(-3, 1, tikz::Unit::Centimeter));
+    item1->setPos(tikz::Pos(-3, 1, tikz::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::thin());
     item1->node()->style()->setShape(tikz::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item1->node()->setText("$a$");
 
     item2 = m_doc->createTikzNode();
-    item2->node()->setPos(tikz::Pos(3, 1, tikz::Unit::Centimeter));
+    item2->node()->setPos(tikz::Pos(3, 1, tikz::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
     item2->node()->style()->setShape(tikz::ShapeCircle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item2->node()->setText("a");
 
     // an path
@@ -172,17 +172,17 @@ MainWindow::MainWindow()
 
 
     item1 = m_doc->createTikzNode();
-    item1->setPos(tikz::Pos(-3, -1, tikz::Unit::Centimeter));
+    item1->setPos(tikz::Pos(-3, -1, tikz::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
     item1->node()->style()->setShape(tikz::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item1->node()->setText("$\\iiint \\max$");
 
     item2 = m_doc->createTikzNode();
-    item2->node()->setPos(tikz::Pos(3, -1, tikz::Unit::Centimeter));
+    item2->node()->setPos(tikz::Pos(3, -1, tikz::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::ultraThick());
     item2->node()->style()->setShape(tikz::ShapeRectangle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item2->node()->setText("A long text\\\\which is wrapped");
 
 //     item2->style()->setParentStyle(item1->style());
@@ -197,20 +197,20 @@ MainWindow::MainWindow()
 
 
     item1 = m_doc->createTikzNode();
-    item1->setPos(tikz::Pos(-3, -3, tikz::Unit::Centimeter));
+    item1->setPos(tikz::Pos(-3, -3, tikz::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
     item1->node()->style()->setShape(tikz::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item1->node()->setText("c");
 
     a = item1;
 
     item2 = m_doc->createTikzNode();
-    item2->node()->setPos(tikz::Pos(3, -3, tikz::Unit::Centimeter));
+    item2->node()->setPos(tikz::Pos(3, -3, tikz::Centimeter));
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
     item2->node()->style()->setShape(tikz::ShapeEllipse);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
     item2->node()->style()->setMinimumWidth(2);
     item2->node()->setText("8");
 
@@ -254,23 +254,23 @@ MainWindow::MainWindow()
     // test example
     {
         TikzNode *n1 = m_doc->createTikzNode();
-        n1->node()->setPos(tikz::Pos(0, 6, tikz::Unit::Centimeter));
+        n1->node()->setPos(tikz::Pos(0, 6, tikz::Centimeter));
         n1->node()->style()->setLineWidth(tikz::Value::semiThick());
         n1->node()->style()->setShape(tikz::ShapeRectangle);
-        n1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n1->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
-        n1->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n1->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Centimeter));
+        n1->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n1->node()->style()->setPenColor(QColor(51, 189, 242));
         n1->node()->style()->setFillColor(QColor(204, 239, 252));
         n1->node()->setText("Kate Part\\\\(Backend library)");
 
         TikzNode *n2 = m_doc->createTikzNode();
-        n2->node()->setPos(tikz::Pos(0, 8, tikz::Unit::Centimeter));
+        n2->node()->setPos(tikz::Pos(0, 8, tikz::Centimeter));
         n2->node()->style()->setLineWidth(tikz::Value::semiThick());
         n2->node()->style()->setShape(tikz::ShapeRectangle);
-        n2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n2->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
-        n2->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n2->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Centimeter));
+        n2->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n2->node()->style()->setPenColor(QColor(255, 153, 51));
         n2->node()->style()->setFillColor(QColor(255, 229, 204));
         n2->node()->setText("KTextEditor\\\\(Interfaces)");
@@ -279,9 +279,9 @@ MainWindow::MainWindow()
         n3->node()->setPos(QPointF(-5.8, 10));
         n3->node()->style()->setLineWidth(tikz::Value::semiThick());
         n3->node()->style()->setShape(tikz::ShapeRectangle);
-        n3->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n3->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        n3->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n3->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n3->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
+        n3->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n3->node()->style()->setPenColor(QColor(255, 51, 51));
         n3->node()->style()->setFillColor(QColor(255, 204, 204));
         n3->node()->setText("Kate\\\\(Application)");
@@ -290,20 +290,20 @@ MainWindow::MainWindow()
         n4->node()->setPos(QPointF(-2.9, 10));
         n4->node()->style()->setLineWidth(tikz::Value::semiThick());
         n4->node()->style()->setShape(tikz::ShapeRectangle);
-        n4->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n4->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        n4->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n4->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n4->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
+        n4->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n4->node()->style()->setPenColor(QColor(255, 51, 51));
         n4->node()->style()->setFillColor(QColor(255, 204, 204));
         n4->node()->setText("KWrite\\\\(Application)");
 
         TikzNode *n5 = m_doc->createTikzNode();
-        n5->node()->setPos(tikz::Pos(0, 10, tikz::Unit::Centimeter));
+        n5->node()->setPos(tikz::Pos(0, 10, tikz::Centimeter));
         n5->node()->style()->setLineWidth(tikz::Value::semiThick());
         n5->node()->style()->setShape(tikz::ShapeRectangle);
-        n5->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n5->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        n5->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n5->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n5->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
+        n5->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n5->node()->style()->setPenColor(QColor(255, 51, 51));
         n5->node()->style()->setFillColor(QColor(255, 204, 204));
         n5->node()->setText("KDevelop\\\\(Application)");
@@ -312,9 +312,9 @@ MainWindow::MainWindow()
         n6->node()->setPos(QPointF(2.9, 10));
         n6->node()->style()->setLineWidth(tikz::Value::semiThick());
         n6->node()->style()->setShape(tikz::ShapeRectangle);
-        n6->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n6->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        n6->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n6->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n6->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
+        n6->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n6->node()->style()->setPenColor(QColor(255, 51, 51));
         n6->node()->style()->setFillColor(QColor(255, 204, 204));
         n6->node()->setText("Kile\\\\(Application)");
@@ -323,9 +323,9 @@ MainWindow::MainWindow()
         n7->node()->setPos(QPointF(5.8, 10));
         n7->node()->style()->setLineWidth(tikz::Value::semiThick());
         n7->node()->style()->setShape(tikz::ShapeRectangle);
-        n7->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        n7->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        n7->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        n7->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+        n7->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
+        n7->node()->style()->setMinimumHeight(tikz::Value(1.5, tikz::Centimeter));
         n7->node()->style()->setPenColor(QColor(255, 51, 51));
         n7->node()->style()->setFillColor(QColor(255, 204, 204));
         n7->node()->setText("3rd party\\\\(Application)");
