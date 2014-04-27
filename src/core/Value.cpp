@@ -26,9 +26,11 @@ namespace tikz {
 
 QString Value::toString() const
 {
-    // we require a valid number
-    Q_ASSERT(isValid());
+    if (! isValid()) {
+        return QLatin1String("nan");
+    }
 
+    // use C locale with out thousand-',' separators
     QLocale locale = QLocale::c();
     locale.setNumberOptions(QLocale::OmitGroupSeparator);
     QString number = locale.toString(m_value, 'f', 20);
@@ -76,6 +78,11 @@ QString Value::toString() const
 
 Value Value::fromString(const QString & str)
 {
+    // we require a valid number
+    if (str == QLatin1String("nan")) {
+        return invalid();
+    }
+
     // format example: 12.50cm
     static QRegularExpression re("([-+]?\\d*\\.?\\d*)\\s*(\\w*)");
 

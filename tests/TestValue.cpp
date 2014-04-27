@@ -33,6 +33,19 @@ void ValueTest::cleanupTestCase()
 {
 }
 
+void ValueTest::testNaN()
+{
+    tikz::Value val = tikz::Value::invalid();
+
+    // toString
+    QCOMPARE(val.toString(), QString("nan"));
+    QCOMPARE(val, tikz::Value::invalid());
+
+    // fromString
+    val = tikz::Value::fromString("nan");
+    QCOMPARE(val, tikz::Value::invalid());
+}
+
 void ValueTest::testPoint()
 {
     tikz::Value val;

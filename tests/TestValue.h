@@ -31,6 +31,7 @@ public slots:
     void cleanupTestCase();
 
 private slots:
+    void testNaN();
     void testPoint();
     void testFromString();
 };
