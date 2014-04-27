@@ -67,8 +67,8 @@ TikzScene::TikzScene(TikzDocument * doc)
     d->tool = new ProxyTool(this);
 
     // set sane scene rect
-    setSceneRect(-tikz::cm2pt(10), -tikz::cm2pt(10),
-                 tikz::cm2pt(20), tikz::cm2pt(20));
+    setSceneRect(-tikz::cm2pt(15), -tikz::cm2pt(15),
+                 tikz::cm2pt(30), tikz::cm2pt(30));
 }
 
 TikzScene::~TikzScene()

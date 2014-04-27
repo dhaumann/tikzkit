@@ -32,6 +32,7 @@
 #include <tikz/core/tikz.h>
 #include <tikz/core/Path.h>
 #include <tikz/core/EdgePath.h>
+#include <tikz/core/EllipsePath.h>
 
 #include <QDockWidget>
 #include <QHBoxLayout>
@@ -129,27 +130,25 @@ MainWindow::MainWindow()
 
     // an ellipse path
     tikz::ui::PathItem* path = m_doc->createTikzPath(tikz::core::Path::Ellipse);
-    path->path()->style()->setRadiusX(tikz::Value(2.0, tikz::Centimeter));
-    path->path()->style()->setRadiusY(tikz::Value(1.0, tikz::Centimeter));
-//     path->setStartNode(item1);
-//     path->setEndNode(item2);
-    path->path()->style()->setLineWidth(tikz::Value::semiThick());
+    auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
+    ellipse->style()->setRadiusX(tikz::Value(2.0, tikz::Centimeter));
+    ellipse->style()->setRadiusY(tikz::Value(1.0, tikz::Centimeter));
+    ellipse->style()->setLineWidth(tikz::Value::semiThick());
 
     // add a line path
     path = m_doc->createTikzPath(tikz::core::Path::Line);
-    path->path()->style()->setLineWidth(tikz::Value::semiThick());
-    path->path()->style()->setDoubleLine(true);
-    path->path()->style()->setArrowTail(tikz::LatexArrow);
-    path->path()->style()->setArrowHead(tikz::ToArrow);
-//     qobject_cast<tikz::core::EdgePath*>(path->path())->setStartNode(item1->node());
-//     qobject_cast<tikz::core::EdgePath*>(path->path())->setEndNode(item2->node());
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setStartPos(tikz::Pos(0, 0, tikz::Centimeter));
-    qobject_cast<tikz::core::EdgePath*>(path->path())->setEndPos(tikz::Pos(3, 3, tikz::Centimeter));
+    auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+    edge->style()->setLineWidth(tikz::Value::semiThick());
+//     edge->style()->setDoubleLine(true);
+    edge->style()->setArrowTail(tikz::LatexArrow);
+    edge->style()->setArrowHead(tikz::ToArrow);
+    edge->setStartNode(item1->node());
+    edge->setEndNode(item2->node());
 
     m_linePropertyWidget->setLineStyle(m_doc->style());
+
+
 #if 0
-
-
     item1 = m_doc->createTikzNode();
     item1->setPos(tikz::Pos(-3, 1, tikz::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::thin());
@@ -250,12 +249,12 @@ MainWindow::MainWindow()
         path->path()->style()->setArrowHead(tikz::Arrow(i));
         path->path()->style()->endConfig();
     }
+#endif
 
     // test example
     {
-        TikzNode *n1 = m_doc->createTikzNode();
+        tikz::ui::TikzNode *n1 = m_doc->createTikzNode();
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Centimeter));
-        n1->node()->style()->setLineWidth(tikz::Value::semiThick());
         n1->node()->style()->setShape(tikz::ShapeRectangle);
         n1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n1->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Centimeter));
@@ -264,9 +263,8 @@ MainWindow::MainWindow()
         n1->node()->style()->setFillColor(QColor(204, 239, 252));
         n1->node()->setText("Kate Part\\\\(Backend library)");
 
-        TikzNode *n2 = m_doc->createTikzNode();
+        tikz::ui::TikzNode *n2 = m_doc->createTikzNode();
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Centimeter));
-        n2->node()->style()->setLineWidth(tikz::Value::semiThick());
         n2->node()->style()->setShape(tikz::ShapeRectangle);
         n2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n2->node()->style()->setMinimumWidth(tikz::Value(2, tikz::Centimeter));
@@ -275,9 +273,8 @@ MainWindow::MainWindow()
         n2->node()->style()->setFillColor(QColor(255, 229, 204));
         n2->node()->setText("KTextEditor\\\\(Interfaces)");
 
-        TikzNode *n3 = m_doc->createTikzNode();
-        n3->node()->setPos(QPointF(-5.8, 10));
-        n3->node()->style()->setLineWidth(tikz::Value::semiThick());
+        tikz::ui::TikzNode *n3 = m_doc->createTikzNode();
+        n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Centimeter));
         n3->node()->style()->setShape(tikz::ShapeRectangle);
         n3->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n3->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -286,9 +283,8 @@ MainWindow::MainWindow()
         n3->node()->style()->setFillColor(QColor(255, 204, 204));
         n3->node()->setText("Kate\\\\(Application)");
 
-        TikzNode *n4 = m_doc->createTikzNode();
-        n4->node()->setPos(QPointF(-2.9, 10));
-        n4->node()->style()->setLineWidth(tikz::Value::semiThick());
+        tikz::ui::TikzNode *n4 = m_doc->createTikzNode();
+        n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Centimeter));
         n4->node()->style()->setShape(tikz::ShapeRectangle);
         n4->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n4->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -297,9 +293,8 @@ MainWindow::MainWindow()
         n4->node()->style()->setFillColor(QColor(255, 204, 204));
         n4->node()->setText("KWrite\\\\(Application)");
 
-        TikzNode *n5 = m_doc->createTikzNode();
+        tikz::ui::TikzNode *n5 = m_doc->createTikzNode();
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Centimeter));
-        n5->node()->style()->setLineWidth(tikz::Value::semiThick());
         n5->node()->style()->setShape(tikz::ShapeRectangle);
         n5->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n5->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -308,9 +303,8 @@ MainWindow::MainWindow()
         n5->node()->style()->setFillColor(QColor(255, 204, 204));
         n5->node()->setText("KDevelop\\\\(Application)");
 
-        TikzNode *n6 = m_doc->createTikzNode();
-        n6->node()->setPos(QPointF(2.9, 10));
-        n6->node()->style()->setLineWidth(tikz::Value::semiThick());
+        tikz::ui::TikzNode *n6 = m_doc->createTikzNode();
+        n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Centimeter));
         n6->node()->style()->setShape(tikz::ShapeRectangle);
         n6->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n6->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -319,9 +313,8 @@ MainWindow::MainWindow()
         n6->node()->style()->setFillColor(QColor(255, 204, 204));
         n6->node()->setText("Kile\\\\(Application)");
 
-        TikzNode *n7 = m_doc->createTikzNode();
-        n7->node()->setPos(QPointF(5.8, 10));
-        n7->node()->style()->setLineWidth(tikz::Value::semiThick());
+        tikz::ui::TikzNode *n7 = m_doc->createTikzNode();
+        n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Centimeter));
         n7->node()->style()->setShape(tikz::ShapeRectangle);
         n7->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
         n7->node()->style()->setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -334,56 +327,55 @@ MainWindow::MainWindow()
         // paths
         //
         tikz::ui::PathItem* path = m_doc->createTikzPath();
-//         path->setStartNode(n1);
-//         path->setEndNode(n2);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
+        auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n1->node());
+        edge->setEndNode(n2->node());
         path->path()->style()->setArrowTail(tikz::LatexArrow);
         path->path()->style()->setArrowHead(tikz::LatexArrow);
         path->path()->style()->setPenColor(QColor(122, 122, 122));
 
         path = m_doc->createTikzPath();
-//         path->setStartNode(n2);
-//         path->setEndNode(n3);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
-        path->path()->style()->setArrowTail(tikz::LatexArrow);
-        path->path()->style()->setArrowHead(tikz::LatexArrow);
-        path->path()->style()->setPenColor(QColor(122, 122, 122));
-//         path->path()->setStartAnchor(tikz::West);
+        edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n2->node());
+        edge->setEndNode(n3->node());
+        edge->style()->setArrowTail(tikz::LatexArrow);
+        edge->style()->setArrowHead(tikz::LatexArrow);
+        edge->style()->setPenColor(QColor(122, 122, 122));
+        edge->setStartAnchor(tikz::West);
 
         path = m_doc->createTikzPath();
-//         path->setStartNode(n2);
-//         path->setEndNode(n4);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
-        path->path()->style()->setArrowTail(tikz::LatexArrow);
-        path->path()->style()->setArrowHead(tikz::LatexArrow);
-        path->path()->style()->setPenColor(QColor(122, 122, 122));
+        edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n2->node());
+        edge->setEndNode(n4->node());
+        edge->style()->setArrowTail(tikz::LatexArrow);
+        edge->style()->setArrowHead(tikz::LatexArrow);
+        edge->style()->setPenColor(QColor(122, 122, 122));
 
         path = m_doc->createTikzPath();
-//         path->setStartNode(n2);
-//         path->setEndNode(n5);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
-        path->path()->style()->setArrowTail(tikz::LatexArrow);
-        path->path()->style()->setArrowHead(tikz::LatexArrow);
-        path->path()->style()->setPenColor(QColor(122, 122, 122));
+        edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n2->node());
+        edge->setEndNode(n5->node());
+        edge->style()->setArrowTail(tikz::LatexArrow);
+        edge->style()->setArrowHead(tikz::LatexArrow);
+        edge->style()->setPenColor(QColor(122, 122, 122));
         
         path = m_doc->createTikzPath();
-//         path->setStartNode(n2);
-//         path->setEndNode(n6);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
-        path->path()->style()->setArrowTail(tikz::LatexArrow);
-        path->path()->style()->setArrowHead(tikz::LatexArrow);
-        path->path()->style()->setPenColor(QColor(122, 122, 122));
+        edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n2->node());
+        edge->setEndNode(n6->node());
+        edge->style()->setArrowTail(tikz::LatexArrow);
+        edge->style()->setArrowHead(tikz::LatexArrow);
+        edge->style()->setPenColor(QColor(122, 122, 122));
         
         path = m_doc->createTikzPath();
-//         path->setStartNode(n2);
-//         path->setEndNode(n7);
-        path->path()->style()->setLineWidth(tikz::Value::thick());
-        path->path()->style()->setArrowTail(tikz::LatexArrow);
-        path->path()->style()->setArrowHead(tikz::LatexArrow);
-        path->path()->style()->setPenColor(QColor(122, 122, 122));
-//         path->path()->setStartAnchor(tikz::East);
+        edge = qobject_cast<tikz::core::EdgePath*>(path->path());
+        edge->setStartNode(n2->node());
+        edge->setEndNode(n7->node());
+        edge->style()->setArrowTail(tikz::LatexArrow);
+        edge->style()->setArrowHead(tikz::LatexArrow);
+        edge->style()->setPenColor(QColor(122, 122, 122));
+        edge->setStartAnchor(tikz::East);
     }
-#endif
 
     setupActions();
 
