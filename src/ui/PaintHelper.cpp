@@ -141,7 +141,7 @@ void PaintHelper::drawPath(const QPainterPath & path)
     d->painter->drawPath(path);
 
     // second pass: draw inner line
-    if (d->style->doubleLine()) {
+    if (d->style->doubleLine() && d->style->innerLineWidth().toPoint() > 0) {
         p.setWidthF(d->style->innerLineWidth().toPoint());
         if (d->style->penStyle() != tikz::SolidLine) {
             // scale by different line widths to match distances
