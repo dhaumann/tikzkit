@@ -414,6 +414,7 @@ void MainWindow::loadFile()
 {
     QString filename("output.tikzkit");
     m_doc->load(filename);
+    m_linePropertyWidget->setLineStyle(m_doc->style());
 }
 
 void MainWindow::updateTikzCode()
