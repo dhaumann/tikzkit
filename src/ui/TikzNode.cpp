@@ -72,6 +72,8 @@ class TikzNodePrivate
             outlinePath = shape->outline();
 
             q->setRotation(node->style()->rotation());
+
+            q->update();
         }
 };
 
