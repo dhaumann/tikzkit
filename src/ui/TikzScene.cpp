@@ -95,41 +95,6 @@ TikzEditMode TikzScene::editMode() const
     return d->editMode;
 }
 
-void TikzScene::drawBackground(QPainter *painter, const QRectF &rect)
-{
-    if (!rect.isValid()) {
-        qWarning() << "Scene bounding rect is invalid. Something is wrong!";
-        return;
-    }
-
-    // painting is in unit 'pt'
-
-    // desired unit
-    const tikz::Unit unit = tikz::Centimeter;
-    const Value one(1, unit);
-
-    tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(unit).value());
-    left = tikz::Value(std::floor(left.value()), unit);
-
-    tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(unit).value());
-    top = tikz::Value(std::ceil(top.value()), unit);
-
-    QVarLengthArray<QLineF, 100> lines;
-    for (tikz::Value x = left; x.toPoint() < rect.right(); x += one) {
-        lines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
-    }
-    for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one) {
-        lines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
-    }
-
-    painter->save();
-    QPen pen(QColor(243, 243, 243));
-    pen.setWidth(0);
-    painter->setPen(pen);
-    painter->drawLines(lines.data(), lines.size());
-    painter->restore();
-}
-
 void TikzScene::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     // first let QGraphicsScene do its work

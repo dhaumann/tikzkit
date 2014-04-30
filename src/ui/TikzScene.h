@@ -73,10 +73,6 @@ class TIKZUI_EXPORT TikzScene : public QGraphicsScene
         void editModeChanged(TikzEditMode mode) const;
 
     protected:
-        // Efficiently draws a grid in the background.
-        // For more information: http://www.qtcentre.org/threads/5609-Drawing-grids-efficiently-in-QGraphicsScene?p=28905#post28905
-        void drawBackground(QPainter *painter, const QRectF &rect) override;
-
         /**
          * Reimplemented to pass mouse press events to tool handler.
          */
