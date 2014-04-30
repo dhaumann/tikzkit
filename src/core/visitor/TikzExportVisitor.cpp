@@ -102,12 +102,8 @@ static QString colorToString(const QColor & color)
     return QString("orange");
 }
 
-static QString toString(tikz::core::Style * style, bool doubleLine = false)
+static QString penStyleToString(tikz::core::Style * style)
 {
-    if (doubleLine) {
-        return "double distance=" + style->innerLineWidth().toString();
-    }
-
     const tikz::Value lw = style->lineWidth();
     if (lw == Value::ultraThin()) {
         return "ultra thin";
@@ -281,7 +277,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export line width
     //
     if (style->lineWidthSet()) {
-        options << toString(style);
+        options << penStyleToString(style);
     }
 
     //
@@ -293,7 +289,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
             : QString());
 
         if (style->innerLineWidthSet()) {
-            options << toString(style, true); // 'true' for double line
+            options << "double distance=" + style->innerLineWidth().toString();
         }
     }
 
