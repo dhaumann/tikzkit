@@ -24,6 +24,9 @@
 #include <QGraphicsView>
 #include <QDebug>
 
+// TODO (later): make this unit configurable
+static const tikz::Unit s_unit = tikz::Centimeter;
+
 namespace tikz {
 namespace ui {
 
@@ -74,23 +77,20 @@ public:
             rect = r;
             zoom = z;
 
-            // TODO (later): make this unit configurable
-            const tikz::Unit unit = tikz::Centimeter;
-
             // we want a line each 5 mm
-            const int lpu = linesPerUnit(unit);
-            qDebug() << "lines per unit" << lpu;
+            const int lpu = linesPerUnit(s_unit);
+//             qDebug() << "lines per s_unit" << lpu;
 
             majorLines.clear();
             minorLines.clear();
 
-            const Value one(1, unit);
+            const Value one(1, s_unit);
 
-            tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(unit).value());
-            left = tikz::Value(std::floor(left.value()), unit);
+            tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(s_unit).value());
+            left = tikz::Value(std::floor(left.value()), s_unit);
 
-            tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(unit).value());
-            top = tikz::Value(std::ceil(top.value()), unit);
+            tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(s_unit).value());
+            top = tikz::Value(std::ceil(top.value()), s_unit);
 
             QVarLengthArray<QLineF, 100> lines;
             int i = 0;
@@ -133,7 +133,8 @@ void Grid::draw(QPainter * p, const QRectF & rect)
     d->updateCache(rect);
 
     p->save();
-//     QPen pen(QColor(243, 243, 243));
+    p->setRenderHints(QPainter::Antialiasing, false);
+
     QPen pen(QColor(230, 230, 230));
     pen.setWidth(0);
     p->setPen(pen);
@@ -142,17 +143,16 @@ void Grid::draw(QPainter * p, const QRectF & rect)
     pen.setDashPattern(QVector<qreal>() << 5 << 5);
     p->setPen(pen);
     p->drawLines(d->minorLines.data(), d->minorLines.size());
+
     p->restore();
 }
 
 tikz::Value Grid::snapValue(const tikz::Value & value) const
 {
-    // TODO (later): make this unit configurable
-    const tikz::Unit unit = tikz::Centimeter;
-    const int lpu = d->linesPerUnit(unit);
-    const Value one(1.0 / lpu, unit);
+    const int lpu = d->linesPerUnit(s_unit);
+    const Value one(1.0 / lpu, s_unit);
 
-    const auto snappedValue = tikz::Value(qRound(value.convertTo(unit).value() / one.value()) * one.value(), unit).convertTo(value.unit());
+    const auto snappedValue = tikz::Value(qRound(value.convertTo(s_unit).value() / one.value()) * one.value(), s_unit).convertTo(value.unit());
 //     qDebug() << value << "converts to:" << snappedValue;
     return snappedValue;
 }

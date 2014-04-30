@@ -74,6 +74,8 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     gridLayout->addWidget(viewport(), 1, 1);
 
     setLayout(gridLayout);
+
+//     setViewportUpdateMode(FullViewportUpdate);
 }
 
 TikzView::~TikzView()
