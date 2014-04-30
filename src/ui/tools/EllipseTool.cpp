@@ -136,6 +136,23 @@ QPointF EllipseTool::handlePos(Handle::Position pos)
     return c + t.map(p);
 }
 
+static void snapPos(tikz::Pos & pos)
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    if (snap) {
+        pos = tikz::Pos(qRound(pos.x().value() / 0.2) * 0.2,
+                        qRound(pos.y().value() / 0.2) * 0.2, pos.x().unit());
+    }
+}
+
+static void snapValue(tikz::Value & val)
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    if (snap) {
+        val = tikz::Value(qRound(val.value() / 0.2) * 0.2, val.unit());
+    }
+}
+
 void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
@@ -156,6 +173,9 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         return;
     }
 
+    // later: preferred unit
+    const tikz::Unit unit = tikz::Centimeter;
+
     //
     // move
     //
@@ -164,9 +184,8 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         tikz::core::EllipsePath * ep = m_path->ellipsePath();
         tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
         if (snap && ! metaPos.node()) {
-            QPointF p = scenePos;
-            p.rx() = qRound(p.x() / 0.2) * 0.2;
-            p.ry() = qRound(p.y() / 0.2) * 0.2;
+            tikz::Pos p = tikz::Pos(scenePos).convertTo(unit);
+            snapPos(p);
             metaPos.setPos(p);
         }
 
@@ -181,9 +200,9 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     t.rotate(-m_path->style()->rotation());
 
     // honor rotation of path
-    const QPointF delta = t.map(m_path->pos() - scenePos);
-    qreal w = m_path->style()->radiusX().toPoint();
-    qreal h = m_path->style()->radiusY().toPoint();
+    const tikz::Pos delta = tikz::Pos(t.map(m_path->pos() - scenePos)).convertTo(unit);
+    tikz::Value w = m_path->style()->radiusX();
+    tikz::Value h = m_path->style()->radiusY();
 
     switch (handle->handlePos()) {
         case Handle::TopLeftCorner:
@@ -194,8 +213,8 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
             h = delta.y();
 
             // snap to raster
-            if (snap) w = qRound(w / 0.2) * 0.2;
-            if (snap) h = qRound(h / 0.2) * 0.2;
+            snapValue(w);
+            snapValue(h);
 
             break;
         }
@@ -203,14 +222,14 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         case Handle::BottomBorder: {
             h = delta.y();
             // snap to raster
-            if (snap) h = qRound(h / 0.2) * 0.2;
+            snapValue(h);
             break;
         }
         case Handle::LeftBorder:
         case Handle::RightBorder: {
             w = delta.x();
             // snap to raster
-            if (snap) w = qRound(w / 0.2) * 0.2;
+            snapValue(w);
             break;
         }
         case Handle::Center: Q_ASSERT(false);
@@ -219,8 +238,8 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     }
 
     // for now, only allow positive values
-    w = qAbs(w);
-    h = qAbs(h);
+    w = tikz::Value(qAbs(w.value()), w.unit());
+    h = tikz::Value(qAbs(h.value()), h.unit());
 
     tikz::core::EdgeStyle s;
     s.setStyle(*m_path->style());
