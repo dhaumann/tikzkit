@@ -33,31 +33,72 @@
 #include <QMetaProperty>
 #include <QFile>
 #include <QDebug>
+#include <QHash>
 
 namespace tikz {
 namespace core {
 using namespace internal;
 
+static QColor mixColor(const QColor & c1, const QColor & c2, qreal interp)
+{
+    if (! c1.isValid() || ! c2.isValid()) {
+        return QColor();
+    }
+
+    const auto p = interp;
+    const auto q = 1 - interp;
+    return QColor(qRound(p * c1.red() + q * c2.red()),
+                  qRound(p * c1.green() + q * c2.green()),
+                  qRound(p * c1.blue() + q * c2.blue()));
+}
+
 static QString colorToString(const QColor & color)
 {
-    // TODO: fix color conversion
-    if (color == Qt::black) return "black";
-    if (color == Qt::white) return "white";
-    if (color == Qt::cyan) return "cyan";
-    if (color == Qt::darkCyan) return "cyan!50!black";
-    if (color == Qt::red) return "red";
-    if (color == Qt::darkRed) return "red!50!black";
-    if (color == Qt::magenta) return "magenta";
-    if (color == Qt::darkMagenta) return "magenta!50!black";
-    if (color == Qt::green) return "green";
-    if (color == Qt::darkGreen) return "green!50!black";
-    if (color == Qt::yellow) return "yellow";
-    if (color == Qt::darkYellow) return "yellow!50!black";
-    if (color == Qt::blue) return "blue";
-    if (color == Qt::darkBlue) return "blue!50!black";
-    if (color == Qt::gray) return "gray";
-    if (color == Qt::darkGray) return "gray!50!black";
-    if (color == Qt::lightGray) return "gray!50";
+    static QHash<QRgb, QString> colorMap;
+    if (colorMap.isEmpty()) {
+        for (int i = 10; i < 100; i += 10) {
+            const qreal f = i / 100.0;
+            colorMap.insert(mixColor(Qt::black, Qt::white, f).rgb(), QString("black!%1").arg(i));
+            colorMap.insert(mixColor(Qt::cyan, Qt::white, f).rgb(), QString("cyan!%1").arg(i));
+            colorMap.insert(mixColor(Qt::cyan, Qt::black, f).rgb(), QString("cyan!%1!black").arg(i));
+            colorMap.insert(mixColor(Qt::red, Qt::white, f).rgb(), QString("red!%1").arg(i));
+            colorMap.insert(mixColor(Qt::red, Qt::black, f).rgb(), QString("red!%1!black").arg(i));
+            colorMap.insert(mixColor(Qt::magenta, Qt::white, f).rgb(), QString("magenta!%1").arg(i));
+            colorMap.insert(mixColor(Qt::magenta, Qt::black, f).rgb(), QString("magenta!%1!black").arg(i));
+            colorMap.insert(mixColor(Qt::green, Qt::white, f).rgb(), QString("green!%1").arg(i));
+            colorMap.insert(mixColor(Qt::green, Qt::black, f).rgb(), QString("green!%1!black").arg(i));
+            colorMap.insert(mixColor(Qt::yellow, Qt::white, f).rgb(), QString("yellow!%1").arg(i));
+            colorMap.insert(mixColor(Qt::yellow, Qt::black, f).rgb(), QString("yellow!%1!black").arg(i));
+            colorMap.insert(mixColor(Qt::blue, Qt::white, f).rgb(), QString("blue!%1").arg(i));
+            colorMap.insert(mixColor(Qt::blue, Qt::black, f).rgb(), QString("blue!%1!black").arg(i));
+            colorMap.insert(mixColor(QColor(255, 128, 0), Qt::white, f).rgb(), QString("orange!%1").arg(i));
+            colorMap.insert(mixColor(QColor(255, 128, 0), Qt::black, f).rgb(), QString("orange!%1!black").arg(i));
+        }
+
+        colorMap.insert(Qt::black, "black");
+        colorMap.insert(QColor(128, 128, 128).rgb(), "gray");
+        colorMap.insert(QColor(64, 64, 64).rgb(), "darkgray");
+        colorMap.insert(QColor(191, 191, 191).rgb(), "lightgray");
+        colorMap.insert(Qt::white, "white");
+        colorMap.insert(Qt::cyan, "cyan");
+        colorMap.insert(Qt::red, "red");
+        colorMap.insert(Qt::magenta, "magenta");
+        colorMap.insert(Qt::green, "green");
+        colorMap.insert(Qt::yellow, "yellow");
+        colorMap.insert(Qt::blue, "blue");
+        colorMap.insert(QColor(191, 128, 64).rgb(), "brown");
+        colorMap.insert(QColor(191, 255, 0).rgb(), "lime");
+        colorMap.insert(QColor(255, 191, 191).rgb(), "pink");
+        colorMap.insert(QColor(191, 0, 64).rgb(), "purple");
+        colorMap.insert(QColor(0, 128, 128).rgb(), "teal");
+        colorMap.insert(QColor(128, 0, 128).rgb(), "violet");
+        colorMap.insert(QColor(128, 128, 0).rgb(), "olive");
+    }
+
+    if (colorMap.contains(color.rgb())) {
+        return colorMap[color.rgb()];
+    }
+
     return QString("orange");
 }
 
