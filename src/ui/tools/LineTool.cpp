@@ -24,6 +24,7 @@
 #include "EdgePathItem.h"
 #include "AnchorManager.h"
 #include "TikzDocument.h"
+#include "TikzView.h"
 
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EdgePath.h>
@@ -114,15 +115,17 @@ QPointF LineTool::handlePos(Handle::Position pos)
 
 void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    TikzView * tikzView = qobject_cast<TikzView *>(view);
+
+    // later: preferred unit
+    const tikz::Unit unit = tikz::Centimeter;
 
     // try to attach to anchor
     tikz::core::MetaPos metaPos = m_anchorManager->anchorAt(scenePos, view);
 
-    if (snap && ! metaPos.node()) {
-        QPointF p = scenePos;
-        p.rx() = qRound(p.x() / 0.2) * 0.2;
-        p.ry() = qRound(p.y() / 0.2) * 0.2;
+    if (! metaPos.node()) {
+        tikz::Pos p = tikz::Pos(scenePos).convertTo(unit);
+        p = tikzView->snapPos(p);
         metaPos.setPos(p);
     }
 

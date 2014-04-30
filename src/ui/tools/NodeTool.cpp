@@ -23,6 +23,7 @@
 #include "MoveHandle.h"
 #include "NodeItem.h"
 #include "TikzDocument.h"
+#include "TikzView.h"
 #include <tikz/core/NodeStyle.h>
 
 #include <QApplication>
@@ -135,26 +136,9 @@ QPointF NodeTool::handlePos(Handle::Position pos)
     return c + t.map(p);
 }
 
-static void snapPos(tikz::Pos & pos)
-{
-    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    if (snap) {
-        pos = tikz::Pos(qRound(pos.x().value() / 0.2) * 0.2,
-                        qRound(pos.y().value() / 0.2) * 0.2, pos.x().unit());
-    }
-}
-
-static void snapValue(tikz::Value & val)
-{
-    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    if (snap) {
-        val = tikz::Value(qRound(val.value() / 0.2) * 0.2, val.unit());
-    }
-}
-
 void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    TikzView * tikzView = qobject_cast<TikzView *>(view);
 
     // later: preferred unit
     const tikz::Unit unit = tikz::Centimeter;
@@ -165,8 +149,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     if (handle->handleType() == Handle::RotateHandle) {
         const QPointF delta = m_node->node()->pos() - tikz::Pos(scenePos);
         const qreal rad = atan2(-delta.y(), -delta.x());
-        qreal deg = rad * 180 / M_PI + 90;
-        if (snap) deg = qRound(deg / 15) * 15;
+        const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
         tikz::core::NodeStyle s;
         s.setStyle(*m_node->style());
         s.setRotation(deg);
@@ -180,7 +163,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     //
     if (handle->handlePos() == Handle::Center) {
         tikz::Pos p = tikz::Pos(scenePos).convertTo(unit);
-        snapPos(p);
+        p = tikzView->snapPos(p);
         m_node->node()->setPos(p);
         return;
     }
@@ -205,8 +188,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
             h = delta.y();
 
             // snap to raster
-            snapValue(w);
-            snapValue(h);
+            w = tikzView->snapValue(w);
+            h = tikzView->snapValue(h);
 
             break;
         }
@@ -214,14 +197,14 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
         case Handle::BottomBorder: {
             h = delta.y();
             // snap to raster
-            snapValue(h);
+            h = tikzView->snapValue(h);
             break;
         }
         case Handle::LeftBorder:
         case Handle::RightBorder: {
             w = delta.x();
             // snap to raster
-            snapValue(w);
+            w = tikzView->snapValue(w);
             break;
         }
         case Handle::Center: Q_ASSERT(false);

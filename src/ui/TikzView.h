@@ -24,6 +24,9 @@
 
 #include "tikzgui_export.h"
 
+#include <tikz/core/Value.h>
+#include <tikz/core/Pos.h>
+
 
 namespace tikz {
 namespace ui {
@@ -51,6 +54,22 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
          */
         TikzDocument * document() const;
 
+        /**
+         * Snap @p value to the grid.
+         */
+        tikz::Value snapValue(const tikz::Value & value) const;
+
+        /**
+         * Snap x/y components of @p pos to the grid.
+         */
+        tikz::Pos snapPos(const tikz::Pos & pos) const;
+
+        /**
+         * Snap @p angle in degrees to a 15° raster.
+         */
+        qreal snapAngle(qreal angle) const;
+
+
     protected:
         void mousePressEvent(QMouseEvent* event) override;
         void mouseMoveEvent(QMouseEvent* event) override;
@@ -58,6 +77,7 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
         void wheelEvent(QWheelEvent* event) override;
         bool viewportEvent(QEvent * event) override;
 
+        void drawBackground(QPainter * painter, const QRectF & rect) override;
 
     private:
         TikzViewPrivate * const d;

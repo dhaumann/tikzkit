@@ -19,10 +19,12 @@
 
 #include "TikzView.h"
 #include "Ruler.h"
+#include "Grid.h"
 
 #include <tikz/core/Document.h>
 
 #include <math.h>
+#include <QApplication>
 #include <QDebug>
 #include <QScrollBar>
 
@@ -35,8 +37,9 @@ class TikzViewPrivate
 {
 public:
     TikzDocument * doc;
-    tikz::ui::Ruler * m_hRuler;
-    tikz::ui::Ruler * m_vRuler;
+    tikz::ui::Grid * grid;
+    tikz::ui::Ruler * hRuler;
+    tikz::ui::Ruler * vRuler;
     QPointF lastMousePos;
     bool handTool;
 };
@@ -54,18 +57,20 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
 
-    d->m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
-    d->m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
+    d->grid = new tikz::ui::Grid(this);
 
-    d->m_hRuler->setUnit(tikz::Centimeter);
-    d->m_vRuler->setUnit(tikz::Centimeter);
+    d->hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
+    d->vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
+
+    d->hRuler->setUnit(tikz::Centimeter);
+    d->vRuler->setUnit(tikz::Centimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
     top->setFixedSize(s_ruler_size, s_ruler_size);
     gridLayout->addWidget(top, 0, 0);
-    gridLayout->addWidget(d->m_hRuler, 0, 1);
-    gridLayout->addWidget(d->m_vRuler, 1, 0);
+    gridLayout->addWidget(d->hRuler, 0, 1);
+    gridLayout->addWidget(d->vRuler, 1, 0);
     gridLayout->addWidget(viewport(), 1, 1);
 
     setLayout(gridLayout);
@@ -79,6 +84,24 @@ TikzView::~TikzView()
 TikzDocument * TikzView::document() const
 {
     return d->doc;
+}
+
+tikz::Value TikzView::snapValue(const tikz::Value & value) const
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    return snap ? d->grid->snapValue(value) : value;
+}
+
+tikz::Pos TikzView::snapPos(const tikz::Pos & pos) const
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    return snap ? d->grid->snapPos(pos) : pos;
+}
+
+qreal TikzView::snapAngle(qreal angle) const
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    return snap ? (qRound(angle / 15) * 15) : angle;
 }
 
 void TikzView::mousePressEvent(QMouseEvent* event)
@@ -111,11 +134,11 @@ void TikzView::mouseMoveEvent(QMouseEvent* event)
     }
 
     // update mouse indicator on rulers
-    d->m_hRuler->setOrigin(d->m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->m_vRuler->setOrigin(d->m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    d->hRuler->setOrigin(d->hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    d->vRuler->setOrigin(d->vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
 
-    d->m_hRuler->setMousePos(event->globalPos());
-    d->m_vRuler->setMousePos(event->globalPos());
+    d->hRuler->setMousePos(event->globalPos());
+    d->vRuler->setMousePos(event->globalPos());
 
     // track last mouse position
     d->lastMousePos = event->pos();
@@ -149,13 +172,22 @@ void TikzView::wheelEvent(QWheelEvent* event)
 
 bool TikzView::viewportEvent(QEvent * event)
 {
-    d->m_hRuler->setOrigin(d->m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->m_vRuler->setOrigin(d->m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    d->hRuler->setOrigin(d->hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    d->vRuler->setOrigin(d->vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
     const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-    d->m_hRuler->setZoom(transform().m11() / physicalDpiX() * s);
-    d->m_vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * s);
+    d->hRuler->setZoom(transform().m11() / physicalDpiX() * s);
+    d->vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * s);
 
     return QGraphicsView::viewportEvent(event);
+}
+
+void TikzView::drawBackground(QPainter * painter, const QRectF & rect)
+{
+    // draw default background (typically nothing)
+    QGraphicsView::drawBackground(painter, rect);
+
+    // draw raster on top
+    d->grid->draw(painter, rect);
 }
 
 }

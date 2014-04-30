@@ -52,6 +52,7 @@ set(qtikzui_SOURCES
 
     utils/AnchorManager.cpp
     utils/Ruler.cpp
+    utils/Grid.cpp
 
     TikzScene.cpp
     TikzView.cpp
