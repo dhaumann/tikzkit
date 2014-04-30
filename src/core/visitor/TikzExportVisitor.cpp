@@ -170,21 +170,6 @@ void TikzExportVisitor::visit(Node * node)
     m_tikzExport.addTikzLine(line);
 }
 
-/**
- * Get the position of @p metaPos either in the form (1.2, 5.3) or as (1.center)
- */
-static QString toCoord(tikz::core::MetaPos metaPos)
-{
-    QString coord;
-    if (metaPos.node()) {
-        const QString anchor = anchorToString(metaPos.anchor());
-        coord = "(" + QString::number(metaPos.node()->id()) + anchor + ")";
-    } else {
-        coord = metaPos.pos().toString();
-    }
-    return coord;
-}
-
 void TikzExportVisitor::visit(Path * path)
 {
     QString options = edgeStyleOptions(path->style()).join(", ");
@@ -202,8 +187,8 @@ void TikzExportVisitor::visit(Path * path)
             //
             // compute start & end
             //
-            const QString startCoord = toCoord(edge->startMetaPos());
-            const QString endCoord = toCoord(edge->endMetaPos());
+            const QString startCoord = edge->startMetaPos().toString();
+            const QString endCoord = edge->endMetaPos().toString();
 
             //
             // build connection string
@@ -232,7 +217,7 @@ void TikzExportVisitor::visit(Path * path)
             //
             // compute center
             //
-            const QString center = toCoord(ellipsePath->metaPos());;
+            const QString center = ellipsePath->metaPos().toString();
 
             //
             // compute radius
