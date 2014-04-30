@@ -238,6 +238,8 @@ void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantM
 {
     style->beginConfig();
 
+    deserializeStyle(style, map);
+
     if (map.contains("radius-x")) {
         style->setRadiusX(tikz::Value::fromString(map["radius-x"].toString()));
     }
@@ -284,6 +286,8 @@ void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantM
 void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantMap & map)
 {
     style->beginConfig();
+
+    deserializeStyle(style, map);
 
     if (map.contains("text-align")) {
         style->setTextAlign(textAlignmentFromString(map["text-align"].toString()));
