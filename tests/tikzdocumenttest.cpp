@@ -9,7 +9,7 @@
 #include <tikz/core/Path.h>
 
 #include <tikz/ui/TikzDocument.h>
-#include <tikz/ui/TikzNode.h>
+#include <tikz/ui/NodeItem.h>
 
 QTEST_MAIN(TikzDocumentTest)
 
@@ -27,7 +27,7 @@ void TikzDocumentTest::documentTest()
 {
     tikz::ui::TikzDocument doc;
 
-    tikz::ui::TikzNode * node = doc.createTikzNode();
+    tikz::ui::NodeItem * node = doc.createNodeItem();
 
     Q_ASSERT(node != 0);
 

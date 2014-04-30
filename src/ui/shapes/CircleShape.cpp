@@ -18,7 +18,7 @@
  */
 
 #include "CircleShape.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/tikz.h>
@@ -34,7 +34,7 @@ class CircleShapePrivate
     public:
 };
 
-CircleShape::CircleShape(TikzNode * node)
+CircleShape::CircleShape(NodeItem * node)
     : AbstractShape(node)
     , d(new CircleShapePrivate())
 {

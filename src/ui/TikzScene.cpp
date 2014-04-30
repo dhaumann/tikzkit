@@ -20,7 +20,7 @@
 #include "TikzScene.h"
 
 #include "TikzDocument.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "PathItem.h"
 #include "AbstractTool.h"
 #include "ProxyTool.h" // FIXME: only temporarily
@@ -192,13 +192,13 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
         // delete all selected items
         foreach (QGraphicsItem* item, selectedItems()) {
             if (item->type() == QGraphicsItem::UserType + 2) {
-                TikzNode* node = dynamic_cast<TikzNode*>(item);
+                NodeItem* node = dynamic_cast<NodeItem*>(item);
                 Q_ASSERT(node);
-                d->doc->deleteTikzNode(node);
+                d->doc->deleteNodeItem(node);
             } else if (item->type() == QGraphicsItem::UserType + 3) {
                 tikz::ui::PathItem * path = dynamic_cast<tikz::ui::PathItem*>(item);
                 Q_ASSERT(path);
-                d->doc->deleteTikzPath(path);
+                d->doc->deletePathItem(path);
             }
         }
 

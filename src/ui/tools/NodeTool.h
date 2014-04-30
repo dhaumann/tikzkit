@@ -29,10 +29,10 @@
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 
 /**
- * The NodeTool allows to modify a TikzNode.
+ * The NodeTool allows to modify a NodeItem.
  * The supported operations are: move, resize, rotate.
  */
 class NodeTool : public AbstractTool
@@ -43,7 +43,7 @@ class NodeTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        NodeTool(TikzNode * node, QGraphicsScene * scene);
+        NodeTool(NodeItem * node, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.
@@ -114,7 +114,7 @@ class NodeTool : public AbstractTool
 
 
     private:
-        TikzNode * m_node;
+        NodeItem * m_node;
         QVector<Handle *> m_handles;
         tikz::core::Transaction m_transaction;
 };

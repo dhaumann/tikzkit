@@ -28,7 +28,7 @@
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 class AbstractShapePrivate;
 
 class AbstractShape
@@ -37,7 +37,7 @@ class AbstractShape
         /**
          * Default constructor
          */
-        AbstractShape(TikzNode * node);
+        AbstractShape(NodeItem * node);
 
         /**
          * Default constructor
@@ -47,7 +47,7 @@ class AbstractShape
         /**
          * Returns the pointer to the node passed in the constructor.
          */
-        TikzNode* node() const;
+        NodeItem* node() const;
 
     //
     // Shape properties
@@ -59,7 +59,7 @@ class AbstractShape
         virtual tikz::Shape type() const;
 
         /**
-         * This function is called by TikzNode::shapeRect().
+         * This function is called by NodeItem::shapeRect().
          * The shape can adjust the calculated @p shapeRect if needed.
          *
          * Example:
@@ -116,7 +116,7 @@ class AbstractShape
 /**
  * Factory function to get shapes
  */
-extern AbstractShape *createShape(tikz::Shape shape, TikzNode* node);
+extern AbstractShape *createShape(tikz::Shape shape, NodeItem* node);
 
 }
 }

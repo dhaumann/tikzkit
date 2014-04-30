@@ -19,7 +19,7 @@
 
 #include "NodeText_p.h"
 #include "NodeText.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include "TexGenerator.h"
 
@@ -30,16 +30,16 @@
 namespace tikz {
 namespace ui {
 
-NodeTextPrivate::NodeTextPrivate(TikzNode* tikzNode, NodeText* nodeText)
+NodeTextPrivate::NodeTextPrivate(NodeItem* nodeItem, NodeText* nodeText)
     : QObject()
     , svgRenderer(this)
     , texGenerator(this)
 {
     q = nodeText;
-    node = tikzNode;
+    node = nodeItem;
 
     connect(&texGenerator, SIGNAL(svgReady(QString)), this, SLOT(readSvgFile(QString)));
-    connect(this, SIGNAL(svgChanged()), tikzNode->node(), SIGNAL(changed()));
+    connect(this, SIGNAL(svgChanged()), nodeItem->node(), SIGNAL(changed()));
 }
 
 void NodeTextPrivate::updateCache()

@@ -18,7 +18,7 @@
  */
 
 #include "TexGenerator.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include <QPointer>
 #include <QPainter>

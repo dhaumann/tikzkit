@@ -31,7 +31,7 @@ class QGraphicsView;
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 class PathItem;
 class TikzDocumentPrivate;
 
@@ -91,56 +91,56 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     public:
         /**
-         * Returns all TikzNode%s in the TikzDocument.
+         * Returns all NodeItem%s in the TikzDocument.
          */
-        QVector<TikzNode*> tikzNodes() const;
+        QVector<NodeItem*> nodeItems() const;
 
         /**
-         * Returns all TikzPath%s in the TikzDocument.
+         * Returns all PathItem%s in the TikzDocument.
          */
-        QVector<PathItem*> tikzPaths() const;
+        QVector<PathItem*> pathItems() const;
 
         /**
-         * Creates a new TikzNode associated with this document.
+         * Creates a new NodeItem associated with this document.
          * If the node is not needed anymore, delete it by
-         * calling deleteTikzNode(tikzNode).
+         * calling deleteNodeItem(nodeItem).
          */
-        TikzNode * createTikzNode();
+        NodeItem * createNodeItem();
 
         /**
          * Creates a new path associated with this document.
          * If the path is not needed anymore, delete it by
-         * calling deleteTikzPath(tikzPath).
+         * calling deletePathItem(pathItem).
          */
-        tikz::ui::PathItem * createTikzPath(tikz::core::Path::Type type = tikz::core::Path::Line);
+        tikz::ui::PathItem * createPathItem(tikz::core::Path::Type type = tikz::core::Path::Line);
 
         /**
          * Remove @p node from the document by deleting the node object.
          * Afterwards, the pointer is invalid.
          * @param node node to delete
          */
-        void deleteTikzNode(TikzNode * node);
+        void deleteNodeItem(NodeItem * node);
 
         /**
          * Remove @p path from the document by deleting the path object.
          * Afterwards, the pointer is invalid.
          * @param path path to delete
          */
-        void deleteTikzPath(tikz::ui::PathItem * path);
+        void deletePathItem(tikz::ui::PathItem * path);
 
         /**
-         * Get the TikzNode with @p id.
+         * Get the NodeItem with @p id.
          * @param id unique id of the node
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        TikzNode * tikzNodeFromId(qint64 id) const;
+        NodeItem * nodeItemFromId(qint64 id) const;
 
         /**
          * Get the tikz::ui::PathItem with @p id.
          * @param id unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        tikz::ui::PathItem * tikzPathFromId(qint64 id) const;
+        tikz::ui::PathItem * pathItemFromId(qint64 id) const;
 
     //
     // internal: Undo / redo items manipulate with ID

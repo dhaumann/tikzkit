@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include <tikz/core/NodeStyle.h>
 #include "NodeText.h"
 #include "Painter.h"
@@ -41,12 +41,12 @@
 namespace tikz {
 namespace ui {
 
-class TikzNodePrivate
+class NodeItemPrivate
 {
-    TikzNode* q;
+    NodeItem* q;
 
     public:
-        TikzNodePrivate(TikzNode * tikzNode) : q(tikzNode) {}
+        NodeItemPrivate(NodeItem * nodeItem) : q(nodeItem) {}
 
         tikz::core::Node* node;
         NodeText* textItem;
@@ -77,9 +77,9 @@ class TikzNodePrivate
         }
 };
 
-TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
+NodeItem::NodeItem(tikz::core::Node * node, QGraphicsItem * parent)
     : TikzItem(parent)
-    , d(new TikzNodePrivate(this))
+    , d(new NodeItemPrivate(this))
 {
     d->dirty = false;
     d->node = node;
@@ -100,39 +100,39 @@ TikzNode::TikzNode(tikz::core::Node * node, QGraphicsItem * parent)
     slotSetPos(node->pos());
 }
 
-TikzNode::~TikzNode()
+NodeItem::~NodeItem()
 {
     delete d->shape;
     delete d;
 }
 
-TikzDocument * TikzNode::document() const
+TikzDocument * NodeItem::document() const
 {
     Q_ASSERT(qobject_cast<TikzDocument*>(d->node->document()) != nullptr);
     return qobject_cast<TikzDocument*>(d->node->document());
 }
 
-int TikzNode::type() const
+int NodeItem::type() const
 {
     return UserType + 2;
 }
 
-tikz::core::Node * TikzNode::node()
+tikz::core::Node * NodeItem::node()
 {
     return d->node;
 }
 
-qint64 TikzNode::id() const
+qint64 NodeItem::id() const
 {
     return d->node->id();
 }
 
-tikz::core::NodeStyle* TikzNode::style() const
+tikz::core::NodeStyle* NodeItem::style() const
 {
     return d->node->style();
 }
 
-QVector<tikz::Anchor> TikzNode::supportedAnchors() const
+QVector<tikz::Anchor> NodeItem::supportedAnchors() const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -140,7 +140,7 @@ QVector<tikz::Anchor> TikzNode::supportedAnchors() const
     return d->shape->supportedAnchors();
 }
 
-tikz::Pos TikzNode::anchor(tikz::Anchor anchor) const
+tikz::Pos NodeItem::anchor(tikz::Anchor anchor) const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -149,7 +149,7 @@ tikz::Pos TikzNode::anchor(tikz::Anchor anchor) const
     return mapToScene(p);
 }
 
-QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
+QPointF NodeItem::contactPoint(tikz::Anchor anchor, qreal rad) const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -161,7 +161,7 @@ QPointF TikzNode::contactPoint(tikz::Anchor anchor, qreal rad) const
     return mapToScene(p);
 }
 
-QRectF TikzNode::shapeRect() const
+QRectF NodeItem::shapeRect() const
 {
     d->updateCache();
 
@@ -188,7 +188,7 @@ QRectF TikzNode::shapeRect() const
     return rect;
 }
 
-void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -213,7 +213,7 @@ void TikzNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->restore();
 }
 
-QRectF TikzNode::boundingRect() const
+QRectF NodeItem::boundingRect() const
 {
     // at this point, the bounding rect must always be up-to-date, otherwise
     // we have called prepareGeometryChange() without updating the cache.
@@ -224,7 +224,7 @@ QRectF TikzNode::boundingRect() const
     return d->outlinePath.boundingRect();
 }
 
-QPainterPath TikzNode::shape() const
+QPainterPath NodeItem::shape() const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -232,7 +232,7 @@ QPainterPath TikzNode::shape() const
     return d->outlinePath;
 }
 
-QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
+QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant & value)
 {
     if (change == ItemPositionChange && scene() && !d->itemChangeRunning) {
         d->itemChangeRunning = true;
@@ -244,16 +244,16 @@ QVariant TikzNode::itemChange(GraphicsItemChange change, const QVariant & value)
     return QGraphicsObject::itemChange(change, value);
 }
 
-void TikzNode::slotSetPos(const QPointF& pos)
+void NodeItem::slotSetPos(const QPointF& pos)
 {
     if (d->itemChangeRunning) return;
 
     // the tikz::core::Node position changed.
-    // propagate this to this TikzNode::setPos().
+    // propagate this to this NodeItem::setPos().
     setPos(pos);
 }
 
-void TikzNode::styleChanged()
+void NodeItem::styleChanged()
 {
     prepareGeometryChange();
     if (d->node->pos() != tikz::Pos(pos())) slotSetPos(d->node->pos());

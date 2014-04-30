@@ -33,7 +33,7 @@ class RectShape : public AbstractShape
         /**
          * Default constructor
          */
-        RectShape(TikzNode * node);
+        RectShape(NodeItem * node);
 
         /**
          * Default constructor

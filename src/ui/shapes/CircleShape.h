@@ -33,7 +33,7 @@ class CircleShape : public AbstractShape
         /**
          * Default constructor
          */
-        CircleShape(TikzNode * node);
+        CircleShape(NodeItem * node);
 
         /**
          * Default constructor

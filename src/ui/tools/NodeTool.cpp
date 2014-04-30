@@ -21,7 +21,7 @@
 #include "ResizeHandle.h"
 #include "RotateHandle.h"
 #include "MoveHandle.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "TikzDocument.h"
 #include <tikz/core/NodeStyle.h>
 
@@ -34,7 +34,7 @@
 namespace tikz {
 namespace ui {
 
-NodeTool::NodeTool(TikzNode * node, QGraphicsScene * scene)
+NodeTool::NodeTool(NodeItem * node, QGraphicsScene * scene)
     : AbstractTool(scene)
     , m_node(node)
     , m_transaction(node->document(), false)

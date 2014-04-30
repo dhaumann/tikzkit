@@ -26,7 +26,7 @@
 #include <tikz/core/Document.h>
 #include "TikzView.h"
 
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "PathItem.h"
 #include "EllipsePathItem.h"
 #include "EdgePathItem.h"
@@ -107,25 +107,25 @@ tikz::Pos TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
 {
     const auto node = pos.node();
     if (node) {
-        const TikzNode * tikzNode = tikzNodeFromId(node->id());
-        Q_ASSERT(tikzNode != nullptr);
-        return tikzNode->anchor(pos.anchor());
+        const NodeItem * nodeItem = nodeItemFromId(node->id());
+        Q_ASSERT(nodeItem != nullptr);
+        return nodeItem->anchor(pos.anchor());
     }
 
     return Document::scenePos(pos);
 }
 
-QVector<TikzNode*> TikzDocument::tikzNodes() const
+QVector<NodeItem*> TikzDocument::nodeItems() const
 {
     return d->nodes;
 }
 
-QVector<PathItem*> TikzDocument::tikzPaths() const
+QVector<PathItem*> TikzDocument::pathItems() const
 {
     return d->paths;
 }
 
-TikzNode * TikzDocument::createTikzNode()
+NodeItem * TikzDocument::createNodeItem()
 {
     // create node
     tikz::core::Node * node = Document::createNode();
@@ -134,7 +134,7 @@ TikzNode * TikzDocument::createTikzNode()
     return d->nodeMap[node->id()];
 }
 
-tikz::ui::PathItem * TikzDocument::createTikzPath(tikz::core::Path::Type type)
+tikz::ui::PathItem * TikzDocument::createPathItem(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
@@ -143,7 +143,7 @@ tikz::ui::PathItem * TikzDocument::createTikzPath(tikz::core::Path::Type type)
     return d->pathMap[path->id()];
 }
 
-void TikzDocument::deleteTikzNode(TikzNode * node)
+void TikzDocument::deleteNodeItem(NodeItem * node)
 {
     // delete node from id
     const int id = node->id();
@@ -152,7 +152,7 @@ void TikzDocument::deleteTikzNode(TikzNode * node)
     Q_ASSERT(! d->nodeMap.contains(id));
 }
 
-void TikzDocument::deleteTikzPath(tikz::ui::PathItem * path)
+void TikzDocument::deletePathItem(tikz::ui::PathItem * path)
 {
     // delete path from id
     const int id = path->id();
@@ -169,12 +169,12 @@ tikz::core::Node * TikzDocument::createNode(qint64 id)
     Q_ASSERT(! d->nodeMap.contains(id));
 
     // create GUI item
-    TikzNode * tikzNode = new TikzNode(node);
-    d->nodes.append(tikzNode);
-    d->nodeMap.insert(id, tikzNode);
+    NodeItem * nodeItem = new NodeItem(node);
+    d->nodes.append(nodeItem);
+    d->nodeMap.insert(id, nodeItem);
 
     // add to graphics scene
-    d->scene->addItem(tikzNode);
+    d->scene->addItem(nodeItem);
 
     return node;
 }
@@ -183,19 +183,19 @@ void TikzDocument::deleteNode(qint64 id)
 {
     Q_ASSERT(d->nodeMap.contains(id));
 
-    // get TikzNode
-    TikzNode * tikzNode = d->nodeMap[id];
+    // get NodeItem
+    NodeItem * nodeItem = d->nodeMap[id];
 
     // remove from scene
-    d->scene->removeItem(tikzNode);
+    d->scene->removeItem(nodeItem);
 
-    const int index = d->nodes.indexOf(tikzNode);
+    const int index = d->nodes.indexOf(nodeItem);
     Q_ASSERT(index >= 0);
 
     // delete item
     d->nodeMap.remove(id);
     d->nodes.remove(index);
-    delete tikzNode;
+    delete nodeItem;
 
     tikz::core::Document::deleteNode(id);
 }
@@ -207,10 +207,10 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     Q_ASSERT(! d->pathMap.contains(id));
 
     // create GUI item
-    tikz::ui::PathItem * tikzPath = nullptr;
+    tikz::ui::PathItem * pathItem = nullptr;
     switch (type) {
         case tikz::core::Path::Line: {
-            tikzPath = new tikz::ui::EdgePathItem(path);
+            pathItem = new tikz::ui::EdgePathItem(path);
             break;
         }
         case tikz::core::Path::HVLine: break;
@@ -219,7 +219,7 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
         case tikz::core::Path::InOutCurve: break;
         case tikz::core::Path::BezierCurve: break;
         case tikz::core::Path::Ellipse: {
-            tikzPath = new tikz::ui::EllipsePathItem(path);
+            pathItem = new tikz::ui::EllipsePathItem(path);
             break;
         }
         case tikz::core::Path::Rectangle: break;
@@ -229,14 +229,14 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     }
 
     // we should always have a valid ui tikz path
-    Q_ASSERT(tikzPath);
+    Q_ASSERT(pathItem);
 
     // register path
-    d->paths.append(tikzPath);
-    d->pathMap.insert(id, tikzPath);
+    d->paths.append(pathItem);
+    d->pathMap.insert(id, pathItem);
 
     // add to graphics scene
-    d->scene->addItem(tikzPath);
+    d->scene->addItem(pathItem);
 
     return path;
 }
@@ -246,23 +246,23 @@ void TikzDocument::deletePath(qint64 id)
     Q_ASSERT(d->pathMap.contains(id));
 
     // get tikz::ui::PathItem
-    tikz::ui::PathItem * tikzPath = d->pathMap[id];
+    tikz::ui::PathItem * pathItem = d->pathMap[id];
 
     // remove from scene
-    d->scene->removeItem(tikzPath);
+    d->scene->removeItem(pathItem);
 
-    const int index = d->paths.indexOf(tikzPath);
+    const int index = d->paths.indexOf(pathItem);
     Q_ASSERT(index >= 0);
 
     // delete item
     d->pathMap.remove(id);
     d->paths.remove(index);
-    delete tikzPath;
+    delete pathItem;
 
     tikz::core::Document::deletePath(id);
 }
 
-TikzNode * TikzDocument::tikzNodeFromId(qint64 id) const
+NodeItem * TikzDocument::nodeItemFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;
@@ -272,7 +272,7 @@ TikzNode * TikzDocument::tikzNodeFromId(qint64 id) const
     return d->nodeMap[id];
 }
 
-tikz::ui::PathItem * TikzDocument::tikzPathFromId(qint64 id) const
+tikz::ui::PathItem * TikzDocument::pathItemFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;

@@ -35,7 +35,7 @@ namespace core {
 namespace ui {
 
 class TikzDocument;
-class TikzNode;
+class NodeItem;
 class TikzEllipsePathPrivate;
 
 class EllipsePathItem : public tikz::ui::PathItem
@@ -67,13 +67,13 @@ class EllipsePathItem : public tikz::ui::PathItem
          * Set the node to @p node.
          * @param node node of the ellipse. 0 is allowed.
          */
-        void setNode(TikzNode* node);
+        void setNode(NodeItem* node);
 
         /**
          * Get the node where the ellipse is anchored at.
          * @return the end node or 0, if the end of the edge is not connected.
          */
-        TikzNode* node() const;
+        NodeItem* node() const;
 
         /**
          * Get the position of the start of the edge.
@@ -126,7 +126,7 @@ class EllipsePathItem : public tikz::ui::PathItem
         /**
          * This function is called whenever the tikz::core::EllipsePath::setNode()
          * changes. This is required, since otherwise the model is updated,
-         * without the TikzPath being notified.
+         * without the PathItem being notified.
          */
         void updateNode(tikz::core::Node * node);
 
@@ -137,8 +137,8 @@ class EllipsePathItem : public tikz::ui::PathItem
         void updateCache();
 
     private:
-        // the TikzNode this ellipse possibly is anchored at
-        QPointer<TikzNode> m_node;
+        // the NodeItem this ellipse possibly is anchored at
+        QPointer<NodeItem> m_node;
 
         //
         // cached paths

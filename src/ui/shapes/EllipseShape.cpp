@@ -18,7 +18,7 @@
  */
 
 #include "EllipseShape.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/tikz.h>
@@ -33,7 +33,7 @@ class EllipseShapePrivate
     public:
 };
 
-EllipseShape::EllipseShape(TikzNode * node)
+EllipseShape::EllipseShape(NodeItem * node)
     : AbstractShape(node)
     , d(new EllipseShapePrivate())
 {

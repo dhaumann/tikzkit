@@ -29,14 +29,14 @@ class QPainter;
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 class NodeTextPrivate;
 
 class NodeText : public QGraphicsItem
 {
     friend NodeTextPrivate;
     public:
-        NodeText(TikzNode* node);
+        NodeText(NodeItem* node);
         virtual ~NodeText();
 
     public:

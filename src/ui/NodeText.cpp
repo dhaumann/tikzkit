@@ -19,7 +19,7 @@
 
 #include "NodeText.h"
 #include "NodeText_p.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include <QPainter>
 #include <QPixmap>
@@ -30,7 +30,7 @@
 namespace tikz {
 namespace ui {
 
-NodeText::NodeText(TikzNode* node)
+NodeText::NodeText(NodeItem* node)
     : QGraphicsItem(node)
     , d(new NodeTextPrivate(node, this))
 {

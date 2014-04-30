@@ -22,7 +22,7 @@
 #include "NodeTool.h"
 #include "EllipseTool.h"
 #include "LineTool.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "PathItem.h"
 
 #include <tikz/core/Path.h>
@@ -90,8 +90,8 @@ void ProxyTool::updateTool()
 
     QList<QGraphicsItem *> items = scene()->selectedItems();
     if (items.size() == 1) {
-        if (dynamic_cast<TikzNode *>(items[0])) {
-            m_tool = new NodeTool(static_cast<TikzNode *>(items[0]), scene());
+        if (dynamic_cast<NodeItem *>(items[0])) {
+            m_tool = new NodeTool(static_cast<NodeItem *>(items[0]), scene());
         } else if (dynamic_cast<tikz::ui::PathItem*>(items[0])) {
             tikz::ui::PathItem * path = static_cast<tikz::ui::PathItem *>(items[0]);
             const tikz::core::Path::Type type = path->path()->type();

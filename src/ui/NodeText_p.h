@@ -33,7 +33,7 @@ namespace tex {
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 class NodeText;
 
 class NodeTextPrivate : public QObject
@@ -41,11 +41,11 @@ class NodeTextPrivate : public QObject
     Q_OBJECT
 
     public:
-        NodeTextPrivate(TikzNode* tikzNode, NodeText* nodeText);
+        NodeTextPrivate(NodeItem* nodeItem, NodeText* nodeText);
 
     public:
         NodeText* q;
-        TikzNode* node;
+        NodeItem* node;
 
         QSvgRenderer svgRenderer;
         tex::TexGenerator texGenerator;

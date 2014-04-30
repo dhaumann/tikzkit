@@ -33,7 +33,7 @@ namespace tikz {
 namespace ui {
 
 class TikzDocument;
-class TikzNode;
+class NodeItem;
 class AnchorHandle;
 
 class AnchorManager : public QObject
@@ -78,12 +78,12 @@ class AnchorManager : public QObject
         /**
          * Add all Node anchors for @p node.
          */
-        void addNode(TikzNode * node);
+        void addNode(NodeItem * node);
 
         /**
          * Removes all Node anchors for @p node.
          */
-        void removeNode(TikzNode * node);
+        void removeNode(NodeItem * node);
 
         /**
          * Remove all 
@@ -118,8 +118,8 @@ class AnchorManager : public QObject
     private:
         tikz::ui::TikzDocument * m_doc;
         QGraphicsScene * m_scene;
-        QVector <TikzNode *> m_nodes;
-        QHash <TikzNode *, QVector<AnchorHandle *>> m_handleMap;
+        QVector <NodeItem *> m_nodes;
+        QHash <NodeItem *, QVector<AnchorHandle *>> m_handleMap;
 };
 
 }

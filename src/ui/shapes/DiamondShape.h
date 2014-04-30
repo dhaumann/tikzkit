@@ -33,7 +33,7 @@ class DiamondShape : public AbstractShape
         /**
          * Default constructor
          */
-        DiamondShape(TikzNode * node);
+        DiamondShape(NodeItem * node);
 
         /**
          * Default constructor

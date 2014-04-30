@@ -24,7 +24,7 @@
 #include <QVector>
 #include <QHash>
 
-class TikzNode;
+class NodeItem;
 class QGraphicsView;
 
 namespace tikz {
@@ -51,9 +51,9 @@ class TikzDocumentPrivate : public QObject
     //
     public:
         /**
-         * List of TikzNode%s.
+         * List of NodeItem%s.
          */
-        QVector<TikzNode*> nodes;
+        QVector<NodeItem*> nodes;
 
         /**
          * List of tikz::ui::PathItem%s.
@@ -63,7 +63,7 @@ class TikzDocumentPrivate : public QObject
         /**
          * Node lookup map
          */
-        QHash<qint64, TikzNode*> nodeMap;
+        QHash<qint64, NodeItem*> nodeMap;
 
         /**
          * Edge lookup map

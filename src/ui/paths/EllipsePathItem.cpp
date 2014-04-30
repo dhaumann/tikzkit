@@ -19,7 +19,7 @@
 
 #include "EllipsePathItem.h"
 
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "TikzDocument.h"
 #include "ResizeHandle.h"
 #include "MoveHandle.h"
@@ -44,7 +44,7 @@ EllipsePathItem::EllipsePathItem(tikz::core::Path * path)
     : tikz::ui::PathItem(path)
 {
     // catch if the tikz::core::Node::pos() changes behind our back:
-    // we need to track the TikzNode the ellipse is attached to
+    // we need to track the NodeItem the ellipse is attached to
     connect(path, SIGNAL(nodeChanged(tikz::core::Node*)),
             this, SLOT(updateNode(tikz::core::Node*)));
 
@@ -61,14 +61,14 @@ TikzDocument * EllipsePathItem::document() const
     return qobject_cast<TikzDocument*>(path()->document());
 }
 
-void EllipsePathItem::setNode(TikzNode* node)
+void EllipsePathItem::setNode(NodeItem* node)
 {
     if (m_node != node) {
         ellipsePath()->setNode(node ? node->node() : 0);
     }
 }
 
-TikzNode* EllipsePathItem::node() const
+NodeItem* EllipsePathItem::node() const
 {
     return m_node;
 }
@@ -76,10 +76,10 @@ TikzNode* EllipsePathItem::node() const
 QPointF EllipsePathItem::pos() const
 {
     if (ellipsePath()->node()) {
-        TikzNode * tikzNode = document()->tikzNodeFromId(ellipsePath()->node()->id());
-        Q_ASSERT(tikzNode != nullptr);
+        NodeItem * nodeItem = document()->nodeItemFromId(ellipsePath()->node()->id());
+        Q_ASSERT(nodeItem != nullptr);
 
-        return tikzNode->anchor(anchor());
+        return nodeItem->anchor(anchor());
     } else {
         return ellipsePath()->pos();
     }
@@ -155,10 +155,10 @@ bool EllipsePathItem::contains(const QPointF & point) const
 
 void EllipsePathItem::updateNode(tikz::core::Node * node)
 {
-    TikzNode * newNode = 0;
+    NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->tikzNodeFromId(node->id());
+        newNode = document()->nodeItemFromId(node->id());
     }
 
     if (m_node != newNode) {

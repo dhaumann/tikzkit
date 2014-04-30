@@ -37,9 +37,9 @@ namespace core {
 namespace ui {
 
 class TikzDocument;
-class TikzNodePrivate;
+class NodeItemPrivate;
 
-class TIKZUI_EXPORT TikzNode : public TikzItem
+class TIKZUI_EXPORT NodeItem : public TikzItem
 {
     Q_OBJECT
 
@@ -47,12 +47,12 @@ class TIKZUI_EXPORT TikzNode : public TikzItem
         /**
          * Constructor for @p node and parent @p parent.
          */
-        TikzNode(tikz::core::Node * node, QGraphicsItem * parent = 0);
+        NodeItem(tikz::core::Node * node, QGraphicsItem * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~TikzNode();
+        virtual ~NodeItem();
 
         /**
          * Returns the associated document, if available.
@@ -156,10 +156,10 @@ class TIKZUI_EXPORT TikzNode : public TikzItem
         /**
          * Private default constructor, not implemented
          */
-        TikzNode();
+        NodeItem();
 
     private:
-        TikzNodePrivate * const d;
+        NodeItemPrivate * const d;
 };
 
 }

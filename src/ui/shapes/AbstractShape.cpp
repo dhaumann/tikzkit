@@ -31,10 +31,10 @@ namespace ui {
 class AbstractShapePrivate
 {
     public:
-        TikzNode* node;
+        NodeItem* node;
 };
 
-AbstractShape::AbstractShape(TikzNode * node)
+AbstractShape::AbstractShape(NodeItem * node)
     : d(new AbstractShapePrivate())
 {
     d->node = node;
@@ -45,7 +45,7 @@ AbstractShape::~AbstractShape()
     delete d;
 }
 
-TikzNode* AbstractShape::node() const
+NodeItem* AbstractShape::node() const
 {
     return d->node;
 }
@@ -90,7 +90,7 @@ QPointF AbstractShape::contactPoint(tikz::Anchor anchor, qreal rad) const
 }
 
 
-AbstractShape *createShape(tikz::Shape shape, TikzNode* node)
+AbstractShape *createShape(tikz::Shape shape, NodeItem* node)
 {
     switch (shape) {
         case tikz::NoShape: return new AbstractShape(node);

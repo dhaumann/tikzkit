@@ -33,7 +33,7 @@ class EllipseShape : public AbstractShape
         /**
          * Default constructor
          */
-        EllipseShape(TikzNode * node);
+        EllipseShape(NodeItem * node);
 
         /**
          * Default constructor

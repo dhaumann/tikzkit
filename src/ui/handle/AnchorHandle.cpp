@@ -18,7 +18,7 @@
  */
 
 #include "AnchorHandle.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "TikzDocument.h"
 
 #include <QPointer>
@@ -35,7 +35,7 @@
 namespace tikz {
 namespace ui {
 
-AnchorHandle::AnchorHandle(TikzNode * node, tikz::Anchor anchor)
+AnchorHandle::AnchorHandle(NodeItem * node, tikz::Anchor anchor)
     : Handle(Handle::AnchorHandle)
     , m_metaPos(node->document())
     , m_node(node)
@@ -70,7 +70,7 @@ int AnchorHandle::type() const
     return UserType + 4;
 }
 
-TikzNode * AnchorHandle::node() const
+NodeItem * AnchorHandle::node() const
 {
     return m_node;
 }

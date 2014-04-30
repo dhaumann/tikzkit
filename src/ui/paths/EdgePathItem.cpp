@@ -19,7 +19,7 @@
 
 #include "EdgePathItem.h"
 
-#include "TikzNode.h"
+#include "NodeItem.h"
 #include "TikzDocument.h"
 #include "AbstractArrow.h"
 #include "Painter.h"
@@ -71,10 +71,10 @@ tikz::core::EdgePath * EdgePathItem::edgePath() const
 
 void EdgePathItem::updateStartNode(tikz::core::Node * node)
 {
-    TikzNode * newNode = 0;
+    NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->tikzNodeFromId(node->id());
+        newNode = document()->nodeItemFromId(node->id());
     }
 
     if (m_startNode != newNode) {
@@ -86,10 +86,10 @@ void EdgePathItem::updateStartNode(tikz::core::Node * node)
 
 void EdgePathItem::updateEndNode(tikz::core::Node * node)
 {
-    TikzNode * newNode = 0;
+    NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->tikzNodeFromId(node->id());
+        newNode = document()->nodeItemFromId(node->id());
     }
 
     if (m_endNode != newNode) {
@@ -99,7 +99,7 @@ void EdgePathItem::updateEndNode(tikz::core::Node * node)
     }
 }
 
-void EdgePathItem::setStartNode(TikzNode * start)
+void EdgePathItem::setStartNode(NodeItem * start)
 {
     if (m_startNode != start) {
         edgePath()->setStartNode(start ? start->node() : 0);
@@ -109,7 +109,7 @@ void EdgePathItem::setStartNode(TikzNode * start)
     Q_ASSERT(m_startNode == start);
 }
 
-void EdgePathItem::setEndNode(TikzNode * end)
+void EdgePathItem::setEndNode(NodeItem * end)
 {
     if (m_endNode != end) {
         edgePath()->setEndNode(end ? end->node() : 0);
@@ -119,12 +119,12 @@ void EdgePathItem::setEndNode(TikzNode * end)
     Q_ASSERT(m_endNode == end);
 }
 
-TikzNode* EdgePathItem::startNode() const
+NodeItem* EdgePathItem::startNode() const
 {
     return m_startNode;
 }
 
-TikzNode* EdgePathItem::endNode() const
+NodeItem* EdgePathItem::endNode() const
 {
     return m_endNode;
 }

@@ -25,7 +25,7 @@
 #include <QProcess>
 
 class PdfRendererPrivate;
-class TikzNode;
+class NodeItem;
 
 namespace tex {
 

@@ -18,7 +18,7 @@
  */
 
 #include "DiamondShape.h"
-#include "TikzNode.h"
+#include "NodeItem.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/tikz.h>
@@ -33,7 +33,7 @@ class DiamondShapePrivate
     public:
 };
 
-DiamondShape::DiamondShape(TikzNode * node)
+DiamondShape::DiamondShape(NodeItem * node)
     : AbstractShape(node)
     , d(new DiamondShapePrivate())
 {

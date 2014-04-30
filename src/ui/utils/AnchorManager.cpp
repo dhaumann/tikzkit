@@ -18,7 +18,7 @@
  */
 
 #include "AnchorManager.h"
-#include <TikzNode.h>
+#include <NodeItem.h>
 #include <AnchorHandle.h>
 
 #include <QDebug>
@@ -50,7 +50,7 @@ QGraphicsScene * AnchorManager::scene() const
 void AnchorManager::clear()
 {
     // just remove all anchors
-    foreach (TikzNode * node, m_nodes) {
+    foreach (NodeItem * node, m_nodes) {
         Q_ASSERT(m_handleMap.contains(node));
         qDeleteAll(m_handleMap[node]);
         m_handleMap.remove(node);
@@ -66,7 +66,7 @@ void AnchorManager::clear()
 
 void AnchorManager::hideAnchors()
 {
-    foreach (TikzNode * node, m_nodes) {
+    foreach (NodeItem * node, m_nodes) {
         Q_ASSERT(m_handleMap.contains(node));
         foreach (AnchorHandle * handle, m_handleMap[node]) {
             handle->hide();
@@ -76,7 +76,7 @@ void AnchorManager::hideAnchors()
 
 void AnchorManager::showAnchors()
 {
-    foreach (TikzNode * node, m_nodes) {
+    foreach (NodeItem * node, m_nodes) {
         Q_ASSERT(m_handleMap.contains(node));
         foreach (AnchorHandle * handle, m_handleMap[node]) {
             handle->show();
@@ -97,12 +97,12 @@ static T *first(const QList<QGraphicsItem *> &items)
 
 void AnchorManager::addAllNodes()
 {
-    foreach (TikzNode * node, m_doc->tikzNodes()) {
+    foreach (NodeItem * node, m_doc->nodeItems()) {
         addNode(node);
     }
 }
 
-void AnchorManager::addNode(TikzNode * node)
+void AnchorManager::addNode(NodeItem * node)
 {
     if (m_nodes.contains(node)) {
         return;
@@ -119,7 +119,7 @@ void AnchorManager::addNode(TikzNode * node)
     }
 }
 
-void AnchorManager::removeNode(TikzNode * node)
+void AnchorManager::removeNode(NodeItem * node)
 {
     const int index = m_nodes.indexOf(node);
     if (index < 0) {
@@ -140,7 +140,7 @@ void AnchorManager::nodeDestroyed(QObject * obj)
 {
     // find deleted Node
     for (int i = 0; i < m_nodes.size(); ++i) {
-        TikzNode * node = m_nodes[i];
+        NodeItem * node = m_nodes[i];
         if (static_cast<QObject *>(node) == obj) {
             removeNode(node);
             return;

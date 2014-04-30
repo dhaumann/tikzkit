@@ -36,7 +36,7 @@ namespace core {
 namespace ui {
 
 class TikzDocument;
-class TikzNode;
+class NodeItem;
 
 class EdgePathItem :  public PathItem
 {
@@ -62,25 +62,25 @@ class EdgePathItem :  public PathItem
          * Set the start node to @p start.
          * @param start start node of the edge. 0 is allows.
          */
-        void setStartNode(TikzNode* start);
+        void setStartNode(NodeItem* start);
 
         /**
          * Set the end node to @p end.
          * @param end end node of the edge. 0 is allows.
          */
-        void setEndNode(TikzNode* end);
+        void setEndNode(NodeItem* end);
 
         /**
          * Get the start node.
          * @return the start node or 0, if the start of the edge is not connected.
          */
-        TikzNode* startNode() const;
+        NodeItem* startNode() const;
 
         /**
          * Get the end node.
          * @return the end node or 0, if the end of the edge is not connected.
          */
-        TikzNode* endNode() const;
+        NodeItem* endNode() const;
 
         /**
          * Get the position of the start of the edge.
@@ -220,8 +220,8 @@ class EdgePathItem :  public PathItem
     private:
         bool m_dirty;
 
-        QPointer<TikzNode> m_startNode;
-        QPointer<TikzNode> m_endNode;
+        QPointer<NodeItem> m_startNode;
+        QPointer<NodeItem> m_endNode;
 
         // Cached start and end position of the edge.
         // These positions include the rightExtend() of arrows as well as

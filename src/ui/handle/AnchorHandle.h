@@ -26,7 +26,7 @@
 namespace tikz {
 namespace ui {
 
-class TikzNode;
+class NodeItem;
 
 class AnchorHandle : public Handle
 {
@@ -36,7 +36,7 @@ class AnchorHandle : public Handle
         /**
          * Constructor.
          */
-        AnchorHandle(TikzNode * node, tikz::Anchor anchor);
+        AnchorHandle(NodeItem * node, tikz::Anchor anchor);
 
         /**
          * Destructor
@@ -55,7 +55,7 @@ class AnchorHandle : public Handle
         /**
          * Get the node this anchor handle.
          */
-        TikzNode * node() const;
+        NodeItem * node() const;
 
         /**
          * Get the anchor of this anchor handle.
@@ -96,9 +96,9 @@ class AnchorHandle : public Handle
         tikz::core::MetaPos m_metaPos;
 
         /**
-         * The associated TikzNode.
+         * The associated NodeItem.
          */
-        TikzNode * m_node;
+        NodeItem * m_node;
 };
 
 }

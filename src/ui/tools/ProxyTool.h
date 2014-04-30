@@ -27,7 +27,7 @@ namespace ui {
 
 /**
  * Depending on the selected items in the graphics scene, the ProxyTool
- * redirects all events to the correct tool. For instance, if a TikzNode
+ * redirects all events to the correct tool. For instance, if a NodeItem
  * is selected, all events are redirected to the NodeTool.
  */
 class ProxyTool : public AbstractTool

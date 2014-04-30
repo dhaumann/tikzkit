@@ -29,7 +29,7 @@ include_directories(
 set(qtikzui_SOURCES
     TikzDocument.cpp
     TikzItem.cpp
-    TikzNode.cpp
+    NodeItem.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
 
