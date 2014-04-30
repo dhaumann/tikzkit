@@ -102,7 +102,7 @@ static QString colorToString(const QColor & color)
     return QString("orange");
 }
 
-static QString penStyleToString(tikz::core::Style * style)
+static QString lineWidthToString(tikz::core::Style * style)
 {
     const tikz::Value lw = style->lineWidth();
     if (lw == Value::ultraThin()) {
@@ -277,7 +277,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export line width
     //
     if (style->lineWidthSet()) {
-        options << penStyleToString(style);
+        options << lineWidthToString(style);
     }
 
     //
