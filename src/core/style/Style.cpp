@@ -46,77 +46,48 @@ class StylePrivate
 {
 public:
     // uniq id, or -1
-    qint64 id;
+    qint64 id = -1;
 
     // parent / child hierarchy
-    Style * parent;
+    Style * parent = 0;
     QVector<Style *> children;
 
     // config reference counter
-    int refCounter;
+    int refCounter = 0;
 
     // list of set properties
     QSet<QString> properties;
 
     // line style
-    PenStyle penStyle;
+    PenStyle penStyle = SolidLine;
 
     // line width
-    tikz::Value lineWidth;
+    tikz::Value lineWidth = tikz::Value::semiThick();
 
     // double lines
-    bool doubleLine;
-    tikz::Value innerLineWidth;
+    bool doubleLine = false;
+    tikz::Value innerLineWidth = tikz::Value::semiThick();
 
     // colors
-    QColor penColor;
-    QColor innerLineColor;
-    QColor fillColor;
+    QColor penColor = Qt::black;
+    QColor innerLineColor = Qt::white;
+    QColor fillColor = Qt::transparent;
 
-    qreal penOpacity;
-    qreal fillOpacity;
+    qreal penOpacity = 1.0;
+    qreal fillOpacity = 1.0;
 
-    qreal rotation;
-
-    void init();
+    qreal rotation = 0.0;
 };
-
-void StylePrivate::init()
-{
-    id = -1;
-
-    parent = 0;
-    refCounter = 0;
-
-    penStyle = SolidLine;
-
-    lineWidth = tikz::Value::semiThick();
-
-    doubleLine = false;
-
-    innerLineWidth = tikz::Value::semiThick();
-
-    penOpacity = 1.0;
-    fillOpacity = 1.0;
-
-    penColor = Qt::black;
-    innerLineColor = Qt::white;
-    fillColor = Qt::transparent;
-
-    rotation = 0.0;
-}
 
 Style::Style()
     : d(new StylePrivate())
 {
-    d->init();
 }
 
 Style::Style(qint64 id, Document* tikzDocument)
     : QObject(tikzDocument)
     , d(new StylePrivate())
 {
-    d->init();
     d->id = id;
 }
 

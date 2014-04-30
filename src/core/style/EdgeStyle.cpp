@@ -39,47 +39,31 @@ static const char * s_shortenEnd = "shortenEnd";
 class EdgeStylePrivate
 {
 public:
-    tikz::Value radiusX;
-    tikz::Value radiusY;
+    tikz::Value radiusX = tikz::Value(0, tikz::Centimeter);
+    tikz::Value radiusY = tikz::Value(0, tikz::Centimeter);
 
-    qreal bendAngle; // in degree
-    qreal looseness;
-    qreal outAngle; // in degree
-    qreal inAngle; // in degree
+    qreal bendAngle = 0.0; // in degree
+    qreal looseness = 1.0;
+    qreal outAngle = 45.0; // in degree
+    qreal inAngle = 135.0; // in degree
 
-    Arrow arrowTail;
-    Arrow arrowHead;
+    Arrow arrowTail = tikz::NoArrow;
+    Arrow arrowHead = tikz::NoArrow;
 
     tikz::Value shortenStart;
     tikz::Value shortenEnd;
-
-    void init()
-    {
-        // radiusX/Y = 0 through default constructor
-        // shortenStart/End = 0 through default constructor
-
-        bendAngle = 0.0;
-        looseness = 1.0;
-        outAngle = 45;
-        inAngle = 135;
-
-        arrowTail = tikz::NoArrow;
-        arrowHead = tikz::NoArrow;
-    }
 };
 
 EdgeStyle::EdgeStyle()
     : Style()
     , d(new EdgeStylePrivate())
 {
-    d->init();
 }
 
 EdgeStyle::EdgeStyle(qint64 id, Document* tikzDocument)
     : Style(id, tikzDocument)
     , d(new EdgeStylePrivate())
 {
-    d->init();
 }
 
 EdgeStyle::~EdgeStyle()
@@ -106,7 +90,7 @@ tikz::Value EdgeStyle::radiusX() const
         return style->radiusX();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 tikz::Value EdgeStyle::radiusY() const
@@ -120,7 +104,7 @@ tikz::Value EdgeStyle::radiusY() const
         return style->radiusY();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 bool EdgeStyle::radiusXSet() const
@@ -158,7 +142,7 @@ void EdgeStyle::unsetRadiusX()
     if (propertySet(s_radiusX)) {
         beginConfig();
         removeProperty(s_radiusX);
-        d->radiusX = tikz::Value(0);
+        d->radiusX = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }
@@ -168,7 +152,7 @@ void EdgeStyle::unsetRadiusY()
     if (propertySet(s_radiusY)) {
         beginConfig();
         removeProperty(s_radiusY);
-        d->radiusY = tikz::Value(0);
+        d->radiusY = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }
@@ -442,7 +426,7 @@ tikz::Value EdgeStyle::shortenStart() const
         return style->shortenStart();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 bool EdgeStyle::shortenStartSet() const
@@ -461,7 +445,7 @@ tikz::Value EdgeStyle::shortenEnd() const
         return style->shortenEnd();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 bool EdgeStyle::shortenEndSet() const
@@ -494,7 +478,7 @@ void EdgeStyle::unsetShortenStart()
     if (propertySet(s_shortenStart)) {
         beginConfig();
         removeProperty(s_shortenStart);
-        d->shortenStart = tikz::Value(0);
+        d->shortenStart = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }
@@ -504,7 +488,7 @@ void EdgeStyle::unsetShortenEnd()
     if (propertySet(s_shortenEnd)) {
         beginConfig();
         removeProperty(s_shortenEnd);
-        d->shortenEnd = tikz::Value(0);
+        d->shortenEnd = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }

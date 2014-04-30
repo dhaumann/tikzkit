@@ -36,22 +36,18 @@ class NodeStylePrivate
 {
 public:
     // Node styles
-    TextAlignment textAlign;
-    Shape shape;
-    tikz::Value innerSep;
-    tikz::Value outerSep;
-    tikz::Value minimumHeight;
-    tikz::Value minimumWidth;
+    TextAlignment textAlign = tikz::NoAlign;
+    Shape shape = tikz::ShapeRectangle;
+    tikz::Value innerSep = tikz::Value(3); //FIXME: 0.3333em
+    tikz::Value outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
+    tikz::Value minimumHeight = tikz::Value(0, tikz::Centimeter);
+    tikz::Value minimumWidth = tikz::Value(0, tikz::Centimeter);
 };
 
 NodeStyle::NodeStyle()
     : Style()
     , d(new NodeStylePrivate())
 {
-    d->textAlign = NoAlign;
-    d->shape = ShapeRectangle;
-    d->innerSep = tikz::Value(3); //FIXME: 0.3333em
-    d->outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
 }
 
 NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
@@ -229,7 +225,7 @@ tikz::Value NodeStyle::minimumHeight() const
         return parentStyle->minimumHeight();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 bool NodeStyle::minimumHeightSet() const
@@ -248,7 +244,7 @@ tikz::Value NodeStyle::minimumWidth() const
         return parentStyle->minimumWidth();
     }
 
-    return tikz::Value(0);
+    return tikz::Value(0, tikz::Centimeter);
 }
 
 bool NodeStyle::minimumWidthSet() const
@@ -281,7 +277,7 @@ void NodeStyle::unsetMinimumHeight()
     if (propertySet(s_minimumHeight)) {
         beginConfig();
         removeProperty(s_minimumHeight);
-        d->minimumHeight = tikz::Value(0);
+        d->minimumHeight = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }
@@ -291,7 +287,7 @@ void NodeStyle::unsetMinimumWidth()
     if (propertySet(s_minimumWidth)) {
         beginConfig();
         removeProperty(s_minimumWidth);
-        d->minimumWidth = tikz::Value(0);
+        d->minimumWidth = tikz::Value(0, tikz::Centimeter);
         endConfig();
     }
 }
