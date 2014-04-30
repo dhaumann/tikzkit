@@ -102,9 +102,8 @@ static QString colorToString(const QColor & color)
     return QString("orange");
 }
 
-static QString lineWidthToString(tikz::core::Style * style)
+static QString lineWidthToString(const tikz::Value & lw)
 {
-    const tikz::Value lw = style->lineWidth();
     if (lw == Value::ultraThin()) {
         return "ultra thin";
     } else if (lw == Value::veryThin()) {
@@ -119,9 +118,9 @@ static QString lineWidthToString(tikz::core::Style * style)
         return "very thick";
     } else if (lw == Value::ultraThick()) {
         return "ultra thick";
-    } else {
-        return "line width=" + style->lineWidth().toString();
     }
+
+    return "line width=" + lw.toString();
 }
 
 TikzExportVisitor::TikzExportVisitor()
@@ -277,7 +276,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export line width
     //
     if (style->lineWidthSet()) {
-        options << lineWidthToString(style);
+        options << lineWidthToString(style->lineWidth());
     }
 
     //
