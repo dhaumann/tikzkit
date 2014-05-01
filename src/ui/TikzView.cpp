@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QScrollBar>
+#include <QGridLayout>
 
 namespace tikz {
 namespace ui {

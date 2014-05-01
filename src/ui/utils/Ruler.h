@@ -28,7 +28,6 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QGridLayout>
 
 namespace tikz {
 namespace ui {
