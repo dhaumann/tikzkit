@@ -227,7 +227,14 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPen pen = p.pen();
 
     if (isHovered()) {
-        painter->fillPath(m_hoverPath, Qt::magenta);
+        painter->save();
+        QPen p(Qt::darkBlue);
+        p.setWidth(0);
+        painter->setPen(p);
+        painter->drawPath(m_hoverPath);
+        painter->restore();
+        painter->fillPath(m_hoverPath, QColor(148, 202, 239));
+
     }
 
     // draw line

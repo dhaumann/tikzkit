@@ -116,7 +116,7 @@ void EllipsePathItem::paint(QPainter *painter,
     painter->setRenderHints(QPainter::Antialiasing);
 
     if (isHovered() /*&& !dragging*/) {
-        painter->fillPath(m_hoverPath, Qt::lightGray); // FIXME: make color configurable
+        painter->fillPath(m_hoverPath, QColor(148, 202, 239)); // FIXME: make color configurable
     }
 
     // draw line
