@@ -27,7 +27,6 @@
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>
 
-class QGraphicsView;
 class QPainter;
 
 namespace tikz {
@@ -35,13 +34,21 @@ namespace ui {
 
 class GridPrivate;
 
+/**
+ * A Grid for a QGraphicsView.
+ *
+ * The grid is painted in the background and consists of major and minor lines.
+ * Major lines are drawn at each full unit (e.g. 0cm, 1cm, 2cm, etc.).
+ * Minor lines are drawn between the major lines as an additional help.
+ * The amout of the minor lines varies depending on the zoom of the QGraphicsView.
+ */
 class Grid
 {
 public:
     /**
      * Constructor with required @p view.
      */
-    Grid(QGraphicsView * view);
+    Grid();
 
     /**
      * Destructor.
@@ -52,6 +59,26 @@ public:
      * Draw the grid using the painter @p p.
      */
     void draw(QPainter * p, const QRectF & rect);
+
+    /**
+     * Set the unit of this Grid to @p unit.
+     */
+    void setUnit(tikz::Unit unit) noexcept;
+
+    /**
+     * Returns this Grid's unit.
+     */
+    tikz::Unit unit() const noexcept;
+
+    /**
+     * Set this Grid's zoom factor to @p zoomFactor.
+     */
+    void setZoom(qreal zoomFactor) noexcept;
+
+    /**
+     * Returns this Grid's zoom factor.
+     */
+    qreal zoom() const noexcept;
 
     /**
      * Snap @p value to the grid.

@@ -37,7 +37,7 @@ class TikzViewPrivate
 {
 public:
     TikzDocument * doc;
-    tikz::ui::Grid * grid;
+    tikz::ui::Grid grid;
     tikz::ui::Ruler * hRuler;
     tikz::ui::Ruler * vRuler;
     QPointF lastMousePos;
@@ -56,8 +56,6 @@ TikzView::TikzView(TikzDocument * doc, QWidget * parent)
     QGridLayout* gridLayout = new QGridLayout();
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
-
-    d->grid = new tikz::ui::Grid(this);
 
     d->hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
     d->vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
@@ -91,13 +89,13 @@ TikzDocument * TikzView::document() const
 tikz::Value TikzView::snapValue(const tikz::Value & value) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? d->grid->snapValue(value) : value;
+    return snap ? d->grid.snapValue(value) : value;
 }
 
 tikz::Pos TikzView::snapPos(const tikz::Pos & pos) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? d->grid->snapPos(pos) : pos;
+    return snap ? d->grid.snapPos(pos) : pos;
 }
 
 qreal TikzView::snapAngle(qreal angle) const
@@ -174,11 +172,19 @@ void TikzView::wheelEvent(QWheelEvent* event)
 
 bool TikzView::viewportEvent(QEvent * event)
 {
+    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
+    const qreal xZoom = transform().m11() / physicalDpiX() * s;
+    const qreal yZoom = qAbs(transform().m22()) / physicalDpiY() * s;
+    Q_ASSERT(xZoom == yZoom);
+
+    // update ruler (zoom, origin)
     d->hRuler->setOrigin(d->hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
     d->vRuler->setOrigin(d->vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
-    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-    d->hRuler->setZoom(transform().m11() / physicalDpiX() * s);
-    d->vRuler->setZoom(qAbs(transform().m22()) / physicalDpiY() * s);
+    d->hRuler->setZoom(xZoom);
+    d->vRuler->setZoom(yZoom);
+
+    // update grid (zoom)
+    d->grid.setZoom(xZoom);
 
     return QGraphicsView::viewportEvent(event);
 }

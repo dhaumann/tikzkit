@@ -20,12 +20,7 @@
 #include "Grid.h"
 
 #include <tikz/core/Value.h>
-
-#include <QGraphicsView>
-#include <QDebug>
-
-// TODO (later): make this unit configurable
-static const tikz::Unit s_unit = tikz::Centimeter;
+#include <QPainter>
 
 namespace tikz {
 namespace ui {
@@ -33,9 +28,10 @@ namespace ui {
 class GridPrivate
 {
 public:
-    QGraphicsView * view;
-    qreal zoom = 1000000000;
+    bool dirty = true;
+    qreal zoom = 1.0;
     QRectF rect;
+    tikz::Unit unit = tikz::Centimeter;
 
     QVarLengthArray<QLineF, 256> majorLines;
     QVarLengthArray<QLineF, 256> minorLines;
@@ -47,22 +43,19 @@ public:
      * - 3, ...
      * The return value is guaranteed to be greater or equal to 1.
      */
-    int linesPerUnit(tikz::Unit unit) const
+    int linesPerUnit() const
     {
-        const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-        const qreal zoom = view->transform().m11() / view->physicalDpiX() * s;
-
         // how much space does one unit have on screen [cm] ?
-        const tikz::Value oneUnitOnScreen = tikz::Value(zoom, unit);//.convertTo(tikz::Centimeter);
+        const tikz::Value oneUnitOnScreen = tikz::Value(zoom, unit);
 
         // we want a line each 5 mm
-        int linesPerUnit = 1;
-        while ((oneUnitOnScreen / linesPerUnit) >= tikz::Value(10, tikz::Millimeter)) {
-            linesPerUnit *= 2;
+        int lpu = 1;
+        while ((oneUnitOnScreen / lpu) >= tikz::Value(10, tikz::Millimeter)) {
+            lpu *= 2;
         }
 
-        Q_ASSERT(linesPerUnit > 0);
-        return linesPerUnit;
+        Q_ASSERT(lpu > 0);
+        return lpu;
     }
 
     /**
@@ -70,45 +63,49 @@ public:
      */
     void updateCache(const QRectF & r)
     {
-        const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-        const qreal z = view->transform().m11() / view->physicalDpiX() * s;
-
-        if (rect != r || zoom != z) {
+        if (rect != r || dirty) {
+            dirty = false;
             rect = r;
-            zoom = z;
 
             // we want a line each 5 mm
-            const int lpu = linesPerUnit(s_unit);
-//             qDebug() << "lines per s_unit" << lpu;
+            const int lpu = linesPerUnit();
+//             qDebug() << "lines per unit" << lpu;
 
             majorLines.clear();
             minorLines.clear();
 
-            const Value one(1, s_unit);
+            const Value one(1, unit);
 
-            tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(s_unit).value());
-            left = tikz::Value(std::floor(left.value()), s_unit);
+            tikz::Value left = tikz::Value(tikz::Value(rect.left()).convertTo(unit).value());
+            left = tikz::Value(std::floor(left.value()), unit);
 
-            tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(s_unit).value());
-            top = tikz::Value(std::ceil(top.value()), s_unit);
+            tikz::Value top = tikz::Value(tikz::Value(rect.top()).convertTo(unit).value());
+            top = tikz::Value(std::ceil(top.value()), unit);
 
-            QVarLengthArray<QLineF, 100> lines;
+            //
+            // horizontal lines
+            //
             int i = 0;
             for (tikz::Value x = left; x.toPoint() < rect.right(); x += one / lpu) {
+                const QLineF line(x.toPoint(), rect.top(), x.toPoint(), rect.bottom());
                 if ((i % lpu) == 0) {
-                    majorLines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
+                    majorLines.append(line);
                 } else {
-                    minorLines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
+                    minorLines.append(line);
                 }
                 ++i;
             }
 
+            //
+            // vertical lines
+            //
             i = 0;
             for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one / lpu) {
+                const QLineF line(rect.left(), y.toPoint(), rect.right(), y.toPoint());
                 if ((i % lpu) == 0) {
-                    majorLines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
+                    majorLines.append(line);
                 } else {
-                    minorLines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
+                    minorLines.append(line);
                 }
                 ++i;
             }
@@ -117,10 +114,9 @@ public:
     }
 };
 
-Grid::Grid(QGraphicsView * view)
+Grid::Grid()
     : d(new GridPrivate())
 {
-    d->view = view;
 }
 
 Grid::~Grid()
@@ -147,12 +143,39 @@ void Grid::draw(QPainter * p, const QRectF & rect)
     p->restore();
 }
 
+void Grid::setUnit(tikz::Unit unit) noexcept
+{
+    if (d->unit != unit) {
+        d->unit = unit;
+        d->dirty = true;
+    }
+}
+
+tikz::Unit Grid::unit() const noexcept
+{
+    return d->unit;
+}
+
+void Grid::setZoom(qreal zoomFactor) noexcept
+{
+    if (d->zoom != zoomFactor) {
+        d->zoom = zoomFactor;
+        d->dirty = true;
+    }
+}
+
+qreal Grid::zoom() const noexcept
+{
+    return d->zoom;
+}
+
 tikz::Value Grid::snapValue(const tikz::Value & value) const
 {
-    const int lpu = d->linesPerUnit(s_unit);
-    const Value one(1.0 / lpu, s_unit);
+    const int lpu = d->linesPerUnit();
+    const Value one(1.0 / lpu, d->unit);
 
-    const auto snappedValue = tikz::Value(qRound(value.convertTo(s_unit).value() / one.value()) * one.value(), s_unit).convertTo(value.unit());
+    // snap to the grid and return a Value using the Grid's d->unit
+    const auto snappedValue = tikz::Value(qRound(value.convertTo(d->unit).value() / one.value()) * one.value(), d->unit);
 //     qDebug() << value << "converts to:" << snappedValue;
     return snappedValue;
 }
