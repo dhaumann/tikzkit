@@ -350,15 +350,17 @@ void EdgePathItem::updateCache()
     pps.setJoinStyle(Qt::RoundJoin);
     pps.setCapStyle(Qt::FlatCap);
 
-    pps.setWidth(style()->penWidth().toPoint() + tikz::Value(0.1, tikz::Millimeter).toPoint());
+    tikz::Value w(1, tikz::Millimeter);
+    pps.setWidth(style()->penWidth().toPoint() + w.toPoint());
     m_hoverPath = pps.createStroke(m_edgePath);
-    m_hoverPath.addPath(headTrans.map(m_arrowHead->contour(0.1)));
-    m_hoverPath.addPath(tailTrans.map(m_arrowTail->contour(0.1)));
+    m_hoverPath.addPath(headTrans.map(m_arrowHead->contour(w.toPoint())));
+    m_hoverPath.addPath(tailTrans.map(m_arrowTail->contour(w.toPoint())));
 
-    pps.setWidth(style()->penWidth().toPoint() + tikz::Value(0.2, tikz::Millimeter).toPoint());
+    w = tikz::Value(2, tikz::Millimeter);
+    pps.setWidth(style()->penWidth().toPoint() + w.toPoint());
     m_shapePath = pps.createStroke(m_edgePath);
-    m_shapePath.addPath(headTrans.map(m_arrowHead->contour(0.2)));
-    m_shapePath.addPath(tailTrans.map(m_arrowTail->contour(0.2)));
+    m_shapePath.addPath(headTrans.map(m_arrowHead->contour(w.toPoint())));
+    m_shapePath.addPath(tailTrans.map(m_arrowTail->contour(w.toPoint())));
 }
 
 }
