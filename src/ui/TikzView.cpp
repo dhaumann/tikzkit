@@ -195,7 +195,7 @@ void TikzView::drawBackground(QPainter * painter, const QRectF & rect)
     QGraphicsView::drawBackground(painter, rect);
 
     // draw raster on top
-    d->grid->draw(painter, rect);
+    d->grid.draw(painter, sceneRect().united(rect));
 }
 
 }
