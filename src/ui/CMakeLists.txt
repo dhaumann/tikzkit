@@ -56,6 +56,8 @@ set(qtikzui_SOURCES
     utils/Grid.cpp
 
     colors/ColorPalette.cpp
+    colors/ColorWidget.cpp
+
     TikzScene.cpp
     TikzView.cpp
     Painter.cpp
