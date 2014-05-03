@@ -1,0 +1,63 @@
+GIMP Palette
+Name: Oxygen Vibrant
+Columns: 9
+#
+ 77  38   0	brown orange6
+ 89   0   0	red6
+115   0  85	pink6
+44   0  89	purple6
+  0   0 128	blue6
+  0  77   0	green6
+ 99 128   0	lime6
+255 170   0	yellow6
+ 50  50  50	gray6
+
+128  63   0	brown orange5
+140   0   0	red5
+163   0 123	pink5
+ 64   0 128	purple5
+  0   0 191	blue5
+  0 140   0	green5
+139 179   0	lime5
+255 191   0	yellow5
+ 85  85  85	gray5
+
+191  94   0	brown orange4
+191   0   0	red4
+204   0 154	pink4
+ 90   0 179	purple4
+  0   0 255	blue4
+  0 191   0	green4
+191 245   0	lime4
+255 213   0	yellow4
+136 136 136	gray4
+
+255 126   0	brown orange3
+255   0   0	red3
+255   0 191	pink3
+128   0	255	purple3
+  0 102 255	blue3
+  0 255   0	green3
+229 255   0	lime3
+255 255   0	yellow3
+187 187 187	gray3
+
+255 191 128	brown orange2
+255 128 128	red2
+255 128 223	pink2
+192 128 255	purple2
+128 179 255	blue2
+128 255 128	green2
+240 255 128	lime2
+255 255 153	yellow2
+221 221 221	gray2
+
+255 223 191	brown orange1
+255 191 191	red1
+255 191 240	pink1
+223 191 255	purple1
+191 217 255	blue1
+191 255 191	green1
+248 255 191	lime1
+255 255 191	yellow1
+238 238 238	gray1
