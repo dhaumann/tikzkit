@@ -22,6 +22,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/tex
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
     ${CMAKE_SOURCE_DIR}/src/ui/utils
+    ${CMAKE_SOURCE_DIR}/src/ui/colors
 
 #     ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -54,6 +55,7 @@ set(qtikzui_SOURCES
     utils/Ruler.cpp
     utils/Grid.cpp
 
+    colors/ColorPalette.cpp
     TikzScene.cpp
     TikzView.cpp
     Painter.cpp
