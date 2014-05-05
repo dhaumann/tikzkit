@@ -1,0 +1,51 @@
+GIMP Palette
+Name: TU Darmstadt
+Columns: 11
+#
+ 93 133 195	tud1a
+  0 156 218	tud2a
+ 80 182 149	tud3a
+175 204  80	tud4a
+221 223  72	tud5a
+255 224  92	tud6a
+248 186  60	tud7a
+238 122  52	tud8a
+233  80  62	tud9a
+201  48 142	tud10a
+128  69 151	tud11a
+
+  0  90 169	tud1b
+  0 131 204	tud2b
+  0 157 129	tud3b
+153 192   0	tud4b
+201 212   0	tud5b
+253 202   0	tud6b
+245 163   0	tud7b
+236 101   0	tud8b
+230   0  26	tud9b
+166   0 132	tud10b
+114  16 133	tud11b
+
+  0  78 138	tud1c
+  0 104 157	tud2c
+  0 136 119	tud3c
+127 171  22	tud4c
+177 189   0	tud5c
+215 172   0	tud6c
+210 135   0	tud7c
+204  76   3	tud8c
+185  15  34	tud9c
+149  17 105	tud10c
+ 97  28 115	tud11c
+
+ 36  53 114	tud1d
+  0  78 115	tud2d
+  0 113  94	tud3d
+106 139  55	tud4d
+153 166   4	tud5d
+174 142   0	tud6d
+190 111   0	tud7d
+169  73  19	tud8d
+156  28  38	tud9d
+115  32  84	tud10d
+76   34 106	tud11d
