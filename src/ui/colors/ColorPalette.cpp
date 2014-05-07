@@ -37,6 +37,7 @@ class ColorPalettePrivate
         QString name;
         int rows = 0;
         int columns = 0;
+        QVector<int> spacings;
 };
 
 ColorPalette::ColorPalette()
@@ -51,6 +52,12 @@ ColorPalette::~ColorPalette()
 
 void ColorPalette::load(const QString & filename)
 {
+    // make sure this color palette initially has no name
+    d->name.clear();
+    d->rows = 0;
+    d->columns = 0;
+    d->spacings.clear();
+
     QStringList lines;
     {
         QFile file(filename);
@@ -62,7 +69,6 @@ void ColorPalette::load(const QString & filename)
 
     static QRegularExpression whiteSpaces("\\s+");
 
-    d->columns = 0;
     for (int i = 0; i < lines.size(); ++i) {
         const QString & line = lines[i];
         // ignore comments
@@ -82,6 +88,15 @@ void ColorPalette::load(const QString & filename)
             continue;
         }
 
+        // check for Spacing: space separated int list. Each int is a row, starting at 0.
+        if (line.startsWith(QLatin1String("Spacing:"))) {
+            QStringList list = line.right(line.size() - 8).trimmed().split(whiteSpaces, QString::SkipEmptyParts);
+            foreach (const QString r, list) {
+                d->spacings.append(r.toInt());
+            }
+            continue;
+        }
+
         // check for "r g b <tab> name"
         QStringList color = line.split(whiteSpaces, QString::SkipEmptyParts);
         if (color.size() >= 3) {
@@ -96,6 +111,11 @@ void ColorPalette::load(const QString & filename)
     }
 
     qDebug() << "read" << d->colors.size() << "colors (" << d->rows << ", " << d->columns << ")";
+}
+
+QString ColorPalette::name() const noexcept
+{
+    return d->name;
 }
 
 QRgb ColorPalette::color(int row, int column) const noexcept
@@ -114,6 +134,11 @@ int ColorPalette::rows() const noexcept
 int ColorPalette::columns() const noexcept
 {
     return d->columns;
+}
+
+bool ColorPalette::spacingAfterRow(int row) const
+{
+    return d->spacings.contains(row);
 }
 
 }

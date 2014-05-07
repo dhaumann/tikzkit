@@ -56,12 +56,15 @@ class TIKZUI_EXPORT ColorWidget : public QFrame
 
     public:
         /**
-         * shows the color palette @p palette
+         * Set the selected palette to @p palette.
+         * If @p palette does not exist, the default palette will be selected.
          */
-        void showPalette(const ColorPalette & palette);
+        void setPalette(const QString & palette);
 
     private Q_SLOTS:
         void setColor(QAbstractButton * button);
+
+        void setPaletteFromIndex(int index);
 
     private:
         ColorWidgetPrivate * const d;

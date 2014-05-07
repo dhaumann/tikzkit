@@ -19,6 +19,7 @@
 
 #include "ColorWidget.h"
 #include "ColorPalette.h"
+#include "SliderSpinBox.h"
 
 #include <tikz/core/Style.h>
 #include <tikz/core/tikz.h>
@@ -26,6 +27,9 @@
 #include <QDebug>
 #include <QAbstractButton>
 #include <QButtonGroup>
+#include <QComboBox>
+#include <QDir>
+#include <QLabel>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QPainter>
@@ -77,10 +81,13 @@ private:
 class ColorWidgetPrivate
 {
     public:
+        QComboBox * cmbPalette;
         QVector<ColorButton*> buttons;
         QButtonGroup * group;
         QVBoxLayout * vLayout;
         QGridLayout * gridLayout;
+        SliderSpinBox * sbOpacity;
+
 };
 
 ColorWidget::ColorWidget(QWidget * parent)
@@ -89,15 +96,67 @@ ColorWidget::ColorWidget(QWidget * parent)
 {
     d->group = new QButtonGroup(this);
     d->vLayout = new QVBoxLayout(this);
+
+    //
+    // 1. add palette chooser
+    //
+    {
+        auto hbox = new QHBoxLayout();
+        d->vLayout->addLayout(hbox);
+
+        auto lblPalette = new QLabel("&Palette:", this);
+        hbox->addWidget(lblPalette);
+
+        d->cmbPalette = new QComboBox(this);
+        lblPalette->setBuddy(d->cmbPalette);
+        hbox->addWidget(d->cmbPalette);
+        hbox->addStretch();
+
+        QDir dir("../data/palettes/");
+        QStringList palettes = dir.entryList(QStringList() << "*.gpl");
+
+        ColorPalette cp;
+        foreach (const QString & palette, palettes) {
+            cp.load("../data/palettes/" + palette);
+            if (! cp.name().isEmpty()) {
+                d->cmbPalette->addItem(cp.name(), "../data/palettes/" + palette);
+            }
+        }
+
+        connect(d->cmbPalette, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(setPaletteFromIndex(int)));
+
+    }
+
+    //
+    // 2. add color buttons
+    //
     d->gridLayout = new QGridLayout();
     d->gridLayout->setSpacing(0);
     d->vLayout->addLayout(d->gridLayout);
 
-    ColorPalette cp;
-//     cp.load("../data/palettes/tikzkit.gpl");
-    cp.load("../data/palettes/oxygen.gpl");
-//     cp.load("../data/palettes/oxygen-vibrant.gpl");
-    showPalette(cp);
+    //
+    // 3. add custom color button
+    //
+    {
+        auto hbox = new QHBoxLayout();
+        d->vLayout->addLayout(hbox);
+
+        auto lblOpacity = new QLabel("&Opacity:", this);
+        hbox->addWidget(lblOpacity);
+
+        d->sbOpacity = new SliderSpinBox(this);
+        d->sbOpacity->setRange(0, 100);
+        d->sbOpacity->setSuffix("%");
+        d->sbOpacity->setSingleStep(10);
+        d->sbOpacity->setMinimumWidth(100);
+        lblOpacity->setBuddy(d->sbOpacity);
+        hbox->addWidget(d->sbOpacity);
+        hbox->addStretch();
+    }
+
+    // finally, select some palette
+    setPaletteFromIndex(0);
 
     connect(d->group, SIGNAL(buttonClicked(QAbstractButton*)),
             this, SLOT(setColor(QAbstractButton*)));
@@ -108,23 +167,37 @@ ColorWidget::~ColorWidget()
     delete d;
 }
 
-void ColorWidget::showPalette(const ColorPalette & palette)
+void ColorWidget::setPalette(const QString & palette)
 {
     if (d->buttons.size()) {
         qDeleteAll(d->buttons);
         d->buttons.clear();
     }
 
-    d->buttons.reserve(palette.rows() * palette.columns());
+    const int index = d->cmbPalette->findData(palette);
+    Q_ASSERT(index >= 0);
+    d->cmbPalette->setCurrentIndex(index);
 
+    ColorPalette cp;
+    cp.load(palette);
 
-    for (int row = 0; row < palette.rows(); ++row) {
-        for (int col = 0; col < palette.columns(); ++col) {
-            auto button = new ColorButton(palette.color(row, col), this);
+    d->buttons.reserve(cp.rows() * cp.columns());
+
+    for (int row = 0, offset = 0; row < cp.rows(); ++row) {
+        for (int col = 0; col < cp.columns(); ++col) {
+            auto button = new ColorButton(cp.color(row, col), this);
             d->group->addButton(button);
-            d->gridLayout->addWidget(button, row, col);
+            d->gridLayout->addWidget(button, row + offset, col);
+            button->show();
+            d->buttons.append(button);
+        }
+        if (cp.spacingAfterRow(row)) {
+            offset++;
+            d->gridLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed), row + offset, 0);
         }
     }
+
+    resize(minimumSizeHint());
 }
 
 void ColorWidget::setColor(QAbstractButton * button)
@@ -133,6 +206,11 @@ void ColorWidget::setColor(QAbstractButton * button)
     Q_ASSERT(colorButton);
 
     qDebug() << colorButton->color();
+}
+
+void ColorWidget::setPaletteFromIndex(int index)
+{
+    setPalette(d->cmbPalette->itemData(index).toString());
 }
 
 }

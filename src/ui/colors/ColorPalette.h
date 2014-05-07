@@ -55,6 +55,11 @@ class ColorPalette
 
     public:
         /**
+         * Returns the name of the color palette, read in load().
+         */
+        QString name() const noexcept;
+
+        /**
          * Returns the color of row @p row and column @p column.
          */
         QRgb color(int row, int column) const noexcept;
@@ -68,6 +73,11 @@ class ColorPalette
          * Returns the amount of columns this color palette provides.
          */
         int columns() const noexcept;
+
+        /**
+         * For visual improvement, add a spacing after row.
+         */
+        bool spacingAfterRow(int row) const;
 
     private:
         ColorPalettePrivate * const d;
