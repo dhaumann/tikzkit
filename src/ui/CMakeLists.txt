@@ -24,6 +24,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/utils
     ${CMAKE_SOURCE_DIR}/src/ui/colors
 
+    ${CMAKE_SOURCE_DIR}/src/qtpropertybrowser/src
+
 #     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -109,6 +111,7 @@ target_link_libraries(qtikzui
     Qt5::Widgets
     Qt5::Svg
     qtikzcore
+    qtpropertybrowser
 )
 
 # kate: indent-width 4; replace-tabs on;
