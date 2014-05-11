@@ -94,6 +94,7 @@ set(qtikzui_SOURCES
     widgets/ToolLayout.cpp
 
     propertybrowser/PropertyBrowser.cpp
+    propertybrowser/ValuePropertyManager.cpp
 )
 
 set(qtikzui_FORMS forms/LinePropertyWidget.ui)

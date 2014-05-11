@@ -18,6 +18,7 @@
  */
 
 #include "PropertyBrowser.h"
+#include "ValuePropertyManager.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
