@@ -19,6 +19,7 @@
 
 #include "PropertyBrowser.h"
 #include "ValuePropertyManager.h"
+#include "ValueSpinBoxFactory.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
@@ -51,7 +52,7 @@ class PropertyBrowserPrivate
 {
 public:
     QtTreePropertyBrowser * browser;
-    QtDoublePropertyManager * valueManager;
+    ValuePropertyManager * valueManager;
 
     TikzItem * item = nullptr;
     QHash<QtProperty *, Property> idMap;
@@ -75,11 +76,10 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     , d(new PropertyBrowserPrivate)
 {
     d->browser = new QtTreePropertyBrowser(this);
-    d->valueManager = new QtDoublePropertyManager(this);
+    d->valueManager = new ValuePropertyManager(this);
 
     d->browser->setFactoryForManager(d->valueManager,
-                                     new QtDoubleSpinBoxFactory(this));
-
+                                     new ValueSpinBoxFactory(this));
 
     connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, double)),
             this, SLOT(valueChanged(QtProperty*, double)));
@@ -111,7 +111,7 @@ void PropertyBrowser::setItem(TikzItem * item)
         QtProperty *property;
 
         property = d->valueManager->addProperty(tr("Line Width"));
-        d->valueManager->setRange(property, 0, 10);
+        d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->lineWidth().value());
         d->addProperty(property, Property::LineWidth);
