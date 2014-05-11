@@ -11,10 +11,6 @@ find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE)
 
-# include_directories(
-#     .
-# )
-
 # contains(TEMPLATE, lib):contains(CONFIG, shared):DEFINES += QT_QTPROPERTYBROWSER_EXPORT
 # else:qtpropertybrowser-uselib:DEFINES += QT_QTPROPERTYBROWSER_IMPORT
 

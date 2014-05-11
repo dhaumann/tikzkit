@@ -32,6 +32,7 @@ namespace tikz {
 namespace ui {
     class TikzDocument;
     class LinePropertyWidget;
+    class PropertyBrowser;
 }
 }
 
@@ -76,6 +77,7 @@ class MainWindow : public QMainWindow
         QTextEdit * m_textEdit;
 
         tikz::ui::LinePropertyWidget * m_linePropertyWidget;
+        tikz::ui::PropertyBrowser * m_browser;
         
         tex::PdfGenerator * m_pdfGenerator;
 };

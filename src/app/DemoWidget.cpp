@@ -26,6 +26,7 @@
 #include <tikz/ui/TikzToolBox.h>
 #include <tikz/ui/ArrowComboBox.h>
 #include <tikz/ui/LinePropertyWidget.h>
+#include <tikz/ui/PropertyBrowser.h>
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
@@ -323,6 +324,8 @@ MainWindow::MainWindow()
         n7->node()->style()->setFillColor(QColor(255, 204, 204));
         n7->node()->setText("3rd party\\\\(Application)");
 
+        m_browser->setItem(n7);
+
         //
         // paths
         //
@@ -393,6 +396,14 @@ void MainWindow::setupUi()
     m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
 
     dockWidget->setWidget(m_linePropertyWidget);
+
+    //
+    // next one
+    //
+    dockWidget = new QDockWidget("Property Browser", this);
+    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
+
+    dockWidget->setWidget(m_browser);
 
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 }

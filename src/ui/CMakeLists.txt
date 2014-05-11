@@ -23,6 +23,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
     ${CMAKE_SOURCE_DIR}/src/ui/utils
     ${CMAKE_SOURCE_DIR}/src/ui/colors
+    ${CMAKE_SOURCE_DIR}/src/ui/propertybrowser
 
     ${CMAKE_SOURCE_DIR}/src/qtpropertybrowser/src
 
@@ -91,6 +92,8 @@ set(qtikzui_SOURCES
     widgets/SliderSpinBox.cpp
     widgets/SliderDoubleSpinBox.cpp
     widgets/ToolLayout.cpp
+
+    propertybrowser/PropertyBrowser.cpp
 )
 
 set(qtikzui_FORMS forms/LinePropertyWidget.ui)
