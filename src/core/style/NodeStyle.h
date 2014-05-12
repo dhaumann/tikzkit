@@ -34,6 +34,8 @@ class TIKZCORE_EXPORT NodeStyle : public Style
 
     Q_PROPERTY(tikz::TextAlignment textAlign READ textAlign WRITE setTextAlign RESET unsetTextAlign)
     Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
+    Q_PROPERTY(tikz::Value innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
+    Q_PROPERTY(tikz::Value outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
     Q_PROPERTY(tikz::Value minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
     Q_PROPERTY(tikz::Value minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
 

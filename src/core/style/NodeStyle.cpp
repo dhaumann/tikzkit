@@ -22,7 +22,7 @@
 namespace tikz {
 namespace core {
 
-static const char * s_align = "align";
+static const char * s_align = "textAlign";
 static const char * s_shape = "shape";
 static const char * s_innerSep = "innerSep";
 static const char * s_outerSep = "outerSep";
