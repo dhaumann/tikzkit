@@ -77,27 +77,48 @@ QString ValueSpinBox::textFromValue(double value) const
 
 double ValueSpinBox::valueFromText(const QString &text) const
 {
-    // FIXME: will assert of bad text
-    tikz::Value val = tikz::Value::fromString(text);
+    QString str = text;
+
+    static QRegularExpression re("(pt?|mm?|cm?|in?)");
+    QRegularExpressionMatch match = re.match(str);
+
+    // append unit to avoid fallback to pt in Value::fromString()
+    if (! match.hasMatch()) {
+        switch (d->unit) {
+            case tikz::Point: break;
+            case tikz::Millimeter: str += "mm"; break;
+            case tikz::Centimeter: str += "cm"; break;
+            case tikz::Inch: str += "in"; break;
+            default: Q_ASSERT(false);
+        }
+    }
+
+    // convert to value
+    tikz::Value val = tikz::Value::fromString(str);
+    const bool unitChanged = d->unit != val.unit();
     const_cast<ValueSpinBox*>(this)->setUnit(val.unit());
+
+    // in case the number remains unchanged but the unit changed, manually emit
+    // the signal, since QDoubleSpinBox does not do this.
+    if (val.value() == value() && unitChanged) {
+        const_cast<ValueSpinBox*>(this)->slotValueChanged(val.value());
+    }
+
     return val.value();
 }
 
 void ValueSpinBox::fixup(QString & input) const
 {
-    qDebug() << "before fixup:" << input;
     QDoubleSpinBox::fixup(input);
-    qDebug() << "after fixup.:" << input;
 }
 
 QValidator::State ValueSpinBox::validate(QString & text, int & pos) const
 {
-    static QRegularExpression re("(pt?|mm?|cm?|in?)");
-    QRegularExpressionMatch match = re.match(text);
+    static QRegularExpression re("([a-zA-Z]+)");
 
-    QString unit;
+    QRegularExpressionMatch match = re.match(text);
     if (match.hasMatch()) {
-        unit = match.captured(1);
+        const QString unit = match.captured(1);
         if (unit == "p" ||
             unit == "m" ||
             unit == "c" ||
@@ -109,7 +130,8 @@ QValidator::State ValueSpinBox::validate(QString & text, int & pos) const
         if (unit == "pt" ||
             unit == "mm" ||
             unit == "cm" ||
-            unit == "in") {
+            unit == "in")
+        {
             pos = match.capturedStart(1);
             QString str = text.left(pos);
             return QDoubleSpinBox::validate(str, pos);
