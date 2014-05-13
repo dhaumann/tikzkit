@@ -59,7 +59,11 @@ public:
     void setItem(TikzItem * item);
 
 protected Q_SLOTS:
-    void  valueChanged(QtProperty *property, const tikz::Value & val);
+    void valueChanged(QtProperty *property, const tikz::Value & val);
+    void valueChanged(QtProperty *property, bool val);
+    void valueChanged(QtProperty *property, const QColor & val);
+    void valueChanged(QtProperty *property, int val);
+    void valueChanged(QtProperty *property, double val);
 
 private:
     PropertyBrowserPrivate * const d;

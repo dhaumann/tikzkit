@@ -31,39 +31,48 @@
 #include <QtTreePropertyBrowser>
 #include <QtDoublePropertyManager>
 #include <QtDoubleSpinBoxFactory>
-
-
+#include <QtBoolPropertyManager>
+#include <QtColorPropertyManager>
+#include <QtColorEditorFactory>
+#include <QtSliderFactory>
+#include <QtIntPropertyManager>
 
 namespace tikz {
 namespace ui {
 
-enum class Property {
-    LineWidth,
-    LineStyle,
-    LineColor,
-    LineOpacity
-};
-
-
-
-
+// NOTE: These strings have to match the Q_PROPERTY names of Style,
+//       EdgeStyle, NodeStyle, Edge and Node
+static constexpr char s_penStyle[] = "penStyle";
+static constexpr char s_lineWidth[] = "lineWidth";
+static constexpr char s_doubleLine[] = "doubleLine";
+static constexpr char s_innerLineWidth[] = "innerLineWidth";
+static constexpr char s_penOpacity[] = "penOpacity";
+static constexpr char s_fillOpacity[] = "fillOpacity";
+static constexpr char s_penColor[] = "penColor";
+static constexpr char s_innerLineColor[] = "innerLineColor";
+static constexpr char s_fillColor[] = "fillColor";
+static constexpr char s_rotation[] = "rotation";
 
 class PropertyBrowserPrivate
 {
 public:
     QtTreePropertyBrowser * browser;
     ValuePropertyManager * valueManager;
+    QtBoolPropertyManager * boolManager;
+    QtColorPropertyManager * colorManager;
+    QtIntPropertyManager * sliderManager;
+    QtDoublePropertyManager * doubleSliderManager;
 
     TikzItem * item = nullptr;
-    QHash<QtProperty *, Property> idMap;
+    QHash<QtProperty *, QString> propertyMap;
 
 public:
-    void addProperty(QtProperty *property, Property id)
+    void addProperty(QtProperty *property, const QString & name)
     {
-        Q_ASSERT(! idMap.contains(property));
-        idMap[property] = id;
+        Q_ASSERT(! propertyMap.contains(property));
+        propertyMap[property] = name;
         QtBrowserItem *item = browser->addProperty(property);
-//         browser->setExpanded(item, idToExpanded[id]);
+//         browser->setExpanded(item, idToExpanded[name]);
     }
 };
 
@@ -77,12 +86,23 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
 {
     d->browser = new QtTreePropertyBrowser(this);
     d->valueManager = new ValuePropertyManager(this);
+    d->boolManager = new QtBoolPropertyManager(this);
+    d->colorManager = new QtColorPropertyManager(this);
+    d->sliderManager = new QtIntPropertyManager(this);
 
-    d->browser->setFactoryForManager(d->valueManager,
-                                     new ValueSpinBoxFactory(this));
+    d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
+    d->browser->setFactoryForManager(d->boolManager, new QtCheckBoxFactory(this));
+    d->browser->setFactoryForManager(d->colorManager, new QtColorEditorFactory(this));
+    d->browser->setFactoryForManager(d->sliderManager, new QtSliderFactory(this));
 
     connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, const tikz::Value &)),
             this, SLOT(valueChanged(QtProperty*, const tikz::Value &)));
+    connect(d->boolManager, SIGNAL(valueChanged(QtProperty*, bool)),
+            this, SLOT(valueChanged(QtProperty*, bool)));
+    connect(d->colorManager, SIGNAL(valueChanged(QtProperty*, const QColor &)),
+            this, SLOT(valueChanged(QtProperty*, const QColor &)));
+    connect(d->sliderManager, SIGNAL(valueChanged(QtProperty*, int)),
+            this, SLOT(valueChanged(QtProperty*, int)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -100,21 +120,49 @@ void PropertyBrowser::setItem(TikzItem * item)
 
     // clear all managers and mappings
     d->valueManager->clear();
-    d->idMap.clear();
+    d->propertyMap.clear();
 
     if (! d->item) {
         return;
     }
 
     auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
+    auto path = qobject_cast<tikz::ui::PathItem *>(d->item);
+    Q_ASSERT(node != nullptr || path != nullptr);
+
+    auto nodeStyle = node ? node->style() : nullptr;
+    auto edgeStyle = path ? path->style() : nullptr;
+    tikz::core::Style * style = nodeStyle ? static_cast<tikz::core::Style *>(nodeStyle)
+                                          : static_cast<tikz::core::Style *>(edgeStyle);
+
     if (node) {
         QtProperty *property;
 
         property = d->valueManager->addProperty(tr("Line Width"));
         d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
-        d->valueManager->setValue(property, node->style()->lineWidth().value());
-        d->addProperty(property, Property::LineWidth);
+        d->valueManager->setValue(property, node->style()->lineWidth());
+        d->addProperty(property, s_lineWidth);
+
+        property = d->colorManager->addProperty(tr("Line Color"));
+        d->colorManager->setValue(property, node->style()->penColor());
+        d->addProperty(property, s_penColor);
+
+        property = d->sliderManager->addProperty(tr("Opacity"));
+        d->sliderManager->setRange(property, 0, 100);
+        d->sliderManager->setSingleStep(property, 10);
+        d->sliderManager->setValue(property, node->style()->penOpacity());
+        d->addProperty(property, s_penOpacity);
+
+        property = d->boolManager->addProperty(tr("Double Line"));
+        d->valueManager->setValue(property, node->style()->doubleLine());
+        d->addProperty(property, s_doubleLine);
+
+        property = d->valueManager->addProperty(tr("Inner Line Width"));
+        d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
+        d->valueManager->setSingleStep(property, 0.1);
+        d->valueManager->setValue(property, node->style()->innerLineWidth());
+        d->addProperty(property, s_innerLineWidth);
     }
 }
 
@@ -123,18 +171,102 @@ void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val
     // if items are inserted, the slot valueChanged() is also called.
     // In this case, the item is not yet registered in the map. Hence,
     // we just return.
-    if (! d->idMap.contains(property)) {
+    if (! d->propertyMap.contains(property)) {
         return;
     }
 
     Q_ASSERT(d->item);
 
-    Property id = d->idMap[property];
+    QString name = d->propertyMap[property];
 
     auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
     if (node) {
-        if (id == Property::LineWidth) {
-            node->style()->setLineWidth(val);
+        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            node->style()->setProperty(name.toLatin1(), val);
+        }
+    }
+}
+
+void PropertyBrowser::valueChanged(QtProperty *property, bool val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    Q_ASSERT(d->item);
+
+    QString name = d->propertyMap[property];
+
+    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
+    if (node) {
+        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            node->style()->setProperty(name.toLatin1(), val);
+        }
+    }
+}
+
+void PropertyBrowser::valueChanged(QtProperty *property, const QColor & val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    Q_ASSERT(d->item);
+
+    QString name = d->propertyMap[property];
+
+    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
+    if (node) {
+        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            node->style()->setProperty(name.toLatin1(), val);
+        }
+    }
+}
+
+void PropertyBrowser::valueChanged(QtProperty *property, int val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    Q_ASSERT(d->item);
+
+    QString name = d->propertyMap[property];
+
+    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
+    if (node) {
+        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            node->style()->setProperty(name.toLatin1(), val);
+        }
+    }
+}
+
+void PropertyBrowser::valueChanged(QtProperty *property, double val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    Q_ASSERT(d->item);
+
+    QString name = d->propertyMap[property];
+
+    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
+    if (node) {
+        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            node->style()->setProperty(name.toLatin1(), val);
         }
     }
 }
