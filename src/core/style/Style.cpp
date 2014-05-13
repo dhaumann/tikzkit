@@ -28,16 +28,16 @@ namespace core {
 
 // NOTE: these strings have to match the Q_PROPERTY strings, otherise
 //       serialization will not work correctly.
-static const char * s_penStyle = "penStyle";
-static const char * s_lineWidth = "lineWidth";
-static const char * s_doubleLine = "doubleLine";
-static const char * s_innerLineWidth = "innerLineWidth";
-static const char * s_penOpacity = "penOpacity";
-static const char * s_fillOpacity = "fillOpacity";
-static const char * s_penColor = "penColor";
-static const char * s_innerLineColor = "innerLineColor";
-static const char * s_fillColor = "fillColor";
-static const char * s_rotation = "rotation";
+static constexpr char s_penStyle[] = "penStyle";
+static constexpr char s_lineWidth[] = "lineWidth";
+static constexpr char s_doubleLine[] = "doubleLine";
+static constexpr char s_innerLineWidth[] = "innerLineWidth";
+static constexpr char s_penOpacity[] = "penOpacity";
+static constexpr char s_fillOpacity[] = "fillOpacity";
+static constexpr char s_penColor[] = "penColor";
+static constexpr char s_innerLineColor[] = "innerLineColor";
+static constexpr char s_fillColor[] = "fillColor";
+static constexpr char s_rotation[] = "rotation";
 
 /**
  * Private data and helper functions of class Style.
@@ -391,6 +391,7 @@ void Style::setPenOpacity(qreal opacity)
 {
     if (!propertySet(s_penOpacity) || d->penOpacity != opacity) {
         beginConfig();
+        qDebug() << "setting to:" << opacity;
         addProperty(s_penOpacity);
         d->penOpacity = opacity;
         endConfig();

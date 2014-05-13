@@ -22,16 +22,16 @@
 namespace tikz {
 namespace core {
 
-static const char * s_radiusX = "radiusX";
-static const char * s_radiusY = "radiusY";
-static const char * s_bendAngle = "bendAngle";
-static const char * s_looseness = "looseness";
-static const char * s_outAngle = "outAngle";
-static const char * s_inAngle = "inAngle";
-static const char * s_arrowTail = "arrowTail";
-static const char * s_arrowHead = "arrowHead";
-static const char * s_shortenStart = "shortenStart";
-static const char * s_shortenEnd = "shortenEnd";
+static constexpr char s_radiusX[] = "radiusX";
+static constexpr char s_radiusY[] = "radiusY";
+static constexpr char s_bendAngle[] = "bendAngle";
+static constexpr char s_looseness[] = "looseness";
+static constexpr char s_outAngle[] = "outAngle";
+static constexpr char s_inAngle[] = "inAngle";
+static constexpr char s_arrowTail[] = "arrowTail";
+static constexpr char s_arrowHead[] = "arrowHead";
+static constexpr char s_shortenStart[] = "shortenStart";
+static constexpr char s_shortenEnd[] = "shortenEnd";
 
 /**
  * Private data and helper functions of class EdgeStyle.

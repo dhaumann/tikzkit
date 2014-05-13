@@ -22,12 +22,12 @@
 namespace tikz {
 namespace core {
 
-static const char * s_align = "textAlign";
-static const char * s_shape = "shape";
-static const char * s_innerSep = "innerSep";
-static const char * s_outerSep = "outerSep";
-static const char * s_minimumHeight = "minimumHeight";
-static const char * s_minimumWidth = "minimumWidth";
+static constexpr char s_align[] = "textAlign";
+static constexpr char s_shape[] = "shape";
+static constexpr char s_innerSep[] = "innerSep";
+static constexpr char s_outerSep[] = "outerSep";
+static constexpr char s_minimumHeight[] = "minimumHeight";
+static constexpr char s_minimumWidth[] = "minimumWidth";
 
 /**
  * Private data and helper functions of class NodeStyle.
