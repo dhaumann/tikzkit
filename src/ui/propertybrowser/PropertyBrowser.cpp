@@ -81,8 +81,8 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->browser->setFactoryForManager(d->valueManager,
                                      new ValueSpinBoxFactory(this));
 
-    connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, double)),
-            this, SLOT(valueChanged(QtProperty*, double)));
+    connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, const tikz::Value &)),
+            this, SLOT(valueChanged(QtProperty*, const tikz::Value &)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -118,7 +118,7 @@ void PropertyBrowser::setItem(TikzItem * item)
     }
 }
 
-void PropertyBrowser::valueChanged(QtProperty *property, double val)
+void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val)
 {
     // if items are inserted, the slot valueChanged() is also called.
     // In this case, the item is not yet registered in the map. Hence,
@@ -134,7 +134,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, double val)
     auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
     if (node) {
         if (id == Property::LineWidth) {
-            node->style()->setLineWidth(tikz::Value(val, tikz::Millimeter));
+            node->style()->setLineWidth(val);
         }
     }
 }

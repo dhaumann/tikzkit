@@ -22,6 +22,8 @@
 
 #include "tikzgui_export.h"
 
+#include <tikz/core/Value.h>
+
 #include <QComboBox>
 
 
@@ -57,7 +59,7 @@ public:
     void setItem(TikzItem * item);
 
 protected Q_SLOTS:
-    void  valueChanged(QtProperty *property, double val);
+    void  valueChanged(QtProperty *property, const tikz::Value & val);
 
 private:
     PropertyBrowserPrivate * const d;

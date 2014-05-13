@@ -45,12 +45,12 @@ private:
     ValueSpinBoxFactoryPrivate *d_ptr;
     Q_DECLARE_PRIVATE(ValueSpinBoxFactory)
     Q_DISABLE_COPY(ValueSpinBoxFactory)
-    Q_PRIVATE_SLOT(d_func(), void slotPropertyChanged(QtProperty *, double))
-    Q_PRIVATE_SLOT(d_func(), void slotRangeChanged(QtProperty *, double, double))
+    Q_PRIVATE_SLOT(d_func(), void slotPropertyChanged(QtProperty *, const tikz::Value &))
+    Q_PRIVATE_SLOT(d_func(), void slotRangeChanged(QtProperty *, const tikz::Value &, const tikz::Value &))
     Q_PRIVATE_SLOT(d_func(), void slotSingleStepChanged(QtProperty *, double))
     Q_PRIVATE_SLOT(d_func(), void slotDecimalsChanged(QtProperty *, int))
     Q_PRIVATE_SLOT(d_func(), void slotReadOnlyChanged(QtProperty *, bool))
-    Q_PRIVATE_SLOT(d_func(), void slotSetValue(double))
+    Q_PRIVATE_SLOT(d_func(), void slotSetValue(const tikz::Value &))
     Q_PRIVATE_SLOT(d_func(), void slotEditorDestroyed(QObject *))
 };
 

@@ -18,8 +18,7 @@
  */
 
 #include "ValueSpinBoxFactory.h"
-
-#include <QDoubleSpinBox>
+#include "ValueSpinBox.h"
 
 namespace tikz {
 namespace ui {
@@ -80,36 +79,36 @@ void EditorFactoryPrivate<Editor>::slotEditorDestroyed(QObject *object)
     }
 }
 
-class ValueSpinBoxFactoryPrivate : public EditorFactoryPrivate<QDoubleSpinBox>
+class ValueSpinBoxFactoryPrivate : public EditorFactoryPrivate<ValueSpinBox>
 {
     ValueSpinBoxFactory *q_ptr;
     Q_DECLARE_PUBLIC(ValueSpinBoxFactory)
 public:
 
-    void slotPropertyChanged(QtProperty *property, double value);
-    void slotRangeChanged(QtProperty *property, double min, double max);
+    void slotPropertyChanged(QtProperty *property, const tikz::Value & value);
+    void slotRangeChanged(QtProperty *property, const tikz::Value & min, const tikz::Value & max);
     void slotSingleStepChanged(QtProperty *property, double step);
     void slotDecimalsChanged(QtProperty *property, int prec);
     void slotReadOnlyChanged(QtProperty *property, bool readOnly);
-    void slotSetValue(double value);
+    void slotSetValue(const tikz::Value & value);
 };
 
-void ValueSpinBoxFactoryPrivate::slotPropertyChanged(QtProperty *property, double value)
+void ValueSpinBoxFactoryPrivate::slotPropertyChanged(QtProperty *property, const tikz::Value & value)
 {
-    QList<QDoubleSpinBox *> editors = m_createdEditors[property];
-    QListIterator<QDoubleSpinBox *> itEditor(m_createdEditors[property]);
+    QList<ValueSpinBox *> editors = m_createdEditors[property];
+    QListIterator<ValueSpinBox *> itEditor(m_createdEditors[property]);
     while (itEditor.hasNext()) {
-        QDoubleSpinBox *editor = itEditor.next();
-        if (editor->value() != value) {
+        ValueSpinBox *editor = itEditor.next();
+        if (editor->valueWithUnit() != value) {
             editor->blockSignals(true);
-            editor->setValue(value);
+            editor->setValueWithUnit(value);
             editor->blockSignals(false);
         }
     }
 }
 
 void ValueSpinBoxFactoryPrivate::slotRangeChanged(QtProperty *property,
-            double min, double max)
+            const tikz::Value & min, const tikz::Value & max)
 {
     if (!m_createdEditors.contains(property))
         return;
@@ -118,13 +117,13 @@ void ValueSpinBoxFactoryPrivate::slotRangeChanged(QtProperty *property,
     if (!manager)
         return;
 
-    QList<QDoubleSpinBox *> editors = m_createdEditors[property];
-    QListIterator<QDoubleSpinBox *> itEditor(editors);
+    QList<ValueSpinBox *> editors = m_createdEditors[property];
+    QListIterator<ValueSpinBox *> itEditor(editors);
     while (itEditor.hasNext()) {
-        QDoubleSpinBox *editor = itEditor.next();
+        ValueSpinBox *editor = itEditor.next();
         editor->blockSignals(true);
-        editor->setRange(min, max);
-        editor->setValue(manager->value(property).value());
+        editor->setRange(min.toPoint(), max.toPoint());
+        editor->setValueWithUnit(manager->value(property));
         editor->blockSignals(false);
     }
 }
@@ -138,10 +137,10 @@ void ValueSpinBoxFactoryPrivate::slotSingleStepChanged(QtProperty *property, dou
     if (!manager)
         return;
 
-    QList<QDoubleSpinBox *> editors = m_createdEditors[property];
-    QListIterator<QDoubleSpinBox *> itEditor(editors);
+    QList<ValueSpinBox *> editors = m_createdEditors[property];
+    QListIterator<ValueSpinBox *> itEditor(editors);
     while (itEditor.hasNext()) {
-        QDoubleSpinBox *editor = itEditor.next();
+        ValueSpinBox *editor = itEditor.next();
         editor->blockSignals(true);
         editor->setSingleStep(step);
         editor->blockSignals(false);
@@ -157,9 +156,9 @@ void ValueSpinBoxFactoryPrivate::slotReadOnlyChanged( QtProperty *property, bool
     if (!manager)
         return;
 
-    QListIterator<QDoubleSpinBox *> itEditor(m_createdEditors[property]);
+    QListIterator<ValueSpinBox *> itEditor(m_createdEditors[property]);
     while (itEditor.hasNext()) {
-        QDoubleSpinBox *editor = itEditor.next();
+        ValueSpinBox *editor = itEditor.next();
         editor->blockSignals(true);
         editor->setReadOnly(readOnly);
         editor->blockSignals(false);
@@ -175,22 +174,22 @@ void ValueSpinBoxFactoryPrivate::slotDecimalsChanged(QtProperty *property, int p
     if (!manager)
         return;
 
-    QList<QDoubleSpinBox *> editors = m_createdEditors[property];
-    QListIterator<QDoubleSpinBox *> itEditor(editors);
+    QList<ValueSpinBox *> editors = m_createdEditors[property];
+    QListIterator<ValueSpinBox *> itEditor(editors);
     while (itEditor.hasNext()) {
-        QDoubleSpinBox *editor = itEditor.next();
+        ValueSpinBox *editor = itEditor.next();
         editor->blockSignals(true);
         editor->setDecimals(prec);
-        editor->setValue(manager->value(property).value());
+        editor->setValueWithUnit(manager->value(property));
         editor->blockSignals(false);
     }
 }
 
-void ValueSpinBoxFactoryPrivate::slotSetValue(double value)
+void ValueSpinBoxFactoryPrivate::slotSetValue(const tikz::Value & value)
 {
     QObject *object = q_ptr->sender();
-    const QMap<QDoubleSpinBox *, QtProperty *>::ConstIterator itcend = m_editorToProperty.constEnd();
-    for (QMap<QDoubleSpinBox *, QtProperty *>::ConstIterator itEditor = m_editorToProperty.constBegin(); itEditor != itcend; ++itEditor) {
+    const QMap<ValueSpinBox *, QtProperty *>::ConstIterator itcend = m_editorToProperty.constEnd();
+    for (QMap<ValueSpinBox *, QtProperty *>::ConstIterator itEditor = m_editorToProperty.constBegin(); itEditor != itcend; ++itEditor) {
         if (itEditor.key() == object) {
             QtProperty *property = itEditor.value();
             ValuePropertyManager *manager = q_ptr->propertyManager(property);
@@ -204,7 +203,7 @@ void ValueSpinBoxFactoryPrivate::slotSetValue(double value)
 
 /*! \class ValueSpinBoxFactory
 
-    \brief The ValueSpinBoxFactory class provides QDoubleSpinBox
+    \brief The ValueSpinBoxFactory class provides ValueSpinBox
     widgets for properties created by ValuePropertyManager objects.
 
     \sa QtAbstractEditorFactory, ValuePropertyManager
@@ -237,10 +236,10 @@ ValueSpinBoxFactory::~ValueSpinBoxFactory()
 */
 void ValueSpinBoxFactory::connectPropertyManager(ValuePropertyManager *manager)
 {
-    connect(manager, SIGNAL(valueChanged(QtProperty *, double)),
-                this, SLOT(slotPropertyChanged(QtProperty *, double)));
-    connect(manager, SIGNAL(rangeChanged(QtProperty *, double, double)),
-                this, SLOT(slotRangeChanged(QtProperty *, double, double)));
+    connect(manager, SIGNAL(valueChanged(QtProperty *, const tikz::Value &)),
+                this, SLOT(slotPropertyChanged(QtProperty *, const tikz::Value &)));
+    connect(manager, SIGNAL(rangeChanged(QtProperty *, const tikz::Value &, const tikz::Value &)),
+                this, SLOT(slotRangeChanged(QtProperty *, const tikz::Value &, const tikz::Value &)));
     connect(manager, SIGNAL(singleStepChanged(QtProperty *, double)),
                 this, SLOT(slotSingleStepChanged(QtProperty *, double)));
     connect(manager, SIGNAL(decimalsChanged(QtProperty *, int)),
@@ -257,15 +256,15 @@ void ValueSpinBoxFactory::connectPropertyManager(ValuePropertyManager *manager)
 QWidget *ValueSpinBoxFactory::createEditor(ValuePropertyManager *manager,
         QtProperty *property, QWidget *parent)
 {
-    QDoubleSpinBox *editor = d_ptr->createEditor(property, parent);
+    ValueSpinBox *editor = d_ptr->createEditor(property, parent);
     editor->setSingleStep(manager->singleStep(property));
     editor->setDecimals(manager->decimals(property));
-    editor->setRange(manager->minimum(property).value(), manager->maximum(property).value());
-    editor->setValue(manager->value(property).value());
+    editor->setRange(manager->minimum(property).toPoint(), manager->maximum(property).toPoint());
+    editor->setValueWithUnit(manager->value(property));
     editor->setKeyboardTracking(false);
     editor->setReadOnly(manager->isReadOnly(property));
 
-    connect(editor, SIGNAL(valueChanged(double)), this, SLOT(slotSetValue(double)));
+    connect(editor, SIGNAL(valueChanged(const tikz::Value &)), this, SLOT(slotSetValue(const tikz::Value &)));
     connect(editor, SIGNAL(destroyed(QObject *)),
                 this, SLOT(slotEditorDestroyed(QObject *)));
     return editor;
@@ -278,10 +277,10 @@ QWidget *ValueSpinBoxFactory::createEditor(ValuePropertyManager *manager,
 */
 void ValueSpinBoxFactory::disconnectPropertyManager(ValuePropertyManager *manager)
 {
-    disconnect(manager, SIGNAL(valueChanged(QtProperty *, double)),
-                this, SLOT(slotPropertyChanged(QtProperty *, double)));
-    disconnect(manager, SIGNAL(rangeChanged(QtProperty *, double, double)),
-                this, SLOT(slotRangeChanged(QtProperty *, double, double)));
+    disconnect(manager, SIGNAL(valueChanged(QtProperty *, const tikz::Value &)),
+                this, SLOT(slotPropertyChanged(QtProperty *, const tikz::Value &)));
+    disconnect(manager, SIGNAL(rangeChanged(QtProperty *, const tikz::Value &, const tikz::Value &)),
+                this, SLOT(slotRangeChanged(QtProperty *, const tikz::Value &, const tikz::Value &)));
     disconnect(manager, SIGNAL(singleStepChanged(QtProperty *, double)),
                 this, SLOT(slotSingleStepChanged(QtProperty *, double)));
     disconnect(manager, SIGNAL(decimalsChanged(QtProperty *, int)),

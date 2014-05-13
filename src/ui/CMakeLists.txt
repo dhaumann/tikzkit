@@ -96,6 +96,7 @@ set(qtikzui_SOURCES
     propertybrowser/PropertyBrowser.cpp
     propertybrowser/ValuePropertyManager.cpp
     propertybrowser/ValueSpinBoxFactory.cpp
+    propertybrowser/ValueSpinBox.cpp
 )
 
 set(qtikzui_FORMS forms/LinePropertyWidget.ui)
