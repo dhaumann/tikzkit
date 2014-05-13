@@ -115,7 +115,7 @@ void ValuePropertyManager::setValue(QtProperty *property, const tikz::Value & va
 
     auto & data = it.value();
 
-    if (data.val == val)
+    if (data.val == val && data.val.unit() == val.unit())
         return;
 
     const tikz::Value oldVal = data.val;
@@ -123,7 +123,7 @@ void ValuePropertyManager::setValue(QtProperty *property, const tikz::Value & va
         : val > data.maxVal ? data.maxVal
         : val;
 
-    if (data.val == oldVal)
+    if (data.val == oldVal && data.val.unit() == oldVal.unit())
         return;
 
     emit propertyChanged(property);
