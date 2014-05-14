@@ -391,7 +391,6 @@ void Style::setPenOpacity(qreal opacity)
 {
     if (!propertySet(s_penOpacity) || d->penOpacity != opacity) {
         beginConfig();
-        qDebug() << "setting to:" << opacity;
         addProperty(s_penOpacity);
         d->penOpacity = opacity;
         endConfig();
