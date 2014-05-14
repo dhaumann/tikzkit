@@ -28,6 +28,8 @@
 #include <tikz/ui/PathItem.h>
 
 #include <QDebug>
+#include <QVBoxLayout>
+
 #include <QtTreePropertyBrowser>
 #include <QtDoublePropertyManager>
 #include <QtDoubleSpinBoxFactory>
@@ -85,6 +87,10 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     , d(new PropertyBrowserPrivate)
 {
     d->browser = new QtTreePropertyBrowser(this);
+    auto vboxLayout = new QVBoxLayout(this);
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
+    vboxLayout->addWidget(d->browser);
+
     d->valueManager = new ValuePropertyManager(this);
     d->boolManager = new QtBoolPropertyManager(this);
     d->colorManager = new QtColorPropertyManager(this);
