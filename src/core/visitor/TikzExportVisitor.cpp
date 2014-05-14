@@ -75,17 +75,17 @@ static QString colorToString(const QColor & color)
             colorMap.insert(mixColor(QColor(255, 128, 0), Qt::black, f).rgb(), QString("orange!%1!black").arg(i));
         }
 
-        colorMap.insert(Qt::black, "black");
+        colorMap.insert(QColor(Qt::black).rgb(), "black");
         colorMap.insert(QColor(128, 128, 128).rgb(), "gray");
         colorMap.insert(QColor(64, 64, 64).rgb(), "darkgray");
         colorMap.insert(QColor(191, 191, 191).rgb(), "lightgray");
-        colorMap.insert(Qt::white, "white");
-        colorMap.insert(Qt::cyan, "cyan");
-        colorMap.insert(Qt::red, "red");
-        colorMap.insert(Qt::magenta, "magenta");
-        colorMap.insert(Qt::green, "green");
-        colorMap.insert(Qt::yellow, "yellow");
-        colorMap.insert(Qt::blue, "blue");
+        colorMap.insert(QColor(Qt::white).rgb(), "white");
+        colorMap.insert(QColor(Qt::cyan).rgb(), "cyan");
+        colorMap.insert(QColor(Qt::red).rgb(), "red");
+        colorMap.insert(QColor(Qt::magenta).rgb(), "magenta");
+        colorMap.insert(QColor(Qt::green).rgb(), "green");
+        colorMap.insert(QColor(Qt::yellow).rgb(), "yellow");
+        colorMap.insert(QColor(Qt::blue).rgb(), "blue");
         colorMap.insert(QColor(191, 128, 64).rgb(), "brown");
         colorMap.insert(QColor(191, 255, 0).rgb(), "lime");
         colorMap.insert(QColor(255, 191, 191).rgb(), "pink");
