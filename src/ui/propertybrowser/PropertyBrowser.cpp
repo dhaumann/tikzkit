@@ -76,6 +76,14 @@ public:
         QtBrowserItem *item = browser->addProperty(property);
 //         browser->setExpanded(item, idToExpanded[name]);
     }
+
+    void addSubProperty(QtProperty *parent, QtProperty *property, const QString & name)
+    {
+        Q_ASSERT(! propertyMap.contains(property));
+        propertyMap[property] = name;
+        parent->addSubProperty(property);
+//         browser->setExpanded(item, idToExpanded[name]);
+    }
 };
 
 
@@ -160,15 +168,20 @@ void PropertyBrowser::setItem(TikzItem * item)
         d->sliderManager->setValue(property, node->style()->penOpacity());
         d->addProperty(property, s_penOpacity);
 
-        property = d->boolManager->addProperty(tr("Double Line"));
-        d->valueManager->setValue(property, node->style()->doubleLine());
-        d->addProperty(property, s_doubleLine);
+        auto doubleLine = d->boolManager->addProperty(tr("Double Line"));
+        d->valueManager->setValue(doubleLine, node->style()->doubleLine());
+        d->addProperty(doubleLine, s_doubleLine);
 
         property = d->valueManager->addProperty(tr("Inner Line Width"));
         d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->innerLineWidth());
-        d->addProperty(property, s_innerLineWidth);
+        d->addSubProperty(doubleLine, property, s_innerLineWidth);
+
+        property = d->colorManager->addProperty(tr("Inner Line Color"));
+        d->colorManager->setValue(property, node->style()->innerLineColor());
+        d->addSubProperty(doubleLine, property, s_innerLineColor);
+
     }
 }
 
@@ -251,7 +264,11 @@ void PropertyBrowser::valueChanged(QtProperty *property, int val)
     auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
     if (node) {
         if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            node->style()->setProperty(name.toLatin1(), val);
+            if (name == s_penOpacity) {
+                node->style()->setProperty(name.toLatin1(), val / 100.0);
+            } else {
+                node->style()->setProperty(name.toLatin1(), val);
+            }
         }
     }
 }
