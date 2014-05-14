@@ -58,6 +58,11 @@ class Painter
          */
         void drawPath(const QPainterPath & path);
 
+        /**
+         * Fill the path with all its style.
+         */
+        void fillPath(const QPainterPath & path);
+
     private:
         PainterPrivate * const d;
 };

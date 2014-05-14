@@ -202,10 +202,9 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     d->updateCache();
 
     Painter p(painter, style());
-    QBrush brush(style()->fillColor());
 
     // fill shape
-    painter->fillPath(d->shapePath, brush);
+    p.fillPath(d->shapePath);
 
     // draw shape
     p.drawPath(d->shapePath);

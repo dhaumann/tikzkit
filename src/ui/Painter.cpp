@@ -113,6 +113,7 @@ void Painter::drawPath(const QPainterPath & path)
 
     // first pass: draw line
     d->painter->setPen(p);
+    d->painter->setOpacity(d->style->penOpacity());
     d->painter->drawPath(path);
 
     // second pass: draw inner line
@@ -132,28 +133,24 @@ void Painter::drawPath(const QPainterPath & path)
     }
 }
 
-//     rgb
-//     red,1,0,0/0,1,1/0,1,1,0/.3;%
-//     green,0,1,0/.33333,1,1/1,0,1,0/.59;%
-//     blue,0,0,1/.66667,1,1/1,1,0,0/.11;%
-//     brown,.75,.5,.25/.083333,.66667,.75/0,.25,.5,.25/.5475;%
-//     lime,.75,1,0/.20833,1,1/.25,0,1,0/.815;%
-//     orange,1,.5,0/.083333,1,1/0,.5,1,0/.595;%
-//     pink,1,.75,.75/0,.25,1/0,.25,.25,0/.825;%
-//     purple,.75,0,.25/.94444,1,.75/0,.75,.5,.25/.2525;%
-//     teal,0,.5,.5/.5,1,.5/.5,0,0,.5/.35;%
-//     violet,.5,0,.5/.83333,1,.5/0,.5,0,.5/.205}%
-//     \definecolorset{cmyk/rgb/hsb/gray}{}{}%
-//     cyan,1,0,0,0/0,1,1/.5,1,1/.7;%
-//     magenta,0,1,0,0/1,0,1/.83333,1,1/.41;%
-//     yellow,0,0,1,0/1,1,0/.16667,1,1/.89;%
-//     olive,0,0,1,.5/.5,.5,0/.16667,1,.5/.39}
-//     \definecolorset{gray/rgb/hsb/cmyk}{}{}%
-//     black,0/0,0,0/0,0,0/0,0,0,1;%
-//     darkgray,.25/.25,.25,.25/0,0,.25/0,0,0,.75;%
-//     gray,.5/.5,.5,.5/0,0,.5/0,0,0,.5;%
-//     lightgray,.75/.75,.75,.75/0,0,.75/0,0,0,.25;%
-//     white,1/1,1,1/0,0,1/0,0,0,0
+void Painter::fillPath(const QPainterPath & path)
+{
+    // shortcut: only paint if required
+    if (d->style->fillColor().alpha() == 0 || d->style->fillOpacity() == 0.0) {
+        return;
+    }
+
+    QPen p = pen();
+    p.setColor(Qt::transparent);
+    p.setWidthF(d->style->penWidth().toPoint());
+
+    const QBrush brush(d->style->fillColor());
+
+    d->painter->setPen(p);
+    d->painter->setBrush(brush);
+    d->painter->setOpacity(d->style->fillOpacity());
+    d->painter->drawPath(path);
+}
 
 }
 }
