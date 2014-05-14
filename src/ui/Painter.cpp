@@ -113,12 +113,12 @@ void Painter::drawPath(const QPainterPath & path)
 
     // first pass: draw line
     d->painter->setPen(p);
+    d->painter->setBrush(Qt::NoBrush);
     d->painter->setOpacity(d->style->penOpacity());
     d->painter->drawPath(path);
 
     // second pass: draw inner line
     if (d->style->doubleLine() && d->style->innerLineWidth().toPoint() > 0) {
-        p.setWidthF(d->style->innerLineWidth().toPoint());
         if (d->style->penStyle() != tikz::SolidLine) {
             // scale by different line widths to match distances
             for (int i = 0; i < pattern.size(); ++i) {
@@ -127,7 +127,8 @@ void Painter::drawPath(const QPainterPath & path)
             p.setDashPattern(pattern);
         }
 
-        p.setColor(Qt::red);
+        p.setWidthF(d->style->innerLineWidth().toPoint());
+        p.setColor(d->style->innerLineColor());
         d->painter->setPen(p);
         d->painter->drawPath(path);
     }
@@ -149,7 +150,7 @@ void Painter::fillPath(const QPainterPath & path)
     d->painter->setPen(p);
     d->painter->setBrush(brush);
     d->painter->setOpacity(d->style->fillOpacity());
-    d->painter->drawPath(path);
+    d->painter->fillPath(path, brush);
 }
 
 }
