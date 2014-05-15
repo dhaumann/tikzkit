@@ -39,7 +39,7 @@ namespace tikz {
 namespace ui {
 
 DocumentPrivate::DocumentPrivate(QObject * parent)
-    : tikz::core::Document(parent)
+    : tikz::ui::Document(this, parent)
     , d(new TikzDocumentPrivate())
 {
     d->scene = new TikzScene(this);
@@ -113,6 +113,17 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
     }
 
     return Document::scenePos(pos);
+}
+
+View * DocumentPrivate::createView(QWidget *parent,
+                                   tikz::ui::MainWindow *mainWindow)
+{
+    return nullptr; // TODO
+}
+
+QList<View *> DocumentPrivate::views() const
+{
+    return QList<View*>(); // TODO
 }
 
 QVector<NodeItem*> DocumentPrivate::nodeItems() const

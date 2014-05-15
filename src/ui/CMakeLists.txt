@@ -24,6 +24,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/utils
     ${CMAKE_SOURCE_DIR}/src/ui/colors
     ${CMAKE_SOURCE_DIR}/src/ui/propertybrowser
+    ${CMAKE_SOURCE_DIR}/src/ui/include
+    ${CMAKE_SOURCE_DIR}/src/ui/app
+    ${CMAKE_SOURCE_DIR}/src/ui/document
 
     ${CMAKE_SOURCE_DIR}/src/qtpropertybrowser/src
 
@@ -31,11 +34,13 @@ include_directories(
 )
 
 set(qtikzui_SOURCES
-    DocumentPrivate.cpp
     TikzItem.cpp
     NodeItem.cpp
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
+
+    include/Document.cpp
+    document/DocumentPrivate.cpp
 
     tools/AbstractTool.cpp
     tools/ProxyTool.cpp

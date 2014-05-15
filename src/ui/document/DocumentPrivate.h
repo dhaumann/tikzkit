@@ -17,13 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UI_DOCUMENT_H
-#define TIKZ_UI_DOCUMENT_H
+#ifndef TIKZ_UI_DOCUMENT_PRIVATE_H
+#define TIKZ_UI_DOCUMENT_PRIVATE_H
 
-#include "tikzgui_export.h"
 #include "tikzgui.h"
+#include "tikzgui_export.h"
 
-#include <tikz/core/Document.h>
+#include "Document.h"
 #include <tikz/core/MetaPos.h>
 
 class QGraphicsView;
@@ -35,7 +35,7 @@ class NodeItem;
 class PathItem;
 class TikzDocumentPrivate;
 
-class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
+class TIKZUI_EXPORT DocumentPrivate : public tikz::ui::Document
 {
     Q_OBJECT
 
@@ -76,7 +76,6 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
          */
         void editModeChanged(TikzEditMode mode) const;
 
-
     //
     // convenience functions
     //
@@ -86,6 +85,21 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
          */
         tikz::Pos scenePos(const tikz::core::MetaPos & pos) const override;
 
+    public:
+        /**
+         * Create a new view attached to @p parent.
+         * @param parent parent widget
+         * @param mainWindow the main window responsible for this view, if any
+         * @return the new view
+         */
+        View *createView(QWidget *parent,
+                         tikz::ui::MainWindow *mainWindow) override;
+
+        /**
+         * Returns the views pre-casted to tikz::ui::View%s
+         */
+        QList<View *> views() const override;
+
     //
     // Node and path creation
     //
@@ -93,40 +107,40 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
         /**
          * Returns all NodeItem%s in the DocumentPrivate.
          */
-        QVector<NodeItem*> nodeItems() const;
+        QVector<NodeItem*> nodeItems() const override;
 
         /**
          * Returns all PathItem%s in the DocumentPrivate.
          */
-        QVector<PathItem*> pathItems() const;
+        QVector<PathItem*> pathItems() const override;
 
         /**
          * Creates a new NodeItem associated with this document.
          * If the node is not needed anymore, delete it by
          * calling deleteNodeItem(nodeItem).
          */
-        NodeItem * createNodeItem();
+        NodeItem * createNodeItem() override;
 
         /**
          * Creates a new path associated with this document.
          * If the path is not needed anymore, delete it by
          * calling deletePathItem(pathItem).
          */
-        tikz::ui::PathItem * createPathItem(tikz::core::Path::Type type = tikz::core::Path::Line);
+        tikz::ui::PathItem * createPathItem(tikz::core::Path::Type type = tikz::core::Path::Line) override;
 
         /**
          * Remove @p node from the document by deleting the node object.
          * Afterwards, the pointer is invalid.
          * @param node node to delete
          */
-        void deleteNodeItem(NodeItem * node);
+        void deleteNodeItem(NodeItem * node) override;
 
         /**
          * Remove @p path from the document by deleting the path object.
          * Afterwards, the pointer is invalid.
          * @param path path to delete
          */
-        void deletePathItem(tikz::ui::PathItem * path);
+        void deletePathItem(tikz::ui::PathItem * path) override;
 
         /**
          * Get the NodeItem with @p id.
@@ -184,6 +198,6 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
 }
 }
 
-#endif // TIKZ_UI_DOCUMENT_H
+#endif // TIKZ_UI_DOCUMENT_PRIVATE_H
 
 // kate: indent-width 4; replace-tabs on;

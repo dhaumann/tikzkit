@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UI_DOCUMENT_PRIVATE_H
-#define TIKZ_UI_DOCUMENT_PRIVATE_H
+#ifndef TIKZ_UI_DOCUMENT_PRIVATE_D_H
+#define TIKZ_UI_DOCUMENT_PRIVATE_D_H
 
 #include <QObject>
 #include <QVector>
@@ -42,10 +42,8 @@ class DocumentPrivate;
 class TikzScene;
 
 
-class TikzDocumentPrivate : public QObject
+class TikzDocumentPrivate
 {
-    Q_OBJECT
-
     //
     // data types
     //
@@ -84,6 +82,6 @@ class TikzDocumentPrivate : public QObject
 }
 }
 
-#endif // TIKZ_UI_DOCUMENT_PRIVATE_H
+#endif // TIKZ_UI_DOCUMENT_PRIVATE_D_H
 
 // kate: indent-width 4; replace-tabs on;
