@@ -18,7 +18,6 @@
  */
 
 #include "DocumentPrivate.h"
-#include "TikzDocument_p.h"
 
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
@@ -40,11 +39,10 @@ namespace ui {
 
 DocumentPrivate::DocumentPrivate(QObject * parent)
     : tikz::ui::Document(this, parent)
-    , d(new TikzDocumentPrivate())
 {
-    d->scene = new TikzScene(this);
+    m_scene = new TikzScene(this);
 
-    connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
+    connect(m_scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
     connect(this, SIGNAL(aboutToClear()), this, SLOT(clearDocumentPrivate()));
 }
 
@@ -54,35 +52,32 @@ DocumentPrivate::~DocumentPrivate()
     clearDocumentPrivate();
 
     // make sure they are gone
-    Q_ASSERT(d->nodeMap.isEmpty());
-    Q_ASSERT(d->nodes.isEmpty());
-    Q_ASSERT(d->pathMap.isEmpty());
-    Q_ASSERT(d->paths.isEmpty());
-
-    // free private data
-    delete d;
+    Q_ASSERT(m_nodeMap.isEmpty());
+    Q_ASSERT(m_nodes.isEmpty());
+    Q_ASSERT(m_pathMap.isEmpty());
+    Q_ASSERT(m_paths.isEmpty());
 }
 
 void DocumentPrivate::clearDocumentPrivate()
 {
     // free UI part of nodes and paths
-    qDeleteAll(d->paths);
-    d->pathMap.clear();
-    d->paths.clear();
+    qDeleteAll(m_paths);
+    m_pathMap.clear();
+    m_paths.clear();
 
-    qDeleteAll(d->nodes);
-    d->nodeMap.clear();
-    d->nodes.clear();
+    qDeleteAll(m_nodes);
+    m_nodeMap.clear();
+    m_nodes.clear();
 }
 
 void DocumentPrivate::setEditMode(TikzEditMode mode)
 {
-    d->scene->setEditMode(mode);
+    m_scene->setEditMode(mode);
 }
 
 TikzEditMode DocumentPrivate::editMode() const
 {
-    return d->scene->editMode();
+    return m_scene->editMode();
 }
 
 tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
@@ -102,10 +97,10 @@ QGraphicsView * DocumentPrivate::createView(QWidget * parent)
 {
     // create view
     QGraphicsView * view = new TikzView(this, parent);
-    d->views.append(view);
+    m_views.append(view);
 
     // set graphics scene
-    view->setScene(d->scene);
+    view->setScene(m_scene);
 
     // scale to true display size
     const qreal s = tikz::Value(1, tikz::Inch).toPoint();
@@ -123,48 +118,48 @@ QList<View *> DocumentPrivate::views() const
 
 QVector<NodeItem*> DocumentPrivate::nodeItems() const
 {
-    return d->nodes;
+    return m_nodes;
 }
 
 QVector<PathItem*> DocumentPrivate::pathItems() const
 {
-    return d->paths;
+    return m_paths;
 }
 
 NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
     tikz::core::Node * node = Document::createNode();
-    Q_ASSERT(d->nodeMap.contains(node->id()));
+    Q_ASSERT(m_nodeMap.contains(node->id()));
 
-    return d->nodeMap[node->id()];
+    return m_nodeMap[node->id()];
 }
 
 tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
-    Q_ASSERT(d->pathMap.contains(path->id()));
+    Q_ASSERT(m_pathMap.contains(path->id()));
 
-    return d->pathMap[path->id()];
+    return m_pathMap[path->id()];
 }
 
 void DocumentPrivate::deleteNodeItem(NodeItem * node)
 {
     // delete node from id
     const int id = node->id();
-    Q_ASSERT(d->nodeMap.contains(id));
+    Q_ASSERT(m_nodeMap.contains(id));
     Document::deleteNode(node->node());
-    Q_ASSERT(! d->nodeMap.contains(id));
+    Q_ASSERT(! m_nodeMap.contains(id));
 }
 
 void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
 {
     // delete path from id
     const int id = path->id();
-    Q_ASSERT(d->pathMap.contains(id));
+    Q_ASSERT(m_pathMap.contains(id));
     Document::deletePath(path->path());
-    Q_ASSERT(! d->pathMap.contains(id));
+    Q_ASSERT(! m_pathMap.contains(id));
 }
 
 tikz::core::Node * DocumentPrivate::createNode(qint64 id)
@@ -172,35 +167,35 @@ tikz::core::Node * DocumentPrivate::createNode(qint64 id)
     // create node by tikz::core::Document
     tikz::core::Node * node = Document::createNode(id);
     Q_ASSERT(id == node->id());
-    Q_ASSERT(! d->nodeMap.contains(id));
+    Q_ASSERT(! m_nodeMap.contains(id));
 
     // create GUI item
     NodeItem * nodeItem = new NodeItem(node);
-    d->nodes.append(nodeItem);
-    d->nodeMap.insert(id, nodeItem);
+    m_nodes.append(nodeItem);
+    m_nodeMap.insert(id, nodeItem);
 
     // add to graphics scene
-    d->scene->addItem(nodeItem);
+    m_scene->addItem(nodeItem);
 
     return node;
 }
 
 void DocumentPrivate::deleteNode(qint64 id)
 {
-    Q_ASSERT(d->nodeMap.contains(id));
+    Q_ASSERT(m_nodeMap.contains(id));
 
     // get NodeItem
-    NodeItem * nodeItem = d->nodeMap[id];
+    NodeItem * nodeItem = m_nodeMap[id];
 
     // remove from scene
-    d->scene->removeItem(nodeItem);
+    m_scene->removeItem(nodeItem);
 
-    const int index = d->nodes.indexOf(nodeItem);
+    const int index = m_nodes.indexOf(nodeItem);
     Q_ASSERT(index >= 0);
 
     // delete item
-    d->nodeMap.remove(id);
-    d->nodes.remove(index);
+    m_nodeMap.remove(id);
+    m_nodes.remove(index);
     delete nodeItem;
 
     tikz::core::Document::deleteNode(id);
@@ -210,7 +205,7 @@ tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint
 {
     tikz::core::Path * path = Document::createPath(type, id);
     Q_ASSERT(id == path->id());
-    Q_ASSERT(! d->pathMap.contains(id));
+    Q_ASSERT(! m_pathMap.contains(id));
 
     // create GUI item
     tikz::ui::PathItem * pathItem = nullptr;
@@ -238,31 +233,31 @@ tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint
     Q_ASSERT(pathItem);
 
     // register path
-    d->paths.append(pathItem);
-    d->pathMap.insert(id, pathItem);
+    m_paths.append(pathItem);
+    m_pathMap.insert(id, pathItem);
 
     // add to graphics scene
-    d->scene->addItem(pathItem);
+    m_scene->addItem(pathItem);
 
     return path;
 }
 
 void DocumentPrivate::deletePath(qint64 id)
 {
-    Q_ASSERT(d->pathMap.contains(id));
+    Q_ASSERT(m_pathMap.contains(id));
 
     // get tikz::ui::PathItem
-    tikz::ui::PathItem * pathItem = d->pathMap[id];
+    tikz::ui::PathItem * pathItem = m_pathMap[id];
 
     // remove from scene
-    d->scene->removeItem(pathItem);
+    m_scene->removeItem(pathItem);
 
-    const int index = d->paths.indexOf(pathItem);
+    const int index = m_paths.indexOf(pathItem);
     Q_ASSERT(index >= 0);
 
     // delete item
-    d->pathMap.remove(id);
-    d->paths.remove(index);
+    m_pathMap.remove(id);
+    m_paths.remove(index);
     delete pathItem;
 
     tikz::core::Document::deletePath(id);
@@ -274,8 +269,8 @@ NodeItem * DocumentPrivate::nodeItemFromId(qint64 id) const
         return 0;
     }
 
-    Q_ASSERT(d->nodeMap.contains(id));
-    return d->nodeMap[id];
+    Q_ASSERT(m_nodeMap.contains(id));
+    return m_nodeMap[id];
 }
 
 tikz::ui::PathItem * DocumentPrivate::pathItemFromId(qint64 id) const
@@ -284,8 +279,8 @@ tikz::ui::PathItem * DocumentPrivate::pathItemFromId(qint64 id) const
         return 0;
     }
 
-    Q_ASSERT(d->pathMap.contains(id));
-    return d->pathMap[id];
+    Q_ASSERT(m_pathMap.contains(id));
+    return m_pathMap[id];
 }
 
 }

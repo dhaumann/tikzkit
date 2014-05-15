@@ -29,11 +29,17 @@
 class QGraphicsView;
 
 namespace tikz {
+namespace core {
+    class Document;
+    class Node;
+    class Path;
+}
+
 namespace ui {
 
 class NodeItem;
 class PathItem;
-class TikzDocumentPrivate;
+class TikzScene;
 
 class DocumentPrivate : public tikz::ui::Document
 {
@@ -186,7 +192,35 @@ class DocumentPrivate : public tikz::ui::Document
         void clearDocumentPrivate();
 
     private:
-        TikzDocumentPrivate * d;
+        /**
+         * List of NodeItem%s.
+         */
+        QVector<NodeItem*> m_nodes;
+
+        /**
+         * List of tikz::ui::PathItem%s.
+         */
+        QVector<tikz::ui::PathItem *> m_paths;
+
+        /**
+         * Node lookup map
+         */
+        QHash<qint64, NodeItem*> m_nodeMap;
+
+        /**
+         * Edge lookup map
+         */
+        QHash<qint64, tikz::ui::PathItem *> m_pathMap;
+
+        /**
+         * Graphics scene for the document.
+         */
+        TikzScene * m_scene;
+
+        /**
+         * List of graphics views.
+         */
+        QVector<QGraphicsView*> m_views;
 };
 
 }
