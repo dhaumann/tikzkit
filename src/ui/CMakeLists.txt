@@ -40,6 +40,11 @@ set(qtikzui_SOURCES
 #     TikzEdge_p.cpp
 
     include/Document.cpp
+    include/Editor.cpp
+    include/Application.cpp
+
+    app/EditorPrivate.cpp
+
     document/DocumentPrivate.cpp
 
     tools/AbstractTool.cpp

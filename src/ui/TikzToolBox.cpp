@@ -19,7 +19,7 @@
 
 #include "TikzToolBox.h"
 
-#include "DocumentPrivate.h"
+#include "Document.h"
 #include "ToolLayout.h"
 
 #include <QDebug>
@@ -33,14 +33,14 @@ namespace ui {
 class TikzToolBoxPrivate
 {
 public:
-    // associated DocumentPrivate
-    DocumentPrivate * doc;
+    // associated Document
+    Document * doc;
 
     // this button group contains all tools
     QButtonGroup * group;
 };
 
-TikzToolBox::TikzToolBox(DocumentPrivate * doc, QWidget * parent)
+TikzToolBox::TikzToolBox(Document * doc, QWidget * parent)
     : QWidget(parent)
     , d(new TikzToolBoxPrivate())
 {
@@ -104,7 +104,7 @@ TikzToolBox::~TikzToolBox()
     delete d;
 }
 
-DocumentPrivate * TikzToolBox::document() const
+Document * TikzToolBox::document() const
 {
     return d->doc;
 }
@@ -130,7 +130,7 @@ TikzEditMode TikzToolBox::editMode() const
 void TikzToolBox::setEditModeInternal(int mode)
 {
     Q_ASSERT(mode >= 0);
-    document()->setEditMode(static_cast<TikzEditMode>(mode));
+//     document()->setEditMode(static_cast<TikzEditMode>(mode));
 }
 
 }

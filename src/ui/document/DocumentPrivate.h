@@ -35,7 +35,7 @@ class NodeItem;
 class PathItem;
 class TikzDocumentPrivate;
 
-class TIKZUI_EXPORT DocumentPrivate : public tikz::ui::Document
+class DocumentPrivate : public tikz::ui::Document
 {
     Q_OBJECT
 
@@ -49,11 +49,6 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::ui::Document
          * Destructor
          */
         virtual ~DocumentPrivate();
-
-        /**
-         * Create a graphics view for this document.
-         */
-        QGraphicsView * createView(QWidget * parent);
 
     //
     // Forward functions for EditMode
@@ -89,11 +84,10 @@ class TIKZUI_EXPORT DocumentPrivate : public tikz::ui::Document
         /**
          * Create a new view attached to @p parent.
          * @param parent parent widget
-         * @param mainWindow the main window responsible for this view, if any
          * @return the new view
          */
-        View *createView(QWidget *parent,
-                         tikz::ui::MainWindow *mainWindow) override;
+//         View *createView(QWidget * parent) override;
+        QGraphicsView * createView(QWidget * parent) override;
 
         /**
          * Returns the views pre-casted to tikz::ui::View%s

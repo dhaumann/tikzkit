@@ -17,12 +17,18 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "EditorPrivate.h"
+#include "DocumentPrivate.h"
 
-#include <tikz.h>
+#include <tikz/core/tikz.h>
+#include <tikz/core/Value.h>
+#include <tikz/core/Pos.h>
 
 #include <QApplication>
 
-tikz::ui::EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
+namespace tikz {
+namespace ui {
+
+EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     : tikz::ui::Editor (this)
     , m_application(nullptr)
 {
@@ -43,11 +49,11 @@ tikz::ui::EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &static
     qRegisterMetaType<tikz::Value>("Value");
 }
 
-tikz::ui::EditorPrivate::~EditorPrivate()
+EditorPrivate::~EditorPrivate()
 {
 }
 
-tikz::ui::Document *tikz::ui::EditorPrivate::createDocument(QObject *parent)
+tikz::ui::Document * EditorPrivate::createDocument(QObject *parent)
 {
     auto doc = new tikz::ui::DocumentPrivate(this);
 
@@ -56,12 +62,12 @@ tikz::ui::Document *tikz::ui::EditorPrivate::createDocument(QObject *parent)
     return doc;
 }
 
-int tikz::ui::EditorPrivate::configPages() const
+int EditorPrivate::configPages() const
 {
     return 0;
 }
 
-tikz::ui::ConfigPage *tikz::ui::EditorPrivate::configPage(int number, QWidget *parent)
+tikz::ui::ConfigPage * EditorPrivate::configPage(int number, QWidget *parent)
 {
     Q_UNUSED(number)
     Q_UNUSED(parent)
@@ -77,10 +83,10 @@ static void cleanupGlobal()
     /**
      * delete if there
      */
-    delete tikz::ui::EditorPrivate::self();
+    delete EditorPrivate::self();
 }
 
-tikz::ui::EditorPrivate *tikz::ui::EditorPrivate::self()
+EditorPrivate * EditorPrivate::self()
 {
     /**
      * remember the static instance in a QPointer
@@ -117,28 +123,31 @@ tikz::ui::EditorPrivate *tikz::ui::EditorPrivate::self()
     return staticInstance.data();
 }
 
-void tikz::ui::EditorPrivate::registerDocument(tikz::ui::DocumentPrivate *doc)
+void EditorPrivate::registerDocument(tikz::ui::DocumentPrivate *doc)
 {
     Q_ASSERT (!m_documents.contains(doc));
     m_documents.insert(doc, doc);
 }
 
-void tikz::ui::EditorPrivate::deregisterDocument(tikz::ui::DocumentPrivate *doc)
+void EditorPrivate::deregisterDocument(tikz::ui::DocumentPrivate *doc)
 {
     Q_ASSERT (m_documents.contains(doc));
     m_documents.remove(doc);
 }
 
-void tikz::ui::EditorPrivate::registerView(tikz::ui::ViewPrivate *view)
+void EditorPrivate::registerView(tikz::ui::ViewPrivate *view)
 {
-    Q_ASSERT (!m_views.contains(view));
-    m_views.insert(view);
+//     Q_ASSERT (!m_views.contains(view));
+//     m_views.insert(view);
 }
 
-void tikz::ui::EditorPrivate::deregisterView(tikz::ui::ViewPrivate *view)
+void EditorPrivate::deregisterView(tikz::ui::ViewPrivate *view)
 {
-    Q_ASSERT (m_views.contains(view));
-    m_views.remove(view);
+//     Q_ASSERT (m_views.contains(view));
+//     m_views.remove(view);
+}
+
+}
 }
 
 // kate: indent-width 4; replace-tabs on;

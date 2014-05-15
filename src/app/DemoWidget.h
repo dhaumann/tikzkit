@@ -30,7 +30,7 @@ namespace tex {
 
 namespace tikz {
 namespace ui {
-    class DocumentPrivate;
+    class Document;
     class LinePropertyWidget;
     class PropertyBrowser;
 }
@@ -72,13 +72,13 @@ class MainWindow : public QMainWindow
 
         std::unique_ptr<Ui::MainWindow> m_ui;
 
-        tikz::ui::DocumentPrivate * m_doc;
+        tikz::ui::Document* m_doc;
 
         QTextEdit * m_textEdit;
 
         tikz::ui::LinePropertyWidget * m_linePropertyWidget;
         tikz::ui::PropertyBrowser * m_browser;
-        
+
         tex::PdfGenerator * m_pdfGenerator;
 };
 

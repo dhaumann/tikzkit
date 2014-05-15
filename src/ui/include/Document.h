@@ -25,11 +25,12 @@
 
 #include <tikz/core/Document.h>
 
+class QGraphicsView;
+
 namespace tikz {
 namespace ui {
 
 class DocumentPrivate;
-class MainWindow;
 class View;
 
 class NodeItem;
@@ -63,11 +64,10 @@ public:
     /**
      * Create a new view attached to @p parent.
      * @param parent parent widget
-     * @param mainWindow the main window responsible for this view, if any
      * @return the new view
      */
-    virtual View *createView(QWidget *parent,
-                             tikz::ui::MainWindow *mainWindow) = 0;
+//     virtual View *createView(QWidget * parent) = 0;
+    virtual QGraphicsView * createView(QWidget * parent) = 0;
 
     /**
      * Returns the views pre-casted to tikz::ui::View%s

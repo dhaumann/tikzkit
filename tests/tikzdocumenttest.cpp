@@ -8,7 +8,8 @@
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 
-#include <tikz/ui/DocumentPrivate.h>
+#include <tikz/ui/Editor.h>
+#include <tikz/ui/Document.h>
 #include <tikz/ui/NodeItem.h>
 
 QTEST_MAIN(TikzDocumentTest)
@@ -25,13 +26,11 @@ void TikzDocumentTest::cleanupTestCase()
 
 void TikzDocumentTest::documentTest()
 {
-    tikz::ui::DocumentPrivate doc;
+    auto doc = tikz::ui::Editor::instance()->createDocument(0);
 
-    tikz::ui::NodeItem * node = doc.createNodeItem();
+    tikz::ui::NodeItem * node = doc->createNodeItem();
 
     Q_ASSERT(node != 0);
-
-//     QCOMPARE(doc.toJson(), QByteArray("[  ]"));
 
 //     tikz::core::Node * node = doc.createNode();
 }

@@ -19,7 +19,8 @@
 #include "ui_MainWindow.h"
 #include "PdfGenerator.h"
 
-#include <tikz/ui/DocumentPrivate.h>
+#include <tikz/ui/Editor.h>
+#include <tikz/ui/Document.h>
 #include <tikz/ui/NodeItem.h>
 #include <tikz/ui/PathItem.h>
 #include <tikz/ui/TikzScene.h>
@@ -72,7 +73,7 @@ MainWindow::MainWindow()
     QHBoxLayout * hbox = new QHBoxLayout(top);
     top->setLayout(hbox);
 
-    m_doc = new tikz::ui::DocumentPrivate(this);
+    m_doc = tikz::ui::Editor::instance()->createDocument(this);
 
     tikz::ui::TikzToolBox * toolBox = new tikz::ui::TikzToolBox(m_doc, this);
     hbox->addWidget(toolBox);

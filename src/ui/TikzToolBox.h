@@ -28,7 +28,7 @@
 namespace tikz {
 namespace ui {
 
-class DocumentPrivate;
+class Document;
 class TikzToolBoxPrivate;
 
 class TIKZUI_EXPORT TikzToolBox : public QWidget
@@ -39,7 +39,7 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
         /**
          * Constructor.
          */
-        TikzToolBox(DocumentPrivate * document, QWidget * parent = 0);
+        TikzToolBox(Document * document, QWidget * parent = 0);
 
         /**
          * Destructor.
@@ -47,9 +47,9 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
         virtual ~TikzToolBox();
 
         /**
-         * Returns the associated DocumentPrivate.
+         * Returns the associated Document.
          */
-        DocumentPrivate * document() const;
+        Document * document() const;
 
     //
     // Edit mode

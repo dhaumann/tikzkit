@@ -21,7 +21,7 @@
 #ifndef TIKZUI_EDITOR_H
 #define TIKZUI_EDITOR_H
 
-#include <tikzui_export.h>
+#include "tikzgui_export.h"
 
 #include <QObject>
 
@@ -31,6 +31,7 @@ namespace ui {
 class Application;
 class Document;
 class EditorPrivate;
+class ConfigPage;
 
 class TIKZUI_EXPORT Editor : public QObject
 {

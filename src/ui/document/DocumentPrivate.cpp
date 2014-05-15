@@ -75,24 +75,6 @@ void DocumentPrivate::clearDocumentPrivate()
     d->nodes.clear();
 }
 
-QGraphicsView * DocumentPrivate::createView(QWidget * parent)
-{
-    // create view
-    QGraphicsView * view = new TikzView(this, parent);
-    d->views.append(view);
-
-    // set graphics scene
-    view->setScene(d->scene);
-
-    // scale to true display size
-    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-    view->scale(view->physicalDpiX() / s,
-               -view->physicalDpiY() / s);
-
-    // return view
-    return view;
-}
-
 void DocumentPrivate::setEditMode(TikzEditMode mode)
 {
     d->scene->setEditMode(mode);
@@ -115,10 +97,23 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
     return Document::scenePos(pos);
 }
 
-View * DocumentPrivate::createView(QWidget *parent,
-                                   tikz::ui::MainWindow *mainWindow)
+// View * DocumentPrivate::createView(QWidget * parent)
+QGraphicsView * DocumentPrivate::createView(QWidget * parent)
 {
-    return nullptr; // TODO
+    // create view
+    QGraphicsView * view = new TikzView(this, parent);
+    d->views.append(view);
+
+    // set graphics scene
+    view->setScene(d->scene);
+
+    // scale to true display size
+    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
+    view->scale(view->physicalDpiX() / s,
+               -view->physicalDpiY() / s);
+
+    // return view
+    return view;
 }
 
 QList<View *> DocumentPrivate::views() const

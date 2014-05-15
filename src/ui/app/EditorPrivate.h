@@ -20,26 +20,17 @@
 #ifndef TIKZUI_EDITOR_PRIVATE_H
 #define TIKZUI_EDITOR_PRIVATE_H
 
-#include <ktexteditor_export.h>
-#include "katescript.h"
-
-#include <ktexteditor/editor.h>
-#include "ktexteditor/view.h"
-
-#include <KService>
-#include <KAboutData>
-#include <KSharedConfig>
-
-#include <ktexteditor/application.h>
-#include <tikz::ui/Command>
-#include <draft/templateinterface2.h>
+#include <tikz/ui/Editor.h>
+#include <tikz/ui/Application.h>
 
 #include <QList>
 #include <QPointer>
-#include <QMap>
 
 namespace tikz {
 namespace ui {
+
+class DocumentPrivate;
+class ViewPrivate;
 
 /**
  * tikz::ui::EditorPrivate
@@ -48,28 +39,11 @@ namespace ui {
  * or view stay around, here is the place to put things
  * which are needed and shared by all this objects ;)
  */
-class KTEXTEDITOR_EXPORT EditorPrivate : public tikz::ui::Editor, public tikz::ui::TemplateScriptRegistrar
+class EditorPrivate : public tikz::ui::Editor
 {
     Q_OBJECT
-    Q_INTERFACES(tikz::ui::TemplateScriptRegistrar)
 
     friend class tikz::ui::Editor;
-
-    // unit testing
-public:
-    /**
-     * Calling this function internally sets a flag such that unitTestMode()
-     * returns \p true.
-     */
-    static void enableUnitTestMode();
-    /**
-     * Returns \p true, if the unit test mode was enabled through a call of
-     * enableUnitTestMode(), otherwise \p false.
-     */
-    static bool unitTestMode();
-
-    // for setDefaultEncoding
-    friend class KateDocumentConfig;
 
 private:
     /**
@@ -121,19 +95,6 @@ public:
     }
 
     /**
-     * General Information about this editor
-     */
-public:
-    /**
-     * return the about data
-     * @return about data of this editor part
-     */
-    const KAboutData &aboutData() const
-    {
-        return m_aboutData;
-    }
-
-    /**
      * Configuration management
      */
 public:
@@ -153,14 +114,14 @@ public:
     tikz::ui::ConfigPage *configPage(int number, QWidget *parent) override;
 
     /**
-     * Kate Part Internal stuff ;)
+     * TikZKit Internal stuff ;)
      */
 public:
     /**
      * singleton accessor
      * @return instance of the factory
      */
-    static tikz::ui::EditorPrivate *self();
+    static EditorPrivate *self();
 
     /**
      * register document at the factory
@@ -194,7 +155,8 @@ public:
      */
     QList<tikz::ui::ViewPrivate *> views()
     {
-        return m_views.toList();
+        return QList<tikz::ui::ViewPrivate *>();
+//         return m_views.toList(); // TODO
     }
 
     /**
@@ -215,7 +177,7 @@ private:
     /**
      * registered views
      */
-    QSet<tikz::ui::ViewPrivate *> m_views;
+//     QSet<tikz::ui::ViewPrivate *> m_views; FIXME
 
     /**
      * access to application
