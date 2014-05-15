@@ -97,6 +97,9 @@ set(qtikzui_SOURCES
     propertybrowser/ValuePropertyManager.cpp
     propertybrowser/ValueSpinBoxFactory.cpp
     propertybrowser/ValueSpinBox.cpp
+    propertybrowser/OpacityPropertyManager.cpp
+    propertybrowser/OpacityEditorFactory.cpp
+    propertybrowser/OpacityEditor.cpp
 )
 
 set(qtikzui_FORMS forms/LinePropertyWidget.ui)
