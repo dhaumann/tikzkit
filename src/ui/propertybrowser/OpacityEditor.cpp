@@ -53,8 +53,12 @@ OpacityEditor::OpacityEditor(QWidget * parent)
     d->spinBox->setRange(0, 100);
     d->spinBox->setSingleStep(10);
     d->spinBox->setSuffix("%");
+    d->spinBox->setValue(100);
 
     d->slider->setRange(0, 100);
+    d->slider->setPageStep(10);
+    d->slider->setSingleStep(10);
+    d->slider->setValue(100);
     d->slider->setToolTip("Hold down shift for fine adjustment.");
 
     setFocusProxy(d->spinBox);
@@ -112,10 +116,6 @@ void OpacityEditor::slotSliderChanged(int opacity)
 
     if (d->intOpacity != opacity) {
         setValue(opacity / 100.0);
-    }
-
-    if (opacity != d->intOpacity) {
-        d->intOpacity = opacity;
         emit valueChanged(d->intOpacity / 100.0);
     } else if (d->slider->value() != opacity) {
         d->slider->setValue(opacity);
@@ -124,10 +124,8 @@ void OpacityEditor::slotSliderChanged(int opacity)
 
 void OpacityEditor::slotSpinBoxChanged(int opacity)
 {
-    setValue(opacity / 100.0);
-
     if (opacity != d->intOpacity) {
-        d->intOpacity = opacity;
+        setValue(opacity / 100.0);
         emit valueChanged(d->intOpacity / 100.0);
     }
 }
