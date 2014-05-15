@@ -20,6 +20,8 @@
 #include "PropertyBrowser.h"
 #include "ValuePropertyManager.h"
 #include "ValueSpinBoxFactory.h"
+#include "OpacityEditorFactory.h"
+#include "OpacityPropertyManager.h"
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
@@ -36,8 +38,6 @@
 #include <QtBoolPropertyManager>
 #include <QtColorPropertyManager>
 #include <QtColorEditorFactory>
-#include <QtSliderFactory>
-#include <QtIntPropertyManager>
 
 namespace tikz {
 namespace ui {
@@ -62,7 +62,7 @@ public:
     ValuePropertyManager * valueManager;
     QtBoolPropertyManager * boolManager;
     QtColorPropertyManager * colorManager;
-    QtIntPropertyManager * sliderManager;
+    OpacityPropertyManager * opacityManager;
     QtDoublePropertyManager * doubleSliderManager;
 
     TikzItem * item = nullptr;
@@ -102,12 +102,12 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->valueManager = new ValuePropertyManager(this);
     d->boolManager = new QtBoolPropertyManager(this);
     d->colorManager = new QtColorPropertyManager(this);
-    d->sliderManager = new QtIntPropertyManager(this);
+    d->opacityManager = new OpacityPropertyManager(this);
 
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
     d->browser->setFactoryForManager(d->boolManager, new QtCheckBoxFactory(this));
     d->browser->setFactoryForManager(d->colorManager, new QtColorEditorFactory(this));
-    d->browser->setFactoryForManager(d->sliderManager, new QtSliderFactory(this));
+    d->browser->setFactoryForManager(d->opacityManager, new OpacityEditorFactory(this));
 
     connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, const tikz::Value &)),
             this, SLOT(valueChanged(QtProperty*, const tikz::Value &)));
@@ -115,8 +115,8 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
             this, SLOT(valueChanged(QtProperty*, bool)));
     connect(d->colorManager, SIGNAL(valueChanged(QtProperty*, const QColor &)),
             this, SLOT(valueChanged(QtProperty*, const QColor &)));
-    connect(d->sliderManager, SIGNAL(valueChanged(QtProperty*, int)),
-            this, SLOT(valueChanged(QtProperty*, int)));
+    connect(d->opacityManager, SIGNAL(valueChanged(QtProperty*, qreal)),
+            this, SLOT(valueChanged(QtProperty*, qreal)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -134,7 +134,9 @@ void PropertyBrowser::setItem(TikzItem * item)
 
     // clear all managers and mappings
     d->valueManager->clear();
-    d->propertyMap.clear();
+    d->boolManager->clear();
+    d->colorManager->clear();
+    d->opacityManager->clear();
 
     if (! d->item) {
         return;
@@ -162,10 +164,8 @@ void PropertyBrowser::setItem(TikzItem * item)
         d->colorManager->setValue(property, node->style()->penColor());
         d->addProperty(property, s_penColor);
 
-        property = d->sliderManager->addProperty(tr("Opacity"));
-        d->sliderManager->setRange(property, 0, 100);
-        d->sliderManager->setSingleStep(property, 10);
-        d->sliderManager->setValue(property, node->style()->penOpacity());
+        property = d->opacityManager->addProperty(tr("Opacity"));
+        d->opacityManager->setValue(property, node->style()->penOpacity());
         d->addProperty(property, s_penOpacity);
 
         auto doubleLine = d->boolManager->addProperty(tr("Double Line"));
