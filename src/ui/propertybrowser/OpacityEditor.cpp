@@ -118,7 +118,9 @@ void OpacityEditor::slotSliderChanged(int opacity)
         setValue(opacity / 100.0);
         emit valueChanged(d->intOpacity / 100.0);
     } else if (d->slider->value() != opacity) {
+        const bool blockSlider = d->slider->blockSignals(true);
         d->slider->setValue(opacity);
+        d->slider->blockSignals(blockSlider);
     }
 }
 
