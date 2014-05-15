@@ -33,7 +33,7 @@ namespace core {
 
 namespace ui {
 
-class TikzDocument;
+class DocumentPrivate;
 class PathPrivate;
 
 class TIKZUI_EXPORT PathItem :  public TikzItem
@@ -54,7 +54,7 @@ class TIKZUI_EXPORT PathItem :  public TikzItem
         /**
          * Returns the associated document, if available.
          */
-        TikzDocument * document() const;
+        DocumentPrivate * document() const;
 
         /**
          * Reimplment to return a proper UserType + 3.

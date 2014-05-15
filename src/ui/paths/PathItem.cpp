@@ -20,7 +20,7 @@
 #include "PathItem.h"
 
 #include <tikz/core/Path.h>
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 
 #include <QDebug>
 
@@ -55,10 +55,10 @@ PathItem::~PathItem()
     delete d;
 }
 
-TikzDocument * PathItem::document() const
+DocumentPrivate * PathItem::document() const
 {
-    Q_ASSERT(qobject_cast<TikzDocument*>(d->path->document()) != nullptr);
-    return qobject_cast<TikzDocument*>(d->path->document());
+    Q_ASSERT(qobject_cast<DocumentPrivate*>(d->path->document()) != nullptr);
+    return qobject_cast<DocumentPrivate*>(d->path->document());
 }
 
 int PathItem::type() const

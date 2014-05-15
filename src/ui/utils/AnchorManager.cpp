@@ -25,12 +25,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 
 namespace tikz {
 namespace ui {
 
-AnchorManager::AnchorManager(QGraphicsScene * scene, tikz::ui::TikzDocument * doc, QObject * parent)
+AnchorManager::AnchorManager(QGraphicsScene * scene, tikz::ui::DocumentPrivate * doc, QObject * parent)
     : QObject(parent)
     , m_doc(doc)
     , m_scene(scene)

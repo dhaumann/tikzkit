@@ -35,7 +35,7 @@ namespace core {
 }
 namespace ui {
 
-class TikzDocument;
+class DocumentPrivate;
 class NodeItem;
 
 class EdgePathItem :  public PathItem

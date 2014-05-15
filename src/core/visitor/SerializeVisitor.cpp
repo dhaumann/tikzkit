@@ -43,15 +43,6 @@ using namespace internal;
 SerializeVisitor::SerializeVisitor()
     : Visitor()
 {
-    qRegisterMetaType<tikz::Anchor>("Anchor");
-    qRegisterMetaType<tikz::Arrow>("Arrow");
-    qRegisterMetaType<tikz::LineCap>("LineCap");
-    qRegisterMetaType<tikz::LineJoin>("LineJoin");
-    qRegisterMetaType<tikz::PenStyle>("PenStyle");
-    qRegisterMetaType<tikz::Shape>("Shape");
-    qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
-    qRegisterMetaType<tikz::Pos>("Pos");
-    qRegisterMetaType<tikz::Value>("Value");
 }
 
 SerializeVisitor::~SerializeVisitor()

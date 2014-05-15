@@ -19,6 +19,8 @@
 
 #include "OpacityPropertyManager.h"
 
+#include <QDebug>
+
 namespace tikz {
 namespace ui {
 
@@ -90,6 +92,7 @@ void OpacityPropertyManager::setValue(QtProperty *property, qreal val)
     if (data.val == oldVal)
         return;
 
+    qDebug() << "emiting new value:" << data.val;
     emit propertyChanged(property);
     emit valueChanged(property, data.val);
 }

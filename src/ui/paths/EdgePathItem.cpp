@@ -20,7 +20,7 @@
 #include "EdgePathItem.h"
 
 #include "NodeItem.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "AbstractArrow.h"
 #include "Painter.h"
 

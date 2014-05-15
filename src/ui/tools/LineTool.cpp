@@ -23,7 +23,7 @@
 #include "MoveHandle.h"
 #include "EdgePathItem.h"
 #include "AnchorManager.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "TikzView.h"
 
 #include <tikz/core/EdgeStyle.h>

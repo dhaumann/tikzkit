@@ -35,7 +35,7 @@ class NodeItem;
 class PathItem;
 class TikzDocumentPrivate;
 
-class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
+class TIKZUI_EXPORT DocumentPrivate : public tikz::core::Document
 {
     Q_OBJECT
 
@@ -43,12 +43,12 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
         /**
          * Default constructor.
          */
-        TikzDocument(QObject * parent = 0);
+        DocumentPrivate(QObject * parent = 0);
 
         /**
          * Destructor
          */
-        virtual ~TikzDocument();
+        virtual ~DocumentPrivate();
 
         /**
          * Create a graphics view for this document.
@@ -91,12 +91,12 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     public:
         /**
-         * Returns all NodeItem%s in the TikzDocument.
+         * Returns all NodeItem%s in the DocumentPrivate.
          */
         QVector<NodeItem*> nodeItems() const;
 
         /**
-         * Returns all PathItem%s in the TikzDocument.
+         * Returns all PathItem%s in the DocumentPrivate.
          */
         QVector<PathItem*> pathItems() const;
 
@@ -171,11 +171,11 @@ class TIKZUI_EXPORT TikzDocument : public tikz::core::Document
     //
     protected Q_SLOTS:
         /**
-         * Clear all contents of this TikzDocument.
+         * Clear all contents of this DocumentPrivate.
          * @warning This functions is called from the destructor.
          *          So never make it virtual.
          */
-        void clearTikzDocument();
+        void clearDocumentPrivate();
 
     private:
         TikzDocumentPrivate * d;

@@ -19,7 +19,7 @@
 
 #include "AnchorHandle.h"
 #include "NodeItem.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 
 #include <QPointer>
 #include <QPainter>

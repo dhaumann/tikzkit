@@ -19,7 +19,7 @@
 
 #include "TikzToolBox.h"
 
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "ToolLayout.h"
 
 #include <QDebug>
@@ -33,14 +33,14 @@ namespace ui {
 class TikzToolBoxPrivate
 {
 public:
-    // associated TikzDocument
-    TikzDocument * doc;
+    // associated DocumentPrivate
+    DocumentPrivate * doc;
 
     // this button group contains all tools
     QButtonGroup * group;
 };
 
-TikzToolBox::TikzToolBox(TikzDocument * doc, QWidget * parent)
+TikzToolBox::TikzToolBox(DocumentPrivate * doc, QWidget * parent)
     : QWidget(parent)
     , d(new TikzToolBoxPrivate())
 {
@@ -104,7 +104,7 @@ TikzToolBox::~TikzToolBox()
     delete d;
 }
 
-TikzDocument * TikzToolBox::document() const
+DocumentPrivate * TikzToolBox::document() const
 {
     return d->doc;
 }

@@ -31,7 +31,7 @@ include_directories(
 )
 
 set(qtikzui_SOURCES
-    TikzDocument.cpp
+    DocumentPrivate.cpp
     TikzItem.cpp
     NodeItem.cpp
 #     TikzEdge.cpp

@@ -20,7 +20,7 @@
 #include "EllipsePathItem.h"
 
 #include "NodeItem.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "ResizeHandle.h"
 #include "MoveHandle.h"
 #include "RotateHandle.h"
@@ -55,10 +55,10 @@ EllipsePathItem::~EllipsePathItem()
 {
 }
 
-TikzDocument * EllipsePathItem::document() const
+DocumentPrivate * EllipsePathItem::document() const
 {
-    Q_ASSERT(qobject_cast<TikzDocument*>(path()->document()) != nullptr);
-    return qobject_cast<TikzDocument*>(path()->document());
+    Q_ASSERT(qobject_cast<DocumentPrivate*>(path()->document()) != nullptr);
+    return qobject_cast<DocumentPrivate*>(path()->document());
 }
 
 void EllipsePathItem::setNode(NodeItem* node)

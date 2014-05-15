@@ -49,7 +49,7 @@ tikz::ui::EditorPrivate::~EditorPrivate()
 
 tikz::ui::Document *tikz::ui::EditorPrivate::createDocument(QObject *parent)
 {
-    auto doc = new tikz::ui::TikzDocument(this);
+    auto doc = new tikz::ui::DocumentPrivate(this);
 
     emit documentCreated(doc);
 

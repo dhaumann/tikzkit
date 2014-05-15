@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "TikzDocument_p.h"
 
 #include <tikz/core/Node.h>
@@ -38,20 +38,20 @@
 namespace tikz {
 namespace ui {
 
-TikzDocument::TikzDocument(QObject * parent)
+DocumentPrivate::DocumentPrivate(QObject * parent)
     : tikz::core::Document(parent)
     , d(new TikzDocumentPrivate())
 {
     d->scene = new TikzScene(this);
 
     connect(d->scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
-    connect(this, SIGNAL(aboutToClear()), this, SLOT(clearTikzDocument()));
+    connect(this, SIGNAL(aboutToClear()), this, SLOT(clearDocumentPrivate()));
 }
 
-TikzDocument::~TikzDocument()
+DocumentPrivate::~DocumentPrivate()
 {
     // purge all Nodes and Paths
-    clearTikzDocument();
+    clearDocumentPrivate();
 
     // make sure they are gone
     Q_ASSERT(d->nodeMap.isEmpty());
@@ -63,7 +63,7 @@ TikzDocument::~TikzDocument()
     delete d;
 }
 
-void TikzDocument::clearTikzDocument()
+void DocumentPrivate::clearDocumentPrivate()
 {
     // free UI part of nodes and paths
     qDeleteAll(d->paths);
@@ -75,7 +75,7 @@ void TikzDocument::clearTikzDocument()
     d->nodes.clear();
 }
 
-QGraphicsView * TikzDocument::createView(QWidget * parent)
+QGraphicsView * DocumentPrivate::createView(QWidget * parent)
 {
     // create view
     QGraphicsView * view = new TikzView(this, parent);
@@ -93,17 +93,17 @@ QGraphicsView * TikzDocument::createView(QWidget * parent)
     return view;
 }
 
-void TikzDocument::setEditMode(TikzEditMode mode)
+void DocumentPrivate::setEditMode(TikzEditMode mode)
 {
     d->scene->setEditMode(mode);
 }
 
-TikzEditMode TikzDocument::editMode() const
+TikzEditMode DocumentPrivate::editMode() const
 {
     return d->scene->editMode();
 }
 
-tikz::Pos TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
+tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
 {
     const auto node = pos.node();
     if (node) {
@@ -115,17 +115,17 @@ tikz::Pos TikzDocument::scenePos(const tikz::core::MetaPos & pos) const
     return Document::scenePos(pos);
 }
 
-QVector<NodeItem*> TikzDocument::nodeItems() const
+QVector<NodeItem*> DocumentPrivate::nodeItems() const
 {
     return d->nodes;
 }
 
-QVector<PathItem*> TikzDocument::pathItems() const
+QVector<PathItem*> DocumentPrivate::pathItems() const
 {
     return d->paths;
 }
 
-NodeItem * TikzDocument::createNodeItem()
+NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
     tikz::core::Node * node = Document::createNode();
@@ -134,7 +134,7 @@ NodeItem * TikzDocument::createNodeItem()
     return d->nodeMap[node->id()];
 }
 
-tikz::ui::PathItem * TikzDocument::createPathItem(tikz::core::Path::Type type)
+tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
@@ -143,7 +143,7 @@ tikz::ui::PathItem * TikzDocument::createPathItem(tikz::core::Path::Type type)
     return d->pathMap[path->id()];
 }
 
-void TikzDocument::deleteNodeItem(NodeItem * node)
+void DocumentPrivate::deleteNodeItem(NodeItem * node)
 {
     // delete node from id
     const int id = node->id();
@@ -152,7 +152,7 @@ void TikzDocument::deleteNodeItem(NodeItem * node)
     Q_ASSERT(! d->nodeMap.contains(id));
 }
 
-void TikzDocument::deletePathItem(tikz::ui::PathItem * path)
+void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
 {
     // delete path from id
     const int id = path->id();
@@ -161,7 +161,7 @@ void TikzDocument::deletePathItem(tikz::ui::PathItem * path)
     Q_ASSERT(! d->pathMap.contains(id));
 }
 
-tikz::core::Node * TikzDocument::createNode(qint64 id)
+tikz::core::Node * DocumentPrivate::createNode(qint64 id)
 {
     // create node by tikz::core::Document
     tikz::core::Node * node = Document::createNode(id);
@@ -179,7 +179,7 @@ tikz::core::Node * TikzDocument::createNode(qint64 id)
     return node;
 }
 
-void TikzDocument::deleteNode(qint64 id)
+void DocumentPrivate::deleteNode(qint64 id)
 {
     Q_ASSERT(d->nodeMap.contains(id));
 
@@ -200,7 +200,7 @@ void TikzDocument::deleteNode(qint64 id)
     tikz::core::Document::deleteNode(id);
 }
 
-tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 id)
+tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 id)
 {
     tikz::core::Path * path = Document::createPath(type, id);
     Q_ASSERT(id == path->id());
@@ -241,7 +241,7 @@ tikz::core::Path * TikzDocument::createPath(tikz::core::Path::Type type, qint64 
     return path;
 }
 
-void TikzDocument::deletePath(qint64 id)
+void DocumentPrivate::deletePath(qint64 id)
 {
     Q_ASSERT(d->pathMap.contains(id));
 
@@ -262,7 +262,7 @@ void TikzDocument::deletePath(qint64 id)
     tikz::core::Document::deletePath(id);
 }
 
-NodeItem * TikzDocument::nodeItemFromId(qint64 id) const
+NodeItem * DocumentPrivate::nodeItemFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;
@@ -272,7 +272,7 @@ NodeItem * TikzDocument::nodeItemFromId(qint64 id) const
     return d->nodeMap[id];
 }
 
-tikz::ui::PathItem * TikzDocument::pathItemFromId(qint64 id) const
+tikz::ui::PathItem * DocumentPrivate::pathItemFromId(qint64 id) const
 {
     if (id < 0) {
         return 0;

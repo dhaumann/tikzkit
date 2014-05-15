@@ -22,7 +22,7 @@
 #include "NodeText.h"
 #include "Painter.h"
 #include "AbstractShape.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -106,10 +106,10 @@ NodeItem::~NodeItem()
     delete d;
 }
 
-TikzDocument * NodeItem::document() const
+DocumentPrivate * NodeItem::document() const
 {
-    Q_ASSERT(qobject_cast<TikzDocument*>(d->node->document()) != nullptr);
-    return qobject_cast<TikzDocument*>(d->node->document());
+    Q_ASSERT(qobject_cast<DocumentPrivate*>(d->node->document()) != nullptr);
+    return qobject_cast<DocumentPrivate*>(d->node->document());
 }
 
 int NodeItem::type() const

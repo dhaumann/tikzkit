@@ -38,7 +38,7 @@ namespace ui {
 
 class PathItem;
 
-class TikzDocument;
+class DocumentPrivate;
 class TikzScene;
 
 

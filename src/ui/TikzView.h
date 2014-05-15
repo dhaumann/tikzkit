@@ -31,7 +31,7 @@
 namespace tikz {
 namespace ui {
 
-class TikzDocument;
+class DocumentPrivate;
 class TikzViewPrivate;
 
 class TIKZUI_EXPORT TikzView : public QGraphicsView
@@ -42,7 +42,7 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
         /**
          * Constructor.
          */
-        TikzView(TikzDocument * document = 0, QWidget * parent = 0);
+        TikzView(DocumentPrivate * document = 0, QWidget * parent = 0);
 
         /**
          * Destructor.
@@ -50,9 +50,9 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
         virtual ~TikzView();
 
         /**
-         * Returns the associated TikzDocument.
+         * Returns the associated tikz Document.
          */
-        TikzDocument * document() const;
+        DocumentPrivate * document() const;
 
         /**
          * Snap @p value to the grid.

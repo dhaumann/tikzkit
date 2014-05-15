@@ -28,7 +28,7 @@
 namespace tikz {
 namespace ui {
 
-class TikzDocument;
+class DocumentPrivate;
 class TikzScenePrivate;
 
 class TIKZUI_EXPORT TikzScene : public QGraphicsScene
@@ -39,7 +39,7 @@ class TIKZUI_EXPORT TikzScene : public QGraphicsScene
         /**
          * Constructor.
          */
-        TikzScene(TikzDocument * document = 0);
+        TikzScene(DocumentPrivate * document = 0);
 
         /**
          * Destructor.
@@ -47,9 +47,9 @@ class TIKZUI_EXPORT TikzScene : public QGraphicsScene
         virtual ~TikzScene();
 
         /**
-         * Returns the associated TikzDocument.
+         * Returns the associated DocumentPrivate.
          */
-        TikzDocument * document() const;
+        DocumentPrivate * document() const;
 
     //
     // Edit mode

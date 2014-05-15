@@ -37,7 +37,7 @@ static const int s_ruler_size = 16;
 class TikzViewPrivate
 {
 public:
-    TikzDocument * doc;
+    DocumentPrivate * doc;
     tikz::ui::Grid grid;
     tikz::ui::Ruler * hRuler;
     tikz::ui::Ruler * vRuler;
@@ -45,7 +45,7 @@ public:
     bool handTool;
 };
 
-TikzView::TikzView(TikzDocument * doc, QWidget * parent)
+TikzView::TikzView(DocumentPrivate * doc, QWidget * parent)
     : QGraphicsView(parent)
     , d(new TikzViewPrivate())
 {
@@ -82,7 +82,7 @@ TikzView::~TikzView()
     delete d;
 }
 
-TikzDocument * TikzView::document() const
+DocumentPrivate * TikzView::document() const
 {
     return d->doc;
 }

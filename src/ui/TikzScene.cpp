@@ -19,7 +19,7 @@
 
 #include "TikzScene.h"
 
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "NodeItem.h"
 #include "PathItem.h"
 #include "AbstractTool.h"
@@ -44,8 +44,8 @@ namespace ui {
 class TikzScenePrivate
 {
 public:
-    // associated TikzDocument
-    TikzDocument * doc;
+    // associated tikz Document
+    DocumentPrivate * doc;
 
     // The size of the cells in the grid.
     int subDivisions;
@@ -57,7 +57,7 @@ public:
     AbstractTool * tool;
 };
 
-TikzScene::TikzScene(TikzDocument * doc)
+TikzScene::TikzScene(DocumentPrivate * doc)
     : QGraphicsScene(doc)
     , d(new TikzScenePrivate())
 {
@@ -76,7 +76,7 @@ TikzScene::~TikzScene()
     delete d;
 }
 
-TikzDocument * TikzScene::document() const
+DocumentPrivate * TikzScene::document() const
 {
     return d->doc;
 }

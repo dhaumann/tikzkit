@@ -8,7 +8,7 @@
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 
-#include <tikz/ui/TikzDocument.h>
+#include <tikz/ui/DocumentPrivate.h>
 #include <tikz/ui/NodeItem.h>
 
 QTEST_MAIN(TikzDocumentTest)
@@ -25,7 +25,7 @@ void TikzDocumentTest::cleanupTestCase()
 
 void TikzDocumentTest::documentTest()
 {
-    tikz::ui::TikzDocument doc;
+    tikz::ui::DocumentPrivate doc;
 
     tikz::ui::NodeItem * node = doc.createNodeItem();
 

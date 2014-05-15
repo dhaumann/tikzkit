@@ -22,7 +22,7 @@
 #include "RotateHandle.h"
 #include "MoveHandle.h"
 #include "NodeItem.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "TikzView.h"
 #include <tikz/core/NodeStyle.h>
 

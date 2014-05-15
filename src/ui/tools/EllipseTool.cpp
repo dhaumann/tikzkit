@@ -23,7 +23,7 @@
 #include "MoveHandle.h"
 #include "EllipsePathItem.h"
 #include "AnchorManager.h"
-#include "TikzDocument.h"
+#include "DocumentPrivate.h"
 #include "TikzView.h"
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EllipsePath.h>

@@ -34,7 +34,7 @@ namespace core {
 
 namespace ui {
 
-class TikzDocument;
+class DocumentPrivate;
 class NodeItem;
 class TikzEllipsePathPrivate;
 
@@ -56,7 +56,7 @@ class EllipsePathItem : public tikz::ui::PathItem
         /**
          * Returns the associated document, if available.
          */
-        TikzDocument * document() const;
+        DocumentPrivate * document() const;
 
         /**
          * Returns the tikz::core::Path object, casted to tikz::core::EllipsePath
