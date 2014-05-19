@@ -21,7 +21,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/ui/arrows
     ${CMAKE_SOURCE_DIR}/src/ui/tex
     ${CMAKE_SOURCE_DIR}/src/ui/widgets
-    ${CMAKE_SOURCE_DIR}/src/ui/utils
+    ${CMAKE_SOURCE_DIR}/src/ui/view
     ${CMAKE_SOURCE_DIR}/src/ui/colors
     ${CMAKE_SOURCE_DIR}/src/ui/propertybrowser
     ${CMAKE_SOURCE_DIR}/src/ui/include
@@ -66,15 +66,15 @@ set(qtikzui_SOURCES
     handle/MoveHandle.cpp
     handle/AnchorHandle.cpp
 
-    utils/AnchorManager.cpp
-    utils/Ruler.cpp
-    utils/Grid.cpp
+    view/TikzView.cpp
+    view/AnchorManager.cpp
+    view/Ruler.cpp
+    view/Grid.cpp
 
     colors/ColorPalette.cpp
     colors/ColorWidget.cpp
 
     TikzScene.cpp
-    TikzView.cpp
     Painter.cpp
     CurveHandle.cpp
     BezierCurve.cpp
