@@ -33,17 +33,6 @@ View::~View()
 {
 }
 
-tikz::ui::Document * View::document() const
-{
-    return nullptr;
-}
-
-tikz::ui::MainWindow * View::mainWindow() const
-{
-    return nullptr;
-}
-
-
 bool View::hasSelection() const
 {
     return false;

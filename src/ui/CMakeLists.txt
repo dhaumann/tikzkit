@@ -67,6 +67,7 @@ set(qtikzui_SOURCES
     handle/AnchorHandle.cpp
 
     view/ViewPrivate.cpp
+    view/Renderer.cpp
     view/AnchorManager.cpp
     view/Ruler.cpp
     view/Grid.cpp

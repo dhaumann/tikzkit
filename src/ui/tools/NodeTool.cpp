@@ -24,6 +24,8 @@
 #include "NodeItem.h"
 #include "DocumentPrivate.h"
 #include "ViewPrivate.h"
+#include "Renderer.h"
+
 #include <tikz/core/NodeStyle.h>
 
 #include <QApplication>
@@ -138,7 +140,7 @@ QPointF NodeTool::handlePos(Handle::Position pos)
 
 void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    ViewPrivate * tikzView = qobject_cast<ViewPrivate *>(view);
+    auto tikzView = qobject_cast<Renderer *>(view);
 
     // later: preferred unit
     const tikz::Unit unit = tikz::Centimeter;

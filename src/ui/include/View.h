@@ -65,7 +65,7 @@ public:
      * returned document.
      * \return the view's document
      */
-    tikz::ui::Document *document() const;
+    virtual tikz::ui::Document *document() const = 0;
 
     /*
      * General information about this view
@@ -75,7 +75,7 @@ public:
      * Get the view's main window, if any
      * \return the view's main window
      */
-    tikz::ui::MainWindow *mainWindow() const;
+    virtual tikz::ui::MainWindow *mainWindow() const = 0;
 
     /*
      * SIGNALS

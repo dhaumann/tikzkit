@@ -25,6 +25,8 @@
 #include "AnchorManager.h"
 #include "DocumentPrivate.h"
 #include "ViewPrivate.h"
+#include "Renderer.h"
+
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EllipsePath.h>
 
@@ -139,7 +141,7 @@ QPointF EllipseTool::handlePos(Handle::Position pos)
 
 void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    ViewPrivate * tikzView = qobject_cast<ViewPrivate *>(view);
+    auto tikzView = qobject_cast<Renderer *>(view);
 
     //
     // rotate

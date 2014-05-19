@@ -93,7 +93,8 @@ class DocumentPrivate : public tikz::ui::Document
          * @return the new view
          */
 //         View *createView(QWidget * parent) override;
-        QGraphicsView * createView(QWidget * parent) override;
+        View * createView(QWidget * parent,
+                          tikz::ui::MainWindow * mainWindow = nullptr) override;
 
         /**
          * Returns the views pre-casted to tikz::ui::View%s
@@ -220,7 +221,7 @@ class DocumentPrivate : public tikz::ui::Document
         /**
          * List of graphics views.
          */
-        QVector<QGraphicsView*> m_views;
+        QVector<tikz::ui::View*> m_views;
 };
 
 }

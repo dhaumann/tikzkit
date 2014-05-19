@@ -32,6 +32,7 @@ namespace ui {
 
 class DocumentPrivate;
 class View;
+class MainWindow;
 
 class NodeItem;
 class PathItem;
@@ -66,8 +67,8 @@ public:
      * @param parent parent widget
      * @return the new view
      */
-//     virtual View *createView(QWidget * parent) = 0;
-    virtual QGraphicsView * createView(QWidget * parent) = 0;
+    virtual View *createView(QWidget * parent,
+                             tikz::ui::MainWindow * mainWindow = nullptr) = 0;
 
     /**
      * Returns the views pre-casted to tikz::ui::View%s

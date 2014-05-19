@@ -23,7 +23,9 @@
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
 #include <tikz/core/Document.h>
+
 #include "ViewPrivate.h"
+#include "Renderer.h"
 
 #include "NodeItem.h"
 #include "PathItem.h"
@@ -92,20 +94,20 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
     return Document::scenePos(pos);
 }
 
-// View * DocumentPrivate::createView(QWidget * parent)
-QGraphicsView * DocumentPrivate::createView(QWidget * parent)
+View * DocumentPrivate::createView(QWidget * parent,
+                                   tikz::ui::MainWindow * mainWindow)
 {
     // create view
-    QGraphicsView * view = new ViewPrivate(this, parent);
+    auto view = new ViewPrivate(this, parent, mainWindow);
     m_views.append(view);
 
     // set graphics scene
-    view->setScene(m_scene);
+    view->renderer()->setScene(m_scene);
 
     // scale to true display size
     const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-    view->scale(view->physicalDpiX() / s,
-               -view->physicalDpiY() / s);
+    view->renderer()->scale(view->physicalDpiX() / s,
+                           -view->physicalDpiY() / s);
 
     // return view
     return view;

@@ -17,11 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UI_VIEW_PRIVATE_H
-#define TIKZ_UI_VIEW_PRIVATE_H
+#ifndef TIKZ_UI_RENDERER_H
+#define TIKZ_UI_RENDERER_H
+
+#include <QGraphicsView>
 
 #include "tikzgui_export.h"
-#include "View.h"
+#include "Grid.h"
 
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>
@@ -30,9 +32,9 @@ namespace tikz {
 namespace ui {
 
 class DocumentPrivate;
-class Renderer;
+class Ruler;
 
-class TIKZUI_EXPORT ViewPrivate : public tikz::ui::View
+class TIKZUI_EXPORT Renderer : public QGraphicsView
 {
     Q_OBJECT
 
@@ -40,31 +42,18 @@ class TIKZUI_EXPORT ViewPrivate : public tikz::ui::View
         /**
          * Constructor.
          */
-        ViewPrivate(tikz::ui::DocumentPrivate * doc,
-                    QWidget * parent = nullptr,
-                    tikz::ui::MainWindow * mainWindow = nullptr);
+        Renderer(DocumentPrivate * document = 0, QWidget * parent = 0);
 
         /**
          * Destructor.
          */
-        virtual ~ViewPrivate();
+        virtual ~Renderer();
 
-    //
-    // General Document and MainWindow properties
-    //
-    public:
         /**
          * Returns the associated tikz Document.
          */
-        tikz::ui::Document * document() const override;
+        DocumentPrivate * document() const;
 
-        /**
-         * Get the view's main window, if any
-         * \return the view's main window
-         */
-        tikz::ui::MainWindow * mainWindow() const override;
-
-    public:
         /**
          * Snap @p value to the grid.
          */
@@ -80,21 +69,28 @@ class TIKZUI_EXPORT ViewPrivate : public tikz::ui::View
          */
         qreal snapAngle(qreal angle) const;
 
-    public:
-        /**
-         * Returns the QGraphicsView that renders the scene.
-         */
-        Renderer * renderer() const;
+
+    protected:
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
+        void wheelEvent(QWheelEvent* event) override;
+        bool viewportEvent(QEvent * event) override;
+
+        void drawBackground(QPainter * painter, const QRectF & rect) override;
 
     private:
-        tikz::ui::DocumentPrivate * m_doc;
-        tikz::ui::MainWindow * m_mainWindow;
-        tikz::ui::Renderer * m_renderer;
+        DocumentPrivate * m_doc;
+        tikz::ui::Grid m_grid;
+        tikz::ui::Ruler * m_hRuler;
+        tikz::ui::Ruler * m_vRuler;
+        QPointF m_lastMousePos;
+        bool m_handTool;
 };
 
 }
 }
 
-#endif // TIKZ_UI_VIEW_PRIVATE_H
+#endif // TIKZ_UI_RENDERER_H
 
 // kate: indent-width 4; replace-tabs on;
