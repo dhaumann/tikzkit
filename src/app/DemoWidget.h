@@ -31,6 +31,7 @@ namespace tex {
 namespace tikz {
 namespace ui {
     class Document;
+    class View;
     class LinePropertyWidget;
     class PropertyBrowser;
 }
@@ -68,11 +69,10 @@ class MainWindow : public QMainWindow
         void setupUi();
 
     private:
-        QGraphicsView* m_view;
-
         std::unique_ptr<Ui::MainWindow> m_ui;
 
         tikz::ui::Document* m_doc;
+        tikz::ui::View* m_view;
 
         QTextEdit * m_textEdit;
 

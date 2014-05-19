@@ -32,7 +32,7 @@ namespace ui {
 class DocumentPrivate;
 class Renderer;
 
-class TIKZUI_EXPORT ViewPrivate : public tikz::ui::View
+class ViewPrivate : public tikz::ui::View
 {
     Q_OBJECT
 

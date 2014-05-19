@@ -34,7 +34,7 @@ namespace ui {
 class DocumentPrivate;
 class Ruler;
 
-class TIKZUI_EXPORT Renderer : public QGraphicsView
+class Renderer : public QGraphicsView
 {
     Q_OBJECT
 

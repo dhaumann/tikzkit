@@ -21,6 +21,7 @@
 
 #include <tikz/ui/Editor.h>
 #include <tikz/ui/Document.h>
+#include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
 #include <tikz/ui/PathItem.h>
 #include <tikz/ui/TikzScene.h>
@@ -40,7 +41,6 @@
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QGraphicsView>
 #include <QSlider>
 #include <QTimer>
 #include <QtOpenGL/QGLWidget>
@@ -408,6 +408,7 @@ void MainWindow::setupUi()
     m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
 
     dockWidget->setWidget(m_linePropertyWidget);
+
     QToolButton * btn = new QToolButton(this);
 
     auto colorWidget = new tikz::ui::ColorWidget(btn);

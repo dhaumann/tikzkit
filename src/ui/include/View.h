@@ -21,7 +21,7 @@
 #ifndef TIKZUI_VIEW_H
 #define TIKZUI_VIEW_H
 
-#include <tikzgui_export.h>
+#include "tikzgui_export.h"
 
 #include <QWidget>
 
