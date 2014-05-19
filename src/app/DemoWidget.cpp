@@ -27,6 +27,7 @@
 #include <tikz/ui/TikzToolBox.h>
 #include <tikz/ui/ArrowComboBox.h>
 #include <tikz/ui/LinePropertyWidget.h>
+#include <tikz/ui/ColorWidget.h>
 #include <tikz/ui/PropertyBrowser.h>
 
 #include <tikz/core/NodeStyle.h>
@@ -71,6 +72,7 @@ MainWindow::MainWindow()
     splitter->addWidget(top);
 
     QHBoxLayout * hbox = new QHBoxLayout(top);
+    hbox->setContentsMargins(0, 0, 0, 0);
     top->setLayout(hbox);
 
     m_doc = tikz::ui::Editor::instance()->createDocument(this);
@@ -393,18 +395,31 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
-    auto dockWidget = new QDockWidget("Properties", this);
-    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
+    auto dockWidget = new QDockWidget("Property Browser", this);
+    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
+    dockWidget->setWidget(m_browser);
 
-    dockWidget->setWidget(m_linePropertyWidget);
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
     //
     // next one
     //
-    dockWidget = new QDockWidget("Property Browser", this);
-    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
+    dockWidget = new QDockWidget("Properties", this);
+    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
 
-    dockWidget->setWidget(m_browser);
+    dockWidget->setWidget(m_linePropertyWidget);
+    QToolButton * btn = new QToolButton(this);
+
+    auto colorWidget = new tikz::ui::ColorWidget(btn);
+    colorWidget->setWindowFlags(Qt::Popup);
+    colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    colorWidget->setFocusPolicy(Qt::NoFocus);
+    colorWidget->setFocusProxy(this);
+    colorWidget->hide();
+//     m_linePropertyWidget->layout()->addWidget(colorWidget);
+
+    connect(btn, SIGNAL(clicked()), colorWidget, SLOT(show()));
+    m_linePropertyWidget->layout()->addWidget(btn);
 
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 }
