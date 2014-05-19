@@ -39,9 +39,11 @@ set(qtikzui_SOURCES
 #     TikzEdge.cpp
 #     TikzEdge_p.cpp
 
-    include/Document.cpp
     include/Editor.cpp
     include/Application.cpp
+    include/MainWindow.cpp
+    include/Document.cpp
+    include/View.cpp
 
     app/EditorPrivate.cpp
 
