@@ -23,7 +23,7 @@
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
 #include <tikz/core/Document.h>
-#include "TikzView.h"
+#include "ViewPrivate.h"
 
 #include "NodeItem.h"
 #include "PathItem.h"
@@ -96,7 +96,7 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
 QGraphicsView * DocumentPrivate::createView(QWidget * parent)
 {
     // create view
-    QGraphicsView * view = new TikzView(this, parent);
+    QGraphicsView * view = new ViewPrivate(this, parent);
     m_views.append(view);
 
     // set graphics scene

@@ -17,24 +17,25 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_UI_TIKZ_VIEW_H
-#define TIKZ_UI_TIKZ_VIEW_H
+#ifndef TIKZ_UI_VIEW_PRIVATE_H
+#define TIKZ_UI_VIEW_PRIVATE_H
 
 #include <QGraphicsView>
 
 #include "tikzgui_export.h"
+#include "Grid.h"
 
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>
-
 
 namespace tikz {
 namespace ui {
 
 class DocumentPrivate;
 class TikzViewPrivate;
+class Ruler;
 
-class TIKZUI_EXPORT TikzView : public QGraphicsView
+class TIKZUI_EXPORT ViewPrivate : public QGraphicsView
 {
     Q_OBJECT
 
@@ -42,12 +43,12 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
         /**
          * Constructor.
          */
-        TikzView(DocumentPrivate * document = 0, QWidget * parent = 0);
+        ViewPrivate(DocumentPrivate * document = 0, QWidget * parent = 0);
 
         /**
          * Destructor.
          */
-        virtual ~TikzView();
+        virtual ~ViewPrivate();
 
         /**
          * Returns the associated tikz Document.
@@ -80,12 +81,17 @@ class TIKZUI_EXPORT TikzView : public QGraphicsView
         void drawBackground(QPainter * painter, const QRectF & rect) override;
 
     private:
-        TikzViewPrivate * const d;
+        DocumentPrivate * m_doc;
+        tikz::ui::Grid m_grid;
+        tikz::ui::Ruler * m_hRuler;
+        tikz::ui::Ruler * m_vRuler;
+        QPointF m_lastMousePos;
+        bool m_handTool;
 };
 
 }
 }
 
-#endif // TIKZ_UI_TIKZ_VIEW_H
+#endif // TIKZ_UI_VIEW_PRIVATE_H
 
 // kate: indent-width 4; replace-tabs on;

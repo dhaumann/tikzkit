@@ -17,9 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "TikzView.h"
+#include "ViewPrivate.h"
 #include "Ruler.h"
-#include "Grid.h"
 
 #include <tikz/core/Document.h>
 
@@ -34,23 +33,11 @@ namespace ui {
 
 static const int s_ruler_size = 16;
 
-class TikzViewPrivate
-{
-public:
-    DocumentPrivate * doc;
-    tikz::ui::Grid grid;
-    tikz::ui::Ruler * hRuler;
-    tikz::ui::Ruler * vRuler;
-    QPointF lastMousePos;
-    bool handTool;
-};
-
-TikzView::TikzView(DocumentPrivate * doc, QWidget * parent)
+ViewPrivate::ViewPrivate(DocumentPrivate * doc, QWidget * parent)
     : QGraphicsView(parent)
-    , d(new TikzViewPrivate())
 {
-    d->doc = doc;
-    d->handTool = false;
+    m_doc = doc;
+    m_handTool = false;
 
     // add rulers
     setViewportMargins(s_ruler_size, s_ruler_size, 0, 0);
@@ -58,18 +45,18 @@ TikzView::TikzView(DocumentPrivate * doc, QWidget * parent)
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
 
-    d->hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
-    d->vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
+    m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
+    m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
 
-    d->hRuler->setUnit(tikz::Centimeter);
-    d->vRuler->setUnit(tikz::Centimeter);
+    m_hRuler->setUnit(tikz::Centimeter);
+    m_vRuler->setUnit(tikz::Centimeter);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
     top->setFixedSize(s_ruler_size, s_ruler_size);
     gridLayout->addWidget(top, 0, 0);
-    gridLayout->addWidget(d->hRuler, 0, 1);
-    gridLayout->addWidget(d->vRuler, 1, 0);
+    gridLayout->addWidget(m_hRuler, 0, 1);
+    gridLayout->addWidget(m_vRuler, 1, 0);
     gridLayout->addWidget(viewport(), 1, 1);
 
     setLayout(gridLayout);
@@ -77,53 +64,52 @@ TikzView::TikzView(DocumentPrivate * doc, QWidget * parent)
 //     setViewportUpdateMode(FullViewportUpdate);
 }
 
-TikzView::~TikzView()
+ViewPrivate::~ViewPrivate()
 {
-    delete d;
 }
 
-DocumentPrivate * TikzView::document() const
+DocumentPrivate * ViewPrivate::document() const
 {
-    return d->doc;
+    return m_doc;
 }
 
-tikz::Value TikzView::snapValue(const tikz::Value & value) const
-{
-    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? d->grid.snapValue(value) : value;
-}
-
-tikz::Pos TikzView::snapPos(const tikz::Pos & pos) const
+tikz::Value ViewPrivate::snapValue(const tikz::Value & value) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? d->grid.snapPos(pos) : pos;
+    return snap ? m_grid.snapValue(value) : value;
 }
 
-qreal TikzView::snapAngle(qreal angle) const
+tikz::Pos ViewPrivate::snapPos(const tikz::Pos & pos) const
+{
+    const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
+    return snap ? m_grid.snapPos(pos) : pos;
+}
+
+qreal ViewPrivate::snapAngle(qreal angle) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
     return snap ? (qRound(angle / 15) * 15) : angle;
 }
 
-void TikzView::mousePressEvent(QMouseEvent* event)
+void ViewPrivate::mousePressEvent(QMouseEvent* event)
 {
-    d->lastMousePos = event->pos();
+    m_lastMousePos = event->pos();
 
     // start scrolling with middle mouse button
     if (event->button() == Qt::MidButton) {
         setCursor(Qt::SizeAllCursor);
-        d->handTool = true;
+        m_handTool = true;
         event->accept();
     } else {
         QGraphicsView::mousePressEvent(event);
     }
 }
 
-void TikzView::mouseMoveEvent(QMouseEvent* event)
+void ViewPrivate::mouseMoveEvent(QMouseEvent* event)
 {
     // on middle mouse button down: move
-    if (d->handTool) {
-        const QPointF diff = event->pos() - d->lastMousePos;
+    if (m_handTool) {
+        const QPointF diff = event->pos() - m_lastMousePos;
         QScrollBar * h = horizontalScrollBar();
         QScrollBar * v = verticalScrollBar();
         h->setValue(h->value() - diff.x());
@@ -135,29 +121,29 @@ void TikzView::mouseMoveEvent(QMouseEvent* event)
     }
 
     // update mouse indicator on rulers
-    d->hRuler->setOrigin(d->hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->vRuler->setOrigin(d->vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    m_hRuler->setOrigin(m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    m_vRuler->setOrigin(m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
 
-    d->hRuler->setMousePos(event->globalPos());
-    d->vRuler->setMousePos(event->globalPos());
+    m_hRuler->setMousePos(event->globalPos());
+    m_vRuler->setMousePos(event->globalPos());
 
     // track last mouse position
-    d->lastMousePos = event->pos();
+    m_lastMousePos = event->pos();
 }
 
-void TikzView::mouseReleaseEvent(QMouseEvent* event)
+void ViewPrivate::mouseReleaseEvent(QMouseEvent* event)
 {
     // end scrolling with middle mouse button
     if (event->button() == Qt::MidButton) {
         unsetCursor();
-        d->handTool = false;
+        m_handTool = false;
         event->accept();
     } else {
         QGraphicsView::mouseReleaseEvent(event);
     }
 }
 
-void TikzView::wheelEvent(QWheelEvent* event)
+void ViewPrivate::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() & Qt::ControlModifier) {
         // fix mouse position when zooming
@@ -171,7 +157,7 @@ void TikzView::wheelEvent(QWheelEvent* event)
     }
 }
 
-bool TikzView::viewportEvent(QEvent * event)
+bool ViewPrivate::viewportEvent(QEvent * event)
 {
     const qreal s = tikz::Value(1, tikz::Inch).toPoint();
     const qreal xZoom = transform().m11() / physicalDpiX() * s;
@@ -179,24 +165,24 @@ bool TikzView::viewportEvent(QEvent * event)
     Q_ASSERT(xZoom == yZoom);
 
     // update ruler (zoom, origin)
-    d->hRuler->setOrigin(d->hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
-    d->vRuler->setOrigin(d->vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
-    d->hRuler->setZoom(xZoom);
-    d->vRuler->setZoom(yZoom);
+    m_hRuler->setOrigin(m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
+    m_vRuler->setOrigin(m_vRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).y());
+    m_hRuler->setZoom(xZoom);
+    m_vRuler->setZoom(yZoom);
 
     // update grid (zoom)
-    d->grid.setZoom(xZoom);
+    m_grid.setZoom(xZoom);
 
     return QGraphicsView::viewportEvent(event);
 }
 
-void TikzView::drawBackground(QPainter * painter, const QRectF & rect)
+void ViewPrivate::drawBackground(QPainter * painter, const QRectF & rect)
 {
     // draw default background (typically nothing)
     QGraphicsView::drawBackground(painter, rect);
 
     // draw raster on top
-    d->grid.draw(painter, sceneRect().united(rect));
+    m_grid.draw(painter, sceneRect().united(rect));
 }
 
 }

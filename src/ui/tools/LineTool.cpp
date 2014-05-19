@@ -24,7 +24,7 @@
 #include "EdgePathItem.h"
 #include "AnchorManager.h"
 #include "DocumentPrivate.h"
-#include "TikzView.h"
+#include "ViewPrivate.h"
 
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EdgePath.h>
@@ -115,7 +115,7 @@ QPointF LineTool::handlePos(Handle::Position pos)
 
 void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    TikzView * tikzView = qobject_cast<TikzView *>(view);
+    ViewPrivate * tikzView = qobject_cast<ViewPrivate *>(view);
 
     // later: preferred unit
     const tikz::Unit unit = tikz::Centimeter;

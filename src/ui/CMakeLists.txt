@@ -66,7 +66,7 @@ set(qtikzui_SOURCES
     handle/MoveHandle.cpp
     handle/AnchorHandle.cpp
 
-    view/TikzView.cpp
+    view/ViewPrivate.cpp
     view/AnchorManager.cpp
     view/Ruler.cpp
     view/Grid.cpp
