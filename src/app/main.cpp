@@ -16,7 +16,7 @@
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QApplication>
-#include "DemoWidget.h"
+#include "MainWindow.h"
 
 int main(int argc, char* argv[])
 {

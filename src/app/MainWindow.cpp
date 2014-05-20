@@ -15,11 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
-#include "DemoWidget.h"
+#include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "PdfGenerator.h"
 
 #include <tikz/ui/Editor.h>
+#include <tikz/ui/MainWindow.h>
 #include <tikz/ui/Document.h>
 #include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
@@ -45,6 +46,7 @@
 #include <QTimer>
 #include <QtOpenGL/QGLWidget>
 #include <QUndoStack>
+#include <QTabBar>
 #include <QToolButton>
 #include <QTextEdit>
 #include <QSplitter>
@@ -56,6 +58,7 @@ static tikz::ui::NodeItem* a;
 MainWindow::MainWindow()
     : QMainWindow()
     , m_ui(new Ui::MainWindow())
+    , m_wrapper(new tikz::ui::MainWindow(this))
 {
     m_ui->setupUi(this);
 
@@ -113,6 +116,8 @@ MainWindow::MainWindow()
     splitter->setStretchFactor(0, 20);
     splitter->setStretchFactor(1, 1);
 
+    m_view = m_doc->createView(nullptr);
+    m_view->show();
     m_view = m_doc->createView(this);
     l->addWidget(m_view);
 
@@ -387,6 +392,12 @@ MainWindow::MainWindow()
 
     connect(m_doc, SIGNAL(changed()), this, SLOT(updateTikzCode()));
     updateTikzCode();
+
+    //
+    // initialize tikz::ui::MainWindow wrapper object
+    //
+    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SLOT(viewCreated(tikz::ui::View *)));
+    connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
 }
 
 MainWindow::~MainWindow()
@@ -463,6 +474,28 @@ void MainWindow::previewPdf(const QString & pdfFile)
 {
     qDebug() << "previewPdF:" << pdfFile;
     QProcess::startDetached("okular", QStringList() << pdfFile);
+}
+
+
+QList<tikz::ui::View *> MainWindow::views()
+{
+    return m_views;
+}
+
+tikz::ui::View *MainWindow::activeView()
+{
+}
+
+tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)
+{
+}
+
+tikz::ui::View *MainWindow::openUrl(const QUrl &url)
+{
+}
+
+bool MainWindow::closeView(tikz::ui::View *view)
+{
 }
 
 // kate: indent-width 4; replace-tabs on;

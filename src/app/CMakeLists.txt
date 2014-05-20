@@ -20,7 +20,7 @@ include_directories(
 
 set(tikzkit_SOURCES
     main.cpp
-    DemoWidget.cpp
+    MainWindow.cpp
     PdfGenerator.cpp
 )
 
