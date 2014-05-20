@@ -36,34 +36,107 @@ MainWindow::~MainWindow()
 {
 }
 
-QWidget * MainWindow::window()
-{
-    return nullptr;
-}
-
 QList<tikz::ui::View *> MainWindow::views()
 {
-    return QList<tikz::ui::View *>();
+    /**
+     * null check
+     */
+    if (!this) {
+        return QList<tikz::ui::View *> ();
+    }
+
+    /**
+     * dispatch to parent
+     */
+    QList<tikz::ui::View *> views;
+    QMetaObject::invokeMethod(parent()
+                              , "views"
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(QList<tikz::ui::View *>, views));
+    return views;
 }
 
 tikz::ui::View * MainWindow::activeView()
 {
-    return nullptr;
+    /**
+     * null check
+     */
+    if (!this) {
+        return nullptr;
+    }
+
+    /**
+     * dispatch to parent
+     */
+    tikz::ui::View *view = nullptr;
+    QMetaObject::invokeMethod(parent()
+                              , "activeView"
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(tikz::ui::View *, view));
+    return view;
 }
 
 tikz::ui::View * MainWindow::activateView(tikz::ui::Document *document)
 {
-    return nullptr;
+    /**
+     * null check
+     */
+    if (!this) {
+        return nullptr;
+    }
+
+    /**
+     * dispatch to parent
+     */
+    tikz::ui::View *view = nullptr;
+    QMetaObject::invokeMethod(parent()
+                              , "activateView"
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(tikz::ui::View *, view)
+                              , Q_ARG(tikz::ui::Document *, document));
+    return view;
 }
 
 tikz::ui::View * MainWindow::openUrl(const QUrl &url)
 {
-    return nullptr;
+    /**
+     * null check
+     */
+    if (!this) {
+        return nullptr;
+    }
+
+    /**
+     * dispatch to parent
+     */
+    tikz::ui::View *view = nullptr;
+    QMetaObject::invokeMethod(parent()
+                              , "openUrl"
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(tikz::ui::View *, view)
+                              , Q_ARG(const QUrl &, url));
+    return view;
 }
 
 bool MainWindow::closeView(tikz::ui::View *view)
 {
-    return false;
+    /**
+     * null check
+     */
+    if (!this) {
+        return false;
+    }
+
+    /**
+     * dispatch to parent
+     */
+    bool success = false;
+    QMetaObject::invokeMethod(parent()
+                              , "closeView"
+                              , Qt::DirectConnection
+                              , Q_RETURN_ARG(bool, success)
+                              , Q_ARG(tikz::ui::View *, view));
+    return success;
 }
 
 }

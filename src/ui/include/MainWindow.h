@@ -21,7 +21,7 @@
 #ifndef TIKZUI_MAINWINDOW_H
 #define TIKZUI_MAINWINDOW_H
 
-#include <tikzgui_export.h>
+#include "tikzgui_export.h"
 
 #include <QObject>
 
@@ -72,16 +72,6 @@ public:
      * Virtual Destructor
      */
     virtual ~MainWindow();
-
-//
-// Accessors to some window properties and contents
-//
-public:
-    /**
-     * Get the toplevel widget.
-     * \return the real main window widget.
-     */
-    QWidget *window();
 
 //
 // View access and manipulation interface
