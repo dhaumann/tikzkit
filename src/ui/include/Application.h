@@ -21,7 +21,7 @@
 #ifndef TIKZUI_APPLICATION_H
 #define TIKZUI_APPLICATION_H
 
-#include <tikzgui_export.h>
+#include "tikzgui_export.h"
 #include <QObject>
 
 namespace tikz {
@@ -63,14 +63,6 @@ public:
      * Virtual Destructor
      */
     virtual ~Application();
-
-    /**
-     * Ask app to quit. The app might interact with the user and decide that
-     * quiting is not possible and return false.
-     *
-     * \return true if the app could quit
-     */
-    bool quit();
 
 //
 // MainWindow related accessors

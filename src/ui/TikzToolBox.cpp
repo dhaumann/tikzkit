@@ -20,6 +20,8 @@
 #include "TikzToolBox.h"
 
 #include "Document.h"
+#include "View.h"
+#include "MainWindow.h"
 #include "ToolLayout.h"
 
 #include <QDebug>
@@ -40,11 +42,11 @@ public:
     QButtonGroup * group;
 };
 
-TikzToolBox::TikzToolBox(Document * doc, QWidget * parent)
+TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     : QWidget(parent)
     , d(new TikzToolBoxPrivate())
 {
-    d->doc = doc;
+    d->doc = mainWin->activeView()->document();
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     setLayout(vbox);

@@ -30,6 +30,7 @@
 
 class QUndoStack;
 class QPointF;
+class QUrl;
 
 namespace tikz {
 namespace core {
@@ -78,15 +79,22 @@ class TIKZCORE_EXPORT Document : public QObject
         void clear();
 
         /**
-         * Load the tikz document from @p file.
+         * Load the tikz document from @p url.
          * The file contents must be in json notation, written by save().
          */
-        bool load(const QString & file);
+        bool load(const QUrl & url);
 
         /**
          * Save the tikz document to @p file in json notation.
          */
-        bool save(const QString & file);
+        bool save(const QUrl & file);
+
+    public:
+        /**
+         * Get the current url of this file.
+         */
+        QUrl url() const;
+
 
         /**
          * Export the picture to TikZ.

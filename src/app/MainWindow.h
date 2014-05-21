@@ -22,8 +22,9 @@
 #include <memory>
 
 class QGraphicsView;
-class QTabBar;
 class QTextEdit;
+
+class ViewManager;
 
 namespace tex {
     class PdfGenerator;
@@ -61,6 +62,7 @@ public:
 public Q_SLOTS:
     void saveFile();
     void loadFile();
+    void newDocument();
 
     void updateTikzCode();
     void previewPdf();
@@ -69,6 +71,12 @@ public Q_SLOTS:
 protected:
     void setupActions();
     void setupUi();
+
+public:
+    /**
+     * Accessor to the MainWindow wrapper interface
+     */
+    tikz::ui::MainWindow * wrapper() const;
 
 //
 // tikz::ui::MainWindow interface
@@ -128,15 +136,10 @@ Q_SIGNALS:
 private:
     std::unique_ptr<Ui::MainWindow> m_ui;
 
-    // tabbar for View switching
-    QTabBar * m_tabbar;
+    ViewManager * m_viewManager;
 
     tikz::ui::MainWindow * m_wrapper;
     QList<tikz::ui::View*> m_views;
-
-
-    tikz::ui::Document* m_doc;
-    tikz::ui::View* m_view;
 
     QTextEdit * m_textEdit;
 

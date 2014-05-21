@@ -16,15 +16,15 @@
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QApplication>
+#include "TikzKit.h"
 #include "MainWindow.h"
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    MainWindow w;
-    w.resize(640, 480);
-    w.show();
+    // create TikzKit singleton
+    TikzKit tikzkit;
 
     return app.exec();
 }

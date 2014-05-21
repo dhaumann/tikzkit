@@ -20,6 +20,9 @@ include_directories(
 
 set(tikzkit_SOURCES
     main.cpp
+    TikzKit.cpp
+    DocumentManager.cpp
+    ViewManager.cpp
     MainWindow.cpp
     PdfGenerator.cpp
 )

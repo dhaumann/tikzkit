@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QFile>
+#include <QUrl>
 
 namespace tikz {
 namespace core {
@@ -44,6 +45,8 @@ namespace core {
 class DocumentPrivate
 {
     public:
+        // the Document's current url
+        QUrl url;
         // undo manager
         QUndoStack undoManager;
         // monitor transactions
@@ -138,29 +141,40 @@ void Document::clear()
 
     // clear undo stack
     d->undoManager.clear();
+
+    // unnamed document
+    d->url.clear();
 }
 
-bool Document::load(const QString & file)
+bool Document::load(const QUrl & file)
 {
     // first start a clean document
     clear();
 
     // open the file contents
     DeserializeVisitor dv;
-    if (dv.load(file)) {
+    if (dv.load(file.toLocalFile())) {
+        d->url = file;
         accept(dv);
         return true;
     }
     return false;
 }
 
-bool Document::save(const QString & file)
+bool Document::save(const QUrl & file)
 {
+    d->url = file;
+
     SerializeVisitor sv;
     accept(sv);
 
-    sv.save(file);
+    sv.save(file.toLocalFile());
     return true;
+}
+
+QUrl Document::url() const
+{
+    return d->url;
 }
 
 QString Document::tikzCode()

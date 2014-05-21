@@ -17,6 +17,8 @@
  */
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "TikzKit.h"
+#include "ViewManager.h"
 #include "PdfGenerator.h"
 
 #include <tikz/ui/Editor.h>
@@ -49,7 +51,7 @@
 #include <QTabBar>
 #include <QToolButton>
 #include <QTextEdit>
-#include <QSplitter>
+#include <QUrl>
 
 #include <QDebug>
 
@@ -67,60 +69,162 @@ MainWindow::MainWindow()
     m_pdfGenerator = 0;
     connect(m_ui->aPreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 
-    QSplitter * splitter = new QSplitter(Qt::Vertical, this);
-    setCentralWidget(splitter);
+    auto mainWidget = new QWidget(this);
+    setCentralWidget(mainWidget);
 
-    // create toplevel widget
-    QWidget * top = new QWidget(splitter);
-    splitter->addWidget(top);
-
-    QHBoxLayout * hbox = new QHBoxLayout(top);
+    auto hbox = new QHBoxLayout(mainWidget);
     hbox->setContentsMargins(0, 0, 0, 0);
-    top->setLayout(hbox);
+    hbox->setSpacing(0);
 
-    m_doc = tikz::ui::Editor::instance()->createDocument(this);
-
-    tikz::ui::TikzToolBox * toolBox = new tikz::ui::TikzToolBox(m_doc, this);
+    auto toolBox = new tikz::ui::TikzToolBox(m_wrapper);
     hbox->addWidget(toolBox);
 
-    QVBoxLayout* v = new QVBoxLayout();
-    hbox->addLayout(v);
+    m_viewManager = new ViewManager(this, this);
+    hbox->addWidget(m_viewManager);
 
-    QHBoxLayout* h = new QHBoxLayout();
-    v->addLayout(h);
-
-    // undo and redo
-    QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
-    undoAction->setIcon(QIcon::fromTheme("edit-undo"));
-    m_ui->toolBar->addAction(undoAction);
-
-    QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
-    redoAction->setIcon(QIcon::fromTheme("edit-redo"));
-    m_ui->toolBar->addAction(redoAction);
+//     // undo and redo
+//     QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
+//     undoAction->setIcon(QIcon::fromTheme("edit-undo"));
+//     m_ui->toolBar->addAction(undoAction);
+//
+//     QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
+//     redoAction->setIcon(QIcon::fromTheme("edit-redo"));
+//     m_ui->toolBar->addAction(redoAction);
 
     // add arrow head/tail combos
-    ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
-    ArrowComboBox * arrowHeadCombo = new ArrowComboBox(true, this);
-    h->addWidget(arrowTailCombo);
-    h->addWidget(arrowHeadCombo);
-    h->addStretch();
-    arrowTailCombo->show();
-    arrowHeadCombo->show();
+//     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
+//     ArrowComboBox * arrowHeadCombo = new ArrowComboBox(true, this);
+//     h->addWidget(arrowTailCombo);
+//     h->addWidget(arrowHeadCombo);
+//     h->addStretch();
+//     arrowTailCombo->show();
+//     arrowHeadCombo->show();
 
-    QHBoxLayout* l = new QHBoxLayout();
-    v->addLayout(l);
+    auto view = openUrl(QUrl("output.tikzkit"));
 
-    m_textEdit = new QTextEdit(splitter);
-    splitter->addWidget(m_textEdit);
+    setupActions();
 
-    splitter->setStretchFactor(0, 20);
-    splitter->setStretchFactor(1, 1);
+//     connect(m_doc, SIGNAL(changed()), this, SLOT(updateTikzCode()));
+//     updateTikzCode();
 
-    m_view = m_doc->createView(nullptr);
-    m_view->show();
-    m_view = m_doc->createView(this);
-    l->addWidget(m_view);
+    //
+    // initialize tikz::ui::MainWindow wrapper object
+    //
+    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SLOT(viewCreated(tikz::ui::View *)));
+    connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
 
+    // register ourself as MainWindow
+    TikzKit::self()->registerMainWindow(this);
+}
+
+MainWindow::~MainWindow()
+{
+    // unregister this MainWindow
+    TikzKit::self()->unregisterMainWindow(this);
+}
+
+void MainWindow::setupUi()
+{
+    auto dockWidget = new QDockWidget("Property Browser", this);
+    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
+    dockWidget->setWidget(m_browser);
+
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    //
+    // next one
+    //
+    dockWidget = new QDockWidget("Properties", this);
+    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
+
+    dockWidget->setWidget(m_linePropertyWidget);
+
+    QToolButton * btn = new QToolButton(this);
+
+    auto colorWidget = new tikz::ui::ColorWidget(btn);
+    colorWidget->setWindowFlags(Qt::Popup);
+    colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    colorWidget->setFocusPolicy(Qt::NoFocus);
+    colorWidget->setFocusProxy(this);
+    colorWidget->hide();
+//     m_linePropertyWidget->layout()->addWidget(colorWidget);
+
+    connect(btn, SIGNAL(clicked()), colorWidget, SLOT(show()));
+    m_linePropertyWidget->layout()->addWidget(btn);
+
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+}
+
+void MainWindow::setupActions()
+{
+    connect(m_ui->aNew, SIGNAL(triggered()), this, SLOT(newDocument()));
+    connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(m_ui->aOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
+}
+
+void MainWindow::saveFile()
+{
+    QString filename("output.tikzkit");
+    activeView()->document()->save(filename);
+}
+
+void MainWindow::loadFile()
+{
+    QString filename("output.tikzkit");
+    activeView()->document()->load(filename);
+    m_linePropertyWidget->setLineStyle(activeView()->document()->style());
+}
+
+void MainWindow::newDocument()
+{
+    activeView()->document()->clear();
+}
+
+void MainWindow::updateTikzCode()
+{
+    m_textEdit->setText(activeView()->document()->tikzCode());
+}
+
+void MainWindow::previewPdf()
+{
+    delete m_pdfGenerator;
+    m_pdfGenerator = new tex::PdfGenerator(this);
+    connect(m_pdfGenerator, SIGNAL(finished(const QString&)), this, SLOT(previewPdf(const QString&)));
+
+    m_pdfGenerator->generatePdf(activeView()->document()->tikzCode());
+}
+
+void MainWindow::previewPdf(const QString & pdfFile)
+{
+    qDebug() << "previewPdF:" << pdfFile;
+    QProcess::startDetached("okular", QStringList() << pdfFile);
+}
+
+
+tikz::ui::MainWindow * MainWindow::wrapper() const
+{
+    return m_wrapper;
+}
+
+QList<tikz::ui::View *> MainWindow::views()
+{
+    return m_views;
+}
+
+tikz::ui::View *MainWindow::activeView()
+{
+}
+
+tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)
+{
+}
+
+tikz::ui::View *MainWindow::openUrl(const QUrl &url)
+{
+    auto doc = m_viewManager->openUrl(url);
+    return m_viewManager->activateView(doc);
+
+#if 0
     m_view->show();
 
     tikz::ui::NodeItem* item1 = m_doc->createNodeItem();
@@ -156,6 +260,7 @@ MainWindow::MainWindow()
 
     m_linePropertyWidget->setLineStyle(m_doc->style());
 
+#endif
 
 #if 0
     item1 = m_doc->createNodeItem();
@@ -260,6 +365,7 @@ MainWindow::MainWindow()
     }
 #endif
 
+#if 0
     // test example
     {
         tikz::ui::NodeItem *n1 = m_doc->createNodeItem();
@@ -369,7 +475,7 @@ MainWindow::MainWindow()
         edge->style()->setArrowTail(tikz::LatexArrow);
         edge->style()->setArrowHead(tikz::LatexArrow);
         edge->style()->setPenColor(QColor(128, 128, 128));
-        
+
         path = m_doc->createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
@@ -377,7 +483,7 @@ MainWindow::MainWindow()
         edge->style()->setArrowTail(tikz::LatexArrow);
         edge->style()->setArrowHead(tikz::LatexArrow);
         edge->style()->setPenColor(QColor(128, 128, 128));
-        
+
         path = m_doc->createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
@@ -387,111 +493,7 @@ MainWindow::MainWindow()
         edge->style()->setPenColor(QColor(128, 128, 128));
         edge->setStartAnchor(tikz::East);
     }
-
-    setupActions();
-
-    connect(m_doc, SIGNAL(changed()), this, SLOT(updateTikzCode()));
-    updateTikzCode();
-
-    //
-    // initialize tikz::ui::MainWindow wrapper object
-    //
-    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SLOT(viewCreated(tikz::ui::View *)));
-    connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
-}
-
-MainWindow::~MainWindow()
-{
-}
-
-void MainWindow::setupUi()
-{
-    auto dockWidget = new QDockWidget("Property Browser", this);
-    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
-    dockWidget->setWidget(m_browser);
-
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-    //
-    // next one
-    //
-    dockWidget = new QDockWidget("Properties", this);
-    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
-
-    dockWidget->setWidget(m_linePropertyWidget);
-
-    QToolButton * btn = new QToolButton(this);
-
-    auto colorWidget = new tikz::ui::ColorWidget(btn);
-    colorWidget->setWindowFlags(Qt::Popup);
-    colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    colorWidget->setFocusPolicy(Qt::NoFocus);
-    colorWidget->setFocusProxy(this);
-    colorWidget->hide();
-//     m_linePropertyWidget->layout()->addWidget(colorWidget);
-
-    connect(btn, SIGNAL(clicked()), colorWidget, SLOT(show()));
-    m_linePropertyWidget->layout()->addWidget(btn);
-
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-}
-
-void MainWindow::setupActions()
-{
-    connect(m_ui->aNew, SIGNAL(triggered()), m_doc, SLOT(clear()));
-    connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
-    connect(m_ui->aOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
-}
-
-void MainWindow::saveFile()
-{
-    QString filename("output.tikzkit");
-    m_doc->save(filename);
-}
-
-void MainWindow::loadFile()
-{
-    QString filename("output.tikzkit");
-    m_doc->load(filename);
-    m_linePropertyWidget->setLineStyle(m_doc->style());
-}
-
-void MainWindow::updateTikzCode()
-{
-    m_textEdit->setText(m_doc->tikzCode());
-}
-
-void MainWindow::previewPdf()
-{
-    delete m_pdfGenerator;
-    m_pdfGenerator = new tex::PdfGenerator(this);
-    connect(m_pdfGenerator, SIGNAL(finished(const QString&)), this, SLOT(previewPdf(const QString&)));
-
-    m_pdfGenerator->generatePdf(m_doc->tikzCode());
-}
-
-void MainWindow::previewPdf(const QString & pdfFile)
-{
-    qDebug() << "previewPdF:" << pdfFile;
-    QProcess::startDetached("okular", QStringList() << pdfFile);
-}
-
-
-QList<tikz::ui::View *> MainWindow::views()
-{
-    return m_views;
-}
-
-tikz::ui::View *MainWindow::activeView()
-{
-}
-
-tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)
-{
-}
-
-tikz::ui::View *MainWindow::openUrl(const QUrl &url)
-{
+#endif
 }
 
 bool MainWindow::closeView(tikz::ui::View *view)

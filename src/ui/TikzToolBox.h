@@ -28,6 +28,7 @@
 namespace tikz {
 namespace ui {
 
+class MainWindow;
 class Document;
 class TikzToolBoxPrivate;
 
@@ -39,7 +40,7 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
         /**
          * Constructor.
          */
-        TikzToolBox(Document * document, QWidget * parent = 0);
+        TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent = 0);
 
         /**
          * Destructor.
