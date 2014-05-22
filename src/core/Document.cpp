@@ -91,7 +91,7 @@ Document::Document(QObject * parent)
 Document::~Document()
 {
     // clear Document contents
-    clear();
+    close();
 
     // make sure things are really gone
     Q_ASSERT(d->nodeMap.isEmpty());
@@ -118,7 +118,7 @@ bool Document::accept(Visitor & visitor)
     }
 }
 
-void Document::clear()
+void Document::close()
 {
     // tell the world that all Nodes and Paths are about to be deleted
     emit aboutToClear();
@@ -149,7 +149,7 @@ void Document::clear()
 bool Document::load(const QUrl & file)
 {
     // first start a clean document
-    clear();
+    close();
 
     // open the file contents
     DeserializeVisitor dv;
@@ -161,20 +161,53 @@ bool Document::load(const QUrl & file)
     return false;
 }
 
-bool Document::save(const QUrl & file)
+bool Document::reload()
 {
-    d->url = file;
+    if (!d->url.isEmpty()) {
+        return load(d->url);
+    }
+    return false;
+}
 
-    SerializeVisitor sv;
-    accept(sv);
+bool Document::save()
+{
+    if (d->url.isLocalFile()) {
+        SerializeVisitor sv;
+        accept(sv);
 
-    sv.save(file.toLocalFile());
-    return true;
+        sv.save(d->url.toLocalFile());
+        return true;
+    }
+
+    return false;
+}
+
+bool Document::saveAs(const QUrl & file)
+{
+    if (file.isLocalFile()) {
+        d->url = file;
+
+        SerializeVisitor sv;
+        accept(sv);
+
+        sv.save(file.toLocalFile());
+        return true;
+    }
+
+    return false;
 }
 
 QUrl Document::url() const
 {
     return d->url;
+}
+
+bool Document::isEmptyBuffer() const
+{
+    return d->url.isEmpty()
+        && ! isModified()
+        && d->nodes.isEmpty()
+        && d->paths.isEmpty();
 }
 
 QString Document::tikzCode()

@@ -46,7 +46,7 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     : QWidget(parent)
     , d(new TikzToolBoxPrivate())
 {
-    d->doc = mainWin->activeView()->document();
+    d->doc = nullptr;//mainWin->activeView()->document();
 
     QVBoxLayout * vbox = new QVBoxLayout(this);
     setLayout(vbox);

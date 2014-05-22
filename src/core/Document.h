@@ -72,22 +72,32 @@ class TIKZCORE_EXPORT Document : public QObject
     //
     public Q_SLOTS:
         /**
-         * Clear all contents of the document.
+         * Clear all contents of the document and reset the associated file.
          * @warning This functions is called in the Document destructor.
          *          So never make it virtual!
          */
-        void clear();
+        void close();
 
         /**
          * Load the tikz document from @p url.
-         * The file contents must be in json notation, written by save().
          */
         bool load(const QUrl & url);
 
         /**
+         * Reload the current Document.
+         * Reloading a document works only if a file was loaded before.
+         */
+        bool reload();
+
+        /**
+         * Save the tikz document to the file opened with load().
+         */
+        bool save();
+
+        /**
          * Save the tikz document to @p file in json notation.
          */
-        bool save(const QUrl & file);
+        bool saveAs(const QUrl & file);
 
     public:
         /**
@@ -95,6 +105,12 @@ class TIKZCORE_EXPORT Document : public QObject
          */
         QUrl url() const;
 
+        /**
+         * Check whether this Document is completely empty.
+         * The return value is @e true, if no modifications have been made
+         * and the Document is empty without any contents loaded from a file.
+         */
+        bool isEmptyBuffer() const;
 
         /**
          * Export the picture to TikZ.

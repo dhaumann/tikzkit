@@ -165,7 +165,7 @@ void MainWindow::setupActions()
 void MainWindow::saveFile()
 {
     QString filename("output.tikzkit");
-    activeView()->document()->save(filename);
+    activeView()->document()->saveAs(filename);
 }
 
 void MainWindow::loadFile()
@@ -177,7 +177,7 @@ void MainWindow::loadFile()
 
 void MainWindow::newDocument()
 {
-    activeView()->document()->clear();
+    activeView()->document()->close();
 }
 
 void MainWindow::updateTikzCode()
@@ -211,8 +211,9 @@ QList<tikz::ui::View *> MainWindow::views()
     return m_views;
 }
 
-tikz::ui::View *MainWindow::activeView()
+tikz::ui::View * MainWindow::activeView()
 {
+    return m_viewManager->activeView();
 }
 
 tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)

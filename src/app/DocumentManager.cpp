@@ -102,7 +102,7 @@ tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
 
 bool DocumentManager::closeDocument(tikz::ui::Document *doc, bool closeUrl)
 {
-    doc->clear();
+    doc->close();
 
     if (closeUrl) {
         //FIXME: needed?
@@ -205,7 +205,7 @@ void DocumentManager::saveAll()
 {
     foreach(tikz::ui::Document * doc, m_documents)
     if (doc->isModified()) {
-        doc->save(doc->url());
+        doc->save();
     }
 }
 

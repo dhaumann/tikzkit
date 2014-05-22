@@ -144,7 +144,7 @@ void ViewManager::slotDocumentClose(tikz::ui::Document * doc)
     if ((TikzKit::self()->documentManager()->documentList().size() == 1)
             && !doc->isModified()
             && doc->url().isEmpty()) {
-        doc->clear();
+        doc->close();
         return;
     }
 
@@ -249,6 +249,8 @@ bool ViewManager::deleteView(tikz::ui::View *view)
 
 tikz::ui::View *ViewManager::activeView()
 {
+    return qobject_cast<tikz::ui::View*>(m_stack->currentWidget());
+
     // FIXME TODO: return active view.
 
     // no views exists!
