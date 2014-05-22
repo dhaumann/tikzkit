@@ -26,6 +26,7 @@
 DocumentManager::DocumentManager(QObject *parent)
     : QObject(parent)
 {
+    // make sure there is at least one document around
     createDocument();
 }
 
@@ -97,13 +98,11 @@ bool DocumentManager::closeDocument(tikz::ui::Document *doc, bool closeUrl)
     doc->close();
 
     if (closeUrl) {
-        //FIXME: needed?
-//         KateApp::self()->emitDocumentClosed(QString::number((qptrdiff)doc));
-
         // document will be deleted, soon
         emit aboutToDeleteDocument(doc);
 
         // really delete the document
+        Q_ASSERT(m_documents.contains(doc));
         delete m_documents.takeAt(m_documents.indexOf(doc));
 
         // document is gone, emit our signals
@@ -205,7 +204,7 @@ void DocumentManager::reloadAll()
 {
     // reload all docs that are NOT modified on disk
     foreach(tikz::ui::Document * doc, m_documents) {
-        doc->load(doc->url());
+        doc->reload();
     }
 }
 
