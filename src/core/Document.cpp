@@ -86,6 +86,7 @@ Document::Document(QObject * parent)
     d->style = new Style(d->uniqueId(), this);
 
     connect(&d->undoManager, SIGNAL(indexChanged(int)), this, SIGNAL(changed()));
+    connect(&d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
 }
 
 Document::~Document()

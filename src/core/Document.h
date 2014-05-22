@@ -127,6 +127,11 @@ class TIKZCORE_EXPORT Document : public QObject
         void changed();
 
         /**
+         * This signal is emitted whenever the modified state changed.
+         */
+        void modifiedChanged();
+
+        /**
          * This signal is emitted right before all its Node%s and Path%s
          * are deleted. Make sure to connect to this signal to cleanup
          * all references to Nodes and Paths of this Document to avoid
