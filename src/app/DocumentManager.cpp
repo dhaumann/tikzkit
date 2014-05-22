@@ -63,19 +63,18 @@ tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
 {
     // special handling: if only one unmodified empty buffer in the list,
     // keep this buffer in mind to close it after opening the new url
-    tikz::ui::Document * untitledDoc = nullptr;
+    tikz::ui::Document *doc = nullptr;
     if (documentList().count() == 1
-        && !documentList().at(0)->isModified()
-        && documentList().at(0)->url().isEmpty())
+        && documentList().at(0)->isEmptyBuffer())
     {
-        untitledDoc = documentList().first();
+        doc = documentList().first();
     }
 
     //
     // create new document
     //
     QUrl u(url.adjusted(QUrl::NormalizePathSegments));
-    tikz::ui::Document *doc = nullptr;
+
 
     // always new document if url is empty...
     if (!u.isEmpty()) {
@@ -88,13 +87,6 @@ tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
         if (!u.isEmpty()) {
             doc->load(u);
         }
-    }
-
-    //
-    // close untitled document, as it is not wanted
-    //
-    if (untitledDoc) {
-        closeDocument(untitledDoc);
     }
 
     return doc;
