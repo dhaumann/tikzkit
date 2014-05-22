@@ -42,9 +42,21 @@
 namespace tikz {
 namespace core {
 
+// helper: remove \r and \n from visible document name (see Kate bug #170876)
+inline static QString removeNewLines(const QString &str)
+{
+    QString tmp(str);
+    return tmp.replace(QLatin1String("\r\n"), QLatin1String(" "))
+           .replace(QLatin1Char('\r'), QLatin1Char(' '))
+           .replace(QLatin1Char('\n'), QLatin1Char(' '));
+}
+
 class DocumentPrivate
 {
     public:
+        // Document this private instance belongs to
+        Document * q;
+
         // the Document's current url
         QUrl url;
         // undo manager
@@ -74,12 +86,36 @@ class DocumentPrivate
         {
             return nextId++;
         }
+
+        QString docName;
+
+//
+// helper functions
+//
+public:
+    void updateDocumentName() {
+        if (! url.isEmpty() && docName == removeNewLines(url.fileName())) {
+            return;
+        }
+
+        QString newName = removeNewLines(url.fileName());
+
+        if (newName.isEmpty()) {
+            newName = "Untitled";
+        }
+
+        if (newName != docName) {
+            docName = newName;
+            emit q->documentNameChanged(q);
+        }
+    }
 };
 
 Document::Document(QObject * parent)
     : QObject(parent)
     , d(new DocumentPrivate())
 {
+    d->q = this;
     d->transactionRefCounter = 0;
     d->undoActive = false;
     d->nextId = 0;
@@ -145,6 +181,9 @@ void Document::close()
 
     // unnamed document
     d->url.clear();
+
+    // keep the document name up-to-date
+    d->updateDocumentName();
 }
 
 bool Document::load(const QUrl & file)
@@ -157,6 +196,10 @@ bool Document::load(const QUrl & file)
     if (dv.load(file.toLocalFile())) {
         d->url = file;
         accept(dv);
+
+        // keep the document name up-to-date
+        d->updateDocumentName();
+
         return true;
     }
     return false;
@@ -192,6 +235,10 @@ bool Document::saveAs(const QUrl & file)
         accept(sv);
 
         sv.save(file.toLocalFile());
+
+        // keep the document name up-to-date
+        d->updateDocumentName();
+
         return true;
     }
 
@@ -201,6 +248,11 @@ bool Document::saveAs(const QUrl & file)
 QUrl Document::url() const
 {
     return d->url;
+}
+
+QString Document::documentName() const
+{
+    return d->docName;
 }
 
 bool Document::isEmptyBuffer() const

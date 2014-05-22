@@ -106,6 +106,11 @@ class TIKZCORE_EXPORT Document : public QObject
         QUrl url() const;
 
         /**
+         * Get the Document's filename
+         */
+        QString documentName() const;
+
+        /**
          * Check whether this Document is completely empty.
          * The return value is @e true, if no modifications have been made
          * and the Document is empty without any contents loaded from a file.
@@ -138,6 +143,11 @@ class TIKZCORE_EXPORT Document : public QObject
          * danling pointers.
          */
         void aboutToClear();
+
+        /**
+         * This signal is emitted whenever this Document's name changes.
+         */
+        void documentNameChanged(tikz::core::Document * doc);
 
     //
     // Undo / redo management
