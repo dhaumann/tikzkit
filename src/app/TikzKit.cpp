@@ -104,8 +104,9 @@ tikz::ui::MainWindow * TikzKit::activeMainWindow()
 {
 }
 
-QList<tikz::ui::Document *> TikzKit::documents()
+QVector<tikz::ui::Document *> TikzKit::documents()
 {
+    return documentManager()->documentList();
 }
 
 tikz::ui::Document * TikzKit::findUrl(const QUrl &url)

@@ -20,7 +20,7 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <tikz/ui/Application.h>
+#include "Application.h"
 // #include <tikz/ui/Plugin.h>
 
 namespace tikz {
@@ -76,23 +76,23 @@ tikz::ui::MainWindow *Application::activeMainWindow()
     return window;
 }
 
-QList<tikz::ui::Document *> Application::documents()
+QVector<tikz::ui::Document *> Application::documents()
 {
     /**
      * null check
      */
     if (!this) {
-        return QList<tikz::ui::Document *> ();
+        return QVector<tikz::ui::Document *> ();
     }
 
     /**
      * dispatch to parent
      */
-    QList<tikz::ui::Document *> documents;
+    QVector<tikz::ui::Document *> documents;
     QMetaObject::invokeMethod(parent()
                               , "documents"
                               , Qt::DirectConnection
-                              , Q_RETURN_ARG(QList<tikz::ui::Document *>, documents));
+                              , Q_RETURN_ARG(QVector<tikz::ui::Document *>, documents));
     return documents;
 }
 

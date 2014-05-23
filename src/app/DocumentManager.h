@@ -24,6 +24,7 @@
 #include <tikz/ui/Editor.h>
 
 #include <QList>
+#include <QVector>
 #include <QObject>
 #include <QByteArray>
 #include <QHash>
@@ -44,7 +45,7 @@ public:
     /** Returns the document with @p url or \e nullptr if no such doc is found */
     tikz::ui::Document * findDocument(const QUrl &url) const;
 
-    const QList<tikz::ui::Document *> & documentList() const {
+    const QVector<tikz::ui::Document *> & documentList() const {
         return m_documents;
     }
 
@@ -53,7 +54,7 @@ public:
     bool closeDocument(tikz::ui::Document *, bool closeUrl = true);
     bool closeAllDocuments(bool closeUrl = true);
 
-    QList<tikz::ui::Document *> modifiedDocumentList();
+    QVector<tikz::ui::Document *> modifiedDocumentList();
     bool queryCloseDocuments(MainWindow * w);
 
 public Q_SLOTS:
@@ -93,7 +94,7 @@ Q_SIGNALS:
     void documentDeleted(tikz::ui::Document *document);
 
 private:
-    QList<tikz::ui::Document *> m_documents;
+    QVector<tikz::ui::Document *> m_documents;
 };
 
 #endif

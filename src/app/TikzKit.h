@@ -108,7 +108,7 @@ public Q_SLOTS:
      * This might contain less documents than the editor has in his documents () list.
      * @return all documents the application manages
      */
-    QList<tikz::ui::Document *> documents();
+    QVector<tikz::ui::Document *> documents();
 
     /**
      * Get the document with the URL \p url.

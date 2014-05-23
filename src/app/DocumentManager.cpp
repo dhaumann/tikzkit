@@ -133,10 +133,10 @@ bool DocumentManager::closeAllDocuments(bool closeUrl)
  * Find all modified documents.
  * @return Return the list of all modified documents.
  */
-QList<tikz::ui::Document *> DocumentManager::modifiedDocumentList()
+QVector<tikz::ui::Document *> DocumentManager::modifiedDocumentList()
 {
-    QList<tikz::ui::Document *> modified;
-    foreach(tikz::ui::Document * doc, m_documents) {
+    QVector<tikz::ui::Document *> modified;
+    foreach(auto doc, m_documents) {
         if (doc->isModified()) {
             modified.append(doc);
         }
