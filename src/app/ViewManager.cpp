@@ -23,6 +23,7 @@
 #include "MainWindow.h"
 #include "DocumentManager.h"
 
+#include <tikz/ui/Editor.h>
 #include <tikz/ui/View.h>
 #include <tikz/ui/Document.h>
 
@@ -40,6 +41,8 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
     vbox->setSpacing(0);
 
     m_tabBar = new QTabBar(this);
+    m_tabBar->setDocumentMode(true);
+    connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
     m_stack = new QStackedWidget(this);
 
     vbox->addWidget(m_tabBar);
@@ -221,6 +224,9 @@ bool ViewManager::createView(tikz::ui::Document *doc)
     m_stack->addWidget(view);
     m_docToView[doc] = view;
 
+    // register tab
+    addTab(view);
+
 //     connect(view, SIGNAL(focusIn(tikz::ui::View*)), this, SLOT(activateSpace(tikz::ui::View*)));
 
 //     emit viewCreated(view);
@@ -234,9 +240,10 @@ bool ViewManager::createView(tikz::ui::Document *doc)
 
 bool ViewManager::deleteView(tikz::ui::View *view)
 {
-    if (!view) {
-        return true;
-    }
+    Q_ASSERT(view);
+
+    // unregister tab
+    removeTab(view);
 
 //     removeView(view); FIXME
 // if active view == view, create a new view of another doc
@@ -319,6 +326,54 @@ void ViewManager::aboutToDeleteDocument(tikz::ui::Document *doc)
 void ViewManager::closeView(tikz::ui::View *view)
 {
     deleteView(view);
+}
+
+void ViewManager::addTab(tikz::ui::View * view)
+{
+    qDebug() << "added Tab";
+    int index = -1;
+    for (int i = 0; i < m_tabBar->count(); ++i) {
+        if (m_tabBar->tabData(i).value<tikz::ui::View*>() == view) {
+            index = i;
+            break;
+        }
+    }
+    Q_ASSERT(index == -1);
+
+    auto wasBlocked = m_tabBar->blockSignals(true);
+    index = m_tabBar->addTab(view->document()->documentName());
+    m_tabBar->setTabData(index, QVariant::fromValue<tikz::ui::View*>(view));
+    m_tabBar->blockSignals(wasBlocked);
+}
+
+void ViewManager::removeTab(tikz::ui::View * view)
+{
+    qDebug() << "and remooooved Tab";
+    int index = -1;
+    for (int i = 0; i < m_tabBar->count(); ++i) {
+        if (m_tabBar->tabData(i).value<tikz::ui::View*>() == view) {
+            index = i;
+            break;
+        }
+    }
+    Q_ASSERT(index >= 0);
+
+    m_tabBar->removeTab(index);
+}
+
+void ViewManager::activateTab(int index)
+{
+    auto view = m_tabBar->tabData(index).value<tikz::ui::View*>();
+
+    // a View *must* always be registered at the Editor.
+    // Otherwise, it's a dangling pointer!
+    Q_ASSERT(tikz::ui::Editor::instance()->views().contains(view));
+
+    // the view *must* be in the widget stack, otherwise something is wrong
+    Q_ASSERT(m_stack->indexOf(view) >= 0);
+
+    // finally raise view
+    m_stack->setCurrentWidget(view);
 }
 
 // kate: indent-width 4; replace-tabs on;

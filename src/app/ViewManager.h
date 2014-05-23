@@ -102,6 +102,23 @@ public Q_SLOTS:
      */
     tikz::ui::View *activateView(tikz::ui::Document *doc);
 
+protected:
+    /**
+     * Create a new tab for @p view.
+     */
+    void addTab(tikz::ui::View * view);
+
+    /**
+     * Remove the tab for @p view.
+     */
+    void removeTab(tikz::ui::View * view);
+
+protected Q_SLOTS:
+    /**
+     * Activate the view associated with tab @p index.
+     */
+    void activateTab(int index);
+
 private:
     MainWindow * m_mainWindow;
 
