@@ -105,6 +105,12 @@ public:
      */
     virtual QVector<tikz::ui::Document *> documents() = 0;
 
+    /**
+     * Get a list of all Views of this editor.
+     * \return list of all existing Views
+     */
+    virtual QVector<tikz::ui::View *> views() = 0;
+
 Q_SIGNALS:
     /**
      * The \p editor emits this signal whenever a \p document was successfully

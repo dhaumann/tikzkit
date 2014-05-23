@@ -18,6 +18,7 @@
  */
 #include "EditorPrivate.h"
 #include "DocumentPrivate.h"
+#include "ViewPrivate.h"
 
 #include <tikz/core/tikz.h>
 #include <tikz/core/Value.h>
@@ -143,6 +144,16 @@ QVector<tikz::ui::Document *> EditorPrivate::documents()
         docs.append(m_documents.at(i));
     }
     return docs;
+}
+
+QVector<tikz::ui::View *> EditorPrivate::views()
+{
+    QVector<tikz::ui::View*> list;
+    list.reserve(m_views.size());
+    for (int i = 0; i < m_views.size(); ++i) {
+        list.append(m_views.at(i));
+    }
+    return list;
 }
 
 QVector<tikz::ui::DocumentPrivate *> EditorPrivate::tikzDocuments()

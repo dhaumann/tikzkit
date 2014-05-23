@@ -73,6 +73,12 @@ public:
     QVector<tikz::ui::Document *> documents() override;
 
     /**
+     * Get a list of all Views of this editor.
+     * \return list of all existing Views
+     */
+    QVector<tikz::ui::View *> views() override;
+
+    /**
      * Set the global application object.
      * This will allow the editor component to access
      * the hosting application.
