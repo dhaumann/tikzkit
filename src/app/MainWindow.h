@@ -40,10 +40,6 @@ namespace ui {
 }
 }
 
-namespace Ui {
-    class MainWindow;
-};
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -147,8 +143,6 @@ private:
     QAction * m_fileClose;
     QAction * m_fileQuit;
     QAction * m_filePreview;
-
-    std::unique_ptr<Ui::MainWindow> m_ui;
 
     ViewManager * m_viewManager;
 

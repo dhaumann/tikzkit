@@ -16,7 +16,6 @@
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainWindow.h"
-#include "ui_MainWindow.h"
 #include "TikzKit.h"
 #include "ViewManager.h"
 #include "PdfGenerator.h"
@@ -41,7 +40,10 @@
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/EllipsePath.h>
 
+#include <QApplication>
 #include <QDockWidget>
+#include <QMenu>
+#include <QMenuBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QTabBar>
@@ -56,10 +58,9 @@ static tikz::ui::NodeItem* a;
 
 MainWindow::MainWindow()
     : QMainWindow()
-    , m_ui(new Ui::MainWindow())
     , m_wrapper(new tikz::ui::MainWindow(this))
 {
-    m_ui->setupUi(this);
+    setWindowTitle("TikZKiz - The Graphical Editor for PGF/TikZ");
 
     setupUi();
     setupActions();
@@ -82,11 +83,11 @@ MainWindow::MainWindow()
 //     // undo and redo
 //     QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
 //     undoAction->setIcon(QIcon::fromTheme("edit-undo"));
-//     m_ui->m_toolBar->addAction(undoAction);
+//     m_toolBar->addAction(undoAction);
 //
 //     QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
 //     redoAction->setIcon(QIcon::fromTheme("edit-redo"));
-//     m_ui->m_toolBar->addAction(redoAction);
+//     m_toolBar->addAction(redoAction);
 
     // add arrow head/tail combos
 //     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
@@ -120,6 +121,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
+    //
+    // menubar and status bar
+    //
+    m_fileMenu = new QMenu(menuBar());
+    m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", 0));
+    menuBar()->addAction(m_fileMenu->menuAction());
+
+    m_toolBar = new QToolBar(this);
+    m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    addToolBar(m_toolBar);
+
+    //
+    // dock widgets
+    //
     auto dockWidget = new QDockWidget("Property Browser", this);
     m_browser = new tikz::ui::PropertyBrowser(dockWidget);
     dockWidget->setWidget(m_browser);
@@ -177,17 +192,10 @@ void MainWindow::setupActions()
 //     m_fileMenu->setTitle(QApplication::translate("MainWindow", "&File", 0));
 //     m_toolBar->setWindowTitle(QApplication::translate("MainWindow", "m_toolBar", 0));
 
-    m_fileMenu = new QMenu(menuBar());
-    m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", 0));
-    menuBar()->addAction(m_fileMenu->menuAction());
-
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);
     m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_fileQuit);
-
-    m_toolBar = new QToolBar(this);
-    m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     m_toolBar->addAction(m_fileNew);
     m_toolBar->addAction(m_fileOpen);
@@ -197,10 +205,9 @@ void MainWindow::setupActions()
     m_toolBar->addSeparator();
     m_toolBar->addAction(m_filePreview);
 
-    addToolBar(m_toolBar);
 
     connect(m_fileNew, SIGNAL(triggered()), this, SLOT(newDocument()));
-//     connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+//     connect(aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
     connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
