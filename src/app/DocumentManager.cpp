@@ -62,6 +62,19 @@ tikz::ui::Document *DocumentManager::findDocument(const QUrl &url) const
 
 tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
 {
+    //
+    // create new document
+    //
+    QUrl u(url.adjusted(QUrl::NormalizePathSegments));
+
+    // in case the url is already open, just return the existing document
+    if (!u.isEmpty()) {
+        auto doc = findDocument(u);
+        if (doc) {
+            return doc;
+        }
+    }
+
     // special handling: if only one unmodified empty buffer in the list,
     // keep this buffer in mind to close it after opening the new url
     tikz::ui::Document *doc = nullptr;
@@ -69,25 +82,12 @@ tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
         && documentList().at(0)->isEmptyBuffer())
     {
         doc = documentList().first();
-    }
-
-    //
-    // create new document
-    //
-    QUrl u(url.adjusted(QUrl::NormalizePathSegments));
-
-
-    // always new document if url is empty...
-    if (!u.isEmpty()) {
-        doc = findDocument(u);
-    }
-
-    if (!doc) {
+    } else {
         doc = createDocument();
+    }
 
-        if (!u.isEmpty()) {
-            doc->load(u);
-        }
+    if (!u.isEmpty()) {
+        doc->load(u);
     }
 
     return doc;
