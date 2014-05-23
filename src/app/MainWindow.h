@@ -65,8 +65,8 @@ public Q_SLOTS:
     void previewPdf(const QString & pdfFile);
 
 protected:
-    void setupActions();
     void setupUi();
+    void setupActions();
 
 public Q_SLOTS:
     /**

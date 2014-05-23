@@ -27,7 +27,9 @@ set(tikzkit_SOURCES
     PdfGenerator.cpp
 )
 
-set(tikzkit_FORMS MainWindow.ui)
+set(tikzkit_FORMS
+    # example.ui
+)
 qt5_wrap_ui(tikzkit_FORMS_HEADERS ${tikzkit_FORMS})
 
 add_executable(tikzkit

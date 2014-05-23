@@ -60,7 +60,7 @@ MainWindow::MainWindow()
     : QMainWindow()
     , m_wrapper(new tikz::ui::MainWindow(this))
 {
-    setWindowTitle("TikZKiz - The Graphical Editor for PGF/TikZ");
+    setWindowTitle("TikZKit - The Graphical Editor for PGF/TikZ");
 
     setupUi();
     setupActions();
