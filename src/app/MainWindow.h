@@ -60,17 +60,23 @@ public:
     virtual ~MainWindow();
 
 public Q_SLOTS:
-    void saveFile();
-    void loadFile();
     void newDocument();
 
-    void updateTikzCode();
+    void saveFile();
+    void loadFile();
+
     void previewPdf();
     void previewPdf(const QString & pdfFile);
 
 protected:
     void setupActions();
     void setupUi();
+
+public Q_SLOTS:
+    /**
+     * This slot is called by the ViewManager whenever the current view changes.
+     */
+    void slotViewChanged(tikz::ui::View * view);
 
 public:
     /**
@@ -134,6 +140,14 @@ Q_SIGNALS:
     void viewCreated(tikz::ui::View *view);
 
 private:
+    QMenu * m_fileMenu;
+    QToolBar * m_toolBar;
+    QAction * m_fileNew;
+    QAction * m_fileOpen;
+    QAction * m_fileClose;
+    QAction * m_fileQuit;
+    QAction * m_filePreview;
+
     std::unique_ptr<Ui::MainWindow> m_ui;
 
     ViewManager * m_viewManager;

@@ -44,11 +44,8 @@
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QSlider>
-#include <QTimer>
-#include <QtOpenGL/QGLWidget>
-#include <QUndoStack>
 #include <QTabBar>
+#include <QToolBar>
 #include <QToolButton>
 #include <QTextEdit>
 #include <QUrl>
@@ -65,9 +62,9 @@ MainWindow::MainWindow()
     m_ui->setupUi(this);
 
     setupUi();
+    setupActions();
 
     m_pdfGenerator = 0;
-    connect(m_ui->aPreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 
     auto mainWidget = new QWidget(this);
     setCentralWidget(mainWidget);
@@ -85,11 +82,11 @@ MainWindow::MainWindow()
 //     // undo and redo
 //     QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
 //     undoAction->setIcon(QIcon::fromTheme("edit-undo"));
-//     m_ui->toolBar->addAction(undoAction);
+//     m_ui->m_toolBar->addAction(undoAction);
 //
 //     QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
 //     redoAction->setIcon(QIcon::fromTheme("edit-redo"));
-//     m_ui->toolBar->addAction(redoAction);
+//     m_ui->m_toolBar->addAction(redoAction);
 
     // add arrow head/tail combos
 //     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
@@ -102,16 +99,14 @@ MainWindow::MainWindow()
 
     auto view = openUrl(QUrl("output.tikzkit"));
 
-    setupActions();
-
-//     connect(m_doc, SIGNAL(changed()), this, SLOT(updateTikzCode()));
-//     updateTikzCode();
-
     //
-    // initialize tikz::ui::MainWindow wrapper object
+    // initialize tikz::ui::MainWindow wrapper object (forward signals from the
+    // ViewManager to this MainWindow)
     //
     connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SLOT(viewCreated(tikz::ui::View *)));
     connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
+    connect(m_viewManager, SIGNAL(viewCreated(tikz::ui::View *)), this, SLOT(viewCreated(tikz::ui::View *)));
+    connect(m_viewManager, SIGNAL(viewChanged(tikz::ui::View *)), this, SLOT(slotViewChanged(tikz::ui::View *)));
 
     // register ourself as MainWindow
     TikzKit::self()->registerMainWindow(this);
@@ -157,9 +152,58 @@ void MainWindow::setupUi()
 
 void MainWindow::setupActions()
 {
-    connect(m_ui->aNew, SIGNAL(triggered()), this, SLOT(newDocument()));
-    connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
-    connect(m_ui->aOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
+    m_fileNew = new QAction(this);
+    m_fileNew->setIcon(QIcon::fromTheme("document-new"));
+    m_fileNew->setText(QApplication::translate("MainWindow", "&New", 0));
+    m_fileNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", 0));
+
+    m_fileOpen = new QAction(this);
+    m_fileOpen->setIcon(QIcon::fromTheme("document-open"));
+    m_fileOpen->setText(QApplication::translate("MainWindow", "&Open", 0));
+    m_fileOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
+
+    m_fileQuit = new QAction(this);
+    m_fileQuit->setIcon(QIcon::fromTheme("application-exit"));
+    m_fileQuit->setText(QApplication::translate("MainWindow", "&Quit", 0));
+    m_fileQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", 0));
+
+    m_filePreview = new QAction(this);
+    m_filePreview->setIcon(QIcon::fromTheme("application-pdf"));
+    m_filePreview->setText(QApplication::translate("MainWindow", "Preview", 0));
+
+//     aSave->setText(QApplication::translate("MainWindow", "Save", 0));
+//     aSave->setIcon(QIcon::fromTheme("document-save"));
+//     aSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
+//     m_fileMenu->setTitle(QApplication::translate("MainWindow", "&File", 0));
+//     m_toolBar->setWindowTitle(QApplication::translate("MainWindow", "m_toolBar", 0));
+
+    m_fileMenu = new QMenu(menuBar());
+    m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", 0));
+    menuBar()->addAction(m_fileMenu->menuAction());
+
+    m_fileMenu->addAction(m_fileNew);
+    m_fileMenu->addAction(m_fileOpen);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_fileQuit);
+
+    m_toolBar = new QToolBar(this);
+    m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_toolBar->addAction(m_fileNew);
+    m_toolBar->addAction(m_fileOpen);
+    m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-save"));
+    m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-close"));
+    m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-undo"));
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_filePreview);
+
+    addToolBar(m_toolBar);
+
+    connect(m_fileNew, SIGNAL(triggered()), this, SLOT(newDocument()));
+//     connect(m_ui->aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
+    connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 }
 
 void MainWindow::saveFile()
@@ -180,11 +224,6 @@ void MainWindow::newDocument()
     activeView()->document()->close();
 }
 
-void MainWindow::updateTikzCode()
-{
-    m_textEdit->setText(activeView()->document()->tikzCode());
-}
-
 void MainWindow::previewPdf()
 {
     delete m_pdfGenerator;
@@ -200,6 +239,14 @@ void MainWindow::previewPdf(const QString & pdfFile)
     QProcess::startDetached("okular", QStringList() << pdfFile);
 }
 
+void MainWindow::slotViewChanged(tikz::ui::View * view)
+{
+    // remove current view actions
+    // add new view actions
+
+    // forward viewChanged() signal
+    emit viewChanged(view);
+}
 
 tikz::ui::MainWindow * MainWindow::wrapper() const
 {
