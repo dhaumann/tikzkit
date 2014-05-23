@@ -73,7 +73,7 @@ public:
     /**
      * Returns the views pre-casted to tikz::ui::View%s
      */
-    virtual QList<View *> views() const = 0;
+    virtual QVector<View *> views() const = 0;
 
 Q_SIGNALS:
     /**

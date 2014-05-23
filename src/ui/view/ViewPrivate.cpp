@@ -21,6 +21,7 @@
 #include "DocumentPrivate.h"
 #include "Renderer.h"
 #include "Ruler.h"
+#include "EditorPrivate.h"
 
 #include <tikz/core/Document.h>
 
@@ -46,10 +47,17 @@ ViewPrivate::ViewPrivate(tikz::ui::DocumentPrivate * doc,
     auto vboxLayout = new QVBoxLayout(this);
     vboxLayout->setContentsMargins(0, 0, 0, 0);
     vboxLayout->addWidget(m_renderer);
+
+    // register View
+    EditorPrivate::self()->registerView(this);
+    m_doc->registerView(this);
 }
 
 ViewPrivate::~ViewPrivate()
 {
+    // unregister view
+    EditorPrivate::self()->unregisterView(this);
+    m_doc->unregisterView(this);
 }
 
 tikz::ui::Document * ViewPrivate::document() const

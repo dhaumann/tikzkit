@@ -113,9 +113,21 @@ View * DocumentPrivate::createView(QWidget * parent,
     return view;
 }
 
-QList<View *> DocumentPrivate::views() const
+QVector<View *> DocumentPrivate::views() const
 {
-    return QList<View*>(); // TODO
+    return m_views;
+}
+
+void DocumentPrivate::registerView(tikz::ui::View * view)
+{
+    Q_ASSERT(! m_views.contains(view));
+    m_views.append(view);
+}
+
+void DocumentPrivate::unregisterView(tikz::ui::View * view)
+{
+    Q_ASSERT(m_views.contains(view));
+    m_views.remove(m_views.indexOf(view));
 }
 
 QVector<NodeItem*> DocumentPrivate::nodeItems() const

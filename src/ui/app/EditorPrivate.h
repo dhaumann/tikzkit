@@ -25,6 +25,7 @@
 
 #include <QList>
 #include <QPointer>
+#include <QVector>
 
 namespace tikz {
 namespace ui {
@@ -63,16 +64,13 @@ public:
      * @param parent parent object
      * @return created tikz::ui::Document
      */
-    tikz::ui::Document *createDocument(QObject *parent);
+    tikz::ui::Document *createDocument(QObject *parent) override;
 
     /**
      * Returns a list of all documents of this editor.
      * @return list of all existing documents
      */
-    QList<tikz::ui::Document *> documents()
-    {
-        return m_documents.keys();
-    }
+    QVector<tikz::ui::Document *> documents() override;
 
     /**
      * Set the global application object.
@@ -134,7 +132,13 @@ public:
      * unregister document at the factory
      * @param doc document to register
      */
-    void deregisterDocument(tikz::ui::DocumentPrivate *doc);
+    void unregisterDocument(tikz::ui::DocumentPrivate *doc);
+
+    /**
+     * return a list of all registered docs
+     * @return all known documents
+     */
+    QVector<tikz::ui::DocumentPrivate *> tikzDocuments();
 
     /**
      * register view at the factory
@@ -147,37 +151,23 @@ public:
      * unregister view at the factory
      * @param view view to unregister
      */
-    void deregisterView(tikz::ui::ViewPrivate *view);
+    void unregisterView(tikz::ui::ViewPrivate *view);
 
     /**
-     * return a list of all registered views
-     * @return all known views
+     * Return a list of all registered tikz::ui::ViewPrivate%s
      */
-    QList<tikz::ui::ViewPrivate *> views()
-    {
-        return QList<tikz::ui::ViewPrivate *>();
-//         return m_views.toList(); // TODO
-    }
-
-    /**
-     * return a list of all registered docs
-     * @return all known documents
-     */
-    QList<tikz::ui::DocumentPrivate *> kateDocuments()
-    {
-        return m_documents.values();
-    }
+    QVector<tikz::ui::ViewPrivate *> tikzViews();
 
 private:
     /**
      * registered docs, map from general to specialized pointer
      */
-    QHash<tikz::ui::Document *, tikz::ui::DocumentPrivate *> m_documents;
+    QVector<tikz::ui::DocumentPrivate *> m_documents;
 
     /**
      * registered views
      */
-//     QSet<tikz::ui::ViewPrivate *> m_views; FIXME
+    QVector<tikz::ui::ViewPrivate *> m_views;
 
     /**
      * access to application

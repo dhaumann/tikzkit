@@ -126,25 +126,45 @@ EditorPrivate * EditorPrivate::self()
 void EditorPrivate::registerDocument(tikz::ui::DocumentPrivate *doc)
 {
     Q_ASSERT (!m_documents.contains(doc));
-    m_documents.insert(doc, doc);
+    m_documents.append(doc);
 }
 
-void EditorPrivate::deregisterDocument(tikz::ui::DocumentPrivate *doc)
+void EditorPrivate::unregisterDocument(tikz::ui::DocumentPrivate *doc)
 {
     Q_ASSERT (m_documents.contains(doc));
-    m_documents.remove(doc);
+    m_documents.remove(m_documents.indexOf(doc));
+}
+
+QVector<tikz::ui::Document *> EditorPrivate::documents()
+{
+    QVector<tikz::ui::Document*> docs;
+    docs.reserve(m_documents.size());
+    for (int i = 0; i < m_documents.size(); ++i) {
+        docs.append(m_documents.at(i));
+    }
+    return docs;
+}
+
+QVector<tikz::ui::DocumentPrivate *> EditorPrivate::tikzDocuments()
+{
+    return m_documents;
 }
 
 void EditorPrivate::registerView(tikz::ui::ViewPrivate *view)
 {
-//     Q_ASSERT (!m_views.contains(view));
-//     m_views.insert(view);
+    Q_ASSERT (!m_views.contains(view));
+    m_views.append(view);
 }
 
-void EditorPrivate::deregisterView(tikz::ui::ViewPrivate *view)
+void EditorPrivate::unregisterView(tikz::ui::ViewPrivate *view)
 {
-//     Q_ASSERT (m_views.contains(view));
-//     m_views.remove(view);
+    Q_ASSERT (m_views.contains(view));
+    m_views.remove(m_views.indexOf(view));
+}
+
+QVector<tikz::ui::ViewPrivate *> EditorPrivate::tikzViews()
+{
+    return m_views;
 }
 
 }

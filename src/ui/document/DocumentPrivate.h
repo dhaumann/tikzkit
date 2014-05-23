@@ -78,6 +78,20 @@ class DocumentPrivate : public tikz::ui::Document
         void editModeChanged(TikzEditMode mode) const;
 
     //
+    // View management
+    //
+    public:
+        /**
+         * Called by ViewPrivate on construction to register @p view.
+         */
+        void registerView(tikz::ui::View * view);
+
+        /**
+         * Called by ViewPrivate on destruction to unregister @p view.
+         */
+        void unregisterView(tikz::ui::View * view);
+
+    //
     // convenience functions
     //
     public:
@@ -92,14 +106,13 @@ class DocumentPrivate : public tikz::ui::Document
          * @param parent parent widget
          * @return the new view
          */
-//         View *createView(QWidget * parent) override;
         View * createView(QWidget * parent,
                           tikz::ui::MainWindow * mainWindow = nullptr) override;
 
         /**
          * Returns the views pre-casted to tikz::ui::View%s
          */
-        QList<View *> views() const override;
+        QVector<View *> views() const override;
 
     //
     // Node and path creation

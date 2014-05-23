@@ -24,12 +24,14 @@
 #include "tikzgui_export.h"
 
 #include <QObject>
+#include <QVector>
 
 namespace tikz {
 namespace ui {
 
 class Application;
 class Document;
+class View;
 class EditorPrivate;
 class ConfigPage;
 
@@ -101,7 +103,7 @@ public:
      * \return list of all existing documents
      * \see createDocument()
      */
-    virtual QList<Document *> documents() = 0;
+    virtual QVector<tikz::ui::Document *> documents() = 0;
 
 Q_SIGNALS:
     /**
