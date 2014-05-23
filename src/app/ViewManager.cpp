@@ -272,15 +272,29 @@ void ViewManager::activateView(tikz::ui::View * view)
     Q_ASSERT(view);
     Q_ASSERT(m_views.contains(view));
 
-    int index = m_views.indexOf(view);
-
-    if (index != m_views.size() - 1) {
-        // FIXME: set new active view here
-
-        // TODO: merge new actions
-
-        emit viewChanged(view);
+    if (m_stack->currentWidget() == view) {
+        return;
     }
+
+    // make sure the correct tab is activated
+    int index = -1;
+    for (int i = 0; i < m_tabBar->count(); ++i) {
+        if (m_tabBar->tabData(i).value<tikz::ui::View*>() == view) {
+            index = i;
+            break;
+        }
+    }
+    Q_ASSERT(index >= 0);
+
+    auto wasBlocked = m_tabBar->blockSignals(true);
+    m_tabBar->setCurrentIndex(index);
+    m_tabBar->blockSignals(wasBlocked);
+
+    // make sure the correct view is visible
+    // TODO, FIXME: merge new actions
+    m_stack->setCurrentWidget(view);
+
+    emit viewChanged(view);
 }
 
 tikz::ui::View *ViewManager::activateView(tikz::ui::Document * doc)
@@ -290,12 +304,20 @@ tikz::ui::View *ViewManager::activateView(tikz::ui::Document * doc)
         return activeView();
     }
 
-// TODO
     // activate existing view if possible
-//     if (activeViewSpace()->showView(d)) {
-//         activateView(activeViewSpace()->currentView());
-//         return activeView();
-//     }
+    int index = -1;
+    for (int i = 0; i < m_tabBar->count(); ++i) {
+        if (m_tabBar->tabData(i).value<tikz::ui::View*>()->document() == doc) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index >= 0) {
+        auto view = m_tabBar->tabData(index).value<tikz::ui::View*>();
+        activateView(view);
+        return view;
+    }
 
     // create new view otherwise
     createView(doc);
@@ -386,7 +408,7 @@ void ViewManager::activateTab(int index)
     Q_ASSERT(m_stack->indexOf(view) >= 0);
 
     // finally raise view
-    m_stack->setCurrentWidget(view);
+    activateView(view);
 
     qDebug() << tikz::ui::Editor::instance()->documents().size();
     qDebug() << tikz::ui::Editor::instance()->views().size();
