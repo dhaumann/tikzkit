@@ -76,12 +76,10 @@ tikz::ui::Document *DocumentManager::openUrl(const QUrl &url)
     }
 
     // special handling: if only one unmodified empty buffer in the list,
-    // keep this buffer in mind to close it after opening the new url
+    // reuse this buffer and load the file
     tikz::ui::Document *doc = nullptr;
-    if (documentList().count() == 1
-        && documentList().at(0)->isEmptyBuffer())
-    {
-        doc = documentList().first();
+    if (m_documents.count() == 1 && m_documents.first()->isEmptyBuffer()) {
+        doc = m_documents.first();
     } else {
         doc = createDocument();
     }
