@@ -87,7 +87,7 @@ class DocumentPrivate
             return nextId++;
         }
 
-        QString docName;
+        QString docName = QString("Untitled");
 
 //
 // helper functions
