@@ -119,6 +119,11 @@ protected Q_SLOTS:
      */
     void activateTab(int index);
 
+    /**
+     * The close button on a tab with @p index was pressed.
+     */
+    void closeRequest(int index);
+
 private:
     MainWindow * m_mainWindow;
 

@@ -42,7 +42,10 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
 
     m_tabBar = new QTabBar(this);
     m_tabBar->setDocumentMode(true);
+    m_tabBar->setTabsClosable(true);
+    m_tabBar->setDrawBase(false);
     connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
+    connect(m_tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeRequest(int)), Qt::QueuedConnection);
     m_stack = new QStackedWidget(this);
 
     vbox->addWidget(m_tabBar);
@@ -317,7 +320,7 @@ void ViewManager::aboutToDeleteDocument(tikz::ui::Document *doc)
             closeList.append(v);
         }
     }
-    
+
     while (!closeList.isEmpty()) {
         deleteView(closeList.takeFirst());
     }
@@ -374,6 +377,20 @@ void ViewManager::activateTab(int index)
 
     // finally raise view
     m_stack->setCurrentWidget(view);
+
+    qDebug() << tikz::ui::Editor::instance()->documents().size();
+    qDebug() << tikz::ui::Editor::instance()->views().size();
+}
+
+void ViewManager::closeRequest(int index)
+{
+    auto view = m_tabBar->tabData(index).value<tikz::ui::View*>();
+
+    // a View *must* always be registered at the Editor.
+    // Otherwise, it's a dangling pointer!
+    Q_ASSERT(tikz::ui::Editor::instance()->views().contains(view));
+
+    deleteView(view);
 }
 
 // kate: indent-width 4; replace-tabs on;
