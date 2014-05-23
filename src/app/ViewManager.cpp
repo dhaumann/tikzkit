@@ -347,6 +347,11 @@ void ViewManager::addTab(tikz::ui::View * view)
     index = m_tabBar->addTab(view->document()->documentName());
     m_tabBar->setTabData(index, QVariant::fromValue<tikz::ui::View*>(view));
     m_tabBar->blockSignals(wasBlocked);
+
+    // show tabbar only if there are at least 2 tabs
+    if (m_tabBar->count() > 1) {
+        m_tabBar->show();
+    }
 }
 
 void ViewManager::removeTab(tikz::ui::View * view)
@@ -362,6 +367,11 @@ void ViewManager::removeTab(tikz::ui::View * view)
     Q_ASSERT(index >= 0);
 
     m_tabBar->removeTab(index);
+
+    // hide tabbar if there are less than 2 tabs
+    if (m_tabBar->count() <= 1) {
+        m_tabBar->hide();
+    }
 }
 
 void ViewManager::activateTab(int index)
