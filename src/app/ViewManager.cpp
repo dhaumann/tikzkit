@@ -409,9 +409,6 @@ void ViewManager::activateTab(int index)
 
     // finally raise view
     activateView(view);
-
-    qDebug() << tikz::ui::Editor::instance()->documents().size();
-    qDebug() << tikz::ui::Editor::instance()->views().size();
 }
 
 void ViewManager::closeRequest(int index)

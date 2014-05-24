@@ -19,6 +19,7 @@
 
 #include "DocumentPrivate.h"
 
+
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
@@ -31,6 +32,7 @@
 #include <tikz/core/EllipsePath.h>
 //END DEBUG
 
+#include "EditorPrivate.h"
 #include "ViewPrivate.h"
 #include "Renderer.h"
 
@@ -49,6 +51,10 @@ namespace ui {
 DocumentPrivate::DocumentPrivate(QObject * parent)
     : tikz::ui::Document(this, parent)
 {
+    // register document
+    tikz::ui::EditorPrivate::self()->registerDocument(this);
+
+    // create scene
     m_scene = new TikzScene(this);
 
     connect(m_scene, SIGNAL(editModeChanged(TikzEditMode)), this, SIGNAL(editModeChanged(TikzEditMode)));
@@ -65,6 +71,9 @@ DocumentPrivate::~DocumentPrivate()
     Q_ASSERT(m_nodes.isEmpty());
     Q_ASSERT(m_pathMap.isEmpty());
     Q_ASSERT(m_paths.isEmpty());
+
+    // finally unregister document
+    tikz::ui::EditorPrivate::self()->unregisterDocument(this);
 }
 
 void DocumentPrivate::clearDocumentPrivate()
