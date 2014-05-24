@@ -177,6 +177,11 @@ void MainWindow::setupActions()
     m_fileOpen->setText(QApplication::translate("MainWindow", "&Open", 0));
     m_fileOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
 
+    m_fileClose = new QAction(this);
+    m_fileClose->setIcon(QIcon::fromTheme("document-close"));
+    m_fileClose->setText(QApplication::translate("MainWindow", "&Close", 0));
+    m_fileClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+W", 0));
+
     m_fileQuit = new QAction(this);
     m_fileQuit->setIcon(QIcon::fromTheme("application-exit"));
     m_fileQuit->setText(QApplication::translate("MainWindow", "&Quit", 0));
@@ -195,12 +200,15 @@ void MainWindow::setupActions()
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);
     m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_fileClose);
+    m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_fileQuit);
 
     m_toolBar->addAction(m_fileNew);
     m_toolBar->addAction(m_fileOpen);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-save"));
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-close"));
+    m_toolBar->addAction(m_fileClose);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-undo"));
     m_toolBar->addSeparator();
     m_toolBar->addAction(m_filePreview);
@@ -209,6 +217,7 @@ void MainWindow::setupActions()
     connect(m_fileNew, SIGNAL(triggered()), this, SLOT(newDocument()));
 //     connect(aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
+    connect(m_fileClose, SIGNAL(triggered()), this, SLOT(closeActiveView()));
     connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 }
@@ -282,6 +291,12 @@ tikz::ui::View *MainWindow::openUrl(const QUrl &url)
 
 bool MainWindow::closeView(tikz::ui::View *view)
 {
+    m_viewManager->closeView(view);
+}
+
+bool MainWindow::closeActiveView()
+{
+    m_viewManager->closeView(m_viewManager->activeView());
 }
 
 // kate: indent-width 4; replace-tabs on;

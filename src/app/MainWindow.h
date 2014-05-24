@@ -118,6 +118,7 @@ public Q_SLOTS:
      * \return true if view was closed
      */
     bool closeView(tikz::ui::View *view);
+    bool closeActiveView();
 
     //
     // Signals related to view handling
