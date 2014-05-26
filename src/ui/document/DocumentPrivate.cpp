@@ -115,7 +115,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 {
     // create view
     auto view = new ViewPrivate(this, parent, mainWindow);
-    m_views.append(view);
+    Q_ASSERT(m_views.contains(view));
 
     // set graphics scene
     view->renderer()->setScene(m_scene);
