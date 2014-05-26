@@ -42,15 +42,16 @@
 
 #include <QApplication>
 #include <QDockWidget>
+#include <QFileDialog>
+#include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QTabBar>
+#include <QTextEdit>
 #include <QToolBar>
 #include <QToolButton>
-#include <QTextEdit>
 #include <QUrl>
+#include <QVBoxLayout>
 
 #include <QDebug>
 
@@ -61,9 +62,6 @@ MainWindow::MainWindow()
     , m_wrapper(new tikz::ui::MainWindow(this))
 {
     setWindowTitle("TikZKit - The Graphical Editor for PGF/TikZ");
-
-    setupUi();
-    setupActions();
 
     m_pdfGenerator = 0;
 
@@ -79,6 +77,9 @@ MainWindow::MainWindow()
 
     m_viewManager = new ViewManager(this, this);
     hbox->addWidget(m_viewManager);
+
+    setupUi();
+    setupActions();
 
 //     // undo and redo
 //     QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
@@ -214,31 +215,78 @@ void MainWindow::setupActions()
     m_toolBar->addAction(m_filePreview);
 
 
-    connect(m_fileNew, SIGNAL(triggered()), this, SLOT(newDocument()));
+    connect(m_fileNew, SIGNAL(triggered()), this, SLOT(slotDocumentNew()));
 //     connect(aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
-    connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
-    connect(m_fileClose, SIGNAL(triggered()), this, SLOT(closeActiveView()));
+    connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(slotDocumentOpen()));
+    connect(m_fileClose, SIGNAL(triggered()), this, SLOT(slotCloseActiveView()));
     connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 }
 
-void MainWindow::saveFile()
+void MainWindow::slotDocumentNew()
 {
-    QString filename("output.tikzkit");
-    activeView()->document()->saveAs(filename);
+    auto view = m_viewManager->createView();
+    m_viewManager->activateView(view);
 }
 
-void MainWindow::loadFile()
+void MainWindow::slotDocumentOpen()
 {
-    QString filename("output.tikzkit");
-    activeView()->document()->load(filename);
-    m_linePropertyWidget->setLineStyle(activeView()->document()->style());
+    QUrl baseUrl;
+    if (tikz::ui::View *cv = m_viewManager->activeView()) {
+        baseUrl = cv->document()->url();
+        qDebug() << "using base url" << baseUrl;
+    }
+
+    const QUrl file = QFileDialog::getOpenFileUrl(this, "Open File", baseUrl, "TikZKit (*.tikzkit)");
+    qDebug() << "attempting to open file" << file;
+    if (file.isLocalFile()) {
+        return;
+    }
+
+    m_viewManager->openUrl(file, true);
 }
 
-void MainWindow::newDocument()
+void MainWindow::slotCloseActiveView()
 {
-    activeView()->document()->close();
+    m_viewManager->closeView(m_viewManager->activeView());
 }
+
+// void MainWindow::slotDocumentClose(tikz::ui::Document * doc)
+// {
+//     if (!doc && m_viewManager->activeView()) {
+//         doc = m_viewManager->activeView()->document();
+//     }
+//
+//     if (! doc) {
+//         return;
+//     }
+//
+//     // prevent close document if only one view alive and the document of
+//     // it is not modified and empty
+//     if ((TikzKit::self()->documentManager()->documentList().size() == 1)
+//         && doc->isEmptyBuffer())
+//     {
+//         doc->close();
+//         return;
+//     }
+//
+//     // close document
+//     TikzKit::self()->documentManager()->closeDocument(doc);
+// }
+
+// void MainWindow::saveFile()
+// {
+//     QString filename("output.tikzkit");
+//     activeView()->document()->saveAs(filename);
+// }
+
+// void MainWindow::loadFile()
+// {
+//     m_viewManager->openUrl();
+//     QString filename("output.tikzkit");
+//     activeView()->document()->load(filename);
+//     m_linePropertyWidget->setLineStyle(activeView()->document()->style());
+// }
 
 void MainWindow::previewPdf()
 {
@@ -292,11 +340,6 @@ tikz::ui::View *MainWindow::openUrl(const QUrl &url)
 bool MainWindow::closeView(tikz::ui::View *view)
 {
     m_viewManager->closeView(view);
-}
-
-bool MainWindow::closeActiveView()
-{
-    m_viewManager->closeView(m_viewManager->activeView());
 }
 
 // kate: indent-width 4; replace-tabs on;

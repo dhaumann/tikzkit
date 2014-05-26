@@ -56,10 +56,9 @@ public:
     virtual ~MainWindow();
 
 public Q_SLOTS:
-    void newDocument();
-
-    void saveFile();
-    void loadFile();
+    void slotDocumentNew();
+    void slotDocumentOpen();
+    void slotCloseActiveView();
 
     void previewPdf();
     void previewPdf(const QString & pdfFile);
@@ -118,7 +117,6 @@ public Q_SLOTS:
      * \return true if view was closed
      */
     bool closeView(tikz::ui::View *view);
-    bool closeActiveView();
 
     //
     // Signals related to view handling

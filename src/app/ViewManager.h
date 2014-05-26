@@ -57,23 +57,16 @@ public:
     void closeView(tikz::ui::View *view);
     MainWindow *mainWindow();
 
-private Q_SLOTS:
-    void activateView(tikz::ui::View *view);
-
-public Q_SLOTS:
-    void slotDocumentNew();
-    void slotDocumentOpen();
-    void slotDocumentClose(tikz::ui::Document *document = 0);
-
 Q_SIGNALS:
     void viewChanged(tikz::ui::View *);
+    void viewCreated(tikz::ui::View *);
 
 public:
     /**
      * create and activate a new view for doc, if doc == 0, then
      * create a new document
      */
-    bool createView(tikz::ui::Document *doc = nullptr);
+    tikz::ui::View * createView(tikz::ui::Document *doc = nullptr);
 
 private:
     bool deleteView(tikz::ui::View *view);
@@ -101,6 +94,8 @@ public Q_SLOTS:
      * @param doc document to activate view for
      */
     tikz::ui::View *activateView(tikz::ui::Document *doc);
+
+    void activateView(tikz::ui::View *view);
 
 protected:
     /**

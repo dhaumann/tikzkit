@@ -113,51 +113,6 @@ void ViewManager::updateViewSpaceActions()
 //     goPrev->setEnabled(m_viewSpaceList.count() > 1);
 }
 
-void ViewManager::slotDocumentNew()
-{
-    createView();
-}
-
-void ViewManager::slotDocumentOpen()
-{
-    tikz::ui::View *cv = activeView();
-    if (!cv) {
-        return;
-    }
-
-    // get open file
-    //QFileDialog:: ...
-//     KEncodingFileDialog::Result r = KEncodingFileDialog::getOpenUrlsAndEncoding(
-//                                         cv->document()->url(),
-//                                         QString(), m_mainWindow, i18n("Open File"));
-    QUrl file;
-
-    openUrl(file, true);
-}
-
-void ViewManager::slotDocumentClose(tikz::ui::Document * doc)
-{
-    if (!doc && activeView()) {
-        doc = activeView()->document();
-    }
-
-    if (! doc) {
-        return;
-    }
-
-    // prevent close document if only one view alive and the document of
-    // it is not modified and empty
-    if ((TikzKit::self()->documentManager()->documentList().size() == 1)
-            && !doc->isModified()
-            && doc->url().isEmpty()) {
-        doc->close();
-        return;
-    }
-
-    // close document
-    TikzKit::self()->documentManager()->closeDocument(doc);
-}
-
 tikz::ui::Document *ViewManager::openUrl(const QUrl &url,
                                          bool activate)
 {
@@ -204,7 +159,7 @@ void ViewManager::documentDeleted(tikz::ui::Document * doc)
     }
 }
 
-bool ViewManager::createView(tikz::ui::Document *doc)
+tikz::ui::View * ViewManager::createView(tikz::ui::Document *doc)
 {
     // create doc
     if (!doc) {
@@ -232,13 +187,13 @@ bool ViewManager::createView(tikz::ui::Document *doc)
 
 //     connect(view, SIGNAL(focusIn(tikz::ui::View*)), this, SLOT(activateSpace(tikz::ui::View*)));
 
-//     emit viewCreated(view);
+    emit viewCreated(view);
 
     if (!activeView()) {
         activateView(view);
     }
 
-    return true;
+    return view;
 }
 
 bool ViewManager::deleteView(tikz::ui::View *view)
@@ -260,11 +215,6 @@ bool ViewManager::deleteView(tikz::ui::View *view)
 tikz::ui::View *ViewManager::activeView()
 {
     return qobject_cast<tikz::ui::View*>(m_stack->currentWidget());
-
-    // FIXME TODO: return active view.
-
-    // no views exists!
-    return nullptr;
 }
 
 void ViewManager::activateView(tikz::ui::View * view)
@@ -398,6 +348,11 @@ void ViewManager::removeTab(tikz::ui::View * view)
 
 void ViewManager::activateTab(int index)
 {
+    // if there are no tabs, just return
+    if (index < 0) {
+        return;
+    }
+
     auto view = m_tabBar->tabData(index).value<tikz::ui::View*>();
 
     // a View *must* always be registered at the Editor.
