@@ -20,6 +20,7 @@
 
 #include <QMainWindow>
 #include <memory>
+#include <QPointer>
 
 class QGraphicsView;
 class QTextEdit;
@@ -150,6 +151,7 @@ private:
     QAction * m_filePreview;
 
     ViewManager * m_viewManager;
+    QPointer<tikz::ui::View> m_activeView;
 
     tikz::ui::MainWindow * m_wrapper;
 

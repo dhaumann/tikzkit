@@ -336,8 +336,21 @@ void MainWindow::updateWindowTitle()
 
 void MainWindow::slotViewChanged(tikz::ui::View * view)
 {
-    // remove current view actions
-    // add new view actions
+    if (m_activeView == view) {
+        return;
+    }
+
+    if (m_activeView) {
+        // TODO: remove current view actions from the main window
+    }
+
+    m_activeView = view;
+
+    if (m_activeView) {
+        // TODO: add active view actions to main window
+    }
+
+    qDebug() << "the active view changed to" << view;
 
     // forward viewChanged() signal
     emit viewChanged(view);
