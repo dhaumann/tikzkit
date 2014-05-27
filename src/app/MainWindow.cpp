@@ -240,7 +240,7 @@ void MainWindow::slotDocumentOpen()
 
     const QUrl file = QFileDialog::getOpenFileUrl(this, "Open File", baseUrl, "TikZKit (*.tikzkit)");
     qDebug() << "attempting to open file" << file;
-    if (!file.isLocalFile()) {
+    if (! QFileInfo::exists(file.toLocalFile())) {
         return;
     }
 
