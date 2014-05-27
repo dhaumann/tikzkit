@@ -106,11 +106,14 @@ MainWindow::MainWindow()
     // initialize tikz::ui::MainWindow wrapper object (forward signals from the
     // ViewManager to this MainWindow)
     //
-    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SLOT(viewCreated(tikz::ui::View *)));
-    connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
-    connect(m_viewManager, SIGNAL(viewCreated(tikz::ui::View *)), this, SLOT(viewCreated(tikz::ui::View *)));
+    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SIGNAL(viewCreated(tikz::ui::View *)));
+    connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SIGNAL(viewChanged(tikz::ui::View *)));
+    connect(m_viewManager, SIGNAL(viewCreated(tikz::ui::View *)), this, SIGNAL(viewCreated(tikz::ui::View *)));
     connect(m_viewManager, SIGNAL(viewChanged(tikz::ui::View *)), this, SLOT(slotViewChanged(tikz::ui::View *)));
+
+    // further connections
     connect(m_viewManager, SIGNAL(closeDocumentRequested(tikz::ui::Document *)), this, SLOT(closeDocument(tikz::ui::Document*)));
+    connect(m_viewManager, SIGNAL(viewChanged(tikz::ui::View *)), this, SLOT(updateWindowTitle()));
 
     // register ourself as MainWindow
     TikzKit::self()->registerMainWindow(this);
@@ -318,6 +321,19 @@ void MainWindow::previewPdf(const QString & pdfFile)
     QProcess::startDetached("okular", QStringList() << pdfFile);
 }
 
+void MainWindow::updateWindowTitle()
+{
+    auto view = m_viewManager->activeView();
+    if (view) {
+        auto modified = view->document()->isModified();
+        setWindowTitle(view->document()->documentName()
+                       + (modified ? QString(" [modified]") : QString())
+                       + " - TikZ Kit");
+    } else {
+        setWindowTitle("TikZ Kit");
+    }
+}
+
 void MainWindow::slotViewChanged(tikz::ui::View * view)
 {
     // remove current view actions
@@ -332,9 +348,9 @@ tikz::ui::MainWindow * MainWindow::wrapper() const
     return m_wrapper;
 }
 
-QList<tikz::ui::View *> MainWindow::views()
+QVector<tikz::ui::View *> MainWindow::views() const
 {
-    return m_views;
+    return m_viewManager->views();
 }
 
 tikz::ui::View * MainWindow::activeView()

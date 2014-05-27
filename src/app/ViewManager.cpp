@@ -200,6 +200,11 @@ tikz::ui::View *ViewManager::activeView()
     return m_activeView;
 }
 
+QVector<tikz::ui::View*> ViewManager::views() const
+{
+    return m_views;
+}
+
 void ViewManager::activateView(tikz::ui::View * view)
 {
     Q_ASSERT(view);

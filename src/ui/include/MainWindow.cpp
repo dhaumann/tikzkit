@@ -36,23 +36,23 @@ MainWindow::~MainWindow()
 {
 }
 
-QList<tikz::ui::View *> MainWindow::views()
+QVector<tikz::ui::View *> MainWindow::views() const
 {
     /**
      * null check
      */
     if (!this) {
-        return QList<tikz::ui::View *> ();
+        return QVector<tikz::ui::View *> ();
     }
 
     /**
      * dispatch to parent
      */
-    QList<tikz::ui::View *> views;
+    QVector<tikz::ui::View *> views;
     QMetaObject::invokeMethod(parent()
                               , "views"
                               , Qt::DirectConnection
-                              , Q_RETURN_ARG(QList<tikz::ui::View *>, views));
+                              , Q_RETURN_ARG(QVector<tikz::ui::View *>, views));
     return views;
 }
 

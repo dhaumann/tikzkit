@@ -69,11 +69,22 @@ public:
      */
     tikz::ui::View * createView(tikz::ui::Document *doc = nullptr);
 
+
 private:
     bool deleteView(tikz::ui::View *view);
 
 public:
+    /**
+     * Get the currently active view.
+     * Typically, the returned view is a valid pointer. However, sometimes the
+     * returned view may be a @e nullptr, if there are no documents opened at all.
+     */
     tikz::ui::View *activeView();
+
+    /**
+     * Get the list of views in this ViewManager.
+     */
+    QVector<tikz::ui::View*> views() const;
 
 private Q_SLOTS:
     void slotViewChanged();

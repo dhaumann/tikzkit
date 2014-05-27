@@ -74,6 +74,11 @@ public Q_SLOTS:
      */
     void slotViewChanged(tikz::ui::View * view);
 
+    /**
+     * Call this slot whenever the window title needs to be changed.
+     */
+    void updateWindowTitle();
+
 public:
     /**
      * Accessor to the MainWindow wrapper interface
@@ -88,7 +93,7 @@ public Q_SLOTS:
      * Get a list of all views for this main window.
      * @return all views
      */
-    QList<tikz::ui::View *> views();
+    QVector<tikz::ui::View *> views() const;
 
     /**
      * Access the active view.
@@ -147,7 +152,6 @@ private:
     ViewManager * m_viewManager;
 
     tikz::ui::MainWindow * m_wrapper;
-    QList<tikz::ui::View*> m_views;
 
     QTextEdit * m_textEdit;
 

@@ -24,6 +24,7 @@
 #include "tikzgui_export.h"
 
 #include <QObject>
+#include <QVector>
 
 class QEvent;
 class QIcon;
@@ -81,7 +82,7 @@ public:
      * Get a list of all views for this main window.
      * @return all views
      */
-    QList<tikz::ui::View *> views();
+    QVector<tikz::ui::View *> views() const;
 
     /**
      * Access the active view.
