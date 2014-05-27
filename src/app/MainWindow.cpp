@@ -240,11 +240,16 @@ void MainWindow::slotDocumentOpen()
 
     const QUrl file = QFileDialog::getOpenFileUrl(this, "Open File", baseUrl, "TikZKit (*.tikzkit)");
     qDebug() << "attempting to open file" << file;
-    if (file.isLocalFile()) {
+    if (!file.isLocalFile()) {
         return;
     }
 
-    m_viewManager->openUrl(file, true);
+    openUrl(file);
+
+    // TODO add to open-recent file menu
+//     if (!doc->url().isEmpty()) {
+//         mainWindow()->fileOpenRecent()->addUrl(doc->url());
+//     }
 }
 
 void MainWindow::slotCloseActiveView()
@@ -343,7 +348,7 @@ tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)
 
 tikz::ui::View *MainWindow::openUrl(const QUrl &url)
 {
-    auto doc = m_viewManager->openUrl(url);
+    auto doc = TikzKit::self()->documentManager()->openUrl(url);
     return m_viewManager->activateView(doc);
 }
 

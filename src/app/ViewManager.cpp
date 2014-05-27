@@ -108,22 +108,6 @@ void ViewManager::updateViewSpaceActions()
 //     goPrev->setEnabled(m_viewSpaceList.count() > 1);
 }
 
-tikz::ui::Document *ViewManager::openUrl(const QUrl &url,
-                                         bool activate)
-{
-    tikz::ui::Document *doc = TikzKit::self()->documentManager()->openUrl(url);
-
-//     if (!doc->url().isEmpty()) {
-//         mainWindow()->fileOpenRecent()->addUrl(doc->url());
-//     }
-
-    if (activate) {
-        activateView(doc);
-    }
-
-    return doc;
-}
-
 MainWindow *ViewManager::mainWindow()
 {
     return m_mainWindow;
@@ -135,6 +119,8 @@ void ViewManager::slotDocumentCreated(tikz::ui::Document *doc)
         activateView(doc);
     }
 
+    connect(doc, SIGNAL(documentNameChanged(tikz::core::Document*)), this, SLOT(updateDocumentName(tikz::core::Document*)));
+
     // hide tabbar if there are less than 2 tabs
     if (m_tabBar->count() <= 1) {
         m_tabBar->hide();
@@ -143,6 +129,9 @@ void ViewManager::slotDocumentCreated(tikz::ui::Document *doc)
 
 void ViewManager::slotAboutToDeleteDocument(tikz::ui::Document *doc)
 {
+    // kill all connectiosn (namely, documentNameChanged(), modifiedChanged(), ...)
+    disconnect(doc, 0, this, 0);
+
     // collect all views of that document that belong to this manager
     QList<tikz::ui::View *> closeList;
     foreach (auto view, doc->views()) {
@@ -349,6 +338,15 @@ void ViewManager::closeRequest(int index)
     Q_ASSERT(tikz::ui::Editor::instance()->views().contains(view));
 
     emit closeDocumentRequested(view->document());
+}
+
+void ViewManager::updateDocumentName(tikz::core::Document * doc)
+{
+    for (int i = 0; i < m_tabBar->count(); ++i) {
+        if (m_tabBar->tabData(i).value<tikz::ui::View*>()->document() == doc) {
+            m_tabBar->setTabText(i, doc->documentName());
+        }
+    }
 }
 
 // kate: indent-width 4; replace-tabs on;

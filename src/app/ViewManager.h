@@ -27,6 +27,9 @@ class QStackedWidget;
 class MainWindow;
 
 namespace tikz {
+namespace core {
+    class Document;
+}
 namespace ui {
     class View;
     class Document;
@@ -48,10 +51,6 @@ private:
     void setupActions();
 
     void updateViewSpaceActions();
-
-public Q_SLOTS:
-    tikz::ui::Document *openUrl(const QUrl &url,
-                                bool activate = true);
 
 public:
     void closeView(tikz::ui::View *view);
@@ -113,6 +112,11 @@ protected Q_SLOTS:
      * The close button on a tab with @p index was pressed.
      */
     void closeRequest(int index);
+
+    /**
+     * Call this slot to reflect the correct name in the tabbar.
+     */
+    void updateDocumentName(tikz::core::Document * doc);
 
 private:
     MainWindow * m_mainWindow;
