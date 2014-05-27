@@ -344,6 +344,7 @@ tikz::ui::View * MainWindow::activeView()
 
 tikz::ui::View *MainWindow::activateView(tikz::ui::Document *document)
 {
+    return m_viewManager->activateView(document);
 }
 
 tikz::ui::View *MainWindow::openUrl(const QUrl &url)

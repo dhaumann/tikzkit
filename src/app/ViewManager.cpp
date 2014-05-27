@@ -35,6 +35,7 @@
 ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
     : QWidget(parent)
     , m_mainWindow(mainWin)
+    , m_activeView(nullptr)
 {
     auto vbox = new QVBoxLayout(this);
     vbox->setContentsMargins(0, 0, 0, 0);
@@ -184,8 +185,9 @@ bool ViewManager::deleteView(tikz::ui::View *view)
     // unregister tab
     removeTab(view);
 
-//     removeView(view); FIXME
-// if active view == view, create a new view of another doc
+    // deleting the active view automatically activates another tab, which
+    // in turn activates another view
+    Q_ASSERT(m_activeView != view);
 
     // remove view from mapping and memory !!
     m_views.remove(m_views.indexOf(view));
@@ -195,7 +197,7 @@ bool ViewManager::deleteView(tikz::ui::View *view)
 
 tikz::ui::View *ViewManager::activeView()
 {
-    return qobject_cast<tikz::ui::View*>(m_stack->currentWidget());
+    return m_activeView;
 }
 
 void ViewManager::activateView(tikz::ui::View * view)
@@ -203,7 +205,8 @@ void ViewManager::activateView(tikz::ui::View * view)
     Q_ASSERT(view);
     Q_ASSERT(m_views.contains(view));
 
-    if (m_stack->currentWidget() == view) {
+    if (m_activeView == view) {
+        Q_ASSERT(m_stack->currentWidget() == view);
         return;
     }
 
@@ -223,6 +226,7 @@ void ViewManager::activateView(tikz::ui::View * view)
 
     // make sure the correct view is visible
     // TODO, FIXME: merge new actions
+    m_activeView = view;
     m_stack->setCurrentWidget(view);
 
     emit viewChanged(view);
@@ -251,9 +255,11 @@ tikz::ui::View *ViewManager::activateView(tikz::ui::Document * doc)
     }
 
     // create new view otherwise
-    createView(doc);
-    activateView(doc);
-    return activeView();
+    auto view = createView(doc);
+    activateView(view);
+    Q_ASSERT(view == activeView());
+
+    return view;
 }
 
 void ViewManager::slotViewChanged()
@@ -313,6 +319,8 @@ void ViewManager::activateTab(int index)
 {
     // if there are no tabs, just return
     if (index < 0) {
+        m_activeView = nullptr;
+        emit viewChanged(m_activeView);
         return;
     }
 

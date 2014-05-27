@@ -125,6 +125,7 @@ private:
     QStackedWidget * m_stack;
 
     QVector<tikz::ui::View*> m_views;
+    tikz::ui::View * m_activeView;
 };
 
 #endif // TIKZKIT_VIEW_MANAGER_H
