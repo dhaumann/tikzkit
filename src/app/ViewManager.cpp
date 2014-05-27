@@ -55,24 +55,19 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
     setupActions();
 
     connect(this, SIGNAL(viewChanged(tikz::ui::View*)), this, SLOT(slotViewChanged()));
-    connect(TikzKit::self()->documentManager(), SIGNAL(documentCreatedViewManager(tikz::ui::Document*)), this, SLOT(documentCreated(tikz::ui::Document*)));
+    connect(TikzKit::self()->documentManager(), SIGNAL(documentCreated(tikz::ui::Document*)), this, SLOT(slotDocumentCreated(tikz::ui::Document*)));
 
-    /**
-     * before document is really deleted: cleanup all views!
-     */
+    // a-priori track document deletion
     connect(TikzKit::self()->documentManager(), SIGNAL(aboutToDeleteDocument(tikz::ui::Document*)),
-            this, SLOT(aboutToDeleteDocument(tikz::ui::Document*)));
+            this, SLOT(slotAboutToDeleteDocument(tikz::ui::Document*)));
 
-    /**
-     * handle document deletion transactions
-     * disable view creation in between
-     * afterwards ensure we have views ;)
-     */
+    // unregister document
     connect(TikzKit::self()->documentManager(), SIGNAL(documentDeleted(tikz::ui::Document*)),
-            this, SLOT(documentDeleted(tikz::ui::Document*)));
+            this, SLOT(slotDocumentDeleted(tikz::ui::Document*)));
 
+    // register existing documents
     foreach (auto doc, TikzKit::self()->documentManager()->documentList()) {
-        documentCreated(doc);
+        slotDocumentCreated(doc);
     }
 }
 
@@ -134,53 +129,50 @@ MainWindow *ViewManager::mainWindow()
     return m_mainWindow;
 }
 
-void ViewManager::documentCreated(tikz::ui::Document *doc)
+void ViewManager::slotDocumentCreated(tikz::ui::Document *doc)
 {
     if (!activeView()) {
         activateView(doc);
     }
+
+    // hide tabbar if there are less than 2 tabs
+    if (m_tabBar->count() <= 1) {
+        m_tabBar->hide();
+    }
 }
 
-void ViewManager::documentDeleted(tikz::ui::Document * doc)
+void ViewManager::slotAboutToDeleteDocument(tikz::ui::Document *doc)
 {
-    /**
-     * try to have active view around!
-     */
-    if (!activeView() && !TikzKit::self()->documentManager()->documentList().isEmpty()) {
-        createView(TikzKit::self()->documentManager()->documentList().last());
+    // collect all views of that document that belong to this manager
+    QList<tikz::ui::View *> closeList;
+    foreach (auto view, doc->views()) {
+        if (m_views.contains(view)) {
+            closeList.append(view);
+        }
     }
 
-    /**
-     * if we have one now, show them in all viewspaces that got empty!
-     */
-    if (tikz::ui::View *const newActiveView = activeView()) {
-        createView(newActiveView->document());
-        emit viewChanged(newActiveView);
+    foreach (auto view, closeList) {
+        deleteView(view);
     }
+}
+
+void ViewManager::slotDocumentDeleted(tikz::ui::Document * doc)
+{
+    // for now, nothing to do
 }
 
 tikz::ui::View * ViewManager::createView(tikz::ui::Document *doc)
 {
-    // create doc
-    if (!doc) {
-        doc = TikzKit::self()->documentManager()->createDocument();
-    }
+    // require a valid doc
+    Q_ASSERT(doc);
 
-    /**
-     * pass the view the correct main window
-     */
+    // pass the view the correct main window
     tikz::ui::View *view = doc->createView(m_stack, mainWindow()->wrapper());
 
     m_views.append(view);
 
-    // register document, it is shown below through showView() then
-//     if (! m_documents.contains(doc)) {
-//         registerDocument(doc);
-//     }
-
     // insert View into stack
     m_stack->addWidget(view);
-    m_docToView[doc] = view;
 
     // register tab
     addTab(view);
@@ -271,6 +263,7 @@ tikz::ui::View *ViewManager::activateView(tikz::ui::Document * doc)
 
     // create new view otherwise
     createView(doc);
+    activateView(doc);
     return activeView();
 }
 
@@ -281,23 +274,6 @@ void ViewManager::slotViewChanged()
     }
 }
 
-void ViewManager::aboutToDeleteDocument(tikz::ui::Document *doc)
-{
-    /**
-     * collect all views of that document that belong to this manager
-     */
-    QList<tikz::ui::View *> closeList;
-    Q_FOREACH (tikz::ui::View *v, doc->views()) {
-        if (m_views.contains(v)) {
-            closeList.append(v);
-        }
-    }
-
-    while (!closeList.isEmpty()) {
-        deleteView(closeList.takeFirst());
-    }
-}
-
 void ViewManager::closeView(tikz::ui::View *view)
 {
     deleteView(view);
@@ -305,7 +281,6 @@ void ViewManager::closeView(tikz::ui::View *view)
 
 void ViewManager::addTab(tikz::ui::View * view)
 {
-    qDebug() << "added Tab";
     int index = -1;
     for (int i = 0; i < m_tabBar->count(); ++i) {
         if (m_tabBar->tabData(i).value<tikz::ui::View*>() == view) {
@@ -328,7 +303,6 @@ void ViewManager::addTab(tikz::ui::View * view)
 
 void ViewManager::removeTab(tikz::ui::View * view)
 {
-    qDebug() << "and remooooved Tab";
     int index = -1;
     for (int i = 0; i < m_tabBar->count(); ++i) {
         if (m_tabBar->tabData(i).value<tikz::ui::View*>() == view) {
@@ -374,7 +348,7 @@ void ViewManager::closeRequest(int index)
     // Otherwise, it's a dangling pointer!
     Q_ASSERT(tikz::ui::Editor::instance()->views().contains(view));
 
-    deleteView(view);
+    emit closeDocumentRequested(view->document());
 }
 
 // kate: indent-width 4; replace-tabs on;

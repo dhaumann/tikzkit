@@ -32,6 +32,8 @@ DocumentManager::DocumentManager(QObject *parent)
 
 DocumentManager::~DocumentManager()
 {
+    qDeleteAll(m_documents);
+    m_documents.clear();
 }
 
 tikz::ui::Document *DocumentManager::createDocument()

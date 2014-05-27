@@ -61,6 +61,8 @@ Q_SIGNALS:
     void viewChanged(tikz::ui::View *);
     void viewCreated(tikz::ui::View *);
 
+    void closeDocumentRequested(tikz::ui::Document * doc);
+
 public:
     /**
      * create and activate a new view for doc, if doc == 0, then
@@ -77,16 +79,9 @@ public:
 private Q_SLOTS:
     void slotViewChanged();
 
-    void documentCreated(tikz::ui::Document *doc);
-    void aboutToDeleteDocument(tikz::ui::Document *doc);
-
-    /**
-     * This singnal is emitted after the documents batch was deleted
-     *
-     * This is the batch closing signal for aboutToDeleteDocuments
-     * @param documents the documents that weren't deleted after all
-     */
-    void documentDeleted(tikz::ui::Document* doc);
+    void slotDocumentCreated(tikz::ui::Document *doc);
+    void slotAboutToDeleteDocument(tikz::ui::Document *doc);
+    void slotDocumentDeleted(tikz::ui::Document* doc);
     
 public Q_SLOTS:
     /**
@@ -125,13 +120,7 @@ private:
     QTabBar * m_tabBar;
     QStackedWidget * m_stack;
 
-    QVector<tikz::ui::Document*> m_documents;
     QVector<tikz::ui::View*> m_views;
-
-    // the list of views that are contained in this ViewManager,
-    // mapped through a hash from Document to View.
-    // note: the number of entries match m_stack->count();
-    QHash<tikz::ui::Document*, tikz::ui::View*> m_docToView;
 };
 
 #endif // TIKZKIT_VIEW_MANAGER_H

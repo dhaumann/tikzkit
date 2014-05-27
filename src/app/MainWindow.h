@@ -59,6 +59,7 @@ public Q_SLOTS:
     void slotDocumentNew();
     void slotDocumentOpen();
     void slotCloseActiveView();
+    void closeDocument(tikz::ui::Document * doc);
 
     void previewPdf();
     void previewPdf(const QString & pdfFile);

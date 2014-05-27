@@ -51,7 +51,7 @@ public:
 
     tikz::ui::Document *openUrl(const QUrl & url);
 
-    bool closeDocument(tikz::ui::Document *, bool closeUrl = true);
+    bool closeDocument(tikz::ui::Document * doc, bool closeUrl = true);
     bool closeAllDocuments(bool closeUrl = true);
 
     QVector<tikz::ui::Document *> modifiedDocumentList();

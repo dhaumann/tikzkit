@@ -18,6 +18,7 @@
 #include "MainWindow.h"
 #include "TikzKit.h"
 #include "ViewManager.h"
+#include "DocumentManager.h"
 #include "PdfGenerator.h"
 
 #include <tikz/ui/Editor.h>
@@ -109,6 +110,7 @@ MainWindow::MainWindow()
     connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SLOT(viewChanged(tikz::ui::View *)));
     connect(m_viewManager, SIGNAL(viewCreated(tikz::ui::View *)), this, SLOT(viewCreated(tikz::ui::View *)));
     connect(m_viewManager, SIGNAL(viewChanged(tikz::ui::View *)), this, SLOT(slotViewChanged(tikz::ui::View *)));
+    connect(m_viewManager, SIGNAL(closeDocumentRequested(tikz::ui::Document *)), this, SLOT(closeDocument(tikz::ui::Document*)));
 
     // register ourself as MainWindow
     TikzKit::self()->registerMainWindow(this);
@@ -225,8 +227,8 @@ void MainWindow::setupActions()
 
 void MainWindow::slotDocumentNew()
 {
-    auto view = m_viewManager->createView();
-    m_viewManager->activateView(view);
+    auto doc = TikzKit::self()->documentManager()->createDocument();
+    m_viewManager->activateView(doc);
 }
 
 void MainWindow::slotDocumentOpen()
@@ -234,7 +236,6 @@ void MainWindow::slotDocumentOpen()
     QUrl baseUrl;
     if (tikz::ui::View *cv = m_viewManager->activeView()) {
         baseUrl = cv->document()->url();
-        qDebug() << "using base url" << baseUrl;
     }
 
     const QUrl file = QFileDialog::getOpenFileUrl(this, "Open File", baseUrl, "TikZKit (*.tikzkit)");
@@ -248,7 +249,16 @@ void MainWindow::slotDocumentOpen()
 
 void MainWindow::slotCloseActiveView()
 {
-    m_viewManager->closeView(m_viewManager->activeView());
+    auto view = m_viewManager->activeView();
+    Q_ASSERT(view);
+
+    closeDocument(view->document());
+}
+
+void MainWindow::closeDocument(tikz::ui::Document * doc)
+{
+    // close the document
+    TikzKit::self()->documentManager()->closeDocument(doc);
 }
 
 // void MainWindow::slotDocumentClose(tikz::ui::Document * doc)
