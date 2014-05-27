@@ -69,6 +69,9 @@ protected:
     void setupUi();
     void setupActions();
 
+    void mergeView(tikz::ui::View * view);
+    void unmergeView(tikz::ui::View * view);
+
 public Q_SLOTS:
     /**
      * This slot is called by the ViewManager whenever the current view changes.

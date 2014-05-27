@@ -44,14 +44,6 @@ public:
     ViewManager(MainWindow * mainWin, QWidget * parent = 0);
     virtual ~ViewManager();
 
-private:
-    /**
-     * create all actions needed for the view manager
-     */
-    void setupActions();
-
-    void updateViewSpaceActions();
-
 public:
     void closeView(tikz::ui::View *view);
     MainWindow *mainWindow();

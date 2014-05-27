@@ -52,9 +52,6 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
     vbox->addWidget(m_tabBar);
     vbox->addWidget(m_stack);
 
-    // important, set them up, as we use them in other methodes
-    setupActions();
-
     connect(this, SIGNAL(viewChanged(tikz::ui::View*)), this, SLOT(slotViewChanged()));
     connect(TikzKit::self()->documentManager(), SIGNAL(documentCreated(tikz::ui::Document*)), this, SLOT(slotDocumentCreated(tikz::ui::Document*)));
 
@@ -74,39 +71,6 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
 
 ViewManager::~ViewManager()
 {
-}
-
-void ViewManager::setupActions()
-{
-//     m_closeView = m_mainWindow->actionCollection()->addAction(QStringLiteral("view_close_current_space"));
-//     m_closeView->setIcon(QIcon::fromTheme(QStringLiteral("view-close")));
-//     m_closeView->setText(i18n("Cl&ose Current View"));
-//     m_closeView->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-//     connect(m_closeView, SIGNAL(triggered()), this, SLOT(slotCloseCurrentViewSpace()), Qt::QueuedConnection);
-//
-//     m_closeView->setWhatsThis(i18n("Close the currently active split view"));
-//
-//     goNext = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_next_split_view"));
-//     goNext->setText(i18n("Next Split View"));
-//     goNext->setShortcut(Qt::Key_F8);
-//     connect(goNext, SIGNAL(triggered()), this, SLOT(activateNextView()));
-//
-//     goNext->setWhatsThis(i18n("Make the next split view the active one."));
-//
-//     goPrev = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_prev_split_view"));
-//     goPrev->setText(i18n("Previous Split View"));
-//     goPrev->setShortcut(Qt::SHIFT + Qt::Key_F8);
-//     connect(goPrev, SIGNAL(triggered()), this, SLOT(activatePrevView()));
-//
-//     goPrev->setWhatsThis(i18n("Make the previous split view the active one."));
-}
-
-void ViewManager::updateViewSpaceActions()
-{
-//     m_closeView->setEnabled(m_viewSpaceList.count() > 1);
-//     m_closeOtherViews->setEnabled(m_viewSpaceList.count() > 1);
-//     goNext->setEnabled(m_viewSpaceList.count() > 1);
-//     goPrev->setEnabled(m_viewSpaceList.count() > 1);
 }
 
 MainWindow *ViewManager::mainWindow()

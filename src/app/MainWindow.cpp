@@ -228,6 +228,51 @@ void MainWindow::setupActions()
     connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
 }
 
+void MainWindow::mergeView(tikz::ui::View * view)
+{
+    if (! view) {
+        return;
+    }
+
+    // TODO: add active view actions to main window
+
+//     m_closeView = m_mainWindow->actionCollection()->addAction(QStringLiteral("view_close_current_space"));
+//     m_closeView->setIcon(QIcon::fromTheme(QStringLiteral("view-close")));
+//     m_closeView->setText(i18n("Cl&ose Current View"));
+//     m_closeView->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+//     connect(m_closeView, SIGNAL(triggered()), this, SLOT(slotCloseCurrentViewSpace()), Qt::QueuedConnection);
+//
+//     m_closeView->setWhatsThis(i18n("Close the currently active split view"));
+//
+//     goNext = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_next_split_view"));
+//     goNext->setText(i18n("Next Split View"));
+//     goNext->setShortcut(Qt::Key_F8);
+//     connect(goNext, SIGNAL(triggered()), this, SLOT(activateNextView()));
+//
+//     goNext->setWhatsThis(i18n("Make the next split view the active one."));
+//
+//     goPrev = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_prev_split_view"));
+//     goPrev->setText(i18n("Previous Split View"));
+//     goPrev->setShortcut(Qt::SHIFT + Qt::Key_F8);
+//     connect(goPrev, SIGNAL(triggered()), this, SLOT(activatePrevView()));
+//
+//     goPrev->setWhatsThis(i18n("Make the previous split view the active one."));
+}
+
+void MainWindow::unmergeView(tikz::ui::View * view)
+{
+    if (! view) {
+        return;
+    }
+
+    // TODO: remove current view actions from the main window
+}
+
+//     m_closeView->setEnabled(m_viewSpaceList.count() > 1);
+//     m_closeOtherViews->setEnabled(m_viewSpaceList.count() > 1);
+//     goNext->setEnabled(m_viewSpaceList.count() > 1);
+//     goPrev->setEnabled(m_viewSpaceList.count() > 1);
+
 void MainWindow::slotDocumentNew()
 {
     auto doc = TikzKit::self()->documentManager()->createDocument();
@@ -341,13 +386,13 @@ void MainWindow::slotViewChanged(tikz::ui::View * view)
     }
 
     if (m_activeView) {
-        // TODO: remove current view actions from the main window
+        unmergeView(m_activeView);
     }
 
     m_activeView = view;
 
     if (m_activeView) {
-        // TODO: add active view actions to main window
+        mergeView(m_activeView);
     }
 
     qDebug() << "the active view changed to" << view;
