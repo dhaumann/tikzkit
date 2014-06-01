@@ -1,5 +1,24 @@
-core
-- tikz::Document (priority: high)
+# TikZKit
+
+Next to being a palindrome, TikZKit is a graphical what-you-see-is-what-you-get (WYSIWYG) editor for PGF/TikZ.
+[PGF/TikZ](http://www.texample.net/tikz/examples/all/) in turn is a markup
+package that allows to create most beautiful pictures in LaTeX.
+The core features of TikZKit are:
+1. Exact rendering as if you had generated the picture through LaTeX.
+2. TikZ export, obtaining TikZ code that can easily be manipulated.
+
+## Architecture
+
+TikZKit is written in C++11 and Qt5.
+It is organized in two libraries following the model/view concept, and the application:
+1. tikzcore: This library describes the model. A tikz picture is entirely described by a tikz::core::Document.
+2. tikzui: This library describes the view. It renders the scene by using the QGraphicsView based on a tikz::core::Document.
+3. TikZKit: The application is a wrapper around the libraries tikzcore and tikzui.
+
+## TODO List (incomplete)
+
+### tikzcore
+- tikz::core::Document (priority: high)
   - maybe use pgf layers: background, nodes, edges, foreground
 
 - visitors (priority: high)
@@ -17,13 +36,13 @@ core
   - support anchors above, left, below, right and combinations
   - support anchoring on other anchors
 
-gui
+### tikzui
 
 - shapes
   - add more shapes
   - add more arrows
 
-app
+### app
 - TikZKit
 
 integration test (priority: medium)
@@ -40,4 +59,4 @@ integration test (priority: medium)
     - use pdiff to check the graphical diff
     - fail test only on user specified threshold
 
-kate: space-indent on; indent-width 2;
+<!--- kate: space-indent on; indent-width 2; -->
