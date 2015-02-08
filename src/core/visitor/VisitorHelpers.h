@@ -37,7 +37,7 @@ extern QString anchorToString(tikz::Anchor anchor, bool withDot = false);
 /**
  * Converts @p anchor to tikz::Anchor.
  */
-extern tikz::Anchor anchorFromString(const QString anchor);
+extern tikz::Anchor anchorFromString(const QString & anchor);
 
 /**
  * Convert @p penStyle to a QString.

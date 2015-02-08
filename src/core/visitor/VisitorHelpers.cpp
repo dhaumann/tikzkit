@@ -80,7 +80,7 @@ QString anchorToString(tikz::Anchor anchor, bool withDot)
     return str.isEmpty() ? str : ('.' + str);
 }
 
-tikz::Anchor anchorFromString(const QString anchor)
+tikz::Anchor anchorFromString(const QString & anchor)
 {
     if (anchor.isEmpty()) {
         return Anchor::NoAnchor;
