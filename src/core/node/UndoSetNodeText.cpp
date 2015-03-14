@@ -25,7 +25,7 @@ namespace tikz {
 namespace core {
 
 UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Set node text", doc)
     , m_id(id)
 {
     Node * node = doc->nodeFromId(id);
@@ -66,7 +66,7 @@ void UndoSetNodeText::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetNodeText::mergeWith(const QUndoCommand * command)
+bool UndoSetNodeText::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 

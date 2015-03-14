@@ -122,7 +122,7 @@ void Node::setMetaPos(const tikz::core::MetaPos & pos)
         d->pos = pos;
         endConfig();
     } else {
-        document()->undoManager()->push(new UndoSetNodePos(this, pos, document()));
+        document()->addUndoItem(new UndoSetNodePos(this, pos, document()));
     }
 }
 
@@ -145,7 +145,7 @@ void Node::setText(const QString& text)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->undoManager()->push(new UndoSetNodeText(id(), text, document()));
+        document()->addUndoItem(new UndoSetNodeText(id(), text, document()));
 
         // now the text should be updated
         Q_ASSERT(d->text == text);
@@ -172,7 +172,7 @@ void Node::setStyle(const NodeStyle & style)
         endConfig();
     } else {
     // create new undo item, push will call ::redo()
-    document()->undoManager()->push(new UndoSetNodeStyle(id(), style, document()));
+    document()->addUndoItem(new UndoSetNodeStyle(id(), style, document()));
 
     // now the text should be updated
 //     Q_ASSERT(d->style == style); // same as above

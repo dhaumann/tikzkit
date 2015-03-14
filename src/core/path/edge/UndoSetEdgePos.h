@@ -65,7 +65,7 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Merge undo items, if possible.
          */
-        bool mergeWith(const QUndoCommand * command) override;
+        bool mergeWith(const UndoItem * command) override;
 
     private:
         /**

@@ -26,7 +26,7 @@ namespace tikz {
 namespace core {
 
 UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Delete node", doc)
     , m_id(id)
 {
     // get node to save data

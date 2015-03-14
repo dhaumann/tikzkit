@@ -26,7 +26,7 @@ namespace tikz {
 namespace core {
 
 UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Set node style", doc)
     , m_id(id)
 {
     // get node to save data
@@ -69,7 +69,7 @@ void UndoSetNodeStyle::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetNodeStyle::mergeWith(const QUndoCommand * command)
+bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 

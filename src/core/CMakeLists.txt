@@ -44,6 +44,8 @@ set(qtikzcore_SOURCES
     path/ellipse/EllipsePath.cpp
     path/ellipse/UndoSetEllipsePos.cpp
 
+    undo/UndoManager.cpp
+    undo/UndoGroup.cpp
     undo/UndoItem.cpp
 
     node/UndoCreateNode.cpp
@@ -63,11 +65,11 @@ set(qtikzcore_SOURCES
 # generate the moc-file for tikz.h ourselves.
 # NOTE: The moc file may not have the file ending ".moc", as including
 # the .moc file in tikz.cpp will create an empty tikz.moc file.
-qt5_generate_moc(tikz.h tikzmoc)
+#qt5_generate_moc(tikz.h tikzmoc)
 
 add_library(qtikzcore SHARED
     ${qtikzcore_SOURCES}
-    tikzmoc
+#    tikzmoc
 )
 
 target_link_libraries(qtikzcore

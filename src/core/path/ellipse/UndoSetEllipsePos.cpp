@@ -27,7 +27,7 @@ namespace core {
 UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      const MetaPos & newPos,
                                      Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Set ellipse position", doc)
     , m_pathId(path->id())
     , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
@@ -67,7 +67,7 @@ void UndoSetEllipsePos::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetEllipsePos::mergeWith(const QUndoCommand * command)
+bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 

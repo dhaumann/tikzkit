@@ -29,7 +29,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
                                const MetaPos & newPos,
                                bool isStartNode,
                                Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Set edge position", doc)
     , m_pathId(path->id())
     , m_undoPos(oldPos)
     , m_redoPos(newPos)
@@ -78,7 +78,7 @@ void UndoSetEdgePos::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetEdgePos::mergeWith(const QUndoCommand * command)
+bool UndoSetEdgePos::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 

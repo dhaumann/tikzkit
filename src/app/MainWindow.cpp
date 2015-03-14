@@ -82,14 +82,6 @@ MainWindow::MainWindow()
     setupUi();
     setupActions();
 
-//     // undo and redo
-//     QAction * undoAction = m_doc->undoManager()->createUndoAction(m_doc);
-//     undoAction->setIcon(QIcon::fromTheme("edit-undo"));
-//     m_toolBar->addAction(undoAction);
-//
-//     QAction * redoAction = m_doc->undoManager()->createRedoAction(m_doc);
-//     redoAction->setIcon(QIcon::fromTheme("edit-redo"));
-//     m_toolBar->addAction(redoAction);
 
     // add arrow head/tail combos
 //     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
@@ -233,6 +225,13 @@ void MainWindow::mergeView(tikz::ui::View * view)
     if (! view) {
         return;
     }
+
+    // undo and redo
+    QAction * undoAction = view->document()->undoAction();
+    m_toolBar->addAction(undoAction);
+
+    QAction * redoAction = view->document()->redoAction();
+    m_toolBar->addAction(redoAction);
 
     // TODO: add active view actions to main window
 

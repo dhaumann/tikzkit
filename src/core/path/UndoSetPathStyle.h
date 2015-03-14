@@ -60,7 +60,7 @@ class UndoSetPathStyle : public UndoItem
         /**
          * Merge undo items, if possible.
          */
-        virtual bool mergeWith(const QUndoCommand * command) override;
+        virtual bool mergeWith(const UndoItem * command) override;
 
     private:
         /**

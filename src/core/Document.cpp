@@ -23,6 +23,7 @@
 #include "EllipsePath.h"
 #include "Style.h"
 
+#include "UndoManager.h"
 #include "UndoCreateNode.h"
 #include "UndoDeleteNode.h"
 #include "UndoCreatePath.h"
@@ -33,7 +34,6 @@
 #include "DeserializeVisitor.h"
 #include "TikzExportVisitor.h"
 
-#include <QUndoStack>
 #include <QDebug>
 #include <QTextStream>
 #include <QFile>
@@ -55,19 +55,17 @@ class DocumentPrivate
 {
     public:
         // Document this private instance belongs to
-        Document * q;
+        Document * q = nullptr;
 
         // the Document's current url
         QUrl url;
         // undo manager
-        QUndoStack undoManager;
-        // monitor transactions
-        int transactionRefCounter;
+        UndoManager * undoManager = nullptr;
         // flag whether operations should add undo items or not
-        bool undoActive;
+        bool undoActive = false;
 
         // global document style options
-        Style * style;
+        Style * style = nullptr;
 
         // node & path list
         QVector<Node*> nodes;
@@ -79,7 +77,7 @@ class DocumentPrivate
         /// Path lookup map
         QHash<qint64, Path*> pathMap;
 
-        qint64 nextId;
+        qint64 nextId = 0;
 
         // helper to get a document-wide unique id
         qint64 uniqueId()
@@ -116,13 +114,13 @@ Document::Document(QObject * parent)
     , d(new DocumentPrivate())
 {
     d->q = this;
-    d->transactionRefCounter = 0;
+    d->undoManager = new UndoManager(this);
     d->undoActive = false;
     d->nextId = 0;
     d->style = new Style(d->uniqueId(), this);
 
-    connect(&d->undoManager, SIGNAL(indexChanged(int)), this, SIGNAL(changed()));
-    connect(&d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
+    connect(d->undoManager, SIGNAL(indexChanged(int)), this, SIGNAL(changed()));
+    connect(d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
 }
 
 Document::~Document()
@@ -177,7 +175,7 @@ void Document::close()
     d->style = new Style(d->uniqueId(), this);
 
     // clear undo stack
-    d->undoManager.clear();
+    d->undoManager->clear();
 
     // unnamed document
     d->url.clear();
@@ -271,38 +269,24 @@ QString Document::tikzCode()
     return tev.tikzCode();
 }
 
-QUndoStack * Document::undoManager()
+void Document::addUndoItem(tikz::core::UndoItem * undoItem)
 {
-    return &d->undoManager;
+    d->undoManager->addUndoItem(undoItem);
 }
 
 void Document::beginTransaction(const QString & name)
 {
-    // only call begin macro if required
-    if (d->transactionRefCounter == 0) {
-        d->undoManager.beginMacro(name);
-    }
-
-    ++d->transactionRefCounter;
+    d->undoManager->startTransaction(name);
 }
 
 void Document::finishTransaction()
 {
-    // make sure decreasing the ref-counter is valid
-    Q_ASSERT(d->transactionRefCounter > 0);
-
-    // decrease ref counter
-    --d->transactionRefCounter;
-
-    // and finish transaction if applicable
-    if (d->transactionRefCounter == 0) {
-        d->undoManager.endMacro();
-    }
+    d->undoManager->commitTransaction();
 }
 
 bool Document::transactionRunning() const
 {
-    return d->transactionRefCounter > 0;
+    return d->undoManager->transactionActive();
 }
 
 bool Document::setUndoActive(bool active)
@@ -319,7 +303,17 @@ bool Document::undoActive() const
 
 bool Document::isModified() const
 {
-    return ! d->undoManager.isClean();
+    return ! d->undoManager->isClean();
+}
+
+QAction * Document::undoAction()
+{
+    return d->undoManager->undoAction();
+}
+
+QAction * Document::redoAction()
+{
+    return d->undoManager->redoAction();
 }
 
 tikz::Pos Document::scenePos(const MetaPos & pos) const
@@ -351,7 +345,7 @@ Path * Document::createPath(Path::Type type)
 {
     // create new edge, push will call ::redo()
     const qint64 id = d->uniqueId();
-    d->undoManager.push(new UndoCreatePath(type, id, this));
+    addUndoItem(new UndoCreatePath(type, id, this));
 
     // now the edge should be in the map
     Q_ASSERT(d->pathMap.contains(id));
@@ -371,7 +365,7 @@ void Document::deletePath(Path * path)
 
     // delete path, push will call ::redo()
     const qint64 id = path->id();
-    d->undoManager.push(new UndoDeletePath(id, this));
+    addUndoItem(new UndoDeletePath(id, this));
 
     // path really removed?
     Q_ASSERT(!d->pathMap.contains(id));
@@ -381,7 +375,7 @@ Node* Document::createNode()
 {
     // create new node, push will call ::redo()
     const qint64 id = d->uniqueId();
-    d->undoManager.push(new UndoCreateNode(id, this));
+    addUndoItem(new UndoCreateNode(id, this));
 
     // now the node should be in the map
     Q_ASSERT(d->nodeMap.contains(id));
@@ -413,7 +407,7 @@ void Document::deleteNode(Node * node)
     const qint64 id = node->id();
 
     // start undo group
-    d->undoManager.beginMacro("Remove node");
+    d->undoManager->startTransaction("Remove node");
 
     // make sure no edge points to the deleted node
     foreach (Path* path, d->paths) {
@@ -424,10 +418,10 @@ void Document::deleteNode(Node * node)
     }
 
     // delete node, push will call ::redo()
-    d->undoManager.push(new UndoDeleteNode(id, this));
+    addUndoItem(new UndoDeleteNode(id, this));
 
     // end undo group
-    d->undoManager.endMacro();
+    d->undoManager->commitTransaction();
 
     // node really removed?
     Q_ASSERT(!d->nodeMap.contains(id));

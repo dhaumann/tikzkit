@@ -28,7 +28,7 @@
 #include <QObject>
 #include <QVector>
 
-class QUndoStack;
+class QAction;
 class QPointF;
 class QUrl;
 
@@ -40,6 +40,7 @@ class Style;
 class Node;
 class NodeStyle;
 class EdgeStyle;
+class UndoItem;
 class Visitor;
 
 class TIKZCORE_EXPORT Document : public QObject
@@ -156,7 +157,7 @@ class TIKZCORE_EXPORT Document : public QObject
         /**
          * Get the undo stack of this document.
          */
-        QUndoStack * undoManager();
+        void addUndoItem(tikz::core::UndoItem * undoItem);
 
         /**
          * Begin undo group @p name.
@@ -194,6 +195,16 @@ class TIKZCORE_EXPORT Document : public QObject
          * Check whether the document is in a modified state.
          */
         bool isModified() const;
+
+        /**
+         * Returns the undo action of this document.
+         */
+        QAction * undoAction();
+
+        /**
+         * Returns the redo action of this document.
+         */
+        QAction * redoAction();
 
     //
     // convenience functions

@@ -107,7 +107,7 @@ void Path::setStyle(const EdgeStyle & style)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->undoManager()->push(new UndoSetPathStyle(id(), style, document()));
+        document()->addUndoItem(new UndoSetPathStyle(id(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above

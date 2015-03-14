@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -23,19 +23,54 @@
 namespace tikz {
 namespace core {
 
-UndoItem::UndoItem(Document * doc)
-    : QUndoCommand()
-    , m_document(doc)
+class UndoItemPrivate {
+public:
+    /**
+     * Pointer to the document of this undo/redo item.
+     */
+    Document* doc = nullptr;
+
+    /**
+     * Description of the undo item.
+     */
+    QString text;
+};
+
+UndoItem::UndoItem(const QString & text, Document* doc)
+    : d(new UndoItemPrivate())
 {
+    d->doc = doc;
 }
 
 UndoItem::~UndoItem()
 {
+    delete d;
 }
 
 Document* UndoItem::document()
 {
-    return m_document;
+    return d->doc;
+}
+
+void UndoItem::setText(const QString & text)
+{
+    d->text = text;
+}
+
+QString UndoItem::text() const
+{
+    return d->text;
+}
+
+int UndoItem::id() const
+{
+    return -1;
+}
+
+bool UndoItem::mergeWith(const UndoItem * item)
+{
+    Q_UNUSED(item)
+    return false;
 }
 
 }

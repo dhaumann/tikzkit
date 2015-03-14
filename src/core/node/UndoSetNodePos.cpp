@@ -27,7 +27,7 @@ namespace core {
 UndoSetNodePos::UndoSetNodePos(Node * node,
                        const MetaPos & newPos,
                        Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Move node", doc)
     , m_id(node->id())
     , m_undoPos(node->metaPos())
     , m_redoPos(newPos)
@@ -66,7 +66,7 @@ void UndoSetNodePos::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetNodePos::mergeWith(const QUndoCommand * command)
+bool UndoSetNodePos::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 

@@ -24,7 +24,7 @@ namespace tikz {
 namespace core {
 
 UndoCreateNode::UndoCreateNode(qint64 id, Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Create node", doc)
     , m_id(id)
 {
 }

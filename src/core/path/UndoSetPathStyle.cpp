@@ -26,7 +26,7 @@ namespace tikz {
 namespace core {
 
 UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc)
-    : UndoItem(doc)
+    : UndoItem("Change path style", doc)
     , m_pathId(pathId)
 {
     // get path to save data
@@ -71,7 +71,7 @@ void UndoSetPathStyle::redo()
     document()->setUndoActive(wasActive);
 }
 
-bool UndoSetPathStyle::mergeWith(const QUndoCommand * command)
+bool UndoSetPathStyle::mergeWith(const UndoItem * command)
 {
     Q_ASSERT(id() == command->id());
 
