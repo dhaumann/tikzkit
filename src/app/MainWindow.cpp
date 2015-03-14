@@ -99,6 +99,7 @@ MainWindow::MainWindow()
     // ViewManager to this MainWindow)
     //
     connect(this, SIGNAL(viewCreated(tikz::ui::View *)), m_wrapper, SIGNAL(viewCreated(tikz::ui::View *)));
+    connect(this, SIGNAL(viewCreated(tikz::ui::View *)), this, SLOT(mergeView(tikz::ui::View *)));
     connect(this, SIGNAL(viewChanged(tikz::ui::View *)), m_wrapper, SIGNAL(viewChanged(tikz::ui::View *)));
     connect(m_viewManager, SIGNAL(viewCreated(tikz::ui::View *)), this, SIGNAL(viewCreated(tikz::ui::View *)));
     connect(m_viewManager, SIGNAL(viewChanged(tikz::ui::View *)), this, SLOT(slotViewChanged(tikz::ui::View *)));
@@ -233,6 +234,10 @@ void MainWindow::mergeView(tikz::ui::View * view)
     QAction * redoAction = view->document()->redoAction();
     m_toolBar->addAction(redoAction);
 
+    connect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
+
+    updateWindowTitle();
+
     // TODO: add active view actions to main window
 
 //     m_closeView = m_mainWindow->actionCollection()->addAction(QStringLiteral("view_close_current_space"));
@@ -265,6 +270,7 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     }
 
     // TODO: remove current view actions from the main window
+    disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
 }
 
 //     m_closeView->setEnabled(m_viewSpaceList.count() > 1);

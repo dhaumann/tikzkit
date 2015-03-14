@@ -36,9 +36,14 @@ public:
     Document* doc = nullptr;
 
     /**
-     * Holds the clean state.
+     * Pointer to the clean undo group.
      */
-    bool clean = true;
+    UndoGroup * cleanUndoGroup = nullptr;
+
+    /**
+     * Track previous clean state.
+     */
+    bool wasClean = true;
 
     /**
      * Holds all undo items.
@@ -78,11 +83,11 @@ public: // helper functions
     void updateState()
     {
         if (undoAction) {
-            // FIXME: TODO disable, if no undo available.
+            undoAction->setDisabled(undoItems.isEmpty());
         }
 
         if (redoAction) {
-            // FIXME: TODO disable, if no redo available.
+            redoAction->setDisabled(redoItems.isEmpty());
         }
     }
 };
@@ -128,17 +133,17 @@ QAction * UndoManager::redoAction()
     return d->redoAction;
 }
 
-void UndoManager::setClean(bool clean)
+void UndoManager::setClean()
 {
-    if (d->clean != clean) {
-        d->clean = clean;
-        emit cleanChanged(d->clean);
+    if (! isClean()) {
+        d->cleanUndoGroup = d->undoItems.isEmpty() ? nullptr : d->undoItems.last();
+        emit cleanChanged(true);
     }
 }
 
 bool UndoManager::isClean() const
 {
-    return d->clean;
+    return d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last());
 }
 
 void UndoManager::undo()
@@ -148,6 +153,7 @@ void UndoManager::undo()
         d->redoItems.append(d->undoItems.last());
         d->undoItems.removeLast();
         d->updateState();
+        emit cleanChanged(d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last()));
     }
 }
 
@@ -158,19 +164,23 @@ void UndoManager::redo()
         d->undoItems.append(d->redoItems.last());
         d->redoItems.removeLast();
         d->updateState();
+        emit cleanChanged(d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last()));
     }
 }
 
 void UndoManager::clear()
 {
+    // a group for a clean state does not exist anymore
+    d->cleanUndoGroup = nullptr;
+
+    // delete undo and redo items
     qDeleteAll(d->undoItems);
     qDeleteAll(d->redoItems);
 
     d->undoItems.clear();
     d->redoItems.clear();
 
-    d->clean = true;
-
+    // delete/reset pending transaction data
     delete d->currentUndoGroup;
     d->currentUndoGroup = nullptr;
     d->transactionRefCount = 0;
@@ -200,7 +210,11 @@ void UndoManager::startTransaction(const QString & text)
     if (d->transactionRefCount == 0) {
         Q_ASSERT(d->currentUndoGroup == nullptr);
 
+        // create new pending undo group
         d->currentUndoGroup = new UndoGroup(text, this);
+
+        // track clean state at the beginning of the transaction
+        d->wasClean = isClean();
     }
 
     ++d->transactionRefCount;
@@ -232,6 +246,11 @@ void UndoManager::commitTransaction()
         d->undoItems.append(d->currentUndoGroup);
         d->currentUndoGroup = nullptr;
         d->updateState();
+
+        // track clean state
+        if (d->wasClean) {
+            emit cleanChanged(false);
+        }
     }
 }
 

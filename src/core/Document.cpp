@@ -198,6 +198,9 @@ bool Document::load(const QUrl & file)
         // keep the document name up-to-date
         d->updateDocumentName();
 
+        // mark this state as unmodified
+        d->undoManager->setClean();
+
         return true;
     }
     return false;
@@ -218,6 +221,10 @@ bool Document::save()
         accept(sv);
 
         sv.save(d->url.toLocalFile());
+
+        // mark this state as unmodified
+        d->undoManager->setClean();
+
         return true;
     }
 

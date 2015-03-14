@@ -71,7 +71,7 @@ public Q_SLOTS:
      * Mark the current undo/redo state as clean.
      * Typically, the clean state matches the modified state of the doucment.
      */
-    void setClean(bool clean);
+    void setClean();
 
 public:
     /**
