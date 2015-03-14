@@ -82,6 +82,10 @@ public:
      */
     void addItem(UndoItem * item);
 
+public:
+    // debugging
+    void printTree();
+
 private:
     /**
      * Pimpl pointer to the held data.

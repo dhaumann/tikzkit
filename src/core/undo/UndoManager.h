@@ -144,6 +144,10 @@ public:
      */
     bool transactionActive() const;
 
+public:
+    // for debugging
+    void printTree();
+
 private:
     /**
      * Pimpl pointer to the held data.

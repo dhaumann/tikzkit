@@ -21,6 +21,8 @@
 #include "UndoItem.h"
 #include "UndoManager.h"
 
+#include <QDebug>
+
 namespace tikz {
 namespace core {
 
@@ -93,6 +95,15 @@ void UndoGroup::addItem(UndoItem *item)
     } else {
         d->items.append(item);
     }
+}
+
+void UndoGroup::printTree()
+{
+    QString str = "group: " + text();
+    for (auto item : d->items) {
+        str += " -->" + item->text();
+    }
+    qDebug() << str;
 }
 
 }

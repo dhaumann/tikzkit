@@ -275,6 +275,19 @@ bool UndoManager::transactionActive() const
     return d->transactionRefCount > 0;
 }
 
+void UndoManager::printTree()
+{
+    qDebug() << "-- undo items --";
+    for (auto item : d->undoItems) {
+        item->printTree();
+    }
+
+    qDebug() << "\n-- redo items --";
+    for (auto item : d->redoItems) {
+        item->printTree();
+    }
+}
+
 }
 }
 
