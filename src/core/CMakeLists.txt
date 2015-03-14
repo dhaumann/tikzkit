@@ -11,6 +11,7 @@ find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
 include_directories(
     .
+    utils/
     undo/
     visitor/
     style/
@@ -22,16 +23,16 @@ include_directories(
 
 set(qtikzcore_SOURCES
     tikz.cpp
-    Value.cpp
-    Pos.cpp
     node/Node.cpp
-    MetaPos.cpp
-    MetaPos_p.cpp
     Document.cpp
-    Transaction.cpp
     style/Style.cpp
     style/NodeStyle.cpp
     style/EdgeStyle.cpp
+
+    utils/Value.cpp
+    utils/Pos.cpp
+    utils/MetaPos.cpp
+    utils/MetaPos_p.cpp
 
     path/Path.cpp
     path/UndoSetPathStyle.cpp
@@ -47,6 +48,7 @@ set(qtikzcore_SOURCES
     undo/UndoManager.cpp
     undo/UndoGroup.cpp
     undo/UndoItem.cpp
+    undo/Transaction.cpp
 
     node/UndoCreateNode.cpp
     node/UndoDeleteNode.cpp
