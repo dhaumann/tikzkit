@@ -149,22 +149,34 @@ bool UndoManager::isClean() const
 void UndoManager::undo()
 {
     if (d->undoItems.count() > 0) {
+        const bool oldClean = isClean();
+
         d->undoItems.last()->undo();
         d->redoItems.append(d->undoItems.last());
         d->undoItems.removeLast();
         d->updateState();
-        emit cleanChanged(d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last()));
+
+        const bool newClean = isClean();
+        if (oldClean != newClean) {
+            emit cleanChanged(newClean);
+        }
     }
 }
 
 void UndoManager::redo()
 {
     if (d->redoItems.count() > 0) {
+        const bool oldClean = isClean();
+
         d->redoItems.last()->redo();
         d->undoItems.append(d->redoItems.last());
         d->redoItems.removeLast();
         d->updateState();
-        emit cleanChanged(d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last()));
+
+        const bool newClean = isClean();
+        if (oldClean != newClean) {
+            emit cleanChanged(newClean);
+        }
     }
 }
 
