@@ -259,6 +259,10 @@ void UndoManager::commitTransaction()
         d->currentUndoGroup = nullptr;
         d->updateState();
 
+        // clear redo items
+        qDeleteAll(d->redoItems);
+        d->redoItems.clear();
+
         // track clean state
         if (d->wasClean) {
             emit cleanChanged(false);
