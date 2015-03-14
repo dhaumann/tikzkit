@@ -40,6 +40,7 @@ UndoItem::UndoItem(const QString & text, Document* doc)
     : d(new UndoItemPrivate())
 {
     d->doc = doc;
+    d->text = text;
 }
 
 UndoItem::~UndoItem()

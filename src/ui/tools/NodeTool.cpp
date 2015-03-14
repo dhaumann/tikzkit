@@ -69,6 +69,16 @@ void NodeTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     qDebug() << "node tool: mouse release event";
 }
 
+void NodeTool::keyPressEvent(QKeyEvent * event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        if (m_transaction.isRunning()) {
+            m_transaction.cancel();
+            event->accept();
+        }
+    }
+}
+
 void NodeTool::createNodeHandles()
 {
     // on hide, just delte all handles
@@ -140,6 +150,10 @@ QPointF NodeTool::handlePos(Handle::Position pos)
 
 void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
+    if (!m_transaction.isRunning()) {
+        return;
+    }
+
     auto tikzView = qobject_cast<Renderer *>(view);
 
     // later: preferred unit
@@ -244,6 +258,10 @@ void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGr
 void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
+
+    if (!m_transaction.isRunning()) {
+        return;
+    }
 
     m_transaction.finish();
 }

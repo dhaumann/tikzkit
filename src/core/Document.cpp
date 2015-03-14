@@ -286,6 +286,11 @@ void Document::beginTransaction(const QString & name)
     d->undoManager->startTransaction(name);
 }
 
+void Document::cancelTransaction()
+{
+    d->undoManager->cancelTransaction();
+}
+
 void Document::finishTransaction()
 {
     d->undoManager->commitTransaction();

@@ -167,7 +167,13 @@ class TIKZCORE_EXPORT Document : public QObject
         void beginTransaction(const QString & name);
 
         /**
-         * End undo group @p name.
+         * Cancel the currently pending transaction. All changes are reverted
+         * and the undo / redo stack remains unchanged.
+         */
+        void cancelTransaction();
+
+        /**
+         * Finish currently running transaction.
          */
         void finishTransaction();
 

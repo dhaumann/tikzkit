@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -31,12 +31,12 @@ class TransactionPrivate {
         /**
          * real document implementation
          */
-        Document *document;
+        Document *document = nullptr;
 
         /**
          * Indicator for running editing transaction
          */
-        bool transactionRunning;
+        bool transactionRunning = false;
 };
 
 Transaction::Transaction(Document *document, bool autoStart)
@@ -47,7 +47,6 @@ Transaction::Transaction(Document *document, bool autoStart)
 
     // initialize d-pointer
     d->document = document;
-    d->transactionRunning = false;
 
     // start the editing transaction
     if (autoStart) {
@@ -57,18 +56,37 @@ Transaction::Transaction(Document *document, bool autoStart)
 
 void Transaction::start(const QString & action)
 {
+    Q_ASSERT(! d->transactionRunning);
+
     if (d->document && !d->transactionRunning) {
         d->document->beginTransaction(action);
         d->transactionRunning = true;
     }
 }
 
+void Transaction::cancel()
+{
+    Q_ASSERT(d->transactionRunning);
+
+    if (d->document && d->transactionRunning) {
+        d->document->cancelTransaction();
+        d->transactionRunning = false;
+    }
+}
+
 void Transaction::finish()
 {
+    Q_ASSERT(d->transactionRunning);
+
     if (d->document && d->transactionRunning) {
         d->document->finishTransaction();
         d->transactionRunning = false;
     }
+}
+
+bool Transaction::isRunning() const
+{
+    return d->transactionRunning;
 }
 
 Transaction::~Transaction()
@@ -76,7 +94,9 @@ Transaction::~Transaction()
     /**
      * finish the editing transaction
      */
-    finish();
+    if (d->transactionRunning) {
+        finish();
+    }
 
     /**
      * delete our d-pointer

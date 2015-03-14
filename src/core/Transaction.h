@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -37,10 +37,6 @@ class TransactionPrivate;
  * node and changing its text. The Transaction class allows to bunch together such
  * a sequence to a single undo/redo step.
  *
- * You should \e never return control to the event loop while it has an
- * unterminated (i.e. this object is not destructed) transaction sequence, so
- * try always to do all of your work in one go!
- *
  * Using this class typically looks as follows:
  * @code
  * void foo()
@@ -54,6 +50,9 @@ class TransactionPrivate;
  *
  * Although usually not required, a Transaction additionally allows to manually
  * call finish() and start() in between.
+ *
+ * Further, if a running transaction should be aborted, just call cancel().
+ * This is handy whenever the user hits Escape during a modification.
  */
 class TIKZCORE_EXPORT Transaction
 {
@@ -86,12 +85,24 @@ class TIKZCORE_EXPORT Transaction
         void start(const QString & action = QString());
 
         /**
+         * Cancels the running transaction.
+         * If the transaction is canceled, finish() is not automatically
+         * called in the destructor.
+         */
+        void cancel();
+
+        /**
          * By calling finish(), the editing transaction can be finished
          * already before destruction of this instance.
          *
-         * @see start()
+         * @see start(), cancel()
          */
         void finish();
+
+        /**
+         * Check whether this transaction currently is active.
+         */
+        bool isRunning() const;
 
     private:
         /**
@@ -104,6 +115,7 @@ class TIKZCORE_EXPORT Transaction
          */
         TransactionPrivate *const d;
 };
+
 }
 }
 

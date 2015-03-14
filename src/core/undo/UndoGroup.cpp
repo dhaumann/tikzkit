@@ -27,8 +27,14 @@ namespace core {
 class UndoGroupPrivate
 {
 public:
+    /**
+     * Pointer to the undo manager.
+     */
     UndoManager * manager = nullptr;
 
+    /**
+     * Name of the undo group.
+     */
     QString text;
 
     /**
@@ -41,6 +47,7 @@ UndoGroup::UndoGroup(const QString & text, UndoManager * manager)
     : d(new UndoGroupPrivate())
 {
     d->manager = manager;
+    d->text = text;
 }
 
 UndoGroup::~UndoGroup()

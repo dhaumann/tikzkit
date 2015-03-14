@@ -72,6 +72,11 @@ class NodeTool : public AbstractTool
          */
         void mouseReleaseEvent(QGraphicsSceneMouseEvent * event) override;
 
+        /**
+         * Reimplemented to cache key events
+         */
+        void keyPressEvent(QKeyEvent * event) override;
+
     //
     // internal to NodeTool
     //
