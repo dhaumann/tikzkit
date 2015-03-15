@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -21,23 +21,7 @@
 
 // TIKZCORE_EXPORT: this like exists just to copy the include files
 
-#include <QObject>
-#ifndef Q_MOC_RUN
 namespace tikz {
-#else
-class tikz {
-    Q_GADGET
-    Q_ENUMS(Unit)
-    Q_ENUMS(TextAlignment)
-    Q_ENUMS(Anchor)
-    Q_ENUMS(Shape)
-    Q_ENUMS(PenStyle)
-    Q_ENUMS(LineWidth)
-    Q_ENUMS(LineCap)
-    Q_ENUMS(LineJoin)
-    Q_ENUMS(Arrow)
-public:
-#endif
 
 /**
  * Available units.
@@ -129,16 +113,7 @@ enum Arrow {
     ArrowCount
 };
 
-//
-// QMetaObject is used to convert enums to strings and vice versa
-//
-extern const QMetaObject staticMetaObject;
-
-#ifdef Q_MOC_RUN
-};
-#else
 }
-#endif
 
 #endif // TIKZ_H
 

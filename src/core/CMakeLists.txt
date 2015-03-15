@@ -64,14 +64,8 @@ set(qtikzcore_SOURCES
     visitor/TikzExport.cpp
 )
 
-# generate the moc-file for tikz.h ourselves.
-# NOTE: The moc file may not have the file ending ".moc", as including
-# the .moc file in tikz.cpp will create an empty tikz.moc file.
-#qt5_generate_moc(tikz.h tikzmoc)
-
 add_library(qtikzcore SHARED
     ${qtikzcore_SOURCES}
-#    tikzmoc
 )
 
 target_link_libraries(qtikzcore
