@@ -24,6 +24,7 @@
 
 #include <QAction>
 #include <QIcon>
+#include <QPointer>
 
 namespace tikz {
 namespace core {
@@ -68,12 +69,12 @@ public:
     /**
      * Holds the undo action.
      */
-    QAction* undoAction = nullptr;
+    QPointer<QAction> undoAction;
 
     /**
      * Holds the redo action.
      */
-    QAction* redoAction = nullptr;
+    QPointer<QAction> redoAction;
 
 public: // helper functions
     /**

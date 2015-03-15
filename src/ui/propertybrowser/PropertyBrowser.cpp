@@ -58,12 +58,12 @@ static constexpr char s_rotation[] = "rotation";
 class PropertyBrowserPrivate
 {
 public:
-    QtTreePropertyBrowser * browser;
-    ValuePropertyManager * valueManager;
-    QtBoolPropertyManager * boolManager;
-    QtColorPropertyManager * colorManager;
-    OpacityPropertyManager * opacityManager;
-    QtDoublePropertyManager * doubleSliderManager;
+    QtTreePropertyBrowser * browser = nullptr;
+    ValuePropertyManager * valueManager = nullptr;
+    QtBoolPropertyManager * boolManager = nullptr;
+    QtColorPropertyManager * colorManager = nullptr;
+    OpacityPropertyManager * opacityManager = nullptr;
+    QtDoublePropertyManager * doubleSliderManager = nullptr;
 
     TikzItem * item = nullptr;
     QHash<QtProperty *, QString> propertyMap;
