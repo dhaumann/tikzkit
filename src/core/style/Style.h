@@ -25,7 +25,7 @@
 
 #include <QColor>
 #include <QObject>
-#include <QVariant>
+#include <QJsonObject>
 
 #include "Value.h"
 
@@ -60,6 +60,11 @@ class TIKZCORE_EXPORT Style : public QObject
         Style();
 
         /**
+         * Constructor that deserializes the style from @p json.
+         */
+        Style(const QJsonObject & json, Document* tikzDocument);
+
+        /**
          * Virtual destructor.
          */
         virtual ~Style();
@@ -74,6 +79,11 @@ class TIKZCORE_EXPORT Style : public QObject
          * Set the properties of this style to all properties of @p other.
          */
         virtual void setStyle(const Style& other);
+
+        /**
+         * Serialize the style to a JSON object.
+         */
+        virtual QJsonObject toJson() const;
 
     //
     // parent / child hierarchy
@@ -94,6 +104,13 @@ class TIKZCORE_EXPORT Style : public QObject
          * this style.
          */
         bool hasChildStyles() const;
+
+        /**
+         * Searches this style as well as all child styles recursively for
+         * a style that matches @p id. If no style with @p id is found,
+         * nullptr is returned.
+         */
+        Style * findStyle(qint64 styleId) const;
 
     //
     // config methods

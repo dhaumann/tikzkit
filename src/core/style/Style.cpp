@@ -20,6 +20,7 @@
 #include "Style.h"
 
 #include "Document.h"
+#include "VisitorHelpers.h"
 
 #include <QSet>
 
@@ -49,7 +50,7 @@ public:
     qint64 id = -1;
 
     // parent / child hierarchy
-    Style * parent = 0;
+    Style * parent = nullptr;
     QVector<Style *> children;
 
     // config reference counter
@@ -89,6 +90,65 @@ Style::Style(qint64 id, Document* tikzDocument)
     , d(new StylePrivate())
 {
     d->id = id;
+}
+
+Style::Style(const QJsonObject & json, Document* tikzDocument)
+    : QObject(tikzDocument)
+    , d(new StylePrivate())
+{
+    using namespace internal;
+
+    beginConfig();
+
+    if (json.contains("parent-style-id")) {
+        const qint64 styleId = json["parent-style-id"].toString().toLongLong();
+        d->parent = tikzDocument->style()->findStyle(styleId);
+    }
+
+    Q_ASSERT(json.contains("style-id"));
+    if (json.contains("style-id")) {
+        d->id = json["style-id"].toString().toLongLong();
+    }
+
+    if (json.contains("pen-color")) {
+        setPenColor(json["pen-color"].toString());
+    }
+
+    if (json.contains("fill-color")) {
+        setFillColor(json["fill-color"].toString());
+    }
+
+    if (json.contains("pen-opacity")) {
+        setPenOpacity(json["pen-opacity"].toDouble());
+    }
+
+    if (json.contains("fill-opacity")) {
+        setFillOpacity(json["fill-opacity"].toDouble());
+    }
+
+    if (json.contains("pen-style")) {
+        setPenStyle(penStyleFromString(json["pen-style"].toString()));
+    }
+
+    // FIXME line type
+    // FIXME line width
+
+    if (json.contains("double-line")) {
+        setDoubleLine(json["double-line"].toBool());
+
+        // FIXME line type
+        // FIXME line width
+
+        if (json.contains("double-line-color")) {
+            setInnerLineColor(json["double-line-color"].toString());
+        }
+    }
+
+    if (json.contains("rotation")) {
+        setRotation(json["rotation"].toDouble());
+    }
+
+    endConfig();
 }
 
 Style::~Style()
@@ -139,6 +199,63 @@ void Style::setStyle(const Style& other)
     endConfig();
 }
 
+QJsonObject Style::toJson() const
+{
+    using namespace tikz::core::internal;
+
+    QJsonObject json;
+
+    if (parentStyle()) {
+        json["parent-style-id"] = QString::number(parentStyle()->id());
+    }
+
+    if (parentStyle()) {
+        json["style-id"] = QString::number(id());
+    }
+
+    if (penColorSet()) {
+        json["pen-color"] = penColor().name();
+    }
+
+    if (fillColorSet()) {
+        json["fill-color"] = fillColor().name();
+    }
+
+    if (penOpacitySet()) {
+        json["pen-opacity"] = penOpacity();
+    }
+
+    if (fillOpacitySet()) {
+        json["fill-opacity"] = fillOpacity();
+    }
+
+    if (penStyleSet()) {
+        json["pen-style"] = penStyleToString(penStyle());
+    }
+
+    // FIXME line width
+//     if (penStyleSet()) {
+//         json["pen-style", penStyleToString(style->penStyle()));
+//     }
+
+
+    if (doubleLineSet()) {
+        json["double-line"] = "true";
+
+        // FIXME line width
+
+        if (innerLineColorSet()) {
+            json["double-line-color"] = innerLineColor().name();
+        }
+    }
+
+    if (rotationSet()) {
+        json["rotation"] = rotation();
+    }
+
+    return json;
+}
+
 Style *Style::parentStyle() const
 {
     return d->parent;
@@ -146,6 +263,8 @@ Style *Style::parentStyle() const
 
 void Style::setParentStyle(Style *parent)
 {
+    Q_ASSERT(parent != this);
+
     if (d->parent != parent) {
         beginConfig();
         if (d->parent) {
@@ -172,6 +291,22 @@ void Style::setParentStyle(Style *parent)
 bool Style::hasChildStyles() const
 {
     return d->children.size() > 0;
+}
+
+Style * Style::findStyle(qint64 styleId) const
+{
+    if (d->id == styleId) {
+        return const_cast<Style*>(this);
+    }
+
+    for (const auto style : d->children) {
+        auto ptr = style->findStyle(styleId);
+        if (ptr) {
+            return ptr;
+        }
+    }
+
+    return nullptr;
 }
 
 void Style::beginConfig()

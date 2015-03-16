@@ -18,6 +18,7 @@
  */
 
 #include "NodeStyle.h"
+#include "VisitorHelpers.h"
 
 namespace tikz {
 namespace core {
@@ -56,6 +57,33 @@ NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
 {
 }
 
+NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
+    : Style(json, tikzDocument)
+    , d(new NodeStylePrivate())
+{
+    using namespace internal;
+
+    beginConfig();
+
+    if (json.contains("text-align")) {
+        setTextAlign(textAlignmentFromString(json["text-align"].toString()));
+    }
+
+    if (json.contains("shape")) {
+        setShape(shapeFromString(json["shape"].toString()));
+    }
+
+    if (json.contains("minimum-width")) {
+        setMinimumWidth(tikz::Value::fromString(json["minimum-width"].toString()));
+    }
+
+    if (json.contains("minimum-height")) {
+        setMinimumHeight(tikz::Value::fromString(json["minimum-height"].toString()));
+    }
+
+    endConfig();
+}
+
 NodeStyle::~NodeStyle()
 {
     delete d;
@@ -67,6 +95,31 @@ void NodeStyle::setStyle(const NodeStyle& other)
     Style::setStyle(other);
     *d = *other.d;
     endConfig();
+}
+
+QJsonObject NodeStyle::toJson() const
+{
+    using namespace internal;
+
+    QJsonObject json = Style::toJson();
+
+    if (textAlignSet()) {
+        json["text-align"] = textAlignmentToString(textAlign());
+    }
+
+    if (shapeSet()) {
+        json["shape"] = shapeToString(shape());
+    }
+
+    if (minimumWidthSet()) {
+        json["minimum-width"] = minimumWidth().toString();
+    }
+
+    if (minimumHeightSet()) {
+        json["minimum-height"] = minimumHeight().toString();
+    }
+
+    return json;
 }
 
 TextAlignment NodeStyle::textAlign() const

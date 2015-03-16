@@ -18,6 +18,7 @@
  */
 
 #include "EdgeStyle.h"
+#include "VisitorHelpers.h"
 
 namespace tikz {
 namespace core {
@@ -66,6 +67,57 @@ EdgeStyle::EdgeStyle(qint64 id, Document* tikzDocument)
 {
 }
 
+EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
+    : Style(json, tikzDocument)
+    , d(new EdgeStylePrivate())
+{
+    using namespace internal;
+
+    beginConfig();
+
+    if (json.contains("radius-x")) {
+        setRadiusX(tikz::Value::fromString(json["radius-x"].toString()));
+    }
+
+    if (json.contains("radius-y")) {
+        setRadiusY(tikz::Value::fromString(json["radius-y"].toString()));
+    }
+
+    if (json.contains("bend-angle")) {
+        setBendAngle(json["bend-angle"].toDouble());
+    }
+
+    if (json.contains("looseness")) {
+        setLooseness(json["looseness"].toDouble());
+    }
+
+    if (json.contains("out-angle")) {
+        setOutAngle(json["out-angle"].toDouble());
+    }
+
+    if (json.contains("in-angle")) {
+        setInAngle(json["in-angle"].toDouble());
+    }
+
+    if (json.contains("arrow-tail")) {
+        setArrowTail(arrowFromString(json["arrow-tail"].toString()));
+    }
+
+    if (json.contains("arrow-head")) {
+        setArrowHead(arrowFromString(json["arrow-head"].toString()));
+    }
+
+    if (json.contains("shorten-start")) {
+        setShortenStart(tikz::Value::fromString(json["shorten-start"].toString()));
+    }
+
+    if (json.contains("shorten-end")) {
+        setShortenEnd(tikz::Value::fromString(json["shorten-end"].toString()));
+    }
+
+    endConfig();
+}
+
 EdgeStyle::~EdgeStyle()
 {
     delete d;
@@ -77,6 +129,55 @@ void EdgeStyle::setStyle(const EdgeStyle& other)
     Style::setStyle(other);
     *d = *other.d;
     endConfig();
+}
+
+QJsonObject EdgeStyle::toJson() const
+{
+    using namespace internal;
+
+    QJsonObject json = Style::toJson();
+
+    if (radiusXSet()) {
+        json["radius-x"] = radiusX().toString();
+    }
+
+    if (radiusYSet()) {
+        json["radius-y"] = radiusY().toString();
+    }
+
+    if (bendAngleSet()) {
+        json["bend-angle"] = bendAngle();
+    }
+
+    if (loosenessSet()) {
+        json["looseness"] = looseness();
+    }
+
+    if (outAngleSet()) {
+        json["out-angle"] = outAngle();
+    }
+
+    if (inAngleSet()) {
+        json["in-angle"] = inAngle();
+    }
+
+    if (arrowTailSet()) {
+        json["arrow-tail"] = arrowToString(arrowTail());
+    }
+
+    if (arrowHeadSet()) {
+        json["arrow-head"] = arrowToString(arrowHead());
+    }
+
+    if (shortenStartSet()) {
+        json["shorten-start"] = shortenStart().toString();
+    }
+
+    if (shortenEndSet()) {
+        json["shorten-end"] = shortenEnd().toString();
+    }
+
+    return json;
 }
 
 tikz::Value EdgeStyle::radiusX() const

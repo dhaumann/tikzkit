@@ -46,6 +46,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         NodeStyle();
 
         /**
+         * Constructor that deserializes the style from @p json.
+         */
+        NodeStyle(const QJsonObject & json, Document* tikzDocument);
+
+        /**
          * Virtual destructor.
          */
         virtual ~NodeStyle();
@@ -54,6 +59,11 @@ class TIKZCORE_EXPORT NodeStyle : public Style
          * Set the properties of this style to all properties of @p other.
          */
         virtual void setStyle(const NodeStyle& other);
+
+        /**
+         * Serialize the style to a JSON object.
+         */
+        QJsonObject toJson() const override;
 
     //
     // text alignment
