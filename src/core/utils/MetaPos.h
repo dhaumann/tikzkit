@@ -60,11 +60,18 @@ class TIKZCORE_EXPORT MetaPos
 
     public:
         /**
-         * Default constructor.
+         * Constructor.
          * The @p document should be a valid pointer, otherwise the behaviour
          * is undefined.
          */
         MetaPos(Document * document);
+
+        /**
+         * Constructor that deserializes this position from @p str.
+         * The @p document should be a valid pointer, otherwise the behaviour
+         * is undefined.
+         */
+        MetaPos(const QString & str, Document * document);
 
         /**
          * Copy constructor.

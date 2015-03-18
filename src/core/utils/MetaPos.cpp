@@ -48,6 +48,12 @@ MetaPos::MetaPos(const MetaPos & pos)
     *this = pos;
 }
 
+MetaPos::MetaPos(const QString & str, Document * document)
+    : MetaPos(document)
+{
+    fromString(str);
+}
+
 MetaPos::~MetaPos()
 {
     delete d;
