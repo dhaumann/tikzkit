@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -30,6 +30,13 @@ UndoCreatePath::UndoCreatePath(Path::Type type, qint64 id, Document * doc)
 {
 }
 
+UndoCreatePath::UndoCreatePath(const QJsonObject & json, Document * doc)
+    : UndoCreatePath(static_cast<Path::Type>(json["path-type"].toString().toInt()),
+                     json["path-id"].toString().toLongLong(),
+                     doc)
+{
+}
+
 UndoCreatePath::~UndoCreatePath()
 {
 }
@@ -42,6 +49,15 @@ void UndoCreatePath::undo()
 void UndoCreatePath::redo()
 {
     document()->createPath(m_type, m_id);
+}
+
+QJsonObject UndoCreatePath::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "create path";
+    json["path-id"] = QString::number(m_id);
+    json["path-type"] = static_cast<int>(m_type); // FIXME: serialize to string
+    return json;
 }
 
 }

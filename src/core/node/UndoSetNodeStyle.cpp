@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -36,6 +36,13 @@ UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document 
     // save properties
     m_undoStyle.setStyle(*node->style());
     m_redoStyle.setStyle(style);
+}
+
+UndoSetNodeStyle::UndoSetNodeStyle(const QJsonObject & json, Document * doc)
+    : UndoSetNodeStyle(json["node-id"].toString().toLongLong(),
+                       NodeStyle(json["redo-style"].toObject(), doc),
+                       doc)
+{
 }
 
 UndoSetNodeStyle::~UndoSetNodeStyle()
@@ -79,6 +86,15 @@ bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
     }
 
     return otherStyle;
+}
+
+QJsonObject UndoSetNodeStyle::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "set node style";
+    json["node-id"] = QString::number(m_id);
+    json["redo-style"] = m_redoStyle.toJson();
+    return json;
 }
 
 }

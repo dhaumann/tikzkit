@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -36,10 +36,14 @@ class UndoSetEdgePos : public UndoItem
          * Constructor.
          */
         UndoSetEdgePos(EdgePath * path,
-                       const MetaPos & oldPos,
                        const MetaPos & newPos,
                        bool isStartNode,
                        Document * doc);
+
+        /**
+         * Constructor that deserializes the item from @p json.
+         */
+        UndoSetEdgePos(const QJsonObject & json, Document * doc);
 
         /**
          * Destructor
@@ -66,6 +70,11 @@ class UndoSetEdgePos : public UndoItem
          * Merge undo items, if possible.
          */
         bool mergeWith(const UndoItem * command) override;
+
+        /**
+         * Serializie to JSON object.
+         */
+        QJsonObject toJsonObject() const override;
 
     private:
         /**

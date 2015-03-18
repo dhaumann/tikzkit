@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -31,6 +31,13 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
     , m_pathId(path->id())
     , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
+{
+}
+
+UndoSetEllipsePos::UndoSetEllipsePos(const QJsonObject & json, Document * doc)
+    : UndoSetEllipsePos(static_cast<EllipsePath *>(doc->pathFromId(json["path-id"].toString().toLongLong())),
+                        MetaPos(json["redo-pos"].toString(), doc),
+                        doc)
 {
 }
 
@@ -77,6 +84,15 @@ bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
     }
 
     return other != nullptr;
+}
+
+QJsonObject UndoSetEllipsePos::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "set ellipse pos";
+    json["path-id"] = QString::number(m_pathId);
+    json["redo-pos"] = m_redoPos.toString();
+    return json;
 }
 
 }

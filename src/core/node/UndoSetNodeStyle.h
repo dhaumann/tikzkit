@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -38,6 +38,11 @@ class UndoSetNodeStyle : public UndoItem
         UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc);
 
         /**
+         * Constructor that deserializes the item from @p json.
+         */
+        UndoSetNodeStyle(const QJsonObject & json, Document * doc);
+
+        /**
          * Destructor
          */
         virtual ~UndoSetNodeStyle();
@@ -45,22 +50,27 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * Return node id, which is uniq.
          */
-        virtual int id() const override;
+        int id() const override;
 
         /**
          * Undo: add node again.
          */
-        virtual void undo() override;
+        void undo() override;
 
         /**
          * Redo: delete node again.
          */
-        virtual void redo() override;
+        void redo() override;
 
         /**
          * Merge undo items, if possible.
          */
-        virtual bool mergeWith(const UndoItem * command) override;
+        bool mergeWith(const UndoItem * command) override;
+
+        /**
+         * Serializie to JSON object.
+         */
+        QJsonObject toJsonObject() const override;
 
     private:
         /**

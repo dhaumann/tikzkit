@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -36,6 +36,13 @@ UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Docum
     // save properties
     m_undoStyle.setStyle(*path->style());
     m_redoStyle.setStyle(style);
+}
+
+UndoSetPathStyle::UndoSetPathStyle(const QJsonObject & json, Document * doc)
+    : UndoSetPathStyle(json["path-id"].toString().toLongLong(),
+                       EdgeStyle(json["redo-style"].toObject(), doc),
+                       doc)
+{
 }
 
 UndoSetPathStyle::~UndoSetPathStyle()
@@ -81,6 +88,15 @@ bool UndoSetPathStyle::mergeWith(const UndoItem * command)
     }
 
     return otherStyle;
+}
+
+QJsonObject UndoSetPathStyle::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "set edge style";
+    json["path-id"] = QString::number(m_pathId);
+    json["redo-style"] = m_redoStyle.toJson();
+    return json;
 }
 
 }

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -38,6 +38,11 @@ class UndoCreatePath : public UndoItem
         UndoCreatePath(Path::Type type, qint64 id, Document * doc);
 
         /**
+         * Constructor that deserializes the item from @p json.
+         */
+        UndoCreatePath(const QJsonObject & json, Document * doc);
+
+        /**
          * Destructor
          */
         virtual ~UndoCreatePath();
@@ -45,12 +50,17 @@ class UndoCreatePath : public UndoItem
         /**
          * Undo: delete node again.
          */
-        virtual void undo() override;
+        void undo() override;
 
         /**
          * Redo: create node again.
          */
-        virtual void redo() override;
+        void redo() override;
+
+        /**
+         * Serializie to JSON object.
+         */
+        QJsonObject toJsonObject() const override;
 
     private:
         /**

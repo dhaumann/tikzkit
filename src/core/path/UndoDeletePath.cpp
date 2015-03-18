@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -39,6 +39,12 @@ UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
     m_style.setStyle(*path->style());
 }
 
+UndoDeletePath::UndoDeletePath(const QJsonObject & json, Document * doc)
+    : UndoDeletePath(json["path-id"].toString().toLongLong(),
+                     doc)
+{
+}
+
 UndoDeletePath::~UndoDeletePath()
 {
 }
@@ -58,6 +64,14 @@ void UndoDeletePath::undo()
 void UndoDeletePath::redo()
 {
     document()->deletePath(m_id);
+}
+
+QJsonObject UndoDeletePath::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "delete path";
+    json["path-id"] = QString::number(m_id);
+    return json;
 }
 
 }

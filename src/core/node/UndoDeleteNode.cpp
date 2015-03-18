@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -39,6 +39,11 @@ UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
     m_style.setStyle(*node->style());
 }
 
+UndoDeleteNode::UndoDeleteNode(const QJsonObject & json, Document * doc)
+    : UndoDeleteNode(json["node-id"].toString().toLongLong(), doc)
+{
+}
+
 UndoDeleteNode::~UndoDeleteNode()
 {
 }
@@ -60,6 +65,14 @@ void UndoDeleteNode::undo()
 void UndoDeleteNode::redo()
 {
     document()->deleteNode(m_id);
+}
+
+QJsonObject UndoDeleteNode::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "delete node";
+    json["node-id"] = QString::number(m_id);
+    return json;
 }
 
 }

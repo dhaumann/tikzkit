@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -29,6 +29,11 @@ UndoCreateNode::UndoCreateNode(qint64 id, Document * doc)
 {
 }
 
+UndoCreateNode::UndoCreateNode(const QJsonObject & json, Document * doc)
+    : UndoCreateNode(json["node-id"].toString().toLongLong(), doc)
+{
+}
+
 UndoCreateNode::~UndoCreateNode()
 {
 }
@@ -41,6 +46,14 @@ void UndoCreateNode::undo()
 void UndoCreateNode::redo()
 {
     document()->createNode(m_id);
+}
+
+QJsonObject UndoCreateNode::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "create node";
+    json["node-id"] = QString::number(m_id);
+    return json;
 }
 
 }

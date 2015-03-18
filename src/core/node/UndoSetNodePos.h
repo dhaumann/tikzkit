@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -40,6 +40,11 @@ class UndoSetNodePos : public UndoItem
                        Document * doc);
 
         /**
+         * Constructor that deserializes the item from @p json.
+         */
+        UndoSetNodePos(const QJsonObject & json, Document * doc);
+
+        /**
          * Destructor.
          */
         virtual ~UndoSetNodePos();
@@ -64,11 +69,16 @@ class UndoSetNodePos : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+        /**
+         * Serializie to JSON object.
+         */
+        QJsonObject toJsonObject() const override;
+
     private:
         /**
          * The unique Node id.
          */
-        const qint64 m_id;
+        qint64 m_id;
 
         /**
          * Undo position.

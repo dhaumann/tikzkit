@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -25,8 +25,8 @@ namespace tikz {
 namespace core {
 
 UndoSetNodePos::UndoSetNodePos(Node * node,
-                       const MetaPos & newPos,
-                       Document * doc)
+                               const MetaPos & newPos,
+                               Document * doc)
     : UndoItem("Move node", doc)
     , m_id(node->id())
     , m_undoPos(node->metaPos())
@@ -36,6 +36,14 @@ UndoSetNodePos::UndoSetNodePos(Node * node,
 
 UndoSetNodePos::~UndoSetNodePos()
 {
+}
+
+UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
+    : UndoSetNodePos(doc->nodeFromId(json["node-id"].toString().toLongLong()),
+                     MetaPos(json["redo-pos"].toString(), doc),
+                     doc)
+{
+    Q_ASSERT(m_id >= 0);
 }
 
 int UndoSetNodePos::id() const
@@ -77,6 +85,15 @@ bool UndoSetNodePos::mergeWith(const UndoItem * command)
     }
 
     return other != nullptr;
+}
+
+QJsonObject UndoSetNodePos::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "move node";
+    json["node-id"] = QString::number(m_id);
+    json["redo-pos"] = m_redoPos.toString();
+    return json;
 }
 
 }

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -33,6 +33,13 @@ UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * 
 
     m_undoText = node->text();
     m_redoText = newText;
+}
+
+UndoSetNodeText::UndoSetNodeText(const QJsonObject & json, Document * doc)
+    : UndoSetNodeText(json["node-id"].toString().toLongLong(),
+                      json["redo-text"].toString(),
+                      doc)
+{
 }
 
 UndoSetNodeText::~UndoSetNodeText()
@@ -77,6 +84,15 @@ bool UndoSetNodeText::mergeWith(const UndoItem * command)
     }
 
     return other != nullptr;
+}
+
+QJsonObject UndoSetNodeText::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "set node text";
+    json["node-id"] = QString::number(m_id);
+    json["redo-text"] = m_redoText;
+    return json;
 }
 
 }

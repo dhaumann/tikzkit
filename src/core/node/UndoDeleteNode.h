@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -21,7 +21,7 @@
 #define TIKZ_UNDO_DELETE_NODE_H
 
 #include "UndoItem.h"
-#include <QPointF>
+#include "Pos.h"
 #include <NodeStyle.h>
 
 namespace tikz {
@@ -39,6 +39,11 @@ class UndoDeleteNode : public UndoItem
         UndoDeleteNode(qint64 id, Document * doc);
 
         /**
+         * Constructor that deserializes the item from @p json.
+         */
+        UndoDeleteNode(const QJsonObject & json, Document * doc);
+
+        /**
          * Destructor
          */
         virtual ~UndoDeleteNode();
@@ -53,16 +58,21 @@ class UndoDeleteNode : public UndoItem
          */
         virtual void redo() override;
 
+        /**
+         * Serializie to JSON object.
+         */
+        QJsonObject toJsonObject() const override;
+
     private:
         /**
          * The unique Node id.
          */
-        const qint64 m_id;
+        qint64 m_id;
 
         /**
          * The node position.
          */
-        QPointF m_pos;
+        tikz::Pos m_pos;
 
         /**
          * The node text.

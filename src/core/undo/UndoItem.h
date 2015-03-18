@@ -21,6 +21,7 @@
 #define TIKZ_UNDO_ITEM_H
 
 #include <QString>
+#include <QJsonObject>
 
 namespace tikz {
 namespace core {
@@ -87,6 +88,11 @@ public:
      * copy the redo data of @p item into this undo item.
      */
     virtual bool mergeWith(const UndoItem * item);
+
+    /**
+     * Serialize the undo item to a JSON object.
+     */
+    virtual QJsonObject toJsonObject() const {}
 
 private:
     /**

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -25,15 +25,22 @@ namespace tikz {
 namespace core {
 
 UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
-                               const MetaPos & oldPos,
                                const MetaPos & newPos,
                                bool isStartNode,
                                Document * doc)
     : UndoItem("Set edge position", doc)
     , m_pathId(path->id())
-    , m_undoPos(oldPos)
+    , m_undoPos(isStartNode ? path->startMetaPos() : path->endMetaPos())
     , m_redoPos(newPos)
     , m_isStart(isStartNode)
+{
+}
+
+UndoSetEdgePos::UndoSetEdgePos(const QJsonObject & json, Document * doc)
+    : UndoSetEdgePos(dynamic_cast<EdgePath *>(doc->pathFromId(json["path-id"].toString().toLongLong())),
+                     MetaPos(json["redo-pos"].toString(), doc),
+                     json["is-start"].toBool(),
+                     doc)
 {
 }
 
@@ -89,6 +96,16 @@ bool UndoSetEdgePos::mergeWith(const UndoItem * command)
     }
 
     return false;
+}
+
+QJsonObject UndoSetEdgePos::toJsonObject() const
+{
+    QJsonObject json;
+    json["type"] = "set edge pos";
+    json["path-id"] = QString::number(m_pathId);
+    json["redo-pos"] = m_redoPos.toString();
+    json["is-start"] = m_isStart;
+    return json;
 }
 
 }
