@@ -46,6 +46,7 @@ set(qtikzcore_SOURCES
     path/ellipse/UndoSetEllipsePos.cpp
 
     undo/UndoManager.cpp
+    undo/UndoFactory.cpp
     undo/UndoGroup.cpp
     undo/UndoItem.cpp
     undo/Transaction.cpp

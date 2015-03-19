@@ -89,7 +89,7 @@ bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
 QJsonObject UndoSetEllipsePos::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "set ellipse pos";
+    json["type"] = "ellipse-set-pos";
     json["path-id"] = QString::number(m_pathId);
     json["redo-pos"] = m_redoPos.toString();
     return json;

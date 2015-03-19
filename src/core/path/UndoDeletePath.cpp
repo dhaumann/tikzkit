@@ -69,7 +69,7 @@ void UndoDeletePath::redo()
 QJsonObject UndoDeletePath::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "delete path";
+    json["type"] = "path-delete";
     json["path-id"] = QString::number(m_id);
     return json;
 }

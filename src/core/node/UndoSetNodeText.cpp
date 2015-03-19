@@ -89,7 +89,7 @@ bool UndoSetNodeText::mergeWith(const UndoItem * command)
 QJsonObject UndoSetNodeText::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "set node text";
+    json["type"] = "node-set-text";
     json["node-id"] = QString::number(m_id);
     json["redo-text"] = m_redoText;
     return json;

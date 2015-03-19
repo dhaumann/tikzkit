@@ -93,7 +93,7 @@ bool UndoSetPathStyle::mergeWith(const UndoItem * command)
 QJsonObject UndoSetPathStyle::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "set edge style";
+    json["type"] = "path-set-style";
     json["path-id"] = QString::number(m_pathId);
     json["redo-style"] = m_redoStyle.toJson();
     return json;

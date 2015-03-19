@@ -54,7 +54,7 @@ void UndoCreatePath::redo()
 QJsonObject UndoCreatePath::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "create path";
+    json["type"] = "path-create";
     json["path-id"] = QString::number(m_id);
     json["path-type"] = static_cast<int>(m_type); // FIXME: serialize to string
     return json;

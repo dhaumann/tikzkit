@@ -70,7 +70,7 @@ void UndoDeleteNode::redo()
 QJsonObject UndoDeleteNode::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "delete node";
+    json["type"] = "node-delete";
     json["node-id"] = QString::number(m_id);
     return json;
 }

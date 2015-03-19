@@ -51,7 +51,7 @@ void UndoCreateNode::redo()
 QJsonObject UndoCreateNode::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "create node";
+    json["type"] = "node-create";
     json["node-id"] = QString::number(m_id);
     return json;
 }

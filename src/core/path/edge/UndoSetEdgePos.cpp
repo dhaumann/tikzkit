@@ -101,7 +101,7 @@ bool UndoSetEdgePos::mergeWith(const UndoItem * command)
 QJsonObject UndoSetEdgePos::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "set edge pos";
+    json["type"] = "edge-set-pos";
     json["path-id"] = QString::number(m_pathId);
     json["redo-pos"] = m_redoPos.toString();
     json["is-start"] = m_isStart;

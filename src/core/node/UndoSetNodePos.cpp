@@ -90,7 +90,7 @@ bool UndoSetNodePos::mergeWith(const UndoItem * command)
 QJsonObject UndoSetNodePos::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "move node";
+    json["type"] = "node-set-pos";
     json["node-id"] = QString::number(m_id);
     json["redo-pos"] = m_redoPos.toString();
     return json;

@@ -91,7 +91,7 @@ bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
 QJsonObject UndoSetNodeStyle::toJsonObject() const
 {
     QJsonObject json;
-    json["type"] = "set node style";
+    json["type"] = "node-set-style";
     json["node-id"] = QString::number(m_id);
     json["redo-style"] = m_redoStyle.toJson();
     return json;
