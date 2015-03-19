@@ -221,6 +221,7 @@ bool Document::reload()
 bool Document::save()
 {
     if (d->url.isLocalFile()) {
+        // first serialize to json document
         QJsonArray jsonHistory;
         for (auto group : d->undoManager->undoGroups()) {
             QJsonArray groupItems;
@@ -237,11 +238,16 @@ bool Document::save()
         QJsonObject json;
         json["history"] = jsonHistory;
 
-        QJsonDocument jsonDoc(json);
-        SerializeVisitor sv;
-        accept(sv);
+        // now save data
+        QFile file(d->url.toLocalFile());
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            return false;
+        }
 
-        sv.save(d->url.toLocalFile());
+        // write json to text stream
+        QTextStream stream(&file);
+        QJsonDocument jsonDoc(json);
+        stream << jsonDoc.toJson();
 
         // mark this state as unmodified
         d->undoManager->setClean();
