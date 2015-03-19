@@ -21,6 +21,7 @@
 #define TIKZ_UNDO_MANAGER_H
 
 #include <QObject>
+#include <QList>
 
 class QAction;
 
@@ -29,6 +30,7 @@ namespace core {
 
 class Document;
 class UndoManagerPrivate;
+class UndoGroup;
 class UndoItem;
 
 /**
@@ -107,6 +109,12 @@ public Q_SLOTS:
      * Add the undo item @p item to the current undo group.
      */
     void addUndoItem(UndoItem *item);
+
+    /**
+     * Returns a list of all undo groups.
+     * You must not delete the pointers to the UndoGroup%s.
+     */
+    QList<UndoGroup*> undoGroups() const;
 
 public:
     /**

@@ -218,6 +218,11 @@ void UndoManager::addUndoItem(UndoItem * item)
     commitTransaction();
 }
 
+QList<UndoGroup*> UndoManager::undoGroups() const
+{
+    return d->undoItems;
+}
+
 void UndoManager::startTransaction(const QString & text)
 {
     if (d->transactionRefCount == 0) {

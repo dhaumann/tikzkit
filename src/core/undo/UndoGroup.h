@@ -82,6 +82,12 @@ public:
      */
     void addItem(UndoItem * item);
 
+    /**
+     * Returns a list of all undo items.
+     * You must not delete the pointers to the UndoItem%s.
+     */
+    QList<UndoItem *> undoItems() const;
+
 public:
     // debugging
     void printTree();

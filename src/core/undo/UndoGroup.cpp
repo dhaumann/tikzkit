@@ -97,6 +97,11 @@ void UndoGroup::addItem(UndoItem *item)
     }
 }
 
+QList<UndoItem *> UndoGroup::undoItems() const
+{
+    return d->items;
+}
+
 void UndoGroup::printTree()
 {
     QString str = "group: " + text();
