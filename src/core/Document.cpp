@@ -23,7 +23,9 @@
 #include "EllipsePath.h"
 #include "Style.h"
 
+#include "Transaction.h"
 #include "UndoManager.h"
+#include "UndoFactory.h"
 #include "UndoGroup.h"
 #include "UndoCreateNode.h"
 #include "UndoDeleteNode.h"
@@ -188,26 +190,43 @@ void Document::close()
     d->updateDocumentName();
 }
 
-bool Document::load(const QUrl & file)
+bool Document::load(const QUrl & fileurl)
 {
     // first start a clean document
     close();
 
-    // open the file contents
-    DeserializeVisitor dv;
-    if (dv.load(file.toLocalFile())) {
-        d->url = file;
-        accept(dv);
-
-        // keep the document name up-to-date
-        d->updateDocumentName();
-
-        // mark this state as unmodified
-        d->undoManager->setClean();
-
-        return true;
+    // open file + read all json contents
+    QFile file(fileurl.toLocalFile());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+         return false;
     }
-    return false;
+
+    QJsonDocument json = QJsonDocument::fromJson(file.readAll());
+    QJsonObject root = json.object();
+
+    // read history and replay
+    UndoFactory factory(this);
+    QJsonArray history = root["history"].toArray();
+    for (auto action : history) {
+        QJsonObject entry = action.toObject();
+        Transaction transaction(this, false);
+        transaction.start(entry["text"].toString());
+        QJsonArray items = entry["items"].toArray();
+        for (auto item : items) {
+            UndoItem * undoItem = factory.createItem(item.toObject());
+            if (undoItem) {
+                addUndoItem(undoItem);
+            }
+        }
+    }
+
+    // keep the document name up-to-date
+    d->updateDocumentName();
+
+    // mark this state as unmodified
+    d->undoManager->setClean();
+
+    return true;
 }
 
 bool Document::reload()
