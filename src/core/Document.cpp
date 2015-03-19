@@ -24,6 +24,7 @@
 #include "Style.h"
 
 #include "UndoManager.h"
+#include "UndoGroup.h"
 #include "UndoCreateNode.h"
 #include "UndoDeleteNode.h"
 #include "UndoCreatePath.h"
@@ -38,6 +39,9 @@
 #include <QTextStream>
 #include <QFile>
 #include <QUrl>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace tikz {
 namespace core {
@@ -217,6 +221,23 @@ bool Document::reload()
 bool Document::save()
 {
     if (d->url.isLocalFile()) {
+        QJsonArray jsonHistory;
+        for (auto group : d->undoManager->undoGroups()) {
+            QJsonArray groupItems;
+            for (auto item : group->undoItems()) {
+                groupItems.append(item->toJsonObject());
+            }
+
+            QJsonObject jsonGroup;
+            jsonGroup["text"] = group->text();
+            jsonGroup["items"] = groupItems;
+            jsonHistory.append(jsonGroup);
+        }
+
+        QJsonObject json;
+        json["history"] = jsonHistory;
+
+        QJsonDocument jsonDoc(json);
         SerializeVisitor sv;
         accept(sv);
 
