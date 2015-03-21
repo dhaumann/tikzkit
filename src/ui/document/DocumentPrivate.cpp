@@ -359,7 +359,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
@@ -369,7 +369,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
         edge->setStartAnchor(tikz::West);
 
         path = createPathItem();
@@ -380,7 +380,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
@@ -390,7 +390,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
@@ -400,7 +400,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
@@ -410,7 +410,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
-        edge->style()->setStyle(es);
+        edge->setStyle(es);
         edge->setStartAnchor(tikz::East);
     }
 //END DEBUG
