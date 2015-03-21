@@ -59,6 +59,7 @@ public:
 public Q_SLOTS:
     void slotDocumentNew();
     void slotDocumentOpen();
+    void slotDocumentSave();
     void slotCloseActiveView();
     void closeDocument(tikz::ui::Document * doc);
 
@@ -149,6 +150,7 @@ private:
     QToolBar * m_toolBar;
     QAction * m_fileNew;
     QAction * m_fileOpen;
+    QAction * m_fileSave;
     QAction * m_fileClose;
     QAction * m_fileQuit;
     QAction * m_filePreview;

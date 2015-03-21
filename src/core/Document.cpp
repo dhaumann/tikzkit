@@ -239,7 +239,15 @@ bool Document::reload()
 
 bool Document::save()
 {
+    return saveAs(d->url);
+}
+
+bool Document::saveAs(const QUrl & file)
+{
+    const bool urlChanged = d->url.toLocalFile() != file.toLocalFile();
+
     if (d->url.isLocalFile()) {
+
         // first serialize to json document
         QJsonArray jsonHistory;
         for (auto group : d->undoManager->undoGroups()) {
@@ -268,27 +276,13 @@ bool Document::save()
         QJsonDocument jsonDoc(json);
         stream << jsonDoc.toJson();
 
+        if (urlChanged) {
+            // keep the document name up-to-date
+            d->updateDocumentName();
+        }
+
         // mark this state as unmodified
         d->undoManager->setClean();
-
-        return true;
-    }
-
-    return false;
-}
-
-bool Document::saveAs(const QUrl & file)
-{
-    if (file.isLocalFile()) {
-        d->url = file;
-
-        SerializeVisitor sv;
-        accept(sv);
-
-        sv.save(file.toLocalFile());
-
-        // keep the document name up-to-date
-        d->updateDocumentName();
 
         return true;
     }

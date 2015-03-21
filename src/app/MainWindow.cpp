@@ -176,6 +176,11 @@ void MainWindow::setupActions()
     m_fileOpen->setText(QApplication::translate("MainWindow", "&Open", 0));
     m_fileOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
 
+    m_fileSave = new QAction(this);
+    m_fileSave->setIcon(QIcon::fromTheme("document-save"));
+    m_fileSave->setText(QApplication::translate("MainWindow", "&Save", 0));
+    m_fileSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
+
     m_fileClose = new QAction(this);
     m_fileClose->setIcon(QIcon::fromTheme("document-close"));
     m_fileClose->setText(QApplication::translate("MainWindow", "&Close", 0));
@@ -190,14 +195,13 @@ void MainWindow::setupActions()
     m_filePreview->setIcon(QIcon::fromTheme("application-pdf"));
     m_filePreview->setText(QApplication::translate("MainWindow", "Preview", 0));
 
-//     aSave->setText(QApplication::translate("MainWindow", "Save", 0));
-//     aSave->setIcon(QIcon::fromTheme("document-save"));
-//     aSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
 //     m_fileMenu->setTitle(QApplication::translate("MainWindow", "&File", 0));
 //     m_toolBar->setWindowTitle(QApplication::translate("MainWindow", "m_toolBar", 0));
 
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_fileSave);
     m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_fileClose);
     m_fileMenu->addSeparator();
@@ -206,6 +210,7 @@ void MainWindow::setupActions()
     m_toolBar->addAction(m_fileNew);
     m_toolBar->addAction(m_fileOpen);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-save"));
+    m_toolBar->addAction(m_fileSave);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-close"));
     m_toolBar->addAction(m_fileClose);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-undo"));
@@ -214,7 +219,7 @@ void MainWindow::setupActions()
 
 
     connect(m_fileNew, SIGNAL(triggered()), this, SLOT(slotDocumentNew()));
-//     connect(aSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(m_fileSave, SIGNAL(triggered()), this, SLOT(slotDocumentSave()));
     connect(m_fileOpen, SIGNAL(triggered()), this, SLOT(slotDocumentOpen()));
     connect(m_fileClose, SIGNAL(triggered()), this, SLOT(slotCloseActiveView()));
     connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -303,6 +308,21 @@ void MainWindow::slotDocumentOpen()
 //     if (!doc->url().isEmpty()) {
 //         mainWindow()->fileOpenRecent()->addUrl(doc->url());
 //     }
+}
+
+void MainWindow::slotDocumentSave()
+{
+    auto view = m_viewManager->activeView();
+    Q_ASSERT(view);
+
+    QUrl url = view->document()->url();
+
+    if (url.isEmpty()) {
+        url = QFileDialog::getSaveFileUrl(this, "Save File", QUrl(), "*.tikzkit");
+        view->document()->saveAs(url);
+    } else {
+        view->document()->save();
+    }
 }
 
 void MainWindow::slotCloseActiveView()
