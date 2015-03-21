@@ -362,20 +362,6 @@ void MainWindow::closeDocument(tikz::ui::Document * doc)
 //     TikzKit::self()->documentManager()->closeDocument(doc);
 // }
 
-// void MainWindow::saveFile()
-// {
-//     QString filename("output.tikzkit");
-//     activeView()->document()->saveAs(filename);
-// }
-
-// void MainWindow::loadFile()
-// {
-//     m_viewManager->openUrl();
-//     QString filename("output.tikzkit");
-//     activeView()->document()->load(filename);
-//     m_linePropertyWidget->setLineStyle(activeView()->document()->style());
-// }
-
 void MainWindow::previewPdf()
 {
     delete m_pdfGenerator;
