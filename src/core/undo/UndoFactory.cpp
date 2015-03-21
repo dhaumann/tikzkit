@@ -41,11 +41,6 @@ public:
      * Pointer to the document of this undo/redo item.
      */
     Document* doc = nullptr;
-
-    /**
-     * Description of the undo item.
-     */
-    QString text;
 };
 
 UndoFactory::UndoFactory(Document* doc)
