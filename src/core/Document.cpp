@@ -242,11 +242,11 @@ bool Document::save()
     return saveAs(d->url);
 }
 
-bool Document::saveAs(const QUrl & file)
+bool Document::saveAs(const QUrl & targetUrl)
 {
-    const bool urlChanged = d->url.toLocalFile() != file.toLocalFile();
+    const bool urlChanged = d->url.toLocalFile() != targetUrl.toLocalFile();
 
-    if (d->url.isLocalFile()) {
+    if (targetUrl.isLocalFile()) {
 
         // first serialize to json document
         QJsonArray jsonHistory;
@@ -266,7 +266,7 @@ bool Document::saveAs(const QUrl & file)
         json["history"] = jsonHistory;
 
         // now save data
-        QFile file(d->url.toLocalFile());
+        QFile file(targetUrl.toLocalFile());
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             return false;
         }
@@ -277,6 +277,7 @@ bool Document::saveAs(const QUrl & file)
         stream << jsonDoc.toJson();
 
         if (urlChanged) {
+            d->url = targetUrl;
             // keep the document name up-to-date
             d->updateDocumentName();
         }
