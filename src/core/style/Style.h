@@ -23,6 +23,7 @@
 #include "tikz.h"
 #include "tikz_export.h"
 
+#include <memory>
 #include <QColor>
 #include <QObject>
 #include <QJsonObject>
@@ -465,7 +466,7 @@ class TIKZCORE_EXPORT Style : public QObject
         Style(qint64 id, Document* tikzDocument);
 
     private:
-        StylePrivate * const d;
+        std::unique_ptr<StylePrivate> const d;
 };
 
 }

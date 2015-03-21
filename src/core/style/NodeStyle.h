@@ -231,7 +231,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         NodeStyle(qint64 id, Document* tikzDocument);
 
     private:
-        NodeStylePrivate * const d;
+        std::unique_ptr<NodeStylePrivate> const d;
 };
 
 }

@@ -120,7 +120,6 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
 
 EdgeStyle::~EdgeStyle()
 {
-    delete d;
 }
 
 void EdgeStyle::setStyle(const EdgeStyle& other)

@@ -86,7 +86,6 @@ NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
 
 NodeStyle::~NodeStyle()
 {
-    delete d;
 }
 
 void NodeStyle::setStyle(const NodeStyle& other)

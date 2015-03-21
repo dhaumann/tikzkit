@@ -164,8 +164,6 @@ Style::~Style()
 
     // now: remove from parent's child list, if needed
     setParentStyle(0);
-
-    delete d;
 }
 
 qint64 Style::id() const

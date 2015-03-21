@@ -355,7 +355,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         EdgeStyle(qint64 id, Document* tikzDocument);
 
     private:
-        EdgeStylePrivate * const d;
+        std::unique_ptr<EdgeStylePrivate> const d;
 };
 
 }
