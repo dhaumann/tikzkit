@@ -195,6 +195,16 @@ void MainWindow::setupActions()
     m_filePreview->setIcon(QIcon::fromTheme("application-pdf"));
     m_filePreview->setText(QApplication::translate("MainWindow", "Preview", 0));
 
+    m_editUndo = new QAction(this);
+    m_editUndo->setIcon(QIcon::fromTheme("edit-undo"));
+    m_editUndo->setText(QApplication::translate("MainWindow", "&Undo", 0));
+    m_editUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0));
+
+    m_editRedo = new QAction(this);
+    m_editRedo->setIcon(QIcon::fromTheme("edit-redo"));
+    m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", 0));
+    m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", 0));
+
 //     m_fileMenu->setTitle(QApplication::translate("MainWindow", "&File", 0));
 //     m_toolBar->setWindowTitle(QApplication::translate("MainWindow", "m_toolBar", 0));
 
@@ -214,9 +224,10 @@ void MainWindow::setupActions()
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-close"));
     m_toolBar->addAction(m_fileClose);
     m_toolBar->addSeparator()->setData(QStringLiteral("merge-point-undo"));
+    m_toolBar->addAction(m_editUndo);
+    m_toolBar->addAction(m_editRedo);
     m_toolBar->addSeparator();
     m_toolBar->addAction(m_filePreview);
-
 
     connect(m_fileNew, SIGNAL(triggered()), this, SLOT(slotDocumentNew()));
     connect(m_fileSave, SIGNAL(triggered()), this, SLOT(slotDocumentSave()));
@@ -233,15 +244,16 @@ void MainWindow::mergeView(tikz::ui::View * view)
     }
 
     // undo and redo
-    QAction * undoAction = view->document()->undoAction();
-    m_toolBar->addAction(undoAction);
-
-    QAction * redoAction = view->document()->redoAction();
-    m_toolBar->addAction(redoAction);
+    connect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
+    connect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));
+    connect(m_editUndo, SIGNAL(triggered()), view->document(), SLOT(undo()));
+    connect(m_editRedo, SIGNAL(triggered()), view->document(), SLOT(redo()));
 
     connect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
 
     updateWindowTitle();
+    m_editUndo->setEnabled(view->document()->undoAvailable());
+    m_editRedo->setEnabled(view->document()->redoAvailable());
 
     // TODO: add active view actions to main window
 
@@ -275,6 +287,12 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     }
 
     // TODO: remove current view actions from the main window
+    disconnect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
+    disconnect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));
+
+    disconnect(m_editUndo, SIGNAL(triggered()), view->document(), SLOT(undo()));
+    disconnect(m_editRedo, SIGNAL(triggered()), view->document(), SLOT(redo()));
+
     disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
 }
 

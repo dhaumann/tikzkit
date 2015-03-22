@@ -203,14 +203,42 @@ class TIKZCORE_EXPORT Document : public QObject
         bool isModified() const;
 
         /**
-         * Returns the undo action of this document.
+         * Returns whether undo can currently be invoked or not.
          */
-        QAction * undoAction();
+        bool undoAvailable() const;
 
         /**
-         * Returns the redo action of this document.
+         * Returns whether redo can currently be invoked or not.
          */
-        QAction * redoAction();
+        bool redoAvailable() const;
+
+    public Q_SLOTS:
+        /**
+         * Undo one undo group.
+         * Calling undo() only has an effect if undoAvailable() is @e true.
+         * @see undoAvailable(), undoAvailableChanged()
+         */
+        void undo();
+
+        /**
+         * Redo one redo group.
+         * Calling redo() only has an effect if redoAvailable() is @e true.
+         * @see redoAvailable(), redoAvailableChanged()
+         */
+        void redo();
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever undoAvailable() changes.
+         * @see undoAvailable()
+         */
+        bool undoAvailableChanged(bool available) const;
+
+        /**
+         * This signal is emitted whenever redoAvailable() changes.
+         * @see redoAvailable()
+         */
+        bool redoAvailableChanged(bool available) const;
 
     //
     // convenience functions

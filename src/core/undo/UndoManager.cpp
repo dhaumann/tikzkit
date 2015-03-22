@@ -66,16 +66,6 @@ public:
      */
     int transactionRefCount = 0;
 
-    /**
-     * Holds the undo action.
-     */
-    QPointer<QAction> undoAction;
-
-    /**
-     * Holds the redo action.
-     */
-    QPointer<QAction> redoAction;
-
 public: // helper functions
     /**
      * Make sure the undo/redo actions always properly reflect the currently
@@ -83,13 +73,7 @@ public: // helper functions
      */
     void updateState()
     {
-        if (undoAction) {
-            undoAction->setDisabled(undoItems.isEmpty());
-        }
-
-        if (redoAction) {
-            redoAction->setDisabled(redoItems.isEmpty());
-        }
+        // for now empty
     }
 };
 
@@ -112,28 +96,6 @@ Document* UndoManager::document()
     return d->doc;
 }
 
-QAction * UndoManager::undoAction()
-{
-    if (!d->undoAction) {
-        d->undoAction = new QAction(QIcon::fromTheme("edit-undo"), "Undo", this);
-        connect(d->undoAction, SIGNAL(triggered()), this, SLOT(undo()));
-        d->updateState();
-    }
-
-    return d->undoAction;
-}
-
-QAction * UndoManager::redoAction()
-{
-    if (!d->redoAction) {
-        d->redoAction = new QAction(QIcon::fromTheme("edit-redo"), "Redo", this);
-        connect(d->redoAction, SIGNAL(triggered()), this, SLOT(redo()));
-        d->updateState();
-    }
-
-    return d->redoAction;
-}
-
 void UndoManager::setClean()
 {
     if (! isClean()) {
@@ -147,16 +109,28 @@ bool UndoManager::isClean() const
     return d->cleanUndoGroup == (d->undoItems.isEmpty() ? nullptr : d->undoItems.last());
 }
 
+bool UndoManager::undoAvailable() const
+{
+    return ! d->undoItems.isEmpty();
+}
+
+bool UndoManager::redoAvailable() const
+{
+    return ! d->redoItems.isEmpty();
+}
+
 void UndoManager::undo()
 {
-    if (d->undoItems.count() > 0) {
+    if (! d->undoItems.isEmpty()) {
         const bool oldClean = isClean();
 
+        // perform undo action
         d->undoItems.last()->undo();
         d->redoItems.append(d->undoItems.last());
         d->undoItems.removeLast();
         d->updateState();
 
+        // emit cleanChanged() if required
         const bool newClean = isClean();
         if (oldClean != newClean) {
             emit cleanChanged(newClean);
@@ -166,7 +140,7 @@ void UndoManager::undo()
 
 void UndoManager::redo()
 {
-    if (d->redoItems.count() > 0) {
+    if (! d->redoItems.isEmpty()) {
         const bool oldClean = isClean();
 
         d->redoItems.last()->redo();

@@ -146,14 +146,17 @@ Q_SIGNALS:
     void viewCreated(tikz::ui::View *view);
 
 private:
-    QMenu * m_fileMenu;
-    QToolBar * m_toolBar;
-    QAction * m_fileNew;
-    QAction * m_fileOpen;
-    QAction * m_fileSave;
-    QAction * m_fileClose;
-    QAction * m_fileQuit;
-    QAction * m_filePreview;
+    QMenu * m_fileMenu = nullptr;
+    QToolBar * m_toolBar = nullptr;
+    QAction * m_fileNew = nullptr;
+    QAction * m_fileOpen = nullptr;
+    QAction * m_fileSave = nullptr;
+    QAction * m_fileClose = nullptr;
+    QAction * m_fileQuit = nullptr;
+    QAction * m_filePreview = nullptr;
+
+    QAction * m_editUndo = nullptr;
+    QAction * m_editRedo = nullptr;
 
     ViewManager * m_viewManager;
     QPointer<tikz::ui::View> m_activeView;

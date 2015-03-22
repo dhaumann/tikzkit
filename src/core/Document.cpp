@@ -359,14 +359,52 @@ bool Document::isModified() const
     return ! d->undoManager->isClean();
 }
 
-QAction * Document::undoAction()
+bool Document::undoAvailable() const
 {
-    return d->undoManager->undoAction();
+    return d->undoManager->undoAvailable();
 }
 
-QAction * Document::redoAction()
+bool Document::redoAvailable() const
 {
-    return d->undoManager->redoAction();
+    return d->undoManager->redoAvailable();
+}
+
+void Document::undo()
+{
+    const bool undoWasAvailable = undoAvailable();
+    const bool redoWasAvailable = redoAvailable();
+
+    d->undoManager->undo();
+
+    const bool undoNowAvailable = undoAvailable();
+    const bool redoNowAvailable = redoAvailable();
+
+    if (undoWasAvailable != undoNowAvailable) {
+        emit undoAvailableChanged(undoNowAvailable);
+    }
+
+    if (redoWasAvailable != redoNowAvailable) {
+        emit redoAvailableChanged(redoNowAvailable);
+    }
+}
+
+void Document::redo()
+{
+    const bool undoWasAvailable = undoAvailable();
+    const bool redoWasAvailable = redoAvailable();
+
+    d->undoManager->redo();
+
+    const bool undoNowAvailable = undoAvailable();
+    const bool redoNowAvailable = redoAvailable();
+
+    if (undoWasAvailable != undoNowAvailable) {
+        emit undoAvailableChanged(undoNowAvailable);
+    }
+
+    if (redoWasAvailable != redoNowAvailable) {
+        emit redoAvailableChanged(redoNowAvailable);
+    }
 }
 
 tikz::Pos Document::scenePos(const MetaPos & pos) const

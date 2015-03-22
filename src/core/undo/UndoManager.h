@@ -56,18 +56,6 @@ public:
      */
     Document* document();
 
-    /**
-     * Returns a QAction that triggers undo.
-     * If undo is not available, this action is automatically disabled.
-     */
-    QAction * undoAction();
-
-    /**
-     * Returns a QAction that triggers redo.
-     * If redo is not available, this action is automatically disabled.
-     */
-    QAction * redoAction();
-
 public Q_SLOTS:
     /**
      * Mark the current undo/redo state as clean.
@@ -76,6 +64,16 @@ public Q_SLOTS:
     void setClean();
 
 public:
+    /**
+     * Returns whether undo can currently be invoked or not.
+     */
+    bool undoAvailable() const;
+
+    /**
+     * Returns whether redo can currently be invoked or not.
+     */
+    bool redoAvailable() const;
+
     /**
      * Returns the clean state.
      */
@@ -110,6 +108,7 @@ public Q_SLOTS:
      */
     void addUndoItem(UndoItem *item);
 
+public:
     /**
      * Returns a list of all undo groups.
      * You must not delete the pointers to the UndoGroup%s.
