@@ -19,6 +19,8 @@
 
 #include "Renderer.h"
 #include "Ruler.h"
+#include "TikzScene.h"
+#include "DocumentPrivate.h"
 
 #include <tikz/core/Document.h>
 
@@ -60,6 +62,14 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     gridLayout->addWidget(viewport(), 1, 1);
 
     setLayout(gridLayout);
+
+    // set graphics scene
+    setScene(doc->scene());
+
+    // scale to true display size
+    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
+    scale(physicalDpiX() / s,
+         -physicalDpiY() / s);
 
 //     setViewportUpdateMode(FullViewportUpdate);
 }

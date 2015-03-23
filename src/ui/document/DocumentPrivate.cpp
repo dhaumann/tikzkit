@@ -110,20 +110,17 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
     return Document::scenePos(pos);
 }
 
+TikzScene * DocumentPrivate::scene() const
+{
+    return m_scene;
+}
+
 View * DocumentPrivate::createView(QWidget * parent,
                                    tikz::ui::MainWindow * mainWindow)
 {
     // create view
     auto view = new ViewPrivate(this, parent, mainWindow);
     Q_ASSERT(m_views.contains(view));
-
-    // set graphics scene
-    view->renderer()->setScene(m_scene);
-
-    // scale to true display size
-    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
-    view->renderer()->scale(view->physicalDpiX() / s,
-                           -view->physicalDpiY() / s);
 
 //BEGIN DEBUG
     tikz::ui::NodeItem* item1 = createNodeItem();

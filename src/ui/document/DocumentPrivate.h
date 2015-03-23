@@ -100,6 +100,11 @@ class DocumentPrivate : public tikz::ui::Document
          */
         tikz::Pos scenePos(const tikz::core::MetaPos & pos) const override;
 
+        /**
+         * Returns the QGraphicsScene based scene.
+         */
+        TikzScene * scene() const;
+
     public:
         /**
          * Create a new view attached to @p parent.
