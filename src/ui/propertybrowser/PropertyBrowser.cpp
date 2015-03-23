@@ -26,11 +26,13 @@
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
 
+#include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
 #include <tikz/ui/PathItem.h>
 
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QPointer>
 
 #include <QtTreePropertyBrowser>
 #include <QtDoublePropertyManager>
@@ -65,6 +67,7 @@ public:
     OpacityPropertyManager * opacityManager = nullptr;
     QtDoublePropertyManager * doubleSliderManager = nullptr;
 
+    QPointer<View> view = nullptr;
     TikzItem * item = nullptr;
     QHash<QtProperty *, QString> propertyMap;
 
@@ -122,6 +125,24 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
 PropertyBrowser::~PropertyBrowser()
 {
     delete d;
+}
+
+void PropertyBrowser::setView(tikz::ui::View * view)
+{
+    if (d->view == view) {
+        return;
+    }
+
+    if (d->view) {
+        disconnect(d->view, SIGNAL(selectionChanged(tikz::ui::View*)), this, SLOT(updateCurrentItem()));
+    }
+
+    d->view = view;
+    if (d->view) {
+        connect(d->view, SIGNAL(selectionChanged(tikz::ui::View*)), this, SLOT(updateCurrentItem()));
+    }
+
+    updateCurrentItem();
 }
 
 void PropertyBrowser::setItem(TikzItem * item)
@@ -292,6 +313,16 @@ void PropertyBrowser::valueChanged(QtProperty *property, double val)
             node->style()->setProperty(name.toLatin1(), val);
         }
     }
+}
+
+void PropertyBrowser::updateCurrentItem()
+{
+    auto tikzItems = d->view->selectedItems();
+    if (tikzItems.size() != 1) {
+        return;
+    }
+ 
+    setItem(tikzItems.front());
 }
 
 }

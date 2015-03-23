@@ -34,6 +34,7 @@ namespace tikz {
 namespace ui {
 
 class PropertyBrowserPrivate;
+class View;
 
 /**
  * todo
@@ -58,12 +59,16 @@ public:
      */
     void setItem(TikzItem * item);
 
+    void setView(tikz::ui::View * view);
+
 protected Q_SLOTS:
     void valueChanged(QtProperty *property, const tikz::Value & val);
     void valueChanged(QtProperty *property, bool val);
     void valueChanged(QtProperty *property, const QColor & val);
     void valueChanged(QtProperty *property, int val);
     void valueChanged(QtProperty *property, double val);
+
+    void updateCurrentItem();
 
 private:
     PropertyBrowserPrivate * const d;

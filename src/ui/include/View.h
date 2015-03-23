@@ -25,6 +25,8 @@
 
 #include <QWidget>
 
+class TikzItem;
+
 namespace tikz {
 namespace ui {
 
@@ -96,39 +98,28 @@ Q_SIGNALS:
      */
     void focusOut(tikz::ui::View *view);
 
-    /*
-     * Selection methodes.
-     * This deals with text selection and copy&paste
-     */
+//
+// Selection methodes.
+//
 public:
+    /**
+     * Check whether the view has selected items.
+     */
+    virtual bool hasSelection() const = 0;
 
     /**
-     * Query the view whether it has selected text, i.e. whether a selection
-     * exists.
-     * \return \e true if a text selection exists, otherwise \e false
-     * \see setSelection(), selectionRange()
+     * Unselect all selected items (without deleting the selected items).
      */
-    bool hasSelection() const;
+    virtual bool clearSelection() = 0;
 
     /**
-     * Remove the view's current selection, \e without deleting the selected
-     * items.
-     * \return \e true on success, otherwise \e false
+     * Returns the selected items in the scene.
      */
-    bool clearSelection();
+    virtual QList<TikzItem *> selectedItems() const = 0;
 
-    /*
-     * SIGNALS
-     * following signals should be emitted by the editor view for selection
-     * handling.
-     */
 Q_SIGNALS:
     /**
      * This signal is emitted whenever the \p view's selection changes.
-     * \note If the mode switches from block selection to normal selection
-     *       or vice versa this signal should also be emitted.
-     * \param view view in which the selection changed
-     * \see selection(), selectionRange(), selectionText()
      */
     void selectionChanged(tikz::ui::View * view);
 

@@ -64,6 +64,21 @@ class ViewPrivate : public tikz::ui::View
          */
         tikz::ui::MainWindow * mainWindow() const override;
 
+        /**
+         * Check whether the view has selected items.
+         */
+        bool hasSelection() const override;
+
+        /**
+         * Unselect all selected items (without deleting the selected items).
+         */
+        bool clearSelection() override;
+
+        /**
+         * Returns the selected items in the scene.
+         */
+        QList<TikzItem *> selectedItems() const override;
+
     public:
         /**
          * Snap @p value to the grid.
@@ -85,6 +100,12 @@ class ViewPrivate : public tikz::ui::View
          * Returns the QGraphicsView that renders the scene.
          */
         Renderer * renderer() const;
+
+    public Q_SLOTS:
+        /**
+         * Relay slot to forward selection changed signal with view parameter.
+         */
+        void slotSelectionChanged();
 
     private:
         tikz::ui::DocumentPrivate * m_doc;

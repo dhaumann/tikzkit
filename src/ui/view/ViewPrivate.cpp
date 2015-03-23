@@ -22,6 +22,8 @@
 #include "Renderer.h"
 #include "Ruler.h"
 #include "EditorPrivate.h"
+#include "TikzScene.h"
+#include "TikzItem.h"
 
 #include <tikz/core/Document.h>
 
@@ -51,6 +53,8 @@ ViewPrivate::ViewPrivate(tikz::ui::DocumentPrivate * doc,
     // register View
     EditorPrivate::self()->registerView(this);
     m_doc->registerView(this);
+
+    connect(doc->scene(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 }
 
 ViewPrivate::~ViewPrivate()
@@ -68,6 +72,29 @@ tikz::ui::Document * ViewPrivate::document() const
 tikz::ui::MainWindow * ViewPrivate::mainWindow() const
 {
     return m_mainWindow;
+}
+
+bool ViewPrivate::hasSelection() const
+{
+    return ! m_doc->scene()->selectedItems().isEmpty();
+}
+
+bool ViewPrivate::clearSelection()
+{
+    m_doc->scene()->clearSelection();
+}
+
+QList<TikzItem *> ViewPrivate::selectedItems() const
+{
+    QList<QGraphicsItem *> items = m_doc->scene()->selectedItems();
+    QList<TikzItem *> filteredItems;
+    for (auto item : items) {
+        auto tikzItem = dynamic_cast<TikzItem *>(item);
+        if (tikzItem) {
+            filteredItems.append(tikzItem);
+        }
+    }
+    return filteredItems;
 }
 
 tikz::Value ViewPrivate::snapValue(const tikz::Value & value) const
@@ -89,6 +116,11 @@ qreal ViewPrivate::snapAngle(qreal angle) const
 Renderer * ViewPrivate::renderer() const
 {
     return m_renderer;
+}
+
+void ViewPrivate::slotSelectionChanged()
+{
+    emit selectionChanged(this);
 }
 
 }

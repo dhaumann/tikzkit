@@ -70,6 +70,7 @@ protected:
     void setupUi();
     void setupActions();
 
+protected Q_SLOTS:
     void mergeView(tikz::ui::View * view);
     void unmergeView(tikz::ui::View * view);
 

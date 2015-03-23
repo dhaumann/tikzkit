@@ -252,10 +252,13 @@ void MainWindow::mergeView(tikz::ui::View * view)
     m_editUndo->setEnabled(view->document()->undoAvailable());
     m_editRedo->setEnabled(view->document()->redoAvailable());
 
+    m_browser->setView(view);
 }
 
 void MainWindow::unmergeView(tikz::ui::View * view)
 {
+    m_browser->setView(view);
+
     if (! view) {
         return;
     }
