@@ -205,9 +205,6 @@ void MainWindow::setupActions()
     m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", 0));
     m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", 0));
 
-//     m_fileMenu->setTitle(QApplication::translate("MainWindow", "&File", 0));
-//     m_toolBar->setWindowTitle(QApplication::translate("MainWindow", "m_toolBar", 0));
-
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);
     m_fileMenu->addSeparator();
@@ -255,29 +252,6 @@ void MainWindow::mergeView(tikz::ui::View * view)
     m_editUndo->setEnabled(view->document()->undoAvailable());
     m_editRedo->setEnabled(view->document()->redoAvailable());
 
-    // TODO: add active view actions to main window
-
-//     m_closeView = m_mainWindow->actionCollection()->addAction(QStringLiteral("view_close_current_space"));
-//     m_closeView->setIcon(QIcon::fromTheme(QStringLiteral("view-close")));
-//     m_closeView->setText(i18n("Cl&ose Current View"));
-//     m_closeView->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-//     connect(m_closeView, SIGNAL(triggered()), this, SLOT(slotCloseCurrentViewSpace()), Qt::QueuedConnection);
-//
-//     m_closeView->setWhatsThis(i18n("Close the currently active split view"));
-//
-//     goNext = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_next_split_view"));
-//     goNext->setText(i18n("Next Split View"));
-//     goNext->setShortcut(Qt::Key_F8);
-//     connect(goNext, SIGNAL(triggered()), this, SLOT(activateNextView()));
-//
-//     goNext->setWhatsThis(i18n("Make the next split view the active one."));
-//
-//     goPrev = m_mainWindow->actionCollection()->addAction(QStringLiteral("go_prev_split_view"));
-//     goPrev->setText(i18n("Previous Split View"));
-//     goPrev->setShortcut(Qt::SHIFT + Qt::Key_F8);
-//     connect(goPrev, SIGNAL(triggered()), this, SLOT(activatePrevView()));
-//
-//     goPrev->setWhatsThis(i18n("Make the previous split view the active one."));
 }
 
 void MainWindow::unmergeView(tikz::ui::View * view)
@@ -286,7 +260,7 @@ void MainWindow::unmergeView(tikz::ui::View * view)
         return;
     }
 
-    // TODO: remove current view actions from the main window
+    // disconnect actions from current view
     disconnect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
     disconnect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));
 
@@ -295,11 +269,6 @@ void MainWindow::unmergeView(tikz::ui::View * view)
 
     disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
 }
-
-//     m_closeView->setEnabled(m_viewSpaceList.count() > 1);
-//     m_closeOtherViews->setEnabled(m_viewSpaceList.count() > 1);
-//     goNext->setEnabled(m_viewSpaceList.count() > 1);
-//     goPrev->setEnabled(m_viewSpaceList.count() > 1);
 
 void MainWindow::slotDocumentNew()
 {
@@ -356,29 +325,6 @@ void MainWindow::closeDocument(tikz::ui::Document * doc)
     // close the document
     TikzKit::self()->documentManager()->closeDocument(doc);
 }
-
-// void MainWindow::slotDocumentClose(tikz::ui::Document * doc)
-// {
-//     if (!doc && m_viewManager->activeView()) {
-//         doc = m_viewManager->activeView()->document();
-//     }
-//
-//     if (! doc) {
-//         return;
-//     }
-//
-//     // prevent close document if only one view alive and the document of
-//     // it is not modified and empty
-//     if ((TikzKit::self()->documentManager()->documentList().size() == 1)
-//         && doc->isEmptyBuffer())
-//     {
-//         doc->close();
-//         return;
-//     }
-//
-//     // close document
-//     TikzKit::self()->documentManager()->closeDocument(doc);
-// }
 
 void MainWindow::previewPdf()
 {
