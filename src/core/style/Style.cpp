@@ -143,8 +143,8 @@ Style::Style(const QJsonObject & json, Document* tikzDocument)
 
         // FIXME line type
 
-        if (json.contains("double-line-color")) {
-            setInnerLineColor(json["double-line-color"].toString());
+        if (json.contains("inner-line-color")) {
+            setInnerLineColor(json["inner-line-color"].toString());
         }
     }
 
