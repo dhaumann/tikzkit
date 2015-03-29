@@ -26,7 +26,7 @@ namespace tikz {
 namespace core {
 
 UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc)
-    : UndoItem("Set node style", doc)
+    : UndoItem("Set Node Style", doc)
     , m_id(id)
 {
     // get node to save data

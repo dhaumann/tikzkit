@@ -27,7 +27,7 @@ namespace core {
 UndoSetNodePos::UndoSetNodePos(Node * node,
                                const MetaPos & newPos,
                                Document * doc)
-    : UndoItem("Move node", doc)
+    : UndoItem("Move Node", doc)
     , m_id(node->id())
     , m_undoPos(node->metaPos())
     , m_redoPos(newPos)

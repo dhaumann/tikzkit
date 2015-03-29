@@ -26,7 +26,7 @@ namespace tikz {
 namespace core {
 
 UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
-    : UndoItem("Delete path", doc)
+    : UndoItem("Delete Path", doc)
     , m_id(id)
 {
     // get path to save data

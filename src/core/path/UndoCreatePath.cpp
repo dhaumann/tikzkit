@@ -24,7 +24,7 @@ namespace tikz {
 namespace core {
 
 UndoCreatePath::UndoCreatePath(Path::Type type, qint64 id, Document * doc)
-    : UndoItem("Create path", doc)
+    : UndoItem("Create Path", doc)
     , m_id(id)
     , m_type(type)
 {

@@ -25,7 +25,7 @@ namespace tikz {
 namespace core {
 
 UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * doc)
-    : UndoItem("Set node text", doc)
+    : UndoItem("Set Node Text", doc)
     , m_id(id)
 {
     Node * node = doc->nodeFromId(id);
