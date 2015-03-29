@@ -92,8 +92,6 @@ MainWindow::MainWindow()
 //     arrowTailCombo->show();
 //     arrowHeadCombo->show();
 
-    auto view = openUrl(QUrl("output.tikzkit"));
-
     //
     // initialize tikz::ui::MainWindow wrapper object (forward signals from the
     // ViewManager to this MainWindow)
@@ -110,6 +108,8 @@ MainWindow::MainWindow()
 
     // register ourself as MainWindow
     TikzKit::self()->registerMainWindow(this);
+
+    auto view = openUrl(QUrl("output.tikzkit"));
 }
 
 MainWindow::~MainWindow()

@@ -194,7 +194,6 @@ void ViewManager::activateView(tikz::ui::View * view)
     m_tabBar->blockSignals(wasBlocked);
 
     // make sure the correct view is visible
-    // TODO, FIXME: merge new actions
     m_activeView = view;
     m_stack->setCurrentWidget(view);
 

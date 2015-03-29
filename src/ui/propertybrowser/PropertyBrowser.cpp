@@ -191,7 +191,7 @@ void PropertyBrowser::setItem(TikzItem * item)
         d->addProperty(property, s_penOpacity);
 
         auto doubleLine = d->boolManager->addProperty(tr("Double Line"));
-        d->valueManager->setValue(doubleLine, node->style()->doubleLine());
+        d->boolManager->setValue(doubleLine, node->style()->doubleLine());
         d->addProperty(doubleLine, s_doubleLine);
 
         property = d->valueManager->addProperty(tr("Inner Line Width"));
