@@ -50,9 +50,11 @@ class UndoSetNodePos : public UndoItem
         virtual ~UndoSetNodePos();
 
         /**
-         * Return node id, which is uniq.
+         * Return uniq undo item id.
          */
-        int id() const override;
+        int id() const override {
+            return uniqId<decltype(this)>();
+        }
 
         /**
          * Undo: delete node again.

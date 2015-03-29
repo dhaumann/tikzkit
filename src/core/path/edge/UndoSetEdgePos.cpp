@@ -48,11 +48,6 @@ UndoSetEdgePos::~UndoSetEdgePos()
 {
 }
 
-int UndoSetEdgePos::id() const
-{
-    return m_pathId;
-}
-
 void UndoSetEdgePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

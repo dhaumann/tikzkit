@@ -72,13 +72,20 @@ public:
     virtual void undo() = 0;
 
     /**
-     * Returns the uniq undo identifier of this undo item.
+     * Returns the uniq undo item identifier of this undo item.
      * Whenever two successive undo items have the same id, the function
      * mergeWith() is executed to fold the two undo items into a single
      * undo item.
      *
      * By default, -1 is returned. In this case (or any other negative id),
      * mergeWith() is not called.
+     *
+     * If you reimplement this function, reimplement it like this:
+     * @code
+     * int id() const override {
+     *     return uniqId<decltype(this)>();
+     * }
+     * @endcode
      */
     virtual int id() const;
 
@@ -93,6 +100,26 @@ public:
      * Serialize the undo item to a JSON object.
      */
     virtual QJsonObject toJsonObject() const {}
+
+protected:
+    /**
+     * Internal id counter starting at 0.
+     * Each time this function is called, the counter is increased by one.
+     */
+    static int nextFreeId();
+
+    /**
+     * Template function that always returns the same id for T.
+     * This is a trick: Since the template funcion is generated for each class,
+     * each undo item calling this function with its type gets an own uniq id.
+     * Hence: We magically never get undo item id clashes at runtime.
+     */
+    template<typename T>
+    int uniqId() const
+    {
+        static int s_id = nextFreeId();
+        return s_id;
+    }
 
 private:
     /**

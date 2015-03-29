@@ -49,11 +49,6 @@ UndoSetPathStyle::~UndoSetPathStyle()
 {
 }
 
-int UndoSetPathStyle::id() const
-{
-    return m_pathId;
-}
-
 void UndoSetPathStyle::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

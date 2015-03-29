@@ -50,9 +50,11 @@ class UndoSetEllipsePos : public UndoItem
         virtual ~UndoSetEllipsePos();
 
         /**
-         * Return node id, which is uniq.
+         * Return uniq undo item id.
          */
-        int id() const override;
+        int id() const override {
+            return uniqId<decltype(this)>();
+        }
 
         /**
          * Undo: disconnect edge again.

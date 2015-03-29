@@ -46,11 +46,6 @@ UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
     Q_ASSERT(m_id >= 0);
 }
 
-int UndoSetNodePos::id() const
-{
-    return m_id;
-}
-
 void UndoSetNodePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

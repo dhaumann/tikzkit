@@ -50,11 +50,12 @@ class UndoSetEdgePos : public UndoItem
          */
         virtual ~UndoSetEdgePos();
 
-
         /**
-         * Return node id, which is uniq.
+         * Return uniq undo item id.
          */
-        int id() const override;
+        int id() const override {
+            return uniqId<decltype(this)>();
+        }
 
         /**
          * Undo: disconnect edge again.

@@ -49,11 +49,6 @@ UndoSetNodeStyle::~UndoSetNodeStyle()
 {
 }
 
-int UndoSetNodeStyle::id() const
-{
-    return m_id;
-}
-
 void UndoSetNodeStyle::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

@@ -45,11 +45,6 @@ UndoSetEllipsePos::~UndoSetEllipsePos()
 {
 }
 
-int UndoSetEllipsePos::id() const
-{
-    return m_pathId;
-}
-
 void UndoSetEllipsePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

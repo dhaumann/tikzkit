@@ -46,11 +46,6 @@ UndoSetNodeText::~UndoSetNodeText()
 {
 }
 
-int UndoSetNodeText::id() const
-{
-    return m_id;
-}
-
 void UndoSetNodeText::undo()
 {
     const bool wasActive = document()->setUndoActive(true);

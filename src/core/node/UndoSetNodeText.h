@@ -49,9 +49,11 @@ class UndoSetNodeText : public UndoItem
         virtual ~UndoSetNodeText();
 
         /**
-         * Return node id, which is uniq.
+         * Return uniq undo item id.
          */
-        int id() const override;
+        int id() const override {
+            return uniqId<decltype(this)>();
+        }
 
         /**
          * Undo: delete node again.

@@ -90,7 +90,10 @@ void UndoGroup::redo()
 
 void UndoGroup::addItem(UndoItem *item)
 {
-    if (!d->items.isEmpty() && d->items.last()->mergeWith(item)) {
+    // only try merge, if undo item id's match
+    const int lastUndoId = d->items.isEmpty() ? -1 : d->items.last()->id();
+    const int newUndoId = item->id();
+    if (lastUndoId >= 0 && lastUndoId == newUndoId && d->items.last()->mergeWith(item)) {
         delete item;
     } else {
         d->items.append(item);

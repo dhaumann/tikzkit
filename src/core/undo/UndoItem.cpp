@@ -74,6 +74,15 @@ bool UndoItem::mergeWith(const UndoItem * item)
     return false;
 }
 
+namespace {
+    int freeId = 0;
+}
+
+int UndoItem::nextFreeId()
+{
+    return freeId++;
+}
+
 }
 }
 
