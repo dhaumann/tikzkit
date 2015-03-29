@@ -80,7 +80,7 @@ class UndoSetNodePos : public UndoItem
         /**
          * The unique Node id.
          */
-        qint64 m_id;
+        qint64 m_nodeId;
 
         /**
          * Undo position.

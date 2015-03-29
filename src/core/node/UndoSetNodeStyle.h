@@ -78,7 +78,7 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * The unique Node id.
          */
-        const qint64 m_id;
+        const qint64 m_nodeId;
 
         /**
          * The node style before the change

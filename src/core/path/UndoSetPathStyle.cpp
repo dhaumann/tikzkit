@@ -75,14 +75,14 @@ void UndoSetPathStyle::redo()
 
 bool UndoSetPathStyle::mergeWith(const UndoItem * command)
 {
-    Q_ASSERT(id() == command->id());
-
-    auto * otherStyle = dynamic_cast<const UndoSetPathStyle*>(command);
-    if (otherStyle) {
-        m_redoStyle.setStyle(otherStyle->m_redoStyle);
+        // only merge when command is of correct type
+    auto other = static_cast<const UndoSetPathStyle*>(command);
+    if (m_pathId != other->m_pathId) {
+        return false;
     }
 
-    return otherStyle;
+    m_redoStyle.setStyle(other->m_redoStyle);
+    return true;
 }
 
 QJsonObject UndoSetPathStyle::toJsonObject() const

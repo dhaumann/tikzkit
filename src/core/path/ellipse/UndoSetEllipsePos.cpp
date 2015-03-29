@@ -71,14 +71,13 @@ void UndoSetEllipsePos::redo()
 
 bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
 {
-    Q_ASSERT(id() == command->id());
-
-    auto other = dynamic_cast<const UndoSetEllipsePos*>(command);
-    if (other) {
-        m_redoPos = other->m_redoPos;
+    auto other = static_cast<const UndoSetEllipsePos*>(command);
+    if (m_pathId != other->m_pathId) {
+        return false;
     }
 
-    return other != nullptr;
+    m_redoPos = other->m_redoPos;
+    return true;
 }
 
 QJsonObject UndoSetEllipsePos::toJsonObject() const

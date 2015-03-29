@@ -82,15 +82,14 @@ void UndoSetEdgePos::redo()
 
 bool UndoSetEdgePos::mergeWith(const UndoItem * command)
 {
-    Q_ASSERT(id() == command->id());
-
-    auto other = dynamic_cast<const UndoSetEdgePos*>(command);
-    if (other && m_isStart == other->m_isStart) {
-        m_redoPos = other->m_redoPos;
-        return true;
+    // only merge when command is of correct type
+    auto other = static_cast<const UndoSetEdgePos*>(command);
+    if (m_pathId != other->m_pathId || m_isStart != other->m_isStart) {
+        return false;
     }
 
-    return false;
+    m_redoPos = other->m_redoPos;
+    return true;
 }
 
 QJsonObject UndoSetEdgePos::toJsonObject() const

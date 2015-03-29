@@ -79,7 +79,7 @@ class UndoSetNodeText : public UndoItem
         /**
          * The unique Node id.
          */
-        const qint64 m_id;
+        const qint64 m_nodeId;
 
         /**
          * Undo text.
