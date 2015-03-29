@@ -249,7 +249,7 @@ QJsonObject Style::toJson() const
         // FIXME line width
 
         if (innerLineColorSet()) {
-            json["double-line-color"] = innerLineColor().name();
+            json["inner-line-color"] = innerLineColor().name();
         }
     }
 
