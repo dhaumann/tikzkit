@@ -123,36 +123,50 @@ View * DocumentPrivate::createView(QWidget * parent,
     Q_ASSERT(m_views.contains(view));
 
 //BEGIN DEBUG
+    beginTransaction("Create Nodes");
     tikz::ui::NodeItem* item1 = createNodeItem();
     item1->node()->setPos(tikz::Pos(-3, 3, tikz::Centimeter));
-    item1->node()->style()->setLineWidth(tikz::Value::veryThin());
-    item1->node()->style()->setShape(tikz::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+    tikz::core::NodeStyle ns;
+    ns.setStyle(*item1->node()->style());
+    ns.setLineWidth(tikz::Value::veryThin());
+    ns.setShape(tikz::ShapeRectangle);
+    ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
+    item1->node()->setStyle(ns);
     item1->node()->setText("$\\int f(x) dx$");
 
     tikz::ui::NodeItem* item2 = createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 3, tikz::Centimeter));
-    item2->node()->style()->setLineWidth(tikz::Value::thin());
-    item2->node()->style()->setShape(tikz::ShapeCircle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Millimeter));
+    ns.setStyle(*item2->node()->style());
+    ns.setLineWidth(tikz::Value::thin());
+    ns.setShape(tikz::ShapeCircle);
+    ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
+    item2->node()->setStyle(ns);
     item2->node()->setText("$\\Leftrightarrow$");
+    finishTransaction();
 
+    beginTransaction("Create Paths");
     // an ellipse path
     tikz::ui::PathItem* path = createPathItem(tikz::core::Path::Ellipse);
     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
-    ellipse->style()->setRadiusX(tikz::Value(2.0, tikz::Centimeter));
-    ellipse->style()->setRadiusY(tikz::Value(1.0, tikz::Centimeter));
-    ellipse->style()->setLineWidth(tikz::Value::semiThick());
+    tikz::core::EdgeStyle es;
+    es.setStyle(*ellipse->style());
+    es.setRadiusX(tikz::Value(2.0, tikz::Centimeter));
+    es.setRadiusY(tikz::Value(1.0, tikz::Centimeter));
+    es.setLineWidth(tikz::Value::semiThick());
+    ellipse->setStyle(es);
 
     // add a line path
     path = createPathItem(tikz::core::Path::Line);
     auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
-    edge->style()->setLineWidth(tikz::Value::semiThick());
-//     edge->style()->setDoubleLine(true);
-    edge->style()->setArrowTail(tikz::LatexArrow);
-    edge->style()->setArrowHead(tikz::ToArrow);
+    es.setStyle(*edge->style());
+    es.setLineWidth(tikz::Value::semiThick());
+//     es.setDoubleLine(true);
+    es.setArrowTail(tikz::LatexArrow);
+    es.setArrowHead(tikz::ToArrow);
+    edge->setStyle(es);
     edge->setStartNode(item1->node());
     edge->setEndNode(item2->node());
+    finishTransaction();
 
 #if 0
     item1 = m_doc->createNodeItem();
@@ -259,9 +273,10 @@ View * DocumentPrivate::createView(QWidget * parent,
 
     // test example
     {
+        beginTransaction("Create Diagram");
+
         tikz::ui::NodeItem *n1 = createNodeItem();
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Centimeter));
-        tikz::core::NodeStyle ns;
         ns.setStyle(*n1->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
@@ -351,7 +366,6 @@ View * DocumentPrivate::createView(QWidget * parent,
         auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n1->node());
         edge->setEndNode(n2->node());
-        tikz::core::EdgeStyle es;
         es.setStyle(*path->path()->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
@@ -409,6 +423,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
         edge->setStartAnchor(tikz::East);
+
+        finishTransaction();
     }
 //END DEBUG
 
