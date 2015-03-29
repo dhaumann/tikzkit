@@ -158,6 +158,7 @@ void PropertyBrowser::setItem(TikzItem * item)
     d->boolManager->clear();
     d->colorManager->clear();
     d->opacityManager->clear();
+    d->propertyMap.clear();
 
     if (! d->item) {
         return;
@@ -319,9 +320,10 @@ void PropertyBrowser::updateCurrentItem()
 {
     auto tikzItems = d->view->selectedItems();
     if (tikzItems.size() != 1) {
+        setItem(nullptr);
         return;
     }
- 
+
     setItem(tikzItems.front());
 }
 

@@ -125,7 +125,6 @@ Document::Document(QObject * parent)
     d->nextId = 0;
     d->style = new Style(d->uniqueId(), this);
 
-    connect(d->undoManager, SIGNAL(indexChanged(int)), this, SIGNAL(changed()));
     connect(d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
 }
 
