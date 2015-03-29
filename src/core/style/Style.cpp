@@ -105,7 +105,6 @@ Style::Style(const QJsonObject & json, Document* tikzDocument)
         d->parent = tikzDocument->style()->findStyle(styleId);
     }
 
-    Q_ASSERT(json.contains("style-id"));
     if (json.contains("style-id")) {
         d->id = json["style-id"].toString().toLongLong();
     }
@@ -130,14 +129,19 @@ Style::Style(const QJsonObject & json, Document* tikzDocument)
         setPenStyle(penStyleFromString(json["pen-style"].toString()));
     }
 
+    if (json.contains("line-width")) {
+        setLineWidth(Value::fromString(json["line-width"].toString()));
+    }
     // FIXME line type
-    // FIXME line width
 
     if (json.contains("double-line")) {
         setDoubleLine(json["double-line"].toBool());
 
+        if (json.contains("inner-line-width")) {
+            setInnerLineWidth(Value::fromString(json["inner-line-width"].toString()));
+        }
+
         // FIXME line type
-        // FIXME line width
 
         if (json.contains("double-line-color")) {
             setInnerLineColor(json["double-line-color"].toString());
@@ -207,9 +211,7 @@ QJsonObject Style::toJson() const
         json["parent-style-id"] = QString::number(parentStyle()->id());
     }
 
-    if (parentStyle()) {
-        json["style-id"] = QString::number(id());
-    }
+    json["style-id"] = QString::number(id());
 
     if (penColorSet()) {
         json["pen-color"] = penColor().name();
@@ -231,14 +233,18 @@ QJsonObject Style::toJson() const
         json["pen-style"] = penStyleToString(penStyle());
     }
 
-    // FIXME line width
-//     if (penStyleSet()) {
-//         json["pen-style", penStyleToString(style->penStyle()));
-//     }
+    if (lineWidthSet()) {
+        json["line-width"] = lineWidth().toString();
+    }
 
+    // FIXME line type
 
     if (doubleLineSet()) {
         json["double-line"] = "true";
+
+        if (innerLineWidthSet()) {
+            json["inner-line-width"] = innerLineWidth().toString();
+        }
 
         // FIXME line width
 
