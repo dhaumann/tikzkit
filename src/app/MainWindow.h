@@ -15,14 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef DEMO_WIDGET_H
-#define DEMO_WIDGET_H
+#ifndef TIKZKIT_MAIN_WINDOW_H
+#define TIKZKIT_MAIN_WINDOW_H
 
 #include <QMainWindow>
 #include <memory>
 #include <QPointer>
 
-class QGraphicsView;
 class QTextEdit;
 
 class ViewManager;
@@ -172,6 +171,6 @@ private:
     tex::PdfGenerator * m_pdfGenerator;
 };
 
-#endif // DEMO_WIDGET_H
+#endif // TIKZKIT_MAIN_WINDOW_H
 
 // kate: indent-width 4; replace-tabs on;
