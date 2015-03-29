@@ -137,6 +137,13 @@ void UndoManager::undo()
         d->redoItems.prepend(d->undoItems.last());
         d->undoItems.removeLast();
 
+        // send dataChanged() signal, since the current undo item is bold (needs repaint)
+        const int startRow = d->undoItems.size();
+        QModelIndex startIndex = index(startRow, 0);
+        QModelIndex endIndex = index(startRow + 1, 0);
+        const QVector<int> roles {Qt::FontRole};
+        emit dataChanged(startIndex, endIndex, roles);
+
         // emit cleanChanged() if required
         const bool newClean = isClean();
         if (oldClean != newClean) {
@@ -153,6 +160,13 @@ void UndoManager::redo()
         d->redoItems.first()->redo();
         d->undoItems.append(d->redoItems.first());
         d->redoItems.removeFirst();
+
+        // send dataChanged() signal, since the current undo item is bold (needs repaint)
+        const int startRow = d->undoItems.size() - 1;
+        QModelIndex startIndex = index(startRow, 0);
+        QModelIndex endIndex = index(startRow + 1, 0);
+        const QVector<int> roles {Qt::FontRole};
+        emit dataChanged(startIndex, endIndex, roles);
 
         const bool newClean = isClean();
         if (oldClean != newClean) {
@@ -366,18 +380,28 @@ QVariant UndoManager::data(const QModelIndex & index, int role) const
         return QVariant();
     }
 
-    if (role != Qt::DisplayRole) {
-        return QVariant();
+    if (role == Qt::DisplayRole) {
+        auto group = static_cast<UndoGroup *>(index.internalPointer());
+        if (group) {
+            // child item
+            return group->undoItems()[index.row()]->text();
+        } else {
+            auto group = d->groupForRow(index.row());
+            Q_ASSERT(group);
+            return group->text();
+        }
     }
 
-    auto group = static_cast<UndoGroup *>(index.internalPointer());
-    if (group) {
-        // child item
-        return group->undoItems()[index.row()]->text();
-    } else {
-        auto group = d->groupForRow(index.row());
-        Q_ASSERT(group);
-        return group->text();
+    if (role == Qt::FontRole) {
+        auto group = static_cast<UndoGroup *>(index.internalPointer());
+        if (!group) {
+            // top-level item
+            if (index.row() == d->undoItems.size() - 1) {
+                QFont font;
+                font.setBold(true);
+                return font;
+            }
+        }
     }
 
     return QVariant();
