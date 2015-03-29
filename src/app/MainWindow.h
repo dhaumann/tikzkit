@@ -24,6 +24,7 @@
 
 class QTextEdit;
 
+class QTreeView;
 class ViewManager;
 
 namespace tex {
@@ -167,6 +168,7 @@ private:
 
     tikz::ui::LinePropertyWidget * m_linePropertyWidget;
     tikz::ui::PropertyBrowser * m_browser;
+    QTreeView * m_historyView;
 
     tex::PdfGenerator * m_pdfGenerator;
 };

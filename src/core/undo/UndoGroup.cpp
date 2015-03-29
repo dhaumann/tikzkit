@@ -102,6 +102,11 @@ QList<UndoItem *> UndoGroup::undoItems() const
     return d->items;
 }
 
+int UndoGroup::count() const
+{
+    return d->items.count();
+}
+
 void UndoGroup::printTree()
 {
     QString str = "group: " + text();

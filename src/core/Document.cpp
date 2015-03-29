@@ -368,6 +368,11 @@ bool Document::redoAvailable() const
     return d->undoManager->redoAvailable();
 }
 
+QAbstractItemModel * Document::historyModel() const
+{
+    return d->undoManager;
+}
+
 void Document::undo()
 {
     const bool undoWasAvailable = undoAvailable();

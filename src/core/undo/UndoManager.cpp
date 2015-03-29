@@ -67,18 +67,26 @@ public:
     int transactionRefCount = 0;
 
 public: // helper functions
-    /**
-     * Make sure the undo/redo actions always properly reflect the currently
-     * available undo / redo action.
-     */
-    void updateState()
+    UndoGroup * groupForRow(int row) const
     {
-        // for now empty
+        if (row < 0) {
+            return nullptr;
+        }
+
+        if (row < undoItems.size()) {
+            // an undo item
+            return undoItems[row];
+        } else if (row < undoItems.size() + redoItems.size()) {
+            // a redo item
+            return redoItems[row - undoItems.size()];
+        }
+
+        return nullptr;
     }
 };
 
 UndoManager::UndoManager(Document* doc)
-    : QObject(doc)
+    : QAbstractItemModel(doc)
     , d(new UndoManagerPrivate())
 {
     d->doc = doc;
@@ -126,9 +134,8 @@ void UndoManager::undo()
 
         // perform undo action
         d->undoItems.last()->undo();
-        d->redoItems.append(d->undoItems.last());
+        d->redoItems.prepend(d->undoItems.last());
         d->undoItems.removeLast();
-        d->updateState();
 
         // emit cleanChanged() if required
         const bool newClean = isClean();
@@ -143,10 +150,9 @@ void UndoManager::redo()
     if (! d->redoItems.isEmpty()) {
         const bool oldClean = isClean();
 
-        d->redoItems.last()->redo();
-        d->undoItems.append(d->redoItems.last());
-        d->redoItems.removeLast();
-        d->updateState();
+        d->redoItems.first()->redo();
+        d->undoItems.append(d->redoItems.first());
+        d->redoItems.removeFirst();
 
         const bool newClean = isClean();
         if (oldClean != newClean) {
@@ -157,6 +163,8 @@ void UndoManager::redo()
 
 void UndoManager::clear()
 {
+    beginResetModel();
+
     // a group for a clean state does not exist anymore
     d->cleanUndoGroup = nullptr;
 
@@ -172,6 +180,7 @@ void UndoManager::clear()
     d->currentUndoGroup = nullptr;
     d->transactionRefCount = 0;
 
+    endResetModel();
 }
 
 void UndoManager::addUndoItem(UndoItem * item)
@@ -223,7 +232,6 @@ void UndoManager::cancelTransaction()
         d->currentUndoGroup->undo();
         delete d->currentUndoGroup;
         d->currentUndoGroup = nullptr;
-        d->updateState();
     }
 }
 
@@ -233,26 +241,166 @@ void UndoManager::commitTransaction()
 
     --d->transactionRefCount;
 
-    // add to undo stack
-    if (d->transactionRefCount == 0) {
-        d->undoItems.append(d->currentUndoGroup);
-        d->currentUndoGroup = nullptr;
-        d->updateState();
+    // already balanced transaction ?
+    if (d->transactionRefCount > 0) {
+        return;
+    }
 
-        // clear redo items
+    //
+    // ok, now the real work: add to undo stack
+    //
+    const int rowIndex = d->undoItems.count();
+
+    // first: clear redo items
+    if (! d->redoItems.isEmpty()) {
+        beginRemoveRows(index(rowIndex, 0), rowIndex, rowIndex + d->redoItems.count());
+        removeRows(rowIndex, d->redoItems.count());
         qDeleteAll(d->redoItems);
         d->redoItems.clear();
+        endRemoveRows();
+    }
 
-        // track clean state
-        if (d->wasClean) {
-            emit cleanChanged(false);
-        }
+    // next: add pending undo group
+    {
+        beginInsertRows(index(rowIndex, 0), rowIndex, rowIndex + 1);
+
+        insertRows(rowIndex, 1);
+        d->undoItems.append(d->currentUndoGroup);
+        d->currentUndoGroup = nullptr;
+
+        endInsertRows();
+    }
+
+    // track clean state
+    if (d->wasClean) {
+        emit cleanChanged(false);
     }
 }
 
 bool UndoManager::transactionActive() const
 {
     return d->transactionRefCount > 0;
+}
+
+QModelIndex UndoManager::index(int row, int column, const QModelIndex & parent) const
+{
+    // currently, we only support one column
+    if (column != 0) {
+        return QModelIndex();
+    }
+
+    // a top-level item is requested
+    if (!parent.isValid()) {
+        auto group = d->groupForRow(row);
+        if (!group) {
+            return QModelIndex();
+        }
+        return createIndex(row, column, nullptr);
+    }
+
+    // a child item of a top-level item is requrested
+    UndoGroup * group = d->groupForRow(parent.row());
+    if (!group) {
+        return QModelIndex();
+    }
+    return createIndex(row, column, group);
+}
+
+QModelIndex UndoManager::parent(const QModelIndex & index) const
+{
+    if (!index.isValid()) {
+        return QModelIndex();
+    }
+
+    auto group = static_cast<UndoGroup *>(index.internalPointer());
+    if (group) {
+        // child item
+        int row = d->undoItems.indexOf(group);
+        if (row < 0) {
+            row = d->redoItems.indexOf(group);
+            Q_ASSERT(row >= 0);
+            row += d->undoItems.size();
+        }
+        return createIndex(row, 0, nullptr);
+    } else {
+        // top-level item
+        return QModelIndex();
+    }
+}
+
+int UndoManager::rowCount(const QModelIndex & parent) const
+{
+    if (!parent.isValid()) {
+        // top-level items
+        return d->undoItems.size() + d->redoItems.size();
+    } else if (! parent.internalPointer()){
+        // child items
+        auto group = d->groupForRow(parent.row());
+        if (group) {
+            return group->count();
+        }
+    }
+    return 0;
+}
+
+int UndoManager::columnCount(const QModelIndex & parent) const
+{
+    if (!parent.isValid()) {
+        return 1;
+    } else {
+        auto group = d->groupForRow(parent.row());
+        if (group) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+QVariant UndoManager::data(const QModelIndex & index, int role) const
+{
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    if (index.column() != 0) {
+        return QVariant();
+    }
+
+    if (role != Qt::DisplayRole) {
+        return QVariant();
+    }
+
+    auto group = static_cast<UndoGroup *>(index.internalPointer());
+    if (group) {
+        // child item
+        return group->undoItems()[index.row()]->text();
+    } else {
+        auto group = d->groupForRow(index.row());
+        Q_ASSERT(group);
+        return group->text();
+    }
+
+    return QVariant();
+}
+
+bool UndoManager::insertRows(int row, int count, const QModelIndex & parent)
+{
+    Q_UNUSED(row)
+    Q_UNUSED(count)
+    Q_UNUSED(parent)
+
+    // for now, inserting is only supported at top-level
+    return true;
+}
+
+bool UndoManager::removeRows(int row, int count, const QModelIndex & parent)
+{
+    Q_UNUSED(row)
+    Q_UNUSED(count)
+    Q_UNUSED(parent)
+
+    // for now, inserting is only supported at top-level
+    return true;
 }
 
 void UndoManager::printTree()

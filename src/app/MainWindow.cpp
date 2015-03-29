@@ -51,6 +51,7 @@
 #include <QTextEdit>
 #include <QToolBar>
 #include <QToolButton>
+#include <QTreeView>
 #include <QUrl>
 #include <QVBoxLayout>
 
@@ -138,6 +139,15 @@ void MainWindow::setupUi()
     m_browser = new tikz::ui::PropertyBrowser(dockWidget);
     dockWidget->setWidget(m_browser);
 
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    //
+    // undo history
+    //
+    dockWidget = new QDockWidget("History", this);
+    m_historyView = new QTreeView(dockWidget);
+    m_historyView->setHeaderHidden(true);
+    dockWidget->setWidget(m_historyView);
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
     //
@@ -371,6 +381,7 @@ void MainWindow::slotViewChanged(tikz::ui::View * view)
 
     if (m_activeView) {
         mergeView(m_activeView);
+        m_historyView->setModel(m_activeView->document()->historyModel());
     }
 
     qDebug() << "the active view changed to" << view;

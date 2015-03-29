@@ -28,8 +28,7 @@
 #include <QObject>
 #include <QVector>
 
-class QAction;
-class QPointF;
+class QAbstractItemModel;
 class QUrl;
 
 namespace tikz {
@@ -211,6 +210,11 @@ class TIKZCORE_EXPORT Document : public QObject
          * Returns whether redo can currently be invoked or not.
          */
         bool redoAvailable() const;
+
+        /**
+         * Returns the history model.
+         */
+        QAbstractItemModel * historyModel() const;
 
     public Q_SLOTS:
         /**

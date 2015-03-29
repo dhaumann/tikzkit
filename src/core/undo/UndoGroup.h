@@ -88,6 +88,11 @@ public:
      */
     QList<UndoItem *> undoItems() const;
 
+    /**
+     * Returns the number of undo items;
+     */
+    int count() const;
+
 public:
     // debugging
     void printTree();

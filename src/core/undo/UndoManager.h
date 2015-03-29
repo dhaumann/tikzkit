@@ -20,10 +20,8 @@
 #ifndef TIKZ_UNDO_MANAGER_H
 #define TIKZ_UNDO_MANAGER_H
 
-#include <QObject>
+#include <QAbstractItemModel>
 #include <QList>
-
-class QAction;
 
 namespace tikz {
 namespace core {
@@ -36,7 +34,7 @@ class UndoItem;
 /**
  * Base class for undo/redo items.
  */
-class UndoManager : public QObject
+class UndoManager : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -150,6 +148,45 @@ public:
      * Returns whether there is a currently pending transaction.
      */
     bool transactionActive() const;
+
+//
+// Implementation of QAbstractItemModel
+//
+public:
+    /**
+     * Returns a QModelIndex for the requested position.
+     */
+    QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;
+
+    /**
+     * Returns a parent QModelIndex for @p index.
+     */
+    QModelIndex parent(const QModelIndex & index) const override;
+
+    /**
+     * Returns the number of child items (rows) for @p parent.
+     */
+    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+
+    /**
+     * Returns the number of columns for the index @p parent.
+     */
+    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+
+    /**
+     * Returns the data for @p index.
+     */
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+
+    /**
+     * Inserts @p count rows starting at @p row.
+     */
+    bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex()) override;
+
+    /**
+     * Removes @p count rows starting at @p row.
+     */
+    bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex()) override;
 
 public:
     // for debugging
