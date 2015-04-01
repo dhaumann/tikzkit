@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include "tikz_export.h"
+#include "Entity.h"
 #include "tikz.h"
 
 namespace tikz {
@@ -34,7 +34,7 @@ class EdgeStyle;
 class Visitor;
 class PathPrivate;
 
-class TIKZCORE_EXPORT Path : public QObject
+class TIKZCORE_EXPORT Path : public Entity
 {
     Q_OBJECT
 
@@ -66,33 +66,6 @@ class TIKZCORE_EXPORT Path : public QObject
          */
         virtual ~Path();
 
-        /**
-         * Returns the associated document.
-         */
-        Document * document() const;
-
-        /**
-         * Document wide unique id.
-         */
-        qint64 id() const;
-
-    //
-    // reference counted config
-    //
-    public:
-        /**
-         * Increase config reference counter.
-         * For beginConfig() call must have a matching endConfig() call.
-         * When the reference counter is 0, changed() is emitted.
-         */
-        void beginConfig();
-
-        /**
-         * Decrease config reference counter.
-         * For beginConfig() call must have a matching endConfig() call.
-         */
-        void endConfig();
-
     public Q_SLOTS:
         /**
          * Emits changed() if reference counter is 0.
@@ -100,13 +73,6 @@ class TIKZCORE_EXPORT Path : public QObject
          * counter is 0 after a call of endConfig().
          */
         void emitChangedIfNeeded();
-
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever the Path changes.
-         * This includes the style, the number of edges, edge types etc.
-         */
-        void changed();
 
     //
     // visitor pattern
@@ -140,10 +106,10 @@ class TIKZCORE_EXPORT Path : public QObject
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
-         * @param id unique id of the path
+         * @param uid unique id of the path
          * @param doc associated document
          */
-        Path(qint64 id, Document* doc);
+        Path(qint64 uid, Document* doc);
 
         /**
          * This function is called by Document::deletePath() right before the

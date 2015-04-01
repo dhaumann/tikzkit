@@ -36,7 +36,7 @@ UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
     // save properties
     m_pos  = node->pos();
     m_text = node->text();
-    m_style.setStyle(*node->style());
+    m_style.setStyle(node->style());
 }
 
 UndoDeleteNode::UndoDeleteNode(const QJsonObject & json, Document * doc)
@@ -58,7 +58,7 @@ void UndoDeleteNode::undo()
     node->beginConfig();
     node->setPos(m_pos);
     node->setText(m_text);
-    node->style()->setStyle(m_style);
+    node->style()->setStyle(&m_style);
     node->endConfig();
 }
 

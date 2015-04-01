@@ -124,7 +124,7 @@ tikz::core::Node * NodeItem::node()
 
 qint64 NodeItem::id() const
 {
-    return d->node->id();
+    return d->node->uid();
 }
 
 tikz::core::NodeStyle* NodeItem::style() const

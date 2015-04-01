@@ -25,6 +25,7 @@ set(qtikzcore_SOURCES
     tikz.cpp
     node/Node.cpp
     Document.cpp
+    Entity.cpp
     style/Style.cpp
     style/NodeStyle.cpp
     style/EdgeStyle.cpp

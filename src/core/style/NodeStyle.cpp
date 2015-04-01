@@ -88,11 +88,14 @@ NodeStyle::~NodeStyle()
 {
 }
 
-void NodeStyle::setStyle(const NodeStyle& other)
+void NodeStyle::setStyle(const Style * other)
 {
     beginConfig();
     Style::setStyle(other);
-    *d = *other.d;
+    auto nodeStyle = qobject_cast<const NodeStyle *>(other);
+    if (nodeStyle) {
+        *d = *nodeStyle->d;
+    }
     endConfig();
 }
 

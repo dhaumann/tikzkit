@@ -36,7 +36,7 @@ UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
     m_type = path->type();
 
     // save properties
-    m_style.setStyle(*path->style());
+    m_style.setStyle(path->style());
 }
 
 UndoDeletePath::UndoDeletePath(const QJsonObject & json, Document * doc)
@@ -57,7 +57,7 @@ void UndoDeletePath::undo()
     Q_ASSERT(path);
 
     path->beginConfig();
-    path->style()->setStyle(m_style);
+    path->style()->setStyle(&m_style);
     path->endConfig();
 }
 

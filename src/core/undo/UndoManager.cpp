@@ -404,6 +404,16 @@ QVariant UndoManager::data(const QModelIndex & index, int role) const
         }
     }
 
+    if (role == Qt::DecorationRole && d->cleanUndoGroup) {
+        auto group = static_cast<UndoGroup *>(index.internalPointer());
+        if (!group) {
+            group = d->groupForRow(index.row());
+            if (group == d->cleanUndoGroup) {
+                return QColor(Qt::red);
+            }
+        }
+    }
+
     return QVariant();
 }
 

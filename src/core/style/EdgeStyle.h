@@ -63,7 +63,7 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         /**
          * Set the properties of this style to all properties of @p other.
          */
-        virtual void setStyle(const EdgeStyle& other);
+        void setStyle(const Style * other) override;
 
         /**
          * Serialize the style to a JSON object.

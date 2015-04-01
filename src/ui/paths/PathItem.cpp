@@ -73,7 +73,7 @@ tikz::core::Path * PathItem::path() const
 
 qint64 PathItem::id() const
 {
-    return d->path->id();
+    return d->path->uid();
 }
 
 tikz::core::EdgeStyle* PathItem::style() const

@@ -122,11 +122,14 @@ EdgeStyle::~EdgeStyle()
 {
 }
 
-void EdgeStyle::setStyle(const EdgeStyle& other)
+void EdgeStyle::setStyle(const Style * other)
 {
     beginConfig();
     Style::setStyle(other);
-    *d = *other.d;
+    auto edgeStyle = qobject_cast<const EdgeStyle *>(other);
+    if (edgeStyle) {
+        *d = *edgeStyle->d;
+    }
     endConfig();
 }
 

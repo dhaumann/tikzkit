@@ -102,7 +102,7 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
 {
     const auto node = pos.node();
     if (node) {
-        const NodeItem * nodeItem = nodeItemFromId(node->id());
+        const NodeItem * nodeItem = nodeItemFromId(node->uid());
         Q_ASSERT(nodeItem != nullptr);
         return nodeItem->anchor(pos.anchor());
     }
@@ -127,7 +127,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     tikz::ui::NodeItem* item1 = createNodeItem();
     item1->node()->setPos(tikz::Pos(-3, 3, tikz::Centimeter));
     tikz::core::NodeStyle ns;
-    ns.setStyle(*item1->node()->style());
+    ns.setStyle(item1->node()->style());
     ns.setLineWidth(tikz::Value::veryThin());
     ns.setShape(tikz::ShapeRectangle);
     ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
@@ -136,7 +136,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
     tikz::ui::NodeItem* item2 = createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 3, tikz::Centimeter));
-    ns.setStyle(*item2->node()->style());
+    ns.setStyle(item2->node()->style());
     ns.setLineWidth(tikz::Value::thin());
     ns.setShape(tikz::ShapeCircle);
     ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
@@ -149,7 +149,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     tikz::ui::PathItem* path = createPathItem(tikz::core::Path::Ellipse);
     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
     tikz::core::EdgeStyle es;
-    es.setStyle(*ellipse->style());
+    es.setStyle(ellipse->style());
     es.setRadiusX(tikz::Value(2.0, tikz::Centimeter));
     es.setRadiusY(tikz::Value(1.0, tikz::Centimeter));
     es.setLineWidth(tikz::Value::semiThick());
@@ -158,7 +158,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     // add a line path
     path = createPathItem(tikz::core::Path::Line);
     auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
-    es.setStyle(*edge->style());
+    es.setStyle(edge->style());
     es.setLineWidth(tikz::Value::semiThick());
 //     es.setDoubleLine(true);
     es.setArrowTail(tikz::LatexArrow);
@@ -277,7 +277,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n1 = createNodeItem();
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Centimeter));
-        ns.setStyle(*n1->node()->style());
+        ns.setStyle(n1->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2, tikz::Centimeter));
@@ -289,7 +289,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n2 = createNodeItem();
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Centimeter));
-        ns.setStyle(*n2->node()->style());
+        ns.setStyle(n2->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2, tikz::Centimeter));
@@ -301,7 +301,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n3 = createNodeItem();
         n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Centimeter));
-        ns.setStyle(*n3->node()->style());
+        ns.setStyle(n3->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -313,7 +313,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n4 = createNodeItem();
         n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Centimeter));
-        ns.setStyle(*n4->node()->style());
+        ns.setStyle(n4->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -325,7 +325,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n5 = createNodeItem();
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Centimeter));
-        ns.setStyle(*n5->node()->style());
+        ns.setStyle(n5->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -337,7 +337,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n6 = createNodeItem();
         n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Centimeter));
-        ns.setStyle(*n5->node()->style());
+        ns.setStyle(n5->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -349,7 +349,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n7 = createNodeItem();
         n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Centimeter));
-        ns.setStyle(*n7->node()->style());
+        ns.setStyle(n7->node()->style());
         ns.setShape(tikz::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Centimeter));
@@ -366,7 +366,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n1->node());
         edge->setEndNode(n2->node());
-        es.setStyle(*path->path()->style());
+        es.setStyle(path->path()->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -376,7 +376,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n3->node());
-        es.setStyle(*edge->style());
+        es.setStyle(edge->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -387,7 +387,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n4->node());
-        es.setStyle(*edge->style());
+        es.setStyle(edge->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -397,7 +397,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n5->node());
-        es.setStyle(*edge->style());
+        es.setStyle(edge->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -407,7 +407,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n6->node());
-        es.setStyle(*edge->style());
+        es.setStyle(edge->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -417,7 +417,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n7->node());
-        es.setStyle(*edge->style());
+        es.setStyle(edge->style());
         es.setArrowTail(tikz::LatexArrow);
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
@@ -463,18 +463,18 @@ NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
     tikz::core::Node * node = Document::createNode();
-    Q_ASSERT(m_nodeMap.contains(node->id()));
+    Q_ASSERT(m_nodeMap.contains(node->uid()));
 
-    return m_nodeMap[node->id()];
+    return m_nodeMap[node->uid()];
 }
 
 tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
-    Q_ASSERT(m_pathMap.contains(path->id()));
+    Q_ASSERT(m_pathMap.contains(path->uid()));
 
-    return m_pathMap[path->id()];
+    return m_pathMap[path->uid()];
 }
 
 void DocumentPrivate::deleteNodeItem(NodeItem * node)
@@ -495,17 +495,17 @@ void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
     Q_ASSERT(! m_pathMap.contains(id));
 }
 
-tikz::core::Node * DocumentPrivate::createNode(qint64 id)
+tikz::core::Node * DocumentPrivate::createNode(qint64 uid)
 {
     // create node by tikz::core::Document
-    tikz::core::Node * node = Document::createNode(id);
-    Q_ASSERT(id == node->id());
-    Q_ASSERT(! m_nodeMap.contains(id));
+    tikz::core::Node * node = Document::createNode(uid);
+    Q_ASSERT(uid == node->uid());
+    Q_ASSERT(! m_nodeMap.contains(uid));
 
     // create GUI item
     NodeItem * nodeItem = new NodeItem(node);
     m_nodes.append(nodeItem);
-    m_nodeMap.insert(id, nodeItem);
+    m_nodeMap.insert(uid, nodeItem);
 
     // add to graphics scene
     m_scene->addItem(nodeItem);
@@ -534,11 +534,11 @@ void DocumentPrivate::deleteNode(qint64 id)
     tikz::core::Document::deleteNode(id);
 }
 
-tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 id)
+tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 uid)
 {
-    tikz::core::Path * path = Document::createPath(type, id);
-    Q_ASSERT(id == path->id());
-    Q_ASSERT(! m_pathMap.contains(id));
+    tikz::core::Path * path = Document::createPath(type, uid);
+    Q_ASSERT(uid == path->uid());
+    Q_ASSERT(! m_pathMap.contains(uid));
 
     // create GUI item
     tikz::ui::PathItem * pathItem = nullptr;
@@ -567,7 +567,7 @@ tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint
 
     // register path
     m_paths.append(pathItem);
-    m_pathMap.insert(id, pathItem);
+    m_pathMap.insert(uid, pathItem);
 
     // add to graphics scene
     m_scene->addItem(pathItem);

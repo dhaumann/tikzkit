@@ -46,9 +46,6 @@ static constexpr char s_rotation[] = "rotation";
 class StylePrivate
 {
 public:
-    // uniq id, or -1
-    qint64 id = -1;
-
     // parent / child hierarchy
     Style * parent = nullptr;
     QVector<Style *> children;
@@ -85,28 +82,23 @@ Style::Style()
 {
 }
 
-Style::Style(qint64 id, Document* tikzDocument)
-    : QObject(tikzDocument)
+Style::Style(qint64 uid, Document* doc)
+    : Entity(uid, doc)
     , d(new StylePrivate())
 {
-    d->id = id;
 }
 
-Style::Style(const QJsonObject & json, Document* tikzDocument)
-    : QObject(tikzDocument)
+Style::Style(const QJsonObject & json, Document* doc)
+    : Entity(json, doc)
     , d(new StylePrivate())
 {
     using namespace internal;
 
     beginConfig();
 
-    if (json.contains("parent-style-id")) {
-        const qint64 styleId = json["parent-style-id"].toString().toLongLong();
-        d->parent = tikzDocument->style()->findStyle(styleId);
-    }
-
-    if (json.contains("style-id")) {
-        d->id = json["style-id"].toString().toLongLong();
+    if (json.contains("parent-uid")) {
+        const qint64 styleId = json["parent-uid"].toString().toLongLong();
+        d->parent = doc->style()->findStyle(styleId);
     }
 
     if (json.contains("pen-color")) {
@@ -170,14 +162,9 @@ Style::~Style()
     setParentStyle(0);
 }
 
-qint64 Style::id() const
+void Style::setStyle(const Style * other)
 {
-    return d->id;
-}
-
-void Style::setStyle(const Style& other)
-{
-    if (this == &other) {
+    if (this == other) {
         return;
     }
 
@@ -185,17 +172,13 @@ void Style::setStyle(const Style& other)
     beginConfig();
 
     // backup properties not to copy
-    const qint64 id = d->id;
     Style * parent = d->parent;
-    const int refCounter = d->refCounter;
 
-    // perform copy of everything
-    *d = *other.d;
+    // perform copy of properties
+    *d = *other->d;
 
     // restore persistend properties
-    d->id = id;
     d->parent = parent;
-    d->refCounter = refCounter;
 
     // end configuration
     endConfig();
@@ -205,13 +188,11 @@ QJsonObject Style::toJson() const
 {
     using namespace tikz::core::internal;
 
-    QJsonObject json;
+    QJsonObject json = Entity::toJson();
 
     if (parentStyle()) {
-        json["parent-style-id"] = QString::number(parentStyle()->id());
+        json["parent-uid"] = QString::number(parentStyle()->uid());
     }
-
-    json["style-id"] = QString::number(id());
 
     if (penColorSet()) {
         json["pen-color"] = penColor().name();
@@ -299,7 +280,7 @@ bool Style::hasChildStyles() const
 
 Style * Style::findStyle(qint64 styleId) const
 {
-    if (d->id == styleId) {
+    if (uid() == styleId) {
         return const_cast<Style*>(this);
     }
 
@@ -311,22 +292,6 @@ Style * Style::findStyle(qint64 styleId) const
     }
 
     return nullptr;
-}
-
-void Style::beginConfig()
-{
-    Q_ASSERT(d->refCounter >= 0);
-    ++d->refCounter;
-}
-
-void Style::endConfig()
-{
-    Q_ASSERT(d->refCounter > 0);
-
-    --d->refCounter;
-    if (d->refCounter == 0) {
-        emit changed();
-    }
 }
 
 void Style::addProperty(const QString & property)

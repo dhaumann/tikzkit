@@ -34,8 +34,8 @@ UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document 
     Q_ASSERT(node);
 
     // save properties
-    m_undoStyle.setStyle(*node->style());
-    m_redoStyle.setStyle(style);
+    m_undoStyle.setStyle(node->style());
+    m_redoStyle.setStyle(&style);
 }
 
 UndoSetNodeStyle::UndoSetNodeStyle(const QJsonObject & json, Document * doc)
@@ -79,7 +79,7 @@ bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
         return false;
     }
 
-    m_redoStyle.setStyle(other->m_redoStyle);
+    m_redoStyle.setStyle(&other->m_redoStyle);
 
     return true;
 }

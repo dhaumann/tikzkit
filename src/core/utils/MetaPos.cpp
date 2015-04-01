@@ -215,7 +215,7 @@ bool MetaPos::setNode(Node* newNode)
     }
 
     // set new node and forward change() signal if applicable
-    d->nodeId = newNode ? newNode->id() : -1;
+    d->nodeId = newNode ? newNode->uid() : -1;
     curNode = node();
 
     // attach to newNode

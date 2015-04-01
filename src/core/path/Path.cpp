@@ -30,31 +30,15 @@ namespace core {
 class PathPrivate
 {
     public:
-        // config reference counter
-        int refCounter;
-
-        // associated document, is always valid, i.e. != 0.
-        Document * doc;
-
-        // document-wide uniq id >= 0
-        qint64 id;
-
         // this edge's style
         EdgeStyle style;
 };
 
-Path::Path(qint64 id, Document* doc)
-    : QObject(doc)
+Path::Path(qint64 uid, Document* doc)
+    : Entity(uid, doc)
     , d(new PathPrivate())
 {
-    // valid document and uniq id required
-    Q_ASSERT(doc);
-    Q_ASSERT(id >= 0);
-
-    d->refCounter = 0;
-    d->doc = doc;
-    d->id = id;
-    d->style.setParentStyle(d->doc->style());
+    d->style.setParentStyle(doc->style());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
@@ -77,16 +61,6 @@ void Path::detachFromNode(Node * node)
 {
 }
 
-Document * Path::document() const
-{
-    return d->doc;
-}
-
-qint64 Path::id() const
-{
-    return d->id;
-}
-
 bool Path::accept(Visitor & visitor)
 {
     visitor.visit(this);
@@ -103,11 +77,11 @@ void Path::setStyle(const EdgeStyle & style)
 
     if (document()->undoActive()) {
         beginConfig();
-        d->style.setStyle(style);
+        d->style.setStyle(&style);
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetPathStyle(id(), style, document()));
+        document()->addUndoItem(new UndoSetPathStyle(uid(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above
@@ -138,7 +112,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         endConfig();
 //     } else {
 //         // create edge via undo system
-//         document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
+//         document()->undoManager()->push(new UndoCreateEdge(uid(), index, document()));
 //         Q_ASSERT(index < d->edges.size());
 //
 //         // return newly created edge
@@ -176,7 +150,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         endConfig();
 //     } else {
 //         // create edge via undo system
-//         document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));
+//         document()->undoManager()->push(new UndoDeleteEdge(uid(), index, document()));
 //     }
 // }
 //
@@ -220,25 +194,9 @@ void Path::setStyle(const EdgeStyle & style)
 //     }
 // }
 
-void Path::beginConfig()
-{
-    Q_ASSERT(d->refCounter >= 0);
-    ++d->refCounter;
-}
-
-void Path::endConfig()
-{
-    Q_ASSERT(d->refCounter > 0);
-
-    --d->refCounter;
-    if (d->refCounter == 0) {
-        emit changed();
-    }
-}
-
 void Path::emitChangedIfNeeded()
 {
-    if (d->refCounter == 0) {
+    if (! configActive()) {
         emit changed();
     }
 }

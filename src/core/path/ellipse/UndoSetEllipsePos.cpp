@@ -28,7 +28,7 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      const MetaPos & newPos,
                                      Document * doc)
     : UndoItem("Set Ellipse Position", doc)
-    , m_pathId(path->id())
+    , m_pathId(path->uid())
     , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
 {

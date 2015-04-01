@@ -42,15 +42,6 @@ class NodePrivate
             : pos(doc)
         {}
 
-        // config reference counter
-        int refCounter;
-
-        // associated document, is always valid, i.e. != 0.
-        Document * doc;
-
-        // document-wide uniq id >= 0
-        qint64 id;
-
         // node position
         MetaPos pos;
 
@@ -61,18 +52,11 @@ class NodePrivate
         NodeStyle style;
 };
 
-Node::Node(qint64 id, Document* doc)
-    : QObject(doc)
+Node::Node(qint64 uid, Document* doc)
+    : Entity(uid, doc)
     , d(new NodePrivate(doc))
 {
-    // valid document and uniq id required
-    Q_ASSERT(doc);
-    Q_ASSERT(id >= 0);
-
-    d->refCounter = 0;
-    d->doc = doc;
-    d->id = id;
-    d->style.setParentStyle(d->doc->style());
+    d->style.setParentStyle(doc->style());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
@@ -80,16 +64,6 @@ Node::Node(qint64 id, Document* doc)
 Node::~Node()
 {
     delete d;
-}
-
-Document * Node::document() const
-{
-    return d->doc;
-}
-
-qint64 Node::id() const
-{
-    return d->id;
 }
 
 bool Node::accept(Visitor & visitor)
@@ -145,7 +119,7 @@ void Node::setText(const QString& text)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeText(id(), text, document()));
+        document()->addUndoItem(new UndoSetNodeText(uid(), text, document()));
 
         // now the text should be updated
         Q_ASSERT(d->text == text);
@@ -168,36 +142,20 @@ void Node::setStyle(const NodeStyle & style)
 
     if (document()->undoActive()) {
         beginConfig();
-        d->style.setStyle(style);
+        d->style.setStyle(&style);
         endConfig();
     } else {
     // create new undo item, push will call ::redo()
-    document()->addUndoItem(new UndoSetNodeStyle(id(), style, document()));
+    document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
 
     // now the text should be updated
 //     Q_ASSERT(d->style == style); // same as above
     }
 }
 
-void Node::beginConfig()
-{
-    Q_ASSERT(d->refCounter >= 0);
-    ++d->refCounter;
-}
-
-void Node::endConfig()
-{
-    Q_ASSERT(d->refCounter > 0);
-
-    --d->refCounter;
-    if (d->refCounter == 0) {
-        emit changed();
-    }
-}
-
 void Node::emitChangedIfNeeded()
 {
-    if (d->refCounter == 0) {
+    if (! configActive()) {
         emit changed();
     }
 }

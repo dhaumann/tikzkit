@@ -21,14 +21,10 @@
 #define TIKZ_STYLE_H
 
 #include "tikz.h"
-#include "tikz_export.h"
-
-#include <memory>
-#include <QColor>
-#include <QObject>
-#include <QJsonObject>
-
+#include "Entity.h"
 #include "Value.h"
+
+#include <QColor>
 
 namespace tikz {
 namespace core {
@@ -36,7 +32,7 @@ namespace core {
 class Document;
 class StylePrivate;
 
-class TIKZCORE_EXPORT Style : public QObject
+class TIKZCORE_EXPORT Style : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor RESET unsetPenColor)
@@ -63,7 +59,7 @@ class TIKZCORE_EXPORT Style : public QObject
         /**
          * Constructor that deserializes the style from @p json.
          */
-        Style(const QJsonObject & json, Document* tikzDocument);
+        Style(const QJsonObject & json, Document* doc);
 
         /**
          * Virtual destructor.
@@ -71,20 +67,14 @@ class TIKZCORE_EXPORT Style : public QObject
         virtual ~Style();
 
         /**
-         * Unique id.
-         * If the style is @e not associated to a document, -1 is returned.
-         */
-        qint64 id() const;
-
-        /**
          * Set the properties of this style to all properties of @p other.
          */
-        virtual void setStyle(const Style& other);
+        virtual void setStyle(const Style * other);
 
         /**
          * Serialize the style to a JSON object.
          */
-        virtual QJsonObject toJson() const;
+        QJsonObject toJson() const override;
 
     //
     // parent / child hierarchy
@@ -112,35 +102,6 @@ class TIKZCORE_EXPORT Style : public QObject
          * nullptr is returned.
          */
         Style * findStyle(qint64 styleId) const;
-
-    //
-    // config methods
-    //
-    public:
-        /**
-         * Start changing config values.
-         * This call is ref-counted. For each beginConfig() you finally
-         * have to call endConfig().
-         */
-        void beginConfig();
-
-        /**
-         * End of changing config values.
-         * This will emit changed(), if the number of calls of endConfig()
-         * matches the calls the one of beginConfig(), i.e. the ref-counter is zero.
-         *
-         * Using beginConfig() and endConfig() allows to change multiple
-         * config values, while still only emitting the changed() signal only once.
-         */
-        void endConfig();
-
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever the style changes.
-         * This includes changes in the parent style that possibly influence
-         * the appearance of this style.
-         */
-        void changed();
 
     //
     // properties

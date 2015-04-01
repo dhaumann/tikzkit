@@ -167,7 +167,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
         tikz::core::NodeStyle s;
-        s.setStyle(*m_node->style());
+        s.setStyle(m_node->style());
         s.setRotation(deg);
 
         m_node->node()->setStyle(s);
@@ -233,7 +233,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     h = tikz::Value(qAbs(h.value()), h.unit());
 
     tikz::core::NodeStyle s;
-    s.setStyle(*m_node->style());
+    s.setStyle(m_node->style());
     s.setMinimumWidth(w);
     s.setMinimumHeight(h);
 

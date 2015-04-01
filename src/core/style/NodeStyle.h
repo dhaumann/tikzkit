@@ -58,7 +58,7 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         /**
          * Set the properties of this style to all properties of @p other.
          */
-        virtual void setStyle(const NodeStyle& other);
+        void setStyle(const Style * other) override;
 
         /**
          * Serialize the style to a JSON object.

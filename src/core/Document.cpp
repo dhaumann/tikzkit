@@ -450,7 +450,7 @@ Path * Document::createPath(Path::Type type)
 void Document::deletePath(Path * path)
 {
     Q_ASSERT(path != 0);
-    Q_ASSERT(d->pathMap.contains(path->id()));
+    Q_ASSERT(d->pathMap.contains(path->uid()));
 
     // TODO: not yet the case, but maybe in future: remove child nodes here?
     //       or: probably move this to Path::deconstruct()!
@@ -459,35 +459,35 @@ void Document::deletePath(Path * path)
     path->deconstruct();
 
     // delete path, push will call ::redo()
-    const qint64 id = path->id();
-    addUndoItem(new UndoDeletePath(id, this));
+    const qint64 uid = path->uid();
+    addUndoItem(new UndoDeletePath(uid, this));
 
     // path really removed?
-    Q_ASSERT(!d->pathMap.contains(id));
+    Q_ASSERT(!d->pathMap.contains(uid));
 }
 
 Node* Document::createNode()
 {
     // create new node, push will call ::redo()
-    const qint64 id = d->uniqueId();
-    addUndoItem(new UndoCreateNode(id, this));
+    const qint64 uid = d->uniqueId();
+    addUndoItem(new UndoCreateNode(uid, this));
 
     // now the node should be in the map
-    Q_ASSERT(d->nodeMap.contains(id));
-    return d->nodeMap[id];
+    Q_ASSERT(d->nodeMap.contains(uid));
+    return d->nodeMap[uid];
 }
 
-Node * Document::createNode(qint64 id)
+Node * Document::createNode(qint64 uid)
 {
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(!d->nodeMap.contains(id));
+    Q_ASSERT(uid >= 0);
+    Q_ASSERT(!d->nodeMap.contains(uid));
 
     // create new node
-    Node* node = new Node(id, this);
+    Node* node = new Node(uid, this);
     d->nodes.append(node);
 
     // insert node into hash map
-    d->nodeMap.insert(id, node);
+    d->nodeMap.insert(uid, node);
 
     return node;
 }
@@ -496,10 +496,10 @@ void Document::deleteNode(Node * node)
 {
     // valid input?
     Q_ASSERT(node != 0);
-    Q_ASSERT(d->nodeMap.contains(node->id()));
+    Q_ASSERT(d->nodeMap.contains(node->uid()));
 
     // get edge id
-    const qint64 id = node->id();
+    const qint64 uid = node->uid();
 
     // start undo group
     d->undoManager->startTransaction("Remove node");
@@ -513,39 +513,39 @@ void Document::deleteNode(Node * node)
     }
 
     // delete node, push will call ::redo()
-    addUndoItem(new UndoDeleteNode(id, this));
+    addUndoItem(new UndoDeleteNode(uid, this));
 
     // end undo group
     d->undoManager->commitTransaction();
 
     // node really removed?
-    Q_ASSERT(!d->nodeMap.contains(id));
+    Q_ASSERT(!d->nodeMap.contains(uid));
 }
 
-void Document::deleteNode(qint64 id)
+void Document::deleteNode(qint64 uid)
 {
     // valid input?
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(d->nodeMap.contains(id));
+    Q_ASSERT(uid >= 0);
+    Q_ASSERT(d->nodeMap.contains(uid));
 
     // get node
-    Node* node = d->nodeMap[id];
+    Node* node = d->nodeMap[uid];
     Q_ASSERT(d->nodes.contains(node));
 
     // unregister node
-    d->nodeMap.remove(id);
+    d->nodeMap.remove(uid);
     d->nodes.remove(d->nodes.indexOf(node));
 
     // truly delete node
     delete node;
 }
 
-Path * Document::createPath(Path::Type type, qint64 id)
+Path * Document::createPath(Path::Type type, qint64 uid)
 {
-    Q_ASSERT(id >= 0);
+    Q_ASSERT(uid >= 0);
 
     // create new path
-    Path* path = 0;
+    Path* path = nullptr;
     switch(type) {
         case Path::Line:
         case Path::HVLine:
@@ -553,11 +553,11 @@ Path * Document::createPath(Path::Type type, qint64 id)
         case Path::BendCurve:
         case Path::InOutCurve:
         case Path::BezierCurve: {
-            path = new EdgePath(type, id, this);
+            path = new EdgePath(type, uid, this);
             break;
         }
         case Path::Ellipse:
-            path = new EllipsePath(id, this);
+            path = new EllipsePath(uid, this);
             break;
         default:
             Q_ASSERT(false);
@@ -567,47 +567,47 @@ Path * Document::createPath(Path::Type type, qint64 id)
     d->paths.append(path);
 
     // insert path into hash map
-    d->pathMap.insert(id, path);
+    d->pathMap.insert(uid, path);
 
     return path;
 }
 
-void Document::deletePath(qint64 id)
+void Document::deletePath(qint64 uid)
 {
     // valid input?
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(d->pathMap.contains(id));
+    Q_ASSERT(uid >= 0);
+    Q_ASSERT(d->pathMap.contains(uid));
 
     // get path
-    Path * path = d->pathMap[id];
+    Path * path = d->pathMap[uid];
     Q_ASSERT(d->paths.contains(path));
 
     // unregister path
-    d->pathMap.remove(id);
+    d->pathMap.remove(uid);
     d->paths.remove(d->paths.indexOf(path));
 
     // truly delete path
     delete path;
 }
 
-Node * Document::nodeFromId(qint64 id)
+Node * Document::nodeFromId(qint64 uid)
 {
-    if (id < 0) {
-        return 0;
+    if (uid < 0) {
+        return nullptr;
     }
 
-    Q_ASSERT(d->nodeMap.contains(id));
-    return d->nodeMap[id];
+    Q_ASSERT(d->nodeMap.contains(uid));
+    return d->nodeMap[uid];
 }
 
-Path * Document::pathFromId(qint64 id)
+Path * Document::pathFromId(qint64 uid)
 {
-    if (id < 0) {
-        return 0;
+    if (uid < 0) {
+        return nullptr;
     }
 
-    Q_ASSERT(d->pathMap.contains(id));
-    return d->pathMap[id];
+    Q_ASSERT(d->pathMap.contains(uid));
+    return d->pathMap[uid];
 }
 
 }

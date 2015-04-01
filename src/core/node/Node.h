@@ -20,7 +20,7 @@
 #ifndef TIKZ_NODE_H
 #define TIKZ_NODE_H
 
-#include "tikz_export.h"
+#include "Entity.h"
 #include "tikz.h"
 #include "Pos.h"
 
@@ -36,7 +36,7 @@ class Document;
 class Visitor;
 class MetaPos;
 
-class TIKZCORE_EXPORT Node : public QObject
+class TIKZCORE_EXPORT Node : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
@@ -47,21 +47,6 @@ class TIKZCORE_EXPORT Node : public QObject
          * Destructor
          */
         virtual ~Node();
-
-        /**
-         * Returns the associated document, if available.
-         */
-        Document * document() const;
-
-    //
-    // id
-    //
-    public:
-        /**
-         * Unique id.
-         * If the document is @e not associated to a document -1 is returned.
-         */
-        qint64 id() const;
 
     //
     // visitor pattern
@@ -122,34 +107,11 @@ class TIKZCORE_EXPORT Node : public QObject
         void setStyle(const NodeStyle & style);
 
     Q_SIGNALS:
-        /**
-         * This signal is emitted whenever this node changes, either due to
-         * a change of its position, or changes in its style.
-         * This signal is not emitted when the text changed.
-         */
-        void changed();
 
         /**
          * This signal is emitted whenever this node's text changed.
          */
         void textChanged(const QString& text);
-
-    //
-    // reference counted config
-    //
-    public:
-        /**
-         * Increase config reference counter.
-         * For beginConfig() call must have a matching endConfig() call.
-         * When the reference counter is 0, changed() is emitted.
-         */
-        void beginConfig();
-
-        /**
-         * Decrease config reference counter.
-         * For beginConfig() call must have a matching endConfig() call.
-         */
-        void endConfig();
 
     public Q_SLOTS:
         /**

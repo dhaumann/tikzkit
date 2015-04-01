@@ -151,7 +151,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
         tikz::core::EdgeStyle s;
-        s.setStyle(*m_path->style());
+        s.setStyle(m_path->style());
         s.setRotation(deg);
 
         m_path->path()->setStyle(s);
@@ -227,7 +227,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     h = tikz::Value(qAbs(h.value()), h.unit());
 
     tikz::core::EdgeStyle s;
-    s.setStyle(*m_path->style());
+    s.setStyle(m_path->style());
     s.setRadiusX(w);
     s.setRadiusY(h);
 

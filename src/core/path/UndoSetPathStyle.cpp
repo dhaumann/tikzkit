@@ -34,8 +34,8 @@ UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Docum
     Q_ASSERT(path);
 
     // save properties
-    m_undoStyle.setStyle(*path->style());
-    m_redoStyle.setStyle(style);
+    m_undoStyle.setStyle(path->style());
+    m_redoStyle.setStyle(&style);
 }
 
 UndoSetPathStyle::UndoSetPathStyle(const QJsonObject & json, Document * doc)
@@ -81,7 +81,7 @@ bool UndoSetPathStyle::mergeWith(const UndoItem * command)
         return false;
     }
 
-    m_redoStyle.setStyle(other->m_redoStyle);
+    m_redoStyle.setStyle(&other->m_redoStyle);
     return true;
 }
 
