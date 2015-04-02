@@ -260,6 +260,14 @@ void UndoManager::commitTransaction()
         return;
     }
 
+    // calling startTransaction() immediately followed by commitTransaction()
+    // will create an empty pending undo group. We don't want empty groups.
+    if (d->currentUndoGroup->isEmpty()) {
+        delete d->currentUndoGroup;
+        d->currentUndoGroup = nullptr;
+        return;
+    }
+
     //
     // ok, now the real work: add to undo stack
     //
