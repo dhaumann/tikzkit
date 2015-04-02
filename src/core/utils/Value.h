@@ -61,49 +61,49 @@ class TIKZCORE_EXPORT Value
          * 'ultra thin' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value ultraThin() noexcept {
-            return Value(0.1);
+            return Value(0.1, Unit::Point);
         }
 
         /**
          * 'very thin' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value veryThin() noexcept {
-            return Value(0.2);
+            return Value(0.2, Unit::Point);
         }
 
         /**
          * 'thin' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value thin() noexcept {
-            return Value(0.4);
+            return Value(0.4, Unit::Point);
         }
 
         /**
          * 'semithick' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value semiThick() noexcept {
-            return Value(0.6);
+            return Value(0.6, Unit::Point);
         }
 
         /**
          * 'thick' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value thick() noexcept {
-            return Value(0.8);
+            return Value(0.8, Unit::Point);
         }
 
         /**
          * 'very thick' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value veryThick() noexcept {
-            return Value(1.2);
+            return Value(1.2, Unit::Point);
         }
 
         /**
          * 'ultra thick' line width according to the PGF/TikZ standard.
          */
         static inline constexpr Value ultraThick() noexcept {
-            return Value(1.6);
+            return Value(1.6, Unit::Point);
         }
 
         /**
