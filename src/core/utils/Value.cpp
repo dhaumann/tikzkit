@@ -41,7 +41,7 @@ QString Value::toString() const
     // allow only a single '.' as floating point separator
     Q_ASSERT(number.count(QLatin1Char('.')) <= 1);
 
-    const int dotIndex = number.indexOf(QLatin1Char('.'));
+    int dotIndex = number.indexOf(QLatin1Char('.'));
 
     // Rounding errors typically result in several consecutive '9' chars.
     // Catch this case and fix it to get a nice reacable number.
@@ -73,8 +73,10 @@ QString Value::toString() const
     } else if ((nineIndex = number.indexOf(QLatin1String("899999"))) > dotIndex) {
         number.truncate(nineIndex + 1);
         number.replace(nineIndex, 1, "9");
-    } else if ((nineIndex = number.indexOf(QLatin1String("999999"))) > dotIndex) {
-//         number.replace(nineIndex, 6, "9");
+    } else if ((nineIndex = number.indexOf(QLatin1String(".999999"))) == dotIndex) {
+        number.truncate(nineIndex);
+        number = QString::number(number.toInt() + 1);
+        dotIndex = -1;
     }
 
     // we have 20 digits after the '.', which is usually too much.
@@ -90,12 +92,12 @@ QString Value::toString() const
     }
 
     // beautify step I: remove trailing zeros, e.g. 3.5670000000 -> 3.567
-    while (number.length() && number[number.length() - 1] == QLatin1Char('0')) {
+    while (dotIndex >= 0 && number.endsWith(QLatin1Char('0'))) {
         number.truncate(number.length() - 1);
     }
-    
+
     // beautify step II: remove trailing dot, if applicable, e.g. 3. -> 3
-    if (number.length() && number[number.length() - 1] == QLatin1Char('.')) {
+    if (number.endsWith(QLatin1Char('.'))) {
         number.truncate(number.length() - 1);
     }
 
