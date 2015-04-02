@@ -66,6 +66,12 @@ public:
      */
     int transactionRefCount = 0;
 
+    /**
+     * Flag that is set to true, if the currently pending transaction was
+     * canceled.
+     */
+    bool transactionCanceled = false;
+
 public: // helper functions
     UndoGroup * groupForRow(int row) const
     {
@@ -201,6 +207,13 @@ void UndoManager::addUndoItem(UndoItem * item)
 {
     Q_ASSERT(item);
 
+    // if a transaction was canceled, there is no pending undo group.
+    // In this case, just delete the item.
+    if (d->transactionRefCount > 0 && !d->currentUndoGroup) {
+        delete item;
+        return;
+    }
+
     startTransaction();
     Q_ASSERT(d->currentUndoGroup != nullptr);
 
@@ -230,6 +243,9 @@ void UndoManager::startTransaction(const QString & text)
 
         // track clean state at the beginning of the transaction
         d->wasClean = isClean();
+
+        // set cancel-flag to false
+        d->transactionCanceled = false;
     }
 
     ++d->transactionRefCount;
@@ -239,10 +255,9 @@ void UndoManager::cancelTransaction()
 {
     Q_ASSERT(d->transactionRefCount > 0);
 
-    --d->transactionRefCount;
-
     // undo all, and delete group
-    if (d->transactionRefCount == 0) {
+    d->transactionCanceled = true;
+    if (d->currentUndoGroup) {
         d->currentUndoGroup->undo();
         delete d->currentUndoGroup;
         d->currentUndoGroup = nullptr;
@@ -260,9 +275,16 @@ void UndoManager::commitTransaction()
         return;
     }
 
+    // if the transaction was canceled, there is nothing to do.
+    if (d->transactionCanceled) {
+        Q_ASSERT(! d->currentUndoGroup);
+        d->transactionCanceled = false;
+        return;
+    }
+
     // calling startTransaction() immediately followed by commitTransaction()
     // will create an empty pending undo group. We don't want empty groups.
-    if (d->currentUndoGroup->isEmpty()) {
+    if (d->currentUndoGroup && d->currentUndoGroup->isEmpty()) {
         delete d->currentUndoGroup;
         d->currentUndoGroup = nullptr;
         return;

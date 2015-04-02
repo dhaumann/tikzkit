@@ -118,29 +118,29 @@ public:
      * Start a new undo group.
      * All items added through addUndoItem() are grouped together into one
      * undo/redo action. To finish a transaction, call commitTransaction().
-     * Instead of commitTransaction(), you can also call cancelTransaction()
-     * to cancel the currently pending transaction.
+     * If a currently pending transaction should be aborted (e.g., the user
+     * pressed ESC), just call cancelTransaction() before finally calling
+     * commitTransaction().
      * @param text the text of the undo item.
      *
      * @note startTransaction() and commitTransaction() are ref-counted.
      *       Always make sure these calls are balanced. This is also valid
-     *       for cancelTransaction(). Only the last call of cancelTransaction()
-     *       properly cancels the transaction. All internally ref-counted
-     *       calls do nothing.
+     *       for cancelTransaction().
      */
     void startTransaction(const QString & text = QString());
 
     /**
      * Cancel the currently pending transaction.
      *
-     * If you call cancelTransaction() instead of finishTransaction(), all
-     * the added items are un-done again and the currently pending undo/redo
-     * group is deleted.
+     * If you call cancelTransaction(), all the added items are un-done
+     * again and the currently pending undo/redo group is deleted.
+     * @note Make sure to call commitTransaction(), though.
      */
     void cancelTransaction();
 
     /**
-     * Commits the currently pending transaction.
+     * Commits the currently pending transaction, if it was not canceled
+     * through cancelTransaction().
      */
     void commitTransaction();
 

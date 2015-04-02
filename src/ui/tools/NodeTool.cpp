@@ -259,10 +259,6 @@ void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QG
 {
     qDebug() << "mouse handle released" << scenePos;
 
-    if (!m_transaction.isRunning()) {
-        return;
-    }
-
     m_transaction.finish();
 }
 

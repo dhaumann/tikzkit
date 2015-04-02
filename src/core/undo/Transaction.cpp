@@ -70,7 +70,6 @@ void Transaction::cancel()
 
     if (d->document && d->transactionRunning) {
         d->document->cancelTransaction();
-        d->transactionRunning = false;
     }
 }
 
