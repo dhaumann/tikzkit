@@ -18,7 +18,6 @@
  */
 
 #include "SerializeVisitor.h"
-#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -37,8 +36,6 @@
 
 namespace tikz {
 namespace core {
-
-using namespace internal;
 
 SerializeVisitor::SerializeVisitor()
     : Visitor()
@@ -215,12 +212,12 @@ QVariantMap SerializeVisitor::serializeStyle(Style * style)
     }
 
     if (style->penStyleSet()) {
-        map.insert("pen-style", penStyleToString(style->penStyle()));
+        map.insert("pen-style", toString(style->penStyle()));
     }
 
     // FIXME line width
 //     if (style->penStyleSet()) {
-//         map.insert("pen-style", penStyleToString(style->penStyle()));
+//         map.insert("pen-style", toString(style->penStyle()));
 //     }
     
 
@@ -270,11 +267,11 @@ QVariantMap SerializeVisitor::serializeEdgeStyle(EdgeStyle * style)
     }
 
     if (style->arrowTailSet()) {
-        map.insert("arrow-tail", arrowToString(style->arrowTail()));
+        map.insert("arrow-tail", toString(style->arrowTail()));
     }
 
     if (style->arrowHeadSet()) {
-        map.insert("arrow-head", arrowToString(style->arrowHead()));
+        map.insert("arrow-head", toString(style->arrowHead()));
     }
 
     if (style->shortenStartSet()) {
@@ -293,11 +290,11 @@ QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
     QVariantMap map = serializeStyle(style);
 
     if (style->textAlignSet()) {
-        map.insert("text-align", textAlignmentToString(style->textAlign()));
+        map.insert("text-align", toString(style->textAlign()));
     }
 
     if (style->shapeSet()) {
-        map.insert("shape", shapeToString(style->shape()));
+        map.insert("shape", toString(style->shape()));
     }
 
     if (style->minimumWidthSet()) {

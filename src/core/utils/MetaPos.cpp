@@ -19,7 +19,6 @@
 
 #include "MetaPos.h"
 #include "MetaPos_p.h"
-#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -69,7 +68,7 @@ QString MetaPos::toString() const
     if (node()) {
         return QString("(%1%2)")
             .arg(d->nodeId)
-            .arg(internal::anchorToString(d->anchor));
+            .arg(tikz::toString(d->anchor));
     } else {
         return d->pos.toString();
     }
@@ -95,8 +94,7 @@ void MetaPos::fromString(const QString & str)
 
         // read tikz::Anchor
         if (dotIndex > 0) {
-            d->anchor = internal::anchorFromString(
-                str.mid(dotIndex + 1, closeIndex - (dotIndex + 1)));
+            d->anchor = toAnchor(str.mid(dotIndex + 1, closeIndex - (dotIndex + 1)));
         } else {
             d->anchor = tikz::NoAnchor;
         }

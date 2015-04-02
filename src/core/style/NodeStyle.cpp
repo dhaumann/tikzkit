@@ -18,7 +18,6 @@
  */
 
 #include "NodeStyle.h"
-#include "VisitorHelpers.h"
 
 namespace tikz {
 namespace core {
@@ -61,16 +60,14 @@ NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
     : Style(json, tikzDocument)
     , d(new NodeStylePrivate())
 {
-    using namespace internal;
-
     beginConfig();
 
     if (json.contains("text-align")) {
-        setTextAlign(textAlignmentFromString(json["text-align"].toString()));
+        setTextAlign(toTextAlignment(json["text-align"].toString()));
     }
 
     if (json.contains("shape")) {
-        setShape(shapeFromString(json["shape"].toString()));
+        setShape(toShape(json["shape"].toString()));
     }
 
     if (json.contains("minimum-width")) {
@@ -106,16 +103,14 @@ void NodeStyle::setStyle(const Style * other)
 
 QJsonObject NodeStyle::toJson() const
 {
-    using namespace internal;
-
     QJsonObject json = Style::toJson();
 
     if (textAlignSet()) {
-        json["text-align"] = textAlignmentToString(textAlign());
+        json["text-align"] = toString(textAlign());
     }
 
     if (shapeSet()) {
-        json["shape"] = shapeToString(shape());
+        json["shape"] = toString(shape());
     }
 
     if (minimumWidthSet()) {

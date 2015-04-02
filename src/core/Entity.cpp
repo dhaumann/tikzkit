@@ -20,8 +20,6 @@
 #include "Entity.h"
 #include "Document.h"
 
-#include <QSet>
-
 namespace tikz {
 namespace core {
 

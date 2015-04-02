@@ -18,7 +18,6 @@
  */
 
 #include "EdgeStyle.h"
-#include "VisitorHelpers.h"
 
 namespace tikz {
 namespace core {
@@ -71,8 +70,6 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     : Style(json, tikzDocument)
     , d(new EdgeStylePrivate())
 {
-    using namespace internal;
-
     beginConfig();
 
     if (json.contains("radius-x")) {
@@ -100,11 +97,11 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     }
 
     if (json.contains("arrow-tail")) {
-        setArrowTail(arrowFromString(json["arrow-tail"].toString()));
+        setArrowTail(toArrow(json["arrow-tail"].toString()));
     }
 
     if (json.contains("arrow-head")) {
-        setArrowHead(arrowFromString(json["arrow-head"].toString()));
+        setArrowHead(toArrow(json["arrow-head"].toString()));
     }
 
     if (json.contains("shorten-start")) {
@@ -140,8 +137,6 @@ void EdgeStyle::setStyle(const Style * other)
 
 QJsonObject EdgeStyle::toJson() const
 {
-    using namespace internal;
-
     QJsonObject json = Style::toJson();
 
     if (radiusXSet()) {
@@ -169,11 +164,11 @@ QJsonObject EdgeStyle::toJson() const
     }
 
     if (arrowTailSet()) {
-        json["arrow-tail"] = arrowToString(arrowTail());
+        json["arrow-tail"] = toString(arrowTail());
     }
 
     if (arrowHeadSet()) {
-        json["arrow-head"] = arrowToString(arrowHead());
+        json["arrow-head"] = toString(arrowHead());
     }
 
     if (shortenStartSet()) {

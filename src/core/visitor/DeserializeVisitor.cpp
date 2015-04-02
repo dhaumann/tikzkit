@@ -18,7 +18,6 @@
  */
 
 #include "DeserializeVisitor.h"
-#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -37,7 +36,6 @@
 
 namespace tikz {
 namespace core {
-using namespace internal;
 
 DeserializeVisitor::DeserializeVisitor()
     : Visitor()
@@ -201,7 +199,7 @@ void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map
     }
 
     if (map.contains("pen-style")) {
-        style->setPenStyle(penStyleFromString(map["pen-style"].toString()));
+        style->setPenStyle(toPenStyle(map["pen-style"].toString()));
     }
     
     // FIXME line type
@@ -256,11 +254,11 @@ void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantM
     }
 
     if (map.contains("arrow-tail")) {
-        style->setArrowTail(arrowFromString(map["arrow-tail"].toString()));
+        style->setArrowTail(toArrow(map["arrow-tail"].toString()));
     }
 
     if (map.contains("arrow-head")) {
-        style->setArrowHead(arrowFromString(map["arrow-head"].toString()));
+        style->setArrowHead(toArrow(map["arrow-head"].toString()));
     }
 
     if (map.contains("shorten-start")) {
@@ -281,11 +279,11 @@ void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantM
     deserializeStyle(style, map);
 
     if (map.contains("text-align")) {
-        style->setTextAlign(textAlignmentFromString(map["text-align"].toString()));
+        style->setTextAlign(toTextAlignment(map["text-align"].toString()));
     }
 
     if (map.contains("shape")) {
-        style->setShape(shapeFromString(map["shape"].toString()));
+        style->setShape(toShape(map["shape"].toString()));
     }
 
     if (map.contains("minimum-width")) {

@@ -66,6 +66,18 @@ enum TextAlignment {
     // TODO: add all types ?
 };
 
+/**
+ * Convert the tikz::TextAlignment @p alignment to a QString.
+ * @note This function creates TikZ compatible strings.
+ */
+TIKZCORE_EXPORT QString toString(tikz::TextAlignment alignment);
+
+/**
+ * Conver the string @p alignment to an enum tikz::TextAlignment.
+ */
+TIKZCORE_EXPORT tikz::TextAlignment toTextAlignment(const QString & alignment);
+
+
 enum Anchor {
     NoAnchor = 0,
     Center,
@@ -79,6 +91,19 @@ enum Anchor {
     NorthWest
 };
 
+/**
+ * Convert the enum @p anchor to a QString. If @p withDot is @e true,
+ * the anchor has a leading '.'.
+ * Returns e.g. "north" or ".north" for a north anchor.
+ * @note This function creates TikZ compatible strings.
+ */
+TIKZCORE_EXPORT QString toString(tikz::Anchor anchor, bool withDot = false);
+
+/**
+ * Converts @p anchor to tikz::Anchor.
+ */
+TIKZCORE_EXPORT tikz::Anchor toAnchor(const QString & anchor);
+
 enum Shape {
     NoShape = 0,
     ShapeRectangle,
@@ -86,6 +111,17 @@ enum Shape {
     ShapeDiamond,
     ShapeEllipse
 };
+
+/**
+ * Convert the tikz::Shape @p shape to a QString.
+ * @note This function creates TikZ compatible strings.
+ */
+TIKZCORE_EXPORT QString toString(tikz::Shape shape);
+
+/**
+ * Conver the string @p shape to an enum tikz::Shape.
+ */
+TIKZCORE_EXPORT tikz::Shape toShape(const QString & shape);
 
 enum PenStyle {
     SolidLine = 0,
@@ -102,6 +138,19 @@ enum PenStyle {
     DenselyDashDotDottedLine,
     LooselyDashDotDottedLine
 };
+
+/**
+ * Convert @p penStyle to a QString.
+ * Examples are e.g. "solid", "densely dashed", ...
+ * @note This function creates TikZ compatible strings.
+ */
+TIKZCORE_EXPORT QString toString(tikz::PenStyle penStyle);
+
+/**
+ * Convert @p penStyle to a QString.
+ * Examples are e.g. "solid", "densely dashed", ...
+ */
+TIKZCORE_EXPORT tikz::PenStyle toPenStyle(const QString & penStyle);
 
 enum LineCap {
     CapUnset = 0,
@@ -136,6 +185,17 @@ enum Arrow {
     ReversedStealthTickArrow,
     ArrowCount
 };
+
+/**
+ * Convert @p arrow to a QString.
+ * @note This function creates TikZ compatible strings.
+ */
+TIKZCORE_EXPORT QString toString(tikz::Arrow arrow);
+
+/**
+ * Conver the string @p arrow to an enum tikz::Arrow.
+ */
+TIKZCORE_EXPORT tikz::Arrow toArrow(const QString & arrow);
 
 }
 

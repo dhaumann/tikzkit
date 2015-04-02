@@ -54,6 +54,225 @@ EntityType toEntityType(const QString & str)
     return EntityType::Invalid;
 }
 
+QString toString(tikz::TextAlignment alignment)
+{
+    switch (alignment) {
+        case TextAlignment::NoAlign: return "none";
+        case TextAlignment::AlignLeft: return "left";
+        case TextAlignment::AlignCenter: return "center";
+        case TextAlignment::AlignRight: return "right";
+        case TextAlignment::AlignJustify: return "justify";
+        default: Q_ASSERT(false);
+    }
+
+    return QString();
+}
+
+tikz::TextAlignment toTextAlignment(const QString & alignment)
+{
+    if (alignment == "none") {
+        return TextAlignment::NoAlign;
+    } else if (alignment == "left") {
+        return TextAlignment::AlignLeft;
+    } else if (alignment == "center") {
+        return TextAlignment::AlignCenter;
+    } else if (alignment == "right") {
+        return TextAlignment::AlignRight;
+    } else if (alignment == "justify") {
+        return TextAlignment::AlignJustify;
+    }
+
+    Q_ASSERT(false);
+
+    return TextAlignment::NoAlign;
+}
+
+QString toString(tikz::Anchor anchor, bool withDot)
+{
+    QString str;
+    switch (anchor) {
+        case Anchor::NoAnchor: break;
+        case Anchor::Center: str = "center"; break;
+        case Anchor::North: str = "north"; break;
+        case Anchor::NorthEast: str = "north east"; break;
+        case Anchor::East: str = "east"; break;
+        case Anchor::SouthEast: str = "south east"; break;
+        case Anchor::South: str = "south"; break;
+        case Anchor::SouthWest: str = "south west"; break;
+        case Anchor::West: str = "west"; break;
+        case Anchor::NorthWest: str = "north west"; break;
+        default: break;
+    }
+
+    return str.isEmpty() ? str : ('.' + str);
+}
+
+tikz::Anchor toAnchor(const QString & anchor)
+{
+    if (anchor.isEmpty()) {
+        return Anchor::NoAnchor;
+    } else if (anchor == "center") {
+        return Anchor::Center;
+    } else if (anchor == "north") {
+        return Anchor::North;
+    } else if (anchor == "north east") {
+        return Anchor::NorthEast;
+    } else if (anchor == "east") {
+        return Anchor::East;
+    } else if (anchor == "south east") {
+        return Anchor::SouthEast;
+    } else if (anchor == "south") {
+        return Anchor::South;
+    } else if (anchor == "south west") {
+        return Anchor::SouthWest;
+    } else if (anchor == "west") {
+        return Anchor::West;
+    } else if (anchor == "north west") {
+        return Anchor::NorthWest;
+    }
+
+    Q_ASSERT(false);
+
+    return Anchor::NoAnchor;
+}
+
+QString toString(tikz::Shape shape)
+{
+    switch (shape) {
+        case Shape::NoShape: return QString();
+        case Shape::ShapeRectangle: return "rectangle";
+        case Shape::ShapeCircle: return "circle";
+        case Shape::ShapeDiamond: return "diamond";
+        case Shape::ShapeEllipse: return "ellipse";
+        default: Q_ASSERT(false); break;
+    }
+
+    return QString();
+}
+
+tikz::Shape toShape(const QString & shape)
+{
+    if (shape.isEmpty()) {
+        return Shape::NoShape;
+    } else if (shape == "rectangle") {
+        return Shape::ShapeRectangle;
+    } else if (shape == "circle") {
+        return Shape::ShapeCircle;
+    } else if (shape == "diamond") {
+        return Shape::ShapeDiamond;
+    } else if (shape == "ellipse") {
+        return Shape::ShapeEllipse;
+    }
+
+    Q_ASSERT(false);
+
+    return tikz::NoShape;
+}
+
+QString toString(tikz::PenStyle ps)
+{
+    switch (ps) {
+        case PenStyle::SolidLine: return "solid";
+        case PenStyle::DottedLine: return "dotted";
+        case PenStyle::DenselyDottedLine: return "densely dotted";
+        case PenStyle::LooselyDottedLine: return "loosely dotted";
+        case PenStyle::DashedLine: return "dashed";
+        case PenStyle::DenselyDashedLine: return "densely dashed";
+        case PenStyle::LooselyDashedLine: return "loosely dashed";
+        case PenStyle::DashDottedLine: return "dashdotted";
+        case PenStyle::DenselyDashDottedLine: return "densely dashdotted";
+        case PenStyle::LooselyDashDottedLine: return "loosely dashdotted";
+        case PenStyle::DashDotDottedLine: return "dashdotdotted";
+        case PenStyle::DenselyDashDotDottedLine: return "densely dashdotdotted";
+        case PenStyle::LooselyDashDotDottedLine: return "loosely dashdotdotted";
+        default: Q_ASSERT(false);
+    }
+    return QString();
+}
+
+tikz::PenStyle toPenStyle(const QString & penStyle)
+{
+    if (penStyle == "solid") {
+        return PenStyle::SolidLine;
+    } else if (penStyle == "dotted") {
+        return PenStyle::DottedLine;
+    } else if (penStyle == "densely dotted") {
+        return PenStyle::DenselyDottedLine;
+    } else if (penStyle == "loosely dotted") {
+        return PenStyle::LooselyDottedLine;
+    } else if (penStyle == "dashed") {
+        return PenStyle::DashedLine;
+    } else if (penStyle == "densely dashed") {
+        return PenStyle::DenselyDashedLine;
+    } else if (penStyle == "loosely dashed") {
+        return PenStyle::LooselyDashedLine;
+    } else if (penStyle == "dashdotted") {
+        return PenStyle::DashDottedLine;
+    } else if (penStyle == "densely dashdotted") {
+        return PenStyle::DenselyDashDottedLine;
+    } else if (penStyle == "loosely dashdotted") {
+        return PenStyle::LooselyDashDottedLine;
+    } else if (penStyle == "dashdotdotted") {
+        return PenStyle::DashDotDottedLine;
+    } else if (penStyle == "densely dashdotdotted") {
+        return PenStyle::DenselyDashDotDottedLine;
+    } else if (penStyle == "loosely dashdotdotted") {
+        return PenStyle::LooselyDashDotDottedLine;
+    }
+
+    Q_ASSERT(false);
+
+    return PenStyle::SolidLine;
+}
+
+QString toString(tikz::Arrow arrow)
+{
+    switch (arrow) {
+        case Arrow::NoArrow: return QString();
+        case Arrow::ToArrow: return "to";
+        case Arrow::ReversedToArrow: return "to reversed";
+        case Arrow::StealthArrow: return "stealth";
+        case Arrow::ReversedStealthArrow: return "stealth reversed";
+        case Arrow::LatexArrow: return "latex";
+        case Arrow::ReversedLatexArrow: return "latex reversed";
+        case Arrow::PipeArrow: return "|";
+        case Arrow::StealthTickArrow: return "stealth'";
+        case Arrow::ReversedStealthTickArrow: return "stealth' reversed";
+        default: Q_ASSERT(false); break;
+    }
+
+    return QString();
+}
+
+tikz::Arrow toArrow(const QString & arrow)
+{
+    if (arrow.isEmpty()) {
+        return Arrow::NoArrow;
+    } else if (arrow == "to") {
+        return Arrow::ToArrow;
+    } else if (arrow == "to reversed") {
+        return Arrow::ReversedToArrow;
+    } else if (arrow == "stealth") {
+        return Arrow::StealthArrow;
+    } else if (arrow == "stealth reversed") {
+        return Arrow::ReversedStealthArrow;
+    } else if (arrow == "latex") {
+        return Arrow::LatexArrow;
+    } else if (arrow == "latex reversed") {
+        return Arrow::ReversedLatexArrow;
+    } else if (arrow == "|") {
+        return Arrow::PipeArrow;
+    } else if (arrow == "stealth'") {
+        return Arrow::StealthTickArrow;
+    } else if (arrow == "stealth' reversed") {
+        return Arrow::ReversedStealthTickArrow;
+    }
+
+    Q_ASSERT(false);
+
+    return Arrow::NoArrow;
+}
+
 } // namespace tikz
 
 // kate: indent-width 4; replace-tabs on;

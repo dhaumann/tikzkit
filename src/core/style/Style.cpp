@@ -20,7 +20,6 @@
 #include "Style.h"
 
 #include "Document.h"
-#include "VisitorHelpers.h"
 
 #include <QSet>
 
@@ -93,8 +92,6 @@ Style::Style(const QJsonObject & json, Document* doc)
     : Entity(json, doc)
     , d(new StylePrivate())
 {
-    using namespace internal;
-
     beginConfig();
 
     if (json.contains("parent-id")) {
@@ -119,7 +116,7 @@ Style::Style(const QJsonObject & json, Document* doc)
     }
 
     if (json.contains("pen-style")) {
-        setPenStyle(penStyleFromString(json["pen-style"].toString()));
+        setPenStyle(toPenStyle(json["pen-style"].toString()));
     }
 
     if (json.contains("line-width")) {
@@ -192,8 +189,6 @@ void Style::setStyle(const Style * other)
 
 QJsonObject Style::toJson() const
 {
-    using namespace tikz::core::internal;
-
     QJsonObject json = Entity::toJson();
 
     if (parentStyle()) {
@@ -217,7 +212,7 @@ QJsonObject Style::toJson() const
     }
 
     if (penStyleSet()) {
-        json["pen-style"] = penStyleToString(penStyle());
+        json["pen-style"] = toString(penStyle());
     }
 
     if (lineWidthSet()) {

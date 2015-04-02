@@ -18,7 +18,6 @@
  */
 
 #include "TikzExportVisitor.h"
-#include "VisitorHelpers.h"
 
 #include "Document.h"
 #include "Node.h"
@@ -37,7 +36,6 @@
 
 namespace tikz {
 namespace core {
-using namespace internal;
 
 static QColor mixColor(const QColor & c1, const QColor & c2, qreal interp)
 {
@@ -269,7 +267,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     // export pen style
     //
     if (style->penStyleSet()) {
-        options << penStyleToString(style->penStyle());
+        options << toString(style->penStyle());
     }
 
     //
@@ -330,12 +328,12 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
     //
     QString arrowTail;
     if (style->arrowTailSet()) {
-        arrowTail = arrowToString(style->arrowTail());
+        arrowTail = toString(style->arrowTail());
     }
 
     QString arrowHead;
     if (style->arrowHeadSet()) {
-        arrowHead = arrowToString(style->arrowHead());
+        arrowHead = toString(style->arrowHead());
     }
 
     if (style->arrowTailSet() || style->arrowHeadSet()) {
@@ -416,14 +414,14 @@ QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
     // export align
     //
     if (style->textAlignSet()) {
-        options << "align=" + textAlignmentToString(style->textAlign());
+        options << "align=" + toString(style->textAlign());
     }
 
     //
     // export shape
     //
     if (style->shapeSet()) {
-        options << shapeToString(style->shape());
+        options << toString(style->shape());
     }
 
     //
