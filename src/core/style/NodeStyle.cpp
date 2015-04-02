@@ -88,6 +88,11 @@ NodeStyle::~NodeStyle()
 {
 }
 
+tikz::EntityType NodeStyle::entityType() const
+{
+    return EntityType::NodeStyle;
+}
+
 void NodeStyle::setStyle(const Style * other)
 {
     beginConfig();

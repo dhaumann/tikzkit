@@ -76,7 +76,7 @@ NodeItem* EllipsePathItem::node() const
 QPointF EllipsePathItem::pos() const
 {
     if (ellipsePath()->node()) {
-        NodeItem * nodeItem = document()->nodeItemFromId(ellipsePath()->node()->uid());
+        NodeItem * nodeItem = document()->nodeItemFromId(ellipsePath()->node()->id());
         Q_ASSERT(nodeItem != nullptr);
 
         return nodeItem->anchor(anchor());
@@ -158,7 +158,7 @@ void EllipsePathItem::updateNode(tikz::core::Node * node)
     NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->nodeItemFromId(node->uid());
+        newNode = document()->nodeItemFromId(node->id());
     }
 
     if (m_node != newNode) {

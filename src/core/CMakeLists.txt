@@ -23,13 +23,14 @@ include_directories(
 
 set(qtikzcore_SOURCES
     tikz.cpp
-    node/Node.cpp
     Document.cpp
     Entity.cpp
+    node/Node.cpp
     style/Style.cpp
     style/NodeStyle.cpp
     style/EdgeStyle.cpp
 
+    utils/Uid.cpp
     utils/Value.cpp
     utils/Pos.cpp
     utils/MetaPos.cpp

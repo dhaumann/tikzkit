@@ -78,12 +78,13 @@ public:
 };
 
 Style::Style()
-    : d(new StylePrivate())
+    : Entity()
+    , d(new StylePrivate())
 {
 }
 
-Style::Style(qint64 uid, Document* doc)
-    : Entity(uid, doc)
+Style::Style(qint64 id, Document* doc)
+    : Entity(id, doc)
     , d(new StylePrivate())
 {
 }
@@ -96,8 +97,8 @@ Style::Style(const QJsonObject & json, Document* doc)
 
     beginConfig();
 
-    if (json.contains("parent-uid")) {
-        const qint64 styleId = json["parent-uid"].toString().toLongLong();
+    if (json.contains("parent-id")) {
+        const qint64 styleId = json["parent-id"].toString().toLongLong();
         d->parent = doc->style()->findStyle(styleId);
     }
 
@@ -162,6 +163,11 @@ Style::~Style()
     setParentStyle(0);
 }
 
+tikz::EntityType Style::entityType() const
+{
+    return EntityType::Style;
+}
+
 void Style::setStyle(const Style * other)
 {
     if (this == other) {
@@ -191,7 +197,7 @@ QJsonObject Style::toJson() const
     QJsonObject json = Entity::toJson();
 
     if (parentStyle()) {
-        json["parent-uid"] = QString::number(parentStyle()->uid());
+        json["parent-id"] = QString::number(parentStyle()->id());
     }
 
     if (penColorSet()) {
@@ -280,7 +286,7 @@ bool Style::hasChildStyles() const
 
 Style * Style::findStyle(qint64 styleId) const
 {
-    if (uid() == styleId) {
+    if (id() == styleId) {
         return const_cast<Style*>(this);
     }
 

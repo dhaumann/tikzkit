@@ -61,6 +61,11 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         virtual ~EdgeStyle();
 
         /**
+         * Returns EntityType::EdgeStyle.
+         */
+        tikz::EntityType entityType() const override;
+
+        /**
          * Set the properties of this style to all properties of @p other.
          */
         void setStyle(const Style * other) override;

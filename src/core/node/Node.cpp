@@ -52,8 +52,8 @@ class NodePrivate
         NodeStyle style;
 };
 
-Node::Node(qint64 uid, Document* doc)
-    : Entity(uid, doc)
+Node::Node(qint64 id, Document* doc)
+    : Entity(id, doc)
     , d(new NodePrivate(doc))
 {
     d->style.setParentStyle(doc->style());
@@ -64,6 +64,11 @@ Node::Node(qint64 uid, Document* doc)
 Node::~Node()
 {
     delete d;
+}
+
+tikz::EntityType Node::entityType() const
+{
+    return EntityType::Node;
 }
 
 bool Node::accept(Visitor & visitor)
@@ -119,7 +124,7 @@ void Node::setText(const QString& text)
         endConfig();
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeText(uid(), text, document()));
+        document()->addUndoItem(new UndoSetNodeText(id(), text, document()));
 
         // now the text should be updated
         Q_ASSERT(d->text == text);
@@ -146,7 +151,7 @@ void Node::setStyle(const NodeStyle & style)
         endConfig();
     } else {
     // create new undo item, push will call ::redo()
-    document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
+    document()->addUndoItem(new UndoSetNodeStyle(id(), style, document()));
 
     // now the text should be updated
 //     Q_ASSERT(d->style == style); // same as above

@@ -102,7 +102,7 @@ tikz::Pos DocumentPrivate::scenePos(const tikz::core::MetaPos & pos) const
 {
     const auto node = pos.node();
     if (node) {
-        const NodeItem * nodeItem = nodeItemFromId(node->uid());
+        const NodeItem * nodeItem = nodeItemFromId(node->id());
         Q_ASSERT(nodeItem != nullptr);
         return nodeItem->anchor(pos.anchor());
     }
@@ -463,18 +463,18 @@ NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
     tikz::core::Node * node = Document::createNode();
-    Q_ASSERT(m_nodeMap.contains(node->uid()));
+    Q_ASSERT(m_nodeMap.contains(node->id()));
 
-    return m_nodeMap[node->uid()];
+    return m_nodeMap[node->id()];
 }
 
 tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::core::Path::Type type)
 {
     // create path
     tikz::core::Path * path = Document::createPath(type);
-    Q_ASSERT(m_pathMap.contains(path->uid()));
+    Q_ASSERT(m_pathMap.contains(path->id()));
 
-    return m_pathMap[path->uid()];
+    return m_pathMap[path->id()];
 }
 
 void DocumentPrivate::deleteNodeItem(NodeItem * node)
@@ -495,17 +495,17 @@ void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
     Q_ASSERT(! m_pathMap.contains(id));
 }
 
-tikz::core::Node * DocumentPrivate::createNode(qint64 uid)
+tikz::core::Node * DocumentPrivate::createNode(qint64 id)
 {
     // create node by tikz::core::Document
-    tikz::core::Node * node = Document::createNode(uid);
-    Q_ASSERT(uid == node->uid());
-    Q_ASSERT(! m_nodeMap.contains(uid));
+    tikz::core::Node * node = Document::createNode(id);
+    Q_ASSERT(id == node->id());
+    Q_ASSERT(! m_nodeMap.contains(id));
 
     // create GUI item
     NodeItem * nodeItem = new NodeItem(node);
     m_nodes.append(nodeItem);
-    m_nodeMap.insert(uid, nodeItem);
+    m_nodeMap.insert(id, nodeItem);
 
     // add to graphics scene
     m_scene->addItem(nodeItem);
@@ -534,11 +534,11 @@ void DocumentPrivate::deleteNode(qint64 id)
     tikz::core::Document::deleteNode(id);
 }
 
-tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 uid)
+tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 id)
 {
-    tikz::core::Path * path = Document::createPath(type, uid);
-    Q_ASSERT(uid == path->uid());
-    Q_ASSERT(! m_pathMap.contains(uid));
+    tikz::core::Path * path = Document::createPath(type, id);
+    Q_ASSERT(id == path->id());
+    Q_ASSERT(! m_pathMap.contains(id));
 
     // create GUI item
     tikz::ui::PathItem * pathItem = nullptr;
@@ -567,7 +567,7 @@ tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint
 
     // register path
     m_paths.append(pathItem);
-    m_pathMap.insert(uid, pathItem);
+    m_pathMap.insert(id, pathItem);
 
     // add to graphics scene
     m_scene->addItem(pathItem);

@@ -67,6 +67,11 @@ class TIKZCORE_EXPORT Style : public Entity
         virtual ~Style();
 
         /**
+         * Returns EntityType::Style.
+         */
+        tikz::EntityType entityType() const override;
+
+        /**
          * Set the properties of this style to all properties of @p other.
          */
         virtual void setStyle(const Style * other);

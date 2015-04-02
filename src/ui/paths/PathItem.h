@@ -24,7 +24,6 @@
 
 #include <tikz/core/tikz.h>
 
-
 namespace tikz {
 namespace core {
     class Path;

@@ -29,7 +29,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
                                bool isStartNode,
                                Document * doc)
     : UndoItem("Set Edge Position", doc)
-    , m_pathId(path->uid())
+    , m_pathId(path->id())
     , m_undoPos(isStartNode ? path->startMetaPos() : path->endMetaPos())
     , m_redoPos(newPos)
     , m_isStart(isStartNode)

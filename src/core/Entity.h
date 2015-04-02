@@ -37,7 +37,7 @@ class EntityPrivate;
 class TIKZCORE_EXPORT Entity : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(qint64 uid READ uid)
+    Q_PROPERTY(qint64 id READ id)
 
     public:
         /**
@@ -57,16 +57,25 @@ class TIKZCORE_EXPORT Entity : public QObject
         virtual ~Entity();
 
         /**
-         * Unique entity identifier.
+         * Unique identifier.
          * If the entity id is -1 (or negative), the entity is not unique,
          * implying the entity is not managed by any tikz::core::Document.
+         * The return value is the same as uid().id().
          */
-        qint64 uid() const;
+        qint64 id() const;
+
+        /**
+         * Returns the unique entity identifier in terms of a Uid.
+         * The uid().id() is the same as id(). However, the Uid also passes
+         * information about the type of the object through Uid::type().
+         */
+        Uid uid() const;
 
         /**
          * Returns the EntityType.
+         * The default implementation returns EntityType::Invalid.
          */
-        virtual tikz::EntityType entityType() const = 0;
+        virtual tikz::EntityType entityType() const;
 
         /**
          * Serialize the style to a JSON object.

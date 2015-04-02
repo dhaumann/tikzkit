@@ -32,12 +32,12 @@ class EntityPrivate
 {
 public:
     // unique id, or -1 (negative)
-    qint64 uid = -1;
+    qint64 id = -1;
 
     // config reference counter
     int refCounter = 0;
 
-    // associsated Document (if any)
+    // associated Document (if any)
     Document * document = nullptr;
 };
 
@@ -46,15 +46,15 @@ Entity::Entity()
 {
 }
 
-Entity::Entity(qint64 uid, Document* doc)
+Entity::Entity(qint64 id, Document* doc)
     : QObject(doc)
     , d(new EntityPrivate())
 {
-    Q_ASSERT(uid >= 0);
+    Q_ASSERT(id >= 0);
     Q_ASSERT(doc);
 
     d->document = doc;
-    d->uid = uid;
+    d->id = id;
 }
 
 Entity::Entity(const QJsonObject & json, Document* doc)
@@ -64,7 +64,9 @@ Entity::Entity(const QJsonObject & json, Document* doc)
     d->document = doc;
 
     if (json.contains("uid")) {
-        d->uid = json["uid"].toString().toLongLong();
+        const Uid tempUid = Uid::fromString(json["uid"].toString());
+        Q_ASSERT(entityType() == tempUid.type());
+        d->id = tempUid.id();
     }
 }
 
@@ -72,15 +74,25 @@ Entity::~Entity()
 {
 }
 
-qint64 Entity::uid() const
+qint64 Entity::id() const
 {
-    return d->uid;
+    return d->id;
+}
+
+Uid Entity::uid() const
+{
+    return Uid(d->id, entityType());
+}
+
+tikz::EntityType Entity::entityType() const
+{
+    return EntityType::Invalid;
 }
 
 QJsonObject Entity::toJson() const
 {
     QJsonObject json;
-    json["uid"] = QString::number(uid());
+    json["uid"] = uid().toString();
     return json;
 }
 

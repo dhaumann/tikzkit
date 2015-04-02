@@ -111,7 +111,7 @@ void DeserializeVisitor::visit(Document * doc)
 
 void DeserializeVisitor::visit(Node * node)
 {
-    const QVariantMap & map = m_nodes[QString("node-%1").arg(node->uid())].toMap();
+    const QVariantMap & map = m_nodes[QString("node-%1").arg(node->id())].toMap();
 
     // deserialize node
     tikz::core::MetaPos mp(node->document());
@@ -131,7 +131,7 @@ void DeserializeVisitor::visit(Node * node)
 
 void DeserializeVisitor::visit(Path * path)
 {
-    const QVariantMap & map = m_paths[QString("path-%1").arg(path->uid())].toMap();
+    const QVariantMap & map = m_paths[QString("path-%1").arg(path->id())].toMap();
     tikz::core::MetaPos mp(path->document());
 
     switch (path->type()) {

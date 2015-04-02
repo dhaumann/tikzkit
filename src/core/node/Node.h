@@ -48,6 +48,11 @@ class TIKZCORE_EXPORT Node : public Entity
          */
         virtual ~Node();
 
+        /**
+         * Returns EntityType::Node.
+         */
+        tikz::EntityType entityType() const override;
+
     //
     // visitor pattern
     //

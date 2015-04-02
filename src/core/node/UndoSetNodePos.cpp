@@ -28,7 +28,7 @@ UndoSetNodePos::UndoSetNodePos(Node * node,
                                const MetaPos & newPos,
                                Document * doc)
     : UndoItem("Move Node", doc)
-    , m_nodeId(node->uid())
+    , m_nodeId(node->id())
     , m_undoPos(node->metaPos())
     , m_redoPos(newPos)
 {

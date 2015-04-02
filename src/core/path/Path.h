@@ -66,6 +66,11 @@ class TIKZCORE_EXPORT Path : public Entity
          */
         virtual ~Path();
 
+        /**
+         * Returns EntityType::Edge.
+         */
+        tikz::EntityType entityType() const override;
+
     public Q_SLOTS:
         /**
          * Emits changed() if reference counter is 0.
@@ -106,10 +111,10 @@ class TIKZCORE_EXPORT Path : public Entity
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
-         * @param uid unique id of the path
+         * @param id unique id of the path
          * @param doc associated document
          */
-        Path(qint64 uid, Document* doc);
+        Path(qint64 id, Document* doc);
 
         /**
          * This function is called by Document::deletePath() right before the

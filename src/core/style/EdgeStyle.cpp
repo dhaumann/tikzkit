@@ -122,6 +122,11 @@ EdgeStyle::~EdgeStyle()
 {
 }
 
+tikz::EntityType EdgeStyle::entityType() const
+{
+    return EntityType::EdgeStyle;
+}
+
 void EdgeStyle::setStyle(const Style * other)
 {
     beginConfig();
