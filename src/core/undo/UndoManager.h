@@ -124,8 +124,7 @@ public:
      * @param text the text of the undo item.
      *
      * @note startTransaction() and commitTransaction() are ref-counted.
-     *       Always make sure these calls are balanced. This is also valid
-     *       for cancelTransaction().
+     *       Always make sure these two calls are balanced.
      */
     void startTransaction(const QString & text = QString());
 
