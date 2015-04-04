@@ -96,7 +96,11 @@ void UndoGroup::addItem(UndoItem *item)
     if (lastUndoId >= 0 && lastUndoId == newUndoId && d->items.last()->mergeWith(item)) {
         delete item;
     } else {
+        // add to this undo group
         d->items.append(item);
+
+        // associate the UndoItem's group with this UndoGroup
+        item->setGroup(this);
     }
 }
 

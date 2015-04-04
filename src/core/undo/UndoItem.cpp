@@ -31,6 +31,11 @@ public:
     Document* doc = nullptr;
 
     /**
+     * Pointer to the UndoGroup this UndoItem belongs to.
+     */
+    UndoGroup * group = nullptr;
+
+    /**
      * Description of the undo item.
      */
     QString text;
@@ -72,6 +77,16 @@ bool UndoItem::mergeWith(const UndoItem * item)
 {
     Q_UNUSED(item)
     return false;
+}
+
+UndoGroup * UndoItem::group() const
+{
+    return d->group;
+}
+
+void UndoItem::setGroup(UndoGroup * group)
+{
+    d->group = group;
 }
 
 namespace {
