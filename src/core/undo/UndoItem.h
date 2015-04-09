@@ -100,7 +100,7 @@ public:
     /**
      * Serialize the undo item to a JSON object.
      */
-    virtual QJsonObject toJsonObject() const {}
+    virtual QJsonObject toJsonObject() const = 0;
 
 // group information
 public:
