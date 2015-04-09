@@ -92,7 +92,7 @@ Style::Style(const QJsonObject & json, Document* doc)
     : Entity(json, doc)
     , d(new StylePrivate())
 {
-    beginConfig();
+    ConfigTransaction transaction(this);
 
     if (json.contains("parent-id")) {
         const qint64 styleId = json["parent-id"].toString().toLongLong();
@@ -141,8 +141,6 @@ Style::Style(const QJsonObject & json, Document* doc)
     if (json.contains("rotation")) {
         setRotation(json["rotation"].toDouble());
     }
-
-    endConfig();
 }
 
 Style::~Style()
@@ -172,7 +170,7 @@ void Style::setStyle(const Style * other)
     }
 
     // start configuration
-    beginConfig();
+    ConfigTransaction transaction(this);
 
     // backup properties not to copy
     Style * parent = d->parent;
@@ -182,9 +180,6 @@ void Style::setStyle(const Style * other)
 
     // restore persistend properties
     d->parent = parent;
-
-    // end configuration
-    endConfig();
 }
 
 QJsonObject Style::toJson() const
@@ -252,7 +247,7 @@ void Style::setParentStyle(Style *parent)
     Q_ASSERT(parent != this);
 
     if (d->parent != parent) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         if (d->parent) {
             // disconnect all signals (e.g. changed())
             disconnect(d->parent, 0, this, 0);
@@ -270,7 +265,6 @@ void Style::setParentStyle(Style *parent)
             Q_ASSERT(! d->parent->d->children.contains(this));
             d->parent->d->children.append(this);
         }
-        endConfig();
     }
 }
 
@@ -331,20 +325,18 @@ bool Style::penStyleSet() const
 void Style::setPenStyle(tikz::PenStyle style)
 {
     if (!propertySet(s_penStyle) || d->penStyle != style) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_penStyle);
         d->penStyle = style;
-        endConfig();
     }
 }
 
 void Style::unsetPenStyle()
 {
     if (propertySet(s_penStyle)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_penStyle);
         d->penStyle = SolidLine;
-        endConfig();
     }
 }
 
@@ -369,10 +361,9 @@ void Style::setLineWidth(const tikz::Value & width)
     if (!propertySet(s_lineWidth)
         || d->lineWidth != width
     ) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_lineWidth);
         d->lineWidth = width;
-        endConfig();
     }
 }
 
@@ -392,10 +383,9 @@ tikz::Value Style::lineWidth() const
 void Style::unsetLineWidth()
 {
     if (propertySet(s_lineWidth)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_lineWidth);
         d->lineWidth = tikz::Value::semiThick();
-        endConfig();
     }
 }
 
@@ -420,20 +410,18 @@ bool Style::doubleLineSet() const
 void Style::setDoubleLine(bool enabled)
 {
     if (!propertySet(s_doubleLine) || d->doubleLine != enabled) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_doubleLine);
         d->doubleLine = enabled;
-        endConfig();
     }
 }
 
 void Style::unsetDoubleLine()
 {
     if (propertySet(s_doubleLine)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_doubleLine);
         d->doubleLine = false;
-        endConfig();
     }
 }
 
@@ -462,20 +450,18 @@ bool Style::innerLineWidthSet() const
 void Style::setInnerLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_innerLineWidth) || d->innerLineWidth != width) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_innerLineWidth);
         d->innerLineWidth = width;
-        endConfig();
     }
 }
 
 void Style::unsetInnerLineWidth()
 {
     if (propertySet(s_innerLineWidth)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_innerLineWidth);
         d->innerLineWidth = tikz::Value::semiThick();
-        endConfig();
     }
 }
 
@@ -495,10 +481,9 @@ qreal Style::penOpacity() const
 void Style::setPenOpacity(qreal opacity)
 {
     if (!propertySet(s_penOpacity) || d->penOpacity != opacity) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_penOpacity);
         d->penOpacity = opacity;
-        endConfig();
     }
 }
 
@@ -510,10 +495,9 @@ bool Style::penOpacitySet() const
 void Style::unsetPenOpacity()
 {
     if (propertySet(s_penOpacity)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_penOpacity);
         d->penOpacity = 1.0;
-        endConfig();
     }
 }
 
@@ -538,20 +522,18 @@ bool Style::fillOpacitySet() const
 void Style::setFillOpacity(qreal opacity)
 {
     if (!propertySet(s_fillOpacity) || d->fillOpacity != opacity) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_fillOpacity);
         d->fillOpacity = opacity;
-        endConfig();
     }
 }
 
 void Style::unsetFillOpacity()
 {
     if (propertySet(s_fillOpacity)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_fillOpacity);
         d->fillOpacity = 1.0;
-        endConfig();
     }
 }
 
@@ -612,60 +594,54 @@ bool Style::fillColorSet() const
 void Style::setPenColor(const QColor & color)
 {
     if (!propertySet(s_penColor) || d->penColor != color) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_penColor);
         d->penColor = color;
-        endConfig();
     }
 }
 
 void Style::unsetPenColor()
 {
     if (propertySet(s_penColor)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_penColor);
         d->penColor = Qt::black;
-        endConfig();
     }
 }
 
 void Style::setInnerLineColor(const QColor & color)
 {
     if (!propertySet(s_innerLineColor) || d->innerLineColor != color) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_innerLineColor);
         d->innerLineColor = color;
-        endConfig();
     }
 }
 
 void Style::unsetInnerLineColor()
 {
     if (propertySet(s_innerLineColor)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_innerLineColor);
         d->innerLineColor = Qt::white;
-        endConfig();
     }
 }
 
 void Style::setFillColor(const QColor & color)
 {
     if (!propertySet(s_fillColor) || d->fillColor != color) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_fillColor);
         d->fillColor = color;
-        endConfig();
     }
 }
 
 void Style::unsetFillColor()
 {
     if (propertySet(s_fillColor)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_fillColor);
         d->fillColor = Qt::transparent;
-        endConfig();
     }
 }
 
@@ -690,20 +666,18 @@ bool Style::rotationSet() const
 void Style::setRotation(qreal angle)
 {
     if (!propertySet(s_rotation) || d->rotation != angle) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_rotation);
         d->rotation = angle;
-        endConfig();
     }
 }
 
 void Style::unsetRotation()
 {
     if (propertySet(s_rotation)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_rotation);
         d->rotation = 0.0;
-        endConfig();
     }
 }
 

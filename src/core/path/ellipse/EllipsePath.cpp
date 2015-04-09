@@ -60,9 +60,8 @@ void EllipsePath::deconstruct()
     // just set both the start and end pos to (0, 0).
     // undo (i.e., creating the node again), will then restore the initial
     // connections correctly.
-    beginConfig();
+    ConfigTransaction transaction(this);
     setPos(tikz::Pos());
-    endConfig();
 }
 
 void EllipsePath::detachFromNode(Node * node)
@@ -118,14 +117,13 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
     }
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         auto oldNode = node();
         d->pos = pos;
         auto newNode = node();
         if (oldNode != newNode) {
             emit nodeChanged(newNode);
         }
-        endConfig();
     } else {
         document()->addUndoItem(
             new UndoSetEllipsePos(this, pos, document()));

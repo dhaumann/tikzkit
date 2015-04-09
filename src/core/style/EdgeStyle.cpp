@@ -70,7 +70,7 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     : Style(json, tikzDocument)
     , d(new EdgeStylePrivate())
 {
-    beginConfig();
+    ConfigTransaction transaction(this);
 
     if (json.contains("radius-x")) {
         setRadiusX(tikz::Value::fromString(json["radius-x"].toString()));
@@ -111,8 +111,6 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     if (json.contains("shorten-end")) {
         setShortenEnd(tikz::Value::fromString(json["shorten-end"].toString()));
     }
-
-    endConfig();
 }
 
 EdgeStyle::~EdgeStyle()
@@ -126,13 +124,12 @@ tikz::EntityType EdgeStyle::entityType() const
 
 void EdgeStyle::setStyle(const Style * other)
 {
-    beginConfig();
+    ConfigTransaction transaction(this);
     Style::setStyle(other);
     auto edgeStyle = qobject_cast<const EdgeStyle *>(other);
     if (edgeStyle) {
         *d = *edgeStyle->d;
     }
-    endConfig();
 }
 
 QJsonObject EdgeStyle::toJson() const
@@ -223,40 +220,36 @@ bool EdgeStyle::radiusYSet() const
 void EdgeStyle::setRadiusX(const tikz::Value & xradius)
 {
     if (!propertySet(s_radiusX) || d->radiusX != xradius) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_radiusX);
         d->radiusX = xradius;
-        endConfig();
     }
 }
 
 void EdgeStyle::setRadiusY(const tikz::Value & yradius)
 {
     if (!propertySet(s_radiusY) || d->radiusY != yradius) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_radiusY);
         d->radiusY = yradius;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetRadiusX()
 {
     if (propertySet(s_radiusX)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_radiusX);
         d->radiusX = tikz::Value(0, tikz::Centimeter);
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetRadiusY()
 {
     if (propertySet(s_radiusY)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_radiusY);
         d->radiusY = tikz::Value(0, tikz::Centimeter);
-        endConfig();
     }
 }
 
@@ -286,20 +279,18 @@ void EdgeStyle::setBendAngle(qreal angle)
     while (angle < -180) angle += 360.0;
 
     if (!propertySet(s_bendAngle) || d->bendAngle != angle) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_bendAngle);
         d->bendAngle = angle;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetBendAngle()
 {
     if (propertySet(s_bendAngle)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_bendAngle);
         d->bendAngle = 0.0;
-        endConfig();
     }
 }
 
@@ -325,20 +316,18 @@ bool EdgeStyle::loosenessSet() const
 void EdgeStyle::setLooseness(qreal looseness)
 {
     if (!propertySet(s_looseness) || d->looseness != looseness) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_looseness);
         d->looseness = looseness;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetLooseness()
 {
     if (propertySet(s_looseness)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_looseness);
         d->looseness = 1.0;
-        endConfig();
     }
 }
 
@@ -384,20 +373,18 @@ bool EdgeStyle::outAngleSet() const
 void EdgeStyle::setOutAngle(qreal angle)
 {
     if (!propertySet(s_outAngle) || d->outAngle != angle) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_outAngle);
         d->outAngle = angle;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetOutAngle()
 {
     if (propertySet(s_outAngle)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_outAngle);
         d->outAngle = 45;
-        endConfig();
     }
 }
 
@@ -423,20 +410,18 @@ bool EdgeStyle::inAngleSet() const
 void EdgeStyle::setInAngle(qreal angle)
 {
     if (!propertySet(s_inAngle) || d->inAngle != angle) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_inAngle);
         d->inAngle = angle;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetInAngle()
 {
     if (propertySet(s_inAngle)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_inAngle);
         d->inAngle = 135;
-        endConfig();
     }
 }
 
@@ -481,40 +466,36 @@ bool EdgeStyle::arrowHeadSet() const
 void EdgeStyle::setArrowTail(tikz::Arrow tail)
 {
     if (!propertySet(s_arrowTail) || d->arrowTail != tail) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_arrowTail);
         d->arrowTail = tail;
-        endConfig();
     }
 }
 
 void EdgeStyle::setArrowHead(tikz::Arrow head)
 {
     if (!propertySet(s_arrowHead) || d->arrowHead != head) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_arrowHead);
         d->arrowHead = head;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetArrowTail()
 {
     if (propertySet(s_arrowTail)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_arrowTail);
         d->arrowTail = tikz::NoArrow;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetArrowHead()
 {
     if (propertySet(s_arrowHead)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_arrowHead);
         d->arrowHead = tikz::NoArrow;
-        endConfig();
     }
 }
 
@@ -559,40 +540,36 @@ bool EdgeStyle::shortenEndSet() const
 void EdgeStyle::setShortenStart(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenStart) || d->shortenStart != shorten) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_shortenStart);
         d->shortenStart = shorten;
-        endConfig();
     }
 }
 
 void EdgeStyle::setShortenEnd(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenEnd) || d->shortenEnd != shorten) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         addProperty(s_shortenEnd);
         d->shortenEnd = shorten;
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetShortenStart()
 {
     if (propertySet(s_shortenStart)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_shortenStart);
         d->shortenStart = tikz::Value(0, tikz::Centimeter);
-        endConfig();
     }
 }
 
 void EdgeStyle::unsetShortenEnd()
 {
     if (propertySet(s_shortenEnd)) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         removeProperty(s_shortenEnd);
         d->shortenEnd = tikz::Value(0, tikz::Centimeter);
-        endConfig();
     }
 }
 

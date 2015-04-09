@@ -73,10 +73,9 @@ void EdgePath::deconstruct()
     // just set both the start and end pos to (0, 0).
     // undo (i.e., creating the node again), will then restore the initial
     // connections correctly.
-    beginConfig();
+    ConfigTransaction transaction(this);
     setStartPos(tikz::Pos());
     setEndPos(tikz::Pos());
-    endConfig();
 }
 
 void EdgePath::detachFromNode(Node * node)
@@ -169,14 +168,13 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
     }
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         auto oldNode = startNode();
         d->start = pos;
         auto newNode = startNode();
         if (oldNode != newNode) {
             emit startNodeChanged(newNode);
         }
-        endConfig();
     } else {
         document()->addUndoItem(
             new UndoSetEdgePos(this, pos, true, document()));
@@ -190,14 +188,13 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
     }
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         auto oldNode = endNode();
         d->end = pos;
         auto newNode = endNode();
         if (oldNode != newNode) {
             emit endNodeChanged(newNode);
         }
-        endConfig();
     } else {
         document()->addUndoItem(
             new UndoSetEdgePos(this, pos, false, document()));

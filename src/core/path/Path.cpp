@@ -81,9 +81,8 @@ void Path::setStyle(const EdgeStyle & style)
     // TODO: room for optimization: if style did not change, abort
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         d->style.setStyle(&style);
-        endConfig();
     } else {
         // create new undo item, push will call ::redo()
         document()->addUndoItem(new UndoSetPathStyle(id(), style, document()));
@@ -106,15 +105,13 @@ void Path::setStyle(const EdgeStyle & style)
 //     Edge * edge = 0;
 //
 //     if (document()->undoActive()) {
-//         beginConfig();
+//         ConfigTransaction transaction(this);
 //
 //         // create and insert edge
 //         edge = new Edge(this);
 //
 //         // insert edge
 //         d->edges.insert(index, edge);
-//
-//         endConfig();
 //     } else {
 //         // create edge via undo system
 //         document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
@@ -141,7 +138,7 @@ void Path::setStyle(const EdgeStyle & style)
 //     Q_ASSERT(index < d->edges.size());
 //
 //     if (document()->undoActive()) {
-//         beginConfig();
+//         ConfigTransaction transaction(this);
 //
 //         // get edge to delete
 //         Edge * edge = d->edges[index];
@@ -151,8 +148,6 @@ void Path::setStyle(const EdgeStyle & style)
 //
 //         // finally delete edge
 //         delete edge;
-//
-//         endConfig();
 //     } else {
 //         // create edge via undo system
 //         document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));

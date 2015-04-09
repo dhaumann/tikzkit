@@ -180,7 +180,7 @@ void DeserializeVisitor::visit(EdgeStyle * style)
 
 void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map)
 {
-    style->beginConfig();
+    ConfigTransaction transaction(style);
 
     if (map.contains("pen-color")) {
         style->setPenColor(map["pen-color"].value<QColor>());
@@ -219,13 +219,11 @@ void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map
     if (map.contains("rotation")) {
         style->setRotation(map["rotation"].toDouble());
     }
-
-    style->endConfig();
 }
 
 void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantMap & map)
 {
-    style->beginConfig();
+    ConfigTransaction transaction(style);
 
     deserializeStyle(style, map);
 
@@ -268,13 +266,11 @@ void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantM
     if (map.contains("shorten-end")) {
         style->setShortenEnd(tikz::Value::fromString(map["shorten-end"].toString()));
     }
-
-    style->endConfig();
 }
 
 void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantMap & map)
 {
-    style->beginConfig();
+    ConfigTransaction transaction(style);
 
     deserializeStyle(style, map);
 
@@ -293,8 +289,6 @@ void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantM
     if (map.contains("minimum-height")) {
         style->setMinimumHeight(tikz::Value::fromString(map["minimum-height"].toString()));
     }
-
-    style->endConfig();
 }
 
 }

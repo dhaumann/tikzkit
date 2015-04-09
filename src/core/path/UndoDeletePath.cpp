@@ -56,9 +56,8 @@ void UndoDeletePath::undo()
     Path * path = document()->pathFromId(m_id);
     Q_ASSERT(path);
 
-    path->beginConfig();
+    ConfigTransaction transaction(path);
     path->style()->setStyle(&m_style);
-    path->endConfig();
 }
 
 void UndoDeletePath::redo()

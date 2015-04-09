@@ -97,9 +97,8 @@ void Node::setMetaPos(const tikz::core::MetaPos & pos)
     }
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         d->pos = pos;
-        endConfig();
     } else {
         document()->addUndoItem(new UndoSetNodePos(this, pos, document()));
     }
@@ -118,10 +117,9 @@ void Node::setText(const QString& text)
     }
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         d->text = text;
         emit textChanged(d->text);
-        endConfig();
     } else {
         // create new undo item, push will call ::redo()
         document()->addUndoItem(new UndoSetNodeText(id(), text, document()));
@@ -146,9 +144,8 @@ void Node::setStyle(const NodeStyle & style)
     // TODO: room for optimization: if style did not change, abort
 
     if (document()->undoActive()) {
-        beginConfig();
+        ConfigTransaction transaction(this);
         d->style.setStyle(&style);
-        endConfig();
     } else {
     // create new undo item, push will call ::redo()
     document()->addUndoItem(new UndoSetNodeStyle(id(), style, document()));
