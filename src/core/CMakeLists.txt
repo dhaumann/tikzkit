@@ -25,6 +25,7 @@ set(qtikzcore_SOURCES
     tikz.cpp
     Document.cpp
     Entity.cpp
+    ConfigInterface.cpp
     node/Node.cpp
     style/Style.cpp
     style/NodeStyle.cpp

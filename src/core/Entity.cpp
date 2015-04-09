@@ -32,20 +32,18 @@ public:
     // unique id, or -1 (negative)
     qint64 id = -1;
 
-    // config reference counter
-    int refCounter = 0;
-
     // associated Document (if any)
     Document * document = nullptr;
 };
 
 Entity::Entity()
-    : d(new EntityPrivate())
+    : ConfigInterface()
+    , d(new EntityPrivate())
 {
 }
 
 Entity::Entity(qint64 id, Document* doc)
-    : QObject(doc)
+    : ConfigInterface(doc)
     , d(new EntityPrivate())
 {
     Q_ASSERT(id >= 0);
@@ -56,7 +54,7 @@ Entity::Entity(qint64 id, Document* doc)
 }
 
 Entity::Entity(const QJsonObject & json, Document* doc)
-    : QObject(doc)
+    : ConfigInterface(doc)
     , d(new EntityPrivate())
 {
     d->document = doc;
@@ -97,27 +95,6 @@ QJsonObject Entity::toJson() const
 Document * Entity::document() const
 {
     return d->document;
-}
-
-void Entity::beginConfig()
-{
-    Q_ASSERT(d->refCounter >= 0);
-    ++d->refCounter;
-}
-
-void Entity::endConfig()
-{
-    Q_ASSERT(d->refCounter > 0);
-
-    --d->refCounter;
-    if (d->refCounter == 0) {
-        emit changed();
-    }
-}
-
-bool Entity::configActive() const
-{
-    return d->refCounter > 0;
 }
 
 }

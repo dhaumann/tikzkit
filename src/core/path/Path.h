@@ -71,14 +71,6 @@ class TIKZCORE_EXPORT Path : public Entity
          */
         tikz::EntityType entityType() const override;
 
-    public Q_SLOTS:
-        /**
-         * Emits changed() if reference counter is 0.
-         * Otherwise, emitting changed() is delayed until the reference
-         * counter is 0 after a call of endConfig().
-         */
-        void emitChangedIfNeeded();
-
     //
     // visitor pattern
     //

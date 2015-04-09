@@ -20,7 +20,7 @@
 #ifndef TIKZ_CORE_ENTITY_H
 #define TIKZ_CORE_ENTITY_H
 
-#include "tikz_export.h"
+#include "ConfigInterface.h"
 #include "tikz.h"
 #include "Uid.h"
 
@@ -34,7 +34,7 @@ namespace core {
 class Document;
 class EntityPrivate;
 
-class TIKZCORE_EXPORT Entity : public QObject
+class TIKZCORE_EXPORT Entity : public ConfigInterface
 {
     Q_OBJECT
     Q_PROPERTY(qint64 id READ id)
@@ -86,40 +86,6 @@ class TIKZCORE_EXPORT Entity : public QObject
          * Returns the document, if passed to the constructor.
          */
         Document * document() const;
-
-    //
-    // config methods
-    //
-    public:
-        /**
-         * Start changing properties.
-         * This call is ref-counted. For each beginConfig() you finally
-         * have to call endConfig().
-         */
-        void beginConfig();
-
-        /**
-         * End of changing properties.
-         * This will emit changed(), if the number of calls of endConfig()
-         * matches the calls the one of beginConfig(), i.e. the ref-counter is zero.
-         *
-         * Using beginConfig() and endConfig() allows to change multiple
-         * config values, while still only emitting the changed() signal only once.
-         */
-        void endConfig();
-
-        /**
-         * Returns whether beginConfig() was called without an endConfig() yet.
-         */
-        bool configActive() const;
-
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever the style changes.
-         * This includes changes in the parent style that possibly influence
-         * the appearance of this style.
-         */
-        void changed();
 
     //
     // internal to tikz::Document

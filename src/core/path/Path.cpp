@@ -199,13 +199,6 @@ void Path::setStyle(const EdgeStyle & style)
 //     }
 // }
 
-void Path::emitChangedIfNeeded()
-{
-    if (! configActive()) {
-        emit changed();
-    }
-}
-
 }
 }
 

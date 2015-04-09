@@ -158,13 +158,6 @@ void Node::setStyle(const NodeStyle & style)
     }
 }
 
-void Node::emitChangedIfNeeded()
-{
-    if (! configActive()) {
-        emit changed();
-    }
-}
-
 }
 }
 
