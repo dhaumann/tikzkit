@@ -17,27 +17,27 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "ConfigInterface.h"
+#include "ConfigObject.h"
 
 namespace tikz {
 namespace core {
 
-ConfigInterface::ConfigInterface(QObject * parent)
+ConfigObject::ConfigObject(QObject * parent)
     : QObject(parent)
 {
 }
 
-ConfigInterface::~ConfigInterface()
+ConfigObject::~ConfigObject()
 {
 }
 
-void ConfigInterface::beginConfig()
+void ConfigObject::beginConfig()
 {
     Q_ASSERT(m_refCounter >= 0);
     ++m_refCounter;
 }
 
-void ConfigInterface::endConfig()
+void ConfigObject::endConfig()
 {
     Q_ASSERT(m_refCounter > 0);
 
@@ -47,15 +47,41 @@ void ConfigInterface::endConfig()
     }
 }
 
-bool ConfigInterface::configActive() const
+bool ConfigObject::configActive() const
 {
     return m_refCounter > 0;
 }
 
-void ConfigInterface::emitChangedIfNeeded()
+void ConfigObject::emitChangedIfNeeded()
 {
     if (! configActive()) {
         emit changed();
+    }
+}
+
+ConfigTransaction::ConfigTransaction(ConfigObject * configObject)
+    : m_configObject(configObject)
+{
+    Q_ASSERT(configObject);
+
+    m_configObject->beginConfig();
+    m_configTransactionActive = true;
+}
+
+ConfigTransaction::~ConfigTransaction()
+{
+    if (m_configTransactionActive) {
+        m_configObject->endConfig();
+    }
+}
+
+void ConfigTransaction::endConfig()
+{
+    Q_ASSERT(m_configTransactionActive);
+
+    if (m_configTransactionActive) {
+        m_configTransactionActive = false;
+        m_configObject->endConfig();
     }
 }
 

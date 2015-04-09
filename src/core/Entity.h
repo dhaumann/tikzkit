@@ -20,7 +20,7 @@
 #ifndef TIKZ_CORE_ENTITY_H
 #define TIKZ_CORE_ENTITY_H
 
-#include "ConfigInterface.h"
+#include "ConfigObject.h"
 #include "tikz.h"
 #include "Uid.h"
 
@@ -34,7 +34,7 @@ namespace core {
 class Document;
 class EntityPrivate;
 
-class TIKZCORE_EXPORT Entity : public ConfigInterface
+class TIKZCORE_EXPORT Entity : public ConfigObject
 {
     Q_OBJECT
     Q_PROPERTY(qint64 id READ id)

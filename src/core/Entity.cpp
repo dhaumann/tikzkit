@@ -37,13 +37,13 @@ public:
 };
 
 Entity::Entity()
-    : ConfigInterface()
+    : ConfigObject()
     , d(new EntityPrivate())
 {
 }
 
 Entity::Entity(qint64 id, Document* doc)
-    : ConfigInterface(doc)
+    : ConfigObject(doc)
     , d(new EntityPrivate())
 {
     Q_ASSERT(id >= 0);
@@ -54,7 +54,7 @@ Entity::Entity(qint64 id, Document* doc)
 }
 
 Entity::Entity(const QJsonObject & json, Document* doc)
-    : ConfigInterface(doc)
+    : ConfigObject(doc)
     , d(new EntityPrivate())
 {
     d->document = doc;

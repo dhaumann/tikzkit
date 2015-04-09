@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_CORE_CONFIG_INTERFACE_H
-#define TIKZ_CORE_CONFIG_INTERFACE_H
+#ifndef TIKZ_CORE_CONFIG_OBJECT_H
+#define TIKZ_CORE_CONFIG_OBJECT_H
 
 #include "tikz_export.h"
 
@@ -30,10 +30,10 @@ namespace core {
 /**
  * Base class that signals change events.
  *
- * The ConfigInterface contains a changed() signal.
+ * The ConfigObject contains a changed() signal.
  * @TODO FIXME
  */
-class TIKZCORE_EXPORT ConfigInterface : public QObject
+class TIKZCORE_EXPORT ConfigObject : public QObject
 {
     Q_OBJECT
 
@@ -41,12 +41,12 @@ class TIKZCORE_EXPORT ConfigInterface : public QObject
         /**
          * Default constructor with optional parent.
          */
-        explicit ConfigInterface(QObject * parent = nullptr);
+        explicit ConfigObject(QObject * parent = nullptr);
 
         /**
          * Virtual destructor.
          */
-        virtual ~ConfigInterface();
+        virtual ~ConfigObject();
 
     //
     // config methods
@@ -94,9 +94,37 @@ class TIKZCORE_EXPORT ConfigInterface : public QObject
         int m_refCounter = 0;
 };
 
+class TIKZCORE_EXPORT ConfigTransaction
+{
+public:
+    // Disable some constructors.
+    ConfigTransaction() = delete;
+    ConfigTransaction(const ConfigTransaction & other) = delete;
+
+    /**
+     * Constructor that immediately calls configObject->beginConfig().
+     */
+    ConfigTransaction(ConfigObject * configObject);
+
+    /**
+     * Destructor that calls configObject->endConfig(), if required.
+     */
+    ~ConfigTransaction();
+
+    /**
+     * Call endConfig() on the ConfigObject passed in the constructor.
+     * You may call this only once.
+     */
+    void endConfig();
+
+private:
+    ConfigObject * const m_configObject = nullptr;
+    bool m_configTransactionActive = false;
+};
+
 }
 }
 
-#endif // TIKZ_CORE_CONFIG_INTERFACE_H
+#endif // TIKZ_CORE_CONFIG_OBJECT_H
 
 // kate: indent-width 4; replace-tabs on;

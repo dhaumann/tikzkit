@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -116,7 +116,7 @@ public:
 };
 
 Document::Document(QObject * parent)
-    : QObject(parent)
+    : ConfigObject(parent)
     , d(new DocumentPrivate())
 {
     d->q = this;
