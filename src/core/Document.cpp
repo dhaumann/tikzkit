@@ -187,6 +187,9 @@ void Document::close()
 
     // keep the document name up-to-date
     d->updateDocumentName();
+
+    // propagate change() signal from style
+    connect(d->style, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
 }
 
 bool Document::load(const QUrl & fileurl)
@@ -323,6 +326,10 @@ void Document::addUndoItem(tikz::core::UndoItem * undoItem)
 
 void Document::beginTransaction(const QString & name)
 {
+    // track changes
+    beginConfig();
+
+    // pass call to undo mananger
     d->undoManager->startTransaction(name);
 }
 
@@ -333,7 +340,11 @@ void Document::cancelTransaction()
 
 void Document::finishTransaction()
 {
+    // first pass call to undo mananger
     d->undoManager->commitTransaction();
+
+    // notify world about changes
+    endConfig();
 }
 
 bool Document::transactionRunning() const
@@ -489,6 +500,9 @@ Node * Document::createNode(qint64 id)
     // insert node into hash map
     d->nodeMap.insert(id, node);
 
+    // propagate changed signal
+    connect(node, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
+
     return node;
 }
 
@@ -568,6 +582,9 @@ Path * Document::createPath(Path::Type type, qint64 id)
 
     // insert path into hash map
     d->pathMap.insert(id, path);
+
+    // propagate changed signal
+    connect(path, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
 
     return path;
 }
