@@ -24,8 +24,6 @@ include_directories(
 
 set(qtikzcore_SOURCES
     tikz.cpp
-    Entity.cpp
-    ConfigObject.cpp
 
     document/Document.cpp
 
@@ -33,11 +31,13 @@ set(qtikzcore_SOURCES
     style/NodeStyle.cpp
     style/EdgeStyle.cpp
 
-    utils/Uid.cpp
     utils/Value.cpp
     utils/Pos.cpp
     utils/MetaPos.cpp
     utils/MetaPos_p.cpp
+    utils/Uid.cpp
+    utils/Entity.cpp
+    utils/ConfigObject.cpp
 
     path/Path.cpp
     path/UndoSetPathStyle.cpp
