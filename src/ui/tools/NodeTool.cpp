@@ -79,6 +79,10 @@ void NodeTool::keyPressEvent(QKeyEvent * event)
         }
     }
 
+    if (event->key() == Qt::Key_Delete) {
+        document()->deleteNodeItem(m_node);
+    }
+
     if (event->key() == Qt::Key_T) {
         bool ok = true;
         QString text = QInputDialog::getMultiLineText(nullptr, "Set Text", "Enter node text in LaTeX", m_node->node()->text(), &ok);
