@@ -54,6 +54,19 @@ Transaction::Transaction(Document *document, bool autoStart)
     }
 }
 
+Transaction::Transaction(Document * document, const QString & name)
+    : d (new TransactionPrivate())
+{
+    // Alghouth it works in release-mode, we usually want a valid document
+    Q_ASSERT(document != nullptr);
+
+    // initialize d-pointer
+    d->document = document;
+
+    // start the editing transaction
+    start(name);
+}
+
 void Transaction::start(const QString & action)
 {
     Q_ASSERT(! d->transactionRunning);

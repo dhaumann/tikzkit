@@ -67,6 +67,14 @@ class TIKZCORE_EXPORT Transaction
         explicit Transaction(Document * document, bool autoStart = true);
 
         /**
+         * Constructs the object and starts an editing transaction.
+         *
+         * @param document document for the transaction
+         * @param name the transaction name
+         */
+        explicit Transaction(Document * document, const QString & name);
+
+        /**
          * Destructs the object and, if needed, finishs a running editing
          * transaction by calling finish().
          *
