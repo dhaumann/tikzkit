@@ -64,7 +64,7 @@ TikzScene::TikzScene(DocumentPrivate * doc)
     d->doc = doc;
     d->subDivisions = 1;
     d->editMode = TikzEditMode::ModeSelect;
-    d->tool = new ProxyTool(this);
+    d->tool = new ProxyTool(doc, this);
 
     // set sane scene rect
     setSceneRect(-tikz::cm2pt(15), -tikz::cm2pt(15),
