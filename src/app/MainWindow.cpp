@@ -110,7 +110,8 @@ MainWindow::MainWindow()
     // register ourself as MainWindow
     TikzKit::self()->registerMainWindow(this);
 
-    auto view = openUrl(QUrl("output.tikzkit"));
+//     auto view = openUrl(QUrl("output.tikzkit"));
+    slotViewChanged(activeView());
 }
 
 MainWindow::~MainWindow()
