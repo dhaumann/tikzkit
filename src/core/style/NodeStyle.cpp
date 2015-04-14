@@ -77,6 +77,14 @@ NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
     if (json.contains("minimum-height")) {
         setMinimumHeight(tikz::Value::fromString(json["minimum-height"].toString()));
     }
+
+    if (json.contains("inner-sep")) {
+        setInnerSep(tikz::Value::fromString(json["inner-sep"].toString()));
+    }
+
+    if (json.contains("outer-sep")) {
+        setOuterSep(tikz::Value::fromString(json["outer-sep"].toString()));
+    }
 }
 
 NodeStyle::~NodeStyle()
@@ -116,6 +124,14 @@ QJsonObject NodeStyle::toJson() const
 
     if (minimumHeightSet()) {
         json["minimum-height"] = minimumHeight().toString();
+    }
+
+    if (innerSepSet()) {
+        json["inner-sep"] = innerSep().toString();
+    }
+
+    if (outerSepSet()) {
+        json["outer-sep"] = outerSep().toString();
     }
 
     return json;
