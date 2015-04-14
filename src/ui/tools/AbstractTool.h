@@ -20,6 +20,7 @@
 #ifndef TIKZ_UI_ABSTRACT_TOOL_H
 #define TIKZ_UI_ABSTRACT_TOOL_H
 
+#include "tikzgui_export.h"
 #include <QObject>
 
 class QGraphicsSceneMouseEvent;
@@ -30,6 +31,8 @@ class QGraphicsScene;
 namespace tikz {
 namespace ui {
 
+class Document;
+
 /**
  * The AbstractTool provides an interface for arbitrary tools operating on the
  * graphics scene.
@@ -38,7 +41,7 @@ namespace ui {
  * This way, child classes can show interactive tools to the user with which
  * e.g. new nodes or edges can be created etc.
  */
-class AbstractTool : public QObject
+class TIKZUI_EXPORT AbstractTool : public QObject
 {
     Q_OBJECT
 
