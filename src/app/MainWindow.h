@@ -85,6 +85,11 @@ public Q_SLOTS:
      */
     void updateWindowTitle();
 
+    /**
+     * Call this slot whenever the window title needs to be changed.
+     */
+    void updateTikzCode();
+
 public:
     /**
      * Accessor to the MainWindow wrapper interface

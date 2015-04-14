@@ -172,6 +172,16 @@ void MainWindow::setupUi()
     m_linePropertyWidget->layout()->addWidget(btn);
 
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    //
+    // next one
+    //
+    dockWidget = new QDockWidget("TikZ Code", this);
+    m_textEdit = new QTextEdit(dockWidget);
+    dockWidget->setWidget(m_textEdit);
+
+    addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
+
 }
 
 void MainWindow::setupActions()
@@ -253,12 +263,16 @@ void MainWindow::mergeView(tikz::ui::View * view)
     // undo and redo
     connect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
     connect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));
+
     connect(m_editUndo, SIGNAL(triggered()), view->document(), SLOT(undo()));
     connect(m_editRedo, SIGNAL(triggered()), view->document(), SLOT(redo()));
 
     connect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
+    connect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
 
     updateWindowTitle();
+    updateTikzCode();
+
     m_editUndo->setEnabled(view->document()->undoAvailable());
     m_editRedo->setEnabled(view->document()->redoAvailable());
 
@@ -281,6 +295,7 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     disconnect(m_editRedo, SIGNAL(triggered()), view->document(), SLOT(redo()));
 
     disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
+    disconnect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
 }
 
 void MainWindow::slotDocumentNew()
@@ -365,6 +380,17 @@ void MainWindow::updateWindowTitle()
     } else {
         setWindowTitle("TikZ Kit");
     }
+}
+
+void MainWindow::updateTikzCode()
+{
+    auto view = activeView();
+    if (!view) {
+        m_textEdit->clear();
+        return;
+    }
+
+    m_textEdit->setText(view->document()->tikzCode());
 }
 
 void MainWindow::slotViewChanged(tikz::ui::View * view)
