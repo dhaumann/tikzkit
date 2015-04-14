@@ -222,6 +222,17 @@ bool Document::load(const QUrl & fileurl)
         }
     }
 
+    // now make sure the next free uniq id is valid by finding the maximum
+    // used id, and then add "+1".
+    auto keys = d->nodeMap.keys();
+    if (keys.size()) {
+        d->nextId = *std::max_element(keys.begin(), keys.end()) + 1;
+    }
+    keys = d->pathMap.keys();
+    if (keys.size()) {
+        d->nextId = std::max(d->nextId, *std::max_element(keys.begin(), keys.end()) + 1);
+    }
+
     // keep the document name up-to-date
     d->updateDocumentName();
 
