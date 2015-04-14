@@ -19,6 +19,12 @@
 
 #include "SelectTool.h"
 
+#include "NodeItem.h"
+#include "EdgePathItem.h"
+#include <tikz/core/EdgePath.h>
+#include <tikz/core/Transaction.h>
+#include "Document.h"
+
 #include <QGraphicsScene>
 #include <QKeyEvent>
 
@@ -49,6 +55,23 @@ void SelectTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void SelectTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     qDebug() << "mouse release event";
+}
+
+void SelectTool::keyPressEvent(QKeyEvent * event)
+{
+    if (event->key() == Qt::Key_N) {
+        tikz::core::Transaction(document(), "Create Node");
+        tikz::ui::NodeItem * node = document()->createNodeItem();
+        node->setPos(tikz::Pos(0, 0));
+        node->node()->setText("x");
+    }
+
+    if (event->key() == Qt::Key_E) {
+        tikz::core::Transaction(document(), "Create Edge");
+        auto path = dynamic_cast<EdgePathItem *>(document()->createPathItem(tikz::core::Path::Line));
+        path->edgePath()->setStartPos(tikz::Pos(-1, 0, tikz::Unit::Centimeter));
+        path->edgePath()->setEndPos(tikz::Pos(1, 0, tikz::Unit::Centimeter));
+    }
 }
 
 }

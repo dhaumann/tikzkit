@@ -66,7 +66,10 @@ class SelectTool : public AbstractTool
          */
         void mouseReleaseEvent(QGraphicsSceneMouseEvent * event) override;
 
-    private:
+        /**
+         * This function is called whenever a key is pressed.
+         */
+        void keyPressEvent(QKeyEvent * event) override;
 };
 
 }
