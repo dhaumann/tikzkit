@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QKeyEvent>
+#include <QInputDialog>
 
 #include <QDebug>
 
@@ -75,6 +76,14 @@ void NodeTool::keyPressEvent(QKeyEvent * event)
         if (m_transaction.isRunning()) {
             m_transaction.cancel();
             event->accept();
+        }
+    }
+
+    if (event->key() == Qt::Key_T) {
+        bool ok = true;
+        QString text = QInputDialog::getMultiLineText(nullptr, "Set Text", "Enter node text in LaTeX", m_node->node()->text(), &ok);
+        if (ok) {
+            m_node->node()->setText(text);
         }
     }
 }
