@@ -86,9 +86,14 @@ public Q_SLOTS:
     void updateWindowTitle();
 
     /**
-     * Call this slot whenever the window title needs to be changed.
+     * Call this slot whenever document changed.
      */
     void updateTikzCode();
+
+    /**
+     * Call this slot whenever the document actions change.
+     */
+    void updateActions();
 
 public:
     /**

@@ -269,12 +269,11 @@ void MainWindow::mergeView(tikz::ui::View * view)
 
     connect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
+    connect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
 
     updateWindowTitle();
     updateTikzCode();
-
-    m_editUndo->setEnabled(view->document()->undoAvailable());
-    m_editRedo->setEnabled(view->document()->redoAvailable());
+    updateActions();
 
     m_browser->setView(view);
 }
@@ -296,6 +295,7 @@ void MainWindow::unmergeView(tikz::ui::View * view)
 
     disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
     disconnect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
+    disconnect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
 }
 
 void MainWindow::slotDocumentNew()
@@ -391,6 +391,18 @@ void MainWindow::updateTikzCode()
     }
 
     m_textEdit->setText(view->document()->tikzCode());
+}
+
+void MainWindow::updateActions()
+{
+    auto view = activeView();
+    if (view) {
+        m_editUndo->setEnabled(activeView()->document()->undoAvailable());
+        m_editRedo->setEnabled(activeView()->document()->redoAvailable());
+    } else {
+        m_editUndo->setEnabled(false);
+        m_editRedo->setEnabled(false);
+    }
 }
 
 void MainWindow::slotViewChanged(tikz::ui::View * view)
