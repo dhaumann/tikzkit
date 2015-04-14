@@ -177,12 +177,14 @@ void PropertyBrowser::setItem(TikzItem * item)
         QtProperty *property;
 
         property = d->valueManager->addProperty(tr("Line Width"));
+        property->setModified(node->style()->lineWidthSet());
         d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->lineWidth());
         d->addProperty(property, s_lineWidth);
 
         property = d->colorManager->addProperty(tr("Line Color"));
+        property->setModified(node->style()->penColorSet());
         d->colorManager->setValue(property, node->style()->penColor());
         d->addProperty(property, s_penColor);
 
@@ -191,18 +193,26 @@ void PropertyBrowser::setItem(TikzItem * item)
         d->addProperty(property, s_penOpacity);
 
         auto doubleLine = d->boolManager->addProperty(tr("Double Line"));
+        property->setModified(node->style()->doubleLineSet());
         d->boolManager->setValue(doubleLine, node->style()->doubleLine());
         d->addProperty(doubleLine, s_doubleLine);
 
         property = d->valueManager->addProperty(tr("Inner Line Width"));
+        property->setModified(node->style()->innerLineWidthSet());
         d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->innerLineWidth());
         d->addSubProperty(doubleLine, property, s_innerLineWidth);
 
         property = d->colorManager->addProperty(tr("Inner Line Color"));
+        property->setModified(node->style()->innerLineColorSet());
         d->colorManager->setValue(property, node->style()->innerLineColor());
         d->addSubProperty(doubleLine, property, s_innerLineColor);
+
+        property = d->colorManager->addProperty(tr("Fill Color"));
+        property->setModified(node->style()->fillColorSet());
+        d->colorManager->setValue(property, node->style()->fillColor());
+        d->addProperty(property, s_fillColor);
 
     }
 }
@@ -224,6 +234,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val
     if (node) {
         if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
             node->style()->setProperty(name.toLatin1(), val);
+            property->setModified(true);
         }
     }
 }
