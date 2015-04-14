@@ -25,10 +25,13 @@
 namespace tikz {
 namespace ui {
 
-AbstractTool::AbstractTool(QGraphicsScene * scene)
+AbstractTool::AbstractTool(tikz::ui::Document * doc, QGraphicsScene * scene)
     : QObject(scene)
+    , m_document(doc)
     , m_scene(scene)
 {
+    Q_ASSERT(doc);
+    Q_ASSERT(scene);
 }
 
 AbstractTool::~AbstractTool()
@@ -38,6 +41,11 @@ AbstractTool::~AbstractTool()
 QGraphicsScene * AbstractTool::scene() const
 {
     return m_scene;
+}
+
+tikz::ui::Document * AbstractTool::document() const
+{
+    return m_document;
 }
 
 void AbstractTool::mouseEnteredScene()

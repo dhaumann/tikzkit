@@ -37,7 +37,7 @@ class SelectTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        SelectTool(QGraphicsScene * scene);
+        SelectTool(tikz::ui::Document * doc, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.

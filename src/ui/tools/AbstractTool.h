@@ -46,7 +46,7 @@ class AbstractTool : public QObject
         /**
          * Constructor with graphics scene @p scene.
          */
-        AbstractTool(QGraphicsScene * scene);
+        AbstractTool(tikz::ui::Document * doc, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.
@@ -57,6 +57,11 @@ class AbstractTool : public QObject
          * Returns the graphics scene this tool works on.
          */
         QGraphicsScene * scene() const;
+
+        /**
+         * Returns the Document this tool works on.
+         */
+        tikz::ui::Document * document() const;
 
     //
     // sub classes: reimplement as needed
@@ -100,6 +105,8 @@ class AbstractTool : public QObject
         virtual void keyPressEvent(QKeyEvent * event);
 
     private:
+        // pointer to the Document
+        tikz::ui::Document * m_document;
         // pointer to graphics scene
         QGraphicsScene * m_scene;
 };

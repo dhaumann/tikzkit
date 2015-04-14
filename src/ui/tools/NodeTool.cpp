@@ -38,7 +38,7 @@ namespace tikz {
 namespace ui {
 
 NodeTool::NodeTool(NodeItem * node, QGraphicsScene * scene)
-    : AbstractTool(scene)
+    : AbstractTool(node->document(), scene)
     , m_node(node)
     , m_transaction(node->document(), false)
 {

@@ -35,8 +35,8 @@
 namespace tikz {
 namespace ui {
 
-ProxyTool::ProxyTool(QGraphicsScene * graphicsScene)
-    : AbstractTool(graphicsScene)
+ProxyTool::ProxyTool(tikz::ui::Document * doc, QGraphicsScene * graphicsScene)
+    : AbstractTool(doc, graphicsScene)
     , m_tool(nullptr)
 {
     // keep track of selected items to always select correct tool
@@ -115,7 +115,7 @@ void ProxyTool::updateTool()
     // make sure we always have a valid tool
     //
     if (! m_tool) {
-        m_tool = new SelectTool(scene());
+        m_tool = new SelectTool(document(), scene());
     }
 }
 

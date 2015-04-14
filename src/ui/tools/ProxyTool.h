@@ -38,7 +38,7 @@ class ProxyTool : public AbstractTool
         /**
          * Constructor with graphics scene @p scene.
          */
-        ProxyTool(QGraphicsScene * scene);
+        ProxyTool(tikz::ui::Document * doc, QGraphicsScene * scene);
 
         /**
          * Virtual destructor.

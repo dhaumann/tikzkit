@@ -27,8 +27,8 @@
 namespace tikz {
 namespace ui {
 
-SelectTool::SelectTool(QGraphicsScene * scene)
-    : AbstractTool(scene)
+SelectTool::SelectTool(tikz::ui::Document * doc, QGraphicsScene * scene)
+    : AbstractTool(doc, scene)
 {
 }
 
