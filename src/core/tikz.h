@@ -73,7 +73,7 @@ enum TextAlignment {
 TIKZCORE_EXPORT QString toString(tikz::TextAlignment alignment);
 
 /**
- * Conver the string @p alignment to an enum tikz::TextAlignment.
+ * Convert the string @p alignment to an enum tikz::TextAlignment.
  */
 TIKZCORE_EXPORT tikz::TextAlignment toTextAlignment(const QString & alignment);
 
@@ -119,7 +119,7 @@ enum Shape {
 TIKZCORE_EXPORT QString toString(tikz::Shape shape);
 
 /**
- * Conver the string @p shape to an enum tikz::Shape.
+ * Convert the string @p shape to an enum tikz::Shape.
  */
 TIKZCORE_EXPORT tikz::Shape toShape(const QString & shape);
 
@@ -193,12 +193,16 @@ enum Arrow {
 TIKZCORE_EXPORT QString toString(tikz::Arrow arrow);
 
 /**
- * Conver the string @p arrow to an enum tikz::Arrow.
+ * Convert the string @p arrow to an enum tikz::Arrow.
  */
 TIKZCORE_EXPORT tikz::Arrow toArrow(const QString & arrow);
 
+/**
+ * Available path types.
+ */
 enum class PathType : int {
-    Line = 0, // (a) -- (b)
+    Invalid = 0,
+    Line, // (a) -- (b)
     HVLine, // (a) -| (b)
     VHLine, // (a) |- (b)
     BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
@@ -206,9 +210,18 @@ enum class PathType : int {
     BezierCurve, // (a) .. controls (b) and (c) .. (d)
     Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
     Rectangle, // (a) rectangle (b)
-    Grid, // (a) grid (b)
-    Invalid
+    Grid // (a) grid (b)
 };
+
+/**
+ * Convert PathType @p type to a QString.
+ */
+TIKZCORE_EXPORT QString toString(tikz::PathType type);
+
+/**
+ * Convert the string @p type to an enum tikz::PathType.
+ */
+TIKZCORE_EXPORT tikz::PathType toPathType(const QString & type);
 
 }
 

@@ -66,26 +66,6 @@ bool DeserializeVisitor::load(const QString & filename)
     return true;
 }
 
-static PathType pathType(const QString & type)
-{
-    PathType t = PathType::Invalid;
-
-    t = (type == "to") ? PathType::Line
-        : (type == "-|") ? PathType::HVLine
-        : (type == "|-") ? PathType::VHLine
-        : (type == "bend") ? PathType::BendCurve
-        : (type == "in-out") ? PathType::InOutCurve
-        : (type == "bezier") ? PathType::BezierCurve
-        : (type == "ellipse") ? PathType::Ellipse
-        : (type == "rectangle") ? PathType::Rectangle
-        : (type == "grid") ? PathType::Grid
-        : PathType::Invalid;
-
-    Q_ASSERT(t != PathType::Invalid);
-
-    return t;
-}
-
 void DeserializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
@@ -100,7 +80,7 @@ void DeserializeVisitor::visit(Document * doc)
         const qint64 id = idAsStr.toLongLong();
         const QString type = m_root["paths"].toMap()[QString("path-%1").arg(id)].toMap()["type"].toString();
 //         qDebug() << type << pathType(type);
-        doc->createPath(pathType(type), id);
+        doc->createPath(toPathType(type), id);
     }
 
     // load document style

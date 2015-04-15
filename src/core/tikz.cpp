@@ -273,6 +273,45 @@ tikz::Arrow toArrow(const QString & arrow)
     return Arrow::NoArrow;
 }
 
+QString toString(tikz::PathType type)
+{
+    switch (type) {
+        case PathType::Invalid: Q_ASSERT(false); return "to";
+        case PathType::Line: return "to";
+        case PathType::HVLine: return "-|";
+        case PathType::VHLine: return "|-";
+        case PathType::BendCurve: return "bend";
+        case PathType::InOutCurve: return "in-out";
+        case PathType::BezierCurve: return "bezier";
+        case PathType::Ellipse: return "ellipse";
+        case PathType::Rectangle: return "rectangle";
+        case PathType::Grid: return "grid";
+    }
+
+    Q_ASSERT(false);
+
+    return QString();
+}
+
+PathType toPathType(const QString & type)
+{
+    const PathType t
+        = (type == "to") ? PathType::Line
+        : (type == "-|") ? PathType::HVLine
+        : (type == "|-") ? PathType::VHLine
+        : (type == "bend") ? PathType::BendCurve
+        : (type == "in-out") ? PathType::InOutCurve
+        : (type == "bezier") ? PathType::BezierCurve
+        : (type == "ellipse") ? PathType::Ellipse
+        : (type == "rectangle") ? PathType::Rectangle
+        : (type == "grid") ? PathType::Grid
+        : PathType::Invalid;
+
+    Q_ASSERT(t != PathType::Invalid);
+
+    return t;
+}
+
 } // namespace tikz
 
 // kate: indent-width 4; replace-tabs on;
