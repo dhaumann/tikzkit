@@ -58,7 +58,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Returns the element type of this edge.
          */
-        Path::Type type() const override;
+        PathType type() const override;
 
         /**
          * Get the start of this edge as a shared MetaPos object.
@@ -198,7 +198,7 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * @param id unique id of the path
          * @param doc associated document
          */
-        EdgePath(Path::Type type, qint64 id, Document* doc);
+        EdgePath(PathType type, qint64 id, Document* doc);
 
         /**
          * Destruct the node by saving the start and end pos or node connection.

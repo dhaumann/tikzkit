@@ -50,9 +50,9 @@ EllipsePath::~EllipsePath()
     delete d;
 }
 
-Path::Type EllipsePath::type() const
+PathType EllipsePath::type() const
 {
-    return Path::Ellipse;
+    return PathType::Ellipse;
 }
 
 void EllipsePath::deconstruct()

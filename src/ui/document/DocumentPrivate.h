@@ -145,7 +145,7 @@ class DocumentPrivate : public tikz::ui::Document
          * If the path is not needed anymore, delete it by
          * calling deletePathItem(pathItem).
          */
-        tikz::ui::PathItem * createPathItem(tikz::core::Path::Type type = tikz::core::Path::Line) override;
+        tikz::ui::PathItem * createPathItem(tikz::PathType type = tikz::PathType::Line) override;
 
         /**
          * Remove @p node from the document by deleting the node object.
@@ -192,7 +192,7 @@ class DocumentPrivate : public tikz::ui::Document
         /**
          * Create a new path associated with this document with @p id.
          */
-        tikz::core::Path * createPath(tikz::core::Path::Type type, qint64 id) override;
+        tikz::core::Path * createPath(tikz::PathType type, qint64 id) override;
 
         /**
          * Delete path @p id associated with this document.

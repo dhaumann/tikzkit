@@ -197,6 +197,19 @@ TIKZCORE_EXPORT QString toString(tikz::Arrow arrow);
  */
 TIKZCORE_EXPORT tikz::Arrow toArrow(const QString & arrow);
 
+enum class PathType : int {
+    Line = 0, // (a) -- (b)
+    HVLine, // (a) -| (b)
+    VHLine, // (a) |- (b)
+    BendCurve, // (a) to[bend left=20, looseness=1.2] (b)
+    InOutCurve, // (a) to[in=20, out=30] (b)
+    BezierCurve, // (a) .. controls (b) and (c) .. (d)
+    Ellipse, // (a) ellipse[x radius=1cm, y radius=2cm]
+    Rectangle, // (a) rectangle (b)
+    Grid, // (a) grid (b)
+    Invalid
+};
+
 }
 
 #endif // TIKZ_H

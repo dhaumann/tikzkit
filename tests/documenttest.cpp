@@ -39,7 +39,7 @@ void DocumentTest::documentTest()
     doc.undoManager()->redo();
     QCOMPARE(QString(doc.toJson()), QString("[ { \"node\" : 1 }, { \"node\" : 2 } ]"));
 
-    tikz::core::Path * path = doc.createPath();
+    tikz::PathType * path = doc.createPath();
     QCOMPARE(QString(doc.toJson()), QString("[ { \"node\" : 1 }, { \"node\" : 2 }, { \"edge\" : 3 } ]"));
 
     edge->setStartNode(doc.nodeFromId(1));

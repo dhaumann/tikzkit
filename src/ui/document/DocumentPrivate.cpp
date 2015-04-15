@@ -146,7 +146,7 @@ View * DocumentPrivate::createView(QWidget * parent,
 
     beginTransaction("Create Paths");
     // an ellipse path
-    tikz::ui::PathItem* path = createPathItem(tikz::core::Path::Ellipse);
+    tikz::ui::PathItem* path = createPathItem(tikz::PathType::Ellipse);
     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
     tikz::core::EdgeStyle es;
     es.setStyle(ellipse->style());
@@ -156,7 +156,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     ellipse->setStyle(es);
 
     // add a line path
-    path = createPathItem(tikz::core::Path::Line);
+    path = createPathItem(tikz::PathType::Line);
     auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
     es.setStyle(edge->style());
     es.setLineWidth(tikz::Value::semiThick());
@@ -468,10 +468,10 @@ NodeItem * DocumentPrivate::createNodeItem()
     return m_nodeMap[node->id()];
 }
 
-tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::core::Path::Type type)
+tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::PathType type)
 {
     // create path
-    tikz::core::Path * path = Document::createPath(type);
+    auto path = Document::createPath(type);
     Q_ASSERT(m_pathMap.contains(path->id()));
 
     return m_pathMap[path->id()];
@@ -534,31 +534,31 @@ void DocumentPrivate::deleteNode(qint64 id)
     tikz::core::Document::deleteNode(id);
 }
 
-tikz::core::Path * DocumentPrivate::createPath(tikz::core::Path::Type type, qint64 id)
+tikz::core::Path * DocumentPrivate::createPath(tikz::PathType type, qint64 id)
 {
-    tikz::core::Path * path = Document::createPath(type, id);
+    auto path = Document::createPath(type, id);
     Q_ASSERT(id == path->id());
     Q_ASSERT(! m_pathMap.contains(id));
 
     // create GUI item
     tikz::ui::PathItem * pathItem = nullptr;
     switch (type) {
-        case tikz::core::Path::Line: {
+        case tikz::PathType::Line: {
             pathItem = new tikz::ui::EdgePathItem(path);
             break;
         }
-        case tikz::core::Path::HVLine: break;
-        case tikz::core::Path::VHLine: break;
-        case tikz::core::Path::BendCurve: break;
-        case tikz::core::Path::InOutCurve: break;
-        case tikz::core::Path::BezierCurve: break;
-        case tikz::core::Path::Ellipse: {
+        case tikz::PathType::HVLine: break;
+        case tikz::PathType::VHLine: break;
+        case tikz::PathType::BendCurve: break;
+        case tikz::PathType::InOutCurve: break;
+        case tikz::PathType::BezierCurve: break;
+        case tikz::PathType::Ellipse: {
             pathItem = new tikz::ui::EllipsePathItem(path);
             break;
         }
-        case tikz::core::Path::Rectangle: break;
-        case tikz::core::Path::Grid: break;
-        case tikz::core::Path::Invalid:
+        case tikz::PathType::Rectangle: break;
+        case tikz::PathType::Grid: break;
+        case tikz::PathType::Invalid:
         default: break;
     }
 

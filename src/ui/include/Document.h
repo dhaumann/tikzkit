@@ -111,7 +111,7 @@ public:
      * If the path is not needed anymore, delete it by
      * calling deletePathItem(pathItem).
      */
-    virtual tikz::ui::PathItem * createPathItem(tikz::core::Path::Type type = tikz::core::Path::Line) = 0;
+    virtual tikz::ui::PathItem * createPathItem(tikz::PathType type = tikz::PathType::Line) = 0;
 
     /**
      * Remove @p node from the document by deleting the node object.

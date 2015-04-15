@@ -48,9 +48,9 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         virtual ~EllipsePath();
 
         /**
-         * Returns type tikz::core::Path::Ellipse.
+         * Returns type tikz::PathType::Ellipse.
          */
-        Path::Type type() const override;
+        PathType type() const override;
 
     //
     // Node manipulation

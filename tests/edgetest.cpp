@@ -22,7 +22,7 @@ void EdgeTest::edgeTest()
 {
 #if  0
     tikz::core::Document doc;
-    tikz::core::Path * path = doc.createPath();
+    tikz::PathType * path = doc.createPath();
 
     QCOMPARE(edge->start().pos(), QPointF(0, 0));
     QCOMPARE(edge->end().pos(), QPointF(0, 0));

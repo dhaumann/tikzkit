@@ -69,7 +69,7 @@ class UndoDeletePath : public UndoItem
         /**
          * Path type.
          */
-        Path::Type m_type;
+        PathType m_type;
 
         /**
          * The edge style of the created edge

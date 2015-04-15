@@ -173,9 +173,9 @@ void TikzExportVisitor::visit(Path * path)
     QString cmd;
 
     switch (path->type()) {
-        case Path::Line:
-        case Path::HVLine:
-        case Path::VHLine: {
+        case PathType::Line:
+        case PathType::HVLine:
+        case PathType::VHLine: {
             auto edge = static_cast<tikz::core::EdgePath*>(path);
             //
             // compute start & end
@@ -188,23 +188,23 @@ void TikzExportVisitor::visit(Path * path)
             //
             QString to;
             switch (edge->type()) {
-                case Path::Type::Line: to = "--"; break;
-                case Path::Type::HVLine: to = "-|"; break;
-                case Path::Type::VHLine: to = "|-"; break;
+                case PathType::Line: to = "--"; break;
+                case PathType::HVLine: to = "-|"; break;
+                case PathType::VHLine: to = "|-"; break;
                 default: Q_ASSERT(false); break;
             }
             cmd = "\\draw" + options + " " + startCoord + " " + to + " " + endCoord + ";";
         }
-        case Path::BendCurve: {
+        case PathType::BendCurve: {
             break;
         }
-        case Path::InOutCurve: {
+        case PathType::InOutCurve: {
             break;
         }
-        case Path::BezierCurve: {
+        case PathType::BezierCurve: {
             break;
         }
-        case Path::Ellipse: {
+        case PathType::Ellipse: {
             auto ellipsePath = static_cast<tikz::core::EllipsePath*>(path);
 
             //
@@ -234,10 +234,10 @@ void TikzExportVisitor::visit(Path * path)
             cmd = "\\draw" + options + " " + center + " circle [" + radius + "];";
             break;
         }
-        case Path::Rectangle: {
+        case PathType::Rectangle: {
             break;
         }
-        case Path::Grid: {
+        case PathType::Grid: {
             break;
         }
         default: break;

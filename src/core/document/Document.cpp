@@ -458,7 +458,7 @@ QVector<Path*> Document::paths() const
     return d->paths;
 }
 
-Path * Document::createPath(Path::Type type)
+Path * Document::createPath(PathType type)
 {
     // create new edge, push will call ::redo()
     const qint64 id = d->uniqueId();
@@ -565,23 +565,23 @@ void Document::deleteNode(qint64 id)
     delete node;
 }
 
-Path * Document::createPath(Path::Type type, qint64 id)
+Path * Document::createPath(PathType type, qint64 id)
 {
     Q_ASSERT(id >= 0);
 
     // create new path
     Path* path = nullptr;
     switch(type) {
-        case Path::Line:
-        case Path::HVLine:
-        case Path::VHLine:
-        case Path::BendCurve:
-        case Path::InOutCurve:
-        case Path::BezierCurve: {
+        case PathType::Line:
+        case PathType::HVLine:
+        case PathType::VHLine:
+        case PathType::BendCurve:
+        case PathType::InOutCurve:
+        case PathType::BezierCurve: {
             path = new EdgePath(type, id, this);
             break;
         }
-        case Path::Ellipse:
+        case PathType::Ellipse:
             path = new EllipsePath(id, this);
             break;
         default:

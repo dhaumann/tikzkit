@@ -306,7 +306,7 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          * If the path is not needed anymore, delete it with deletePath().
          * @param type the path type
          */
-        Path * createPath(tikz::core::Path::Type type = Path::Line);
+        Path * createPath(tikz::PathType type = PathType::Line);
 
         /**
          * Remove @p path from the document by deleting the path object.
@@ -332,7 +332,7 @@ class TIKZCORE_EXPORT Document : public ConfigObject
         /**
          * Create a new path associated with this document with @p id.
          */
-        virtual Path * createPath(Path::Type type, qint64 id);
+        virtual Path * createPath(PathType type, qint64 id);
 
         /**
          * Delete path @p id associated with this document.

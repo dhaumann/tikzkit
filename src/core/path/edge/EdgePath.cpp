@@ -34,7 +34,7 @@ class EdgePathPrivate
         {}
 
         // the element type of this edge
-        Path::Type type;
+        PathType type;
 
         // start meta node this edge points to
         MetaPos start;
@@ -43,7 +43,7 @@ class EdgePathPrivate
         MetaPos end;
 };
 
-EdgePath::EdgePath(Type type, qint64 id, Document* doc)
+EdgePath::EdgePath(PathType type, qint64 id, Document* doc)
     : Path(id, doc)
     , d(new EdgePathPrivate(doc))
 {
@@ -100,7 +100,7 @@ void EdgePath::detachFromNode(Node * node)
     Q_ASSERT(d->end.node() != node);
 }
 
-Path::Type EdgePath::type() const
+PathType EdgePath::type() const
 {
     return d->type;
 }

@@ -35,7 +35,7 @@ class UndoCreatePath : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreatePath(Path::Type type, qint64 id, Document * doc);
+        UndoCreatePath(PathType type, qint64 id, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -71,7 +71,7 @@ class UndoCreatePath : public UndoItem
         /**
          * Path type.
          */
-        const Path::Type m_type;
+        const PathType m_type;
 };
 
 }

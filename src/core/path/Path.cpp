@@ -53,9 +53,9 @@ tikz::EntityType Path::entityType() const
     return EntityType::Path;
 }
 
-Path::Type Path::type() const
+PathType Path::type() const
 {
-    return Invalid;
+    return PathType::Invalid;
 }
 
 void Path::deconstruct()

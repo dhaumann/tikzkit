@@ -94,18 +94,18 @@ void ProxyTool::updateTool()
             m_tool = new NodeTool(static_cast<NodeItem *>(items[0]), scene());
         } else if (dynamic_cast<tikz::ui::PathItem*>(items[0])) {
             tikz::ui::PathItem * path = static_cast<tikz::ui::PathItem *>(items[0]);
-            const tikz::core::Path::Type type = path->path()->type();
+            const tikz::PathType type = path->path()->type();
             switch (type) {
-                case tikz::core::Path::Line: m_tool = new LineTool(path, scene()); break;
-                case tikz::core::Path::HVLine: break;
-                case tikz::core::Path::VHLine: break;
-                case tikz::core::Path::BendCurve: break;
-                case tikz::core::Path::InOutCurve: break;
-                case tikz::core::Path::BezierCurve: break;
-                case tikz::core::Path::Ellipse: m_tool = new EllipseTool(path, scene()); break;
-                case tikz::core::Path::Rectangle: break;
-                case tikz::core::Path::Grid: break;
-                case tikz::core::Path::Invalid: break;
+                case tikz::PathType::Line: m_tool = new LineTool(path, scene()); break;
+                case tikz::PathType::HVLine: break;
+                case tikz::PathType::VHLine: break;
+                case tikz::PathType::BendCurve: break;
+                case tikz::PathType::InOutCurve: break;
+                case tikz::PathType::BezierCurve: break;
+                case tikz::PathType::Ellipse: m_tool = new EllipseTool(path, scene()); break;
+                case tikz::PathType::Rectangle: break;
+                case tikz::PathType::Grid: break;
+                case tikz::PathType::Invalid: break;
                 default: Q_ASSERT(false);
             }
         }

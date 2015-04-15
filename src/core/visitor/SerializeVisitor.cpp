@@ -127,43 +127,43 @@ void SerializeVisitor::visit(Path * path)
     auto edge = dynamic_cast<tikz::core::EdgePath*>(path);
 
     switch (path->type()) {
-        case Path::Line:
+        case PathType::Line:
             map.insert("type", "to");
             serializeEdge(map, edge);
             break;
-        case Path::HVLine:
+        case PathType::HVLine:
             map.insert("type", "-|");
             serializeEdge(map, edge);
             break;
-        case Path::VHLine:
+        case PathType::VHLine:
             map.insert("type", "|-");
             serializeEdge(map, edge);
             break;
-        case Path::BendCurve:
+        case PathType::BendCurve:
             map.insert("type", "bend");
             serializeEdge(map, edge);
             break;
-        case Path::InOutCurve:
+        case PathType::InOutCurve:
             map.insert("type", "in-out");
             serializeEdge(map, edge);
             break;
-        case Path::BezierCurve:
+        case PathType::BezierCurve:
             map.insert("type", "bezier");
             serializeEdge(map, edge);
             break;
-        case Path::Ellipse:
+        case PathType::Ellipse:
             map.insert("type", "ellipse");
             serializeEdge(map, dynamic_cast<tikz::core::EllipsePath*>(path));
             break;
-        case Path::Rectangle:
+        case PathType::Rectangle:
             map.insert("type", "rectangle");
             serializeEdge(map, edge);
             break;
-        case Path::Grid:
+        case PathType::Grid:
             map.insert("type", "grid");
             serializeEdge(map, edge);
             break;
-        case Path::Invalid:
+        case PathType::Invalid:
             Q_ASSERT(false);
             break;
         default: break;

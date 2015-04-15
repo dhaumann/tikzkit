@@ -66,22 +66,22 @@ bool DeserializeVisitor::load(const QString & filename)
     return true;
 }
 
-static Path::Type pathType(const QString & type)
+static PathType pathType(const QString & type)
 {
-    Path::Type t = Path::Invalid;
+    PathType t = PathType::Invalid;
 
-    t = (type == "to") ? Path::Line
-        : (type == "-|") ? Path::HVLine
-        : (type == "|-") ? Path::VHLine
-        : (type == "bend") ? Path::BendCurve
-        : (type == "in-out") ? Path::InOutCurve
-        : (type == "bezier") ? Path::BezierCurve
-        : (type == "ellipse") ? Path::Ellipse
-        : (type == "rectangle") ? Path::Rectangle
-        : (type == "grid") ? Path::Grid
-        : Path::Invalid;
+    t = (type == "to") ? PathType::Line
+        : (type == "-|") ? PathType::HVLine
+        : (type == "|-") ? PathType::VHLine
+        : (type == "bend") ? PathType::BendCurve
+        : (type == "in-out") ? PathType::InOutCurve
+        : (type == "bezier") ? PathType::BezierCurve
+        : (type == "ellipse") ? PathType::Ellipse
+        : (type == "rectangle") ? PathType::Rectangle
+        : (type == "grid") ? PathType::Grid
+        : PathType::Invalid;
 
-    Q_ASSERT(t != Path::Invalid);
+    Q_ASSERT(t != PathType::Invalid);
 
     return t;
 }
@@ -133,9 +133,9 @@ void DeserializeVisitor::visit(Path * path)
     tikz::core::MetaPos mp(path->document());
 
     switch (path->type()) {
-        case Path::Line:
-        case Path::HVLine:
-        case Path::VHLine: {
+        case PathType::Line:
+        case PathType::HVLine:
+        case PathType::VHLine: {
             auto edge = static_cast<tikz::core::EdgePath*>(path);
             mp.fromString(map["start"].toString());
             edge->setStartMetaPos(mp);
@@ -143,18 +143,18 @@ void DeserializeVisitor::visit(Path * path)
             edge->setEndMetaPos(mp);
             break;
         }
-        case Path::BendCurve:
-        case Path::InOutCurve:
-        case Path::BezierCurve:
-        case Path::Ellipse: {
+        case PathType::BendCurve:
+        case PathType::InOutCurve:
+        case PathType::BezierCurve:
+        case PathType::Ellipse: {
             auto ellipse = static_cast<tikz::core::EllipsePath*>(path);
             mp.fromString(map["center"].toString());
             ellipse->setMetaPos(mp);
             break;
         }
-        case Path::Rectangle:
-        case Path::Grid:
-        case Path::Invalid:
+        case PathType::Rectangle:
+        case PathType::Grid:
+        case PathType::Invalid:
             Q_ASSERT(false);
             break;
         default: break;
