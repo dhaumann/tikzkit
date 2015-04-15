@@ -217,12 +217,12 @@ void MainWindow::setupActions()
     m_filePreview->setText(QApplication::translate("MainWindow", "Preview", 0));
 
     m_editUndo = new QAction(this);
-    m_editUndo->setIcon(QIcon::fromTheme("edit-undo"));
+    m_editUndo->setIcon(QIcon::fromTheme("edit-undo", QIcon(":/icons/icons/edit-undo.png")));
     m_editUndo->setText(QApplication::translate("MainWindow", "&Undo", 0));
     m_editUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0));
 
     m_editRedo = new QAction(this);
-    m_editRedo->setIcon(QIcon::fromTheme("edit-redo"));
+    m_editRedo->setIcon(QIcon::fromTheme("edit-redo", QIcon(":/icons/icons/edit-redo.png")));
     m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", 0));
     m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", 0));
 
