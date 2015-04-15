@@ -35,12 +35,13 @@ public:
 
     QVarLengthArray<QLineF, 256> majorLines;
     QVarLengthArray<QLineF, 256> minorLines;
+    QVarLengthArray<QLineF, 256> tenthLines;
 
     /**
      * Returns the number of lines that are visible per unit:
-     * - 1 equals only major lines
-     * - 2 means each unit is subdivided by one minor line
-     * - 3, ...
+     * -  1 equals only major lines
+     * -  2 means each unit is subdivided once
+     * - 10 means each unit is subdivided 10 times line
      * The return value is guaranteed to be greater or equal to 1.
      */
     int linesPerUnit() const
@@ -51,7 +52,13 @@ public:
         // we want a line each 5 mm
         int lpu = 1;
         while ((oneUnitOnScreen / lpu) >= tikz::Value(10, tikz::Millimeter)) {
-            lpu *= 2;
+            if (lpu == 1) {
+                lpu *= 2;
+            } else if (lpu == 2) {
+                lpu *= 5;
+            } else {
+                break;
+            }
         }
 
         Q_ASSERT(lpu > 0);
@@ -68,11 +75,12 @@ public:
             rect = r;
 
             // we want a line each 5 mm
-            const int lpu = linesPerUnit();
+            const auto lpu = linesPerUnit();
 //             qDebug() << "lines per unit" << lpu;
 
             majorLines.clear();
             minorLines.clear();
+            tenthLines.clear();
 
             const Value one(1, unit);
 
@@ -86,12 +94,31 @@ public:
             // horizontal lines
             //
             int i = 0;
-            for (tikz::Value x = left; x.toPoint() < rect.right(); x += one / lpu) {
-                const QLineF line(x.toPoint(), rect.top(), x.toPoint(), rect.bottom());
-                if ((i % lpu) == 0) {
-                    majorLines.append(line);
-                } else {
-                    minorLines.append(line);
+            for (tikz::Value x = left; x.toPoint() < rect.right(); x += one) {
+                majorLines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
+
+                if (lpu >= 2) {
+                    auto tx = x + (one / 2);
+                    minorLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                }
+
+                if (lpu == 10) {
+                    auto tx = x + 1 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 2 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 3 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 4 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 6 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 7 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 8 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    tx = x + 9 * (one / 10);
+                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
                 }
                 ++i;
             }
@@ -100,12 +127,31 @@ public:
             // vertical lines
             //
             i = 0;
-            for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one / lpu) {
-                const QLineF line(rect.left(), y.toPoint(), rect.right(), y.toPoint());
-                if ((i % lpu) == 0) {
-                    majorLines.append(line);
-                } else {
-                    minorLines.append(line);
+            for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one) {
+                majorLines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
+
+                if (lpu >= 2) {
+                    auto ty = y + (one / 2);
+                    minorLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                }
+
+                if (lpu == 10) {
+                    auto ty = y + 1 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 2 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 3 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 4 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 6 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 7 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 8 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    ty = y + 9 * (one / 10);
+                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
                 }
                 ++i;
             }
@@ -136,9 +182,13 @@ void Grid::draw(QPainter * p, const QRectF & rect)
     p->setPen(pen);
     p->drawLines(d->majorLines.data(), d->majorLines.size());
 
-    pen.setDashPattern(QVector<qreal>() << 5 << 5);
+    pen.setDashPattern(QVector<qreal>() << 6 << 3);
     p->setPen(pen);
     p->drawLines(d->minorLines.data(), d->minorLines.size());
+
+    pen.setDashPattern(QVector<qreal>() << 1 << 2);
+    p->setPen(pen);
+    p->drawLines(d->tenthLines.data(), d->tenthLines.size());
 
     p->restore();
 }
