@@ -95,7 +95,8 @@ public:
             //
             int i = 0;
             for (tikz::Value x = left; x.toPoint() < rect.right(); x += one) {
-                majorLines.append(QLineF(x.toPoint(), rect.top(), x.toPoint(), rect.bottom()));
+                QLineF l(x.toPoint(), rect.top(), x.toPoint(), rect.bottom());
+                majorLines.append(l);
 
                 if (lpu >= 2) {
                     auto tx = x + (one / 2);
@@ -103,22 +104,24 @@ public:
                 }
 
                 if (lpu == 10) {
-                    auto tx = x + 1 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 2 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 3 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 4 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 6 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 7 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 8 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
-                    tx = x + 9 * (one / 10);
-                    tenthLines.append(QLineF(tx.toPoint(), rect.top(), tx.toPoint(), rect.bottom()));
+                    const qreal tenth = (one / 10).toPoint();
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+
+                    l.translate(2 * tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(tenth, 0);
+                    tenthLines.append(l);
                 }
                 ++i;
             }
@@ -128,7 +131,8 @@ public:
             //
             i = 0;
             for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one) {
-                majorLines.append(QLineF(rect.left(), y.toPoint(), rect.right(), y.toPoint()));
+                QLineF l(rect.left(), y.toPoint(), rect.right(), y.toPoint());
+                majorLines.append(l);
 
                 if (lpu >= 2) {
                     auto ty = y + (one / 2);
@@ -136,22 +140,24 @@ public:
                 }
 
                 if (lpu == 10) {
-                    auto ty = y + 1 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 2 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 3 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 4 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 6 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 7 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 8 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
-                    ty = y + 9 * (one / 10);
-                    tenthLines.append(QLineF(rect.left(), ty.toPoint(), rect.right(), ty.toPoint()));
+                    const qreal tenth = (one / 10).toPoint();
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+
+                    l.translate(2 * tenth, 0);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
+                    l.translate(0, tenth);
+                    tenthLines.append(l);
                 }
                 ++i;
             }
