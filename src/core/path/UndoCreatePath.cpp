@@ -31,7 +31,7 @@ UndoCreatePath::UndoCreatePath(PathType type, qint64 id, Document * doc)
 }
 
 UndoCreatePath::UndoCreatePath(const QJsonObject & json, Document * doc)
-    : UndoCreatePath(static_cast<PathType>(json["path-type"].toString().toInt()),
+    : UndoCreatePath(toPathType(json["path-type"].toString()),
                      json["path-id"].toString().toLongLong(),
                      doc)
 {
@@ -56,7 +56,7 @@ QJsonObject UndoCreatePath::toJsonObject() const
     QJsonObject json;
     json["type"] = "path-create";
     json["path-id"] = QString::number(m_id);
-    json["path-type"] = static_cast<int>(m_type); // FIXME: serialize to string
+    json["path-type"] = toString(m_type);
     return json;
 }
 
