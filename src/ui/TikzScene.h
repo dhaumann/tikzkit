@@ -93,6 +93,12 @@ class TIKZUI_EXPORT TikzScene : public QGraphicsScene
          */
         void keyPressEvent(QKeyEvent * keyEvent) override;
 
+    private Q_SLOTS:
+        /**
+         * Updates the scene rect such that the entire contents is visible.
+         */
+        void updateSceneRect();
+
     private:
         TikzScenePrivate * const d;
 };

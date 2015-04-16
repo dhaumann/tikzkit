@@ -66,9 +66,8 @@ TikzScene::TikzScene(DocumentPrivate * doc)
     d->editMode = TikzEditMode::ModeSelect;
     d->tool = new ProxyTool(doc, this);
 
-    // set sane scene rect
-    setSceneRect(-tikz::cm2pt(15), -tikz::cm2pt(15),
-                 tikz::cm2pt(30), tikz::cm2pt(30));
+    connect(doc, &DocumentPrivate::changed, this, &TikzScene::updateSceneRect);
+    updateSceneRect();
 }
 
 TikzScene::~TikzScene()
@@ -173,6 +172,16 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
 
     // nothing done with the event, pass on
     QGraphicsScene::keyPressEvent(keyEvent);
+}
+
+void TikzScene::updateSceneRect()
+{
+    // set sane scene rect
+    setSceneRect(-tikz::cm2pt(15), -tikz::cm2pt(15),
+                 tikz::cm2pt(30), tikz::cm2pt(30));
+    return;
+    qDebug() << "ITEM SCENERECT CHANGED";
+    setSceneRect(itemsBoundingRect());
 }
 
 }
