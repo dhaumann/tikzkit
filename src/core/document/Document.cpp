@@ -125,6 +125,9 @@ Document::Document(QObject * parent)
     d->nextId = 0;
     d->style = new Style(d->uniqueId(), this);
 
+    // Debugging:
+    d->style->setLineWidth(tikz::Value::veryThick());
+
     connect(d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
 }
 
