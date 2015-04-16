@@ -61,8 +61,11 @@ Entity::Entity(const QJsonObject & json, Document* doc)
 
     if (json.contains("uid")) {
         const Uid tempUid = Uid::fromString(json["uid"].toString());
-        Q_ASSERT(entityType() == tempUid.type());
-        d->id = tempUid.id();
+        if (tempUid.isValid()) {
+            qDebug() << tempUid;
+            Q_ASSERT(entityType() == tempUid.type());
+            d->id = tempUid.id();
+        }
     }
 }
 
