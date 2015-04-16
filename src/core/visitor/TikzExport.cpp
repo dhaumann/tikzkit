@@ -42,9 +42,9 @@ QString TikzExport::tikzCode()
     if (m_documentOptions.isEmpty()) {
         doc += "\\begin{tikzpicture}\n";
     } else {
-        doc += "\\begin{tikzpicture}[" + m_documentOptions + "]\n";
+        doc += "\\begin{tikzpicture}[very thick, " + m_documentOptions + "]\n";
     }
-    doc += "\\draw[help lines, gray] (-3, -2) grid (4, 4);\n";
+//     doc += "\\draw[help lines, gray] (-3, -2) grid (4, 4);\n";
 
     //
     // add all lines
