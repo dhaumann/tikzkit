@@ -39,7 +39,7 @@ class TransactionPrivate {
         bool transactionRunning = false;
 };
 
-Transaction::Transaction(Document *document, bool autoStart)
+Transaction::Transaction(Document *document)
     : d (new TransactionPrivate())
 {
     // Alghouth it works in release-mode, we usually want a valid document
@@ -47,11 +47,6 @@ Transaction::Transaction(Document *document, bool autoStart)
 
     // initialize d-pointer
     d->document = document;
-
-    // start the editing transaction
-    if (autoStart) {
-        start();
-    }
 }
 
 Transaction::Transaction(Document * document, const QString & name)

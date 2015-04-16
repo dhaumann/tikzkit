@@ -41,7 +41,7 @@ class TransactionPrivate;
  * @code
  * void foo()
  * {
- *     tikz::core::Transaction transaction(document);
+ *     tikz::core::Transaction transaction(document, "Modify Node");
  *     // now call editing functions
  *     node->setPos(...);
  *     node->setText(...);
@@ -58,13 +58,13 @@ class TIKZCORE_EXPORT Transaction
 {
     public:
         /**
-         * Constructs the object and starts an editing transaction by
-         * calling start().
+         * Constructor that does NOT start an editing transaction.
+         * You need to call start() manually.
          *
          * @param document document for the transaction
          * @see start()
          */
-        explicit Transaction(Document * document, bool autoStart = true);
+        explicit Transaction(Document * document);
 
         /**
          * Constructs the object and starts an editing transaction.

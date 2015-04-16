@@ -41,7 +41,7 @@ namespace ui {
 NodeTool::NodeTool(NodeItem * node, QGraphicsScene * scene)
     : AbstractTool(node->document(), scene)
     , m_node(node)
-    , m_transaction(node->document(), false)
+    , m_transaction(node->document())
 {
     // show all node handles
     createNodeHandles();

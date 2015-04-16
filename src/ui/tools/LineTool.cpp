@@ -42,7 +42,7 @@ LineTool::LineTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(path->document(), scene)
     , m_path(qobject_cast<tikz::ui::EdgePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, path->document(), this))
-    , m_transaction(path->document(), false)
+    , m_transaction(path->document())
 {
     // show all path handles
     createPathHandles();

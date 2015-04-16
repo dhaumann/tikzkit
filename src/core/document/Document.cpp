@@ -211,8 +211,7 @@ bool Document::load(const QUrl & fileurl)
     QJsonArray history = root["history"].toArray();
     for (auto action : history) {
         QJsonObject entry = action.toObject();
-        Transaction transaction(this, false);
-        transaction.start(entry["text"].toString());
+        Transaction transaction(this, entry["text"].toString());
         QJsonArray items = entry["items"].toArray();
         for (auto item : items) {
             UndoItem * undoItem = factory.createItem(item.toObject());
