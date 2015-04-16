@@ -148,6 +148,7 @@ void MainWindow::setupUi()
     dockWidget = new QDockWidget("History", this);
     m_historyView = new QTreeView(dockWidget);
     m_historyView->setHeaderHidden(true);
+    m_historyView->setAlternatingRowColors(true);
     dockWidget->setWidget(m_historyView);
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
