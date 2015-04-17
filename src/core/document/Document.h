@@ -284,6 +284,13 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          */
         Path * pathFromId(qint64 id);
 
+        /**
+         * Returns the Entity for the Uid @p uid.
+         * A null pointer is returned if the Entity does not exist, or if the
+         * Uid::document() pointer does not equal this Document.
+         */
+        Entity * entity(const tikz::core::Uid & uid) const;
+
     //
     // Node and path creation
     //

@@ -60,12 +60,8 @@ Entity::Entity(const QJsonObject & json, Document* doc)
     d->document = doc;
 
     if (json.contains("uid")) {
-        const Uid tempUid = Uid::fromString(json["uid"].toString());
-        if (tempUid.isValid()) {
-            qDebug() << tempUid;
-            Q_ASSERT(entityType() == tempUid.type());
-            d->id = tempUid.id();
-        }
+        const Uid tempUid(json["uid"].toString(), d->document);
+        d->id = tempUid.id();
     }
 }
 
@@ -80,7 +76,7 @@ qint64 Entity::id() const
 
 Uid Entity::uid() const
 {
-    return Uid(d->id, entityType());
+    return Uid(d->id, d->document);
 }
 
 tikz::EntityType Entity::entityType() const

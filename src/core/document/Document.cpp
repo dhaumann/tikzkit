@@ -640,6 +640,24 @@ Path * Document::pathFromId(qint64 id)
     return d->pathMap[id];
 }
 
+Entity * Document::entity(const tikz::core::Uid & uid) const
+{
+    Q_ASSERT(uid.document() == this);
+    if (uid.document() != this) {
+        return nullptr;
+    }
+
+    if (d->pathMap.contains(uid.id())) {
+        return d->pathMap[uid.id()];
+    }
+
+    if (d->nodeMap.contains(uid.id())) {
+        return d->nodeMap[uid.id()];
+    }
+
+    return nullptr;
+}
+
 }
 }
 

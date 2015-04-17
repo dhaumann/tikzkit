@@ -18,49 +18,28 @@
  */
 
 #include "Uid.h"
-
-#include <QRegularExpression>
-#include <QDebug>
+#include "Document.h"
 
 namespace tikz {
+namespace core {
 
-QString Uid::toString() const
+Entity * Uid::entity() const
 {
-    return QString("%1 (%2)").arg(m_id)
-                             .arg(tikz::toString(m_type));
-}
-
-Uid Uid::fromString(const QString & str)
-{
-    // format example: 21 (NodeStyle)
-    static QRegularExpression re("([-+]?\\d+)\\s*\\((\\s*\\w+\\s*)\\)");
-
-    QRegularExpressionMatch match = re.match(str);
-
-    if (! match.hasMatch()) {
-        Q_ASSERT(false);
-        return Uid();
+    Q_ASSERT(m_document);
+    if (! m_document) {
+        return nullptr;
     }
 
-    const QString number = match.captured(1);
-    const QString type = match.captured(2);
-
-//     qDebug() << str << "converts to:" << number << type;
-
-    bool ok = false;
-    qint64 uid = number.toLongLong(&ok);
-    Q_ASSERT(ok);
-
-    return ok ? Uid(uid, tikz::toEntityType(type))
-              : Uid();
+    return m_document->entity(*this);
 }
 
+}
 }
 
 namespace QTest {
     // Uid: template specialization for QTest::toString()
     template<>
-    char *toString(const tikz::Uid & uid)
+    char *toString(const tikz::core::Uid & uid)
     {
         const QString str = "Uid[" + uid.toString() + "]";
         const QByteArray ba = str.toLatin1();

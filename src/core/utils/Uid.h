@@ -26,11 +26,18 @@
 #include <QDebug>
 
 namespace tikz {
+namespace core {
+
+class Entity;
+class Document;
 
 /**
  * The Uid class provides document-wide unique identifiers.
  *
- * The Uid is defined by an integer number and an EntityType.
+ * The Uid is defined by an integer number that refers to an Entity of
+ * the associated Document.
+ *
+ * @see Entity, Document
  */
 class TIKZCORE_EXPORT Uid
 {
@@ -38,27 +45,50 @@ class TIKZCORE_EXPORT Uid
         /**
          * Default constructor. Creates an invalid Uid.
          */
-        explicit constexpr Uid()
-            : m_id(-1)
-            , m_type(EntityType::Invalid)
+        explicit constexpr Uid() noexcept
         {
         }
 
         /**
          * Constructor with value and type.
          */
-        explicit constexpr Uid(qint64 id, EntityType type)
+        explicit constexpr Uid(qint64 id, Document * doc) noexcept
             : m_id(id)
-            , m_type(type)
+            , m_document(doc)
         {
         }
 
         /**
-         * Check whether this value is a finite value, i.e. other than NaN or infinity.
+         * Constructor with value and type.
+         */
+        explicit Uid(const QString & idStr, tikz::core::Document * doc) noexcept
+            : m_id(-1)
+            , m_document(doc)
+        {
+            bool ok = false;
+            m_id = idStr.toLongLong(&ok);
+            Q_ASSERT(ok);
+
+            if (! ok) {
+                m_id = -1;
+            }
+        }
+
+        /**
+         * Returns @e true, if id() >= 0 and document() is other than a null pointer,
+         * otherwise returns @e false.
          */
         inline constexpr bool isValid() const noexcept
         {
-            return m_id >= 0 && m_type != tikz::EntityType::Invalid;
+            return m_id >= 0 && m_document != nullptr;
+        }
+
+        /**
+         * Returns the Document this Uid belongs to.
+         */
+        inline constexpr Document * document() const noexcept
+        {
+            return m_document;
         }
 
         /**
@@ -70,22 +100,17 @@ class TIKZCORE_EXPORT Uid
         }
 
         /**
-         * Explicit conversion to value.
+         * Returns the Entity this Uid refers to.
          */
-        inline constexpr EntityType type() const noexcept
-        {
-            return m_type;
-        }
+        Entity * entity() const;
 
         /**
          * Convert this Uid to a string of the form "id (type)"
          */
-        QString toString() const;
-
-        /**
-         * Convert @p str defined by "id (type)" to a Uid.
-         */
-        static Uid fromString(const QString & str);
+        inline QString toString() const noexcept
+        {
+            return QString::number(m_id);
+        }
 
     //
     // operators
@@ -94,7 +119,7 @@ class TIKZCORE_EXPORT Uid
         /**
          * Implicit conversion to qint64.
          */
-        inline operator qint64() const
+        constexpr inline operator qint64() const noexcept
         {
             return m_id;
         }
@@ -102,7 +127,7 @@ class TIKZCORE_EXPORT Uid
         /**
          * QDebug support.
          */
-        inline friend QDebug operator<<(QDebug s, const tikz::Uid& uid)
+        inline friend QDebug operator<<(QDebug s, const tikz::core::Uid& uid)
         {
             if (&uid != nullptr) {
                 s.nospace() << uid.toString();
@@ -119,39 +144,38 @@ class TIKZCORE_EXPORT Uid
 
     private:
         /**
+         * The associated Document of this Uid.
+         */
+        Document * m_document = nullptr;
+
+        /**
          * The value.
          */
         qint64 m_id = -1;
-
-        /**
-         * The unit of this value.
-         */
-        EntityType m_type = tikz::EntityType::Invalid;
 };
 
 /**
  * Equality operator.
- * Return @e true, if the Uid @p lhs equals the Uid @p rhs.
- * @note The comparison is type-aware.
+ * Return @e true, if the Uid @p lhs refers to the same Entity as Uid @p rhs.
  */
 inline constexpr bool operator==(const Uid & lhs, const Uid & rhs) noexcept
 {
     return lhs.isValid()
         && rhs.isValid()
         && (lhs.id() == rhs.id())
-        && (lhs.type() == rhs.type());
+        && (lhs.document() == rhs.document());
 }
 
 /**
  * Inequality operator.
- * Return @e true, if the Uid @p lhs does not equal the Uid @p rhs.
- * @note The comparison is unit-aware.
+ * Return @e true, if the Uid @p lhs refers to a different Entity than Uid @p rhs.
  */
 inline constexpr bool operator!=(const Uid & lhs, const Uid & rhs) noexcept
 {
     return ! (lhs == rhs);
 }
 
+} //namespace core
 } //namespace tikz
 
 namespace QTest
@@ -160,19 +184,19 @@ namespace QTest
     template<typename T> char* toString(const T&);
     
     template<>
-    TIKZCORE_EXPORT char *toString(const tikz::Uid & uid);
+    TIKZCORE_EXPORT char *toString(const tikz::core::Uid & uid);
 }
 
 /**
  * Declare as movable, since the members of Uid are primitive types.
  */
-Q_DECLARE_TYPEINFO(tikz::Uid, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(tikz::Uid)
+Q_DECLARE_TYPEINFO(tikz::core::Uid, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(tikz::core::Uid)
 
 /**
  * QHash function.
  */
-inline uint qHash(const tikz::Uid & uid)
+inline uint qHash(const tikz::core::Uid & uid)
 {
     return qHash(uid.id());
 }
