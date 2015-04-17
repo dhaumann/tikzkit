@@ -73,15 +73,11 @@ class DocumentPrivate
         // global document style options
         Style * style = nullptr;
 
-        // node & path list
-        QVector<Node*> nodes;
-        QVector<Path*> paths;
+        // Entity list, contains Nodes and Paths
+        QVector<Entity *> entities;
 
-        /// Node lookup map
-        QHash<qint64, Node*> nodeMap;
-
-        /// Path lookup map
-        QHash<qint64, Path*> pathMap;
+        // Node lookup map
+        QHash<qint64, Entity *> entityMap;
 
         qint64 nextId = 0;
 
@@ -137,10 +133,8 @@ Document::~Document()
     close();
 
     // make sure things are really gone
-    Q_ASSERT(d->nodeMap.isEmpty());
-    Q_ASSERT(d->nodes.isEmpty());
-    Q_ASSERT(d->pathMap.isEmpty());
-    Q_ASSERT(d->paths.isEmpty());
+    Q_ASSERT(d->entityMap.isEmpty());
+    Q_ASSERT(d->entities.isEmpty());
 
     delete d;
 }
@@ -151,13 +145,19 @@ bool Document::accept(Visitor & visitor)
     visitor.visit(this);
 
     // visit all nodes
-    foreach (Node* node, d->nodes) {
-        node->accept(visitor);
+    for (auto entity : d->entities) {
+        auto node = dynamic_cast<Node *>(entity);
+        if (node) {
+            node->accept(visitor);
+        }
     }
 
     // visit all paths
-    foreach (Path* path, d->paths) {
-        path->accept(visitor);
+    for (auto entity : d->entities) {
+        auto path = dynamic_cast<Path *>(entity);
+        if (path) {
+            path->accept(visitor);
+        }
     }
 }
 
@@ -167,13 +167,9 @@ void Document::close()
     emit aboutToClear();
 
     // free all node and path data
-    qDeleteAll(d->nodes);
-    d->nodes.clear();
-    d->nodeMap.clear();
-
-    qDeleteAll(d->paths);
-    d->paths.clear();
-    d->pathMap.clear();
+    qDeleteAll(d->entities);
+    d->entities.clear();
+    d->entityMap.clear();
 
     // reset unique id counter
     d->nextId = 0;
@@ -226,13 +222,9 @@ bool Document::load(const QUrl & fileurl)
 
     // now make sure the next free uniq id is valid by finding the maximum
     // used id, and then add "+1".
-    auto keys = d->nodeMap.keys();
+    auto keys = d->entityMap.keys();
     if (keys.size()) {
         d->nextId = *std::max_element(keys.begin(), keys.end()) + 1;
-    }
-    keys = d->pathMap.keys();
-    if (keys.size()) {
-        d->nextId = std::max(d->nextId, *std::max_element(keys.begin(), keys.end()) + 1);
     }
 
     // keep the document name up-to-date
@@ -320,8 +312,7 @@ bool Document::isEmptyBuffer() const
 {
     return d->url.isEmpty()
         && ! isModified()
-        && d->nodes.isEmpty()
-        && d->paths.isEmpty();
+        && d->entities.isEmpty();
 }
 
 QString Document::tikzCode()
@@ -452,12 +443,24 @@ Style * Document::style() const
 
 QVector<Node*> Document::nodes() const
 {
-    return d->nodes;
+    QVector <Node *> nodeList;
+    for (auto e : d->entities) {
+        if (auto node = dynamic_cast<Node *>(e)) {
+            nodeList.append(node);
+        }
+    }
+    return nodeList;
 }
 
 QVector<Path*> Document::paths() const
 {
-    return d->paths;
+    QVector <Path *> pathList;
+    for (auto e : d->entities) {
+        if (auto path = dynamic_cast<Path *>(e)) {
+            pathList.append(path);
+        }
+    }
+    return pathList;
 }
 
 Path * Document::createPath(PathType type)
@@ -467,14 +470,22 @@ Path * Document::createPath(PathType type)
     addUndoItem(new UndoCreatePath(type, id, this));
 
     // now the edge should be in the map
-    Q_ASSERT(d->pathMap.contains(id));
-    return d->pathMap[id];
+    const auto it = d->entityMap.find(id);
+    if (it != d->entityMap.end()) {
+        return dynamic_cast<Path*>(d->entityMap[id]);
+    }
+
+    // requested id not in map, this is a bug, since UndoCreatePath should
+    // call createPath(int) that inserts the Entity
+    Q_ASSERT(false);
+
+    return nullptr;
 }
 
 void Document::deletePath(Path * path)
 {
     Q_ASSERT(path != 0);
-    Q_ASSERT(d->pathMap.contains(path->id()));
+    Q_ASSERT(d->entityMap.contains(path->id()));
 
     // TODO: not yet the case, but maybe in future: remove child nodes here?
     //       or: probably move this to Path::deconstruct()!
@@ -487,7 +498,7 @@ void Document::deletePath(Path * path)
     addUndoItem(new UndoDeletePath(id, this));
 
     // path really removed?
-    Q_ASSERT(!d->pathMap.contains(id));
+    Q_ASSERT(!d->entityMap.contains(id));
 }
 
 Node* Document::createNode()
@@ -497,21 +508,29 @@ Node* Document::createNode()
     addUndoItem(new UndoCreateNode(id, this));
 
     // now the node should be in the map
-    Q_ASSERT(d->nodeMap.contains(id));
-    return d->nodeMap[id];
+    const auto it = d->entityMap.find(id);
+    if (it != d->entityMap.end()) {
+        return dynamic_cast<Node *>(d->entityMap[id]);
+    }
+
+    // requested id not in map, this is a bug, since UndoCreatePath should
+    // call createPath(int) that inserts the Entity
+    Q_ASSERT(false);
+
+    return nullptr;
 }
 
 Node * Document::createNode(qint64 id)
 {
     Q_ASSERT(id >= 0);
-    Q_ASSERT(!d->nodeMap.contains(id));
+    Q_ASSERT(!d->entityMap.contains(id));
 
     // create new node
     Node* node = new Node(id, this);
-    d->nodes.append(node);
+    d->entities.append(node);
 
     // insert node into hash map
-    d->nodeMap.insert(id, node);
+    d->entityMap.insert(id, node);
 
     // propagate changed signal
     connect(node, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
@@ -523,7 +542,7 @@ void Document::deleteNode(Node * node)
 {
     // valid input?
     Q_ASSERT(node != 0);
-    Q_ASSERT(d->nodeMap.contains(node->id()));
+    Q_ASSERT(d->entityMap.contains(node->id()));
 
     // get edge id
     const qint64 id = node->id();
@@ -532,8 +551,10 @@ void Document::deleteNode(Node * node)
     d->undoManager->startTransaction("Remove node");
 
     // make sure no edge points to the deleted node
-    foreach (Path* path, d->paths) {
-        path->detachFromNode(node);
+    for (auto entity: d->entities) {
+        if (auto path = dynamic_cast<Path *>(entity)) {
+            path->detachFromNode(node);
+        }
 
         // TODO: a path might require the node?
         //       in that case, maybe delete the path as well?
@@ -546,25 +567,28 @@ void Document::deleteNode(Node * node)
     d->undoManager->commitTransaction();
 
     // node really removed?
-    Q_ASSERT(!d->nodeMap.contains(id));
+    Q_ASSERT(!d->entityMap.contains(id));
 }
 
 void Document::deleteNode(qint64 id)
 {
     // valid input?
     Q_ASSERT(id >= 0);
-    Q_ASSERT(d->nodeMap.contains(id));
+    Q_ASSERT(d->entityMap.contains(id));
 
-    // get node
-    Node* node = d->nodeMap[id];
-    Q_ASSERT(d->nodes.contains(node));
+    // get entity
+    auto it = d->entityMap.find(id);
+    if (it != d->entityMap.end()) {
+        const auto entity = *it;
 
-    // unregister node
-    d->nodeMap.remove(id);
-    d->nodes.remove(d->nodes.indexOf(node));
+        // unregister entity
+        d->entityMap.erase(it);
+        Q_ASSERT(d->entities.contains(entity));
+        d->entities.erase(std::find(d->entities.begin(), d->entities.end(), entity));
 
-    // truly delete node
-    delete node;
+        // truly delete node
+        delete entity;
+    }
 }
 
 Path * Document::createPath(PathType type, qint64 id)
@@ -591,10 +615,10 @@ Path * Document::createPath(PathType type, qint64 id)
     }
 
     // register path
-    d->paths.append(path);
+    d->entities.append(path);
 
     // insert path into hash map
-    d->pathMap.insert(id, path);
+    d->entityMap.insert(id, path);
 
     // propagate changed signal
     connect(path, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
@@ -606,38 +630,31 @@ void Document::deletePath(qint64 id)
 {
     // valid input?
     Q_ASSERT(id >= 0);
-    Q_ASSERT(d->pathMap.contains(id));
+    Q_ASSERT(d->entityMap.contains(id));
 
-    // get path
-    Path * path = d->pathMap[id];
-    Q_ASSERT(d->paths.contains(path));
+    // get entity
+    auto it = d->entityMap.find(id);
+    if (it != d->entityMap.end()) {
+        const auto entity = *it;
 
-    // unregister path
-    d->pathMap.remove(id);
-    d->paths.remove(d->paths.indexOf(path));
+        // unregister entity
+        d->entityMap.erase(it);
+        Q_ASSERT(d->entities.contains(entity));
+        d->entities.erase(std::find(d->entities.begin(), d->entities.end(), entity));
 
-    // truly delete path
-    delete path;
+        // truly delete node
+        delete entity;
+    }
 }
 
 Node * Document::nodeFromId(qint64 id)
 {
-    if (id < 0) {
-        return nullptr;
-    }
-
-    Q_ASSERT(d->nodeMap.contains(id));
-    return d->nodeMap[id];
+    return dynamic_cast<Node *>(entity(Uid(id, this)));
 }
 
 Path * Document::pathFromId(qint64 id)
 {
-    if (id < 0) {
-        return nullptr;
-    }
-
-    Q_ASSERT(d->pathMap.contains(id));
-    return d->pathMap[id];
+    return dynamic_cast<Path *>(entity(Uid(id, this)));
 }
 
 Entity * Document::entity(const tikz::core::Uid & uid) const
@@ -647,12 +664,9 @@ Entity * Document::entity(const tikz::core::Uid & uid) const
         return nullptr;
     }
 
-    if (d->pathMap.contains(uid.id())) {
-        return d->pathMap[uid.id()];
-    }
-
-    if (d->nodeMap.contains(uid.id())) {
-        return d->nodeMap[uid.id()];
+    const auto it = d->entityMap.find(uid.id());
+    if (it != d->entityMap.end()) {
+        return *it;
     }
 
     return nullptr;
