@@ -195,7 +195,7 @@ void MetaPosTest::testToString()
     tikz::core::Node * n = doc.createNode();
 
     QCOMPARE(n->id(), 1);
-    QCOMPARE(n->uid(), tikz::Uid(1, tikz::EntityType::Node));
+    QCOMPARE(n->uid(), tikz::core::Uid(1, &doc));
     QCOMPARE(m.toString(), QString("(0pt, 0pt)"));
 
     m.setPos(tikz::Pos(3, 3, tikz::Centimeter));
@@ -232,7 +232,7 @@ void MetaPosTest::testFromString()
     tikz::core::Node * n = doc.createNode();
 
     QCOMPARE(n->id(), 1);
-    QCOMPARE(n->uid(), tikz::Uid(1, tikz::EntityType::Node));
+    QCOMPARE(n->uid(), tikz::core::Uid(1, &doc));
     m.fromString("(-3cm, 4cm)");
     QCOMPARE(m.toString(), QString("(-3cm, 4cm)"));
 
