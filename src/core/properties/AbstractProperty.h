@@ -45,6 +45,12 @@ enum class PropertyType : int {
 /**
  * Abstract base class for properties.
  *
+ * TODO / FIXME:
+ * - toJson, fromJson?
+ * - merge PropertyInterface into Entity? --> then toJson/fromJson is much simpler
+ * - add TikzFormatter classes: "property name=value", only "value",
+ *   only "double" for double lines, ...
+ *
  * @see Entity
  */
 class TIKZCORE_EXPORT AbstractProperty
