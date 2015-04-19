@@ -77,7 +77,7 @@ class DocumentPrivate
         QVector<Entity *> entities;
 
         // Node lookup map
-        QHash<qint64, Entity *> entityMap;
+        QHash<Uid, Entity *> entityMap;
 
         qint64 nextId = 0;
 
@@ -119,7 +119,7 @@ Document::Document(QObject * parent)
     d->undoManager = new UndoManager(this);
     d->undoActive = false;
     d->nextId = 0;
-    d->style = new Style(d->uniqueId(), this);
+    d->style = new Style(Uid(d->uniqueId(), this), this);
 
     // Debugging:
     d->style->setLineWidth(tikz::Value::veryThick());
@@ -176,7 +176,7 @@ void Document::close()
 
     // reinitialize document style
     delete d->style;
-    d->style = new Style(d->uniqueId(), this);
+    d->style = new Style(Uid(d->uniqueId(), this), this);
 
     // clear undo stack
     d->undoManager->clear();
@@ -466,13 +466,13 @@ QVector<Path*> Document::paths() const
 Path * Document::createPath(PathType type)
 {
     // create new edge, push will call ::redo()
-    const qint64 id = d->uniqueId();
-    addUndoItem(new UndoCreatePath(type, id, this));
+    const Uid uid(d->uniqueId(), this);
+    addUndoItem(new UndoCreatePath(type, uid, this));
 
     // now the edge should be in the map
-    const auto it = d->entityMap.find(id);
+    const auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
-        return dynamic_cast<Path*>(d->entityMap[id]);
+        return dynamic_cast<Path*>(*it);
     }
 
     // requested id not in map, this is a bug, since UndoCreatePath should
@@ -485,7 +485,7 @@ Path * Document::createPath(PathType type)
 void Document::deletePath(Path * path)
 {
     Q_ASSERT(path != 0);
-    Q_ASSERT(d->entityMap.contains(path->id()));
+    Q_ASSERT(d->entityMap.contains(path->uid()));
 
     // TODO: not yet the case, but maybe in future: remove child nodes here?
     //       or: probably move this to Path::deconstruct()!
@@ -494,23 +494,23 @@ void Document::deletePath(Path * path)
     path->deconstruct();
 
     // delete path, push will call ::redo()
-    const qint64 id = path->id();
-    addUndoItem(new UndoDeletePath(id, this));
+    const Uid uid = path->uid();
+    addUndoItem(new UndoDeletePath(uid, this));
 
     // path really removed?
-    Q_ASSERT(!d->entityMap.contains(id));
+    Q_ASSERT(!d->entityMap.contains(uid));
 }
 
 Node* Document::createNode()
 {
     // create new node, push will call ::redo()
-    const qint64 id = d->uniqueId();
-    addUndoItem(new UndoCreateNode(id, this));
+    const Uid uid(d->uniqueId(), this);
+    addUndoItem(new UndoCreateNode(uid, this));
 
     // now the node should be in the map
-    const auto it = d->entityMap.find(id);
+    const auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
-        return dynamic_cast<Node *>(d->entityMap[id]);
+        return dynamic_cast<Node *>(*it);
     }
 
     // requested id not in map, this is a bug, since UndoCreatePath should
@@ -520,17 +520,17 @@ Node* Document::createNode()
     return nullptr;
 }
 
-Node * Document::createNode(qint64 id)
+Node * Document::createNode(const Uid & uid)
 {
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(!d->entityMap.contains(id));
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(!d->entityMap.contains(uid));
 
     // create new node
-    Node* node = new Node(id, this);
+    Node* node = new Node(uid, this);
     d->entities.append(node);
 
     // insert node into hash map
-    d->entityMap.insert(id, node);
+    d->entityMap.insert(uid, node);
 
     // propagate changed signal
     connect(node, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
@@ -542,16 +542,16 @@ void Document::deleteNode(Node * node)
 {
     // valid input?
     Q_ASSERT(node != 0);
-    Q_ASSERT(d->entityMap.contains(node->id()));
+    Q_ASSERT(d->entityMap.contains(node->uid()));
 
     // get edge id
-    const qint64 id = node->id();
+    const Uid uid = node->uid();
 
     // start undo group
     d->undoManager->startTransaction("Remove node");
 
     // make sure no edge points to the deleted node
-    for (auto entity: d->entities) {
+    for (auto entity : d->entities) {
         if (auto path = dynamic_cast<Path *>(entity)) {
             path->detachFromNode(node);
         }
@@ -561,23 +561,23 @@ void Document::deleteNode(Node * node)
     }
 
     // delete node, push will call ::redo()
-    addUndoItem(new UndoDeleteNode(id, this));
+    addUndoItem(new UndoDeleteNode(uid, this));
 
     // end undo group
     d->undoManager->commitTransaction();
 
     // node really removed?
-    Q_ASSERT(!d->entityMap.contains(id));
+    Q_ASSERT(!d->entityMap.contains(uid));
 }
 
-void Document::deleteNode(qint64 id)
+void Document::deleteNode(const Uid & uid)
 {
     // valid input?
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(d->entityMap.contains(id));
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(d->entityMap.contains(uid));
 
     // get entity
-    auto it = d->entityMap.find(id);
+    auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
         const auto entity = *it;
 
@@ -591,9 +591,9 @@ void Document::deleteNode(qint64 id)
     }
 }
 
-Path * Document::createPath(PathType type, qint64 id)
+Path * Document::createPath(PathType type, const Uid & uid)
 {
-    Q_ASSERT(id >= 0);
+    Q_ASSERT(uid.isValid());
 
     // create new path
     Path* path = nullptr;
@@ -604,11 +604,11 @@ Path * Document::createPath(PathType type, qint64 id)
         case PathType::BendCurve:
         case PathType::InOutCurve:
         case PathType::BezierCurve: {
-            path = new EdgePath(type, id, this);
+            path = new EdgePath(type, uid, this);
             break;
         }
         case PathType::Ellipse:
-            path = new EllipsePath(id, this);
+            path = new EllipsePath(uid, this);
             break;
         default:
             Q_ASSERT(false);
@@ -618,7 +618,7 @@ Path * Document::createPath(PathType type, qint64 id)
     d->entities.append(path);
 
     // insert path into hash map
-    d->entityMap.insert(id, path);
+    d->entityMap.insert(uid, path);
 
     // propagate changed signal
     connect(path, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
@@ -626,14 +626,14 @@ Path * Document::createPath(PathType type, qint64 id)
     return path;
 }
 
-void Document::deletePath(qint64 id)
+void Document::deletePath(const Uid & uid)
 {
     // valid input?
-    Q_ASSERT(id >= 0);
-    Q_ASSERT(d->entityMap.contains(id));
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(d->entityMap.contains(uid));
 
     // get entity
-    auto it = d->entityMap.find(id);
+    auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
         const auto entity = *it;
 
@@ -647,24 +647,23 @@ void Document::deletePath(qint64 id)
     }
 }
 
-Node * Document::nodeFromId(qint64 id)
+Node * Document::nodeFromId(const Uid & uid)
 {
-    return dynamic_cast<Node *>(entity(Uid(id, this)));
+    return dynamic_cast<Node *>(entity(uid));
 }
 
-Path * Document::pathFromId(qint64 id)
+Path * Document::pathFromId(const Uid & uid)
 {
-    return dynamic_cast<Path *>(entity(Uid(id, this)));
+    return dynamic_cast<Path *>(entity(uid));
 }
 
 Entity * Document::entity(const tikz::core::Uid & uid) const
 {
-    Q_ASSERT(uid.document() == this);
     if (uid.document() != this) {
         return nullptr;
     }
 
-    const auto it = d->entityMap.find(uid.id());
+    const auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
         return *it;
     }

@@ -24,11 +24,11 @@
 namespace tikz {
 namespace core {
 
-UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * doc)
+UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc)
     : UndoItem("Set Node Text", doc)
-    , m_nodeId(id)
+    , m_nodeUid(nodeUid)
 {
-    Node * node = doc->nodeFromId(id);
+    Node * node = doc->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
 
     m_undoText = node->text();
@@ -36,7 +36,7 @@ UndoSetNodeText::UndoSetNodeText(qint64 id, const QString & newText, Document * 
 }
 
 UndoSetNodeText::UndoSetNodeText(const QJsonObject & json, Document * doc)
-    : UndoSetNodeText(json["node-id"].toString().toLongLong(),
+    : UndoSetNodeText(Uid(json["node-id"].toString(), doc),
                       json["redo-text"].toString(),
                       doc)
 {
@@ -50,7 +50,7 @@ void UndoSetNodeText::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Node * node = document()->nodeFromId(m_nodeId);
+    Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setText(m_undoText);
 
@@ -61,7 +61,7 @@ void UndoSetNodeText::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Node * node = document()->nodeFromId(m_nodeId);
+    Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setText(m_redoText);
 
@@ -72,7 +72,7 @@ bool UndoSetNodeText::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetNodeText*>(command);
-    if (m_nodeId != other->m_nodeId) {
+    if (m_nodeUid != other->m_nodeUid) {
         return false;
     }
 
@@ -84,7 +84,7 @@ QJsonObject UndoSetNodeText::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-set-text";
-    json["node-id"] = QString::number(m_nodeId);
+    json["node-id"] = m_nodeUid.toString();
     json["redo-text"] = m_redoText;
     return json;
 }

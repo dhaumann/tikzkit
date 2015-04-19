@@ -271,18 +271,18 @@ class TIKZCORE_EXPORT Document : public ConfigObject
         QVector<Path*> paths() const;
 
         /**
-         * Get the node with @p id.
-         * @param id unique id of the node
-         * @return null, if the id is -1, otherwise a valid pointer to the node
+         * Get the node with Uid @p uid.
+         * @param uid unique id of the node
+         * @return null, if the uid is -1, otherwise a valid pointer to the node
          */
-        Node * nodeFromId(qint64 id);
+        Node * nodeFromId(const Uid & uid);
 
         /**
-         * Get the path with @p id.
-         * @param id unique id of the path
-         * @return null, if the id is -1, otherwise a valid pointer to the path
+         * Get the path with Uid @p uid.
+         * @param uid unique id of the path
+         * @return null, if the uid is -1, otherwise a valid pointer to the path
          */
-        Path * pathFromId(qint64 id);
+        Path * pathFromId(const Uid & uid);
 
         /**
          * Returns the Entity for the Uid @p uid.
@@ -327,24 +327,24 @@ class TIKZCORE_EXPORT Document : public ConfigObject
     //
     protected:
         /**
-         * Create a new node associated with this document with @p id.
+         * Create a new node associated with this document with @p uid.
          */
-        virtual Node * createNode(qint64 id);
+        virtual Node * createNode(const Uid & uid);
 
         /**
-         * Delete node @p id associated with this document.
+         * Delete node @p uid associated with this document.
          */
-        virtual void deleteNode(qint64 id);
+        virtual void deleteNode(const Uid & uid);
 
         /**
-         * Create a new path associated with this document with @p id.
+         * Create a new path associated with this document with @p uid.
          */
-        virtual Path * createPath(PathType type, qint64 id);
+        virtual Path * createPath(PathType type, const Uid & uid);
 
         /**
-         * Delete path @p id associated with this document.
+         * Delete path @p uid associated with this document.
          */
-        virtual void deletePath(qint64 id);
+        virtual void deletePath(const Uid & uid);
 
     //
     // data pointer

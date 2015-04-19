@@ -25,12 +25,12 @@
 namespace tikz {
 namespace core {
 
-UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
+UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
     : UndoItem("Delete Node", doc)
-    , m_id(id)
+    , m_nodeUid(nodeUid)
 {
     // get node to save data
-    Node* node = document()->nodeFromId(m_id);
+    Node* node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
 
     // save properties
@@ -40,7 +40,7 @@ UndoDeleteNode::UndoDeleteNode(qint64 id, Document * doc)
 }
 
 UndoDeleteNode::UndoDeleteNode(const QJsonObject & json, Document * doc)
-    : UndoDeleteNode(json["node-id"].toString().toLongLong(), doc)
+    : UndoDeleteNode(Uid(json["node-id"].toString(), doc), doc)
 {
 }
 
@@ -50,9 +50,9 @@ UndoDeleteNode::~UndoDeleteNode()
 
 void UndoDeleteNode::undo()
 {
-    document()->createNode(m_id);
+    document()->createNode(m_nodeUid);
 
-    Node* node = document()->nodeFromId(m_id);
+    Node* node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
 
     ConfigTransaction transaction(node);
@@ -63,14 +63,14 @@ void UndoDeleteNode::undo()
 
 void UndoDeleteNode::redo()
 {
-    document()->deleteNode(m_id);
+    document()->deleteNode(m_nodeUid);
 }
 
 QJsonObject UndoDeleteNode::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-delete";
-    json["node-id"] = QString::number(m_id);
+    json["node-id"] = m_nodeUid.toString();
     return json;
 }
 

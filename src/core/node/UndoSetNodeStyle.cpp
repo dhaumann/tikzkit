@@ -25,9 +25,9 @@
 namespace tikz {
 namespace core {
 
-UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc)
+UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc)
     : UndoItem("Set Node Style", doc)
-    , m_nodeId(id)
+    , m_nodeId(nodeUid)
 {
     // get node to save data
     Node* node = document()->nodeFromId(m_nodeId);
@@ -39,7 +39,7 @@ UndoSetNodeStyle::UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document 
 }
 
 UndoSetNodeStyle::UndoSetNodeStyle(const QJsonObject & json, Document * doc)
-    : UndoSetNodeStyle(json["node-id"].toString().toLongLong(),
+    : UndoSetNodeStyle(Uid(json["node-id"].toString(), doc),
                        NodeStyle(json["redo-style"].toObject(), doc),
                        doc)
 {
@@ -88,7 +88,7 @@ QJsonObject UndoSetNodeStyle::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-set-style";
-    json["node-id"] = QString::number(m_nodeId);
+    json["node-id"] = m_nodeId.toString();
     json["redo-style"] = m_redoStyle.toJson();
     return json;
 }

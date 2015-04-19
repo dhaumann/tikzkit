@@ -50,8 +50,8 @@ NodeStyle::NodeStyle()
 {
 }
 
-NodeStyle::NodeStyle(qint64 id, Document* tikzDocument)
-    : Style(id, tikzDocument)
+NodeStyle::NodeStyle(const Uid & uid, Document* tikzDocument)
+    : Style(uid, tikzDocument)
     , d(new NodeStylePrivate())
 {
 }

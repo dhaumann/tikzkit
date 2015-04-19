@@ -74,14 +74,14 @@ void SerializeVisitor::visit(Document * doc)
     // aggregate node ids
     QStringList list;
     foreach (Node * node, doc->nodes()) {
-        list.append(QString::number(node->id()));
+        list.append(node->uid().toString());
     }
     m_root.insert("node-ids", list.join(", "));
 
     // aggregate path ids
     list.clear();
     foreach (Path * path, doc->paths()) {
-        list.append(QString::number(path->id()));
+        list.append(path->uid().toString());
     }
     m_root.insert("path-ids", list.join(", "));
 
@@ -101,11 +101,11 @@ void SerializeVisitor::visit(Node * node)
 
     // serialize node style
     QVariantMap styleMap;
-    styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->id() : -1);
+    styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->uid().id() : -1);
     styleMap.insert("properties", serializeNodeStyle(node->style()));
     map.insert("style", styleMap);
 
-    m_nodes.insert(QString("node-%1").arg(node->id()), map);
+    m_nodes.insert("node-" + node->uid().toString(), map);
 }
 
 static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
@@ -154,14 +154,14 @@ void SerializeVisitor::visit(Path * path)
     // serialize common path properties
     //
     QVariantMap styleMap;
-    styleMap.insert("parent", path->style()->parentStyle() ? path->style()->parentStyle()->id() : -1);
+    styleMap.insert("parent", path->style()->parentStyle() ? path->style()->parentStyle()->uid().id() : -1);
     styleMap.insert("properties", serializeEdgeStyle(path->style()));
     map.insert("style", styleMap);
 
     //
     // put into paths map
     //
-    m_paths.insert(QString("path-%1").arg(path->id()), map);
+    m_paths.insert("path-" + path->uid().toString(), map);
 }
 
 void SerializeVisitor::visit(NodeStyle * style)

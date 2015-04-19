@@ -60,8 +60,8 @@ EdgeStyle::EdgeStyle()
 {
 }
 
-EdgeStyle::EdgeStyle(qint64 id, Document* tikzDocument)
-    : Style(id, tikzDocument)
+EdgeStyle::EdgeStyle(const Uid & uid, Document* tikzDocument)
+    : Style(uid, tikzDocument)
     , d(new EdgeStylePrivate())
 {
 }

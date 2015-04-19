@@ -34,7 +34,7 @@ MetaPos::MetaPos(Document * doc)
     Q_ASSERT(doc != nullptr);
     d->doc = doc;
 
-    Q_ASSERT(d->nodeId = -1);
+    Q_ASSERT(! d->nodeId.isValid());
     Q_ASSERT(d->anchor == tikz::NoAnchor);
 }
 
@@ -67,7 +67,7 @@ QString MetaPos::toString() const
 {
     if (node()) {
         return QString("(%1%2)")
-            .arg(d->nodeId)
+            .arg(d->nodeId.toString())
             .arg(tikz::toString(d->anchor));
     } else {
         return d->pos.toString();
@@ -89,7 +89,7 @@ void MetaPos::fromString(const QString & str)
         d->beginChange();
         const int endIndex = (dotIndex > 0) ? dotIndex : closeIndex;
         bool ok;
-        d->nodeId = str.mid(openIndex + 1, endIndex - (openIndex + 1)).toInt(&ok);
+        d->nodeId = Uid(str.mid(openIndex + 1, endIndex - (openIndex + 1)).toLongLong(&ok), d->doc);
         Q_ASSERT(ok);
 
         // read tikz::Anchor
@@ -120,7 +120,6 @@ MetaPos & MetaPos::operator=(const MetaPos & other)
     // now copy rest
     d->doc = other.d->doc;
     d->pos = other.d->pos;
-    Q_ASSERT(d->nodeId == other.d->nodeId);
     d->anchor = other.d->anchor;
 
     // calls changed
@@ -140,7 +139,7 @@ bool MetaPos::operator==(const MetaPos & other) const
         return false;
     }
 
-    if (d->nodeId >= 0 || other.d->nodeId >= 0) {
+    if (d->nodeId.isValid() || other.d->nodeId.isValid()) {
         return d->nodeId == other.d->nodeId
             && d->anchor == other.d->anchor;
     }
@@ -155,7 +154,7 @@ bool MetaPos::operator!=(const MetaPos & other) const
 
 tikz::Pos MetaPos::pos() const
 {
-    if (d->nodeId < 0) {
+    if (! d->nodeId.isValid()) {
         Q_ASSERT(node() == nullptr);
         return d->pos;
     }
@@ -173,7 +172,7 @@ void MetaPos::setPos(const tikz::Pos & pos)
     if (oldNode) {
         // disconnect changed() signal
         QObject::disconnect(oldNode, 0, d, 0);
-        d->nodeId = -1;
+        d->nodeId = Uid();
 
         change = true;
     }
@@ -213,7 +212,7 @@ bool MetaPos::setNode(Node* newNode)
     }
 
     // set new node and forward change() signal if applicable
-    d->nodeId = newNode ? newNode->id() : -1;
+    d->nodeId = newNode ? newNode->uid() : Uid();
     curNode = node();
 
     // attach to newNode
@@ -240,7 +239,7 @@ Node* MetaPos::node() const
 void MetaPos::setAnchor(tikz::Anchor anchor)
 {
     // setting an anchor only makes sense with a node
-    Q_ASSERT(d->nodeId >= 0);
+    Q_ASSERT(d->nodeId.isValid());
 
     if (d->anchor != anchor) {
         d->beginChange();
@@ -251,7 +250,7 @@ void MetaPos::setAnchor(tikz::Anchor anchor)
 
 Anchor MetaPos::anchor() const
 {
-    return (d->nodeId >= 0) ? d->anchor : tikz::NoAnchor;
+    return (d->nodeId.isValid()) ? d->anchor : tikz::NoAnchor;
 }
 
 QObject * MetaPos::notificationObject()

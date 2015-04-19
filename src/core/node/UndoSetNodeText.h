@@ -21,6 +21,7 @@
 #define TIKZ_UNDO_SET_NODE_TEXT_H
 
 #include "UndoItem.h"
+#include "Uid.h"
 
 #include <QString>
 
@@ -36,7 +37,7 @@ class UndoSetNodeText : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodeText(qint64 id, const QString & newText, Document * doc);
+        UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -79,7 +80,7 @@ class UndoSetNodeText : public UndoItem
         /**
          * The unique Node id.
          */
-        const qint64 m_nodeId;
+        const Uid m_nodeUid;
 
         /**
          * Undo text.

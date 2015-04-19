@@ -35,7 +35,7 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodeStyle(qint64 id, const NodeStyle & style, Document * doc);
+        UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -78,7 +78,7 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * The unique Node id.
          */
-        const qint64 m_nodeId;
+        const Uid m_nodeId;
 
         /**
          * The node style before the change

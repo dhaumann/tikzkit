@@ -35,7 +35,7 @@ class UndoSetPathStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc);
+        UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -78,7 +78,7 @@ class UndoSetPathStyle : public UndoItem
         /**
          * The unique Path id.
          */
-        const qint64 m_pathId;
+        const Uid m_pathUid;
 
         /**
          * The node style before the change

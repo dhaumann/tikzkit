@@ -37,8 +37,8 @@ class EllipsePathPrivate
         MetaPos pos;
 };
 
-EllipsePath::EllipsePath(qint64 id, Document* doc)
-    : Path(id, doc)
+EllipsePath::EllipsePath(const Uid & uid, Document* doc)
+    : Path(uid, doc)
     , d(new EllipsePathPrivate(doc))
 {
     connect(d->pos.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),

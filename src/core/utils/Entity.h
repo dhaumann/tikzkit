@@ -37,7 +37,7 @@ class EntityPrivate;
 class TIKZCORE_EXPORT Entity : public ConfigObject
 {
     Q_OBJECT
-    Q_PROPERTY(qint64 id READ id)
+    Q_PROPERTY(Uid uid READ uid)
 
     public:
         /**
@@ -55,14 +55,6 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
          * Virtual destructor.
          */
         virtual ~Entity();
-
-        /**
-         * Unique identifier.
-         * If the entity id is -1 (or negative), the entity is not unique,
-         * implying the entity is not managed by any tikz::core::Document.
-         * The return value is the same as uid().id().
-         */
-        qint64 id() const;
 
         /**
          * Returns the unique entity identifier in terms of a Uid.
@@ -94,9 +86,9 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
         friend class Document;
 
         /**
-         * Associate this style with @p id to the document @p tikzDocument.
+         * Associate this style with @p uid to the document @p tikzDocument.
          */
-        Entity(qint64 id, Document* tikzDocument);
+        Entity(const Uid & uid, Document* tikzDocument);
 
     private:
         std::unique_ptr<EntityPrivate> const d;

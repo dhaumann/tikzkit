@@ -22,6 +22,7 @@
 
 #include "UndoItem.h"
 #include "MetaPos.h"
+#include "Uid.h"
 
 namespace tikz {
 namespace core {
@@ -80,7 +81,7 @@ class UndoSetNodePos : public UndoItem
         /**
          * The unique Node id.
          */
-        qint64 m_nodeId;
+        Uid m_nodeUid;
 
         /**
          * Undo position.

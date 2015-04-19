@@ -30,7 +30,7 @@ class EntityPrivate
 {
 public:
     // unique id, or -1 (negative)
-    qint64 id = -1;
+    Uid uid = Uid();
 
     // associated Document (if any)
     Document * document = nullptr;
@@ -42,15 +42,16 @@ Entity::Entity()
 {
 }
 
-Entity::Entity(qint64 id, Document* doc)
+Entity::Entity(const Uid & uid, Document* doc)
     : ConfigObject(doc)
     , d(new EntityPrivate())
 {
-    Q_ASSERT(id >= 0);
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(uid.document() == doc);
     Q_ASSERT(doc);
 
     d->document = doc;
-    d->id = id;
+    d->uid = uid;
 }
 
 Entity::Entity(const QJsonObject & json, Document* doc)
@@ -60,8 +61,7 @@ Entity::Entity(const QJsonObject & json, Document* doc)
     d->document = doc;
 
     if (json.contains("uid")) {
-        const Uid tempUid(json["uid"].toString(), d->document);
-        d->id = tempUid.id();
+        d->uid = Uid(json["uid"].toString(), d->document);
     }
 }
 
@@ -69,14 +69,9 @@ Entity::~Entity()
 {
 }
 
-qint64 Entity::id() const
-{
-    return d->id;
-}
-
 Uid Entity::uid() const
 {
-    return Uid(d->id, d->document);
+    return d->uid;
 }
 
 tikz::EntityType Entity::entityType() const
@@ -87,7 +82,7 @@ tikz::EntityType Entity::entityType() const
 QJsonObject Entity::toJson() const
 {
     QJsonObject json;
-    json["uid"] = uid().toString();
+    json["uid"] = d->uid.toString();
     return json;
 }
 

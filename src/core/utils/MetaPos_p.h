@@ -22,6 +22,7 @@
 
 #include "tikz.h"
 
+#include "Uid.h"
 #include "Pos.h"
 #include <QSharedPointer>
 
@@ -44,7 +45,7 @@ class MetaPosPrivate : public QObject
         Document * doc;
 
         tikz::Pos pos;
-        qint64 nodeId;
+        Uid nodeId;
         Anchor anchor;
 
     public:

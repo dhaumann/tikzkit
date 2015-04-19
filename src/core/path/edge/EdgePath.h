@@ -195,10 +195,10 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Constructor that associates this path with the tikz Document @p doc.
          * @param type Path type
-         * @param id unique id of the path
+         * @param uid unique id of the path
          * @param doc associated document
          */
-        EdgePath(PathType type, qint64 id, Document* doc);
+        EdgePath(PathType type, const Uid & uid, Document* doc);
 
         /**
          * Destruct the node by saving the start and end pos or node connection.

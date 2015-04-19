@@ -52,8 +52,8 @@ class NodePrivate
         NodeStyle style;
 };
 
-Node::Node(qint64 id, Document* doc)
-    : Entity(id, doc)
+Node::Node(const Uid & uid, Document* doc)
+    : Entity(uid, doc)
     , d(new NodePrivate(doc))
 {
     d->style.setParentStyle(doc->style());
@@ -122,7 +122,7 @@ void Node::setText(const QString& text)
         emit textChanged(d->text);
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeText(id(), text, document()));
+        document()->addUndoItem(new UndoSetNodeText(uid(), text, document()));
 
         // now the text should be updated
         Q_ASSERT(d->text == text);
@@ -148,7 +148,7 @@ void Node::setStyle(const NodeStyle & style)
         d->style.setStyle(&style);
     } else {
     // create new undo item, push will call ::redo()
-    document()->addUndoItem(new UndoSetNodeStyle(id(), style, document()));
+    document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
 
     // now the text should be updated
 //     Q_ASSERT(d->style == style); // same as above

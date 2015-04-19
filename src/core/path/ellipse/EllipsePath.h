@@ -130,10 +130,10 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         /**
          * Constructor that associates this path with the tikz Document @p doc.
          * @param type Path type
-         * @param id unique id of the path
+         * @param uid unique id of the path
          * @param doc associated document
          */
-        EllipsePath(qint64 id, Document* doc);
+        EllipsePath(const Uid & uid, Document* doc);
 
         /**
          * Destruct the ellipse by saving the position or node connection.

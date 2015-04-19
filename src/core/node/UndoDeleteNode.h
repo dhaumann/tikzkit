@@ -36,7 +36,7 @@ class UndoDeleteNode : public UndoItem
         /**
          * Constructor.
          */
-        UndoDeleteNode(qint64 id, Document * doc);
+        UndoDeleteNode(const Uid & nodeUid, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -67,7 +67,7 @@ class UndoDeleteNode : public UndoItem
         /**
          * The unique Node id.
          */
-        qint64 m_id;
+        const Uid m_nodeUid;
 
         /**
          * The node position.

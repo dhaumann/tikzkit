@@ -126,10 +126,10 @@ class TIKZCORE_EXPORT Node : public Entity
 
         /**
          * Constructor that associates this node with the tikz Document @p doc.
-         * @param id unique id of the node
+         * @param uid unique id of the node
          * @param doc associated document
          */
-        Node(qint64 id, Document* doc);
+        Node(const Uid & uid, Document* doc);
 
     private:
         /**

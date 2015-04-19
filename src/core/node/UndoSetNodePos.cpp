@@ -28,7 +28,7 @@ UndoSetNodePos::UndoSetNodePos(Node * node,
                                const MetaPos & newPos,
                                Document * doc)
     : UndoItem("Move Node", doc)
-    , m_nodeId(node->id())
+    , m_nodeUid(node->uid())
     , m_undoPos(node->metaPos())
     , m_redoPos(newPos)
 {
@@ -39,18 +39,18 @@ UndoSetNodePos::~UndoSetNodePos()
 }
 
 UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
-    : UndoSetNodePos(doc->nodeFromId(json["node-id"].toString().toLongLong()),
+    : UndoSetNodePos(doc->nodeFromId(Uid(json["node-id"].toString(), doc)),
                      MetaPos(json["redo-pos"].toString(), doc),
                      doc)
 {
-    Q_ASSERT(m_nodeId >= 0);
+    Q_ASSERT(m_nodeUid >= 0);
 }
 
 void UndoSetNodePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Node * node = document()->nodeFromId(m_nodeId);
+    Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
 
     node->setMetaPos(m_undoPos);
@@ -62,7 +62,7 @@ void UndoSetNodePos::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Node * node = document()->nodeFromId(m_nodeId);
+    Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setMetaPos(m_redoPos);
 
@@ -73,7 +73,7 @@ bool UndoSetNodePos::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetNodePos*>(command);
-    if (m_nodeId != other->m_nodeId) {
+    if (m_nodeUid != other->m_nodeUid) {
         return false;
     }
 
@@ -85,7 +85,7 @@ QJsonObject UndoSetNodePos::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-set-pos";
-    json["node-id"] = QString::number(m_nodeId);
+    json["node-id"] = m_nodeUid.toString();
     json["redo-pos"] = m_redoPos.toString();
     return json;
 }

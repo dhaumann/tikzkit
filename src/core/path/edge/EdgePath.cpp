@@ -43,8 +43,8 @@ class EdgePathPrivate
         MetaPos end;
 };
 
-EdgePath::EdgePath(PathType type, qint64 id, Document* doc)
-    : Path(id, doc)
+EdgePath::EdgePath(PathType type, const Uid & uid, Document* doc)
+    : Path(uid, doc)
     , d(new EdgePathPrivate(doc))
 {
     d->type = type;

@@ -34,8 +34,8 @@ class PathPrivate
         EdgeStyle style;
 };
 
-Path::Path(qint64 id, Document* doc)
-    : Entity(id, doc)
+Path::Path(const Uid & uid, Document* doc)
+    : Entity(uid, doc)
     , d(new PathPrivate())
 {
     d->style.setParentStyle(doc->style());
@@ -85,7 +85,7 @@ void Path::setStyle(const EdgeStyle & style)
         d->style.setStyle(&style);
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetPathStyle(id(), style, document()));
+        document()->addUndoItem(new UndoSetPathStyle(uid(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above
@@ -114,7 +114,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         d->edges.insert(index, edge);
 //     } else {
 //         // create edge via undo system
-//         document()->undoManager()->push(new UndoCreateEdge(id(), index, document()));
+//         document()->addUndoItem(new UndoCreateEdge(uid(), index, document()));
 //         Q_ASSERT(index < d->edges.size());
 //
 //         // return newly created edge
@@ -150,7 +150,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         delete edge;
 //     } else {
 //         // create edge via undo system
-//         document()->undoManager()->push(new UndoDeleteEdge(id(), index, document()));
+//         document()->addUndoItem(new UndoDeleteEdge(uid(), index, document()));
 //     }
 // }
 //

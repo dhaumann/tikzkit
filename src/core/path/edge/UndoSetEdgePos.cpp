@@ -29,7 +29,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
                                bool isStartNode,
                                Document * doc)
     : UndoItem("Set Edge Position", doc)
-    , m_pathId(path->id())
+    , m_pathUid(path->uid())
     , m_undoPos(isStartNode ? path->startMetaPos() : path->endMetaPos())
     , m_redoPos(newPos)
     , m_isStart(isStartNode)
@@ -37,7 +37,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
 }
 
 UndoSetEdgePos::UndoSetEdgePos(const QJsonObject & json, Document * doc)
-    : UndoSetEdgePos(dynamic_cast<EdgePath *>(doc->pathFromId(json["path-id"].toString().toLongLong())),
+    : UndoSetEdgePos(dynamic_cast<EdgePath *>(doc->pathFromId(Uid(json["path-id"].toString(), doc))),
                      MetaPos(json["redo-pos"].toString(), doc),
                      json["is-start"].toBool(),
                      doc)
@@ -52,7 +52,7 @@ void UndoSetEdgePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     if (m_isStart) {
@@ -68,7 +68,7 @@ void UndoSetEdgePos::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathId));
+    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     if (m_isStart) {
@@ -84,7 +84,7 @@ bool UndoSetEdgePos::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetEdgePos*>(command);
-    if (m_pathId != other->m_pathId || m_isStart != other->m_isStart) {
+    if (m_pathUid != other->m_pathUid || m_isStart != other->m_isStart) {
         return false;
     }
 
@@ -96,7 +96,7 @@ QJsonObject UndoSetEdgePos::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "edge-set-pos";
-    json["path-id"] = QString::number(m_pathId);
+    json["path-id"] = m_pathUid.toString();
     json["redo-pos"] = m_redoPos.toString();
     json["is-start"] = m_isStart;
     return json;

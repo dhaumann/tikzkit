@@ -82,8 +82,8 @@ Style::Style()
 {
 }
 
-Style::Style(qint64 id, Document* doc)
-    : Entity(id, doc)
+Style::Style(const Uid & uid, Document* doc)
+    : Entity(uid, doc)
     , d(new StylePrivate())
 {
 }
@@ -95,7 +95,7 @@ Style::Style(const QJsonObject & json, Document* doc)
     ConfigTransaction transaction(this);
 
     if (json.contains("parent-id")) {
-        const qint64 styleId = json["parent-id"].toString().toLongLong();
+        const Uid styleId(json["parent-id"].toString(), doc);
         d->parent = doc->style()->findStyle(styleId);
     }
 
@@ -187,7 +187,7 @@ QJsonObject Style::toJson() const
     QJsonObject json = Entity::toJson();
 
     if (parentStyle()) {
-        json["parent-id"] = QString::number(parentStyle()->id());
+        json["parent-id"] = parentStyle()->uid().toString();
     }
 
     if (penColorSet()) {
@@ -273,14 +273,14 @@ bool Style::hasChildStyles() const
     return d->children.size() > 0;
 }
 
-Style * Style::findStyle(qint64 styleId) const
+Style * Style::findStyle(const Uid & styleUid) const
 {
-    if (id() == styleId) {
+    if (uid() == styleUid) {
         return const_cast<Style*>(this);
     }
 
     for (const auto style : d->children) {
-        auto ptr = style->findStyle(styleId);
+        auto ptr = style->findStyle(styleUid);
         if (ptr) {
             return ptr;
         }

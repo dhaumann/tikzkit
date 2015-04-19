@@ -23,14 +23,14 @@
 namespace tikz {
 namespace core {
 
-UndoCreateNode::UndoCreateNode(qint64 id, Document * doc)
+UndoCreateNode::UndoCreateNode(const Uid & nodeUid, Document * doc)
     : UndoItem("Create Node", doc)
-    , m_id(id)
+    , m_nodeUid(nodeUid)
 {
 }
 
 UndoCreateNode::UndoCreateNode(const QJsonObject & json, Document * doc)
-    : UndoCreateNode(json["node-id"].toString().toLongLong(), doc)
+    : UndoCreateNode(Uid(json["node-id"].toString(), doc), doc)
 {
 }
 
@@ -40,19 +40,19 @@ UndoCreateNode::~UndoCreateNode()
 
 void UndoCreateNode::undo()
 {
-    document()->deleteNode(m_id);
+    document()->deleteNode(m_nodeUid);
 }
 
 void UndoCreateNode::redo()
 {
-    document()->createNode(m_id);
+    document()->createNode(m_nodeUid);
 }
 
 QJsonObject UndoCreateNode::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-create";
-    json["node-id"] = QString::number(m_id);
+    json["node-id"] = m_nodeUid.toString();
     return json;
 }
 

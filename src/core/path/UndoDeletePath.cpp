@@ -25,12 +25,12 @@
 namespace tikz {
 namespace core {
 
-UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
+UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
     : UndoItem("Delete Path", doc)
-    , m_id(id)
+    , m_pathUid(pathUid)
 {
     // get path to save data
-    Path* path = document()->pathFromId(m_id);
+    Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     m_type = path->type();
@@ -40,7 +40,7 @@ UndoDeletePath::UndoDeletePath(qint64 id, Document * doc)
 }
 
 UndoDeletePath::UndoDeletePath(const QJsonObject & json, Document * doc)
-    : UndoDeletePath(json["path-id"].toString().toLongLong(),
+    : UndoDeletePath(Uid(json["path-id"].toString(), doc),
                      doc)
 {
 }
@@ -51,9 +51,9 @@ UndoDeletePath::~UndoDeletePath()
 
 void UndoDeletePath::undo()
 {
-    document()->createPath(m_type, m_id);
+    document()->createPath(m_type, m_pathUid);
 
-    Path * path = document()->pathFromId(m_id);
+    Path * path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     ConfigTransaction transaction(path);
@@ -62,14 +62,14 @@ void UndoDeletePath::undo()
 
 void UndoDeletePath::redo()
 {
-    document()->deletePath(m_id);
+    document()->deletePath(m_pathUid);
 }
 
 QJsonObject UndoDeletePath::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "path-delete";
-    json["path-id"] = QString::number(m_id);
+    json["path-id"] = m_pathUid.toString();
     return json;
 }
 

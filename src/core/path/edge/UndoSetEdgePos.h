@@ -23,6 +23,7 @@
 #include "UndoItem.h"
 #include "tikz.h"
 #include "MetaPos.h"
+#include "Uid.h"
 
 namespace tikz {
 namespace core {
@@ -81,7 +82,7 @@ class UndoSetEdgePos : public UndoItem
         /**
          * The unique Edge id.
          */
-        const qint64 m_pathId;
+        const Uid m_pathUid;
 
         /**
          * old anchor of the connection

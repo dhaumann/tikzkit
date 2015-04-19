@@ -25,12 +25,12 @@
 namespace tikz {
 namespace core {
 
-UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Document * doc)
+UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc)
     : UndoItem("Change Path Style", doc)
-    , m_pathId(pathId)
+    , m_pathUid(pathUid)
 {
     // get path to save data
-    Path* path = document()->pathFromId(m_pathId);
+    Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     // save properties
@@ -39,7 +39,7 @@ UndoSetPathStyle::UndoSetPathStyle(qint64 pathId, const EdgeStyle & style, Docum
 }
 
 UndoSetPathStyle::UndoSetPathStyle(const QJsonObject & json, Document * doc)
-    : UndoSetPathStyle(json["path-id"].toString().toLongLong(),
+    : UndoSetPathStyle(Uid(json["path-id"].toString(), doc),
                        EdgeStyle(json["redo-style"].toObject(), doc),
                        doc)
 {
@@ -53,7 +53,7 @@ void UndoSetPathStyle::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path* path = document()->pathFromId(m_pathId);
+    Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     path->setStyle(m_undoStyle);
@@ -65,7 +65,7 @@ void UndoSetPathStyle::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    Path* path = document()->pathFromId(m_pathId);
+    Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     path->setStyle(m_redoStyle);
@@ -77,7 +77,7 @@ bool UndoSetPathStyle::mergeWith(const UndoItem * command)
 {
         // only merge when command is of correct type
     auto other = static_cast<const UndoSetPathStyle*>(command);
-    if (m_pathId != other->m_pathId) {
+    if (m_pathUid != other->m_pathUid) {
         return false;
     }
 
@@ -89,7 +89,7 @@ QJsonObject UndoSetPathStyle::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "path-set-style";
-    json["path-id"] = QString::number(m_pathId);
+    json["path-id"] = m_pathUid.toString();
     json["redo-style"] = m_redoStyle.toJson();
     return json;
 }

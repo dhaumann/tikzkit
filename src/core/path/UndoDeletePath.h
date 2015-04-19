@@ -33,7 +33,7 @@ class UndoDeletePath : public UndoItem
         /**
          * Constructor.
          */
-        UndoDeletePath(qint64 id, Document * doc);
+        UndoDeletePath(const Uid & pathUid, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -64,7 +64,7 @@ class UndoDeletePath : public UndoItem
         /**
          * The unique Edge id.
          */
-        const qint64 m_id;
+        const Uid m_pathUid;
 
         /**
          * Path type.

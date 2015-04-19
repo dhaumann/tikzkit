@@ -27,7 +27,7 @@ MetaPosPrivate::MetaPosPrivate(MetaPos * metaPos)
     : QObject()
     , q(metaPos)
     , doc(0)
-    , nodeId(-1)
+    , nodeId()
     , anchor(tikz::NoAnchor)
     , changeRefCounter(0)
 {

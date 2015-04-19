@@ -21,6 +21,7 @@
 #define TIKZ_UNDO_CREATE_NODE_H
 
 #include "UndoItem.h"
+#include "Uid.h"
 
 namespace tikz {
 namespace core {
@@ -34,7 +35,7 @@ class UndoCreateNode : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreateNode(qint64 id, Document * doc);
+        UndoCreateNode(const Uid & nodeUid, Document * doc);
 
         /**
          * Constructor that deserializes the item from @p json.
@@ -66,7 +67,7 @@ class UndoCreateNode : public UndoItem
         /**
          * The unique Node id.
          */
-        const qint64 m_id;
+        const Uid m_nodeUid;
 };
 
 }

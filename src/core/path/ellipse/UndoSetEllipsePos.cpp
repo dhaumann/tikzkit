@@ -28,14 +28,14 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      const MetaPos & newPos,
                                      Document * doc)
     : UndoItem("Set Ellipse Position", doc)
-    , m_pathId(path->id())
+    , m_pathUid(path->uid())
     , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
 {
 }
 
 UndoSetEllipsePos::UndoSetEllipsePos(const QJsonObject & json, Document * doc)
-    : UndoSetEllipsePos(static_cast<EllipsePath *>(doc->pathFromId(json["path-id"].toString().toLongLong())),
+    : UndoSetEllipsePos(static_cast<EllipsePath *>(doc->pathFromId(Uid(json["path-id"].toString(), doc))),
                         MetaPos(json["redo-pos"].toString(), doc),
                         doc)
 {
@@ -49,7 +49,7 @@ void UndoSetEllipsePos::undo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
+    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     path->setMetaPos(m_undoPos);
@@ -61,7 +61,7 @@ void UndoSetEllipsePos::redo()
 {
     const bool wasActive = document()->setUndoActive(true);
 
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathId));
+    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     path->setMetaPos(m_redoPos);
@@ -72,7 +72,7 @@ void UndoSetEllipsePos::redo()
 bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
 {
     auto other = static_cast<const UndoSetEllipsePos*>(command);
-    if (m_pathId != other->m_pathId) {
+    if (m_pathUid != other->m_pathUid) {
         return false;
     }
 
@@ -84,7 +84,7 @@ QJsonObject UndoSetEllipsePos::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "ellipse-set-pos";
-    json["path-id"] = QString::number(m_pathId);
+    json["path-id"] = m_pathUid.toString();
     json["redo-pos"] = m_redoPos.toString();
     return json;
 }

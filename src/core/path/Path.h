@@ -91,10 +91,10 @@ class TIKZCORE_EXPORT Path : public Entity
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
-         * @param id unique id of the path
+         * @param uid unique id of the path
          * @param doc associated document
          */
-        Path(qint64 id, Document* doc);
+        Path(const Uid & uid, Document* doc);
 
         /**
          * This function is called by Document::deletePath() right before the

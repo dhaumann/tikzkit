@@ -103,10 +103,10 @@ class TIKZCORE_EXPORT Style : public Entity
 
         /**
          * Searches this style as well as all child styles recursively for
-         * a style that matches @p id. If no style with @p id is found,
-         * nullptr is returned.
+         * a style that matches @p styleUid. If no style with @p styleUid is
+         * found, a nullptr is returned.
          */
-        Style * findStyle(qint64 styleId) const;
+        Style * findStyle(const Uid & styleUid) const;
 
     //
     // properties
@@ -427,9 +427,9 @@ class TIKZCORE_EXPORT Style : public Entity
         friend class Document;
 
         /**
-         * Associate this style with @p id to the document @p tikzDocument.
+         * Associate this style with @p uid to the document @p tikzDocument.
          */
-        Style(qint64 id, Document* tikzDocument);
+        Style(const Uid & uid, Document* tikzDocument);
 
     private:
         std::unique_ptr<StylePrivate> const d;
