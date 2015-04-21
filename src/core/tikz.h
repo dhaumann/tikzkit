@@ -57,6 +57,17 @@ enum Unit {
     Inch
 };
 
+/**
+ * Convert the tikz::Unit @p unit to a QString.
+ */
+TIKZCORE_EXPORT QString toString(tikz::Unit unit);
+
+/**
+ * Convert the string @p unit to an enum tikz::Unit.
+ */
+TIKZCORE_EXPORT tikz::Unit toUnit(const QString & unit);
+
+
 enum TextAlignment {
     NoAlign = 0,
     AlignLeft,

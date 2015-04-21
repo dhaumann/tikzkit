@@ -70,6 +70,8 @@ class DocumentPrivate
         // flag whether operations should add undo items or not
         bool undoActive = false;
 
+        Unit preferredUnit = Unit::Centimeter;
+
         // global document style options
         Style * style = nullptr;
 
@@ -219,6 +221,9 @@ bool Document::load(const QUrl & fileurl)
             }
         }
     }
+    if (root.contains("preferred-unit")) {
+        setPreferredUnit(toUnit(root["preferred-unit"].toString()));
+    }
 
     // now make sure the next free uniq id is valid by finding the maximum
     // used id, and then add "+1".
@@ -271,6 +276,7 @@ bool Document::saveAs(const QUrl & targetUrl)
 
         QJsonObject json;
         json["history"] = jsonHistory;
+        json["preferred-unit"] = toString(preferredUnit());
 
         // now save data
         QFile file(targetUrl.toLocalFile());
@@ -434,6 +440,19 @@ tikz::Pos Document::scenePos(const MetaPos & pos) const
     }
 
     return node->pos();
+}
+
+void Document::setPreferredUnit(tikz::Unit unit)
+{
+    if (d->preferredUnit != unit) {
+        d->preferredUnit = unit;
+        emit preferredUnitChanged(d->preferredUnit);
+    }
+}
+
+tikz::Unit Document::preferredUnit() const
+{
+    return d->preferredUnit;
 }
 
 Style * Document::style() const

@@ -249,6 +249,27 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          */
         virtual tikz::Pos scenePos(const MetaPos & pos) const;
 
+        /**
+         * Sets the preferred Unit to @p unit.
+         * The preferred Unit is typically used by the graphical scene when
+         * moving nodes and paths.
+         * @see preferredUnit(), referredUnitChanged()
+         */
+        void setPreferredUnit(tikz::Unit unit);
+
+        /**
+         * Returns the currently preferred unit.
+         * @see setPreferredUnit(), referredUnitChanged()
+         */
+        tikz::Unit preferredUnit() const;
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the preferred unit changed.
+         * @see setPreferredUnit(), preferredUnit()
+         */
+        void preferredUnitChanged(tikz::Unit unit);
+
     //
     // Node, Path and style management
     //

@@ -54,6 +54,36 @@ EntityType toEntityType(const QString & str)
     return EntityType::Invalid;
 }
 
+QString toString(tikz::Unit unit)
+{
+    switch (unit) {
+        case Unit::Point: return "pt";
+        case Unit::Millimeter: return "mm";
+        case Unit::Centimeter: return "cm";
+        case Unit::Inch: return "in";
+        default: break;
+    }
+
+    Q_ASSERT(false);
+    return "cm";
+}
+
+tikz::Unit toUnit(const QString & unit)
+{
+    if (unit == QStringLiteral("pt")) {
+        return Unit::Point;
+    } else if (unit == QStringLiteral("mm")) {
+        return Unit::Millimeter;
+    } else if (unit == QStringLiteral("cm")) {
+        return Unit::Centimeter;
+    } else if (unit == QStringLiteral("in")) {
+        return Unit::Inch;
+    }
+
+    Q_ASSERT(false);
+    return Unit::Centimeter;
+}
+
 QString toString(tikz::TextAlignment alignment)
 {
     switch (alignment) {
