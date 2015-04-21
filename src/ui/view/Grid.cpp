@@ -91,7 +91,7 @@ public:
             top = tikz::Value(std::ceil(top.value()), unit);
 
             //
-            // horizontal lines
+            // vertical lines
             //
             int i = 0;
             for (tikz::Value x = left; x.toPoint() < rect.right(); x += one) {
@@ -127,7 +127,7 @@ public:
             }
 
             //
-            // vertical lines
+            // horizontal lines
             //
             i = 0;
             for (tikz::Value y = top; y.toPoint() < rect.bottom(); y += one) {
@@ -150,7 +150,7 @@ public:
                     l.translate(0, tenth);
                     tenthLines.append(l);
 
-                    l.translate(2 * tenth, 0);
+                    l.translate(0, 2 * tenth);
                     tenthLines.append(l);
                     l.translate(0, tenth);
                     tenthLines.append(l);
