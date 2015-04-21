@@ -69,6 +69,11 @@ class Renderer : public QGraphicsView
          */
         qreal snapAngle(qreal angle) const;
 
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the mouse moved on the view.
+         */
+        void mousePositionChanged(const tikz::Pos & pos);
 
     protected:
         void mousePressEvent(QMouseEvent* event) override;

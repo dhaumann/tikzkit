@@ -55,6 +55,7 @@ ViewPrivate::ViewPrivate(tikz::ui::DocumentPrivate * doc,
     m_doc->registerView(this);
 
     connect(doc->scene(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    connect(m_renderer, SIGNAL(mousePositionChanged(tikz::Pos)), this, SIGNAL(mousePositionChanged(tikz::Pos)));
 }
 
 ViewPrivate::~ViewPrivate()

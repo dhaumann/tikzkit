@@ -22,9 +22,13 @@
 #include <memory>
 #include <QPointer>
 
-class QTextEdit;
+#include <tikz/core/Pos.h>
 
+class QLabel;
+class QComboBox;
+class QTextEdit;
 class QTreeView;
+
 class ViewManager;
 
 namespace tex {
@@ -73,6 +77,7 @@ protected:
 protected Q_SLOTS:
     void mergeView(tikz::ui::View * view);
     void unmergeView(tikz::ui::View * view);
+    void updateMousePosition(const tikz::Pos & pos);
 
 public Q_SLOTS:
     /**
@@ -169,18 +174,22 @@ private:
     QAction * m_editUndo = nullptr;
     QAction * m_editRedo = nullptr;
 
-    ViewManager * m_viewManager;
+    ViewManager * m_viewManager = nullptr;
     QPointer<tikz::ui::View> m_activeView;
 
-    tikz::ui::MainWindow * m_wrapper;
+    tikz::ui::MainWindow * m_wrapper = nullptr;
 
-    QTextEdit * m_textEdit;
+    QTextEdit * m_textEdit = nullptr;
 
-    tikz::ui::LinePropertyWidget * m_linePropertyWidget;
-    tikz::ui::PropertyBrowser * m_browser;
-    QTreeView * m_historyView;
+    tikz::ui::LinePropertyWidget * m_linePropertyWidget = nullptr;
+    tikz::ui::PropertyBrowser * m_browser = nullptr;
+    QTreeView * m_historyView = nullptr;
 
-    tex::PdfGenerator * m_pdfGenerator;
+    tex::PdfGenerator * m_pdfGenerator = nullptr;
+
+    // status bar
+    QLabel * m_positionLabel = nullptr;
+    QComboBox * m_unitComboBox = nullptr;
 };
 
 #endif // TIKZKIT_MAIN_WINDOW_H

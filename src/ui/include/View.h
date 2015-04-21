@@ -23,6 +23,8 @@
 
 #include "tikzgui_export.h"
 
+#include <tikz/core/Pos.h>
+
 #include <QWidget>
 
 class TikzItem;
@@ -97,6 +99,12 @@ Q_SIGNALS:
      * \see focusIn()
      */
     void focusOut(tikz::ui::View *view);
+
+    /**
+     * This signal is emitted whenever the mouse moved on the view.
+     * The current mouse position is @p pos.
+     */
+    void mousePositionChanged(const tikz::Pos & pos);
 
 //
 // Selection methodes.

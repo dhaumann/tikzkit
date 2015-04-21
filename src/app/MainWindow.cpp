@@ -42,11 +42,14 @@
 #include <tikz/core/EllipsePath.h>
 
 #include <QApplication>
+#include <QComboBox>
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QMenu>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QTabBar>
 #include <QTextEdit>
 #include <QToolBar>
@@ -82,6 +85,17 @@ MainWindow::MainWindow()
 
     setupUi();
     setupActions();
+
+    // setup statusbar
+    m_positionLabel = new QLabel(this);
+    m_unitComboBox = new QComboBox(this);
+    m_unitComboBox->addItem("pt");
+    m_unitComboBox->addItem("mm");
+    m_unitComboBox->addItem("cm");
+    m_unitComboBox->addItem("in");
+
+    statusBar()->addPermanentWidget(m_positionLabel);
+    statusBar()->addPermanentWidget(m_unitComboBox);
 
 
     // add arrow head/tail combos
@@ -272,6 +286,7 @@ void MainWindow::mergeView(tikz::ui::View * view)
     connect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
+    connect(view, SIGNAL(mousePositionChanged(tikz::Pos)), this, SLOT(updateMousePosition(tikz::Pos)));
 
     updateWindowTitle();
     updateTikzCode();
@@ -298,6 +313,7 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     disconnect(view->document(), SIGNAL(modifiedChanged()), this, SLOT(updateWindowTitle()));
     disconnect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
     disconnect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
+    disconnect(view, SIGNAL(mousePositionChanged(tikz::Pos)), this, SLOT(updateMousePosition(tikz::Pos)));
 }
 
 void MainWindow::slotDocumentNew()
@@ -459,6 +475,12 @@ tikz::ui::View *MainWindow::openUrl(const QUrl &url)
 bool MainWindow::closeView(tikz::ui::View *view)
 {
     m_viewManager->closeView(view);
+}
+
+void MainWindow::updateMousePosition(const tikz::Pos & pos)
+{
+    m_positionLabel->setText(pos.toString());
+    m_unitComboBox->setCurrentText(tikz::toString(pos.x().unit()));
 }
 
 // kate: indent-width 4; replace-tabs on;
