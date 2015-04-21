@@ -20,6 +20,7 @@
 #ifndef TIKZ_UI_GRID_H
 #define TIKZ_UI_GRID_H
 
+#include <QObject>
 #include <QVarLengthArray>
 #include <QRectF>
 #include <QLineF>
@@ -42,13 +43,17 @@ class GridPrivate;
  * Minor lines are drawn between the major lines as an additional help.
  * The amout of the minor lines varies depending on the zoom of the QGraphicsView.
  */
-class Grid
+class Grid : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(Unit unit READ unit WRITE setUnit)
+    Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
+
 public:
     /**
      * Constructor with required @p view.
      */
-    Grid();
+    explicit Grid(QObject * parent = nullptr);
 
     /**
      * Destructor.
@@ -61,25 +66,27 @@ public:
     void draw(QPainter * p, const QRectF & rect);
 
     /**
-     * Set the unit of this Grid to @p unit.
-     */
-    void setUnit(tikz::Unit unit) noexcept;
-
-    /**
      * Returns this Grid's unit.
      */
     tikz::Unit unit() const noexcept;
-
-    /**
-     * Set this Grid's zoom factor to @p zoomFactor.
-     */
-    void setZoom(qreal zoomFactor) noexcept;
 
     /**
      * Returns this Grid's zoom factor.
      */
     qreal zoom() const noexcept;
 
+public Q_SLOTS:
+    /**
+     * Set the unit of this Grid to @p unit.
+     */
+    void setUnit(tikz::Unit unit) noexcept;
+
+    /**
+     * Set this Grid's zoom factor to @p zoomFactor.
+     */
+    void setZoom(qreal zoomFactor) noexcept;
+
+public:
     /**
      * Snap @p value to the grid.
      */

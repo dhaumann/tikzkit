@@ -166,8 +166,9 @@ public:
     }
 };
 
-Grid::Grid()
-    : d(new GridPrivate())
+Grid::Grid(QObject * parent)
+    : QObject(parent)
+    , d(new GridPrivate())
 {
 }
 

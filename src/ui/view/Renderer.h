@@ -23,7 +23,6 @@
 #include <QGraphicsView>
 
 #include "tikzgui_export.h"
-#include "Grid.h"
 
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>
@@ -33,6 +32,7 @@ namespace ui {
 
 class DocumentPrivate;
 class Ruler;
+class Grid;
 
 class Renderer : public QGraphicsView
 {
@@ -80,12 +80,12 @@ class Renderer : public QGraphicsView
         void drawBackground(QPainter * painter, const QRectF & rect) override;
 
     private:
-        DocumentPrivate * m_doc;
-        tikz::ui::Grid m_grid;
-        tikz::ui::Ruler * m_hRuler;
-        tikz::ui::Ruler * m_vRuler;
+        DocumentPrivate * m_doc = nullptr;
+        tikz::ui::Grid * m_grid = nullptr;
+        tikz::ui::Ruler * m_hRuler = nullptr;
+        tikz::ui::Ruler * m_vRuler = nullptr;
         QPointF m_lastMousePos;
-        bool m_handTool;
+        bool m_handTool = false;
 };
 
 }

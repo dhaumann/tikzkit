@@ -21,6 +21,7 @@
 #include "Ruler.h"
 #include "TikzScene.h"
 #include "DocumentPrivate.h"
+#include "Grid.h"
 
 #include <tikz/core/Document.h>
 
@@ -39,13 +40,14 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     : QGraphicsView(parent)
 {
     m_doc = doc;
-    m_handTool = false;
 
     // add rulers
     setViewportMargins(s_ruler_size, s_ruler_size, 0, 0);
     QGridLayout* gridLayout = new QGridLayout();
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
+
+    m_grid = new Grid(this);
 
     m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
     m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
@@ -72,6 +74,14 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
          -physicalDpiY() / s);
 
 //     setViewportUpdateMode(FullViewportUpdate);
+
+    connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_grid, SLOT(setUnit(tikz::Unit)));
+    connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_hRuler, SLOT(setUnit(tikz::Unit)));
+    connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_vRuler, SLOT(setUnit(tikz::Unit)));
+
+    m_grid->setUnit(doc->preferredUnit());
+    m_hRuler->setUnit(doc->preferredUnit());
+    m_vRuler->setUnit(doc->preferredUnit());
 }
 
 Renderer::~Renderer()
@@ -86,13 +96,13 @@ DocumentPrivate * Renderer::document() const
 tikz::Value Renderer::snapValue(const tikz::Value & value) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? m_grid.snapValue(value) : value;
+    return snap ? m_grid->snapValue(value) : value;
 }
 
 tikz::Pos Renderer::snapPos(const tikz::Pos & pos) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? m_grid.snapPos(pos) : pos;
+    return snap ? m_grid->snapPos(pos) : pos;
 }
 
 qreal Renderer::snapAngle(qreal angle) const
@@ -181,7 +191,7 @@ bool Renderer::viewportEvent(QEvent * event)
     m_vRuler->setZoom(yZoom);
 
     // update grid (zoom)
-    m_grid.setZoom(xZoom);
+    m_grid->setZoom(xZoom);
 
     return QGraphicsView::viewportEvent(event);
 }
@@ -192,7 +202,7 @@ void Renderer::drawBackground(QPainter * painter, const QRectF & rect)
     QGraphicsView::drawBackground(painter, rect);
 
     // draw raster on top
-    m_grid.draw(painter, sceneRect().united(rect));
+    m_grid->draw(painter, sceneRect().united(rect));
 }
 
 }
