@@ -102,16 +102,23 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     vboxLayout->setContentsMargins(0, 0, 0, 0);
     vboxLayout->addWidget(d->browser);
 
+    // setup property managers
     d->valueManager = new ValuePropertyManager(this);
     d->boolManager = new QtBoolPropertyManager(this);
     d->colorManager = new QtColorPropertyManager(this);
     d->opacityManager = new OpacityPropertyManager(this);
 
+    // setup propertybrowser
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
     d->browser->setFactoryForManager(d->boolManager, new QtCheckBoxFactory(this));
     d->browser->setFactoryForManager(d->colorManager, new QtColorEditorFactory(this));
     d->browser->setFactoryForManager(d->opacityManager, new OpacityEditorFactory(this));
 
+    d->browser->setPropertiesWithoutValueMarked(true);
+    d->browser->setRootIsDecorated(false);
+    d->browser->setResizeMode(QtTreePropertyBrowser::Interactive);
+
+    // setup connections
     connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, const tikz::Value &)),
             this, SLOT(valueChanged(QtProperty*, const tikz::Value &)));
     connect(d->boolManager, SIGNAL(valueChanged(QtProperty*, bool)),
