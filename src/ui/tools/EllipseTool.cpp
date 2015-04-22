@@ -58,17 +58,14 @@ EllipseTool::~EllipseTool()
 
 void EllipseTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "ellipse path tool: mouse move event";
 }
 
 void EllipseTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "ellipse path tool: mouse press event";
 }
 
 void EllipseTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "ellipse path tool: mouse release event";
 }
 
 void EllipseTool::createPathHandles()

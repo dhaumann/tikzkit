@@ -89,7 +89,6 @@ MainWindow::MainWindow()
     // setup statusbar
     m_positionLabel = new QLabel(this);
     m_unitComboBox = new QComboBox(this);
-    m_unitComboBox->setFrame(false);
     m_unitComboBox->addItem("pt", "pt");
     m_unitComboBox->addItem("mm", "mm");
     m_unitComboBox->addItem("cm", "cm");

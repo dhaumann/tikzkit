@@ -57,17 +57,14 @@ NodeTool::~NodeTool()
 
 void NodeTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse move event";
 }
 
 void NodeTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse press event";
 }
 
 void NodeTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "node tool: mouse release event";
 }
 
 void NodeTool::keyPressEvent(QKeyEvent * event)

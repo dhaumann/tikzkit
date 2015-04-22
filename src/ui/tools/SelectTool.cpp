@@ -46,17 +46,14 @@ SelectTool::~SelectTool()
 
 void SelectTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "mouse move event";
 }
 
 void SelectTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "mouse press event";
 }
 
 void SelectTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "mouse release event";
 }
 
 void SelectTool::keyPressEvent(QKeyEvent * event)

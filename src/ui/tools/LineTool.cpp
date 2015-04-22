@@ -58,17 +58,14 @@ LineTool::~LineTool()
 
 void LineTool::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "line path tool: mouse move event";
 }
 
 void LineTool::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "line path tool: mouse press event";
 }
 
 void LineTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-    qDebug() << "line path tool: mouse release event";
 }
 
 void LineTool::createPathHandles()
