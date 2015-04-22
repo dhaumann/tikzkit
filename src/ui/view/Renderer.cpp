@@ -97,13 +97,19 @@ DocumentPrivate * Renderer::document() const
 tikz::Value Renderer::snapValue(const tikz::Value & value) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? m_grid->snapValue(value) : value;
+    if (snap) {
+        return m_grid->snapValue(value);
+    }
+    return tikz::Value(static_cast<int>(value.value() * 100) / 100.0, value.unit());
 }
 
 tikz::Pos Renderer::snapPos(const tikz::Pos & pos) const
 {
     const bool snap = QApplication::keyboardModifiers() ^ Qt::ShiftModifier;
-    return snap ? m_grid->snapPos(pos) : pos;
+    if (snap) {
+        m_grid->snapPos(pos);
+    }
+    return tikz::Pos(snapValue(pos.x()), snapValue(pos.y()));
 }
 
 qreal Renderer::snapAngle(qreal angle) const
