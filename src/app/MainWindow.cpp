@@ -89,10 +89,14 @@ MainWindow::MainWindow()
     // setup statusbar
     m_positionLabel = new QLabel(this);
     m_unitComboBox = new QComboBox(this);
-    m_unitComboBox->addItem("pt");
-    m_unitComboBox->addItem("mm");
-    m_unitComboBox->addItem("cm");
-    m_unitComboBox->addItem("in");
+    m_unitComboBox->setFrame(false);
+    m_unitComboBox->addItem("pt", "pt");
+    m_unitComboBox->addItem("mm", "mm");
+    m_unitComboBox->addItem("cm", "cm");
+    m_unitComboBox->addItem("in", "in");
+    m_unitComboBox->setCurrentIndex(2);
+
+    connect(m_unitComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreferredUnitChanged(int)));
 
     statusBar()->addPermanentWidget(m_positionLabel);
     statusBar()->addPermanentWidget(m_unitComboBox);
@@ -479,8 +483,16 @@ bool MainWindow::closeView(tikz::ui::View *view)
 
 void MainWindow::updateMousePosition(const tikz::Pos & pos)
 {
-    m_positionLabel->setText(pos.toString());
+    const QString x = QString::number(pos.x().value(), 'f', 2);
+    const QString y = QString::number(pos.y().value(), 'f', 2);
+    m_positionLabel->setText(x + QLatin1String(", ") + y);
     m_unitComboBox->setCurrentText(tikz::toString(pos.x().unit()));
+}
+
+void MainWindow::slotPreferredUnitChanged(int index)
+{
+    tikz::Unit unit = tikz::toUnit(m_unitComboBox->itemData(index).toString());
+    activeView()->document()->setPreferredUnit(unit);
 }
 
 // kate: indent-width 4; replace-tabs on;

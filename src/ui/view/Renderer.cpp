@@ -78,6 +78,7 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_grid, SLOT(setUnit(tikz::Unit)));
     connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_hRuler, SLOT(setUnit(tikz::Unit)));
     connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), m_vRuler, SLOT(setUnit(tikz::Unit)));
+    connect(doc, SIGNAL(preferredUnitChanged(tikz::Unit)), viewport(), SLOT(update()));
 
     m_grid->setUnit(doc->preferredUnit());
     m_hRuler->setUnit(doc->preferredUnit());
