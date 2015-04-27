@@ -40,7 +40,7 @@ UndoSetNodePos::~UndoSetNodePos()
 
 UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
     : UndoSetNodePos(doc->nodeFromId(Uid(json["node-id"].toString(), doc)),
-                     MetaPos(json["redo-pos"].toString(), doc),
+                     MetaPos(json["pos"].toString(), doc),
                      doc)
 {
     Q_ASSERT(m_nodeUid >= 0);
@@ -86,7 +86,7 @@ QJsonObject UndoSetNodePos::toJsonObject() const
     QJsonObject json;
     json["type"] = "node-set-pos";
     json["node-id"] = m_nodeUid.toString();
-    json["redo-pos"] = m_redoPos.toString();
+    json["pos"] = m_redoPos.toString();
     return json;
 }
 

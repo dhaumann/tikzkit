@@ -38,7 +38,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
 
 UndoSetEdgePos::UndoSetEdgePos(const QJsonObject & json, Document * doc)
     : UndoSetEdgePos(dynamic_cast<EdgePath *>(doc->pathFromId(Uid(json["path-id"].toString(), doc))),
-                     MetaPos(json["redo-pos"].toString(), doc),
+                     MetaPos(json["pos"].toString(), doc),
                      json["is-start"].toBool(),
                      doc)
 {
@@ -97,7 +97,7 @@ QJsonObject UndoSetEdgePos::toJsonObject() const
     QJsonObject json;
     json["type"] = "edge-set-pos";
     json["path-id"] = m_pathUid.toString();
-    json["redo-pos"] = m_redoPos.toString();
+    json["pos"] = m_redoPos.toString();
     json["is-start"] = m_isStart;
     return json;
 }

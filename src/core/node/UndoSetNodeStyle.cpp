@@ -40,7 +40,7 @@ UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style,
 
 UndoSetNodeStyle::UndoSetNodeStyle(const QJsonObject & json, Document * doc)
     : UndoSetNodeStyle(Uid(json["node-id"].toString(), doc),
-                       NodeStyle(json["redo-style"].toObject(), doc),
+                       NodeStyle(json["style"].toObject(), doc),
                        doc)
 {
 }
@@ -89,7 +89,7 @@ QJsonObject UndoSetNodeStyle::toJsonObject() const
     QJsonObject json;
     json["type"] = "node-set-style";
     json["node-id"] = m_nodeId.toString();
-    json["redo-style"] = m_redoStyle.toJson();
+    json["style"] = m_redoStyle.toJson();
     return json;
 }
 

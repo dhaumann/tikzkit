@@ -37,7 +37,7 @@ UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, D
 
 UndoSetNodeText::UndoSetNodeText(const QJsonObject & json, Document * doc)
     : UndoSetNodeText(Uid(json["node-id"].toString(), doc),
-                      json["redo-text"].toString(),
+                      json["text"].toString(),
                       doc)
 {
 }
@@ -85,7 +85,7 @@ QJsonObject UndoSetNodeText::toJsonObject() const
     QJsonObject json;
     json["type"] = "node-set-text";
     json["node-id"] = m_nodeUid.toString();
-    json["redo-text"] = m_redoText;
+    json["text"] = m_redoText;
     return json;
 }
 

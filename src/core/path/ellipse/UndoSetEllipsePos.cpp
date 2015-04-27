@@ -36,7 +36,7 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
 
 UndoSetEllipsePos::UndoSetEllipsePos(const QJsonObject & json, Document * doc)
     : UndoSetEllipsePos(static_cast<EllipsePath *>(doc->pathFromId(Uid(json["path-id"].toString(), doc))),
-                        MetaPos(json["redo-pos"].toString(), doc),
+                        MetaPos(json["pos"].toString(), doc),
                         doc)
 {
 }
@@ -85,7 +85,7 @@ QJsonObject UndoSetEllipsePos::toJsonObject() const
     QJsonObject json;
     json["type"] = "ellipse-set-pos";
     json["path-id"] = m_pathUid.toString();
-    json["redo-pos"] = m_redoPos.toString();
+    json["pos"] = m_redoPos.toString();
     return json;
 }
 
