@@ -40,7 +40,7 @@ UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
 }
 
 UndoDeletePath::UndoDeletePath(const QJsonObject & json, Document * doc)
-    : UndoDeletePath(Uid(json["path-id"].toString(), doc),
+    : UndoDeletePath(Uid(json["uid"].toString(), doc),
                      doc)
 {
 }
@@ -69,7 +69,7 @@ QJsonObject UndoDeletePath::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "path-delete";
-    json["path-id"] = m_pathUid.toString();
+    json["uid"] = m_pathUid.toString();
     return json;
 }
 

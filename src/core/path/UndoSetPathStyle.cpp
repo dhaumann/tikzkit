@@ -39,7 +39,7 @@ UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style,
 }
 
 UndoSetPathStyle::UndoSetPathStyle(const QJsonObject & json, Document * doc)
-    : UndoSetPathStyle(Uid(json["path-id"].toString(), doc),
+    : UndoSetPathStyle(Uid(json["uid"].toString(), doc),
                        EdgeStyle(json["style"].toObject(), doc),
                        doc)
 {
@@ -89,7 +89,7 @@ QJsonObject UndoSetPathStyle::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "path-set-style";
-    json["path-id"] = m_pathUid.toString();
+    json["uid"] = m_pathUid.toString();
     json["style"] = m_redoStyle.toJson();
     return json;
 }

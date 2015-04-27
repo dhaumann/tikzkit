@@ -30,7 +30,7 @@ UndoCreateNode::UndoCreateNode(const Uid & nodeUid, Document * doc)
 }
 
 UndoCreateNode::UndoCreateNode(const QJsonObject & json, Document * doc)
-    : UndoCreateNode(Uid(json["node-id"].toString(), doc), doc)
+    : UndoCreateNode(Uid(json["uid"].toString(), doc), doc)
 {
 }
 
@@ -52,7 +52,7 @@ QJsonObject UndoCreateNode::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-create";
-    json["node-id"] = m_nodeUid.toString();
+    json["uid"] = m_nodeUid.toString();
     return json;
 }
 

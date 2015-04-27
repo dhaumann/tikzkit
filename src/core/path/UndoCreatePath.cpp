@@ -32,7 +32,7 @@ UndoCreatePath::UndoCreatePath(PathType type, const Uid & pathUid, Document * do
 
 UndoCreatePath::UndoCreatePath(const QJsonObject & json, Document * doc)
     : UndoCreatePath(toPathType(json["path-type"].toString()),
-                     Uid(json["path-id"].toString(), doc),
+                     Uid(json["uid"].toString(), doc),
                      doc)
 {
 }
@@ -55,7 +55,7 @@ QJsonObject UndoCreatePath::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "path-create";
-    json["path-id"] = m_pathUid.toString();
+    json["uid"] = m_pathUid.toString();
     json["path-type"] = toString(m_type);
     return json;
 }

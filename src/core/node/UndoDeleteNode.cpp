@@ -40,7 +40,7 @@ UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
 }
 
 UndoDeleteNode::UndoDeleteNode(const QJsonObject & json, Document * doc)
-    : UndoDeleteNode(Uid(json["node-id"].toString(), doc), doc)
+    : UndoDeleteNode(Uid(json["uid"].toString(), doc), doc)
 {
 }
 
@@ -70,7 +70,7 @@ QJsonObject UndoDeleteNode::toJsonObject() const
 {
     QJsonObject json;
     json["type"] = "node-delete";
-    json["node-id"] = m_nodeUid.toString();
+    json["uid"] = m_nodeUid.toString();
     return json;
 }
 
