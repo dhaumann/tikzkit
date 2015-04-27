@@ -20,6 +20,8 @@
 #ifndef TIKZ_UNDO_ITEM_H
 #define TIKZ_UNDO_ITEM_H
 
+#include "tikz_export.h"
+
 #include <QString>
 #include <QJsonObject>
 
@@ -33,7 +35,7 @@ class UndoItemPrivate;
 /**
  * Base class for undo/redo items.
  */
-class UndoItem
+class TIKZCORE_EXPORT UndoItem
 {
 public:
     /**
