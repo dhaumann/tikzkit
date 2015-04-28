@@ -22,6 +22,7 @@
 
 #include <QPointF>
 #include <QPainterPath>
+#include <QStringList>
 
 #include <tikz/core/tikz.h>
 
@@ -97,17 +98,17 @@ class AbstractShape
         /**
          * Returns a list of anchors the shape supports.
          */
-        virtual QVector<tikz::Anchor> supportedAnchors() const;
+        virtual QStringList supportedAnchors() const;
 
         /**
          * Returns the position of @p anchor in local node coordinates.
          */
-        virtual QPointF anchorPos(tikz::Anchor anchor) const;
+        virtual QPointF anchorPos(const QString & anchor) const;
 
         /**
          * Returns the contact point for @p anchor and angle @p rad.
          */
-        virtual QPointF contactPoint(tikz::Anchor anchor, qreal rad) const;
+        virtual QPointF contactPoint(const QString & anchor, qreal rad) const;
 
     private:
         AbstractShapePrivate * const d;

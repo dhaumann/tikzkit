@@ -87,47 +87,59 @@ QPainterPath EllipseShape::outline() const
     return path;
 }
 
-QVector<tikz::Anchor> EllipseShape::supportedAnchors() const
+QStringList EllipseShape::supportedAnchors() const
 {
     // by default, just return NoAnchor
-    QVector<tikz::Anchor> anchors;
-    anchors << tikz::NoAnchor
-            << tikz::Center
-            << tikz::North
-            << tikz::NorthEast
-            << tikz::East
-            << tikz::SouthEast
-            << tikz::South
-            << tikz::SouthWest
-            << tikz::West
-            << tikz::NorthWest;
+    const QStringList anchors = QStringList()
+        << QString()
+        << QStringLiteral("center")
+        << QStringLiteral("north")
+        << QStringLiteral("north east")
+        << QStringLiteral("east")
+        << QStringLiteral("south east")
+        << QStringLiteral("south")
+        << QStringLiteral("south west")
+        << QStringLiteral("west")
+        << QStringLiteral("north west");
     return anchors;
 }
 
-QPointF EllipseShape::anchorPos(tikz::Anchor anchor) const
+QPointF EllipseShape::anchorPos(const QString & anchor) const
 {
+    if (anchor.isEmpty()) {
+        return QPointF(0, 0);
+    }
+
     const QRectF shapeRect = node()->shapeRect();
     const qreal rx = shapeRect.width() / 2.0 + node()->style()->outerSep().toPoint();
     const qreal ry = shapeRect.height() / 2.0 + node()->style()->outerSep().toPoint();
-    switch (anchor) {
-        case tikz::NoAnchor:
-        case tikz::Center   : return QPointF(0, 0);
-        case tikz::North    : return QPointF(0, ry);
-        case tikz::NorthEast: return QPointF(rx, ry) * 0.70710678;
-        case tikz::East     : return QPointF(rx, 0);
-        case tikz::SouthEast: return QPointF(rx, -ry) * 0.70710678;
-        case tikz::South    : return QPointF(0, -ry);
-        case tikz::SouthWest: return QPointF(-rx, -ry) * 0.70710678;
-        case tikz::West     : return QPointF(-rx, 0);
-        case tikz::NorthWest: return QPointF(-rx, ry) * 0.70710678;
+
+    if (anchor == QStringLiteral("center")) {
+        return QPointF(0, 0);
+    } else if (anchor == QStringLiteral("north")) {
+        return QPointF(0, ry);
+    } else if (anchor == QStringLiteral("north east")) {
+        return QPointF(rx, ry) * 0.70710678;
+    } else if (anchor == QStringLiteral("east")) {
+        return QPointF(rx, 0);
+    } else if (anchor == QStringLiteral("south east")) {
+        return QPointF(rx, -ry) * 0.70710678;
+    } else if (anchor == QStringLiteral("south")) {
+        return QPointF(0, -ry);
+    } else if (anchor == QStringLiteral("south west")) {
+        return QPointF(-rx, -ry) * 0.70710678;
+    } else if (anchor == QStringLiteral("west")) {
+        return QPointF(-rx, 0);
+    } else if (anchor == QStringLiteral("north west")) {
+        return QPointF(-rx, ry) * 0.70710678;
     }
 
     return QPointF(0, 0);
 }
 
-QPointF EllipseShape::contactPoint(tikz::Anchor anchor, qreal rad) const
+QPointF EllipseShape::contactPoint(const QString & anchor, qreal rad) const
 {
-    if (anchor != tikz::NoAnchor) {
+    if (! anchor.isEmpty()) {
         return anchorPos(anchor);
     }
 

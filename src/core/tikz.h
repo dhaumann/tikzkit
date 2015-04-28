@@ -88,33 +88,6 @@ TIKZCORE_EXPORT QString toString(tikz::TextAlignment alignment);
  */
 TIKZCORE_EXPORT tikz::TextAlignment toTextAlignment(const QString & alignment);
 
-
-enum Anchor {
-    NoAnchor = 0,
-    Center,
-    North,
-    NorthEast,
-    East,
-    SouthEast,
-    South,
-    SouthWest,
-    West,
-    NorthWest
-};
-
-/**
- * Convert the enum @p anchor to a QString. If @p withDot is @e true,
- * the anchor has a leading '.'.
- * Returns e.g. "north" or ".north" for a north anchor.
- * @note This function creates TikZ compatible strings.
- */
-TIKZCORE_EXPORT QString toString(tikz::Anchor anchor, bool withDot = false);
-
-/**
- * Converts @p anchor to tikz::Anchor.
- */
-TIKZCORE_EXPORT tikz::Anchor toAnchor(const QString & anchor);
-
 enum Shape {
     NoShape = 0,
     ShapeRectangle,

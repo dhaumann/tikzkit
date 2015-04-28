@@ -117,55 +117,6 @@ tikz::TextAlignment toTextAlignment(const QString & alignment)
     return TextAlignment::NoAlign;
 }
 
-QString toString(tikz::Anchor anchor, bool withDot)
-{
-    QString str;
-    switch (anchor) {
-        case Anchor::NoAnchor: break;
-        case Anchor::Center: str = "center"; break;
-        case Anchor::North: str = "north"; break;
-        case Anchor::NorthEast: str = "north east"; break;
-        case Anchor::East: str = "east"; break;
-        case Anchor::SouthEast: str = "south east"; break;
-        case Anchor::South: str = "south"; break;
-        case Anchor::SouthWest: str = "south west"; break;
-        case Anchor::West: str = "west"; break;
-        case Anchor::NorthWest: str = "north west"; break;
-        default: break;
-    }
-
-    return str.isEmpty() ? str : ('.' + str);
-}
-
-tikz::Anchor toAnchor(const QString & anchor)
-{
-    if (anchor.isEmpty()) {
-        return Anchor::NoAnchor;
-    } else if (anchor == "center") {
-        return Anchor::Center;
-    } else if (anchor == "north") {
-        return Anchor::North;
-    } else if (anchor == "north east") {
-        return Anchor::NorthEast;
-    } else if (anchor == "east") {
-        return Anchor::East;
-    } else if (anchor == "south east") {
-        return Anchor::SouthEast;
-    } else if (anchor == "south") {
-        return Anchor::South;
-    } else if (anchor == "south west") {
-        return Anchor::SouthWest;
-    } else if (anchor == "west") {
-        return Anchor::West;
-    } else if (anchor == "north west") {
-        return Anchor::NorthWest;
-    }
-
-    Q_ASSERT(false);
-
-    return Anchor::NoAnchor;
-}
-
 QString toString(tikz::Shape shape)
 {
     switch (shape) {

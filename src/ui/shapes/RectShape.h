@@ -64,17 +64,17 @@ class RectShape : public AbstractShape
         /**
          * Returns a list of anchors the shape supports.
          */
-        QVector<tikz::Anchor> supportedAnchors() const override;
+        QStringList supportedAnchors() const override;
 
         /**
          * Returns the position of @p anchor in local node coordinates.
          */
-        QPointF anchorPos(tikz::Anchor anchor) const override;
+        QPointF anchorPos(const QString & anchor) const override;
 
         /**
          * Returns the contact point for @p anchor and angle @p rad.
          */
-        QPointF contactPoint(tikz::Anchor anchor, qreal rad) const override;
+        QPointF contactPoint(const QString & anchor, qreal rad) const override;
 
     private:
         RectShapePrivate * const d;

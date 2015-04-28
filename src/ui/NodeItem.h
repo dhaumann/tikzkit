@@ -87,12 +87,12 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         /**
          * Returns the list of supported anchors depending on the Node's current shape.
          */
-        QVector<tikz::Anchor> supportedAnchors() const;
+        QStringList supportedAnchors() const;
 
         /**
          * Returns the @p anchor in scene coordinates.
          */
-        tikz::Pos anchor(tikz::Anchor anchor) const;
+        tikz::Pos anchor(const QString & anchor) const;
 
         /**
          * Returns the contact point of this node's shape for the requested
@@ -100,7 +100,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
          * @param anchor the anchor
          * @param rad the angle in rad
          */
-        QPointF contactPoint(tikz::Anchor anchor, qreal rad) const;
+        QPointF contactPoint(const QString & anchor, qreal rad) const;
 
         /**
          * Returns the rect of this shape.

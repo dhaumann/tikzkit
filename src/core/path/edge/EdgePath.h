@@ -152,23 +152,23 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Get the anchor of the start of the edge.
          */
-        tikz::Anchor startAnchor() const;
+        QString startAnchor() const;
 
         /**
          * Get the anchor of the end of the edge.
          */
-        tikz::Anchor endAnchor() const;
+        QString endAnchor() const;
 
     public Q_SLOTS:
         /**
          * Set the anchor of the start of the edge to @p anchor.
          */
-        void setStartAnchor(tikz::Anchor anchor);
+        void setStartAnchor(const QString & anchor);
 
         /**
          * Set the anchor of the end of the edge to @p anchor.
          */
-        void setEndAnchor(tikz::Anchor anchor);
+        void setEndAnchor(const QString & anchor);
 
     //
     // signals

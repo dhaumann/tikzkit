@@ -132,7 +132,7 @@ tikz::core::NodeStyle* NodeItem::style() const
     return d->node->style();
 }
 
-QVector<tikz::Anchor> NodeItem::supportedAnchors() const
+QStringList NodeItem::supportedAnchors() const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -140,7 +140,7 @@ QVector<tikz::Anchor> NodeItem::supportedAnchors() const
     return d->shape->supportedAnchors();
 }
 
-tikz::Pos NodeItem::anchor(tikz::Anchor anchor) const
+tikz::Pos NodeItem::anchor(const QString & anchor) const
 {
     // make sure cache is up-to-date
     d->updateCache();
@@ -149,7 +149,7 @@ tikz::Pos NodeItem::anchor(tikz::Anchor anchor) const
     return mapToScene(p);
 }
 
-QPointF NodeItem::contactPoint(tikz::Anchor anchor, qreal rad) const
+QPointF NodeItem::contactPoint(const QString & anchor, qreal rad) const
 {
     // make sure cache is up-to-date
     d->updateCache();

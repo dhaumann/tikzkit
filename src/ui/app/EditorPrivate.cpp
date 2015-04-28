@@ -39,7 +39,6 @@ EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     //
     // register some datatypes
     //
-    qRegisterMetaType<tikz::Anchor>("Anchor");
     qRegisterMetaType<tikz::Arrow>("Arrow");
     qRegisterMetaType<tikz::LineCap>("LineCap");
     qRegisterMetaType<tikz::LineJoin>("LineJoin");

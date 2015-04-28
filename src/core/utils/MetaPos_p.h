@@ -41,12 +41,12 @@ class MetaPosPrivate : public QObject
     Q_OBJECT
 
     public:
-        MetaPos * q;
-        Document * doc;
+        MetaPos * q = nullptr;
+        Document * doc = nullptr;
 
         tikz::Pos pos;
         Uid nodeId;
-        Anchor anchor;
+        QString anchor;
 
     public:
         MetaPosPrivate(MetaPos * metaPos);
@@ -87,7 +87,7 @@ class MetaPosPrivate : public QObject
         /**
          * Change ref counter;
          */
-        int changeRefCounter;
+        int changeRefCounter = 0;
 };
 
 }

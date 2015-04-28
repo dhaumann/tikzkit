@@ -157,22 +157,22 @@ QPointF EdgePathItem::endPos(qreal rad) const
     }
 }
 
-tikz::Anchor EdgePathItem::startAnchor() const
+QString EdgePathItem::startAnchor() const
 {
     return edgePath()->startAnchor();
 }
 
-tikz::Anchor EdgePathItem::endAnchor() const
+QString EdgePathItem::endAnchor() const
 {
     return edgePath()->endAnchor();
 }
 
-void EdgePathItem::setStartAnchor(tikz::Anchor anchor)
+void EdgePathItem::setStartAnchor(const QString & anchor)
 {
     edgePath()->setStartAnchor(anchor);
 }
 
-void EdgePathItem::setEndAnchor(tikz::Anchor anchor)
+void EdgePathItem::setEndAnchor(const QString & anchor)
 {
     edgePath()->setEndAnchor(anchor);
 }

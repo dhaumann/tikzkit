@@ -102,14 +102,14 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         /**
          * Get the anchor of the ellipse.
          */
-        tikz::Anchor anchor() const;
+        QString anchor() const;
 
 
     public Q_SLOTS:
         /**
          * Set the anchor of the ellipse to @p anchor.
          */
-        void setAnchor(tikz::Anchor anchor);
+        void setAnchor(const QString & anchor);
 
     //
     // signals

@@ -201,17 +201,17 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
     }
 }
 
-tikz::Anchor EdgePath::startAnchor() const
+QString EdgePath::startAnchor() const
 {
     return d->start.anchor();
 }
 
-tikz::Anchor EdgePath::endAnchor() const
+QString EdgePath::endAnchor() const
 {
     return d->end.anchor();
 }
 
-void EdgePath::setStartAnchor(tikz::Anchor anchor)
+void EdgePath::setStartAnchor(const QString & anchor)
 {
     auto newPos = startMetaPos();
     newPos.setAnchor(anchor);
@@ -220,7 +220,7 @@ void EdgePath::setStartAnchor(tikz::Anchor anchor)
     Q_ASSERT(d->start.anchor() == anchor);
 }
 
-void EdgePath::setEndAnchor(tikz::Anchor anchor)
+void EdgePath::setEndAnchor(const QString & anchor)
 {
     auto newPos = endMetaPos();
     newPos.setAnchor(anchor);

@@ -112,7 +112,7 @@ void AnchorManager::addNode(NodeItem * node)
     m_nodes.append(node);
 
     // creade and add anchors to scene
-    foreach (tikz::Anchor anchor, node->supportedAnchors()) {
+    foreach (const QString & anchor, node->supportedAnchors()) {
         AnchorHandle * handle = new AnchorHandle(node, anchor);
         m_handleMap[node].append(handle);
         scene()->addItem(handle);

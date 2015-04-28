@@ -88,13 +88,13 @@ class EllipsePathItem : public tikz::ui::PathItem
         /**
          * Get the anchor of the ellipse.
          */
-        tikz::Anchor anchor() const;
+        QString anchor() const;
 
     public Q_SLOTS:
         /**
          * Set the anchor of the ellipse to @p anchor.
          */
-        void setAnchor(tikz::Anchor anchor);
+        void setAnchor(const QString & anchor);
 
     //
     // reimplemented from QGraphicsItem

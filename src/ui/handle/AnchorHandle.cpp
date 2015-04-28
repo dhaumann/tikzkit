@@ -35,7 +35,7 @@
 namespace tikz {
 namespace ui {
 
-AnchorHandle::AnchorHandle(NodeItem * node, tikz::Anchor anchor)
+AnchorHandle::AnchorHandle(NodeItem * node, const QString & anchor)
     : Handle(Handle::AnchorHandle)
     , m_metaPos(node->document())
     , m_node(node)
@@ -44,7 +44,7 @@ AnchorHandle::AnchorHandle(NodeItem * node, tikz::Anchor anchor)
     m_metaPos.setAnchor(anchor);
 
     // set transform property correctly in case of NoAnchor type
-    if (anchor == tikz::NoAnchor) {
+    if (anchor.isEmpty()) {
         // no anchor means the tracked area spans the entire contents of the node,
         // therewith, view transformations must not be ignored
         setFlag(ItemIgnoresTransformations, false);
@@ -75,7 +75,7 @@ NodeItem * AnchorHandle::node() const
     return m_node;
 }
 
-tikz::Anchor AnchorHandle::anchor() const
+QString AnchorHandle::anchor() const
 {
     return m_metaPos.anchor();
 }
@@ -91,7 +91,7 @@ void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     Q_UNUSED(option);
 
     // see 'ItemHasNoContents' in constructor
-    Q_ASSERT(anchor() != tikz::NoAnchor);
+    Q_ASSERT(! anchor().isEmpty());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing);
@@ -110,7 +110,7 @@ void AnchorHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 QRectF AnchorHandle::boundingRect() const
 {
-    if (anchor() == tikz::NoAnchor) {
+    if (anchor().isEmpty()) {
         return m_node->boundingRect();
     } else {
         return Handle::boundingRect();
@@ -119,7 +119,7 @@ QRectF AnchorHandle::boundingRect() const
 
 bool AnchorHandle::contains(const QPointF &point) const
 {
-    if (anchor() == tikz::NoAnchor) {
+    if (anchor().isEmpty()) {
         return m_node->contains(point);
     }
 

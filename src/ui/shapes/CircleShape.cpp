@@ -87,47 +87,59 @@ QPainterPath CircleShape::outline() const
     return path;
 }
 
-QVector<tikz::Anchor> CircleShape::supportedAnchors() const
+QStringList CircleShape::supportedAnchors() const
 {
     // by default, just return NoAnchor
-    QVector<tikz::Anchor> anchors;
-    anchors << tikz::NoAnchor
-            << tikz::Center
-            << tikz::North
-            << tikz::NorthEast
-            << tikz::East
-            << tikz::SouthEast
-            << tikz::South
-            << tikz::SouthWest
-            << tikz::West
-            << tikz::NorthWest;
+    const QStringList anchors = QStringList()
+        << QString()
+        << QStringLiteral("center")
+        << QStringLiteral("north")
+        << QStringLiteral("north east")
+        << QStringLiteral("east")
+        << QStringLiteral("south east")
+        << QStringLiteral("south")
+        << QStringLiteral("south west")
+        << QStringLiteral("west")
+        << QStringLiteral("north west");
     return anchors;
 }
 
-QPointF CircleShape::anchorPos(tikz::Anchor anchor) const
+QPointF CircleShape::anchorPos(const QString & anchor) const
 {
+    if (anchor.isEmpty()) {
+        return QPointF(0, 0);
+    }
+
     const qreal r = node()->style()->outerSep().toPoint() +
                     qMax(node()->shapeRect().width(),
                          node()->shapeRect().height()) / 2.0;
-    switch (anchor) {
-        case tikz::NoAnchor:
-        case tikz::Center   : return QPointF(0, 0);
-        case tikz::North    : return QPointF(0, r);
-        case tikz::NorthEast: return QPointF(r, r) * 0.70710678;
-        case tikz::East     : return QPointF(r, 0);
-        case tikz::SouthEast: return QPointF(r, -r) * 0.70710678;
-        case tikz::South    : return QPointF(0, -r);
-        case tikz::SouthWest: return QPointF(-r, -r) * 0.70710678;
-        case tikz::West     : return QPointF(-r, 0);
-        case tikz::NorthWest: return QPointF(-r, r) * 0.70710678;
+
+    if (anchor == QStringLiteral("center")) {
+        return QPointF(0, 0);
+    } else if (anchor == QStringLiteral("north")) {
+        return QPointF(0, r);
+    } else if (anchor == QStringLiteral("north east")) {
+        return QPointF(r, r) * 0.70710678;
+    } else if (anchor == QStringLiteral("east")) {
+        return QPointF(r, 0);
+    } else if (anchor == QStringLiteral("south east")) {
+        return QPointF(r, -r) * 0.70710678;
+    } else if (anchor == QStringLiteral("south")) {
+        return QPointF(0, -r);
+    } else if (anchor == QStringLiteral("south west")) {
+        return QPointF(-r, -r) * 0.70710678;
+    } else if (anchor == QStringLiteral("west")) {
+        return QPointF(-r, 0);
+    } else if (anchor == QStringLiteral("north west")) {
+        return QPointF(-r, r) * 0.70710678;
     }
 
     return QPointF(0, 0);
 }
 
-QPointF CircleShape::contactPoint(tikz::Anchor anchor, qreal rad) const
+QPointF CircleShape::contactPoint(const QString & anchor, qreal rad) const
 {
-    if (anchor != tikz::NoAnchor) {
+    if (! anchor.isEmpty()) {
         return anchorPos(anchor);
     }
 

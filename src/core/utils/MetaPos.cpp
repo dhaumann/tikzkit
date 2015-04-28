@@ -35,7 +35,7 @@ MetaPos::MetaPos(Document * doc)
     d->doc = doc;
 
     Q_ASSERT(! d->nodeId.isValid());
-    Q_ASSERT(d->anchor == tikz::NoAnchor);
+    Q_ASSERT(d->anchor.isEmpty());
 }
 
 MetaPos::MetaPos(const MetaPos & pos)
@@ -68,7 +68,7 @@ QString MetaPos::toString() const
     if (node()) {
         return QString("(%1%2)")
             .arg(d->nodeId.toString())
-            .arg(tikz::toString(d->anchor));
+            .arg(d->anchor.isEmpty() ? QString() : (QLatin1Char('.') + d->anchor));
     } else {
         return d->pos.toString();
     }
@@ -92,11 +92,11 @@ void MetaPos::fromString(const QString & str)
         d->nodeId = Uid(str.mid(openIndex + 1, endIndex - (openIndex + 1)).toLongLong(&ok), d->doc);
         Q_ASSERT(ok);
 
-        // read tikz::Anchor
+        // read the anchor
         if (dotIndex > 0) {
-            d->anchor = toAnchor(str.mid(dotIndex + 1, closeIndex - (dotIndex + 1)));
+            d->anchor = str.mid(dotIndex + 1, closeIndex - (dotIndex + 1));
         } else {
-            d->anchor = tikz::NoAnchor;
+            d->anchor.clear();
         }
         d->endChange();
     }
@@ -222,7 +222,7 @@ bool MetaPos::setNode(Node* newNode)
     }
 
     // reset anchor
-    d->anchor = NoAnchor;
+    d->anchor.clear();
 
     // notify about change
     d->endChange();
@@ -236,7 +236,7 @@ Node* MetaPos::node() const
     return d->doc->nodeFromId(d->nodeId);
 }
 
-void MetaPos::setAnchor(tikz::Anchor anchor)
+void MetaPos::setAnchor(const QString & anchor)
 {
     // setting an anchor only makes sense with a node
     Q_ASSERT(d->nodeId.isValid());
@@ -248,9 +248,9 @@ void MetaPos::setAnchor(tikz::Anchor anchor)
     }
 }
 
-Anchor MetaPos::anchor() const
+QString MetaPos::anchor() const
 {
-    return (d->nodeId.isValid()) ? d->anchor : tikz::NoAnchor;
+    return (d->nodeId.isValid()) ? d->anchor : QString();
 }
 
 QObject * MetaPos::notificationObject()

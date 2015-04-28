@@ -71,20 +71,18 @@ QPainterPath AbstractShape::outline() const
     return shape();
 }
 
-QVector<tikz::Anchor> AbstractShape::supportedAnchors() const
+QStringList AbstractShape::supportedAnchors() const
 {
-    // by default, just return NoAnchor
-    QVector<tikz::Anchor> anchors;
-    anchors.append(tikz::NoAnchor);
-    return anchors;
+    // there are no anchors by default
+    return QStringList();
 }
 
-QPointF AbstractShape::anchorPos(tikz::Anchor anchor) const
+QPointF AbstractShape::anchorPos(const QString & anchor) const
 {
     return QPointF(0, 0);
 }
 
-QPointF AbstractShape::contactPoint(tikz::Anchor anchor, qreal rad) const
+QPointF AbstractShape::contactPoint(const QString & anchor, qreal rad) const
 {
     return QPointF(0, 0);
 }

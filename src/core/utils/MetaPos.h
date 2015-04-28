@@ -163,12 +163,12 @@ class TIKZCORE_EXPORT MetaPos
          * Get the anchor of this pos.
          * The return value may be 0.
          */
-        Anchor anchor() const;
+        QString anchor() const;
 
         /**
          * Set the anchor of this node to @p anchor.
          */
-        void setAnchor(tikz::Anchor anchor);
+        void setAnchor(const QString & anchor);
 
     //
     // Notification object

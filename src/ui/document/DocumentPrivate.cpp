@@ -381,7 +381,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
-        edge->setStartAnchor(tikz::West);
+        edge->setStartAnchor("west");
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
@@ -422,7 +422,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         es.setArrowHead(tikz::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
-        edge->setStartAnchor(tikz::East);
+        edge->setStartAnchor("east");
 
         finishTransaction();
     }

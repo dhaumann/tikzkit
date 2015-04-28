@@ -130,12 +130,12 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
     }
 }
 
-tikz::Anchor EllipsePath::anchor() const
+QString EllipsePath::anchor() const
 {
     return d->pos.anchor();
 }
 
-void EllipsePath::setAnchor(tikz::Anchor anchor)
+void EllipsePath::setAnchor(const QString & anchor)
 {
     auto newPos = metaPos();
     newPos.setAnchor(anchor);

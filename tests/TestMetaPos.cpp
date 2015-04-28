@@ -205,22 +205,22 @@ void MetaPosTest::testToString()
 
     // now test with Node
     m.setNode(n);
-    QCOMPARE(m.anchor(), tikz::NoAnchor);
+    QVERIFY(m.anchor().isEmpty());
     QCOMPARE(m.toString(), QString("(1)"));
     n->setPos(tikz::Pos(-112.2423, 3478.3434, tikz::Millimeter));
     QCOMPARE(n->metaPos().toString(), QString("(-112.2423mm, 3478.3434mm)"));
     QCOMPARE(m.pos().toString(), QString("(-112.2423mm, 3478.3434mm)"));
     QCOMPARE(m.toString(), QString("(1)"));
 
-    m.setAnchor(tikz::Center);
+    m.setAnchor("center");
     QCOMPARE(m.toString(), QString("(1.center)"));
-    m.setAnchor(tikz::NorthEast);
+    m.setAnchor("north east");
     QCOMPARE(m.toString(), QString("(1.north east)"));
 
     // unset Node again
     m.setPos(tikz::Pos(3, 3, tikz::Centimeter));
     QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
-    QCOMPARE(m.anchor(), tikz::NoAnchor);
+    QVERIFY(m.anchor().isEmpty());
     QCOMPARE(m.toString(), QString("(3cm, 3cm)"));
 }
 
@@ -240,18 +240,17 @@ void MetaPosTest::testFromString()
     m.fromString("(1)");
     QCOMPARE(m.toString(), QString("(1)"));
     QCOMPARE(m.node(), n);
-    QCOMPARE(m.anchor(), tikz::NoAnchor);
+    QVERIFY(m.anchor().isEmpty());
 
     m.fromString("(1.south)");
     QCOMPARE(m.toString(), QString("(1.south)"));
     QCOMPARE(m.node(), n);
-    QCOMPARE(m.anchor(), tikz::South);
+    QCOMPARE(m.anchor(), QString("south"));
 
     m.fromString("(-123345in, +124323in)");
     QCOMPARE(m.toString(), QString("(-123345in, 124323in)"));
     QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
-    QCOMPARE(m.anchor(), tikz::NoAnchor);
-    
+    QVERIFY(m.anchor().isEmpty());
 }
 
 // kate: indent-width 4; replace-tabs on;

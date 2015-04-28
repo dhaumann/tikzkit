@@ -85,12 +85,12 @@ QPointF EllipsePathItem::pos() const
     }
 }
 
-tikz::Anchor EllipsePathItem::anchor() const
+QString EllipsePathItem::anchor() const
 {
     return ellipsePath()->anchor();
 }
 
-void EllipsePathItem::setAnchor(tikz::Anchor anchor)
+void EllipsePathItem::setAnchor(const QString & anchor)
 {
     ellipsePath()->setAnchor(anchor);
 }
