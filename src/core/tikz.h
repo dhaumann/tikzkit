@@ -26,6 +26,70 @@
 namespace tikz {
 
 /**
+ * Logging categories.
+ * These categories are used by log() and the helper functions debug(), info()
+ * warn() and error().
+ */
+enum class LogType : int {
+    Debug,
+    Info,
+    Warning,
+    Error
+};
+
+/**
+ * Set the logging function to @p logFunc.
+ * @warning Make sure to unset the logging function with unsetLogFunction() before
+ *          the function you set with setLogFunction() gets invalid or relies
+ *          on invalid data.
+ * @see unsetLogFunction()
+ */
+TIKZCORE_EXPORT void setLogFunction(std::function<void(LogType, const QString &)> logFunc);
+
+/**
+ * Reset the logging function to a simple call of qDebug().
+ * @see setLogFunction()
+ */
+TIKZCORE_EXPORT void unsetLogFunction();
+
+/**
+ * Logging facilities.
+ */
+TIKZCORE_EXPORT void log(LogType level, const QString & text);
+
+/**
+ * Logging helper function that equals the call of log(LogType::Debug, text).
+ */
+inline void debug(const QString & text)
+{
+    log(LogType::Debug, text);
+}
+
+/**
+ * Logging helper function that equals the call of log(LogType::Info, text).
+ */
+inline void info(const QString & text)
+{
+    log(LogType::Info, text);
+}
+
+/**
+ * Logging helper function that equals the call of log(LogType::Warning, text).
+ */
+inline void warn(const QString & text)
+{
+    log(LogType::Warning, text);
+}
+
+/**
+ * Logging helper function that equals the call of log(LogType::Error, text).
+ */
+inline void error(const QString & text)
+{
+    log(LogType::Error, text);
+}
+
+/**
  * Entity types.
  */
 enum class EntityType : char {

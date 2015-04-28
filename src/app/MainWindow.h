@@ -28,6 +28,7 @@ class QLabel;
 class QComboBox;
 class QTextEdit;
 class QTreeView;
+class QListWidget;
 
 class ViewManager;
 
@@ -79,6 +80,7 @@ protected Q_SLOTS:
     void mergeView(tikz::ui::View * view);
     void unmergeView(tikz::ui::View * view);
     void updateMousePosition(const tikz::Pos & pos);
+    void logMessage(tikz::LogType logType, const QString & text);
 
 public Q_SLOTS:
     /**
@@ -185,6 +187,7 @@ private:
     tikz::ui::LinePropertyWidget * m_linePropertyWidget = nullptr;
     tikz::ui::PropertyBrowser * m_browser = nullptr;
     QTreeView * m_historyView = nullptr;
+    QListWidget * m_logWidget = nullptr;
 
     tex::PdfGenerator * m_pdfGenerator = nullptr;
 

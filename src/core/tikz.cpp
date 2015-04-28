@@ -19,7 +19,32 @@
 
 #include "tikz.h"
 
+#include <QDebug>
+
 namespace tikz {
+
+namespace {
+    std::function<void(LogType, const QString &)> s_logFunc
+        = [](LogType, const QString & text) {
+            qDebug() << text;
+        };
+}
+
+void setLogFunction(std::function<void(LogType, const QString &)> logFunc)
+{
+    s_logFunc = logFunc;
+}
+
+void unsetLogFunction()
+{
+    s_logFunc = [](LogType, const QString & text) {
+        qDebug() << text; };
+}
+
+void log(LogType level, const QString & text)
+{
+    s_logFunc(level, text);
+}
 
 QString toString(EntityType type)
 {

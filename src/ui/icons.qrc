@@ -3,5 +3,9 @@
     <file>icons/edit-select.png</file>
     <file>icons/edit-redo.png</file>
     <file>icons/edit-undo.png</file>
+    <file>icons/log-debug.png</file>
+    <file>icons/log-info.png</file>
+    <file>icons/log-warn.png</file>
+    <file>icons/log-error.png</file>
   </qresource>
 </RCC>

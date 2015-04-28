@@ -57,6 +57,7 @@
 #include <QTreeView>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QListWidget>
 
 #include <QDebug>
 
@@ -129,10 +130,16 @@ MainWindow::MainWindow()
 
 //     auto view = openUrl(QUrl("output.tikzkit"));
     slotViewChanged(activeView());
+
+    tikz::setLogFunction([this](tikz::LogType logType, const QString & text) {
+        this->logMessage(logType, text);
+    });
 }
 
 MainWindow::~MainWindow()
 {
+    tikz::unsetLogFunction();
+
     // unregister this MainWindow
     TikzKit::self()->unregisterMainWindow(this);
 }
@@ -201,6 +208,15 @@ void MainWindow::setupUi()
 
     addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
 
+    //
+    // next one
+    //
+    dockWidget = new QDockWidget("Messages", this);
+    m_logWidget = new QListWidget(dockWidget);
+    m_logWidget->setAlternatingRowColors(true);
+    dockWidget->setWidget(m_logWidget);
+
+    addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
 }
 
 void MainWindow::setupActions()
@@ -492,6 +508,17 @@ void MainWindow::slotPreferredUnitChanged(int index)
 {
     tikz::Unit unit = tikz::toUnit(m_unitComboBox->itemData(index).toString());
     activeView()->document()->setPreferredUnit(unit);
+}
+
+void MainWindow::logMessage(tikz::LogType logType, const QString & text)
+{
+    const QIcon icon
+        = logType == tikz::LogType::Debug ? QIcon::fromTheme("dialog-debug", QIcon(":/icons/icons/log-debug.png"))
+        : logType == tikz::LogType::Info ? QIcon::fromTheme("dialog-information", QIcon(":/icons/icons/log-info.png"))
+        : logType == tikz::LogType::Warning ? QIcon::fromTheme("dialog-warning", QIcon(":/icons/icons/log-warn.png"))
+        : QIcon::fromTheme("code-context", QIcon(":/icons/icons/log-error.png"));
+    auto item = new QListWidgetItem(icon, text);
+    m_logWidget->addItem(item);
 }
 
 // kate: indent-width 4; replace-tabs on;
