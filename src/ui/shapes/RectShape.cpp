@@ -116,6 +116,8 @@ QPointF RectShape::anchorPos(const QString & anchor) const
         return QPointF(-rx, ry);
     }
 
+    tikz::warn("The shape 'rectangle' does not support anchor '" + anchor + "'.");
+
     return QPointF(0, 0);
 }
 

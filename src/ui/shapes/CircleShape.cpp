@@ -134,6 +134,8 @@ QPointF CircleShape::anchorPos(const QString & anchor) const
         return QPointF(-r, r) * 0.70710678;
     }
 
+    tikz::warn("The shape 'circle' does not support anchor '" + anchor + "'.");
+
     return QPointF(0, 0);
 }
 

@@ -144,6 +144,8 @@ QPointF DiamondShape::anchorPos(const QString & anchor) const
         return QPointF(-rx, ry) * 0.5;
     }
 
+    tikz::warn("The shape 'diamond' does not support anchor '" + anchor + "'.");
+
     return QPointF(0, 0);
 }
 

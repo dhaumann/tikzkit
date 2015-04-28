@@ -134,6 +134,8 @@ QPointF EllipseShape::anchorPos(const QString & anchor) const
         return QPointF(-rx, ry) * 0.70710678;
     }
 
+    tikz::warn("The shape 'ellipse' does not support anchor '" + anchor + "'.");
+
     return QPointF(0, 0);
 }
 
