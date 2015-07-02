@@ -38,6 +38,19 @@ It is organized in two libraries following the model/view concept, and the appli
   - allow adding / removing properties at runtime, so that the property system
     is extensible e.g. through plugins
 
+- MetaPos: x und y so trennen, dass es von unterschiedlichen Positions/Anchors kommt.
+- TexGenerator verbessern (mehrere jobs parallel, saubere kapselung, QTemporaryDir)
+- logo
+- class Package? -> tikz package + tikz options
+- introduce tikz::Editor: add EntityFactoryInterface similar to
+  KTE::CommandInterface, add class EntityFactory that returns a list of
+  QStrings ("node-rectangle", ... ?
+- Introduce AbstractNode and AbstractPath (and SimpleNode, SimplePath), or rather: AbstractEntity ?
+- implement pseudo-plugin that uses the EntityFactory
+- remove tikz::EntityType in favour of just one AbstractEntity class
+- (done) logging: Editor::log(LogLevel, text) (LogLevel: Debug, Info, Warning, Error)
+- (done) anchors auf QStrings umstellen, so nennen wie in tikz (NoAnchor == empty string)
+
 - tikz::core::Path (priority: high)
   - add support for rectangle primitive
   - add support for grid primitive
@@ -60,6 +73,10 @@ It is organized in two libraries following the model/view concept, and the appli
   - use Transaction to group properties
   - add default/reset button
   - add support for categories and coloring of categories
+
+- LaTeX to SVG generator
+  - proper design of the class with cleanup of the metadata (use QTemporaryDir)
+  - proper diagnostics, if the dvisvg 
 
 - shapes
   - add more shapes
