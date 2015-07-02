@@ -117,22 +117,21 @@ void Ruler::paintEvent(QPaintEvent* event)
 
     // how many pixels is one unit ?
     const qreal dpi = physicalDpi();
-    const qreal pixelPerCm = m_zoom * dpi / tikz::in2cm(1);
-    const qreal pixelPerUnit = m_zoom * dpi / tikz::Value(1, tikz::Inch).convertTo(tikz::Centimeter).value();
+    const qreal pixelPerUnit = m_zoom * dpi / tikz::Value(1, tikz::Inch).convertTo(m_unit).value();
 
     if (horizontal) {
-        for (int i = floor(-m_origin / pixelPerCm); i < (width() - m_origin) / pixelPerCm; ++i) {
-            QPointF start(i * pixelPerCm, 3.0);
-            QPointF end(i * pixelPerCm, height());
+        for (int i = floor(-m_origin / pixelPerUnit); i < (width() - m_origin) / pixelPerUnit; ++i) {
+            QPointF start(i * pixelPerUnit, 3.0);
+            QPointF end(i * pixelPerUnit, height());
             painter.drawLine(start, end);
 
             painter.drawText(start + QPointF(1, (horizontal ? 7 : -2)),
                              QString::number(int(1) * i));
         }
     } else {
-        for (int i = floor(-m_origin / pixelPerCm); i < (height() - m_origin) / pixelPerCm; ++i) {
-            QPointF start(3.0, i * pixelPerCm);
-            QPointF end(width(), i * pixelPerCm);
+        for (int i = floor(-m_origin / pixelPerUnit); i < (height() - m_origin) / pixelPerUnit; ++i) {
+            QPointF start(3.0, i * pixelPerUnit);
+            QPointF end(width(), i * pixelPerUnit);
             painter.drawLine(start, end);
 
             painter.drawText(start + QPointF(1, (horizontal ? 7 : -2)),
