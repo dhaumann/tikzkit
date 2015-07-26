@@ -40,8 +40,8 @@ void PosTest::testPos()
     // test initial value
     QCOMPARE(pos.x(), tikz::Value(0.0));
     QCOMPARE(pos.y(), tikz::Value(0.0));
-    QCOMPARE(pos.x().unit(), tikz::Point);
-    QCOMPARE(pos.y().unit(), tikz::Point);
+    QCOMPARE(static_cast<int>(pos.x().unit()), static_cast<int>(tikz::Point));
+    QCOMPARE(static_cast<int>(pos.y().unit()), static_cast<int>(tikz::Point));
     QCOMPARE(pos.toString(), QString("(0pt, 0pt)"));
 }
 
