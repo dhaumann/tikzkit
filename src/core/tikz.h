@@ -22,6 +22,7 @@
 #include "tikz_export.h"
 
 #include <QString>
+#include <functional>
 
 namespace tikz {
 

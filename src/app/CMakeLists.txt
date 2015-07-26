@@ -7,7 +7,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 # find Qt5 modules
-find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
+find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
 
 #find_package(PopplerQt4 REQUIRED)
 
