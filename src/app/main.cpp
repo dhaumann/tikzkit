@@ -23,6 +23,11 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
+    /**
+     * enable high dpi support
+     */
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     // create TikzKit singleton
     TikzKit tikzkit;
 
