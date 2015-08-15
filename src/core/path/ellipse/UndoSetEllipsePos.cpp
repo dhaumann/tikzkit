@@ -47,26 +47,18 @@ UndoSetEllipsePos::~UndoSetEllipsePos()
 
 void UndoSetEllipsePos::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     path->setMetaPos(m_undoPos);
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetEllipsePos::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     path->setMetaPos(m_redoPos);
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetEllipsePos::mergeWith(const UndoItem * command)

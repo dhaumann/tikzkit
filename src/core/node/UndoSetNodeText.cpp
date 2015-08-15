@@ -48,24 +48,16 @@ UndoSetNodeText::~UndoSetNodeText()
 
 void UndoSetNodeText::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setText(m_undoText);
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodeText::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setText(m_redoText);
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodeText::mergeWith(const UndoItem * command)

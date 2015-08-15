@@ -139,7 +139,10 @@ void UndoManager::undo()
         const bool oldClean = isClean();
 
         // perform undo action
+        const bool wasActive = document()->setUndoActive(true);
         d->undoItems.last()->undo();
+        document()->setUndoActive(wasActive);
+
         d->redoItems.prepend(d->undoItems.last());
         d->undoItems.removeLast();
 
@@ -163,7 +166,10 @@ void UndoManager::redo()
     if (! d->redoItems.isEmpty()) {
         const bool oldClean = isClean();
 
+        const bool wasActive = document()->setUndoActive(true);
         d->redoItems.first()->redo();
+        document()->setUndoActive(wasActive);
+
         d->undoItems.append(d->redoItems.first());
         d->redoItems.removeFirst();
 
@@ -218,7 +224,9 @@ void UndoManager::addUndoItem(UndoItem * item)
     Q_ASSERT(d->currentUndoGroup != nullptr);
 
     // execute redo action
+    const bool wasActive = document()->setUndoActive(true);
     item->redo();
+    document()->setUndoActive(wasActive);
 
     // add to current group.
     // WARNING: This might merge the item with an already existing item.

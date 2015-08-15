@@ -51,26 +51,18 @@ UndoSetPathStyle::~UndoSetPathStyle()
 
 void UndoSetPathStyle::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     path->setStyle(m_undoStyle);
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetPathStyle::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
     path->setStyle(m_redoStyle);
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetPathStyle::mergeWith(const UndoItem * command)

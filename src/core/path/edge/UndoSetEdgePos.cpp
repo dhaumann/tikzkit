@@ -50,8 +50,6 @@ UndoSetEdgePos::~UndoSetEdgePos()
 
 void UndoSetEdgePos::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
@@ -60,14 +58,10 @@ void UndoSetEdgePos::undo()
     } else {
         path->setEndMetaPos(m_undoPos);
     }
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetEdgePos::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
@@ -76,8 +70,6 @@ void UndoSetEdgePos::redo()
     } else {
         path->setEndMetaPos(m_redoPos);
     }
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetEdgePos::mergeWith(const UndoItem * command)

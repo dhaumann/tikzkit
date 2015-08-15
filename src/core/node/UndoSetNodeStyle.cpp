@@ -51,24 +51,16 @@ UndoSetNodeStyle::~UndoSetNodeStyle()
 
 void UndoSetNodeStyle::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node* node = document()->nodeFromId(m_nodeId);
     Q_ASSERT(node);
     node->setStyle(m_undoStyle);
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodeStyle::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node* node = document()->nodeFromId(m_nodeId);
     Q_ASSERT(node);
     node->setStyle(m_redoStyle);
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodeStyle::mergeWith(const UndoItem * command)

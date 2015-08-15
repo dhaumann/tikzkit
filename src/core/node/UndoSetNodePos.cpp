@@ -48,25 +48,17 @@ UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
 
 void UndoSetNodePos::undo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
 
     node->setMetaPos(m_undoPos);
-
-    document()->setUndoActive(wasActive);
 }
 
 void UndoSetNodePos::redo()
 {
-    const bool wasActive = document()->setUndoActive(true);
-
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
     node->setMetaPos(m_redoPos);
-
-    document()->setUndoActive(wasActive);
 }
 
 bool UndoSetNodePos::mergeWith(const UndoItem * command)
