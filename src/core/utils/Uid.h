@@ -129,11 +129,7 @@ class TIKZCORE_EXPORT Uid
          */
         inline friend QDebug operator<<(QDebug s, const tikz::core::Uid& uid)
         {
-            if (&uid != nullptr) {
-                s.nospace() << uid.toString();
-            } else {
-                s.nospace() << "(null Uid)";
-            }
+            s.nospace() << uid.toString();
             return s.space();
         }
 

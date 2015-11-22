@@ -80,7 +80,7 @@ bool ViewPrivate::hasSelection() const
     return ! m_doc->scene()->selectedItems().isEmpty();
 }
 
-bool ViewPrivate::clearSelection()
+void ViewPrivate::clearSelection()
 {
     m_doc->scene()->clearSelection();
 }

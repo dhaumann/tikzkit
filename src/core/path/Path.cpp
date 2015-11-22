@@ -69,6 +69,7 @@ void Path::detachFromNode(Node * node)
 bool Path::accept(Visitor & visitor)
 {
     visitor.visit(this);
+    return true;
 }
 
 EdgeStyle* Path::style() const

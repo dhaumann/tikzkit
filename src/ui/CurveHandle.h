@@ -69,7 +69,7 @@ class CurveHandle : public TikzItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
         /**
          * Returns the bounding rect of this item.
@@ -85,9 +85,9 @@ class CurveHandle : public TikzItem
     // protected overrides
     //
     protected:
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent * event) override;
+        void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent * event) override;
 
     private:
         CurveHandlePrivate * const d;

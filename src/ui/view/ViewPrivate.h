@@ -72,7 +72,7 @@ class ViewPrivate : public tikz::ui::View
         /**
          * Unselect all selected items (without deleting the selected items).
          */
-        bool clearSelection() override;
+        void clearSelection() override;
 
         /**
          * Returns the selected items in the scene.

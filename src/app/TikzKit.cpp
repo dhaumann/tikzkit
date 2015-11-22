@@ -102,6 +102,7 @@ QList<tikz::ui::MainWindow *> TikzKit::mainWindows()
 
 tikz::ui::MainWindow * TikzKit::activeMainWindow()
 {
+    return nullptr;
 }
 
 QVector<tikz::ui::Document *> TikzKit::documents()
@@ -111,14 +112,17 @@ QVector<tikz::ui::Document *> TikzKit::documents()
 
 tikz::ui::Document * TikzKit::findUrl(const QUrl &url)
 {
+    return nullptr;
 }
 
 tikz::ui::Document * TikzKit::openUrl(const QUrl &url)
 {
+    return nullptr;
 }
 
 bool TikzKit::closeDocument(tikz::ui::Document *document)
 {
+    return false;
 }
 
 // kate: indent-width 4; replace-tabs on;

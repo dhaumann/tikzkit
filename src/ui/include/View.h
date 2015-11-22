@@ -118,7 +118,7 @@ public:
     /**
      * Unselect all selected items (without deleting the selected items).
      */
-    virtual bool clearSelection() = 0;
+    virtual void clearSelection() = 0;
 
     /**
      * Returns the selected items in the scene.

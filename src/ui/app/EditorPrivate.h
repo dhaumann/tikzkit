@@ -84,7 +84,7 @@ public:
      * the hosting application.
      * @param application application object
      */
-    void setApplication(tikz::ui::Application *application)
+    void setApplication(tikz::ui::Application *application) override
     {
         m_application = application;
     }
@@ -93,7 +93,7 @@ public:
      * Current hosting application, if any set.
      * @return current application object or nullptr
      */
-    tikz::ui::Application *application() const
+    tikz::ui::Application *application() const override
     {
         return m_application;
     }

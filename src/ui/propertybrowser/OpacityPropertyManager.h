@@ -44,7 +44,7 @@ Q_SIGNALS:
     void valueChanged(QtProperty *property, qreal val);
     void readOnlyChanged(QtProperty *property, bool readOnly);
 protected:
-    QString valueText(const QtProperty *property) const;
+    QString valueText(const QtProperty *property) const override;
     void initializeProperty(QtProperty *property) override;
     void uninitializeProperty(QtProperty *property) override;
 private:

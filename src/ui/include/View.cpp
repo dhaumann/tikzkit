@@ -38,9 +38,8 @@ bool View::hasSelection() const
     return false;
 }
 
-bool View::clearSelection()
+void View::clearSelection()
 {
-    return false;
 }
 
 }

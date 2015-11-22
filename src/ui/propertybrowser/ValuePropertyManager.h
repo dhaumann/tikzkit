@@ -57,7 +57,7 @@ Q_SIGNALS:
     void decimalsChanged(QtProperty *property, int prec);
     void readOnlyChanged(QtProperty *property, bool readOnly);
 protected:
-    QString valueText(const QtProperty *property) const;
+    QString valueText(const QtProperty *property) const override;
     void initializeProperty(QtProperty *property) override;
     void uninitializeProperty(QtProperty *property) override;
 private:

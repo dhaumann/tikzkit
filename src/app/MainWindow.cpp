@@ -491,7 +491,7 @@ tikz::ui::View *MainWindow::openUrl(const QUrl &url)
     return m_viewManager->activateView(doc);
 }
 
-bool MainWindow::closeView(tikz::ui::View *view)
+void MainWindow::closeView(tikz::ui::View *view)
 {
     m_viewManager->closeView(view);
 }

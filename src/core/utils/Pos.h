@@ -189,11 +189,7 @@ class TIKZCORE_EXPORT Pos
          */
         inline friend QDebug operator<<(QDebug s, const tikz::Pos & pos)
         {
-            if (&pos != nullptr) {
-                s.nospace() << pos.toString();
-            } else {
-                s.nospace() << "(null Pos)";
-            }
+            s.nospace() << pos.toString();
             return s.space();
         }
 

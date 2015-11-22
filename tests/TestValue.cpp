@@ -52,14 +52,14 @@ void ValueTest::testPoint()
 
     // test initial value
     QCOMPARE(val.value(), 0.0);
-    QCOMPARE(static_cast<int>(val.unit()), static_cast<int>(tikz::Point));
+    QCOMPARE(tikz::toString(val.unit()), tikz::toString(tikz::Point));
     QCOMPARE(val.toString(), QString("0pt"));
 
     // test floating point value
     val = 3.567;
 
     QCOMPARE(val.value(), 3.567);
-    QCOMPARE(static_cast<int>(val.unit()), static_cast<int>(tikz::Point));
+    QCOMPARE(tikz::toString(val.unit()), tikz::toString(tikz::Point));
     QCOMPARE(val.toString(), QString("3.567pt"));
 
     // operator += and -=
@@ -84,7 +84,7 @@ void ValueTest::testFromString()
     //
     // unit: point
     //
-    QCOMPARE(static_cast<int>(val.unit()), static_cast<int>(tikz::Point));
+    QCOMPARE(tikz::toString(val.unit()), tikz::toString(tikz::Point));
 
     // test "0pt"
     QCOMPARE(val.value(), tikz::Value::fromString("0pt").value());
@@ -115,7 +115,7 @@ void ValueTest::testFromString()
     // unit: Millimeter
     //
     val = tikz::Value(0.0, tikz::Millimeter);
-    QCOMPARE(static_cast<int>(val.unit()), static_cast<int>(tikz::Millimeter));
+    QCOMPARE(tikz::toString(val.unit()), tikz::toString(tikz::Millimeter));
 
     // test "0pt"
     QCOMPARE(val.value(), tikz::Value::fromString("0mm").value());

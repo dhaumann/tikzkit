@@ -292,11 +292,7 @@ class TIKZCORE_EXPORT Value
          */
         inline friend QDebug operator<<(QDebug s, const tikz::Value & value)
         {
-            if (&value != nullptr) {
-                s.nospace() << value.toString();
-            } else {
-                s.nospace() << "(null Value)";
-            }
+            s.nospace() << value.toString();
             return s.space();
         }
 

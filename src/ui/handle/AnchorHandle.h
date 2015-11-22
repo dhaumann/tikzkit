@@ -46,7 +46,7 @@ class AnchorHandle : public Handle
         /**
          * Reimplment to return a proper UserType + 2.
          */
-        virtual int type() const;
+        int type() const override;
 
     //
     // node/anchor accessors

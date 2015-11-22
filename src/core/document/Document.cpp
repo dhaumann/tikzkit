@@ -161,6 +161,8 @@ bool Document::accept(Visitor & visitor)
             path->accept(visitor);
         }
     }
+
+    return true;
 }
 
 void Document::close()

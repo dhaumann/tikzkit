@@ -74,6 +74,7 @@ tikz::EntityType Node::entityType() const
 bool Node::accept(Visitor & visitor)
 {
     visitor.visit(this);
+    return true;
 }
 
 void Node::setPos(const tikz::Pos & pos)

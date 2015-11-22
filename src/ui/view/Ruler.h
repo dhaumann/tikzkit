@@ -42,7 +42,7 @@ class TIKZUI_EXPORT Ruler : public QWidget
 public:
     Ruler(Qt::Orientation orientation, QWidget* parent = 0);
 
-    QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const override;
 
     Qt::Orientation orientation() const;
 
@@ -66,12 +66,12 @@ protected:
     /**
      * Reimplement to update mouse position.
      */
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
 
     /**
      * Implement painting of the ruler.
      */
-    virtual void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     /**
