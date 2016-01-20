@@ -35,6 +35,7 @@ namespace ui {
 class Document;
 class MainWindow;
 class ViewPrivate;
+class ZoomController;
 
 class TIKZUI_EXPORT View : public QWidget
 {
@@ -80,6 +81,11 @@ public:
      * \return the view's main window
      */
     virtual tikz::ui::MainWindow *mainWindow() const = 0;
+
+    /**
+     * Returns this View's ZoomContrller object.
+     */
+    virtual tikz::ui::ZoomController * zoomController() const = 0;
 
     /*
      * SIGNALS

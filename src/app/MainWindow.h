@@ -193,6 +193,7 @@ private:
     // status bar
     QLabel * m_positionLabel = nullptr;
     QComboBox * m_unitComboBox = nullptr;
+    QComboBox * m_zoomComboBox = nullptr;
 };
 
 #endif // TIKZKIT_MAIN_WINDOW_H

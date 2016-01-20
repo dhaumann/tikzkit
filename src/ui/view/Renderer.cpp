@@ -22,6 +22,7 @@
 #include "TikzScene.h"
 #include "DocumentPrivate.h"
 #include "Grid.h"
+#include "ZoomController.h"
 
 #include <tikz/core/Document.h>
 
@@ -54,6 +55,9 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
 
     m_hRuler->setUnit(tikz::Centimeter);
     m_vRuler->setUnit(tikz::Centimeter);
+
+    m_zoomController = new tikz::ui::ZoomController(this);
+    connect(m_zoomController, &ZoomController::zoomChanged, this, &Renderer::setZoom);
 
     QWidget* top = new QWidget();
     top->setBackgroundRole(QPalette::Window);
@@ -118,6 +122,25 @@ qreal Renderer::snapAngle(qreal angle) const
     return snap ? (qRound(angle / 15) * 15) : angle;
 }
 
+tikz::ui::ZoomController * Renderer::zoomController() const
+{
+    return m_zoomController;
+}
+
+void Renderer::setZoom(qreal zoomFactor)
+{
+    // just in case, prevent division by 0
+    if (zoomFactor == 0) {
+        return;
+    }
+
+    constexpr qreal unit = tikz::Value(1, tikz::Inch).toPoint();
+    const qreal s = unit / zoomFactor;
+    QTransform m;
+    m.scale(physicalDpiX() / s, -physicalDpiY() / s);
+    setTransform(m);
+}
+
 void Renderer::mousePressEvent(QMouseEvent* event)
 {
     m_lastMousePos = event->pos();
@@ -177,12 +200,8 @@ void Renderer::mouseReleaseEvent(QMouseEvent* event)
 void Renderer::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() & Qt::ControlModifier) {
-        // fix mouse position when zooming
         setTransformationAnchor(AnchorUnderMouse);
-
-        // zoom in / out
-        const double scaleFactor = event->delta() > 0 ? 1.15 : (1 / 1.15);
-        scale(scaleFactor, scaleFactor);
+        m_zoomController->processWheelEvent(event->delta());
     } else {
         QGraphicsView::wheelEvent(event);
     }

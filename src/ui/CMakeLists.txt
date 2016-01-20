@@ -71,6 +71,7 @@ set(qtikzui_SOURCES
     view/AnchorManager.cpp
     view/Ruler.cpp
     view/Grid.cpp
+    view/ZoomController.cpp
 
     colors/ColorPalette.cpp
     colors/ColorWidget.cpp

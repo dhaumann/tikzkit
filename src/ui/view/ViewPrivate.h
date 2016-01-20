@@ -65,6 +65,11 @@ class ViewPrivate : public tikz::ui::View
         tikz::ui::MainWindow * mainWindow() const override;
 
         /**
+         * Returns this View's ZoomController object.
+         */
+        tikz::ui::ZoomController * zoomController() const override;
+
+        /**
          * Check whether the view has selected items.
          */
         bool hasSelection() const override;

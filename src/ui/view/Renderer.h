@@ -33,6 +33,7 @@ namespace ui {
 class DocumentPrivate;
 class Ruler;
 class Grid;
+class ZoomController;
 
 class Renderer : public QGraphicsView
 {
@@ -69,6 +70,17 @@ class Renderer : public QGraphicsView
          */
         qreal snapAngle(qreal angle) const;
 
+        /**
+         * Returns the ZoomController object that handles the zoom operations.
+         */
+        ZoomController * zoomController() const;
+
+    public Q_SLOTS:
+        /**
+         * Sets the zoom factor. 1.0 maps to 100%.
+         */
+        void setZoom(qreal zoomFactor);
+
     Q_SIGNALS:
         /**
          * This signal is emitted whenever the mouse moved on the view.
@@ -89,6 +101,7 @@ class Renderer : public QGraphicsView
         tikz::ui::Grid * m_grid = nullptr;
         tikz::ui::Ruler * m_hRuler = nullptr;
         tikz::ui::Ruler * m_vRuler = nullptr;
+        tikz::ui::ZoomController * m_zoomController = nullptr;
         QPointF m_lastMousePos;
         bool m_handTool = false;
 };

@@ -33,6 +33,7 @@
 #include <tikz/ui/LinePropertyWidget.h>
 #include <tikz/ui/ColorWidget.h>
 #include <tikz/ui/PropertyBrowser.h>
+#include <tikz/ui/ZoomController.h>
 
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
@@ -98,8 +99,11 @@ MainWindow::MainWindow()
 
     connect(m_unitComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreferredUnitChanged(int)));
 
+    m_zoomComboBox = new QComboBox(this);
+
     statusBar()->addPermanentWidget(m_positionLabel);
     statusBar()->addPermanentWidget(m_unitComboBox);
+    statusBar()->addPermanentWidget(m_zoomComboBox);
 
 
     // add arrow head/tail combos
@@ -311,6 +315,8 @@ void MainWindow::mergeView(tikz::ui::View * view)
     updateTikzCode();
     updateActions();
 
+    view->zoomController()->attachToComboBox(m_zoomComboBox);
+
     m_browser->setView(view);
 }
 
@@ -321,6 +327,8 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     if (! view) {
         return;
     }
+
+    view->zoomController()->attachToComboBox(nullptr);
 
     // disconnect actions from current view
     disconnect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));

@@ -75,6 +75,11 @@ tikz::ui::MainWindow * ViewPrivate::mainWindow() const
     return m_mainWindow;
 }
 
+tikz::ui::ZoomController * ViewPrivate::zoomController() const
+{
+    return m_renderer->zoomController();
+}
+
 bool ViewPrivate::hasSelection() const
 {
     return ! m_doc->scene()->selectedItems().isEmpty();
