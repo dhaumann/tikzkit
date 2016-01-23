@@ -315,7 +315,14 @@ void MainWindow::mergeView(tikz::ui::View * view)
     updateTikzCode();
     updateActions();
 
+    // attach zoom combo box
     view->zoomController()->attachToComboBox(m_zoomComboBox);
+
+    // track preferred unit
+    const auto unit = activeView()->document()->preferredUnit();
+    const auto unitString = tikz::toString(unit);
+    const auto unitIndex = m_unitComboBox->findData(unitString);
+    m_unitComboBox->setCurrentIndex(unitIndex);
 
     m_browser->setView(view);
 }
