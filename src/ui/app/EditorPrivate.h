@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -22,6 +22,7 @@
 
 #include <tikz/ui/Editor.h>
 #include <tikz/ui/Application.h>
+#include <tikz/ui/MainWindow.h>
 
 #include <QList>
 #include <QPointer>
@@ -86,7 +87,8 @@ public:
      */
     void setApplication(tikz::ui::Application *application) override
     {
-        m_application = application;
+        // switch back to dummy application?
+        m_application = application ? application : &m_dummyApplication;
     }
 
     /**
@@ -164,6 +166,16 @@ public:
      */
     QVector<tikz::ui::ViewPrivate *> tikzViews();
 
+public:
+    /**
+     * Dummy main window to be null safe.
+     * @return dummy main window
+     */
+    tikz::ui::MainWindow *dummyMainWindow()
+    {
+        return &m_dummyMainWindow;
+    }
+
 private:
     /**
      * registered docs, map from general to specialized pointer
@@ -179,6 +191,16 @@ private:
      * access to application
      */
     QPointer<tikz::ui::Application> m_application;
+
+    /**
+     * Dummy application object to be null safe
+     */
+    tikz::ui::Application m_dummyApplication;
+
+    /**
+     * Dummy main window to be null safe
+     */
+    tikz::ui::MainWindow m_dummyMainWindow;
 };
 
 }

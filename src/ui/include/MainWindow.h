@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  * Copyright (C) 2014 Christoph Cullmann <cullmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
@@ -52,9 +52,6 @@ class View;
  *
  * It must not reimplement this class but construct an instance and pass a pointer to a QObject that
  * has the required slots to receive the requests.
- *
- * The interface functions are nullptr safe, this means, you can call them all even if the instance
- * is a nullptr.
  */
 class TIKZUI_EXPORT MainWindow : public QObject
 {

@@ -1,7 +1,7 @@
 /*
  *  This file is part of the KDE project.
  *
- *  Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ *  Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  *  Copyright (C) 2013 Christoph Cullmann <cullmann@kde.org>
  *
  *  This library is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ QList<tikz::ui::MainWindow *> Application::mainWindows()
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return QList<tikz::ui::MainWindow *> ();
     }
 
@@ -61,7 +61,7 @@ tikz::ui::MainWindow *Application::activeMainWindow()
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -81,7 +81,7 @@ QVector<tikz::ui::Document *> Application::documents()
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return QVector<tikz::ui::Document *> ();
     }
 
@@ -101,7 +101,7 @@ tikz::ui::Document *Application::findUrl(const QUrl &url)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -122,7 +122,7 @@ tikz::ui::Document *Application::openUrl(const QUrl &url)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -143,7 +143,7 @@ bool Application::closeDocument(tikz::ui::Document *document)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return false;
     }
 
@@ -165,7 +165,7 @@ tikz::ui::Plugin *Application::plugin(const QString &name)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 

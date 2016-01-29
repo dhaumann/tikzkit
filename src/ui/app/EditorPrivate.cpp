@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -30,8 +30,10 @@ namespace tikz {
 namespace ui {
 
 EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
-    : tikz::ui::Editor (this)
-    , m_application(nullptr)
+    : tikz::ui::Editor(this)
+    , m_dummyApplication(nullptr)
+    , m_application(&m_dummyApplication)
+    , m_dummyMainWindow(nullptr)
 {
     // remember this
     staticInstance = this;

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  * Copyright (C) 2014 Christoph Cullmann <cullmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
@@ -73,13 +73,15 @@ public:
      * Set the global application object.
      * This will allow the editor component to access
      * the hosting application.
-     * @param application application object
+     * @param application application object. If the argument is a nullptr,
+     *                    this will reset the application back to a dummy interface.
      */
     virtual void setApplication(tikz::ui::Application *application) = 0;
 
     /**
      * Current hosting application, if any set.
-     * @return current application object or nullptr
+     * @return current application object or a dummy interface that allows
+     *         calling the functions without having to check for a nullptr.
      */
     virtual tikz::ui::Application *application() const = 0;
 

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  * Copyright (C) 2014 Christoph Cullmann <cullmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ QVector<tikz::ui::View *> MainWindow::views() const
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return QVector<tikz::ui::View *> ();
     }
 
@@ -61,7 +61,7 @@ tikz::ui::View * MainWindow::activeView()
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -81,7 +81,7 @@ tikz::ui::View * MainWindow::activateView(tikz::ui::Document *document)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -102,7 +102,7 @@ tikz::ui::View * MainWindow::openUrl(const QUrl &url)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return nullptr;
     }
 
@@ -123,7 +123,7 @@ bool MainWindow::closeView(tikz::ui::View *view)
     /**
      * null check
      */
-    if (!this) {
+    if (!parent()) {
         return false;
     }
 

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  * Copyright (C) 2014 Christoph Cullmann <cullmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
@@ -44,8 +44,12 @@ class MainWindow;
  * It must not reimplement this class but construct an instance and pass a pointer to a QObject that
  * has the required slots to receive the requests.
  *
- * The interface functions are nullptr safe, this means, you can call them all even if the instance
- * is a nullptr.
+ * tikz::ui::Editor::instance()->application() will always return a non-nullptr object
+ * to avoid the need for nullptr checks before calling the API.
+ *
+ * The same holds for activeMainWindow(), even if no main window is around, you will get a non-nullptr
+ * interface object that allows to call the functions of the MainWindow without needs for a nullptr
+ * check around it in the client code.
  */
 class TIKZUI_EXPORT Application : public QObject
 {
@@ -71,13 +75,16 @@ public:
 public:
     /**
      * Get a list of all main windows.
-     * @return all main windows
+     * @return all main windows, may be an empty list
      */
     QList<tikz::ui::MainWindow *> mainWindows();
 
     /**
      * Accessor to the active main window.
-     * \return a pointer to the active mainwindow
+     * \return a pointer to the active mainwindow.
+     *         Even if no main window is active a non-nullptr dummy interface
+     *         is returned that allows to call interface functions without the
+     *         need for null pointer checks.
      */
     tikz::ui::MainWindow *activeMainWindow();
 
@@ -88,7 +95,7 @@ public:
     /**
      * Get a list of all documents that are managed by the application.
      * This might contain less documents than the editor has in his documents () list.
-     * @return all documents the application manages
+     * @return all documents the application manages, may be an empty list.
      */
     QVector<tikz::ui::Document *> documents();
 
@@ -96,7 +103,7 @@ public:
      * Get the document with the URL \p url.
      * if multiple documents match the searched url, return the first found one...
      * \param url the document's URL
-     * \return the document with the given \p url or NULL, if none found
+     * \return the document with the given \p url or nullptr, if none found
      */
     tikz::ui::Document *findUrl(const QUrl &url);
 

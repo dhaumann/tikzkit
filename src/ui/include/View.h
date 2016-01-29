@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2014-2016 Dominik Haumann <dhaumann@kde.org>
  * Copyright (C) 2014 Christoph Cullmann <cullmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
@@ -78,7 +78,9 @@ public:
 public:
     /**
      * Get the view's main window, if any
-     * \return the view's main window
+     * \return the view's main window. The returned pointer is always valid,
+     *         since a dummy interface is returned in case a proper main
+     *         window isn't set.
      */
     virtual tikz::ui::MainWindow *mainWindow() const = 0;
 

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -118,8 +118,8 @@ TikzScene * DocumentPrivate::scene() const
 View * DocumentPrivate::createView(QWidget * parent,
                                    tikz::ui::MainWindow * mainWindow)
 {
-    // create view
-    auto view = new ViewPrivate(this, parent, mainWindow);
+    // construct new view, we use a dummyMainWindow interface if no mainWindow is there
+    auto view = new ViewPrivate(this, parent, mainWindow ? mainWindow : tikz::ui::EditorPrivate::self()->dummyMainWindow());
     Q_ASSERT(m_views.contains(view));
 
 //BEGIN DEBUG
