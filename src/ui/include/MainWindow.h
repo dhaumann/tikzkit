@@ -77,13 +77,13 @@ public:
 public:
     /**
      * Get a list of all views for this main window.
-     * @return all views
+     * @return all views, might be an empty list.
      */
     QVector<tikz::ui::View *> views() const;
 
     /**
      * Access the active view.
-     * \return active view
+     * \return active view, nullptr, if not available.
      */
     tikz::ui::View *activeView();
 
@@ -91,7 +91,7 @@ public:
      * Activate the view with the corresponding \p document.
      * If none exist for this document, create one
      * \param document the document
-     * \return activated view of this document
+     * \return activated view of this document, or nullptr if not possible.
      */
     tikz::ui::View *activateView(tikz::ui::Document *document);
 
@@ -99,7 +99,8 @@ public:
      * Open the document \p url.
      * \param url the document's url
      * \return a pointer to the created view for the new document, if a document
-     *         with this url is already existing, its view will be activated
+     *         with this url is already existing, its view will be activated.
+     *         A nullptr is returned, if opening the url was not possible.
      */
     tikz::ui::View *openUrl(const QUrl &url);
 

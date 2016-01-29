@@ -39,13 +39,6 @@ MainWindow::~MainWindow()
 QVector<tikz::ui::View *> MainWindow::views() const
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return QVector<tikz::ui::View *> ();
-    }
-
-    /**
      * dispatch to parent
      */
     QVector<tikz::ui::View *> views;
@@ -59,13 +52,6 @@ QVector<tikz::ui::View *> MainWindow::views() const
 tikz::ui::View * MainWindow::activeView()
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
-    /**
      * dispatch to parent
      */
     tikz::ui::View *view = nullptr;
@@ -78,13 +64,6 @@ tikz::ui::View * MainWindow::activeView()
 
 tikz::ui::View * MainWindow::activateView(tikz::ui::Document *document)
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
     /**
      * dispatch to parent
      */
@@ -100,13 +79,6 @@ tikz::ui::View * MainWindow::activateView(tikz::ui::Document *document)
 tikz::ui::View * MainWindow::openUrl(const QUrl &url)
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
-    /**
      * dispatch to parent
      */
     tikz::ui::View *view = nullptr;
@@ -120,13 +92,6 @@ tikz::ui::View * MainWindow::openUrl(const QUrl &url)
 
 bool MainWindow::closeView(tikz::ui::View *view)
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return false;
-    }
-
     /**
      * dispatch to parent
      */

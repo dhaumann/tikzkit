@@ -39,13 +39,6 @@ Application::~Application()
 QList<tikz::ui::MainWindow *> Application::mainWindows()
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return QList<tikz::ui::MainWindow *> ();
-    }
-
-    /**
      * dispatch to parent
      */
     QList<tikz::ui::MainWindow *> mainWindow;
@@ -58,13 +51,6 @@ QList<tikz::ui::MainWindow *> Application::mainWindows()
 
 tikz::ui::MainWindow *Application::activeMainWindow()
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
     /**
      * dispatch to parent
      */
@@ -79,13 +65,6 @@ tikz::ui::MainWindow *Application::activeMainWindow()
 QVector<tikz::ui::Document *> Application::documents()
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return QVector<tikz::ui::Document *> ();
-    }
-
-    /**
      * dispatch to parent
      */
     QVector<tikz::ui::Document *> documents;
@@ -98,13 +77,6 @@ QVector<tikz::ui::Document *> Application::documents()
 
 tikz::ui::Document *Application::findUrl(const QUrl &url)
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
     /**
      * dispatch to parent
      */
@@ -120,13 +92,6 @@ tikz::ui::Document *Application::findUrl(const QUrl &url)
 tikz::ui::Document *Application::openUrl(const QUrl &url)
 {
     /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
-    /**
      * dispatch to parent
      */
     tikz::ui::Document *document = nullptr;
@@ -140,13 +105,6 @@ tikz::ui::Document *Application::openUrl(const QUrl &url)
 
 bool Application::closeDocument(tikz::ui::Document *document)
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return false;
-    }
-
     /**
      * dispatch to parent
      */
@@ -162,13 +120,6 @@ bool Application::closeDocument(tikz::ui::Document *document)
 #if 0
 tikz::ui::Plugin *Application::plugin(const QString &name)
 {
-    /**
-     * null check
-     */
-    if (!parent()) {
-        return nullptr;
-    }
-
     /**
      * dispatch to parent
      */
