@@ -118,8 +118,7 @@ public:
     void endConfig();
 
 private:
-    ConfigObject * const m_configObject = nullptr;
-    bool m_configTransactionActive = false;
+    ConfigObject * m_configObject = nullptr;
 };
 
 }

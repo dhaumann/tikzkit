@@ -65,23 +65,18 @@ ConfigTransaction::ConfigTransaction(ConfigObject * configObject)
     Q_ASSERT(configObject);
 
     m_configObject->beginConfig();
-    m_configTransactionActive = true;
 }
 
 ConfigTransaction::~ConfigTransaction()
 {
-    if (m_configTransactionActive) {
-        m_configObject->endConfig();
-    }
+    endConfig();
 }
 
 void ConfigTransaction::endConfig()
 {
-    Q_ASSERT(m_configTransactionActive);
-
-    if (m_configTransactionActive) {
-        m_configTransactionActive = false;
+    if (m_configObject) {
         m_configObject->endConfig();
+        m_configObject = nullptr;
     }
 }
 
