@@ -28,18 +28,20 @@
 
 #include <QDebug>
 
-TikzKit * TikzKit::s_self = nullptr;
+namespace {
+    TikzKit * s_appSelf = nullptr;
+}
 
 TikzKit * TikzKit::self()
 {
-    return s_self;
+    return s_appSelf;
 }
 
 TikzKit::TikzKit()
     : QObject()
     , m_wrapper(new tikz::ui::Application(this))
 {
-    s_self = this;
+    s_appSelf = this;
 
     // document manager
     m_docManager = new DocumentManager(this);

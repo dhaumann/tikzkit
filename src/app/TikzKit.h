@@ -45,9 +45,6 @@ public:
      */
     static TikzKit * self();
 
-private:
-    static TikzKit * s_self;
-
 public:
     /**
      * Default constructor.
