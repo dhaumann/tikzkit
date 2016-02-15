@@ -16,8 +16,8 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef TIKZ_CORE_COLOR_PROPERTY_H
-#define TIKZ_CORE_COLOR_PROPERTY_H
+#ifndef TIKZ_CORE_VALUE_PROPERTY_H
+#define TIKZ_CORE_VALUE_PROPERTY_H
 
 #include "Property.h"
 #include "Value.h"
@@ -43,12 +43,12 @@ public:
 
 public:
     /**
-     * Set the value or this property to @p value.
+     * Set the value of this property to @p value.
      */
     void setValue(const Value & value);
 
     /**
-     * Returns the Value or this property.
+     * Returns the Value of this property.
      */
     Value value() const;
 
@@ -83,6 +83,6 @@ private:
 } //namespace core
 } //namespace tikz
 
-#endif // TIKZ_CORE_COLOR_PROPERTY_H
+#endif // TIKZ_CORE_VALUE_PROPERTY_H
 
 // kate: indent-width 4; replace-tabs on;

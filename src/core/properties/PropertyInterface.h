@@ -21,7 +21,7 @@
 
 #include "tikz_export.h"
 
-#include <QObject>
+#include <QObject> // for Q_DECLARE_INTERFACE
 #include <QVector>
 
 namespace tikz {

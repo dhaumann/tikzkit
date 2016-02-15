@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -16,11 +16,11 @@
  * along with this library; see the file COPYING.LIB.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef TIKZ_CORE_COLOR_PROPERTY_H
-#define TIKZ_CORE_COLOR_PROPERTY_H
+#ifndef TIKZ_CORE_POS_PROPERTY_H
+#define TIKZ_CORE_POS_PROPERTY_H
 
 #include "Property.h"
-#include <QColor>
+#include "Pos.h"
 
 namespace tikz {
 namespace core {
@@ -28,29 +28,29 @@ namespace core {
 /**
  * Color property.
  */
-class TIKZCORE_EXPORT ColorProperty : public Property
+class TIKZCORE_EXPORT PosProperty : public Property
 {
 public:
     /**
      * Constructor that creates a property @p propertyName as part of @p entity.
      */
-    explicit ColorProperty(const QString & propertyName, PropertyInterface * interface);
+    explicit PosProperty(const QString & propertyName, PropertyInterface * interface);
 
     /**
      * Virtual destructor.
      */
-    virtual ~ColorProperty();
+    virtual ~PosProperty();
 
 public:
     /**
-     * Set the color of this property to @p color.
+     * Set the value or this property to @p pos.
      */
-    void setColor(const QColor & color);
+    void setPos(const Pos & pos);
 
     /**
-     * Returns the color of this property.
+     * Returns the Pos of this property.
      */
-    QColor color() const;
+    Pos pos() const;
 
 public: // Property overrides
     /**
@@ -77,12 +77,12 @@ protected:
     void saveData(QJsonObject & json) override;
 
 private:
-    QColor m_color;
+    Pos m_pos;
 };
 
 } //namespace core
 } //namespace tikz
 
-#endif // TIKZ_CORE_COLOR_PROPERTY_H
+#endif // TIKZ_CORE_POS_PROPERTY_H
 
 // kate: indent-width 4; replace-tabs on;
