@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -20,7 +20,7 @@
 #define TIKZ_CORE_COLOR_PROPERTY_H
 
 #include "Property.h"
-#include <QColor>
+#include "Value.h"
 
 namespace tikz {
 namespace core {
@@ -28,29 +28,29 @@ namespace core {
 /**
  * Color property.
  */
-class TIKZCORE_EXPORT ColorProperty : public Property
+class TIKZCORE_EXPORT ValueProperty : public Property
 {
 public:
     /**
      * Constructor that creates a property @p propertyName as part of @p entity.
      */
-    explicit ColorProperty(const QString & propertyName, PropertyInterface * interface);
+    explicit ValueProperty(const QString & propertyName, PropertyInterface * interface);
 
     /**
      * Virtual destructor.
      */
-    virtual ~ColorProperty();
+    virtual ~ValueProperty();
 
 public:
     /**
-     * Set the color or this property to @p color.
+     * Set the value or this property to @p value.
      */
-    void setColor(const QColor & color);
+    void setValue(const Value & value);
 
     /**
-     * Returns the color or this property.
+     * Returns the Value or this property.
      */
-    QColor color() const;
+    Value value() const;
 
 public: // Property overrides
     /**
@@ -77,7 +77,7 @@ protected:
     void saveData(QJsonObject & json) override;
 
 private:
-    QColor m_color;
+    Value m_value;
 };
 
 } //namespace core

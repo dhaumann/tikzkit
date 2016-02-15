@@ -32,23 +32,10 @@ class PropertyPrivate;
 class Entity;
 class PropertyInterface;
 
-// enum that contains all property types
-enum class PropertyType : int {
-    String,     // e.g. node text
-    StringList, // e.g. align: left, center, right
-    Value,      // e.g. 2mm
-    Color,      // e.g. line color, fill color
-    Bool        // e.g. double lines
-//    Double,     // e.g. rotation
-//    Arrow,      // hm...
-//    Shape       // hm...
-};
-
 /**
  * Base class for properties.
  *
  * TODO / FIXME:
- * - toJson, fromJson?
  * - merge PropertyInterface into Entity? --> then toJson/fromJson is much simpler
  * - add TikzFormatter classes: "property name=value", only "value",
  *   only "double" for double lines, ...
