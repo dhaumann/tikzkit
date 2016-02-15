@@ -71,13 +71,13 @@ public:
     void removeProperty(Property * property);
 
     /**
-     * Retturns the property called @p propertyName. If the requested property
+     * Returns the property called @p propertyName. If the requested property
      * does not exist, either the parentPropertyInterface() is queried for the
      * requested property if @p fallbackToParents is set to @e true, or otherwise
      * a nullptr is returned.
      */
     Property * property(const QString & propertyName,
-                                bool fallbackToParents = true) const;
+                        bool fallbackToParents = true) const;
 
     /**
      * Returns @e true, if a property called @p propertyName exists, otherwise

@@ -20,6 +20,8 @@
 #include "Property.h"
 #include "PropertyInterface.h"
 
+#include <QJsonObject>
+
 namespace tikz {
 namespace core {
 
@@ -57,7 +59,7 @@ Property * Property::parentProperty() const
             auto prop = iface->property(propertyName());
             if (prop) {
                 // hierarchical properties must always have the same type.
-                Q_ASSERT(type() == prop->type());
+                Q_ASSERT(propertyType() == prop->propertyType());
             }
             return prop;
         }
@@ -106,6 +108,37 @@ void Property::notifyChanged()
     if (d->propertyInterface) {
         d->propertyInterface->notifyPropertyChange(this);
     }
+}
+
+void Property::load(const QJsonObject & json)
+{
+    // load meta data
+    d->name = json["name"].toString(d->name);
+    d->propertyName = json["property-name"].toString(d->propertyName);
+
+    // load payload
+    loadData(json["data"].toObject());
+}
+
+void Property::loadData(const QJsonObject & json)
+{
+}
+
+void Property::save(QJsonObject & json)
+{
+    // save meta data
+    json["name"] = d->name;
+    json["property-name"] = propertyName();
+    json["type"] = propertyType();
+
+    // save payload
+    QJsonObject joData;
+    saveData(joData);
+    json["data"] = joData;
+}
+
+void Property::saveData(QJsonObject & json)
+{
 }
 
 }

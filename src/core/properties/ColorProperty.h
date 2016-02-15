@@ -19,7 +19,7 @@
 #ifndef TIKZ_CORE_COLOR_PROPERTY_H
 #define TIKZ_CORE_COLOR_PROPERTY_H
 
-#include "AbstractProperty.h"
+#include "Property.h"
 #include <QColor>
 
 namespace tikz {
@@ -28,7 +28,7 @@ namespace core {
 /**
  * Color property.
  */
-class TIKZCORE_EXPORT ColorProperty : public AbstractProperty
+class TIKZCORE_EXPORT ColorProperty : public Property
 {
 public:
     /**
@@ -41,20 +41,7 @@ public:
      */
     virtual ~ColorProperty();
 
-    /**
-     * Returns the type of the proerty.
-     * The type is used to cast the property to the respective derived type.
-     */
-    PropertyType type() const override;
-
-    /**
-     * Reset the property to its default value.
-     * Calling unset() calls notifyChanged() if isSet() is @e true, and then
-     * sets the isSet() flag to @e false.
-     * @see isSet(), notifyChanged()
-     */
-    void unset() override;
-
+public:
     /**
      * Set the color or this property to @p color.
      */
@@ -64,6 +51,34 @@ public:
      * Returns the color or this property.
      */
     QColor color() const;
+
+public: // Property overrides
+    /**
+     * Returns the type of the proerty.
+     * The type is used to cast the property to the respective derived type.
+     */
+    const char * propertyType() const override;
+
+    /**
+     * Reset the property to its default value.
+     * Calling unset() calls notifyChanged() if isSet() is @e true, and then
+     * sets the isSet() flag to @e false.
+     * @see isSet(), notifyChanged()
+     */
+    void unset() override;
+
+protected:
+    /**
+     * Load the payload of the Property state from the @p json object.
+     * The default implementation is empty.
+     */
+    void loadData(const QJsonObject & json) override;
+
+    /**
+     * Save the payload of the Property state to the @p json object.
+     * The default implementation is empty.
+     */
+    void saveData(QJsonObject & json) override;
 
 private:
     QColor m_color;

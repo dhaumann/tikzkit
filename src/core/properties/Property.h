@@ -23,6 +23,8 @@
 
 #include <QString>
 
+class QJsonObject;
+
 namespace tikz {
 namespace core {
 
@@ -62,7 +64,7 @@ public:
     explicit Property(const QString & propertyName, PropertyInterface * interface);
 
     /**
-     * Virtual destructor.
+     * Destructor.
      */
     virtual ~Property();
 
@@ -76,7 +78,7 @@ public:
      * Returns the property called @p propertyName() from the parent PropertyInterface.
      * This is equivalent to calling (with null pointer checks)
      * propertyInterface()->parentPropertyInterface()->property(propertyName()).
-     * A null pointer is returned if no parent itnerface exists, or if the parent
+     * A null pointer is returned if no parent interface exists, or if the parent
      * interface does not contain a property called @p propertyName().
      */
     Property * parentProperty() const;
@@ -87,7 +89,7 @@ public:
     Entity * entity() const;
 
     /**
-     * Retturns the property name of this Property.
+     * Returns the property name of this Property.
      * The returned string is used as identifier to query for a certain property.
      */
     QString propertyName() const;
@@ -105,10 +107,11 @@ public:
     QString name() const;
 
     /**
-     * Returns the type of the proerty.
+     * Returns the type of the property.
      * The type is used to cast the property to the respective derived type.
+     * Additionally, the type helps to serialize and deserialize the Property
      */
-    virtual PropertyType type() const = 0;
+    virtual const char * propertyType() const = 0;
 
     /**
      * Reset the property to its default value.
@@ -127,6 +130,31 @@ public:
      * Notifies the associated Entity
      */
     void notifyChanged();
+
+public: // load & save
+    /**
+     * Load the Property state from the @p json object.
+     */
+    void load(const QJsonObject & json);
+
+    /**
+     * Save the Property state to the @p json object.
+     */
+    void save(QJsonObject & json);
+
+protected:
+    /**
+     * Load the payload of the Property state from the @p json object.
+     * The default implementation is empty.
+     */
+    virtual void loadData(const QJsonObject & json);
+
+    /**
+     * Save the payload of the Property state to the @p json object.
+     * The default implementation is empty.
+     */
+    virtual void saveData(QJsonObject & json);
+
 
 private:
     // pimpl data pointer

@@ -19,11 +19,13 @@
 
 #include "ColorProperty.h"
 
+#include <QJsonObject>
+
 namespace tikz {
 namespace core {
 
 ColorProperty::ColorProperty(const QString & propertyName, PropertyInterface * interface)
-    : AbstractProperty(propertyName, interface)
+    : Property(propertyName, interface)
     , m_color(Qt::black)
 {
 }
@@ -32,9 +34,9 @@ ColorProperty::~ColorProperty()
 {
 }
 
-PropertyType ColorProperty::type() const
+const char * ColorProperty::propertyType() const
 {
-    return PropertyType::Color;
+    return "color";
 }
 
 void ColorProperty::unset()
@@ -42,7 +44,7 @@ void ColorProperty::unset()
     // FIXME: add undo/redo support
     if (isSet()) {
         m_color = Qt::black;
-        unset(); // calls notifyChanged()
+        Property::unset(); // calls notifyChanged()
     }
 }
 
@@ -67,6 +69,20 @@ QColor ColorProperty::color() const
     }
 
     return Qt::black;
+}
+
+void ColorProperty::loadData(const QJsonObject & json)
+{
+    const QJsonValue v = json["color"];
+    if (v.isString()) {
+        const QString colorName = v.toString();
+        m_color = QColor(colorName);
+    }
+}
+
+void ColorProperty::saveData(QJsonObject & json)
+{
+    json["color"] = m_color.name();
 }
 
 }
