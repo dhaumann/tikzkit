@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -108,9 +108,14 @@ QVector<Property *> PropertyInterface::properties() const
     return d->properties;
 }
 
-void PropertyInterface::notifyPropertyChange(Property * property)
+void PropertyInterface::notifyPropertyChanged(Property * property)
 {
     emit propertyChanged(this, property);
+}
+
+void PropertyInterface::notifyPropertyAboutToChange(Property * property)
+{
+    // TODO: leave empty for now ?
 }
 
 } //namespace core

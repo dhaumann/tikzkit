@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -28,15 +28,63 @@ namespace core {
 class PropertyPrivate
 {
 public:
-    QString name;
+    Property * property = nullptr;
+    QString title;
     QString propertyName;
     PropertyInterface * propertyInterface = nullptr;
     bool propertySet = false;
+
+    //! change refcounter
+    int changeRefCounter = 0;
+
+public: // change management
+    //! Starts a change transaction.
+    void beginChange()
+    {
+        ++changeRefCounter;
+
+        if (changeRefCounter == 1 && propertyInterface) {
+            propertyInterface->notifyPropertyAboutToChange(property);
+        }
+    }
+
+    //! Ends a change transaction.
+    void endChange()
+    {
+        --changeRefCounter;
+        if (changeRefCounter == 0 && propertyInterface) {
+            propertyInterface->notifyPropertyChanged(property);
+        }
+    }
+
+    friend class Property::Transaction;
 };
+
+Property::Transaction::Transaction(Property * prop)
+    : m_property(prop)
+{
+    if (m_property) {
+        m_property->d->beginChange();
+    }
+}
+
+void Property::Transaction::endChange()
+{
+    if (m_property) {
+        m_property->d->endChange();
+        m_property = nullptr;
+    }
+}
+
+Property::Transaction::~Transaction()
+{
+    endChange();
+}
 
 Property::Property(const QString & propertyName, PropertyInterface * interface)
     : d(new PropertyPrivate())
 {
+    d->property = this;
     d->propertyName = propertyName;
     d->propertyInterface = interface;
 }
@@ -74,27 +122,27 @@ Entity * Property::entity() const
 
 QString Property::propertyName() const
 {
-    return d->name;
+    return d->propertyName;
 }
 
-void Property::setName(const QString & name)
+void Property::setTitle(const QString & title)
 {
-    if (d->name != name) {
-        // TODO: Transaction notifier
-        d->name = name;
+    if (d->title!= title) {
+        Transaction trans(this);
+        d->title = title;
     }
 }
 
-QString Property::name() const
+QString Property::title() const
 {
-    return d->name;
+    return d->title;
 }
 
 void Property::unset()
 {
     if (d->propertySet) {
+        Transaction trans(this);
         d->propertySet = false;
-        notifyChanged();
     }
 }
 
@@ -103,18 +151,11 @@ bool Property::isSet() const
     return d->propertySet;
 }
 
-void Property::notifyChanged()
-{
-    if (d->propertyInterface) {
-        d->propertyInterface->notifyPropertyChange(this);
-    }
-}
-
 void Property::load(const QJsonObject & json)
 {
     // load meta data
-    d->name = json["name"].toString(d->name);
-    d->propertyName = json["property-name"].toString(d->propertyName);
+    d->propertyName = json["name"].toString(d->propertyName);
+    d->title = json["title"].toString(d->title);
 
     // load payload
     loadData(json["data"].toObject());
@@ -127,8 +168,8 @@ void Property::loadData(const QJsonObject & json)
 void Property::save(QJsonObject & json)
 {
     // save meta data
-    json["name"] = d->name;
-    json["property-name"] = propertyName();
+    json["name"] = propertyName();
+    json["title"] = d->title;
     json["type"] = propertyType();
 
     // save payload

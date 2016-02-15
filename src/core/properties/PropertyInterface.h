@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -107,11 +107,16 @@ public:
                                  Property * property) = 0;
 
 private:
-    friend class Property;
+    friend class PropertyPrivate;
     /**
      * Helper function that calls the signal propertyChanged() with
      */
-    void notifyPropertyChange(Property * property);
+    void notifyPropertyChanged(Property * property);
+
+    /**
+     * Helper function that calls the signal propertyChanged() with
+     */
+    void notifyPropertyAboutToChange(Property * property);
 
 private:
     // pimpl data pointer

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -45,7 +45,7 @@ enum class PropertyType : int {
 };
 
 /**
- * Abstract base class for properties.
+ * Base class for properties.
  *
  * TODO / FIXME:
  * - toJson, fromJson?
@@ -95,16 +95,16 @@ public:
     QString propertyName() const;
 
     /**
-     * Set the user visible name to @p name.
-     * This name is used as display string to the user, e.g. "Line Width"
+     * Set the user visible name of this Property to @p name.
+     * This title is used as display string to the user, e.g. "Line Width"
      * or "Fill Color".
      */
-    void setName(const QString & name);
+    void setTitle(const QString & name);
 
     /**
-     * Returns the user-visible name that was set with setName().
+     * Returns the user-visible name that was set with setTitle().
      */
-    QString name() const;
+    QString title() const;
 
     /**
      * Returns the type of the property.
@@ -115,9 +115,7 @@ public:
 
     /**
      * Reset the property to its default value.
-     * Calling unset() calls notifyChanged() if isSet() is @e true, and then
-     * sets the isSet() flag to @e false.
-     * @see isSet(), notifyChanged()
+     * @see isSet()
      */
     virtual void unset();
 
@@ -125,11 +123,6 @@ public:
      * Returns @e true, if this property was set, otherwise false.
      */
     bool isSet() const;
-
-    /**
-     * Notifies the associated Entity
-     */
-    void notifyChanged();
 
 public: // load & save
     /**
@@ -155,6 +148,18 @@ protected:
      */
     virtual void saveData(QJsonObject & json);
 
+public:
+    class Transaction
+    {
+    public:
+        Transaction(Property * prop);
+
+        ~Transaction();
+        void endChange();
+
+    private:
+        Property * m_property = nullptr;
+    };
 
 private:
     // pimpl data pointer

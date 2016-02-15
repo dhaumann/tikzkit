@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2015-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -41,19 +41,18 @@ const char * ColorProperty::propertyType() const
 
 void ColorProperty::unset()
 {
-    // FIXME: add undo/redo support
     if (isSet()) {
+        Transaction trans(this);
         m_color = Qt::black;
-        Property::unset(); // calls notifyChanged()
+        Property::unset();
     }
 }
 
 void ColorProperty::setColor(const QColor & color)
 {
-    // FIXME: add undo/redo support
     if (! isSet() || m_color != color) {
+        Transaction trans(this);
         m_color = color;
-        notifyChanged();
     }
 }
 
