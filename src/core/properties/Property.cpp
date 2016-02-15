@@ -17,13 +17,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "AbstractProperty.h"
+#include "Property.h"
 #include "PropertyInterface.h"
 
 namespace tikz {
 namespace core {
 
-class AbstractPropertyPrivate
+class PropertyPrivate
 {
 public:
     QString name;
@@ -32,24 +32,24 @@ public:
     bool propertySet = false;
 };
 
-AbstractProperty::AbstractProperty(const QString & propertyName, PropertyInterface * interface)
-    : d(new AbstractPropertyPrivate())
+Property::Property(const QString & propertyName, PropertyInterface * interface)
+    : d(new PropertyPrivate())
 {
     d->propertyName = propertyName;
     d->propertyInterface = interface;
 }
 
-AbstractProperty::~AbstractProperty()
+Property::~Property()
 {
     delete d;
 }
 
-PropertyInterface * AbstractProperty::propertyInterface() const
+PropertyInterface * Property::propertyInterface() const
 {
     return d->propertyInterface;
 }
 
-AbstractProperty * AbstractProperty::parentProperty() const
+Property * Property::parentProperty() const
 {
     if (d->propertyInterface) {
         auto iface = d->propertyInterface->parentPropertyInterface();
@@ -65,27 +65,30 @@ AbstractProperty * AbstractProperty::parentProperty() const
     return nullptr;
 }
 
-Entity * AbstractProperty::entity() const
+Entity * Property::entity() const
 {
     return d->propertyInterface ? d->propertyInterface->entity() : nullptr;
 }
 
-QString AbstractProperty::propertyName() const
+QString Property::propertyName() const
 {
     return d->name;
 }
 
-void AbstractProperty::setName(const QString & name)
+void Property::setName(const QString & name)
 {
-    d->name = name;
+    if (d->name != name) {
+        // TODO: Transaction notifier
+        d->name = name;
+    }
 }
 
-QString AbstractProperty::name() const
+QString Property::name() const
 {
     return d->name;
 }
 
-void AbstractProperty::unset()
+void Property::unset()
 {
     if (d->propertySet) {
         d->propertySet = false;
@@ -93,12 +96,12 @@ void AbstractProperty::unset()
     }
 }
 
-bool AbstractProperty::isSet() const
+bool Property::isSet() const
 {
     return d->propertySet;
 }
 
-void AbstractProperty::notifyChanged()
+void Property::notifyChanged()
 {
     if (d->propertyInterface) {
         d->propertyInterface->notifyPropertyChange(this);

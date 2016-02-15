@@ -28,7 +28,7 @@ namespace tikz {
 namespace core {
 
 class PropertyInterfacePrivate;
-class AbstractProperty;
+class Property;
 class Entity;
 
 /**
@@ -63,12 +63,12 @@ public:
     /**
      * Adds @p property to the list of managed properties.
      */
-    void addProperty(AbstractProperty * property);
+    void addProperty(Property * property);
 
     /**
      * Removes @p property from the list of managed properties.
      */
-    void removeProperty(AbstractProperty * property);
+    void removeProperty(Property * property);
 
     /**
      * Retturns the property called @p propertyName. If the requested property
@@ -76,7 +76,7 @@ public:
      * requested property if @p fallbackToParents is set to @e true, or otherwise
      * a nullptr is returned.
      */
-    AbstractProperty * property(const QString & propertyName,
+    Property * property(const QString & propertyName,
                                 bool fallbackToParents = true) const;
 
     /**
@@ -91,7 +91,7 @@ public:
      * Returns a list of all properties managed by this PropertyInterface.
      * The returned list does not contain parent properties.
      */
-    QVector<AbstractProperty *> properties() const;
+    QVector<Property *> properties() const;
 
 //
 // Q_SIGNALS
@@ -104,14 +104,14 @@ public:
      * @param property pointer to the changed property
      */
     virtual void propertyChanged(PropertyInterface * propertyInterface,
-                                 AbstractProperty * property) = 0;
+                                 Property * property) = 0;
 
 private:
-    friend class AbstractProperty;
+    friend class Property;
     /**
      * Helper function that calls the signal propertyChanged() with
      */
-    void notifyPropertyChange(AbstractProperty * property);
+    void notifyPropertyChange(Property * property);
 
 private:
     // pimpl data pointer

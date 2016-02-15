@@ -26,7 +26,7 @@
 namespace tikz {
 namespace core {
 
-class AbstractPropertyPrivate;
+class PropertyPrivate;
 class Entity;
 class PropertyInterface;
 
@@ -53,18 +53,18 @@ enum class PropertyType : int {
  *
  * @see Entity
  */
-class TIKZCORE_EXPORT AbstractProperty
+class TIKZCORE_EXPORT Property
 {
 public:
     /**
      * Constructor that creates a property @p propertyName as part of @p entity.
      */
-    explicit AbstractProperty(const QString & propertyName, PropertyInterface * interface);
+    explicit Property(const QString & propertyName, PropertyInterface * interface);
 
     /**
      * Virtual destructor.
      */
-    virtual ~AbstractProperty();
+    virtual ~Property();
 
     /**
      * Returns the PropertyInterface passed in the constructor.
@@ -79,7 +79,7 @@ public:
      * A null pointer is returned if no parent itnerface exists, or if the parent
      * interface does not contain a property called @p propertyName().
      */
-    AbstractProperty * parentProperty() const;
+    Property * parentProperty() const;
 
     /**
      * Returns the associated Entity, or null, if no Entity was given.
@@ -130,7 +130,7 @@ public:
 
 private:
     // pimpl data pointer
-    AbstractPropertyPrivate * const d;
+    PropertyPrivate * const d;
 };
 
 } //namespace core

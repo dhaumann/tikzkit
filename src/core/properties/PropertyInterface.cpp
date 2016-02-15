@@ -18,7 +18,7 @@
  */
 
 #include "PropertyInterface.h"
-#include "AbstractProperty.h"
+#include "Property.h"
 #include <QHash>
 
 namespace tikz {
@@ -27,11 +27,11 @@ namespace core {
 class PropertyInterfacePrivate
 {
 public:
-    QVector<AbstractProperty *> properties;
-    QHash<QString, AbstractProperty *> propertyMap;
+    QVector<Property *> properties;
+    QHash<QString, Property *> propertyMap;
 };
 
-class AbstractProperty;
+class Property;
 class Entity;
 
 PropertyInterface::PropertyInterface()
@@ -49,13 +49,13 @@ PropertyInterface::~PropertyInterface()
     delete d;
 }
 
-void PropertyInterface::addProperty(AbstractProperty * property)
+void PropertyInterface::addProperty(Property * property)
 {
     d->properties.append(property);
     d->propertyMap[property->propertyName()] = property;
 }
 
-void PropertyInterface::removeProperty(AbstractProperty * property)
+void PropertyInterface::removeProperty(Property * property)
 {
     const int index = d->properties.indexOf(property);
     if (index >= 0) {
@@ -64,7 +64,7 @@ void PropertyInterface::removeProperty(AbstractProperty * property)
     }
 }
 
-AbstractProperty * PropertyInterface::property(const QString & propertyName,
+Property * PropertyInterface::property(const QString & propertyName,
                                                bool fallbackToParents) const
 {
     const auto it = d->propertyMap.find(propertyName);
@@ -102,13 +102,13 @@ bool PropertyInterface::hasProperty(const QString & propertyName,
     return false;
 }
 
-QVector<AbstractProperty *> PropertyInterface::properties() const
+QVector<Property *> PropertyInterface::properties() const
 {
     // FIXME: only properties of this instance (no parent ones)
     return d->properties;
 }
 
-void PropertyInterface::notifyPropertyChange(AbstractProperty * property)
+void PropertyInterface::notifyPropertyChange(Property * property)
 {
     emit propertyChanged(this, property);
 }
