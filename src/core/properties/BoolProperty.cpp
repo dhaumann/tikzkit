@@ -62,12 +62,8 @@ bool BoolProperty::enabled() const
         return m_enabled;
     }
 
-    auto parent = parentProperty();
-    if (parent) {
-        return static_cast<BoolProperty *>(parent)->enabled();
-    }
-
-    return false;
+    auto parent = parentProperty<BoolProperty>();
+    return parent ? parent->enabled() : false;
 }
 
 void BoolProperty::loadData(const QJsonObject & json)

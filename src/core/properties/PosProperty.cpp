@@ -62,12 +62,8 @@ Pos PosProperty::pos () const
         return m_pos;
     }
 
-    auto parent = parentProperty();
-    if (parent) {
-        return static_cast<PosProperty *>(parent)->pos();
-    }
-
-    return Pos();
+    auto parent = parentProperty<PosProperty>();
+    return parent ? parent->pos() : Pos();
 }
 
 void PosProperty::loadData(const QJsonObject & json)

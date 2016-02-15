@@ -76,7 +76,7 @@ protected:
     void saveData(QJsonObject & json) override;
 
 private:
-    bool m_enabled;
+    bool m_enabled = false;
 };
 
 } //namespace core

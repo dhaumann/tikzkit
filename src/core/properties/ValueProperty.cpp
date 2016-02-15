@@ -62,12 +62,8 @@ Value ValueProperty::value() const
         return m_value;
     }
 
-    auto parent = parentProperty();
-    if (parent) {
-        return static_cast<ValueProperty *>(parent)->value();
-    }
-
-    return Value();
+    auto parent = parentProperty<ValueProperty>();
+    return parent ? parent->value() : Value();
 }
 
 void ValueProperty::loadData(const QJsonObject & json)

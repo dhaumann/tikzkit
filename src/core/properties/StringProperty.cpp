@@ -62,12 +62,8 @@ QString StringProperty::text() const
         return m_text;
     }
 
-    auto parent = parentProperty();
-    if (parent) {
-        return static_cast<StringProperty *>(parent)->text();
-    }
-
-    return QString();
+    auto parent = parentProperty<StringProperty>();
+    return parent ? parent->text() : QString();
 }
 
 void StringProperty::loadData(const QJsonObject & json)

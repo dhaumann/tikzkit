@@ -62,12 +62,8 @@ QColor ColorProperty::color() const
         return m_color;
     }
 
-    auto parent = parentProperty();
-    if (parent) {
-        return static_cast<ColorProperty *>(parent)->color();
-    }
-
-    return Qt::black;
+    auto parent = parentProperty<ColorProperty>();
+    return parent ? parent->color() : Qt::black;
 }
 
 void ColorProperty::loadData(const QJsonObject & json)

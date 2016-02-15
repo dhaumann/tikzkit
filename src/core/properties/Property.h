@@ -71,6 +71,15 @@ public:
     Property * parentProperty() const;
 
     /**
+     * Helper function. Overload of parentProperty(), static_cast<>ing to T.
+     */
+    template<class T>
+    T * parentProperty() const
+    {
+        return static_cast<T *>(parentProperty());
+    }
+
+    /**
      * Returns the associated Entity, or null, if no Entity was given.
      */
     Entity * entity() const;
