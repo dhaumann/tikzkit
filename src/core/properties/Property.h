@@ -144,13 +144,35 @@ protected:
      */
     virtual void saveData(QJsonObject & json);
 
-public:
+public: // change management
+    /**
+     * Helper class for signaling changes.
+     *
+     * When creating a Transaction instance, the constructor will automatically
+     * call the PropertyInterface::notifyAboutToChangeProperty(). Similarly,
+     * either by calling endChange(), or in the destructor, the Transaction
+     * automatically calls PropertyInterface::notifyPropertyChanged().
+     *
+     * This way, the PropertyInterface can track Property changes. For instance,
+     * this is useful for automatically providing proper undo/redo support.
+     */
     class Transaction
     {
     public:
+        /**
+         * Constructor, calling PropertyInterface::notifyAboutToChangeProperty().
+         */
         Transaction(Property * prop);
 
+        /**
+         * Destructor, calling PropertyInterface::notifyPropertyChanged().
+         */
         ~Transaction();
+
+        /**
+         * End the transaction earlier. Will call PropertyInterface::notifyPropertyChanged()
+         * as well. However, the destructor then will do nothing.
+         */
         void endChange();
 
     private:
