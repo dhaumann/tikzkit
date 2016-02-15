@@ -92,7 +92,7 @@ class TIKZCORE_EXPORT Uid
         }
 
         /**
-         * Get the Unit.
+         * Get the internal id as qint64.
          */
         inline constexpr qint64 id() const noexcept
         {
