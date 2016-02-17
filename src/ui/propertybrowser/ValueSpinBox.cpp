@@ -25,7 +25,7 @@ namespace ui {
 class ValueSpinBoxPrivate
 {
 public:
-    tikz::Unit unit = tikz::Millimeter;
+    tikz::Unit unit = tikz::Unit::Millimeter;
 };
 
 ValueSpinBox::ValueSpinBox(QWidget * parent)
@@ -85,10 +85,10 @@ double ValueSpinBox::valueFromText(const QString &text) const
     // append unit to avoid fallback to pt in Value::fromString()
     if (! match.hasMatch()) {
         switch (d->unit) {
-            case tikz::Point: break;
-            case tikz::Millimeter: str += "mm"; break;
-            case tikz::Centimeter: str += "cm"; break;
-            case tikz::Inch: str += "in"; break;
+            case tikz::Unit::Point: break;
+            case tikz::Unit::Millimeter: str += "mm"; break;
+            case tikz::Unit::Centimeter: str += "cm"; break;
+            case tikz::Unit::Inch: str += "in"; break;
             default: Q_ASSERT(false);
         }
     }

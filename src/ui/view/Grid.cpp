@@ -31,7 +31,7 @@ public:
     bool dirty = true;
     qreal zoom = 1.0;
     QRectF rect;
-    tikz::Unit unit = tikz::Centimeter;
+    tikz::Unit unit = tikz::Unit::Centimeter;
 
     QVarLengthArray<QLineF, 256> majorLines;
     QVarLengthArray<QLineF, 256> minorLines;
@@ -51,7 +51,7 @@ public:
 
         // we want a line each 5 mm
         int lpu = 1;
-        while ((oneUnitOnScreen / lpu) >= tikz::Value(10, tikz::Millimeter)) {
+        while ((oneUnitOnScreen / lpu) >= tikz::Value(10, tikz::Unit::Millimeter)) {
             if (lpu == 1) {
                 lpu *= 2;
             } else if (lpu == 2) {

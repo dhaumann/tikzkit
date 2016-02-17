@@ -53,8 +53,8 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     m_hRuler = new tikz::ui::Ruler(Qt::Horizontal, this);
     m_vRuler = new tikz::ui::Ruler(Qt::Vertical, this);
 
-    m_hRuler->setUnit(tikz::Centimeter);
-    m_vRuler->setUnit(tikz::Centimeter);
+    m_hRuler->setUnit(tikz::Unit::Centimeter);
+    m_vRuler->setUnit(tikz::Unit::Centimeter);
 
     m_zoomController = new tikz::ui::ZoomController(this);
     connect(m_zoomController, &ZoomController::zoomChanged, this, &Renderer::setZoom);
@@ -73,7 +73,7 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     setScene(doc->scene());
 
     // scale to true display size
-    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
+    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
     scale(physicalDpiX() / s,
          -physicalDpiY() / s);
 
@@ -134,7 +134,7 @@ void Renderer::setZoom(qreal zoomFactor)
         return;
     }
 
-    constexpr qreal unit = tikz::Value(1, tikz::Inch).toPoint();
+    constexpr qreal unit = tikz::Value(1, tikz::Unit::Inch).toPoint();
     const qreal s = unit / zoomFactor;
     QTransform m;
     m.scale(physicalDpiX() / s, -physicalDpiY() / s);
@@ -209,7 +209,7 @@ void Renderer::wheelEvent(QWheelEvent* event)
 
 bool Renderer::viewportEvent(QEvent * event)
 {
-    const qreal s = tikz::Value(1, tikz::Inch).toPoint();
+    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
     const qreal xZoom = transform().m11() / physicalDpiX() * s;
     const qreal yZoom = qAbs(transform().m22()) / physicalDpiY() * s;
     Q_ASSERT(xZoom == yZoom);

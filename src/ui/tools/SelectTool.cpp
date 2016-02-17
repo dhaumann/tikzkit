@@ -65,8 +65,8 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::NodeStyle ns;
         ns.setStyle(node->node()->style());
         ns.setShape(tikz::ShapeRectangle);
-        ns.setMinimumWidth(tikz::Value(4, Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Millimeter));
+        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
+        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
         node->node()->setStyle(ns);
     }
 
@@ -76,8 +76,8 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         node->setPos(tikz::Pos(0, 0));
         tikz::core::NodeStyle ns;
         ns.setStyle(node->node()->style());
-        ns.setMinimumWidth(tikz::Value(4, Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Millimeter));
+        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
+        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
         node->node()->setStyle(ns);
         node->node()->setText("x");
     }
@@ -100,8 +100,8 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::NodeStyle ns;
         ns.setStyle(node->node()->style());
         ns.setShape(tikz::ShapeEllipse);
-        ns.setMinimumWidth(tikz::Value(4, Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Millimeter));
+        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
+        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
         node->node()->setStyle(ns);
     }
 
@@ -113,9 +113,9 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         ns.setStyle(node->node()->style());
         ns.setFillColor(Qt::black);
         ns.setShape(tikz::ShapeEllipse);
-        ns.setMinimumWidth(tikz::Value(1, Millimeter));
-        ns.setMinimumHeight(tikz::Value(1, Millimeter));
-        ns.setInnerSep(tikz::Value(0, Millimeter));
+        ns.setMinimumWidth(tikz::Value(1, Unit::Millimeter));
+        ns.setMinimumHeight(tikz::Value(1, Unit::Millimeter));
+        ns.setInnerSep(tikz::Value(0, Unit::Millimeter));
         node->node()->setStyle(ns);
     }
 }

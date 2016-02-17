@@ -83,7 +83,7 @@ void LinePropertyWidgetPrivate::reload()
     ui.cmbLineWidth->setCurrentIndex(indexForLineWidth(style->lineWidth()));
     ui.cmbLineWidth->blockSignals(false);
     ui.sbLineWidth->blockSignals(true);
-    ui.sbLineWidth->setValue(style->lineWidth().convertTo(tikz::Millimeter).value());
+    ui.sbLineWidth->setValue(style->lineWidth().convertTo(tikz::Unit::Millimeter).value());
     ui.sbLineWidth->blockSignals(false);
 
     ui.chkDoubleLine->blockSignals(true);
@@ -93,7 +93,7 @@ void LinePropertyWidgetPrivate::reload()
     ui.cmbInnerLineWidth->setCurrentIndex(indexForLineWidth(style->innerLineWidth()));
     ui.cmbInnerLineWidth->blockSignals(false);
     ui.sbInnerLineWidth->blockSignals(true);
-    ui.sbInnerLineWidth->setValue(style->innerLineWidth().convertTo(tikz::Millimeter).value());
+    ui.sbInnerLineWidth->setValue(style->innerLineWidth().convertTo(tikz::Unit::Millimeter).value());
     ui.sbInnerLineWidth->blockSignals(false);
 
     backupStyle.blockSignals(bs);
@@ -114,14 +114,14 @@ void LinePropertyWidgetPrivate::setLineWidthType(int index)
 {
     tikz::Value lw = lineWidthForIndex(index);
     if (lw.isValid()) {
-	lineStyle()->setLineWidth(lw.convertTo(tikz::Centimeter));
+	lineStyle()->setLineWidth(lw.convertTo(tikz::Unit::Centimeter));
 	reload();
     }
 }
 
 void LinePropertyWidgetPrivate::setLineWidth(double lineWidth)
 {
-    lineStyle()->setLineWidth(tikz::Value(lineWidth, tikz::Millimeter));
+    lineStyle()->setLineWidth(tikz::Value(lineWidth, tikz::Unit::Millimeter));
     reload();
 }
 
@@ -135,14 +135,14 @@ void LinePropertyWidgetPrivate::setInnerLineWidthType(int index)
 {
     tikz::Value lw = lineWidthForIndex(index);
     if (lw.isValid()) {
-	lineStyle()->setInnerLineWidth(lw.convertTo(tikz::Centimeter));
+	lineStyle()->setInnerLineWidth(lw.convertTo(tikz::Unit::Centimeter));
 	reload();
     }
 }
 
 void LinePropertyWidgetPrivate::setInnerLineWidth(double lineWidth)
 {
-    lineStyle()->setInnerLineWidth(tikz::Value(lineWidth, tikz::Millimeter));
+    lineStyle()->setInnerLineWidth(tikz::Value(lineWidth, tikz::Unit::Millimeter));
     reload();
 }
 

@@ -32,7 +32,7 @@ Ruler::Ruler(Qt::Orientation orientation, QWidget* parent)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_origin(0.0)
-    , m_unit(tikz::Centimeter)
+    , m_unit(tikz::Unit::Centimeter)
     , m_zoom(1.0)
 {
     QFont txtFont("Sans Serif Mono", 7);
@@ -117,7 +117,7 @@ void Ruler::paintEvent(QPaintEvent* event)
 
     // how many pixels is one unit ?
     const qreal dpi = physicalDpi();
-    const qreal pixelPerUnit = m_zoom * dpi / tikz::Value(1, tikz::Inch).convertTo(m_unit).value();
+    const qreal pixelPerUnit = m_zoom * dpi / tikz::Value(1, tikz::Unit::Inch).convertTo(m_unit).value();
 
     if (horizontal) {
         for (int i = floor(-m_origin / pixelPerUnit); i < (width() - m_origin) / pixelPerUnit; ++i) {

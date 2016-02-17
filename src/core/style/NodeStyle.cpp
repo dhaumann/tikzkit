@@ -40,8 +40,8 @@ public:
     Shape shape = tikz::ShapeRectangle;
     tikz::Value innerSep = tikz::Value(3); //FIXME: 0.3333em
     tikz::Value outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
-    tikz::Value minimumHeight = tikz::Value(0, tikz::Centimeter);
-    tikz::Value minimumWidth = tikz::Value(0, tikz::Centimeter);
+    tikz::Value minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
+    tikz::Value minimumWidth = tikz::Value(0, tikz::Unit::Centimeter);
 };
 
 NodeStyle::NodeStyle()
@@ -285,7 +285,7 @@ tikz::Value NodeStyle::minimumHeight() const
         return parentStyle->minimumHeight();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 bool NodeStyle::minimumHeightSet() const
@@ -304,7 +304,7 @@ tikz::Value NodeStyle::minimumWidth() const
         return parentStyle->minimumWidth();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 bool NodeStyle::minimumWidthSet() const
@@ -335,7 +335,7 @@ void NodeStyle::unsetMinimumHeight()
     if (propertySet(s_minimumHeight)) {
         ConfigTransaction transaction(this);
         removeProperty(s_minimumHeight);
-        d->minimumHeight = tikz::Value(0, tikz::Centimeter);
+        d->minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 
@@ -344,7 +344,7 @@ void NodeStyle::unsetMinimumWidth()
     if (propertySet(s_minimumWidth)) {
         ConfigTransaction transaction(this);
         removeProperty(s_minimumWidth);
-        d->minimumWidth = tikz::Value(0, tikz::Centimeter);
+        d->minimumWidth = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 

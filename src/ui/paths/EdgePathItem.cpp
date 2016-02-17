@@ -357,13 +357,13 @@ void EdgePathItem::updateCache()
     pps.setJoinStyle(Qt::RoundJoin);
     pps.setCapStyle(Qt::FlatCap);
 
-    tikz::Value w(1, tikz::Millimeter);
+    tikz::Value w(1, tikz::Unit::Millimeter);
     pps.setWidth(style()->penWidth().toPoint() + w.toPoint());
     m_hoverPath = pps.createStroke(m_edgePath);
     m_hoverPath.addPath(headTrans.map(m_arrowHead->contour(w.toPoint())));
     m_hoverPath.addPath(tailTrans.map(m_arrowTail->contour(w.toPoint())));
 
-    w = tikz::Value(2, tikz::Millimeter);
+    w = tikz::Value(2, tikz::Unit::Millimeter);
     pps.setWidth(style()->penWidth().toPoint() + w.toPoint());
     m_shapePath = pps.createStroke(m_edgePath);
     m_shapePath.addPath(headTrans.map(m_arrowHead->contour(w.toPoint())));

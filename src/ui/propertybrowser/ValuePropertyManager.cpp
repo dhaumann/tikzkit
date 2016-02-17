@@ -27,9 +27,9 @@ class ValuePropertyManagerPrivate
 public:
     struct Data
     {
-        tikz::Value val = tikz::Value(0, Millimeter);
-        tikz::Value minVal = tikz::Value(0, Millimeter);
-        tikz::Value maxVal = tikz::Value(INT_MAX, Millimeter);
+        tikz::Value val = tikz::Value(0, Unit::Millimeter);
+        tikz::Value minVal = tikz::Value(0, Unit::Millimeter);
+        tikz::Value maxVal = tikz::Value(INT_MAX, Unit::Millimeter);
         double singleStep = 0.1;
         int decimals = 2;
         bool readOnly = false;

@@ -137,7 +137,7 @@ TIKZCORE_EXPORT EntityType toEntityType(const QString & str);
 /**
  * Available units.
  */
-enum Unit {
+enum class Unit : int {
     Point,
     Millimeter,
     Centimeter,

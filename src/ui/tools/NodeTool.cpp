@@ -167,7 +167,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     auto tikzView = qobject_cast<Renderer *>(view);
 
     // later: preferred unit
-    const tikz::Unit unit = tikz::Centimeter;
+    const tikz::Unit unit = tikz::Unit::Centimeter;
 
     //
     // rotate

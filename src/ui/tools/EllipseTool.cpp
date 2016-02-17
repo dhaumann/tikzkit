@@ -156,7 +156,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     }
 
     // later: preferred unit
-    const tikz::Unit unit = tikz::Centimeter;
+    const tikz::Unit unit = tikz::Unit::Centimeter;
 
     //
     // move

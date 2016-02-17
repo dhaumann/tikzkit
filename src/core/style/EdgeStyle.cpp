@@ -39,8 +39,8 @@ static constexpr char s_shortenEnd[] = "shortenEnd";
 class EdgeStylePrivate
 {
 public:
-    tikz::Value radiusX = tikz::Value(0, tikz::Centimeter);
-    tikz::Value radiusY = tikz::Value(0, tikz::Centimeter);
+    tikz::Value radiusX = tikz::Value(0, tikz::Unit::Centimeter);
+    tikz::Value radiusY = tikz::Value(0, tikz::Unit::Centimeter);
 
     qreal bendAngle = 0.0; // in degree
     qreal looseness = 1.0;
@@ -190,7 +190,7 @@ tikz::Value EdgeStyle::radiusX() const
         return style->radiusX();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 tikz::Value EdgeStyle::radiusY() const
@@ -204,7 +204,7 @@ tikz::Value EdgeStyle::radiusY() const
         return style->radiusY();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 bool EdgeStyle::radiusXSet() const
@@ -240,7 +240,7 @@ void EdgeStyle::unsetRadiusX()
     if (propertySet(s_radiusX)) {
         ConfigTransaction transaction(this);
         removeProperty(s_radiusX);
-        d->radiusX = tikz::Value(0, tikz::Centimeter);
+        d->radiusX = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 
@@ -249,7 +249,7 @@ void EdgeStyle::unsetRadiusY()
     if (propertySet(s_radiusY)) {
         ConfigTransaction transaction(this);
         removeProperty(s_radiusY);
-        d->radiusY = tikz::Value(0, tikz::Centimeter);
+        d->radiusY = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 
@@ -510,7 +510,7 @@ tikz::Value EdgeStyle::shortenStart() const
         return style->shortenStart();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 bool EdgeStyle::shortenStartSet() const
@@ -529,7 +529,7 @@ tikz::Value EdgeStyle::shortenEnd() const
         return style->shortenEnd();
     }
 
-    return tikz::Value(0, tikz::Centimeter);
+    return tikz::Value(0, tikz::Unit::Centimeter);
 }
 
 bool EdgeStyle::shortenEndSet() const
@@ -560,7 +560,7 @@ void EdgeStyle::unsetShortenStart()
     if (propertySet(s_shortenStart)) {
         ConfigTransaction transaction(this);
         removeProperty(s_shortenStart);
-        d->shortenStart = tikz::Value(0, tikz::Centimeter);
+        d->shortenStart = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 
@@ -569,7 +569,7 @@ void EdgeStyle::unsetShortenEnd()
     if (propertySet(s_shortenEnd)) {
         ConfigTransaction transaction(this);
         removeProperty(s_shortenEnd);
-        d->shortenEnd = tikz::Value(0, tikz::Centimeter);
+        d->shortenEnd = tikz::Value(0, tikz::Unit::Centimeter);
     }
 }
 

@@ -185,7 +185,7 @@ void PropertyBrowser::setItem(TikzItem * item)
 
         property = d->valueManager->addProperty(tr("Line Width"));
         property->setModified(node->style()->lineWidthSet());
-        d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
+        d->valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->lineWidth());
         d->addProperty(property, s_lineWidth);
@@ -206,7 +206,7 @@ void PropertyBrowser::setItem(TikzItem * item)
 
         property = d->valueManager->addProperty(tr("Inner Line Width"));
         property->setModified(node->style()->innerLineWidthSet());
-        d->valueManager->setRange(property, tikz::Value(0, tikz::Millimeter), tikz::Value(10, tikz::Millimeter));
+        d->valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
         d->valueManager->setSingleStep(property, 0.1);
         d->valueManager->setValue(property, node->style()->innerLineWidth());
         d->addSubProperty(doubleLine, property, s_innerLineWidth);
