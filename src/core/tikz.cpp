@@ -93,7 +93,8 @@ QString toString(tikz::Unit unit)
     return "cm";
 }
 
-tikz::Unit toUnit(const QString & unit)
+template<>
+Unit toEnum<Unit>(const QString & unit)
 {
     if (unit == QStringLiteral("pt")) {
         return Unit::Point;
@@ -123,7 +124,8 @@ QString toString(tikz::TextAlignment alignment)
     return QString();
 }
 
-tikz::TextAlignment toTextAlignment(const QString & alignment)
+template<>
+TextAlignment toEnum<TextAlignment>(const QString & alignment)
 {
     if (alignment == "none") {
         return TextAlignment::NoAlign;
@@ -156,7 +158,8 @@ QString toString(tikz::Shape shape)
     return QString();
 }
 
-tikz::Shape toShape(const QString & shape)
+template<>
+Shape toEnum<Shape>(const QString & shape)
 {
     if (shape.isEmpty()) {
         return Shape::NoShape;
@@ -196,7 +199,8 @@ QString toString(tikz::PenStyle ps)
     return QString();
 }
 
-tikz::PenStyle toPenStyle(const QString & penStyle)
+template<>
+PenStyle toEnum<PenStyle>(const QString & penStyle)
 {
     if (penStyle == "solid") {
         return PenStyle::SolidLine;
@@ -250,7 +254,8 @@ QString toString(tikz::Arrow arrow)
     return QString();
 }
 
-tikz::Arrow toArrow(const QString & arrow)
+template<>
+Arrow toEnum<Arrow>(const QString & arrow)
 {
     if (arrow.isEmpty()) {
         return Arrow::NoArrow;
@@ -299,7 +304,8 @@ QString toString(tikz::PathType type)
     return QString();
 }
 
-PathType toPathType(const QString & type)
+template<>
+PathType toEnum<PathType>(const QString & type)
 {
     const PathType t
         = (type == "to") ? PathType::Line

@@ -116,7 +116,7 @@ Style::Style(const QJsonObject & json, Document* doc)
     }
 
     if (json.contains("pen-style")) {
-        setPenStyle(toPenStyle(json["pen-style"].toString()));
+        setPenStyle(toEnum<PenStyle>(json["pen-style"].toString()));
     }
 
     if (json.contains("line-width")) {

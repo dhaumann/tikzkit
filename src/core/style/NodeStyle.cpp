@@ -63,11 +63,11 @@ NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
     ConfigTransaction transaction(this);
 
     if (json.contains("text-align")) {
-        setTextAlign(toTextAlignment(json["text-align"].toString()));
+        setTextAlign(toEnum<TextAlignment>(json["text-align"].toString()));
     }
 
     if (json.contains("shape")) {
-        setShape(toShape(json["shape"].toString()));
+        setShape(toEnum<Shape>(json["shape"].toString()));
     }
 
     if (json.contains("minimum-width")) {

@@ -521,7 +521,7 @@ void MainWindow::updateMousePosition(const tikz::Pos & pos)
 
 void MainWindow::slotPreferredUnitChanged(int index)
 {
-    tikz::Unit unit = tikz::toUnit(m_unitComboBox->itemData(index).toString());
+    auto unit = tikz::toEnum<tikz::Unit>(m_unitComboBox->itemData(index).toString());
     activeView()->document()->setPreferredUnit(unit);
 }
 

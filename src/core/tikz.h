@@ -23,8 +23,30 @@
 
 #include <QString>
 #include <functional>
+#include <type_traits>
 
 namespace tikz {
+
+/**
+ * Template helper to convert strings to enum.
+ *
+ * You need to provide a template specialization as follows:
+ * @code
+ * template<>
+ * Foo toEnum<Foo>(const std::string & str)
+ * {
+ *     // ...
+ * }
+ * @endcode
+ */
+template <typename T>
+T toEnum(const QString & str)
+{
+    static_assert(std::is_enum<T>::value,
+                  "Only enums are allowed as toEnum<>() template specialization.");
+    Q_ASSERT(false && "Missing template specialization for toEnum<>().");
+    return T();
+}
 
 /**
  * Logging categories.
@@ -130,9 +152,12 @@ TIKZCORE_EXPORT QString toString(tikz::Unit unit);
 /**
  * Convert the string @p unit to an enum tikz::Unit.
  */
-TIKZCORE_EXPORT tikz::Unit toUnit(const QString & unit);
+template<>
+TIKZCORE_EXPORT Unit toEnum<Unit>(const QString & unit);
 
-
+/**
+ * TextAlignment, following the TikZ text alignment options.
+ */
 enum TextAlignment {
     NoAlign = 0,
     AlignLeft,
@@ -151,8 +176,12 @@ TIKZCORE_EXPORT QString toString(tikz::TextAlignment alignment);
 /**
  * Convert the string @p alignment to an enum tikz::TextAlignment.
  */
-TIKZCORE_EXPORT tikz::TextAlignment toTextAlignment(const QString & alignment);
+template<>
+TIKZCORE_EXPORT TextAlignment toEnum<TextAlignment>(const QString & alignment);
 
+/**
+ * Supported TikZ Shapes.
+ */
 enum Shape {
     NoShape = 0,
     ShapeRectangle,
@@ -170,8 +199,12 @@ TIKZCORE_EXPORT QString toString(tikz::Shape shape);
 /**
  * Convert the string @p shape to an enum tikz::Shape.
  */
-TIKZCORE_EXPORT tikz::Shape toShape(const QString & shape);
+template<>
+TIKZCORE_EXPORT Shape toEnum<Shape>(const QString & shape);
 
+/**
+ * Supported TikZ pen styles.
+ */
 enum PenStyle {
     SolidLine = 0,
     DottedLine,
@@ -199,7 +232,8 @@ TIKZCORE_EXPORT QString toString(tikz::PenStyle penStyle);
  * Convert @p penStyle to a QString.
  * Examples are e.g. "solid", "densely dashed", ...
  */
-TIKZCORE_EXPORT tikz::PenStyle toPenStyle(const QString & penStyle);
+template<>
+TIKZCORE_EXPORT PenStyle toEnum<PenStyle>(const QString & penStyle);
 
 enum LineCap {
     CapUnset = 0,
@@ -244,7 +278,8 @@ TIKZCORE_EXPORT QString toString(tikz::Arrow arrow);
 /**
  * Convert the string @p arrow to an enum tikz::Arrow.
  */
-TIKZCORE_EXPORT tikz::Arrow toArrow(const QString & arrow);
+template<>
+TIKZCORE_EXPORT Arrow toEnum<Arrow>(const QString & arrow);
 
 /**
  * Available path types.
@@ -270,7 +305,8 @@ TIKZCORE_EXPORT QString toString(tikz::PathType type);
 /**
  * Convert the string @p type to an enum tikz::PathType.
  */
-TIKZCORE_EXPORT tikz::PathType toPathType(const QString & type);
+template<>
+TIKZCORE_EXPORT PathType toEnum<PathType>(const QString & type);
 
 }
 

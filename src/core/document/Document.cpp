@@ -224,7 +224,7 @@ bool Document::load(const QUrl & fileurl)
         }
     }
     if (root.contains("preferred-unit")) {
-        setPreferredUnit(toUnit(root["preferred-unit"].toString()));
+        setPreferredUnit(toEnum<Unit>(root["preferred-unit"].toString()));
     }
 
     // now make sure the next free uniq id is valid by finding the maximum

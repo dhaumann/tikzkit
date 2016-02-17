@@ -97,11 +97,11 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     }
 
     if (json.contains("arrow-tail")) {
-        setArrowTail(toArrow(json["arrow-tail"].toString()));
+        setArrowTail(toEnum<Arrow>(json["arrow-tail"].toString()));
     }
 
     if (json.contains("arrow-head")) {
-        setArrowHead(toArrow(json["arrow-head"].toString()));
+        setArrowHead(toEnum<Arrow>(json["arrow-head"].toString()));
     }
 
     if (json.contains("shorten-start")) {

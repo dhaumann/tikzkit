@@ -80,7 +80,7 @@ void DeserializeVisitor::visit(Document * doc)
         const Uid uid(idAsStr, doc);
         const QString type = m_root["paths"].toMap()["path-" + uid.toString()].toMap()["type"].toString();
 //         qDebug() << type << pathType(type);
-        doc->createPath(toPathType(type), uid);
+        doc->createPath(toEnum<PathType>(type), uid);
     }
 
     // load document style
@@ -179,7 +179,7 @@ void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map
     }
 
     if (map.contains("pen-style")) {
-        style->setPenStyle(toPenStyle(map["pen-style"].toString()));
+        style->setPenStyle(toEnum<PenStyle>(map["pen-style"].toString()));
     }
     
     // FIXME line type
@@ -232,11 +232,11 @@ void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantM
     }
 
     if (map.contains("arrow-tail")) {
-        style->setArrowTail(toArrow(map["arrow-tail"].toString()));
+        style->setArrowTail(toEnum<Arrow>(map["arrow-tail"].toString()));
     }
 
     if (map.contains("arrow-head")) {
-        style->setArrowHead(toArrow(map["arrow-head"].toString()));
+        style->setArrowHead(toEnum<Arrow>(map["arrow-head"].toString()));
     }
 
     if (map.contains("shorten-start")) {
@@ -255,11 +255,11 @@ void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantM
     deserializeStyle(style, map);
 
     if (map.contains("text-align")) {
-        style->setTextAlign(toTextAlignment(map["text-align"].toString()));
+        style->setTextAlign(toEnum<TextAlignment>(map["text-align"].toString()));
     }
 
     if (map.contains("shape")) {
-        style->setShape(toShape(map["shape"].toString()));
+        style->setShape(toEnum<Shape>(map["shape"].toString()));
     }
 
     if (map.contains("minimum-width")) {
