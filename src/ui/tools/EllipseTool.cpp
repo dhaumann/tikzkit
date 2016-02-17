@@ -29,6 +29,7 @@
 
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EllipsePath.h>
+#include <tikz/core/Transaction.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -42,7 +43,7 @@ EllipseTool::EllipseTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(path->document(), scene)
     , m_path(qobject_cast<tikz::ui::EllipsePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, path->document(), this))
-    , m_transaction(path->document())
+    , m_transaction(nullptr)
 {
     // show all path handles
     createPathHandles();
@@ -251,14 +252,14 @@ void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, 
         default: Q_ASSERT(false);
     }
 
-    m_transaction.start(action);
+    m_transaction.reset(new tikz::core::Transaction(document(), action));
 }
 
 void EllipseTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
 //     qDebug() << "ellipse tool:mouse handle released" << scenePos;
 
-    m_transaction.finish();
+    m_transaction->finish();
     m_anchorManager->clear();
 }
 

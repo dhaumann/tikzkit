@@ -29,6 +29,7 @@
 
 #include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EdgePath.h>
+#include <tikz/core/Transaction.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -42,7 +43,7 @@ LineTool::LineTool(tikz::ui::PathItem * path, QGraphicsScene * scene)
     : AbstractTool(path->document(), scene)
     , m_path(qobject_cast<tikz::ui::EdgePathItem *>(path))
     , m_anchorManager(new AnchorManager(scene, path->document(), this))
-    , m_transaction(path->document())
+    , m_transaction(nullptr)
 {
     // show all path handles
     createPathHandles();
@@ -147,7 +148,7 @@ void LineTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 void LineTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
 //     qDebug() << "line tool: mouse handle pressed " << scenePos;
-    m_transaction.start("Move Line");
+    m_transaction.reset(new tikz::core::Transaction(document(), "Move Line"));
     m_anchorManager->addAllNodes();
 }
 
@@ -156,7 +157,7 @@ void LineTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QG
 //     qDebug() << "line tool: mouse handle released" << scenePos;
 
     m_anchorManager->clear();
-    m_transaction.finish();
+    m_transaction->finish();
 }
 
 }

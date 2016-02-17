@@ -23,92 +23,47 @@
 namespace tikz {
 namespace core {
 
-/**
- * Private d-pointer type for Transaction
- */
-class TransactionPrivate {
-    public:
-        /**
-         * real document implementation
-         */
-        Document *document = nullptr;
-
-        /**
-         * Indicator for running editing transaction
-         */
-        bool transactionRunning = false;
-};
-
 Transaction::Transaction(Document *document)
-    : d (new TransactionPrivate())
+    : Transaction(document, QString())
 {
-    // Alghouth it works in release-mode, we usually want a valid document
-    Q_ASSERT(document != nullptr);
-
-    // initialize d-pointer
-    d->document = document;
 }
 
 Transaction::Transaction(Document * document, const QString & name)
-    : d (new TransactionPrivate())
+    : m_document(document)
 {
     // Alghouth it works in release-mode, we usually want a valid document
     Q_ASSERT(document != nullptr);
 
-    // initialize d-pointer
-    d->document = document;
-
     // start the editing transaction
-    start(name);
-}
-
-void Transaction::start(const QString & action)
-{
-    Q_ASSERT(! d->transactionRunning);
-
-    if (d->document && !d->transactionRunning) {
-        d->document->beginTransaction(action);
-        d->transactionRunning = true;
+    if (m_document) {
+        m_document->beginTransaction(name);
     }
 }
 
 void Transaction::cancel()
 {
-    Q_ASSERT(d->transactionRunning);
-
-    if (d->document && d->transactionRunning) {
-        d->document->cancelTransaction();
+    if (m_document) {
+        m_document->cancelTransaction();
     }
 }
 
 void Transaction::finish()
 {
-    Q_ASSERT(d->transactionRunning);
-
-    if (d->document && d->transactionRunning) {
-        d->document->finishTransaction();
-        d->transactionRunning = false;
+    if (m_document) {
+        m_document->finishTransaction();
+        m_document = nullptr;
     }
 }
 
 bool Transaction::isRunning() const
 {
-    return d->transactionRunning;
+    return m_document != nullptr;
 }
 
 Transaction::~Transaction()
 {
-    /**
-     * finish the editing transaction
-     */
-    if (d->transactionRunning) {
-        finish();
-    }
-
-    /**
-     * delete our d-pointer
-     */
-    delete d;
+    // finish the editing transaction, if applicable
+    finish();
 }
 
 }

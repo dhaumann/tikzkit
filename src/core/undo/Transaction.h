@@ -49,7 +49,8 @@ class TransactionPrivate;
  * @endcode
  *
  * Although usually not required, a Transaction additionally allows to manually
- * call finish() and start() in between.
+ * call finish(). This way, the transaction is finished before the destructor,
+ * and the destructor does nothing.
  *
  * Further, if a running transaction should be aborted, just call cancel().
  * This is handy whenever the user hits Escape during a modification.
@@ -58,11 +59,9 @@ class TIKZCORE_EXPORT Transaction
 {
     public:
         /**
-         * Constructor that does NOT start an editing transaction.
-         * You need to call start() manually.
+         * Constructor. Will automatically start an editing transaction.
          *
          * @param document document for the transaction
-         * @see start()
          */
         explicit Transaction(Document * document);
 
@@ -75,7 +74,7 @@ class TIKZCORE_EXPORT Transaction
         explicit Transaction(Document * document, const QString & name);
 
         /**
-         * Destructs the object and, if needed, finishs a running editing
+         * Destructs the object and, if needed, finishes a running editing
          * transaction by calling finish().
          *
          * @see finish()
@@ -83,19 +82,7 @@ class TIKZCORE_EXPORT Transaction
         ~Transaction();
 
         /**
-         * By calling start(), the editing transaction can be started again.
-         * This function only is of use in combination with finish().
-         *
-         * @note start() is called in the constructor of Transaction.
-         *
-         * @see finish()
-         */
-        void start(const QString & action = QString());
-
-        /**
-         * Cancels the running transaction.
-         * If the transaction is canceled, finish() is not automatically
-         * called in the destructor.
+         * Tells the history transaction to roolback on finish().
          */
         void cancel();
 
@@ -103,7 +90,7 @@ class TIKZCORE_EXPORT Transaction
          * By calling finish(), the editing transaction can be finished
          * already before destruction of this instance.
          *
-         * @see start(), cancel()
+         * @see cancel()
          */
         void finish();
 
@@ -113,15 +100,14 @@ class TIKZCORE_EXPORT Transaction
         bool isRunning() const;
 
     private:
-        /**
-         * no copying allowed
-         */
-        Q_DISABLE_COPY(Transaction)
+        // disallow copy constructor
+        Transaction(const Transaction &) = delete;
+        Transaction() = delete;
 
         /**
-         * private d-pointer
+         * Document pointer
          */
-        TransactionPrivate *const d;
+        Document * m_document = nullptr;
 };
 
 }

@@ -27,6 +27,7 @@
 #include "Renderer.h"
 
 #include <tikz/core/NodeStyle.h>
+#include <tikz/core/Transaction.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -41,7 +42,7 @@ namespace ui {
 NodeTool::NodeTool(NodeItem * node, QGraphicsScene * scene)
     : AbstractTool(node->document(), scene)
     , m_node(node)
-    , m_transaction(node->document())
+    , m_transaction(nullptr)
 {
     // show all node handles
     createNodeHandles();
@@ -70,8 +71,8 @@ void NodeTool::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 void NodeTool::keyPressEvent(QKeyEvent * event)
 {
     if (event->key() == Qt::Key_Escape) {
-        if (m_transaction.isRunning()) {
-            m_transaction.cancel();
+        if (m_transaction && m_transaction->isRunning()) {
+            m_transaction->cancel();
             event->accept();
         }
     }
@@ -160,7 +161,7 @@ QPointF NodeTool::handlePos(Handle::Position pos)
 
 void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
-    if (!m_transaction.isRunning()) {
+    if (!m_transaction || ! m_transaction->isRunning()) {
         return;
     }
 
@@ -262,14 +263,14 @@ void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGr
         default: Q_ASSERT(false);
     }
 
-    m_transaction.start(action);
+    m_transaction.reset(new tikz::core::Transaction(document(), action));
 }
 
 void NodeTool::handleMouseReleased(Handle * handle, const QPointF & scenePos, QGraphicsView * view)
 {
     qDebug() << "mouse handle released" << scenePos;
 
-    m_transaction.finish();
+    m_transaction.reset();
 }
 
 }
