@@ -46,7 +46,7 @@ DiamondShape::~DiamondShape()
 
 tikz::Shape DiamondShape::type() const
 {
-    return tikz::ShapeDiamond;
+    return tikz::Shape::ShapeDiamond;
 }
 
 void DiamondShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const

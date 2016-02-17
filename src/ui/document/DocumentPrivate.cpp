@@ -129,7 +129,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     tikz::core::NodeStyle ns;
     ns.setStyle(item1->node()->style());
     ns.setLineWidth(tikz::Value::veryThin());
-    ns.setShape(tikz::ShapeRectangle);
+    ns.setShape(tikz::Shape::ShapeRectangle);
     ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item1->node()->setStyle(ns);
     item1->node()->setText("$\\int f(x) dx$");
@@ -138,7 +138,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     item2->node()->setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
     ns.setStyle(item2->node()->style());
     ns.setLineWidth(tikz::Value::thin());
-    ns.setShape(tikz::ShapeCircle);
+    ns.setShape(tikz::Shape::ShapeCircle);
     ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item2->node()->setStyle(ns);
     item2->node()->setText("$\\Leftrightarrow$");
@@ -172,14 +172,14 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1 = m_doc->createNodeItem();
     item1->setPos(tikz::Pos(-3, 1, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::thin());
-    item1->node()->style()->setShape(tikz::ShapeRectangle);
+    item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
     item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item1->node()->setText("$a$");
 
     item2 = m_doc->createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 1, tikz::Unit::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
-    item2->node()->style()->setShape(tikz::ShapeCircle);
+    item2->node()->style()->setShape(tikz::Shape::ShapeCircle);
     item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item2->node()->setText("a");
 
@@ -193,14 +193,14 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1 = m_doc->createNodeItem();
     item1->setPos(tikz::Pos(-3, -1, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
-    item1->node()->style()->setShape(tikz::ShapeRectangle);
+    item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
     item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item1->node()->setText("$\\iiint \\max$");
 
     item2 = m_doc->createNodeItem();
     item2->node()->setPos(tikz::Pos(3, -1, tikz::Unit::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::ultraThick());
-    item2->node()->style()->setShape(tikz::ShapeRectangle);
+    item2->node()->style()->setShape(tikz::Shape::ShapeRectangle);
     item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item2->node()->setText("A long text\\\\which is wrapped");
 
@@ -218,7 +218,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1 = m_doc->createNodeItem();
     item1->setPos(tikz::Pos(-3, -3, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
-    item1->node()->style()->setShape(tikz::ShapeRectangle);
+    item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
     item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item1->node()->setText("c");
 
@@ -228,7 +228,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     item2->node()->setPos(tikz::Pos(3, -3, tikz::Unit::Centimeter));
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
-    item2->node()->style()->setShape(tikz::ShapeEllipse);
+    item2->node()->style()->setShape(tikz::Shape::ShapeEllipse);
     item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
     item2->node()->style()->setMinimumWidth(2);
     item2->node()->setText("8");
@@ -278,7 +278,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n1 = createNodeItem();
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Unit::Centimeter));
         ns.setStyle(n1->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -290,7 +290,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n2 = createNodeItem();
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Unit::Centimeter));
         ns.setStyle(n2->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -302,7 +302,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n3 = createNodeItem();
         n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Unit::Centimeter));
         ns.setStyle(n3->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -314,7 +314,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n4 = createNodeItem();
         n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Unit::Centimeter));
         ns.setStyle(n4->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -326,7 +326,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n5 = createNodeItem();
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Unit::Centimeter));
         ns.setStyle(n5->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -338,7 +338,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n6 = createNodeItem();
         n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Unit::Centimeter));
         ns.setStyle(n5->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
@@ -350,7 +350,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         tikz::ui::NodeItem *n7 = createNodeItem();
         n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Unit::Centimeter));
         ns.setStyle(n7->node()->style());
-        ns.setShape(tikz::ShapeRectangle);
+        ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
         ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
         ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));

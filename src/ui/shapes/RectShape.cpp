@@ -48,7 +48,7 @@ RectShape::~RectShape()
 
 tikz::Shape RectShape::type() const
 {
-    return tikz::ShapeRectangle;
+    return tikz::Shape::ShapeRectangle;
 }
 
 QPainterPath RectShape::shape() const

@@ -158,7 +158,7 @@ TIKZCORE_EXPORT Unit toEnum<Unit>(const QString & unit);
 /**
  * TextAlignment, following the TikZ text alignment options.
  */
-enum TextAlignment {
+enum class TextAlignment : int {
     NoAlign = 0,
     AlignLeft,
     AlignCenter,
@@ -182,7 +182,7 @@ TIKZCORE_EXPORT TextAlignment toEnum<TextAlignment>(const QString & alignment);
 /**
  * Supported TikZ Shapes.
  */
-enum Shape {
+enum class Shape : int {
     NoShape = 0,
     ShapeRectangle,
     ShapeCircle,

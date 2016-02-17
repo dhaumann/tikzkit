@@ -175,7 +175,7 @@ Shape toEnum<Shape>(const QString & shape)
 
     Q_ASSERT(false);
 
-    return tikz::NoShape;
+    return tikz::Shape::NoShape;
 }
 
 QString toString(tikz::PenStyle ps)

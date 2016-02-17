@@ -36,8 +36,8 @@ class NodeStylePrivate
 {
 public:
     // Node styles
-    TextAlignment textAlign = tikz::NoAlign;
-    Shape shape = tikz::ShapeRectangle;
+    TextAlignment textAlign = tikz::TextAlignment::NoAlign;
+    Shape shape = tikz::Shape::ShapeRectangle;
     tikz::Value innerSep = tikz::Value(3); //FIXME: 0.3333em
     tikz::Value outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
     tikz::Value minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
@@ -148,7 +148,7 @@ TextAlignment NodeStyle::textAlign() const
         return parentStyle->textAlign();
     }
 
-    return NoAlign;
+    return TextAlignment::NoAlign;
 }
 
 bool NodeStyle::textAlignSet() const
@@ -170,7 +170,7 @@ void NodeStyle::unsetTextAlign()
     if (propertySet(s_align)) {
         ConfigTransaction transaction(this);
         removeProperty(s_align);
-        d->textAlign = NoAlign;
+        d->textAlign = TextAlignment::NoAlign;
     }
 }
 
@@ -185,7 +185,7 @@ Shape NodeStyle::shape() const
         return parentStyle->shape();
     }
 
-    return ShapeRectangle;
+    return Shape::ShapeRectangle;
 }
 
 bool NodeStyle::shapeSet() const
@@ -207,7 +207,7 @@ void NodeStyle::unsetShape()
     if (propertySet(s_shape)) {
         ConfigTransaction transaction(this);
         removeProperty(s_shape);
-        d->shape = ShapeRectangle;
+        d->shape = Shape::ShapeRectangle;
     }
 }
 

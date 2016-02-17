@@ -47,7 +47,7 @@ CircleShape::~CircleShape()
 
 tikz::Shape CircleShape::type() const
 {
-    return tikz::ShapeCircle;
+    return tikz::Shape::ShapeCircle;
 }
 
 void CircleShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const

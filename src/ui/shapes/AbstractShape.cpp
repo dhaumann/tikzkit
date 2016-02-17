@@ -52,7 +52,7 @@ NodeItem* AbstractShape::node() const
 
 tikz::Shape AbstractShape::type() const
 {
-    return tikz::NoShape;
+    return tikz::Shape::NoShape;
 }
 
 void AbstractShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
@@ -91,11 +91,11 @@ QPointF AbstractShape::contactPoint(const QString & anchor, qreal rad) const
 AbstractShape *createShape(tikz::Shape shape, NodeItem* node)
 {
     switch (shape) {
-        case tikz::NoShape: return new AbstractShape(node);
-        case tikz::ShapeRectangle: return new RectShape(node);
-        case tikz::ShapeCircle: return new CircleShape(node);
-        case tikz::ShapeDiamond: return new DiamondShape(node);
-        case tikz::ShapeEllipse: return new EllipseShape(node);
+        case tikz::Shape::NoShape: return new AbstractShape(node);
+        case tikz::Shape::ShapeRectangle: return new RectShape(node);
+        case tikz::Shape::ShapeCircle: return new CircleShape(node);
+        case tikz::Shape::ShapeDiamond: return new DiamondShape(node);
+        case tikz::Shape::ShapeEllipse: return new EllipseShape(node);
         default: break;
     }
     return new AbstractShape(node);

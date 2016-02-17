@@ -46,7 +46,7 @@ EllipseShape::~EllipseShape()
 
 tikz::Shape EllipseShape::type() const
 {
-    return tikz::ShapeCircle;
+    return tikz::Shape::ShapeCircle;
 }
 
 void EllipseShape::adjustShapeRect(const QRectF & textRect, QRectF & shapeRect) const
