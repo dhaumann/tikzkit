@@ -43,7 +43,7 @@ LatexArrow::~LatexArrow()
 
 tikz::Arrow LatexArrow::type() const
 {
-    return tikz::LatexArrow;
+    return tikz::Arrow::LatexArrow;
 }
 
 QString LatexArrow::name() const
@@ -128,7 +128,7 @@ ReversedLatexArrow::ReversedLatexArrow(tikz::core::EdgeStyle * style)
 
 tikz::Arrow ReversedLatexArrow::type() const
 {
-    return tikz::ReversedLatexArrow;
+    return tikz::Arrow::ReversedLatexArrow;
 }
 
 QString ReversedLatexArrow::name() const

@@ -205,7 +205,7 @@ TIKZCORE_EXPORT Shape toEnum<Shape>(const QString & shape);
 /**
  * Supported TikZ pen styles.
  */
-enum PenStyle {
+enum class PenStyle : int {
     SolidLine = 0,
     DottedLine,
     DenselyDottedLine,
@@ -235,21 +235,21 @@ TIKZCORE_EXPORT QString toString(tikz::PenStyle penStyle);
 template<>
 TIKZCORE_EXPORT PenStyle toEnum<PenStyle>(const QString & penStyle);
 
-enum LineCap {
+enum class LineCap : int {
     CapUnset = 0,
     RoundCap,
     RectCap,
     ButtCap     // TikZ default
 };
 
-enum LineJoin {
+enum class LineJoin : int {
     JoinUnset = 0,
     RoundJoin,
     BevelJoin,
     MiterJoin    // TikZ default
 };
 
-enum Arrow {
+enum class Arrow : int {
     NoArrow = 0,
     /**
      * Default TikZ arrows.

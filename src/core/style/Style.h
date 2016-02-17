@@ -155,7 +155,7 @@ class TIKZCORE_EXPORT Style : public Entity
          * Unset the pen style.
          * After this, calling penStyle() returns the parent()->penStyle()
          * if a parent() style exists, otherwise penStyle() returns the
-         * default pen style @e SolidLine.
+         * default pen style @e tikz::PenStyle::SolidLine.
          * @see PenStyle, penStyle()
          */
         void unsetPenStyle();

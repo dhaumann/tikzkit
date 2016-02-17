@@ -43,7 +43,7 @@ PipeArrow::~PipeArrow()
 
 tikz::Arrow PipeArrow::type() const
 {
-    return tikz::PipeArrow;
+    return tikz::Arrow::PipeArrow;
 }
 
 QString PipeArrow::name() const

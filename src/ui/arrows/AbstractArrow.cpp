@@ -48,7 +48,7 @@ tikz::core::EdgeStyle* AbstractArrow::style() const
 
 tikz::Arrow AbstractArrow::type() const
 {
-    return tikz::NoArrow;
+    return tikz::Arrow::NoArrow;
 }
 
 QString AbstractArrow::name() const
@@ -102,16 +102,16 @@ QPainterPath AbstractArrow::contour(qreal width) const
 AbstractArrow *createArrow(tikz::Arrow type, tikz::core::EdgeStyle* style)
 {
     switch (type) {
-        case tikz::NoArrow: return new AbstractArrow(style);
-        case tikz::ToArrow: return new ToArrow(style);
-        case tikz::ReversedToArrow: return new ReversedToArrow(style);
-        case tikz::StealthArrow: return new StealthArrow(style);
-        case tikz::ReversedStealthArrow: return new ReversedStealthArrow(style);
-        case tikz::LatexArrow: return new LatexArrow(style);
-        case tikz::ReversedLatexArrow: return new ReversedLatexArrow(style);
-        case tikz::PipeArrow: return new PipeArrow(style);
-        case tikz::StealthTickArrow: return new StealthTickArrow(style);
-        case tikz::ReversedStealthTickArrow: return new ReversedStealthTickArrow(style);
+        case tikz::Arrow::NoArrow: return new AbstractArrow(style);
+        case tikz::Arrow::ToArrow: return new ToArrow(style);
+        case tikz::Arrow::ReversedToArrow: return new ReversedToArrow(style);
+        case tikz::Arrow::StealthArrow: return new StealthArrow(style);
+        case tikz::Arrow::ReversedStealthArrow: return new ReversedStealthArrow(style);
+        case tikz::Arrow::LatexArrow: return new LatexArrow(style);
+        case tikz::Arrow::ReversedLatexArrow: return new ReversedLatexArrow(style);
+        case tikz::Arrow::PipeArrow: return new PipeArrow(style);
+        case tikz::Arrow::StealthTickArrow: return new StealthTickArrow(style);
+        case tikz::Arrow::ReversedStealthTickArrow: return new ReversedStealthTickArrow(style);
         default: break;
     }
     return new AbstractArrow(style);

@@ -89,7 +89,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         path->edgePath()->setEndPos(tikz::Pos(1, 0, tikz::Unit::Centimeter));
 
         tikz::core::EdgeStyle es;
-        es.setArrowHead(tikz::ToArrow);
+        es.setArrowHead(tikz::Arrow::ToArrow);
         path->path()->setStyle(es);
     }
 

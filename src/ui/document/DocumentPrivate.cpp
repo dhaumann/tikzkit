@@ -161,8 +161,8 @@ View * DocumentPrivate::createView(QWidget * parent,
     es.setStyle(edge->style());
     es.setLineWidth(tikz::Value::semiThick());
 //     es.setDoubleLine(true);
-    es.setArrowTail(tikz::LatexArrow);
-    es.setArrowHead(tikz::ToArrow);
+    es.setArrowTail(tikz::Arrow::LatexArrow);
+    es.setArrowHead(tikz::Arrow::ToArrow);
     edge->setStyle(es);
     edge->setStartNode(item1->node());
     edge->setEndNode(item2->node());
@@ -211,8 +211,8 @@ View * DocumentPrivate::createView(QWidget * parent,
 //     path->setStartNode(item1);
 //     path->setEndNode(item2);
     path->path()->style()->setLineWidth(tikz::Value::ultraThick());
-    path->path()->style()->setArrowTail(tikz::LatexArrow);
-    path->path()->style()->setArrowHead(tikz::PipeArrow);
+    path->path()->style()->setArrowTail(tikz::Arrow::LatexArrow);
+    path->path()->style()->setArrowHead(tikz::Arrow::PipeArrow);
 
 
     item1 = m_doc->createNodeItem();
@@ -240,12 +240,12 @@ View * DocumentPrivate::createView(QWidget * parent,
     path->path()->style()->setLineWidth(tikz::Value::ultraThick());
     path->path()->style()->setBendAngle(30);
 //     path->path()->style()->setCurveMode(tikz::HVLineTo);
-    path->path()->style()->setArrowTail(tikz::StealthArrow);
-    path->path()->style()->setArrowHead(tikz::ToArrow);
+    path->path()->style()->setArrowTail(tikz::Arrow::StealthArrow);
+    path->path()->style()->setArrowHead(tikz::Arrow::ToArrow);
 
 
     // arrow demo
-    for (int i = 0; i < tikz::ArrowCount; ++i) {
+    for (int i = 0; i < tikz::Arrow::ArrowCount; ++i) {
         path = m_doc->createPathItem();
 //         path->path()->setStartPos(QPointF(-6, i - 4));
 //         path->path()->setEndPos(QPointF(-4, i - 4));
@@ -257,7 +257,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     }
 
     // arrow demo
-    for (int i = 0; i < tikz::ArrowCount; ++i) {
+    for (int i = 0; i < tikz::Arrow::ArrowCount; ++i) {
         path = m_doc->createPathItem();
 //         path->path()->setStartPos(QPointF(4, i - 4));
 //         path->path()->setEndPos(QPointF(6, i - 4));
@@ -367,8 +367,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n1->node());
         edge->setEndNode(n2->node());
         es.setStyle(path->path()->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
 
@@ -377,8 +377,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n2->node());
         edge->setEndNode(n3->node());
         es.setStyle(edge->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
         edge->setStartAnchor("west");
@@ -388,8 +388,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n2->node());
         edge->setEndNode(n4->node());
         es.setStyle(edge->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
 
@@ -398,8 +398,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n2->node());
         edge->setEndNode(n5->node());
         es.setStyle(edge->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
 
@@ -408,8 +408,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n2->node());
         edge->setEndNode(n6->node());
         es.setStyle(edge->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
 
@@ -418,8 +418,8 @@ View * DocumentPrivate::createView(QWidget * parent,
         edge->setStartNode(n2->node());
         edge->setEndNode(n7->node());
         es.setStyle(edge->style());
-        es.setArrowTail(tikz::LatexArrow);
-        es.setArrowHead(tikz::LatexArrow);
+        es.setArrowTail(tikz::Arrow::LatexArrow);
+        es.setArrowHead(tikz::Arrow::LatexArrow);
         es.setPenColor(QColor(128, 128, 128));
         edge->setStyle(es);
         edge->setStartAnchor("east");

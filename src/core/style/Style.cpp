@@ -56,7 +56,7 @@ public:
     QSet<QString> properties;
 
     // line style
-    PenStyle penStyle = SolidLine;
+    PenStyle penStyle = tikz::PenStyle::SolidLine;
 
     // line width
     tikz::Value lineWidth = tikz::Value::semiThick();
@@ -314,7 +314,7 @@ PenStyle Style::penStyle() const
         return parentStyle()->penStyle();
     }
 
-    return SolidLine;
+    return tikz::PenStyle::SolidLine;
 }
 
 bool Style::penStyleSet() const
@@ -336,7 +336,7 @@ void Style::unsetPenStyle()
     if (propertySet(s_penStyle)) {
         ConfigTransaction transaction(this);
         removeProperty(s_penStyle);
-        d->penStyle = SolidLine;
+        d->penStyle = tikz::PenStyle::SolidLine;
     }
 }
 

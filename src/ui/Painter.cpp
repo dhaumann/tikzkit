@@ -53,7 +53,7 @@ Painter::~Painter()
  * The generated dash pattern follows the dash patterns defined by PGF/TikZ,
  * see file generic/pgf/frontendlayer/tikz/tikz.code.tex fur further details.
  *
- * If @p style has a tikz::SolidLine as pen style, an empty vector is returned.
+ * If @p style has a tikz::PenStyle::SolidLine as pen style, an empty vector is returned.
  */
 static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
 {
@@ -62,19 +62,19 @@ static QVector<qreal> penStyle(qreal lineWidth, tikz::PenStyle style)
     //
     QVector<qreal> pattern;
     switch (style) {
-        case tikz::SolidLine: break; // leave empty
-        case tikz::DottedLine: pattern << lineWidth*lineWidth << 2; break;
-        case tikz::DenselyDottedLine: pattern << lineWidth*lineWidth << 1; break;
-        case tikz::LooselyDottedLine: pattern << lineWidth*lineWidth << 4; break;
-        case tikz::DashedLine: pattern << 3 << 3; break;
-        case tikz::DenselyDashedLine: pattern << 3 << 2; break;
-        case tikz::LooselyDashedLine: pattern << 3 << 6; break;
-        case tikz::DashDottedLine: pattern << 3 << 2 << lineWidth << 2; break;
-        case tikz::DenselyDashDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1; break;
-        case tikz::LooselyDashDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4; break;
-        case tikz::DashDotDottedLine: pattern << 3 << 2 << lineWidth*lineWidth << 2 << lineWidth*lineWidth << 2; break;
-        case tikz::DenselyDashDotDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1 << lineWidth*lineWidth << 1; break;
-        case tikz::LooselyDashDotDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4 << lineWidth*lineWidth << 4; break;
+        case tikz::PenStyle::SolidLine: break; // leave empty
+        case tikz::PenStyle::DottedLine: pattern << lineWidth*lineWidth << 2; break;
+        case tikz::PenStyle::DenselyDottedLine: pattern << lineWidth*lineWidth << 1; break;
+        case tikz::PenStyle::LooselyDottedLine: pattern << lineWidth*lineWidth << 4; break;
+        case tikz::PenStyle::DashedLine: pattern << 3 << 3; break;
+        case tikz::PenStyle::DenselyDashedLine: pattern << 3 << 2; break;
+        case tikz::PenStyle::LooselyDashedLine: pattern << 3 << 6; break;
+        case tikz::PenStyle::DashDottedLine: pattern << 3 << 2 << lineWidth << 2; break;
+        case tikz::PenStyle::DenselyDashDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1; break;
+        case tikz::PenStyle::LooselyDashDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4; break;
+        case tikz::PenStyle::DashDotDottedLine: pattern << 3 << 2 << lineWidth*lineWidth << 2 << lineWidth*lineWidth << 2; break;
+        case tikz::PenStyle::DenselyDashDotDottedLine: pattern << 3 << 1 << lineWidth*lineWidth << 1 << lineWidth*lineWidth << 1; break;
+        case tikz::PenStyle::LooselyDashDotDottedLine: pattern << 3 << 4 << lineWidth*lineWidth << 4 << lineWidth*lineWidth << 4; break;
         default: break;
     }
 
@@ -107,7 +107,7 @@ void Painter::drawPath(const QPainterPath & path)
 
     p.setWidthF(d->style->penWidth().toPoint());
     QVector<qreal> pattern = tikz::ui::penStyle(d->style->penWidth().toPoint(), d->style->penStyle());
-    if (d->style->penStyle() != tikz::SolidLine) {
+    if (d->style->penStyle() != tikz::PenStyle::SolidLine) {
         p.setDashPattern(pattern);
     }
 
@@ -119,7 +119,7 @@ void Painter::drawPath(const QPainterPath & path)
 
     // second pass: draw inner line
     if (d->style->doubleLine() && d->style->innerLineWidth().toPoint() > 0) {
-        if (d->style->penStyle() != tikz::SolidLine) {
+        if (d->style->penStyle() != tikz::PenStyle::SolidLine) {
             // scale by different line widths to match distances
             for (int i = 0; i < pattern.size(); ++i) {
                 pattern[i] *= d->style->penWidth().toPoint() / d->style->innerLineWidth().toPoint();

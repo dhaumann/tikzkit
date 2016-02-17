@@ -73,7 +73,7 @@ void ArrowComboBoxPrivate::fillComboBox()
     QPen innerPen(Qt::white);
     innerPen.setWidthF(style.innerLineWidth().toPoint());
 
-    for (int i = 0; i < tikz::ArrowCount; ++i) {
+    for (int i = 0; i < static_cast<int>(tikz::Arrow::ArrowCount); ++i) {
         if (arrowHead) {
             style.setArrowHead(static_cast<tikz::Arrow>(i));
         } else {

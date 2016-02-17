@@ -47,8 +47,8 @@ public:
     qreal outAngle = 45.0; // in degree
     qreal inAngle = 135.0; // in degree
 
-    Arrow arrowTail = tikz::NoArrow;
-    Arrow arrowHead = tikz::NoArrow;
+    Arrow arrowTail = tikz::Arrow::NoArrow;
+    Arrow arrowHead = tikz::Arrow::NoArrow;
 
     tikz::Value shortenStart;
     tikz::Value shortenEnd;
@@ -436,7 +436,7 @@ Arrow EdgeStyle::arrowTail() const
         return style->arrowTail();
     }
 
-    return tikz::NoArrow;
+    return tikz::Arrow::NoArrow;
 }
 
 bool EdgeStyle::arrowTailSet() const
@@ -455,7 +455,7 @@ Arrow EdgeStyle::arrowHead() const
         return style->arrowHead();
     }
 
-    return tikz::NoArrow;
+    return tikz::Arrow::NoArrow;
 }
 
 bool EdgeStyle::arrowHeadSet() const
@@ -486,7 +486,7 @@ void EdgeStyle::unsetArrowTail()
     if (propertySet(s_arrowTail)) {
         ConfigTransaction transaction(this);
         removeProperty(s_arrowTail);
-        d->arrowTail = tikz::NoArrow;
+        d->arrowTail = tikz::Arrow::NoArrow;
     }
 }
 
@@ -495,7 +495,7 @@ void EdgeStyle::unsetArrowHead()
     if (propertySet(s_arrowHead)) {
         ConfigTransaction transaction(this);
         removeProperty(s_arrowHead);
-        d->arrowHead = tikz::NoArrow;
+        d->arrowHead = tikz::Arrow::NoArrow;
     }
 }
 

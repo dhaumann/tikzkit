@@ -43,7 +43,7 @@ ToArrow::~ToArrow()
 
 tikz::Arrow ToArrow::type() const
 {
-    return tikz::ToArrow;
+    return tikz::Arrow::ToArrow;
 }
 
 QString ToArrow::name() const
@@ -126,7 +126,7 @@ ReversedToArrow::~ReversedToArrow()
 
 tikz::Arrow ReversedToArrow::type() const
 {
-    return tikz::ReversedToArrow;
+    return tikz::Arrow::ReversedToArrow;
 }
 
 QString ReversedToArrow::name() const

@@ -43,7 +43,7 @@ StealthArrow::~StealthArrow()
 
 tikz::Arrow StealthArrow::type() const
 {
-    return tikz::StealthArrow;
+    return tikz::Arrow::StealthArrow;
 }
 
 QString StealthArrow::name() const
@@ -123,7 +123,7 @@ ReversedStealthArrow::ReversedStealthArrow(tikz::core::EdgeStyle * style)
 
 tikz::Arrow ReversedStealthArrow::type() const
 {
-    return tikz::ReversedStealthArrow;
+    return tikz::Arrow::ReversedStealthArrow;
 }
 
 QString ReversedStealthArrow::name() const
