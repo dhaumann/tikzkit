@@ -178,7 +178,7 @@ void Style::setStyle(const Style * other)
     // perform copy of properties
     *d = *other->d;
 
-    // restore persistend properties
+    // restore persistent properties
     d->parent = parent;
 }
 

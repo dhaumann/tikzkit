@@ -41,6 +41,14 @@ set(qtikzcore_SOURCES
     utils/Entity.cpp
     utils/ConfigObject.cpp
 
+    properties/Property.cpp
+    properties/PropertyInterface.cpp
+    properties/StringProperty.cpp
+    properties/BoolProperty.cpp
+    properties/ColorProperty.cpp
+    properties/ValueProperty.cpp
+    properties/PosProperty.cpp
+
     path/Path.cpp
     path/UndoSetPathStyle.cpp
     path/UndoCreatePath.cpp
