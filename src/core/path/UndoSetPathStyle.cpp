@@ -25,6 +25,11 @@
 namespace tikz {
 namespace core {
 
+UndoSetPathStyle::UndoSetPathStyle(Document * doc)
+    : UndoItem("Change Path Style", doc)
+{
+}
+
 UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc)
     : UndoItem("Change Path Style", doc)
     , m_pathUid(pathUid)
@@ -36,13 +41,6 @@ UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style,
     // save properties
     m_undoStyle.setStyle(path->style());
     m_redoStyle.setStyle(&style);
-}
-
-UndoSetPathStyle::UndoSetPathStyle(const QJsonObject & json, Document * doc)
-    : UndoSetPathStyle(Uid(json["uid"].toString(), doc),
-                       EdgeStyle(json["style"].toObject(), doc),
-                       doc)
-{
 }
 
 UndoSetPathStyle::~UndoSetPathStyle()
@@ -77,12 +75,18 @@ bool UndoSetPathStyle::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetPathStyle::toJsonObject() const
+void UndoSetPathStyle::loadData(const QJsonObject & json)
+{
+    m_pathUid = Uid(json["uid"].toString(), document());
+    m_redoStyle.load(json["style"].toObject());
+}
+
+QJsonObject UndoSetPathStyle::saveData() const
 {
     QJsonObject json;
     json["type"] = "path-set-style";
     json["uid"] = m_pathUid.toString();
-    json["style"] = m_redoStyle.toJson();
+    json["style"] = m_redoStyle.save();
     return json;
 }
 

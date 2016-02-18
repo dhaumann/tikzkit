@@ -99,10 +99,30 @@ public:
      */
     virtual bool mergeWith(const UndoItem * item);
 
+//
+// serialization
+//
+public:
     /**
-     * Serialize the undo item to a JSON object.
+     * Load the undo item state from the @p json object.
      */
-    virtual QJsonObject toJsonObject() const = 0;
+    void load(const QJsonObject & json);
+
+    /**
+     * Serialize the undo item state to a JSON object.
+     */
+    QJsonObject save() const;
+
+protected:
+    /**
+     * Load the undo item state from the @p json object.
+     */
+    virtual void loadData(const QJsonObject & json) = 0;
+
+    /**
+     * Serialize the undo item state to a JSON object.
+     */
+    virtual QJsonObject saveData() const = 0;
 
 // group information
 public:

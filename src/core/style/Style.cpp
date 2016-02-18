@@ -88,15 +88,52 @@ Style::Style(const Uid & uid, Document* doc)
 {
 }
 
-Style::Style(const QJsonObject & json, Document* doc)
-    : Entity(json, doc)
-    , d(new StylePrivate())
+Style::~Style()
+{
+    // unregister all child styles
+    foreach (Style * style, d->children) {
+        style->setParentStyle(d->parent);
+    }
+    Q_ASSERT(d->children.size() == 0);
+
+    // avoid unnecessary propagation of the changed() signal
+    disconnect(this, SIGNAL(changed()), 0, 0);
+
+    // now: remove from parent's child list, if needed
+    setParentStyle(0);
+}
+
+tikz::EntityType Style::entityType() const
+{
+    return EntityType::Style;
+}
+
+void Style::setStyle(const Style * other)
+{
+    if (this == other) {
+        return;
+    }
+
+    // start configuration
+    ConfigTransaction transaction(this);
+
+    // backup properties not to copy
+    Style * parent = d->parent;
+
+    // perform copy of properties
+    *d = *other->d;
+
+    // restore persistent properties
+    d->parent = parent;
+}
+
+void Style::loadData(const QJsonObject & json)
 {
     ConfigTransaction transaction(this);
 
     if (json.contains("parent-id")) {
-        const Uid styleId(json["parent-id"].toString(), doc);
-        d->parent = doc->style()->findStyle(styleId);
+        const Uid styleId(json["parent-id"].toString(), document());
+        d->parent = document()->style()->findStyle(styleId);
     }
 
     if (json.contains("pen-color")) {
@@ -143,48 +180,9 @@ Style::Style(const QJsonObject & json, Document* doc)
     }
 }
 
-Style::~Style()
+QJsonObject Style::saveData() const
 {
-    // unregister all child styles
-    foreach (Style * style, d->children) {
-        style->setParentStyle(d->parent);
-    }
-    Q_ASSERT(d->children.size() == 0);
-
-    // avoid unnecessary propagation of the changed() signal
-    disconnect(this, SIGNAL(changed()), 0, 0);
-
-    // now: remove from parent's child list, if needed
-    setParentStyle(0);
-}
-
-tikz::EntityType Style::entityType() const
-{
-    return EntityType::Style;
-}
-
-void Style::setStyle(const Style * other)
-{
-    if (this == other) {
-        return;
-    }
-
-    // start configuration
-    ConfigTransaction transaction(this);
-
-    // backup properties not to copy
-    Style * parent = d->parent;
-
-    // perform copy of properties
-    *d = *other->d;
-
-    // restore persistent properties
-    d->parent = parent;
-}
-
-QJsonObject Style::toJson() const
-{
-    QJsonObject json = Entity::toJson();
+    QJsonObject json = Entity::saveData();
 
     if (parentStyle()) {
         json["parent-id"] = parentStyle()->uid().toString();

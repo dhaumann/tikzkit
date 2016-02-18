@@ -51,11 +51,6 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         EdgeStyle();
 
         /**
-         * Constructor that deserializes this style from @p json.
-         */
-        EdgeStyle(const QJsonObject & json, Document* tikzDocument);
-
-        /**
          * Virtual destructor.
          */
         virtual ~EdgeStyle();
@@ -71,9 +66,14 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         void setStyle(const Style * other) override;
 
         /**
-         * Serialize the style to a JSON object.
+         * Save the style to a JSON object.
          */
-        QJsonObject toJson() const override;
+        void loadData(const QJsonObject & json) override;
+
+        /**
+         * Save the style to the json object.
+         */
+        QJsonObject saveData() const override;
 
     //
     // Ellipse properties

@@ -56,11 +56,30 @@ NodeStyle::NodeStyle(const Uid & uid, Document* tikzDocument)
 {
 }
 
-NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
-    : Style(json, tikzDocument)
-    , d(new NodeStylePrivate())
+NodeStyle::~NodeStyle()
+{
+}
+
+tikz::EntityType NodeStyle::entityType() const
+{
+    return EntityType::NodeStyle;
+}
+
+void NodeStyle::setStyle(const Style * other)
 {
     ConfigTransaction transaction(this);
+    Style::setStyle(other);
+    auto nodeStyle = qobject_cast<const NodeStyle *>(other);
+    if (nodeStyle) {
+        *d = *nodeStyle->d;
+    }
+}
+
+void NodeStyle::loadData(const QJsonObject & json)
+{
+    ConfigTransaction transaction(this);
+
+    Style::loadData(json);
 
     if (json.contains("text-align")) {
         setTextAlign(toEnum<TextAlignment>(json["text-align"].toString()));
@@ -87,28 +106,9 @@ NodeStyle::NodeStyle(const QJsonObject & json, Document* tikzDocument)
     }
 }
 
-NodeStyle::~NodeStyle()
+QJsonObject NodeStyle::saveData() const
 {
-}
-
-tikz::EntityType NodeStyle::entityType() const
-{
-    return EntityType::NodeStyle;
-}
-
-void NodeStyle::setStyle(const Style * other)
-{
-    ConfigTransaction transaction(this);
-    Style::setStyle(other);
-    auto nodeStyle = qobject_cast<const NodeStyle *>(other);
-    if (nodeStyle) {
-        *d = *nodeStyle->d;
-    }
-}
-
-QJsonObject NodeStyle::toJson() const
-{
-    QJsonObject json = Style::toJson();
+    QJsonObject json = Style::saveData();
 
     if (textAlignSet()) {
         json["text-align"] = toString(textAlign());

@@ -35,12 +35,12 @@ class UndoSetPathStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc);
+        UndoSetPathStyle(Document * doc);
 
         /**
-         * Constructor that deserializes the item from @p json.
+         * Constructor.
          */
-        UndoSetPathStyle(const QJsonObject & json, Document * doc);
+        UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc);
 
         /**
          * Destructor
@@ -69,16 +69,22 @@ class UndoSetPathStyle : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+protected:
+        /**
+        * Load the undo item state from the @p json object.
+        */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Path id.
          */
-        const Uid m_pathUid;
+        Uid m_pathUid;
 
         /**
          * The node style before the change

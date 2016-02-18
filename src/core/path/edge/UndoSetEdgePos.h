@@ -36,15 +36,15 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Constructor.
          */
+        UndoSetEdgePos(Document * doc);
+
+        /**
+         * Constructor.
+         */
         UndoSetEdgePos(EdgePath * path,
                        const MetaPos & newPos,
                        bool isStartNode,
                        Document * doc);
-
-        /**
-         * Constructor that deserializes the item from @p json.
-         */
-        UndoSetEdgePos(const QJsonObject & json, Document * doc);
 
         /**
          * Destructor
@@ -73,16 +73,22 @@ class UndoSetEdgePos : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Edge id.
          */
-        const Uid m_pathUid;
+        Uid m_pathUid;
 
         /**
          * old anchor of the connection
@@ -97,7 +103,7 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Is it start or end node?
          */
-        bool m_isStart;
+        bool m_isStart = false;
 };
 
 }

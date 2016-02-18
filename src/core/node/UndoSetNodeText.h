@@ -37,12 +37,12 @@ class UndoSetNodeText : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc);
+        UndoSetNodeText(Document * doc);
 
         /**
-         * Constructor that deserializes the item from @p json.
+         * Constructor.
          */
-        UndoSetNodeText(const QJsonObject & json, Document * doc);
+        UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc);
 
         /**
          * Destructor.
@@ -71,16 +71,22 @@ class UndoSetNodeText : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Node id.
          */
-        const Uid m_nodeUid;
+        Uid m_nodeUid;
 
         /**
          * Undo text.

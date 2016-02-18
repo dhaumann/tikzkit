@@ -47,11 +47,6 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
         Entity();
 
         /**
-         * Constructor that deserializes the entity from @p json.
-         */
-        Entity(const QJsonObject & json, Document* doc);
-
-        /**
          * Virtual destructor.
          */
         virtual ~Entity();
@@ -69,15 +64,38 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
          */
         virtual tikz::EntityType entityType() const;
 
-        /**
-         * Serialize the style to a JSON object.
-         */
-        virtual QJsonObject toJson() const;
 
         /**
          * Returns the document, if passed to the constructor.
          */
         Document * document() const;
+
+    //
+    // serialization
+    //
+    public:
+        /**
+         * Load the state from the @p json object.
+         */
+        void load(const QJsonObject & json);
+
+        /**
+         * Save the state to the json object.
+         */
+        QJsonObject save() const;
+
+    protected:
+        /**
+         * Load the payload state from the @p json object.
+         * The default implementation is empty.
+         */
+        virtual void loadData(const QJsonObject & json);
+
+        /**
+         * Save the payload state to the json object.
+         * The default implementation is empty.
+         */
+        virtual QJsonObject saveData() const;
 
     //
     // internal to tikz::Document

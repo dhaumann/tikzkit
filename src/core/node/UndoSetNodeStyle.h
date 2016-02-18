@@ -35,12 +35,12 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc);
+        UndoSetNodeStyle(Document * doc);
 
         /**
-         * Constructor that deserializes the item from @p json.
+         * Constructor.
          */
-        UndoSetNodeStyle(const QJsonObject & json, Document * doc);
+        UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc);
 
         /**
          * Destructor
@@ -69,16 +69,22 @@ class UndoSetNodeStyle : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Node id.
          */
-        const Uid m_nodeId;
+        Uid m_nodeId;
 
         /**
          * The node style before the change

@@ -25,6 +25,11 @@
 namespace tikz {
 namespace core {
 
+UndoDeletePath::UndoDeletePath(Document * doc)
+    : UndoItem("Delete Path", doc)
+{
+}
+
 UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
     : UndoItem("Delete Path", doc)
     , m_pathUid(pathUid)
@@ -37,12 +42,6 @@ UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
 
     // save properties
     m_style.setStyle(path->style());
-}
-
-UndoDeletePath::UndoDeletePath(const QJsonObject & json, Document * doc)
-    : UndoDeletePath(Uid(json["uid"].toString(), doc),
-                     doc)
-{
 }
 
 UndoDeletePath::~UndoDeletePath()
@@ -65,7 +64,12 @@ void UndoDeletePath::redo()
     document()->deletePath(m_pathUid);
 }
 
-QJsonObject UndoDeletePath::toJsonObject() const
+void UndoDeletePath::loadData(const QJsonObject & json)
+{
+    m_pathUid = Uid(json["uid"].toString(), document());
+}
+
+QJsonObject UndoDeletePath::saveData() const
 {
     QJsonObject json;
     json["type"] = "path-delete";

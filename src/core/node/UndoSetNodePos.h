@@ -36,14 +36,14 @@ class UndoSetNodePos : public UndoItem
         /**
          * Constructor.
          */
+        UndoSetNodePos(Document * doc);
+
+        /**
+         * Constructor.
+         */
         UndoSetNodePos(Node * node,
                        const tikz::core::MetaPos & newPos,
                        Document * doc);
-
-        /**
-         * Constructor that deserializes the item from @p json.
-         */
-        UndoSetNodePos(const QJsonObject & json, Document * doc);
 
         /**
          * Destructor.
@@ -72,10 +72,16 @@ class UndoSetNodePos : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**

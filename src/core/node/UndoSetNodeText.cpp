@@ -24,6 +24,11 @@
 namespace tikz {
 namespace core {
 
+UndoSetNodeText::UndoSetNodeText(Document * doc)
+    : UndoItem("Set Node Text", doc)
+{
+}
+
 UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc)
     : UndoItem("Set Node Text", doc)
     , m_nodeUid(nodeUid)
@@ -33,13 +38,6 @@ UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, D
 
     m_undoText = node->text();
     m_redoText = newText;
-}
-
-UndoSetNodeText::UndoSetNodeText(const QJsonObject & json, Document * doc)
-    : UndoSetNodeText(Uid(json["uid"].toString(), doc),
-                      json["text"].toString(),
-                      doc)
-{
 }
 
 UndoSetNodeText::~UndoSetNodeText()
@@ -72,7 +70,13 @@ bool UndoSetNodeText::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetNodeText::toJsonObject() const
+void UndoSetNodeText::loadData(const QJsonObject & json)
+{
+    m_nodeUid = Uid(json["uid"].toString(), document());
+    m_redoText = json["text"].toString();
+}
+
+QJsonObject UndoSetNodeText::saveData() const
 {
     QJsonObject json;
     json["type"] = "node-set-text";

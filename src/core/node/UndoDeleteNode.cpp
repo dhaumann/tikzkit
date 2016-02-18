@@ -25,6 +25,11 @@
 namespace tikz {
 namespace core {
 
+UndoDeleteNode::UndoDeleteNode(Document * doc)
+    : UndoItem("Delete Node", doc)
+{
+}
+
 UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
     : UndoItem("Delete Node", doc)
     , m_nodeUid(nodeUid)
@@ -37,11 +42,6 @@ UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
     m_pos  = node->pos();
     m_text = node->text();
     m_style.setStyle(node->style());
-}
-
-UndoDeleteNode::UndoDeleteNode(const QJsonObject & json, Document * doc)
-    : UndoDeleteNode(Uid(json["uid"].toString(), doc), doc)
-{
 }
 
 UndoDeleteNode::~UndoDeleteNode()
@@ -66,7 +66,12 @@ void UndoDeleteNode::redo()
     document()->deleteNode(m_nodeUid);
 }
 
-QJsonObject UndoDeleteNode::toJsonObject() const
+void UndoDeleteNode::loadData(const QJsonObject & json)
+{
+    m_nodeUid = Uid(json["uid"].toString(), document());
+}
+
+QJsonObject UndoDeleteNode::saveData() const
 {
     QJsonObject json;
     json["type"] = "node-delete";

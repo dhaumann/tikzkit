@@ -57,11 +57,6 @@ class TIKZCORE_EXPORT Style : public Entity
         Style();
 
         /**
-         * Constructor that deserializes the style from @p json.
-         */
-        Style(const QJsonObject & json, Document* doc);
-
-        /**
          * Virtual destructor.
          */
         virtual ~Style();
@@ -77,9 +72,14 @@ class TIKZCORE_EXPORT Style : public Entity
         virtual void setStyle(const Style * other);
 
         /**
-         * Serialize the style to a JSON object.
+         * Load the style to a JSON object.
          */
-        QJsonObject toJson() const override;
+        void loadData(const QJsonObject & json) override;
+
+        /**
+         * Save the style to the json object.
+         */
+        QJsonObject saveData() const override;
 
     //
     // parent / child hierarchy

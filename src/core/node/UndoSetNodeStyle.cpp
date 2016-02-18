@@ -25,6 +25,11 @@
 namespace tikz {
 namespace core {
 
+UndoSetNodeStyle::UndoSetNodeStyle(Document * doc)
+    : UndoItem("Set Node Style", doc)
+{
+}
+
 UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc)
     : UndoItem("Set Node Style", doc)
     , m_nodeId(nodeUid)
@@ -36,13 +41,6 @@ UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style,
     // save properties
     m_undoStyle.setStyle(node->style());
     m_redoStyle.setStyle(&style);
-}
-
-UndoSetNodeStyle::UndoSetNodeStyle(const QJsonObject & json, Document * doc)
-    : UndoSetNodeStyle(Uid(json["uid"].toString(), doc),
-                       NodeStyle(json["style"].toObject(), doc),
-                       doc)
-{
 }
 
 UndoSetNodeStyle::~UndoSetNodeStyle()
@@ -76,12 +74,18 @@ bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetNodeStyle::toJsonObject() const
+void UndoSetNodeStyle::loadData(const QJsonObject & json)
+{
+    m_nodeId = Uid(json["uid"].toString(), document());
+    m_redoStyle.load(json["style"].toObject());
+}
+
+QJsonObject UndoSetNodeStyle::saveData() const
 {
     QJsonObject json;
     json["type"] = "node-set-style";
     json["uid"] = m_nodeId.toString();
-    json["style"] = m_redoStyle.toJson();
+    json["style"] = m_redoStyle.save();
     return json;
 }
 

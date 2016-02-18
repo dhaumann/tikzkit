@@ -35,12 +35,12 @@ class UndoCreatePath : public UndoItem
         /**
          * Constructor.
          */
-        UndoCreatePath(PathType type, const Uid & pathUid, Document * doc);
+        UndoCreatePath(Document * doc);
 
         /**
-         * Constructor that deserializes the item from @p json.
+         * Constructor.
          */
-        UndoCreatePath(const QJsonObject & json, Document * doc);
+        UndoCreatePath(PathType type, const Uid & pathUid, Document * doc);
 
         /**
          * Destructor
@@ -57,21 +57,27 @@ class UndoCreatePath : public UndoItem
          */
         void redo() override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Path id.
          */
-        const Uid m_pathUid;
+        Uid m_pathUid;
 
         /**
          * Path type.
          */
-        const PathType m_type;
+        PathType m_type;
 };
 
 }

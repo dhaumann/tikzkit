@@ -217,12 +217,16 @@ bool Document::load(const QUrl & fileurl)
         Transaction transaction(this, entry["text"].toString());
         QJsonArray items = entry["items"].toArray();
         for (auto item : items) {
-            UndoItem * undoItem = factory.createItem(item.toObject());
+            QJsonObject joItem = item.toObject();
+            const QString type = joItem["type"].toString();
+            UndoItem * undoItem = factory.createItem(type);
             if (undoItem) {
+                undoItem->load(joItem);
                 addUndoItem(undoItem);
             }
         }
     }
+
     if (root.contains("preferred-unit")) {
         setPreferredUnit(toEnum<Unit>(root["preferred-unit"].toString()));
     }
@@ -267,7 +271,7 @@ bool Document::saveAs(const QUrl & targetUrl)
         for (auto group : d->undoManager->undoGroups()) {
             QJsonArray groupItems;
             for (auto item : group->undoItems()) {
-                groupItems.append(item->toJsonObject());
+                groupItems.append(item->save());
             }
 
             QJsonObject jsonGroup;

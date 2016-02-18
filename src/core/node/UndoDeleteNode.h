@@ -36,12 +36,12 @@ class UndoDeleteNode : public UndoItem
         /**
          * Constructor.
          */
-        UndoDeleteNode(const Uid & nodeUid, Document * doc);
+        UndoDeleteNode(Document * doc);
 
         /**
-         * Constructor that deserializes the item from @p json.
+         * Constructor.
          */
-        UndoDeleteNode(const QJsonObject & json, Document * doc);
+        UndoDeleteNode(const Uid & nodeUid, Document * doc);
 
         /**
          * Destructor
@@ -58,16 +58,22 @@ class UndoDeleteNode : public UndoItem
          */
         virtual void redo() override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Node id.
          */
-        const Uid m_nodeUid;
+        Uid m_nodeUid;
 
         /**
          * The node position.

@@ -79,6 +79,28 @@ bool UndoItem::mergeWith(const UndoItem * item)
     return false;
 }
 
+void UndoItem::load(const QJsonObject & json)
+{
+    // TODO, FIXME
+
+    // load payload
+    QJsonObject joData = json["data"].toObject();
+    loadData(joData);
+}
+
+QJsonObject UndoItem::save() const
+{
+    QJsonObject json;
+
+    // TODO, FIXME
+
+    // save payload
+    json["data"] = saveData();
+
+    return json;
+
+}
+
 UndoGroup * UndoItem::group() const
 {
     return d->group;

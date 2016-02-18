@@ -36,14 +36,14 @@ class UndoSetEllipsePos : public UndoItem
         /**
          * Constructor.
          */
+        UndoSetEllipsePos(Document * doc);
+
+        /**
+         * Constructor.
+         */
         UndoSetEllipsePos(EllipsePath * path,
                           const MetaPos & newPos,
                           Document * doc);
-
-        /**
-         * Constructor that deserializes the item from @p json.
-         */
-        UndoSetEllipsePos(const QJsonObject & json, Document * doc);
 
         /**
          * Destructor
@@ -72,16 +72,22 @@ class UndoSetEllipsePos : public UndoItem
          */
         bool mergeWith(const UndoItem * command) override;
 
+    protected:
+        /**
+         * Load the undo item state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
         /**
          * Serializie to JSON object.
          */
-        QJsonObject toJsonObject() const override;
+        QJsonObject saveData() const override;
 
     private:
         /**
          * The unique Edge id.
          */
-        const Uid m_pathUid;
+        Uid m_pathUid;
 
         /**
          * old anchor of the connection

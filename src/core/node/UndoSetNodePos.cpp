@@ -24,6 +24,13 @@
 namespace tikz {
 namespace core {
 
+UndoSetNodePos::UndoSetNodePos(Document * doc)
+    : UndoItem("Move Node", doc)
+    , m_undoPos(doc)
+    , m_redoPos(doc)
+{
+}
+
 UndoSetNodePos::UndoSetNodePos(Node * node,
                                const MetaPos & newPos,
                                Document * doc)
@@ -36,14 +43,6 @@ UndoSetNodePos::UndoSetNodePos(Node * node,
 
 UndoSetNodePos::~UndoSetNodePos()
 {
-}
-
-UndoSetNodePos::UndoSetNodePos(const QJsonObject & json, Document * doc)
-    : UndoSetNodePos(doc->nodeFromId(Uid(json["uid"].toString(), doc)),
-                     MetaPos(json["pos"].toString(), doc),
-                     doc)
-{
-    Q_ASSERT(m_nodeUid >= 0);
 }
 
 void UndoSetNodePos::undo()
@@ -73,7 +72,13 @@ bool UndoSetNodePos::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetNodePos::toJsonObject() const
+void UndoSetNodePos::loadData(const QJsonObject & json)
+{
+    m_nodeUid = Uid(json["uid"].toString(), document());
+    m_redoPos = MetaPos(json["pos"].toString(), document());
+}
+
+QJsonObject UndoSetNodePos::saveData() const
 {
     QJsonObject json;
     json["type"] = "node-set-pos";

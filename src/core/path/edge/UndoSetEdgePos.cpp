@@ -24,6 +24,13 @@
 namespace tikz {
 namespace core {
 
+UndoSetEdgePos::UndoSetEdgePos(Document * doc)
+    : UndoItem("Set Edge Position", doc)
+    , m_undoPos(doc)
+    , m_redoPos(doc)
+{
+}
+
 UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
                                const MetaPos & newPos,
                                bool isStartNode,
@@ -33,14 +40,6 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
     , m_undoPos(isStartNode ? path->startMetaPos() : path->endMetaPos())
     , m_redoPos(newPos)
     , m_isStart(isStartNode)
-{
-}
-
-UndoSetEdgePos::UndoSetEdgePos(const QJsonObject & json, Document * doc)
-    : UndoSetEdgePos(dynamic_cast<EdgePath *>(doc->pathFromId(Uid(json["uid"].toString(), doc))),
-                     MetaPos(json["pos"].toString(), doc),
-                     json["is-start"].toBool(),
-                     doc)
 {
 }
 
@@ -84,7 +83,14 @@ bool UndoSetEdgePos::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetEdgePos::toJsonObject() const
+void UndoSetEdgePos::loadData(const QJsonObject & json)
+{
+    m_pathUid = Uid(json["uid"].toString(), document());
+    m_redoPos = MetaPos(json["pos"].toString(), document());
+    m_isStart = json["is-start"].toBool();
+}
+
+QJsonObject UndoSetEdgePos::saveData() const
 {
     QJsonObject json;
     json["type"] = "edge-set-pos";

@@ -66,11 +66,30 @@ EdgeStyle::EdgeStyle(const Uid & uid, Document* tikzDocument)
 {
 }
 
-EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
-    : Style(json, tikzDocument)
-    , d(new EdgeStylePrivate())
+EdgeStyle::~EdgeStyle()
+{
+}
+
+tikz::EntityType EdgeStyle::entityType() const
+{
+    return EntityType::EdgeStyle;
+}
+
+void EdgeStyle::setStyle(const Style * other)
 {
     ConfigTransaction transaction(this);
+    Style::setStyle(other);
+    auto edgeStyle = qobject_cast<const EdgeStyle *>(other);
+    if (edgeStyle) {
+        *d = *edgeStyle->d;
+    }
+}
+
+void EdgeStyle::loadData(const QJsonObject & json)
+{
+    ConfigTransaction transaction(this);
+
+    Style::loadData(json);
 
     if (json.contains("radius-x")) {
         setRadiusX(tikz::Value::fromString(json["radius-x"].toString()));
@@ -113,28 +132,9 @@ EdgeStyle::EdgeStyle(const QJsonObject & json, Document* tikzDocument)
     }
 }
 
-EdgeStyle::~EdgeStyle()
+QJsonObject EdgeStyle::saveData() const
 {
-}
-
-tikz::EntityType EdgeStyle::entityType() const
-{
-    return EntityType::EdgeStyle;
-}
-
-void EdgeStyle::setStyle(const Style * other)
-{
-    ConfigTransaction transaction(this);
-    Style::setStyle(other);
-    auto edgeStyle = qobject_cast<const EdgeStyle *>(other);
-    if (edgeStyle) {
-        *d = *edgeStyle->d;
-    }
-}
-
-QJsonObject EdgeStyle::toJson() const
-{
-    QJsonObject json = Style::toJson();
+    QJsonObject json = Style::saveData();
 
     if (radiusXSet()) {
         json["radius-x"] = radiusX().toString();

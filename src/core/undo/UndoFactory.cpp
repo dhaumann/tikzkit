@@ -59,34 +59,33 @@ Document* UndoFactory::document()
     return d->doc;
 }
 
-UndoItem * UndoFactory::createItem(const QJsonObject & json)
+UndoItem * UndoFactory::createItem(const QString & type)
 {
-    const QString type = json["type"].toString();
     if (type.isEmpty()) {
         Q_ASSERT(false);
         return nullptr;
     }
 
     if (type == "node-create") {
-        return new UndoCreateNode(json, document());
+        return new UndoCreateNode(document());
     } else if (type == "node-delete") {
-        return new UndoDeleteNode(json, document());
+        return new UndoDeleteNode(document());
     } else if (type == "node-set-pos") {
-        return new UndoSetNodePos(json, document());
+        return new UndoSetNodePos(document());
     } else if (type == "node-set-style") {
-        return new UndoSetNodeStyle(json, document());
+        return new UndoSetNodeStyle(document());
     } else if (type == "node-set-text") {
-        return new UndoSetNodeText(json, document());
+        return new UndoSetNodeText(document());
     } else if (type == "edge-set-pos") {
-        return new UndoSetEdgePos(json, document());
+        return new UndoSetEdgePos(document());
     } else if (type == "ellipse-set-pos") {
-        return new UndoSetEllipsePos(json, document());
+        return new UndoSetEllipsePos(document());
     } else if (type == "path-create") {
-        return new UndoCreatePath(json, document());
+        return new UndoCreatePath(document());
     } else if (type == "path-delete") {
-        return new UndoDeletePath(json, document());
+        return new UndoDeletePath(document());
     } else if (type == "path-set-style") {
-        return new UndoSetPathStyle(json, document());
+        return new UndoSetPathStyle(document());
     }
 
     Q_ASSERT(false);

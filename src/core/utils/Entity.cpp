@@ -54,17 +54,6 @@ Entity::Entity(const Uid & uid, Document* doc)
     d->uid = uid;
 }
 
-Entity::Entity(const QJsonObject & json, Document* doc)
-    : ConfigObject(doc)
-    , d(new EntityPrivate())
-{
-    d->document = doc;
-
-    if (json.contains("uid")) {
-        d->uid = Uid(json["uid"].toString(), d->document);
-    }
-}
-
 Entity::~Entity()
 {
 }
@@ -79,11 +68,36 @@ tikz::EntityType Entity::entityType() const
     return EntityType::Invalid;
 }
 
-QJsonObject Entity::toJson() const
+void Entity::load(const QJsonObject & json)
+{
+    if (json.contains("uid")) {
+        d->uid = Uid(json["uid"].toString(), d->document);
+    }
+
+    // load payload
+    QJsonObject joData = json["data"].toObject();
+    loadData(joData);
+}
+
+QJsonObject Entity::save() const
 {
     QJsonObject json;
+
     json["uid"] = d->uid.toString();
+
+    // save payload
+    json["data"] = saveData();
+
     return json;
+}
+
+QJsonObject Entity::saveData() const
+{
+    return QJsonObject();
+}
+
+void Entity::loadData(const QJsonObject & json)
+{
 }
 
 Document * Entity::document() const

@@ -24,6 +24,13 @@
 namespace tikz {
 namespace core {
 
+UndoSetEllipsePos::UndoSetEllipsePos(Document * doc)
+    : UndoItem("Set Ellipse Position", doc)
+    , m_redoPos(doc)
+    , m_undoPos(doc)
+{
+}
+
 UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      const MetaPos & newPos,
                                      Document * doc)
@@ -31,13 +38,6 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
     , m_pathUid(path->uid())
     , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
-{
-}
-
-UndoSetEllipsePos::UndoSetEllipsePos(const QJsonObject & json, Document * doc)
-    : UndoSetEllipsePos(static_cast<EllipsePath *>(doc->pathFromId(Uid(json["uid"].toString(), doc))),
-                        MetaPos(json["pos"].toString(), doc),
-                        doc)
 {
 }
 
@@ -72,7 +72,13 @@ bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
     return true;
 }
 
-QJsonObject UndoSetEllipsePos::toJsonObject() const
+void UndoSetEllipsePos::loadData(const QJsonObject & json)
+{
+    m_pathUid = Uid(json["uid"].toString(), document());
+    m_redoPos = MetaPos(json["pos"].toString(), document());
+}
+
+QJsonObject UndoSetEllipsePos::saveData() const
 {
     QJsonObject json;
     json["type"] = "ellipse-set-pos";

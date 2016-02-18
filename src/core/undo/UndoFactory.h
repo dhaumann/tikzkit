@@ -20,6 +20,8 @@
 #ifndef TIKZ_UNDO_FACTORY_H
 #define TIKZ_UNDO_FACTORY_H
 
+#include <QString>
+
 class QJsonObject;
 
 namespace tikz {
@@ -54,7 +56,7 @@ public:
     /**
      * Creates an undo item from the @p json object.
      */
-    UndoItem * createItem(const QJsonObject & json);
+    UndoItem * createItem(const QString & type);
 
 private:
     /**

@@ -23,17 +23,15 @@
 namespace tikz {
 namespace core {
 
+UndoCreatePath::UndoCreatePath(Document * doc)
+    : UndoItem("Create Path", doc)
+{
+}
+
 UndoCreatePath::UndoCreatePath(PathType type, const Uid & pathUid, Document * doc)
     : UndoItem("Create Path", doc)
     , m_pathUid(pathUid)
     , m_type(type)
-{
-}
-
-UndoCreatePath::UndoCreatePath(const QJsonObject & json, Document * doc)
-    : UndoCreatePath(toEnum<PathType>(json["path-type"].toString()),
-                     Uid(json["uid"].toString(), doc),
-                     doc)
 {
 }
 
@@ -51,7 +49,13 @@ void UndoCreatePath::redo()
     document()->createPath(m_type, m_pathUid);
 }
 
-QJsonObject UndoCreatePath::toJsonObject() const
+void UndoCreatePath::loadData(const QJsonObject & json)
+{
+    m_type = toEnum<PathType>(json["path-type"].toString());
+    m_pathUid = Uid(json["uid"].toString(), document());
+}
+
+QJsonObject UndoCreatePath::saveData() const
 {
     QJsonObject json;
     json["type"] = "path-create";
