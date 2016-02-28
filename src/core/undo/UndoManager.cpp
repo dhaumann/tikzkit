@@ -223,15 +223,32 @@ void UndoManager::addUndoItem(UndoItem * item)
     startTransaction();
     Q_ASSERT(d->currentUndoGroup != nullptr);
 
-    // execute redo action
-    const bool wasActive = document()->setUndoActive(true);
-    item->redo();
-    document()->setUndoActive(wasActive);
+    // add to current group.
+    // WARNING: This might merge the item with an already existing item.
+    //          Therefore the item pointer may be a dangling pointer afterwards!
+    d->currentUndoGroup->addUndoItem(item);
+
+    commitTransaction();
+}
+
+void UndoManager::addRedoItem(UndoItem * item)
+{
+    Q_ASSERT(item);
+
+    // if a transaction was canceled, there is no pending undo/redo group.
+    // In this case, just delete the item.
+    if (d->transactionRefCount > 0 && !d->currentUndoGroup) {
+        delete item;
+        return;
+    }
+
+    startTransaction();
+    Q_ASSERT(d->currentUndoGroup != nullptr);
 
     // add to current group.
     // WARNING: This might merge the item with an already existing item.
     //          Therefore the item pointer may be a dangling pointer afterwards!
-    d->currentUndoGroup->addItem(item);
+    d->currentUndoGroup->addRedoItem(item);
 
     commitTransaction();
 }

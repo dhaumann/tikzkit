@@ -29,20 +29,17 @@ namespace core {
 class UndoGroupPrivate
 {
 public:
-    /**
-     * Pointer to the undo manager.
-     */
+    //! Pointer to the undo manager.
     UndoManager * manager = nullptr;
 
-    /**
-     * Name of the undo group.
-     */
+    //! Name of the undo group.
     QString text;
 
-    /**
-     * list of items contained
-     */
-    QList<UndoItem *> items;
+    //! list of undo items
+    QVector<UndoItem *> undoItems;
+
+    //! list of redo items
+    QVector<UndoItem *> redoItems;
 };
 
 UndoGroup::UndoGroup(const QString & text, UndoManager * manager)
@@ -54,7 +51,11 @@ UndoGroup::UndoGroup(const QString & text, UndoManager * manager)
 
 UndoGroup::~UndoGroup()
 {
-    qDeleteAll(d->items);
+    qDeleteAll(d->undoItems);
+    qDeleteAll(d->redoItems);
+
+    d->undoItems.clear();
+    d->redoItems.clear();
 
     delete d;
 }
@@ -71,53 +72,69 @@ QString UndoGroup::text() const
 
 bool UndoGroup::isEmpty() const
 {
-    return d->items.isEmpty();
+    return d->undoItems.isEmpty();
 }
 
 void UndoGroup::undo()
 {
-    for (int i = d->items.size() - 1; i >= 0; --i) {
-        d->items[i]->undo();
+    for (int i = d->undoItems.size() - 1; i >= 0; --i) {
+        d->undoItems[i]->undo();
     }
 }
 
 void UndoGroup::redo()
 {
-    for (int i = 0; i < d->items.size(); ++i) {
-        d->items[i]->redo();
+    for (int i = 0; i < d->redoItems.size(); ++i) {
+        d->redoItems[i]->redo();
     }
 }
 
-void UndoGroup::addItem(UndoItem *item)
+void UndoGroup::addUndoItem(UndoItem *item)
 {
     // only try merge, if undo item id's match
-    const int lastUndoId = d->items.isEmpty() ? -1 : d->items.last()->id();
+    const int lastUndoId = d->undoItems.isEmpty() ? -1 : d->undoItems.last()->id();
     const int newUndoId = item->id();
-    if (lastUndoId >= 0 && lastUndoId == newUndoId && d->items.last()->mergeWith(item)) {
+    if (lastUndoId >= 0 && lastUndoId == newUndoId && d->undoItems.last()->mergeWith(item)) {
         delete item;
     } else {
         // add to this undo group
-        d->items.append(item);
+        d->undoItems.append(item);
 
         // associate the UndoItem's group with this UndoGroup
         item->setGroup(this);
     }
 }
 
-QList<UndoItem *> UndoGroup::undoItems() const
+void UndoGroup::addRedoItem(UndoItem *item)
 {
-    return d->items;
+    // only try merge, if redo item id's match
+    const int lastRedoId = d->redoItems.isEmpty() ? -1 : d->redoItems.last()->id();
+    const int newRedoId = item->id();
+    if (lastRedoId >= 0 && lastRedoId == newRedoId && d->redoItems.last()->mergeWith(item)) {
+        delete d->redoItems.back();
+        d->redoItems.pop_back();
+    }
+    // add to this undo group
+    d->redoItems.append(item);
+
+    // associate the UndoItem's group with this UndoGroup
+    item->setGroup(this);
+}
+
+QVector<UndoItem *> UndoGroup::undoItems() const
+{
+    return d->undoItems;
 }
 
 int UndoGroup::count() const
 {
-    return d->items.count();
+    return d->undoItems.count();
 }
 
 void UndoGroup::printTree()
 {
     QString str = "group: " + text();
-    for (auto item : d->items) {
+    for (auto item : d->undoItems) {
         str += " -->" + item->text();
     }
     qDebug() << str;

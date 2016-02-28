@@ -150,9 +150,14 @@ class TIKZCORE_EXPORT Document : public ConfigObject
     //
     public:
         /**
-         * Get the undo stack of this document.
+         * Adds undoItem to the undo stack of this document.
          */
         void addUndoItem(tikz::core::UndoItem * undoItem);
+
+        /**
+         * Adds redoItem to the redo stack of this document.
+         */
+        void addRedoItem(tikz::core::UndoItem * redoItem);
 
         /**
          * Begin undo group @p name.

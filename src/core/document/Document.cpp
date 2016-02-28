@@ -340,6 +340,11 @@ void Document::addUndoItem(tikz::core::UndoItem * undoItem)
     d->undoManager->addUndoItem(undoItem);
 }
 
+void Document::addRedoItem(tikz::core::UndoItem * redoItem)
+{
+    d->undoManager->addRedoItem(redoItem);
+}
+
 void Document::beginTransaction(const QString & name)
 {
     // track changes

@@ -102,9 +102,14 @@ public Q_SLOTS:
     void clear();
 
     /**
-     * Add the undo item @p item to the current undo group.
+     * Add the undo item @p item to the current group.
      */
     void addUndoItem(UndoItem *item);
+
+    /**
+     * Add the redo item @p item to the current group.
+     */
+    void addRedoItem(UndoItem *item);
 
 public:
     /**

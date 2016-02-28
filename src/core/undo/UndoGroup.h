@@ -75,18 +75,26 @@ public:
 
 public:
     /**
-     * Add @p item to the undo group.
+     * Add @p item to the undo stack of this group.
      * If possible, @p item is merged with the last item in this undo group.
      * If a merge was performed, the @p item pointer is invalid afterwards,
      * so never access @p item after adding an item to a group.
      */
-    void addItem(UndoItem * item);
+    void addUndoItem(UndoItem * item);
+
+    /**
+     * Add @p item to the redo stack of this group.
+     * If possible, @p item is merged with the last item in this undo group.
+     * If a merge was performed, the @p item pointer is invalid afterwards,
+     * so never access @p item after adding an item to a group.
+     */
+    void addRedoItem(UndoItem * item);
 
     /**
      * Returns a list of all undo items.
      * You must not delete the pointers to the UndoItem%s.
      */
-    QList<UndoItem *> undoItems() const;
+    QVector<UndoItem *> undoItems() const;
 
     /**
      * Returns the number of undo items;
