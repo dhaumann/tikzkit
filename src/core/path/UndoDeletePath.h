@@ -21,8 +21,7 @@
 #define TIKZ_UNDO_DELETE_PATH_H
 
 #include "UndoItem.h"
-#include "Path.h"
-#include "EdgeStyle.h"
+#include "Uid.h"
 
 namespace tikz {
 namespace core {
@@ -46,14 +45,14 @@ class UndoDeletePath : public UndoItem
         virtual ~UndoDeletePath();
 
         /**
-         * Undo: delete node again.
+         * Returns "path-delete".
          */
-        void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: create node again.
+         * Delete path.
          */
-        void redo() override;
+        void apply() override;
 
     protected:
         /**
@@ -71,16 +70,6 @@ class UndoDeletePath : public UndoItem
          * The unique Edge id.
          */
         Uid m_pathUid;
-
-        /**
-         * Path type.
-         */
-        PathType m_type;
-
-        /**
-         * The edge style of the created edge
-         */
-        EdgeStyle m_style;
 };
 
 }

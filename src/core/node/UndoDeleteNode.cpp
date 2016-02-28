@@ -18,8 +18,6 @@
  */
 
 #include "UndoDeleteNode.h"
-#include "Node.h"
-#include "NodeStyle.h"
 #include "Document.h"
 
 namespace tikz {
@@ -34,34 +32,18 @@ UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
     : UndoItem("Delete Node", doc)
     , m_nodeUid(nodeUid)
 {
-    // get node to save data
-    Node* node = document()->nodeFromId(m_nodeUid);
-    Q_ASSERT(node);
-
-    // save properties
-    m_pos  = node->pos();
-    m_text = node->text();
-    m_style.setStyle(node->style());
 }
 
 UndoDeleteNode::~UndoDeleteNode()
 {
 }
 
-void UndoDeleteNode::undo()
+const char * UndoDeleteNode::type() const
 {
-    document()->createNode(m_nodeUid);
-
-    Node* node = document()->nodeFromId(m_nodeUid);
-    Q_ASSERT(node);
-
-    ConfigTransaction transaction(node);
-    node->setPos(m_pos);
-    node->setText(m_text);
-    node->style()->setStyle(&m_style);
+    return "node-delete";
 }
 
-void UndoDeleteNode::redo()
+void UndoDeleteNode::apply()
 {
     document()->deleteNode(m_nodeUid);
 }
@@ -74,7 +56,6 @@ void UndoDeleteNode::loadData(const QJsonObject & json)
 QJsonObject UndoDeleteNode::saveData() const
 {
     QJsonObject json;
-    json["type"] = "node-delete";
     json["uid"] = m_nodeUid.toString();
     return json;
 }

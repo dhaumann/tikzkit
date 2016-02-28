@@ -48,14 +48,14 @@ class UndoCreatePath : public UndoItem
         virtual ~UndoCreatePath();
 
         /**
-         * Undo: delete node again.
+         * Returns "path-create".
          */
-        void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: create node again.
+         * Apply: create path again.
          */
-        void redo() override;
+        void apply() override;
 
     protected:
         /**

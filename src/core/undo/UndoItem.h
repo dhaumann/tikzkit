@@ -65,14 +65,16 @@ public:
     QString text() const;
 
     /**
-     * Apply the redo operation.
+     * Returns the type of this undo/redo item. The type must be unique,
+     * such as "entity-create" or "entity-change", since it is used by the
+     * undo factory to create items.
      */
-    virtual void redo() = 0;
+    virtual const char * type() const = 0;
 
     /**
-     * Apply the undo operation.
+     * Apply the operation.
      */
-    virtual void undo() = 0;
+    virtual void apply() = 0;
 
     /**
      * Returns the uniq undo item identifier of this undo item.

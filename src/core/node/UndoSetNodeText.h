@@ -50,6 +50,11 @@ class UndoSetNodeText : public UndoItem
         virtual ~UndoSetNodeText();
 
         /**
+         * Returns "node-set-text".
+         */
+        const char * type() const override;
+
+        /**
          * Return uniq undo item id.
          */
         int id() const override {
@@ -57,14 +62,9 @@ class UndoSetNodeText : public UndoItem
         }
 
         /**
-         * Undo: delete node again.
+         * Set node text.
          */
-        void undo() override;
-
-        /**
-         * Redo: create node again.
-         */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -89,14 +89,9 @@ class UndoSetNodeText : public UndoItem
         Uid m_nodeUid;
 
         /**
-         * Undo text.
+         * text.
          */
-        QString m_undoText;
-
-        /**
-         * Redo text.
-         */
-        QString m_redoText;
+        QString m_text;
 };
 
 }

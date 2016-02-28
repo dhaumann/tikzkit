@@ -48,6 +48,11 @@ class UndoSetNodeStyle : public UndoItem
         virtual ~UndoSetNodeStyle();
 
         /**
+         * Returns "node-set-style".
+         */
+        const char * type() const override;
+
+        /**
          * Return uniq undo item id.
          */
         int id() const override {
@@ -55,14 +60,9 @@ class UndoSetNodeStyle : public UndoItem
         }
 
         /**
-         * Undo: add node again.
+         * Set node style.
          */
-        void undo() override;
-
-        /**
-         * Redo: delete node again.
-         */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -87,14 +87,9 @@ class UndoSetNodeStyle : public UndoItem
         Uid m_nodeId;
 
         /**
-         * The node style before the change
-         */
-        NodeStyle m_undoStyle;
-
-        /**
          * The node style after the change
          */
-        NodeStyle m_redoStyle;
+        NodeStyle m_style;
 };
 
 }

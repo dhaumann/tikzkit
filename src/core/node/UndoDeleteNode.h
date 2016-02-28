@@ -21,8 +21,7 @@
 #define TIKZ_UNDO_DELETE_NODE_H
 
 #include "UndoItem.h"
-#include "Pos.h"
-#include <NodeStyle.h>
+#include "Uid.h"
 
 namespace tikz {
 namespace core {
@@ -49,14 +48,14 @@ class UndoDeleteNode : public UndoItem
         virtual ~UndoDeleteNode();
 
         /**
-         * Undo: add node again.
+         * Returns "node-delete".
          */
-        virtual void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: delete node again.
+         * Apply: delete node.
          */
-        virtual void redo() override;
+        void apply() override;
 
     protected:
         /**
@@ -74,21 +73,6 @@ class UndoDeleteNode : public UndoItem
          * The unique Node id.
          */
         Uid m_nodeUid;
-
-        /**
-         * The node position.
-         */
-        tikz::Pos m_pos;
-
-        /**
-         * The node text.
-         */
-        QString m_text;
-
-        /**
-         * The node style of the created node
-         */
-        NodeStyle m_style;
 };
 
 }

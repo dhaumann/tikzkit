@@ -26,8 +26,7 @@ namespace core {
 
 UndoSetEllipsePos::UndoSetEllipsePos(Document * doc)
     : UndoItem("Set Ellipse Position", doc)
-    , m_redoPos(doc)
-    , m_undoPos(doc)
+    , m_pos(doc)
 {
 }
 
@@ -36,8 +35,7 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      Document * doc)
     : UndoItem("Set Ellipse Position", doc)
     , m_pathUid(path->uid())
-    , m_redoPos(newPos)
-    , m_undoPos(path->metaPos())
+    , m_pos(newPos)
 {
 }
 
@@ -45,45 +43,36 @@ UndoSetEllipsePos::~UndoSetEllipsePos()
 {
 }
 
-void UndoSetEllipsePos::undo()
+const char * UndoSetEllipsePos::type() const
 {
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
-    Q_ASSERT(path != 0);
-
-    path->setMetaPos(m_undoPos);
+    return "ellipse-set-pos";
 }
 
-void UndoSetEllipsePos::redo()
+void UndoSetEllipsePos::apply()
 {
     EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
-    path->setMetaPos(m_redoPos);
+    path->setMetaPos(m_pos);
 }
 
 bool UndoSetEllipsePos::mergeWith(const UndoItem * command)
 {
     auto other = static_cast<const UndoSetEllipsePos*>(command);
-    if (m_pathUid != other->m_pathUid) {
-        return false;
-    }
-
-    m_redoPos = other->m_redoPos;
-    return true;
+    return m_pathUid == other->m_pathUid;
 }
 
 void UndoSetEllipsePos::loadData(const QJsonObject & json)
 {
     m_pathUid = Uid(json["uid"].toString(), document());
-    m_redoPos = MetaPos(json["pos"].toString(), document());
+    m_pos = MetaPos(json["pos"].toString(), document());
 }
 
 QJsonObject UndoSetEllipsePos::saveData() const
 {
     QJsonObject json;
-    json["type"] = "ellipse-set-pos";
     json["uid"] = m_pathUid.toString();
-    json["pos"] = m_redoPos.toString();
+    json["pos"] = m_pos.toString();
     return json;
 }
 

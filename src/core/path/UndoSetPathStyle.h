@@ -48,6 +48,11 @@ class UndoSetPathStyle : public UndoItem
         virtual ~UndoSetPathStyle();
 
         /**
+         * Returns "path-set-style".
+         */
+        const char * type() const override;
+
+        /**
          * Return uniq undo item id.
          */
         int id() const override {
@@ -55,14 +60,9 @@ class UndoSetPathStyle : public UndoItem
         }
 
         /**
-         * Undo: add node again.
+         * Set style path.
          */
-        void undo() override;
-
-        /**
-         * Redo: delete node again.
-         */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -87,14 +87,9 @@ protected:
         Uid m_pathUid;
 
         /**
-         * The node style before the change
-         */
-        EdgeStyle m_undoStyle;
-
-        /**
          * The node style after the change
          */
-        EdgeStyle m_redoStyle;
+        EdgeStyle m_style;
 };
 
 }

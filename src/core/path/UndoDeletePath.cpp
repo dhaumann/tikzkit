@@ -19,8 +19,6 @@
 
 #include "UndoDeletePath.h"
 #include "Document.h"
-#include "Path.h"
-#include "Node.h"
 
 namespace tikz {
 namespace core {
@@ -34,32 +32,18 @@ UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
     : UndoItem("Delete Path", doc)
     , m_pathUid(pathUid)
 {
-    // get path to save data
-    Path* path = document()->pathFromId(m_pathUid);
-    Q_ASSERT(path);
-
-    m_type = path->type();
-
-    // save properties
-    m_style.setStyle(path->style());
 }
 
 UndoDeletePath::~UndoDeletePath()
 {
 }
 
-void UndoDeletePath::undo()
+const char* UndoDeletePath::type() const
 {
-    document()->createPath(m_type, m_pathUid);
-
-    Path * path = document()->pathFromId(m_pathUid);
-    Q_ASSERT(path);
-
-    ConfigTransaction transaction(path);
-    path->style()->setStyle(&m_style);
+    return "path-delete";
 }
 
-void UndoDeletePath::redo()
+void UndoDeletePath::apply()
 {
     document()->deletePath(m_pathUid);
 }
@@ -72,7 +56,6 @@ void UndoDeletePath::loadData(const QJsonObject & json)
 QJsonObject UndoDeletePath::saveData() const
 {
     QJsonObject json;
-    json["type"] = "path-delete";
     json["uid"] = m_pathUid.toString();
     return json;
 }

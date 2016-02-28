@@ -59,14 +59,14 @@ class UndoSetEdgePos : public UndoItem
         }
 
         /**
-         * Undo: disconnect edge again.
+         * Returns "edge-set-pos".
          */
-        void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: connect edge
+         * Set edge position.
          */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -91,14 +91,9 @@ class UndoSetEdgePos : public UndoItem
         Uid m_pathUid;
 
         /**
-         * old anchor of the connection
-         */
-        tikz::core::MetaPos m_undoPos;
-
-        /**
          * new anchor of the connection
          */
-        tikz::core::MetaPos m_redoPos;
+        tikz::core::MetaPos m_edgePos;
 
         /**
          * Is it start or end node?

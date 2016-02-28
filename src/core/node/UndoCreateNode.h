@@ -48,14 +48,14 @@ class UndoCreateNode : public UndoItem
         virtual ~UndoCreateNode();
 
         /**
-         * Undo: delete node again.
+         * Returns "node-create".
          */
-        virtual void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: create node again.
+         * Apply: create node again.
          */
-        virtual void redo() override;
+        void apply() override;
 
     protected:
         /**

@@ -34,58 +34,43 @@ UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style,
     : UndoItem("Set Node Style", doc)
     , m_nodeId(nodeUid)
 {
-    // get node to save data
-    Node* node = document()->nodeFromId(m_nodeId);
-    Q_ASSERT(node);
-
-    // save properties
-    m_undoStyle.setStyle(node->style());
-    m_redoStyle.setStyle(&style);
+    m_style.setStyle(&style);
 }
 
 UndoSetNodeStyle::~UndoSetNodeStyle()
 {
 }
 
-void UndoSetNodeStyle::undo()
+const char * UndoSetNodeStyle::type() const
 {
-    Node* node = document()->nodeFromId(m_nodeId);
-    Q_ASSERT(node);
-    node->setStyle(m_undoStyle);
+    return "node-set-style";
 }
 
-void UndoSetNodeStyle::redo()
+void UndoSetNodeStyle::apply()
 {
     Node* node = document()->nodeFromId(m_nodeId);
     Q_ASSERT(node);
-    node->setStyle(m_redoStyle);
+    node->setStyle(m_style);
 }
 
 bool UndoSetNodeStyle::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetNodeStyle*>(command);
-    if (other->m_nodeId != m_nodeId) {
-        return false;
-    }
-
-    m_redoStyle.setStyle(&other->m_redoStyle);
-
-    return true;
+    return other->m_nodeId == m_nodeId;
 }
 
 void UndoSetNodeStyle::loadData(const QJsonObject & json)
 {
     m_nodeId = Uid(json["uid"].toString(), document());
-    m_redoStyle.load(json["style"].toObject());
+    m_style.load(json["style"].toObject());
 }
 
 QJsonObject UndoSetNodeStyle::saveData() const
 {
     QJsonObject json;
-    json["type"] = "node-set-style";
     json["uid"] = m_nodeId.toString();
-    json["style"] = m_redoStyle.save();
+    json["style"] = m_style.save();
     return json;
 }
 

@@ -39,12 +39,12 @@ UndoCreatePath::~UndoCreatePath()
 {
 }
 
-void UndoCreatePath::undo()
+const char * UndoCreatePath::type() const
 {
-    document()->deletePath(m_pathUid);
+    return "path-create";
 }
 
-void UndoCreatePath::redo()
+void UndoCreatePath::apply()
 {
     document()->createPath(m_type, m_pathUid);
 }
@@ -58,7 +58,6 @@ void UndoCreatePath::loadData(const QJsonObject & json)
 QJsonObject UndoCreatePath::saveData() const
 {
     QJsonObject json;
-    json["type"] = "path-create";
     json["uid"] = m_pathUid.toString();
     json["path-type"] = toString(m_type);
     return json;

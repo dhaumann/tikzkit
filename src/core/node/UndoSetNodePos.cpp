@@ -26,8 +26,7 @@ namespace core {
 
 UndoSetNodePos::UndoSetNodePos(Document * doc)
     : UndoItem("Move Node", doc)
-    , m_undoPos(doc)
-    , m_redoPos(doc)
+    , m_pos(doc)
 {
 }
 
@@ -36,8 +35,7 @@ UndoSetNodePos::UndoSetNodePos(Node * node,
                                Document * doc)
     : UndoItem("Move Node", doc)
     , m_nodeUid(node->uid())
-    , m_undoPos(node->metaPos())
-    , m_redoPos(newPos)
+    , m_pos(newPos)
 {
 }
 
@@ -45,45 +43,36 @@ UndoSetNodePos::~UndoSetNodePos()
 {
 }
 
-void UndoSetNodePos::undo()
+const char * UndoSetNodePos::type() const
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
-    Q_ASSERT(node);
-
-    node->setMetaPos(m_undoPos);
+    return "node-set-pos";
 }
 
-void UndoSetNodePos::redo()
+void UndoSetNodePos::apply()
 {
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
-    node->setMetaPos(m_redoPos);
+    node->setMetaPos(m_pos);
 }
 
 bool UndoSetNodePos::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetNodePos*>(command);
-    if (m_nodeUid != other->m_nodeUid) {
-        return false;
-    }
-
-    m_redoPos = other->m_redoPos;
-    return true;
+    return m_nodeUid == other->m_nodeUid;
 }
 
 void UndoSetNodePos::loadData(const QJsonObject & json)
 {
     m_nodeUid = Uid(json["uid"].toString(), document());
-    m_redoPos = MetaPos(json["pos"].toString(), document());
+    m_pos = MetaPos(json["pos"].toString(), document());
 }
 
 QJsonObject UndoSetNodePos::saveData() const
 {
     QJsonObject json;
-    json["type"] = "node-set-pos";
     json["uid"] = m_nodeUid.toString();
-    json["pos"] = m_redoPos.toString();
+    json["pos"] = m_pos.toString();
     return json;
 }
 

@@ -51,6 +51,11 @@ class UndoSetNodePos : public UndoItem
         virtual ~UndoSetNodePos();
 
         /**
+         * Returns "node-set-pos".
+         */
+        const char * type() const override;
+
+        /**
          * Return uniq undo item id.
          */
         int id() const override {
@@ -58,14 +63,9 @@ class UndoSetNodePos : public UndoItem
         }
 
         /**
-         * Undo: delete node again.
+         * Set node position.
          */
-        void undo() override;
-
-        /**
-         * Redo: create node again.
-         */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -90,14 +90,9 @@ class UndoSetNodePos : public UndoItem
         Uid m_nodeUid;
 
         /**
-         * Undo position.
-         */
-        tikz::core::MetaPos m_undoPos;
-
-        /**
          * Redo position.
          */
-        tikz::core::MetaPos m_redoPos;
+        tikz::core::MetaPos m_pos;
 };
 
 }

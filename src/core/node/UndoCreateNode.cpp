@@ -38,12 +38,12 @@ UndoCreateNode::~UndoCreateNode()
 {
 }
 
-void UndoCreateNode::undo()
+const char * UndoCreateNode::type() const
 {
-    document()->deleteNode(m_nodeUid);
+    return "node-create";
 }
 
-void UndoCreateNode::redo()
+void UndoCreateNode::apply()
 {
     document()->createNode(m_nodeUid);
 }
@@ -56,7 +56,6 @@ void UndoCreateNode::loadData(const QJsonObject & json)
 QJsonObject UndoCreateNode::saveData() const
 {
     QJsonObject json;
-    json["type"] = "node-create";
     json["uid"] = m_nodeUid.toString();
     return json;
 }

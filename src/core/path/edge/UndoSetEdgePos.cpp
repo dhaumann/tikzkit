@@ -26,8 +26,7 @@ namespace core {
 
 UndoSetEdgePos::UndoSetEdgePos(Document * doc)
     : UndoItem("Set Edge Position", doc)
-    , m_undoPos(doc)
-    , m_redoPos(doc)
+    , m_edgePos(doc)
 {
 }
 
@@ -37,8 +36,7 @@ UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
                                Document * doc)
     : UndoItem("Set Edge Position", doc)
     , m_pathUid(path->uid())
-    , m_undoPos(isStartNode ? path->startMetaPos() : path->endMetaPos())
-    , m_redoPos(newPos)
+    , m_edgePos(newPos)
     , m_isStart(isStartNode)
 {
 }
@@ -47,27 +45,20 @@ UndoSetEdgePos::~UndoSetEdgePos()
 {
 }
 
-void UndoSetEdgePos::undo()
+const char* UndoSetEdgePos::type() const
 {
-    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
-    Q_ASSERT(path != 0);
-
-    if (m_isStart) {
-        path->setStartMetaPos(m_undoPos);
-    } else {
-        path->setEndMetaPos(m_undoPos);
-    }
+    return "edge-set-pos";
 }
 
-void UndoSetEdgePos::redo()
+void UndoSetEdgePos::apply()
 {
     EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
     Q_ASSERT(path != 0);
 
     if (m_isStart) {
-        path->setStartMetaPos(m_redoPos);
+        path->setStartMetaPos(m_edgePos);
     } else {
-        path->setEndMetaPos(m_redoPos);
+        path->setEndMetaPos(m_edgePos);
     }
 }
 
@@ -75,27 +66,21 @@ bool UndoSetEdgePos::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetEdgePos*>(command);
-    if (m_pathUid != other->m_pathUid || m_isStart != other->m_isStart) {
-        return false;
-    }
-
-    m_redoPos = other->m_redoPos;
-    return true;
+    return m_pathUid == other->m_pathUid && m_isStart == other->m_isStart;
 }
 
 void UndoSetEdgePos::loadData(const QJsonObject & json)
 {
     m_pathUid = Uid(json["uid"].toString(), document());
-    m_redoPos = MetaPos(json["pos"].toString(), document());
+    m_edgePos = MetaPos(json["pos"].toString(), document());
     m_isStart = json["is-start"].toBool();
 }
 
 QJsonObject UndoSetEdgePos::saveData() const
 {
     QJsonObject json;
-    json["type"] = "edge-set-pos";
     json["uid"] = m_pathUid.toString();
-    json["pos"] = m_redoPos.toString();
+    json["pos"] = m_edgePos.toString();
     json["is-start"] = m_isStart;
     return json;
 }

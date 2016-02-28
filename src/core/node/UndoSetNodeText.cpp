@@ -32,56 +32,44 @@ UndoSetNodeText::UndoSetNodeText(Document * doc)
 UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, Document * doc)
     : UndoItem("Set Node Text", doc)
     , m_nodeUid(nodeUid)
+    , m_text(newText)
 {
-    Node * node = doc->nodeFromId(m_nodeUid);
-    Q_ASSERT(node);
-
-    m_undoText = node->text();
-    m_redoText = newText;
 }
 
 UndoSetNodeText::~UndoSetNodeText()
 {
 }
 
-void UndoSetNodeText::undo()
+const char * UndoSetNodeText::type() const
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
-    Q_ASSERT(node);
-    node->setText(m_undoText);
+    return "node-set-text";
 }
 
-void UndoSetNodeText::redo()
+void UndoSetNodeText::apply()
 {
     Node * node = document()->nodeFromId(m_nodeUid);
     Q_ASSERT(node);
-    node->setText(m_redoText);
+    node->setText(m_text);
 }
 
 bool UndoSetNodeText::mergeWith(const UndoItem * command)
 {
     // only merge when command is of correct type
     auto other = static_cast<const UndoSetNodeText*>(command);
-    if (m_nodeUid != other->m_nodeUid) {
-        return false;
-    }
-
-    m_redoText = other->m_redoText;
-    return true;
+    return m_nodeUid == other->m_nodeUid;
 }
 
 void UndoSetNodeText::loadData(const QJsonObject & json)
 {
     m_nodeUid = Uid(json["uid"].toString(), document());
-    m_redoText = json["text"].toString();
+    m_text = json["text"].toString();
 }
 
 QJsonObject UndoSetNodeText::saveData() const
 {
     QJsonObject json;
-    json["type"] = "node-set-text";
     json["uid"] = m_nodeUid.toString();
-    json["text"] = m_redoText;
+    json["text"] = m_text;
     return json;
 }
 

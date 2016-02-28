@@ -78,14 +78,14 @@ bool UndoGroup::isEmpty() const
 void UndoGroup::undo()
 {
     for (int i = d->undoItems.size() - 1; i >= 0; --i) {
-        d->undoItems[i]->undo();
+        d->undoItems[i]->apply();
     }
 }
 
 void UndoGroup::redo()
 {
     for (int i = 0; i < d->redoItems.size(); ++i) {
-        d->redoItems[i]->redo();
+        d->redoItems[i]->apply();
     }
 }
 

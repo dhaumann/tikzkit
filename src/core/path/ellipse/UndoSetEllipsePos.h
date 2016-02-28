@@ -58,14 +58,14 @@ class UndoSetEllipsePos : public UndoItem
         }
 
         /**
-         * Undo: disconnect edge again.
+         * Returns "node-create".
          */
-        void undo() override;
+        const char * type() const override;
 
         /**
-         * Redo: connect edge
+         * Set position.
          */
-        void redo() override;
+        void apply() override;
 
         /**
          * Merge undo items, if possible.
@@ -90,14 +90,9 @@ class UndoSetEllipsePos : public UndoItem
         Uid m_pathUid;
 
         /**
-         * old anchor of the connection
-         */
-        tikz::core::MetaPos m_undoPos;
-
-        /**
          * new anchor of the connection
          */
-        tikz::core::MetaPos m_redoPos;
+        tikz::core::MetaPos m_pos;
 };
 
 }

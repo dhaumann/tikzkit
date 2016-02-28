@@ -34,59 +34,45 @@ UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style,
     : UndoItem("Change Path Style", doc)
     , m_pathUid(pathUid)
 {
-    // get path to save data
-    Path* path = document()->pathFromId(m_pathUid);
-    Q_ASSERT(path);
-
     // save properties
-    m_undoStyle.setStyle(path->style());
-    m_redoStyle.setStyle(&style);
+    m_style.setStyle(&style);
 }
 
 UndoSetPathStyle::~UndoSetPathStyle()
 {
 }
 
-void UndoSetPathStyle::undo()
+const char * UndoSetPathStyle::type() const
 {
-    Path* path = document()->pathFromId(m_pathUid);
-    Q_ASSERT(path);
-
-    path->setStyle(m_undoStyle);
+    return "path-set-style";
 }
 
-void UndoSetPathStyle::redo()
+void UndoSetPathStyle::apply()
 {
     Path* path = document()->pathFromId(m_pathUid);
     Q_ASSERT(path);
 
-    path->setStyle(m_redoStyle);
+    path->setStyle(m_style);
 }
 
 bool UndoSetPathStyle::mergeWith(const UndoItem * command)
 {
-        // only merge when command is of correct type
+    // only merge when command is of correct type
     auto other = static_cast<const UndoSetPathStyle*>(command);
-    if (m_pathUid != other->m_pathUid) {
-        return false;
-    }
-
-    m_redoStyle.setStyle(&other->m_redoStyle);
-    return true;
+    return m_pathUid == other->m_pathUid;
 }
 
 void UndoSetPathStyle::loadData(const QJsonObject & json)
 {
     m_pathUid = Uid(json["uid"].toString(), document());
-    m_redoStyle.load(json["style"].toObject());
+    m_style.load(json["style"].toObject());
 }
 
 QJsonObject UndoSetPathStyle::saveData() const
 {
     QJsonObject json;
-    json["type"] = "path-set-style";
     json["uid"] = m_pathUid.toString();
-    json["style"] = m_redoStyle.save();
+    json["style"] = m_style.save();
     return json;
 }
 
