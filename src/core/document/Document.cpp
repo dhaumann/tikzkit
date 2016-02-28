@@ -266,22 +266,8 @@ bool Document::saveAs(const QUrl & targetUrl)
 
     if (targetUrl.isLocalFile()) {
 
-        // first serialize to json document
-        QJsonArray jsonHistory;
-        for (auto group : d->undoManager->undoGroups()) {
-            QJsonArray groupItems;
-            for (auto item : group->undoItems()) {
-                groupItems.append(item->save());
-            }
-
-            QJsonObject jsonGroup;
-            jsonGroup["text"] = group->text();
-            jsonGroup["items"] = groupItems;
-            jsonHistory.append(jsonGroup);
-        }
-
         QJsonObject json;
-        json["history"] = jsonHistory;
+        json["history"] = d->undoManager->save();
         json["preferred-unit"] = toString(preferredUnit());
 
         // now save data

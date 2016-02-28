@@ -25,6 +25,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QPointer>
+#include <QJsonArray>
 
 namespace tikz {
 namespace core {
@@ -490,6 +491,28 @@ bool UndoManager::removeRows(int row, int count, const QModelIndex & parent)
 
     // for now, inserting is only supported at top-level
     return true;
+}
+
+void UndoManager::load(const QJsonObject & json)
+{
+    QJsonArray array = json["undo-groups"].toArray();
+    foreach (auto group, array) {
+        UndoGroup * undoGroup = new UndoGroup(QString(), this);
+        undoGroup->load(group.toObject());
+        d->redoItems.push_back(undoGroup);
+    }
+}
+
+QJsonObject UndoManager::save() const
+{
+    QJsonArray groupItems;
+    foreach (auto group, undoGroups()) {
+        groupItems.append(group->save());
+    }
+
+    QJsonObject json;
+    json["undo-groups"] = groupItems;
+    return json;
 }
 
 void UndoManager::printTree()

@@ -101,6 +101,20 @@ public:
      */
     int count() const;
 
+//
+// serialization
+//
+public:
+    /**
+     * Load the UndoGroup's items from the @p json object.
+     */
+    void load(const QJsonObject & json);
+
+    /**
+     * Save the UndoGroup's items.
+     */
+    QJsonObject save() const;
+
 public:
     // debugging
     void printTree();

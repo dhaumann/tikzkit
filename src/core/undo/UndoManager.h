@@ -192,6 +192,20 @@ public:
      */
     bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex()) override;
 
+//
+// serialization
+//
+public:
+    /**
+     * Load the UndoGroup's items from the @p json object.
+     */
+    void load(const QJsonObject & json);
+
+    /**
+     * Save the UndoGroup's items.
+     */
+    QJsonObject save() const;
+
 public:
     // for debugging
     void printTree();

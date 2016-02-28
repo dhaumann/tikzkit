@@ -20,8 +20,10 @@
 #include "UndoGroup.h"
 #include "UndoItem.h"
 #include "UndoManager.h"
+#include "UndoFactory.h"
 
 #include <QDebug>
+#include <QJsonArray>
 
 namespace tikz {
 namespace core {
@@ -129,6 +131,34 @@ QVector<UndoItem *> UndoGroup::undoItems() const
 int UndoGroup::count() const
 {
     return d->undoItems.count();
+}
+
+void UndoGroup::load(const QJsonObject & json)
+{
+    d->text = json["text"].toString();
+
+    QJsonArray array = json["items"].toArray();
+    foreach (QJsonValue item, array) {
+        const QString type = item.toObject()["type"].toString();
+        UndoFactory factory(document());
+        auto undoItem = factory.createItem(type);
+
+        d->undoItems.push_back(undoItem);
+        undoItem->setGroup(this);
+    }
+}
+
+QJsonObject UndoGroup::save() const
+{
+    QJsonArray array;
+    foreach (auto item, undoItems()) {
+        array.append(item->save());
+    }
+
+    QJsonObject json;
+    json["text"] = text();
+    json["items"] = array;
+    return json;
 }
 
 void UndoGroup::printTree()
