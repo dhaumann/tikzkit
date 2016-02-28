@@ -126,23 +126,7 @@ protected:
      */
     virtual QJsonObject saveData() const = 0;
 
-// group information
-public:
-    /**
-     * Retuns the UndoGroup this UndoItem belongs to.
-     * As long as an UndoItem is not added to an undo group, a nullptr is
-     * returned.
-     */
-    UndoGroup * group() const;
-
 protected:
-    friend class UndoGroup;
-    /**
-     * Once an undo item is added to an UndoGroup, the undo group this item
-     * belongs to is set to @p group. This function is called by the UndoGroup.
-     */
-    void setGroup(UndoGroup * group);
-
     /**
      * Internal id counter starting at 0.
      * Each time this function is called, the counter is increased by one.

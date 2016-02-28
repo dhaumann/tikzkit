@@ -31,11 +31,6 @@ public:
     Document* doc = nullptr;
 
     /**
-     * Pointer to the UndoGroup this UndoItem belongs to.
-     */
-    UndoGroup * group = nullptr;
-
-    /**
      * Description of the undo item.
      */
     QString text;
@@ -98,16 +93,6 @@ QJsonObject UndoItem::save() const
     json["data"] = saveData();
 
     return json;
-}
-
-UndoGroup * UndoItem::group() const
-{
-    return d->group;
-}
-
-void UndoItem::setGroup(UndoGroup * group)
-{
-    d->group = group;
 }
 
 namespace {

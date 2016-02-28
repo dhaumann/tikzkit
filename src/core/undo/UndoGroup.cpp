@@ -101,9 +101,6 @@ void UndoGroup::addUndoItem(UndoItem *item)
     } else {
         // add to this undo group
         d->undoItems.append(item);
-
-        // associate the UndoItem's group with this UndoGroup
-        item->setGroup(this);
     }
 }
 
@@ -118,9 +115,6 @@ void UndoGroup::addRedoItem(UndoItem *item)
     }
     // add to this undo group
     d->redoItems.append(item);
-
-    // associate the UndoItem's group with this UndoGroup
-    item->setGroup(this);
 }
 
 QVector<UndoItem *> UndoGroup::undoItems() const
@@ -144,7 +138,6 @@ void UndoGroup::load(const QJsonObject & json)
         auto undoItem = factory.createItem(type);
 
         d->undoItems.push_back(undoItem);
-        undoItem->setGroup(this);
     }
 }
 
