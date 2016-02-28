@@ -30,11 +30,11 @@ UndoSetEllipsePos::UndoSetEllipsePos(Document * doc)
 {
 }
 
-UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
+UndoSetEllipsePos::UndoSetEllipsePos(Uid pathUid,
                                      const MetaPos & newPos,
                                      Document * doc)
     : UndoItem("Set Ellipse Position", doc)
-    , m_pathUid(path->uid())
+    , m_pathUid(pathUid)
     , m_pos(newPos)
 {
 }

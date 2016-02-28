@@ -101,7 +101,7 @@ void Node::setMetaPos(const tikz::core::MetaPos & pos)
         ConfigTransaction transaction(this);
         d->pos = pos;
     } else {
-        document()->addUndoItem(new UndoSetNodePos(this, pos, document()));
+        document()->addUndoItem(new UndoSetNodePos(uid(), pos, document()));
     }
 }
 

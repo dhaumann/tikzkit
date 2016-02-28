@@ -28,8 +28,6 @@
 namespace tikz {
 namespace core {
 
-class EdgePath;
-
 class UndoSetEdgePos : public UndoItem
 {
     public:
@@ -41,7 +39,7 @@ class UndoSetEdgePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetEdgePos(EdgePath * path,
+        UndoSetEdgePos(Uid pathUid,
                        const MetaPos & newPos,
                        bool isStartNode,
                        Document * doc);

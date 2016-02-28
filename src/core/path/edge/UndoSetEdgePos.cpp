@@ -30,12 +30,12 @@ UndoSetEdgePos::UndoSetEdgePos(Document * doc)
 {
 }
 
-UndoSetEdgePos::UndoSetEdgePos(EdgePath * path,
+UndoSetEdgePos::UndoSetEdgePos(Uid pathUid,
                                const MetaPos & newPos,
                                bool isStartNode,
                                Document * doc)
     : UndoItem("Set Edge Position", doc)
-    , m_pathUid(path->uid())
+    , m_pathUid(pathUid)
     , m_edgePos(newPos)
     , m_isStart(isStartNode)
 {

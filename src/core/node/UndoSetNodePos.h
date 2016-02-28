@@ -41,7 +41,7 @@ class UndoSetNodePos : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodePos(Node * node,
+        UndoSetNodePos(Uid nodeId,
                        const tikz::core::MetaPos & newPos,
                        Document * doc);
 

@@ -177,7 +177,7 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
         }
     } else {
         document()->addUndoItem(
-            new UndoSetEdgePos(this, pos, true, document()));
+            new UndoSetEdgePos(uid(), pos, true, document()));
     }
 }
 
@@ -197,7 +197,7 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
         }
     } else {
         document()->addUndoItem(
-            new UndoSetEdgePos(this, pos, false, document()));
+            new UndoSetEdgePos(uid(), pos, false, document()));
     }
 }
 

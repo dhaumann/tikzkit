@@ -30,11 +30,11 @@ UndoSetNodePos::UndoSetNodePos(Document * doc)
 {
 }
 
-UndoSetNodePos::UndoSetNodePos(Node * node,
+UndoSetNodePos::UndoSetNodePos(Uid nodeId,
                                const MetaPos & newPos,
                                Document * doc)
     : UndoItem("Move Node", doc)
-    , m_nodeUid(node->uid())
+    , m_nodeUid(nodeId)
     , m_pos(newPos)
 {
 }
