@@ -98,6 +98,83 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
         virtual QJsonObject saveData() const;
 
     //
+    // Transaction support
+    //
+    public:
+        /**
+         * Transaction support.
+         *
+         * Entity modifications may consist of a sequence of changes, such as moving a
+         * node and changing its text. The Transaction class allows to bunch together
+         * such a sequence to a single undo/redo step.
+         *
+         * Using this class typically looks as follows:
+         * @code
+         * void MyEntity::setFoo(int value)
+         * {
+         *     tikz::core::Entity::Transaction transaction(this, "Modify Node");
+         *     // now call editing functions
+         *     setPos(...);
+         *     setText(...);
+         * }
+         * @endcode
+         *
+         * Although usually not required, a Transaction additionally allows to manually
+         * call finish(). This way, the transaction is finished before the destructor,
+         * and the destructor does nothing.
+         *
+         * Further, if a running transaction should be aborted, just call cancel().
+         * This is handy whenever the user hits Escape during a modification.
+         */
+        class TIKZCORE_EXPORT Transaction
+        {
+        public:
+            /**
+             * Constructs the object and starts an editing transaction.
+             *
+             * @param entity entity for the transaction
+             * @param name the transaction name
+             */
+            explicit Transaction(Entity * entity, const QString & name);
+
+            /**
+             * Destructs the object and, if needed, finishes a running editing
+             * transaction by calling finish().
+             *
+             * @see finish()
+             */
+            ~Transaction();
+
+            /**
+             * Tells the history transaction to roolback on finish().
+             */
+            void cancel();
+
+            /**
+             * By calling finish(), the editing transaction can be finished
+             * already before destruction of this instance.
+             *
+             * @see cancel()
+             */
+            void finish();
+
+            /**
+             * Check whether this transaction currently is active.
+             */
+            bool isRunning() const;
+
+        private:
+            // disallow copy constructor
+            Transaction(const Transaction &) = delete;
+            Transaction() = delete;
+
+            /**
+             * Document pointer
+             */
+            Entity * m_entity = nullptr;
+        };
+
+    //
     // internal to tikz::Document
     //
     protected:

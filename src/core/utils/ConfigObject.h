@@ -74,11 +74,39 @@ class TIKZCORE_EXPORT ConfigObject : public QObject
          */
         bool configActive() const;
 
+    //
+    // For derived classes to override.
+    //
+    protected:
+        /**
+         * This function is called whenever this object is about to be changed.
+         * The default implementation is empty.
+         */
+        virtual void notifyAboutToChange();
+
+        /**
+         * This function is called whenever this object was changed.
+         * The default implementation is empty.
+         */
+        virtual void notifyChanged();
+
     Q_SIGNALS:
         /**
-         * This signal is emitted whenever the style changes.
-         * This includes changes in the parent style that possibly influence
-         * the appearance of this style.
+         * This signal is emitted whenever the object is about to change.
+         * At this point, no changes have been made, yet.
+         */
+        void aboutToChange();
+
+        /**
+         * This signal is emitted whenever either this object's data changed,
+         * or when a related object's data changed and this data somehow depends
+         * on it.
+         *
+         * That is, this signal could be emitted, even though notifyChanged()
+         * was not called.
+         *
+         * If you need to rely on all changes, for instance, to keep the GUI
+         * up-to-date, then use this signal.
          */
         void changed();
 

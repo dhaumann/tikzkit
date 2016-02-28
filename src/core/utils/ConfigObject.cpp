@@ -35,6 +35,11 @@ void ConfigObject::beginConfig()
 {
     Q_ASSERT(m_refCounter >= 0);
     ++m_refCounter;
+
+    if (m_refCounter == 1) {
+        notifyAboutToChange();
+        emit aboutToChange();
+    }
 }
 
 void ConfigObject::endConfig()
@@ -43,6 +48,7 @@ void ConfigObject::endConfig()
 
     --m_refCounter;
     if (m_refCounter == 0) {
+        notifyChanged();
         emit changed();
     }
 }
@@ -50,6 +56,14 @@ void ConfigObject::endConfig()
 bool ConfigObject::configActive() const
 {
     return m_refCounter > 0;
+}
+
+void ConfigObject::notifyAboutToChange()
+{
+}
+
+void ConfigObject::notifyChanged()
+{
 }
 
 void ConfigObject::emitChangedIfNeeded()

@@ -105,6 +105,50 @@ Document * Entity::document() const
     return d->document;
 }
 
+Entity::Transaction::Transaction(Entity * entity, const QString & name)
+    : m_entity(entity)
+{
+    // Alghouth it works in release-mode, we usually want a valid document
+    Q_ASSERT(entity != nullptr);
+
+    // start the editing transaction
+    if (m_entity) {
+        if (m_entity->document()) {
+            m_entity->document()->beginTransaction(name);
+        }
+        m_entity->beginConfig();
+    }
+}
+
+void Entity::Transaction::cancel()
+{
+    if (m_entity && m_entity->document()) {
+        m_entity->document()->cancelTransaction();
+    }
+}
+
+void Entity::Transaction::finish()
+{
+    if (m_entity) {
+        if (m_entity->document()) {
+            m_entity->document()->finishTransaction();
+        }
+        m_entity->endConfig();
+        m_entity = nullptr;
+    }
+}
+
+bool Entity::Transaction::isRunning() const
+{
+    return m_entity != nullptr;
+}
+
+Entity::Transaction::~Transaction()
+{
+    // finish the editing transaction, if applicable
+    finish();
+}
+
 }
 }
 
