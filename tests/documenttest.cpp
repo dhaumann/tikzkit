@@ -2,7 +2,6 @@
 
 #include <QtTest/QTest>
 #include <QDebug>
-#include <QUndoStack>
 
 #include <tikz/core/Document.h>
 #include <tikz/core/Node.h>

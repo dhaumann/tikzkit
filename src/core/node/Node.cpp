@@ -29,7 +29,6 @@
 
 #include <cmath>
 
-#include <QUndoStack>
 #include <QDebug>
 
 namespace tikz {
