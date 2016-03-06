@@ -130,10 +130,10 @@ void Entity::Transaction::cancel()
 void Entity::Transaction::finish()
 {
     if (m_entity) {
+        m_entity->endConfig();
         if (m_entity->document()) {
             m_entity->document()->finishTransaction();
         }
-        m_entity->endConfig();
         m_entity = nullptr;
     }
 }
