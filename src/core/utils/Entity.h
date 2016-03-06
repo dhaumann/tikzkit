@@ -185,6 +185,33 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
          */
         Entity(const Uid & uid, Document* tikzDocument);
 
+    //
+    // ConfigObject interface
+    //
+    protected:
+        /**
+         * This override calls notifyAboutToChangeEntity() for the associated document.
+         */
+        void notifyAboutToChange() override;
+
+        /**
+         * This override calls notifyEntityChanged() for the associated document.
+         */
+        void notifyChanged() override;
+
+    Q_SIGNALS:
+
+        /**
+         * This signal is emitted whenever @p entity is about to change.
+         * At this point in time, no changes have been applied, yet.
+         */
+        void entityAboutToChange(tikz::core::Entity * entity);
+
+        /**
+         * This signal is emitted whenever @p entity changed.
+         */
+        void entityChanged(tikz::core::Entity * entity);
+
     private:
         std::unique_ptr<EntityPrivate> const d;
 };

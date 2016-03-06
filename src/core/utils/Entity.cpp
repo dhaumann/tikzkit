@@ -105,6 +105,16 @@ Document * Entity::document() const
     return d->document;
 }
 
+void Entity::notifyAboutToChange()
+{
+    emit entityAboutToChange(this);
+}
+
+void Entity::notifyChanged()
+{
+    emit entityChanged(this);
+}
+
 Entity::Transaction::Transaction(Entity * entity, const QString & name)
     : m_entity(entity)
 {
