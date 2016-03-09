@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2015 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -55,12 +55,12 @@ class DocumentPrivate
 
         // the Document's current url
         QUrl url;
-        // undo manager
-        HistoryManager * undoManager = nullptr;
+        // History manager
+        HistoryManager * historyManager = nullptr;
         // flag whether operations should add undo items or not
         bool undoActive = false;
 
-        // Entity list, contains Nodes and Paths
+        // Entity list, contains Nodes and Paths, etc.
         std::vector<Entity *> entities;
 
         // Node lookup map
@@ -96,6 +96,23 @@ public:
             emit q->documentNameChanged(q);
         }
     }
+
+    void close()
+    {
+        // free all node and path data
+        qDeleteAll(entities);
+        entities.clear();
+        entityMap.clear();
+
+        // reset unique id counter
+        nextId = 0;
+
+        // clear undo stack
+        historyManager->clear();
+
+        // unnamed document
+        url.clear();
+    }
 };
 
 Document::Document(QObject * parent)
@@ -103,17 +120,17 @@ Document::Document(QObject * parent)
     , d(new DocumentPrivate())
 {
     d->q = this;
-    d->undoManager = new HistoryManager(this);
+    d->historyManager = new HistoryManager(this);
     d->undoActive = false;
     d->nextId = 0;
 
-    connect(d->undoManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
+    connect(d->historyManager, SIGNAL(cleanChanged(bool)), this, SIGNAL(modifiedChanged()));
 }
 
 Document::~Document()
 {
     // clear Document contents
-    close();
+    d->close();
 
     // make sure things are really gone
     Q_ASSERT(d->entityMap.isEmpty());
@@ -124,25 +141,14 @@ Document::~Document()
 
 void Document::close()
 {
-    // tell the world that all Nodes and Paths are about to be deleted
-    emit aboutToClear();
+    // tell the world that all Entities are about to be deleted
+    emit q->aboutToClear();
 
-    // free all node and path data
-    qDeleteAll(d->entities);
-    d->entities.clear();
-    d->entityMap.clear();
-
-    // reset unique id counter
-    d->nextId = 0;
-
-    // clear undo stack
-    d->undoManager->clear();
-
-    // unnamed document
-    d->url.clear();
+    // cleanup Document contents
+    d->close();
 
     // keep the document name up-to-date
-    d->updateDocumentName();
+    updateDocumentName();
 }
 
 bool Document::load(const QUrl & fileurl)
@@ -177,6 +183,10 @@ bool Document::load(const QUrl & fileurl)
         }
     }
 
+    // load payload
+    QJsonObject data = json["data"].toObject();
+    loadData(data);
+
     // now make sure the next free uniq id is valid by finding the maximum
     // used id, and then add "+1".
     auto keys = d->entityMap.keys();
@@ -188,7 +198,7 @@ bool Document::load(const QUrl & fileurl)
     d->updateDocumentName();
 
     // mark this state as unmodified
-    d->undoManager->setClean();
+    d->historyManager->setClean();
 
     return true;
 }
@@ -213,7 +223,10 @@ bool Document::saveAs(const QUrl & targetUrl)
     if (targetUrl.isLocalFile()) {
 
         QJsonObject json;
-        json["history"] = d->undoManager->save();
+        json["history"] = d->historyManager->save();
+
+        // save payload
+        json["data"] = saveData();
 
         // now save data
         QFile file(targetUrl.toLocalFile());
@@ -233,12 +246,21 @@ bool Document::saveAs(const QUrl & targetUrl)
         }
 
         // mark this state as unmodified
-        d->undoManager->setClean();
+        d->historyManager->setClean();
 
         return true;
     }
 
     return false;
+}
+
+void Document::loadData(const QJsonObject & json)
+{
+}
+
+QJsonObject Document::saveData()
+{
+    return QJsonObject();
 }
 
 QUrl Document::url() const
@@ -260,12 +282,12 @@ bool Document::isEmptyBuffer() const
 
 void Document::addUndoItem(es::HistoryItem * item)
 {
-    d->undoManager->addUndoItem(item);
+    d->historyManager->addUndoItem(item);
 }
 
 void Document::addRedoItem(es::HistoryItem * item)
 {
-    d->undoManager->addRedoItem(item);
+    d->historyManager->addRedoItem(item);
 }
 
 void Document::beginTransaction(const QString & name)
@@ -274,18 +296,18 @@ void Document::beginTransaction(const QString & name)
     beginConfig();
 
     // pass call to undo mananger
-    d->undoManager->startTransaction(name);
+    d->historyManager->startTransaction(name);
 }
 
 void Document::cancelTransaction()
 {
-    d->undoManager->cancelTransaction();
+    d->historyManager->cancelTransaction();
 }
 
 void Document::finishTransaction()
 {
     // first pass call to undo mananger
-    d->undoManager->commitTransaction();
+    d->historyManager->commitTransaction();
 
     // notify world about changes
     endConfig();
@@ -293,7 +315,7 @@ void Document::finishTransaction()
 
 bool Document::transactionRunning() const
 {
-    return d->undoManager->transactionActive();
+    return d->historyManager->transactionActive();
 }
 
 bool Document::setUndoActive(bool active)
@@ -310,17 +332,17 @@ bool Document::undoActive() const
 
 bool Document::isModified() const
 {
-    return ! d->undoManager->isClean();
+    return ! d->historyManager->isClean();
 }
 
 bool Document::undoAvailable() const
 {
-    return d->undoManager->undoAvailable();
+    return d->historyManager->undoAvailable();
 }
 
 bool Document::redoAvailable() const
 {
-    return d->undoManager->redoAvailable();
+    return d->historyManager->redoAvailable();
 }
 
 void Document::undo()
@@ -328,7 +350,7 @@ void Document::undo()
     const bool undoWasAvailable = undoAvailable();
     const bool redoWasAvailable = redoAvailable();
 
-    d->undoManager->undo();
+    d->historyManager->undo();
 
     const bool undoNowAvailable = undoAvailable();
     const bool redoNowAvailable = redoAvailable();
@@ -347,7 +369,7 @@ void Document::redo()
     const bool undoWasAvailable = undoAvailable();
     const bool redoWasAvailable = redoAvailable();
 
-    d->undoManager->redo();
+    d->historyManager->redo();
 
     const bool undoNowAvailable = undoAvailable();
     const bool redoNowAvailable = redoAvailable();

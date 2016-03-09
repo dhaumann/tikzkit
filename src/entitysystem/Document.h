@@ -52,13 +52,11 @@ class ES_EXPORT Document : public ConfigObject
     public Q_SLOTS:
         /**
          * Clear all contents of the document and reset the associated file.
-         * @warning This functions is called in the Document destructor.
-         *          So never make it virtual!
          */
-        void close();
+        virtual void close();
 
         /**
-         * Load the tikz document from @p url.
+         * Load the Document from @p url.
          */
         bool load(const QUrl & url);
 
@@ -69,14 +67,27 @@ class ES_EXPORT Document : public ConfigObject
         bool reload();
 
         /**
-         * Save the tikz document to the file opened with load().
+         * Save the Document to the file opened with load().
          */
         bool save();
 
         /**
-         * Save the tikz document to @p file in json notation.
+         * Save the Document to @p file in json notation.
          */
         bool saveAs(const QUrl & file);
+
+    protected:
+        /**
+         * Load the payload for derived Documents.
+         * The default implementation is empty.
+         */
+        virtual void loadData(const QJsonObject & json);
+
+        /**
+         * Save the Document to the file opened with load().
+         * The default implementation is empty.
+         */
+        virtual QJsonObject saveData();
 
     public:
         /**
