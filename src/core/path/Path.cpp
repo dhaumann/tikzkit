@@ -86,24 +86,13 @@ void Path::setStyle(const EdgeStyle & style)
 //         index = d->edges.size();
 //     }
 //
-//     Edge * edge = 0;
+//     ConfigTransaction transaction(this);
 //
-//     if (document()->undoActive()) {
-//         ConfigTransaction transaction(this);
+//     // create and insert edge
+//     Edge * edge = new Edge(this);
 //
-//         // create and insert edge
-//         edge = new Edge(this);
-//
-//         // insert edge
-//         d->edges.insert(index, edge);
-//     } else {
-//         // create edge via undo system
-//         document()->addUndoItem(new UndoCreateEdge(eid(), index, document()));
-//         Q_ASSERT(index < d->edges.size());
-//
-//         // return newly created edge
-//         edge = d->edges[index];
-//     }
+//     // insert edge
+//     d->edges.insert(index, edge);
 //
 //     return edge;
 // }
@@ -121,21 +110,16 @@ void Path::setStyle(const EdgeStyle & style)
 //     Q_ASSERT(index >= 0);
 //     Q_ASSERT(index < d->edges.size());
 //
-//     if (document()->undoActive()) {
-//         ConfigTransaction transaction(this);
+//     ConfigTransaction transaction(this);
 //
-//         // get edge to delete
-//         Edge * edge = d->edges[index];
+//     // get edge to delete
+//     Edge * edge = d->edges[index];
 //
-//         // remove edge
-//         d->edges.remove(index);
+//     // remove edge
+//     d->edges.remove(index);
 //
-//         // finally delete edge
-//         delete edge;
-//     } else {
-//         // create edge via undo system
-//         document()->addUndoItem(new UndoDeleteEdge(eid(), index, document()));
-//     }
+//     // finally delete edge
+//     delete edge;
 // }
 //
 // Edge* Path::edge(int i)
