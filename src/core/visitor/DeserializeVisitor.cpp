@@ -70,17 +70,17 @@ void DeserializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list = m_root["node-ids"].toString().split(", ");
-    foreach (const QString & uid, list) {
-        doc->createNode(Uid(uid, doc));
+    foreach (const QString & eid, list) {
+        doc->createNode(Eid(eid, doc));
     }
 
     // aggregate edge ids
     list = m_root["path-ids"].toString().split(", ");
     foreach (const QString & idAsStr, list) {
-        const Uid uid(idAsStr, doc);
-        const QString type = m_root["paths"].toMap()["path-" + uid.toString()].toMap()["type"].toString();
+        const es::Eid eid(idAsStr, doc);
+        const QString type = m_root["paths"].toMap()["path-" + eid.toString()].toMap()["type"].toString();
 //         qDebug() << type << pathType(type);
-        doc->createPath(toEnum<PathType>(type), uid);
+        doc->createPath(toEnum<PathType>(type), eid);
     }
 
     // load document style
@@ -89,7 +89,7 @@ void DeserializeVisitor::visit(Document * doc)
 
 void DeserializeVisitor::visit(Node * node)
 {
-    const QVariantMap & map = m_nodes["node-" + node->uid().toString()].toMap();
+    const QVariantMap & map = m_nodes["node-" + node->eid().toString()].toMap();
 
     // deserialize node
     tikz::core::MetaPos mp(node->document());
@@ -109,7 +109,7 @@ void DeserializeVisitor::visit(Node * node)
 
 void DeserializeVisitor::visit(Path * path)
 {
-    const QVariantMap & map = m_paths["path-" + path->uid().toString()].toMap();
+    const QVariantMap & map = m_paths["path-" + path->eid().toString()].toMap();
     tikz::core::MetaPos mp(path->document());
 
     switch (path->type()) {

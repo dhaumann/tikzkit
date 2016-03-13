@@ -50,25 +50,25 @@ inline static QString removeNewLines(const QString &str)
 class DocumentPrivate
 {
     public:
-        // Document this private instance belongs to
+        //! Document this private instance belongs to
         Document * q = nullptr;
 
-        // the Document's current url
+        //! the Document's current url
         QUrl url;
-        // History manager
+        //! History manager
         HistoryManager * historyManager = nullptr;
-        // flag whether operations should add undo items or not
+        //! flag whether operations should add undo items or not
         bool undoActive = false;
 
-        // Entity list, contains Nodes and Paths, etc.
+        //! Entity list, contains Nodes and Paths, etc.
         std::vector<Entity *> entities;
 
-        // Node lookup map
+        //! Node lookup map
         QHash<Eid, Entity *> entityMap;
 
         qint64 nextId = 0;
 
-        // helper to get a document-wide unique id
+        //! helper to get a document-wide unique id
         qint64 uniqueId()
         {
             return nextId++;
@@ -142,13 +142,13 @@ Document::~Document()
 void Document::close()
 {
     // tell the world that all Entities are about to be deleted
-    emit q->aboutToClear();
+    emit aboutToClear();
 
     // cleanup Document contents
     d->close();
 
     // keep the document name up-to-date
-    updateDocumentName();
+    d->updateDocumentName();
 }
 
 bool Document::load(const QUrl & fileurl)
@@ -184,7 +184,7 @@ bool Document::load(const QUrl & fileurl)
     }
 
     // load payload
-    QJsonObject data = json["data"].toObject();
+    QJsonObject data = root["data"].toObject();
     loadData(data);
 
     // now make sure the next free uniq id is valid by finding the maximum
@@ -383,10 +383,17 @@ void Document::redo()
     }
 }
 
+Entity * Document::createEntity(const QString & type)
+{
+    return createEntity(Eid(d->uniqueId(), this), type);
+}
+
 Entity * Document::createEntity(const Eid & eid, const QString & type)
 {
     Q_ASSERT(eid.isValid());
     Q_ASSERT(!d->entityMap.contains(eid));
+
+    HistoryTransaction ht(this, "Create Entity");
 
     // create new entity
     auto entity = (Entity*)nullptr; // TODO, FIXME: new Node(eid, this);
@@ -395,8 +402,18 @@ Entity * Document::createEntity(const Eid & eid, const QString & type)
     // insert entity into hash map
     d->entityMap.insert(eid, entity);
 
+    // undo/redo support
+    if (!undoActive()) {
+        d->historyManager->addUndoItem(new DeleteEntityHistoryItem(eid, this));
+        d->historyManager->addRedoItem(new CreateEntityHistoryItem(eid, this));
+        d->historyManager->addRedoItem(new ChangeEntityHistoryItem(eid, this));
+    }
+
     // propagate changed signal
     connect(entity, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
+
+    // notify
+    emit entityCreated(entity);
 
     return entity;
 }
@@ -412,6 +429,16 @@ void Document::deleteEntity(const Eid & eid)
     if (it != d->entityMap.end()) {
         const auto entity = *it;
 
+        // notify about deletion
+        emit aboutToDeleteEntity(entity);
+
+        // undo/redo support
+        if (!undoActive()) {
+            d->historyManager->addUndoItem(new ChangeEntityHistoryItem(eid, this));
+            d->historyManager->addUndoItem(new CreateEntityHistoryItem(eid, this));
+            d->historyManager->addRedoItem(new DeleteEntityHistoryItem(eid, this));
+        }
+
         // unregister entity
         d->entityMap.erase(it);
         Q_ASSERT(std::find(d->entities.begin(), d->entities.end(), entity) != d->entities.end());
@@ -420,6 +447,12 @@ void Document::deleteEntity(const Eid & eid)
         // truly delete node
         delete entity;
     }
+}
+
+void Document::deleteEntity(Entity * entity)
+{
+    Q_ASSERT(entity);
+    deleteEntity(entity->eid());
 }
 
 Entity * Document::entity(const es::Eid & eid) const
@@ -434,6 +467,11 @@ Entity * Document::entity(const es::Eid & eid) const
     }
 
     return nullptr;
+}
+
+const std::vector<Entity *> & Document::entities() const
+{
+    return d->entities;
 }
 
 }

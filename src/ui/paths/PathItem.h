@@ -23,7 +23,7 @@
 #include "TikzItem.h"
 
 #include <tikz/core/tikz.h>
-#include <tikz/core/Uid.h>
+#include <tikz/core/Eid.h>
 
 namespace tikz {
 namespace core {
@@ -68,9 +68,9 @@ class TIKZUI_EXPORT PathItem :  public TikzItem
         tikz::core::Path * path() const;
 
         /**
-         * Returns path().uid();
+         * Returns path().eid();
          */
-        tikz::core::Uid uid() const;
+        es::Eid eid() const;
 
         /**
          * Get the EdgeStyle of this path.

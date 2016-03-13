@@ -43,8 +43,8 @@ class EdgePathPrivate
         MetaPos end;
 };
 
-EdgePath::EdgePath(PathType type, const Uid & uid, Document* doc)
-    : Path(uid, doc)
+EdgePath::EdgePath(PathType type, const es::Eid & eid, Document* doc)
+    : Path(eid, doc)
     , d(new EdgePathPrivate(doc))
 {
     d->type = type;
@@ -68,16 +68,6 @@ const tikz::core::MetaPos & EdgePath::endMetaPos() const
     return d->end;
 }
 
-void EdgePath::deconstruct()
-{
-    // just set both the start and end pos to (0, 0).
-    // undo (i.e., creating the node again), will then restore the initial
-    // connections correctly.
-    ConfigTransaction transaction(this);
-    setStartPos(tikz::Pos());
-    setEndPos(tikz::Pos());
-}
-
 void EdgePath::detachFromNode(Node * node)
 {
     Q_ASSERT(node != 0);
@@ -98,6 +88,11 @@ void EdgePath::detachFromNode(Node * node)
 
     Q_ASSERT(d->start.node() != node);
     Q_ASSERT(d->end.node() != node);
+}
+
+const char * EdgePath::type() const
+{
+    return "edge-path";
 }
 
 PathType EdgePath::type() const
@@ -177,7 +172,7 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
         }
     } else {
         document()->addUndoItem(
-            new UndoSetEdgePos(uid(), pos, true, document()));
+            new UndoSetEdgePos(eid(), pos, true, document()));
     }
 }
 
@@ -197,7 +192,7 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
         }
     } else {
         document()->addUndoItem(
-            new UndoSetEdgePos(uid(), pos, false, document()));
+            new UndoSetEdgePos(eid(), pos, false, document()));
     }
 }
 

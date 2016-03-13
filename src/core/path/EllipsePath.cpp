@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -37,8 +37,8 @@ class EllipsePathPrivate
         MetaPos pos;
 };
 
-EllipsePath::EllipsePath(const Uid & uid, Document* doc)
-    : Path(uid, doc)
+EllipsePath::EllipsePath(const es::Eid & eid, Document* doc)
+    : Path(eid, doc)
     , d(new EllipsePathPrivate(doc))
 {
     connect(d->pos.notificationObject(), SIGNAL(changed(tikz::core::MetaPos*)),
@@ -50,18 +50,14 @@ EllipsePath::~EllipsePath()
     delete d;
 }
 
+const char * EllipsePath::type() const
+{
+    return "ellipse-path";
+}
+
 PathType EllipsePath::type() const
 {
     return PathType::Ellipse;
-}
-
-void EllipsePath::deconstruct()
-{
-    // just set both the start and end pos to (0, 0).
-    // undo (i.e., creating the node again), will then restore the initial
-    // connections correctly.
-    ConfigTransaction transaction(this);
-    setPos(tikz::Pos());
 }
 
 void EllipsePath::detachFromNode(Node * node)
@@ -126,7 +122,7 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
         }
     } else {
         document()->addUndoItem(
-            new UndoSetEllipsePos(uid(), pos, document()));
+            new UndoSetEllipsePos(eid(), pos, document()));
     }
 }
 

@@ -50,8 +50,8 @@ NodeStyle::NodeStyle()
 {
 }
 
-NodeStyle::NodeStyle(const Uid & uid, Document* tikzDocument)
-    : Style(uid, tikzDocument)
+NodeStyle::NodeStyle(const es::Eid & eid, Document* tikzDocument)
+    : Style(eid, tikzDocument)
     , d(new NodeStylePrivate())
 {
 }

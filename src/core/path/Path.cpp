@@ -34,8 +34,8 @@ class PathPrivate
         EdgeStyle style;
 };
 
-Path::Path(const Uid & uid, Document* doc)
-    : Entity(uid, doc)
+Path::Path(const es::Eid & eid, Document* doc)
+    : Entity(eid, doc)
     , d(new PathPrivate())
 {
     d->style.setParentStyle(doc->style());
@@ -48,18 +48,14 @@ Path::~Path()
     delete d;
 }
 
-tikz::EntityType Path::entityType() const
+const char * Path::entityType() const
 {
-    return EntityType::Path;
+    return "path";
 }
 
 PathType Path::type() const
 {
     return PathType::Invalid;
-}
-
-void Path::deconstruct()
-{
 }
 
 void Path::detachFromNode(Node * node)
@@ -86,7 +82,7 @@ void Path::setStyle(const EdgeStyle & style)
         d->style.setStyle(&style);
     } else {
         // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetPathStyle(uid(), style, document()));
+        document()->addUndoItem(new UndoSetPathStyle(eid(), style, document()));
 
         // now the text should be updated
         //     Q_ASSERT(d->style == style); // same as above
@@ -115,7 +111,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         d->edges.insert(index, edge);
 //     } else {
 //         // create edge via undo system
-//         document()->addUndoItem(new UndoCreateEdge(uid(), index, document()));
+//         document()->addUndoItem(new UndoCreateEdge(eid(), index, document()));
 //         Q_ASSERT(index < d->edges.size());
 //
 //         // return newly created edge
@@ -151,7 +147,7 @@ void Path::setStyle(const EdgeStyle & style)
 //         delete edge;
 //     } else {
 //         // create edge via undo system
-//         document()->addUndoItem(new UndoDeleteEdge(uid(), index, document()));
+//         document()->addUndoItem(new UndoDeleteEdge(eid(), index, document()));
 //     }
 // }
 //

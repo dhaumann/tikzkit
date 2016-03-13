@@ -1,4 +1,4 @@
-project(kentitysystem)
+project(entitysystem)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -16,7 +16,7 @@ include_directories(
     .
 )
 
-set(kentitysystem_SOURCES
+set(entitysystem_SOURCES
     Document.cpp
 
     Eid.cpp
@@ -33,11 +33,11 @@ set(kentitysystem_SOURCES
     ChangeEntityHistoryItem.cpp
 )
 
-add_library(kentitysystem SHARED
-    ${kentitysystem_SOURCES}
+add_library(entitysystem SHARED
+    ${entitysystem_SOURCES}
 )
 
-target_link_libraries(kentitysystem
+target_link_libraries(entitysystem
     Qt5::Core
 )
 

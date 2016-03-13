@@ -20,7 +20,7 @@
 #ifndef TIKZ_DOCUMENT_H
 #define TIKZ_DOCUMENT_H
 
-#include "ConfigObject.h"
+#include <EntitySystem/Document.h>
 #include "tikz_export.h"
 #include "tikz.h"
 #include "Path.h"
@@ -28,7 +28,6 @@
 
 #include <QVector>
 
-class QAbstractItemModel;
 class QUrl;
 
 namespace tikz {
@@ -42,7 +41,7 @@ class EdgeStyle;
 class UndoItem;
 class Visitor;
 
-class TIKZCORE_EXPORT Document : public ConfigObject
+class TIKZCORE_EXPORT Document : public es::Document
 {
     Q_OBJECT
 
@@ -67,183 +66,27 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          */
         bool accept(Visitor & visitor);
 
-    //
-    // file loading
-    //
-    public Q_SLOTS:
-        /**
-         * Clear all contents of the document and reset the associated file.
-         * @warning This functions is called in the Document destructor.
-         *          So never make it virtual!
-         */
-        void close();
-
-        /**
-         * Load the tikz document from @p url.
-         */
-        bool load(const QUrl & url);
-
-        /**
-         * Reload the current Document.
-         * Reloading a document works only if a file was loaded before.
-         */
-        bool reload();
-
-        /**
-         * Save the tikz document to the file opened with load().
-         */
-        bool save();
-
-        /**
-         * Save the tikz document to @p file in json notation.
-         */
-        bool saveAs(const QUrl & file);
-
-    public:
-        /**
-         * Get the current url of this file.
-         */
-        QUrl url() const;
-
-        /**
-         * Get the Document's filename
-         */
-        QString documentName() const;
-
-        /**
-         * Check whether this Document is completely empty.
-         * The return value is @e true, if no modifications have been made
-         * and the Document is empty without any contents loaded from a file.
-         */
-        bool isEmptyBuffer() const;
-
         /**
          * Export the picture to TikZ.
          */
         QString tikzCode();
 
-    //
-    // signals
-    // NOTE: See also ConfigObject::changed()
-    //
-    Q_SIGNALS:
+//         /**
+//          * Returns the history model.
+//          */
+//         QAbstractItemModel * historyModel() const;
+
+    // es::Document overrides
+    protected:
         /**
-         * This signal is emitted whenever the modified state changed.
+         * Load the payload for derived Documents.
          */
-        void modifiedChanged();
+        void loadData(const QJsonObject & json) override;
 
         /**
-         * This signal is emitted right before all its Node%s and Path%s
-         * are deleted. Make sure to connect to this signal to cleanup
-         * all references to Nodes and Paths of this Document to avoid
-         * danling pointers.
+         * Save the Document to the file opened with load().
          */
-        void aboutToClear();
-
-        /**
-         * This signal is emitted whenever this Document's name changes.
-         */
-        void documentNameChanged(tikz::core::Document * doc);
-
-    //
-    // Undo / redo management
-    //
-    public:
-        /**
-         * Adds undoItem to the undo stack of this document.
-         */
-        void addUndoItem(tikz::core::UndoItem * undoItem);
-
-        /**
-         * Adds redoItem to the redo stack of this document.
-         */
-        void addRedoItem(tikz::core::UndoItem * redoItem);
-
-        /**
-         * Begin undo group @p name.
-         * Each beginTransaction() must have a matching finishTransaction().
-         * The calls may be nested.
-         */
-        void beginTransaction(const QString & name);
-
-        /**
-         * Cancel the currently pending transaction. All changes are reverted
-         * and the undo / redo stack remains unchanged.
-         */
-        void cancelTransaction();
-
-        /**
-         * Finish currently running transaction.
-         */
-        void finishTransaction();
-
-        /**
-         * Check whether a transaction is currently running.
-         */
-        bool transactionRunning() const;
-
-        /**
-         * If @p active is @e true, modifying Nodes, Paths or the Document
-         * directly changes the data without creating an undo item.
-         * For instance, all undo items themselves call this function with
-         * @p active set to @e true.
-         *
-         * @return the old active state is returned
-         */
-        bool setUndoActive(bool active);
-
-        /**
-         * Check whether undo tracking is active.
-         */
-        bool undoActive() const;
-
-        /**
-         * Check whether the document is in a modified state.
-         */
-        bool isModified() const;
-
-        /**
-         * Returns whether undo can currently be invoked or not.
-         */
-        bool undoAvailable() const;
-
-        /**
-         * Returns whether redo can currently be invoked or not.
-         */
-        bool redoAvailable() const;
-
-        /**
-         * Returns the history model.
-         */
-        QAbstractItemModel * historyModel() const;
-
-    public Q_SLOTS:
-        /**
-         * Undo one undo group.
-         * Calling undo() only has an effect if undoAvailable() is @e true.
-         * @see undoAvailable(), undoAvailableChanged()
-         */
-        void undo();
-
-        /**
-         * Redo one redo group.
-         * Calling redo() only has an effect if redoAvailable() is @e true.
-         * @see redoAvailable(), redoAvailableChanged()
-         */
-        void redo();
-
-    Q_SIGNALS:
-        /**
-         * This signal is emitted whenever undoAvailable() changes.
-         * @see undoAvailable()
-         */
-        bool undoAvailableChanged(bool available) const;
-
-        /**
-         * This signal is emitted whenever redoAvailable() changes.
-         * @see redoAvailable()
-         */
-        bool redoAvailableChanged(bool available) const;
+        QJsonObject saveData() override;
 
     //
     // convenience functions
@@ -296,31 +139,15 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          */
         QVector<Path*> paths() const;
 
-        /**
-         * Get the node with Uid @p uid.
-         * @param uid unique id of the node
-         * @return null, if the uid is -1, otherwise a valid pointer to the node
-         */
-        Node * nodeFromId(const Uid & uid);
-
-        /**
-         * Get the path with Uid @p uid.
-         * @param uid unique id of the path
-         * @return null, if the uid is -1, otherwise a valid pointer to the path
-         */
-        Path * pathFromId(const Uid & uid);
-
-        /**
-         * Returns the Entity for the Uid @p uid.
-         * A null pointer is returned if the Entity does not exist, or if the
-         * Uid::document() pointer does not equal this Document.
-         */
-        Entity * entity(const tikz::core::Uid & uid) const;
-
     //
     // Node and path creation
     //
     public:
+        /**
+         * Delete entity @p eid associated with this document.
+         */
+        void deleteEntity(const Eid & eid) override;
+
         /**
          * Creates a new node associated with this document.
          * If the node is not needed anymore, delete it with deleteNode().
@@ -341,37 +168,20 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          */
         Path * createPath(tikz::PathType type = PathType::Line);
 
-        /**
-         * Remove @p path from the document by deleting the path object.
-         * Afterwards, the pointer is invalid.
-         * @param path path to delete
-         */
-        void deletePath(tikz::core::Path * path);
-
     //
     // internal: Undo / redo items manipulate with ID
     //
     protected:
         /**
-         * Create a new node associated with this document with @p uid.
+         * Create a new node associated with this document with @p eid.
          */
-        virtual Node * createNode(const Uid & uid);
+        virtual Node * createNode(const es::Eid & eid);
 
         /**
-         * Delete node @p uid associated with this document.
+         * Create a new path associated with this document with @p eid.
          */
-        virtual void deleteNode(const Uid & uid);
-
-        /**
-         * Create a new path associated with this document with @p uid.
-         */
-        virtual Path * createPath(PathType type, const Uid & uid);
-
-        /**
-         * Delete path @p uid associated with this document.
-         */
-        virtual void deletePath(const Uid & uid);
-
+        virtual Path * createPath(PathType type, const es::Eid & eid);
+//
     //
     // data pointer
     //
@@ -384,12 +194,6 @@ class TIKZCORE_EXPORT Document : public ConfigObject
     protected:
         // visitors
         friend class DeserializeVisitor;
-
-        // uddo/redo system
-        friend class UndoCreateNode;
-        friend class UndoDeleteNode;
-        friend class UndoCreatePath;
-        friend class UndoDeletePath;
 };
 
 }

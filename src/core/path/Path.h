@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include "Entity.h"
+#include <EntitySystem/Entity.h>
 #include "tikz.h"
 
 namespace tikz {
@@ -34,7 +34,7 @@ class EdgeStyle;
 class Visitor;
 class PathPrivate;
 
-class TIKZCORE_EXPORT Path : public Entity
+class TIKZCORE_EXPORT Path : public es::Entity
 {
     Q_OBJECT
 
@@ -55,9 +55,9 @@ class TIKZCORE_EXPORT Path : public Entity
         virtual ~Path();
 
         /**
-         * Returns EntityType::Edge.
+         * Returns "path".
          */
-        tikz::EntityType entityType() const override;
+        const char * entityType() const override;
 
     //
     // visitor pattern
@@ -91,23 +91,10 @@ class TIKZCORE_EXPORT Path : public Entity
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
-         * @param uid unique id of the path
+         * @param eid unique id of the path
          * @param doc associated document
          */
-        Path(const Uid & uid, Document* doc);
-
-        /**
-         * This function is called by Document::deletePath() right before the
-         * Path is deleted. Invoking the undo action will construct the path
-         * again. Therefore, this function needs to add all undo items so that
-         * the respective call of undo() will add properties of the Path again.
-         *
-         * @note: the EdgeStyle of this path is taken care of. No need to put
-         *        this into the undo stack again.
-         *
-         * The default implementation is empty.
-         */
-        virtual void deconstruct();
+        Path(const es::Eid & eid, Document* doc);
 
         /**
          * This function is called for all paths to notify that @p node is

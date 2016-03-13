@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -54,6 +54,11 @@ class TIKZCORE_EXPORT EdgePath : public Path
          * Virtual destructor.
          */
         virtual ~EdgePath();
+
+        /**
+         * Returns "edge-path".
+         */
+        const char * entityType() const override;
 
         /**
          * Returns the element type of this edge.
@@ -195,15 +200,10 @@ class TIKZCORE_EXPORT EdgePath : public Path
         /**
          * Constructor that associates this path with the tikz Document @p doc.
          * @param type Path type
-         * @param uid unique id of the path
+         * @param eid unique id of the path
          * @param doc associated document
          */
-        EdgePath(PathType type, const Uid & uid, Document* doc);
-
-        /**
-         * Destruct the node by saving the start and end pos or node connection.
-         */
-        virtual void deconstruct() override;
+        EdgePath(PathType type, const es::Eid & eid, Document* doc);
 
         /**
          * Detach the edge from @p node, since @p node is about to be deleted.

@@ -47,7 +47,7 @@ public:
     std::vector<HistoryGroup *> redoItems;
 
     //! Holds the items of a currently pending transaction.
-    HistoryGroup * currentUndoGroup = nullptr;
+    HistoryGroup * currentHistoryGroup = nullptr;
 
     //! Ref-counting for balanced being/{cancel, commit} transactions.
     int transactionRefCount = 0;
@@ -152,8 +152,8 @@ void HistoryManager::clear()
     d->redoItems.clear();
 
     // delete/reset pending transaction data
-    delete d->currentUndoGroup;
-    d->currentUndoGroup = nullptr;
+    delete d->currentHistoryGroup;
+    d->currentHistoryGroup = nullptr;
     d->transactionRefCount = 0;
 }
 
@@ -163,18 +163,18 @@ void HistoryManager::addUndoItem(HistoryItem * item)
 
     // if a transaction was canceled, there is no pending undo group.
     // In this case, just delete the item.
-    if (d->transactionRefCount > 0 && !d->currentUndoGroup) {
+    if (d->transactionRefCount > 0 && !d->currentHistoryGroup) {
         delete item;
         return;
     }
 
     startTransaction();
-    Q_ASSERT(d->currentUndoGroup != nullptr);
+    Q_ASSERT(d->currentHistoryGroup != nullptr);
 
     // add to current group.
     // WARNING: This might merge the item with an already existing item.
     //          Therefore the item pointer may be a dangling pointer afterwards!
-    d->currentUndoGroup->addUndoItem(item);
+    d->currentHistoryGroup->addUndoItem(item);
 
     commitTransaction();
 }
@@ -185,18 +185,18 @@ void HistoryManager::addRedoItem(HistoryItem * item)
 
     // if a transaction was canceled, there is no pending undo/redo group.
     // In this case, just delete the item.
-    if (d->transactionRefCount > 0 && !d->currentUndoGroup) {
+    if (d->transactionRefCount > 0 && !d->currentHistoryGroup) {
         delete item;
         return;
     }
 
     startTransaction();
-    Q_ASSERT(d->currentUndoGroup != nullptr);
+    Q_ASSERT(d->currentHistoryGroup != nullptr);
 
     // add to current group.
     // WARNING: This might merge the item with an already existing item.
     //          Therefore the item pointer may be a dangling pointer afterwards!
-    d->currentUndoGroup->addRedoItem(item);
+    d->currentHistoryGroup->addRedoItem(item);
 
     commitTransaction();
 }
@@ -209,10 +209,10 @@ std::vector<HistoryGroup*> HistoryManager::undoGroups() const
 void HistoryManager::startTransaction(const QString & text)
 {
     if (d->transactionRefCount == 0) {
-        Q_ASSERT(d->currentUndoGroup == nullptr);
+        Q_ASSERT(d->currentHistoryGroup == nullptr);
 
         // create new pending undo group
-        d->currentUndoGroup = new HistoryGroup(text, this);
+        d->currentHistoryGroup = new HistoryGroup(text, this);
 
         // track clean state at the beginning of the transaction
         d->wasClean = isClean();
@@ -230,10 +230,10 @@ void HistoryManager::cancelTransaction()
 
     // undo all, and delete group
     d->transactionCanceled = true;
-    if (d->currentUndoGroup) {
-        d->currentUndoGroup->undo();
-        delete d->currentUndoGroup;
-        d->currentUndoGroup = nullptr;
+    if (d->currentHistoryGroup) {
+        d->currentHistoryGroup->undo();
+        delete d->currentHistoryGroup;
+        d->currentHistoryGroup = nullptr;
     }
 }
 
@@ -250,16 +250,16 @@ void HistoryManager::commitTransaction()
 
     // if the transaction was canceled, there is nothing to do.
     if (d->transactionCanceled) {
-        Q_ASSERT(! d->currentUndoGroup);
+        Q_ASSERT(! d->currentHistoryGroup);
         d->transactionCanceled = false;
         return;
     }
 
     // calling startTransaction() immediately followed by commitTransaction()
     // will create an empty pending undo group. We don't want empty groups.
-    if (d->currentUndoGroup && d->currentUndoGroup->isEmpty()) {
-        delete d->currentUndoGroup;
-        d->currentUndoGroup = nullptr;
+    if (d->currentHistoryGroup && d->currentHistoryGroup->isEmpty()) {
+        delete d->currentHistoryGroup;
+        d->currentHistoryGroup = nullptr;
         return;
     }
 
@@ -270,8 +270,8 @@ void HistoryManager::commitTransaction()
     d->redoItems.clear();
 
     // next: add pending undo group
-    d->undoItems.push_back(d->currentUndoGroup);
-    d->currentUndoGroup = nullptr;
+    d->undoItems.push_back(d->currentHistoryGroup);
+    d->currentHistoryGroup = nullptr;
 
     // track clean state
     if (d->wasClean) {

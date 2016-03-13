@@ -20,8 +20,7 @@ include_directories(
     style/
     node
     path
-    path/edge
-    path/ellipse
+    ${CMAKE_SOURCE_DIR}/src/include
 )
 
 set(qtikzcore_SOURCES
@@ -37,9 +36,6 @@ set(qtikzcore_SOURCES
     utils/Pos.cpp
     utils/MetaPos.cpp
     utils/MetaPos_p.cpp
-    utils/Uid.cpp
-    utils/Entity.cpp
-    utils/ConfigObject.cpp
 
     properties/Property.cpp
     properties/PropertyInterface.cpp
@@ -50,28 +46,10 @@ set(qtikzcore_SOURCES
     properties/PosProperty.cpp
 
     path/Path.cpp
-    path/UndoSetPathStyle.cpp
-    path/UndoCreatePath.cpp
-    path/UndoDeletePath.cpp
-
-    path/edge/EdgePath.cpp
-    path/edge/UndoSetEdgePos.cpp
-
-    path/ellipse/EllipsePath.cpp
-    path/ellipse/UndoSetEllipsePos.cpp
-
-    undo/UndoManager.cpp
-    undo/UndoFactory.cpp
-    undo/UndoGroup.cpp
-    undo/UndoItem.cpp
-    undo/Transaction.cpp
+    path/EdgePath.cpp
+    path/EllipsePath.cpp
 
     node/Node.cpp
-    node/UndoCreateNode.cpp
-    node/UndoDeleteNode.cpp
-    node/UndoSetNodePos.cpp
-    node/UndoSetNodeText.cpp
-    node/UndoSetNodeStyle.cpp
 
     visitor/Visitor.cpp
     visitor/SerializeVisitor.cpp
@@ -87,6 +65,7 @@ add_library(qtikzcore SHARED
 target_link_libraries(qtikzcore
     Qt5::Core
     Qt5::Widgets
+    entitysystem
 )
 
 # kate: indent-width 4; replace-tabs on;

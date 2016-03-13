@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -46,6 +46,11 @@ class TIKZCORE_EXPORT EllipsePath : public Path
          * Virtual destructor.
          */
         virtual ~EllipsePath();
+
+        /**
+         * Returns "ellipse-path".
+         */
+        const char * entityType() const override;
 
         /**
          * Returns type tikz::PathType::Ellipse.
@@ -130,15 +135,10 @@ class TIKZCORE_EXPORT EllipsePath : public Path
         /**
          * Constructor that associates this path with the tikz Document @p doc.
          * @param type Path type
-         * @param uid unique id of the path
+         * @param eid unique id of the path
          * @param doc associated document
          */
-        EllipsePath(const Uid & uid, Document* doc);
-
-        /**
-         * Destruct the ellipse by saving the position or node connection.
-         */
-        void deconstruct() override;
+        EllipsePath(const es::Eid & eid, Document* doc);
 
         /**
          * Detach the ellipse from @p node, since @p node is about to be deleted.

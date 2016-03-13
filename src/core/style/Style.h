@@ -21,7 +21,7 @@
 #define TIKZ_STYLE_H
 
 #include "tikz.h"
-#include "Entity.h"
+#include <EntitySystem/Entity.h>
 #include "Value.h"
 
 #include <QColor>
@@ -32,7 +32,7 @@ namespace core {
 class Document;
 class StylePrivate;
 
-class TIKZCORE_EXPORT Style : public Entity
+class TIKZCORE_EXPORT Style : public es::Entity
 {
     Q_OBJECT
     Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor RESET unsetPenColor)
@@ -62,9 +62,9 @@ class TIKZCORE_EXPORT Style : public Entity
         virtual ~Style();
 
         /**
-         * Returns EntityType::Style.
+         * Returns "style".
          */
-        tikz::EntityType entityType() const override;
+        const char * entityType() const override;
 
         /**
          * Set the properties of this style to all properties of @p other.
@@ -103,10 +103,10 @@ class TIKZCORE_EXPORT Style : public Entity
 
         /**
          * Searches this style as well as all child styles recursively for
-         * a style that matches @p styleUid. If no style with @p styleUid is
+         * a style that matches @p styleEid. If no style with @p styleEid is
          * found, a nullptr is returned.
          */
-        Style * findStyle(const Uid & styleUid) const;
+        Style * findStyle(const es::Eid & styleEid) const;
 
     //
     // properties
@@ -427,9 +427,9 @@ class TIKZCORE_EXPORT Style : public Entity
         friend class Document;
 
         /**
-         * Associate this style with @p uid to the document @p tikzDocument.
+         * Associate this style with @p eid to the document @p tikzDocument.
          */
-        Style(const Uid & uid, Document* tikzDocument);
+        Style(const es::Eid & eid, Document* tikzDocument);
 
     private:
         std::unique_ptr<StylePrivate> const d;

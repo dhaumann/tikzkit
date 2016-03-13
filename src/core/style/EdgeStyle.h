@@ -355,9 +355,9 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         friend class Document;
 
         /**
-         * Associate this style with @p uid to the document @p tikzDocument.
+         * Associate this style with @p eid to the document @p tikzDocument.
          */
-        EdgeStyle(const Uid & uid, Document* tikzDocument);
+        EdgeStyle(const es::Eid & eid, Document* tikzDocument);
 
     private:
         std::unique_ptr<EdgeStylePrivate> const d;

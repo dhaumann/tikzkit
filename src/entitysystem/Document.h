@@ -17,8 +17,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TIKZ_DOCUMENT_H
-#define TIKZ_DOCUMENT_H
+#ifndef ENTITY_SYSTEM_DOCUMENT_H
+#define ENTITY_SYSTEM_DOCUMENT_H
 
 #include "ConfigObject.h"
 
@@ -226,7 +226,7 @@ class ES_EXPORT Document : public ConfigObject
         bool redoAvailableChanged(bool available) const;
 
     //
-    // Node, Path and style management
+    // Entity management
     //
     public:
         /**
@@ -236,6 +236,48 @@ class ES_EXPORT Document : public ConfigObject
          */
         Entity * entity(const es::Eid & eid) const;
 
+        /**
+         * Create a new entity associated with this document.
+         */
+        Entity * createEntity(const QString & type);
+
+        /**
+         * Templated helper function to create new entities.
+         */
+        template<typename T>
+        T * createEntity(const QString & type)
+        {
+            return static_cast<T *>(createEntity(type));
+        }
+
+        /**
+         * Delete entity @p eid associated with this document.
+         * If reimplemented, make sure to still call this function.
+         */
+        virtual void deleteEntity(const Eid & eid);
+
+        /**
+         * Delete @p entity of this document.
+         */
+        void deleteEntity(Entity * entity);
+
+        /**
+         * Returns a list of all entities.
+         */
+        const std::vector<Entity *> & entities() const;
+
+    Q_SIGNALS:
+        /**
+         * This signal is emitted whenever the @p entity is created.
+         */
+        void entityCreated(Entity * entity);
+
+        /**
+         * This signal is emitted whenever the @p entity is about to be deleted.
+         * At this point in time, @p entity is still fully valid.
+         */
+        void aboutToDeleteEntity(Entity * entity);
+
     //
     // internal: Undo / redo items manipulate with ID
     //
@@ -244,11 +286,6 @@ class ES_EXPORT Document : public ConfigObject
          * Create a new node associated with this document with @p eid.
          */
         virtual Entity * createEntity(const Eid & eid, const QString & type);
-
-        /**
-         * Delete node @p eid associated with this document.
-         */
-        virtual void deleteEntity(const Eid & eid);
 
     //
     // data pointer
@@ -268,6 +305,6 @@ class ES_EXPORT Document : public ConfigObject
 
 }
 
-#endif // TIKZ_DOCUMENT_H
+#endif // ENTITY_SYSTEM_DOCUMENT_H
 
 // kate: indent-width 4; replace-tabs on;

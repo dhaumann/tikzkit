@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -20,7 +20,7 @@
 #ifndef TIKZ_NODE_H
 #define TIKZ_NODE_H
 
-#include "Entity.h"
+#include <EntitySystem/Entity.h>
 #include "tikz.h"
 #include "Pos.h"
 
@@ -36,7 +36,7 @@ class Document;
 class Visitor;
 class MetaPos;
 
-class TIKZCORE_EXPORT Node : public Entity
+class TIKZCORE_EXPORT Node : public es::Entity
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
@@ -49,9 +49,9 @@ class TIKZCORE_EXPORT Node : public Entity
         virtual ~Node();
 
         /**
-         * Returns EntityType::Node.
+         * Returns "node".
          */
-        tikz::EntityType entityType() const override;
+        const char * entityType() const override;
 
     //
     // visitor pattern
@@ -126,10 +126,10 @@ class TIKZCORE_EXPORT Node : public Entity
 
         /**
          * Constructor that associates this node with the tikz Document @p doc.
-         * @param uid unique id of the node
+         * @param eid unique id of the node
          * @param doc associated document
          */
-        Node(const Uid & uid, Document* doc);
+        Node(const es::Eid & eid, Document* doc);
 
     private:
         /**
