@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -56,9 +56,9 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         virtual ~EdgeStyle();
 
         /**
-         * Returns EntityType::EdgeStyle.
+         * Returns "edge-style".
          */
-        tikz::EntityType entityType() const override;
+        const char * entityType() const override;
 
         /**
          * Set the properties of this style to all properties of @p other.

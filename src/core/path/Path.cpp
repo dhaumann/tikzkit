@@ -22,8 +22,6 @@
 #include "Visitor.h"
 #include "Document.h"
 
-#include "UndoSetPathStyle.h"
-
 namespace tikz {
 namespace core {
 
@@ -75,18 +73,7 @@ EdgeStyle* Path::style() const
 
 void Path::setStyle(const EdgeStyle & style)
 {
-    // TODO: room for optimization: if style did not change, abort
-
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->style.setStyle(&style);
-    } else {
-        // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetPathStyle(eid(), style, document()));
-
-        // now the text should be updated
-        //     Q_ASSERT(d->style == style); // same as above
-    }
+    d->style.setStyle(&style);
 }
 
 // Edge * Path::createEdge(int index)

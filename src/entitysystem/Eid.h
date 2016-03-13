@@ -103,6 +103,15 @@ class ES_EXPORT Eid
         Entity * entity() const;
 
         /**
+         * Returns the Entity this Eid refers to.
+         */
+        template<typename T>
+        T * entity() const
+        {
+            return dynamic_cast<T *>(entity());
+        }
+
+        /**
          * Returns the Entity type, or an empty string, if no Entity is associated.
          */
         const char * type() const;

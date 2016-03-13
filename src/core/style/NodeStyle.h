@@ -51,9 +51,9 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         virtual ~NodeStyle();
 
         /**
-         * Returns EntityType::NodeStyle.
+         * Returns "node-style".
          */
-        tikz::EntityType entityType() const override;
+        const char * entityType() const override;
 
         /**
          * Set the properties of this style to all properties of @p other.

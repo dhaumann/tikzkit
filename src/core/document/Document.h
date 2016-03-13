@@ -146,42 +146,8 @@ class TIKZCORE_EXPORT Document : public es::Document
         /**
          * Delete entity @p eid associated with this document.
          */
-        void deleteEntity(const Eid & eid) override;
+        void deleteEntity(const es::Eid & eid) override;
 
-        /**
-         * Creates a new node associated with this document.
-         * If the node is not needed anymore, delete it with deleteNode().
-         */
-        Node * createNode();
-
-        /**
-         * Remove @p node from the document by deleting the node object.
-         * Afterwards, the pointer is invalid.
-         * @param node node to delete
-         */
-        void deleteNode(Node * node);
-
-        /**
-         * Creates a new path associated with this document.
-         * If the path is not needed anymore, delete it with deletePath().
-         * @param type the path type
-         */
-        Path * createPath(tikz::PathType type = PathType::Line);
-
-    //
-    // internal: Undo / redo items manipulate with ID
-    //
-    protected:
-        /**
-         * Create a new node associated with this document with @p eid.
-         */
-        virtual Node * createNode(const es::Eid & eid);
-
-        /**
-         * Create a new path associated with this document with @p eid.
-         */
-        virtual Path * createPath(PathType type, const es::Eid & eid);
-//
     //
     // data pointer
     //

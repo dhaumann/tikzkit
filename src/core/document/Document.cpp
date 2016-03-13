@@ -164,66 +164,10 @@ QVector<Path*> Document::paths() const
     return pathList;
 }
 
-Path * Document::createPath(PathType type)
-{
-    // create new edge
-    const es::Eid eid(d->uniqueId(), this);
-    addUndoItem(new UndoCreatePath(type, eid, this));
-
-    // now the edge should be in the map
-    const auto it = d->entityMap.find(eid);
-    if (it != d->entityMap.end()) {
-        return dynamic_cast<Path*>(*it);
-    }
-
-    // requested id not in map, this is a bug, since UndoCreatePath should
-    // call createPath(int) that inserts the Entity
-    Q_ASSERT(false);
-
-    return nullptr;
-}
-
-Node* Document::createNode()
-{
-    // create new node, push will call ::redo()
-    const es::Eid eid(d->uniqueId(), this);
-    addUndoItem(new UndoCreateNode(eid, this));
-
-    // now the node should be in the map
-    const auto it = d->entityMap.find(eid);
-    if (it != d->entityMap.end()) {
-        return dynamic_cast<Node *>(*it);
-    }
-
-    // requested id not in map, this is a bug, since UndoCreatePath should
-    // call createPath(int) that inserts the Entity
-    Q_ASSERT(false);
-
-    return nullptr;
-}
-
-Node * Document::createNode(const es::Eid & eid)
-{
-    Q_ASSERT(eid.isValid());
-    Q_ASSERT(!d->entityMap.contains(eid));
-
-    // create new node
-    Node* node = new Node(eid, this);
-    d->entities.append(node);
-
-    // insert node into hash map
-    d->entityMap.insert(eid, node);
-
-    // propagate changed signal
-    connect(node, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
-
-    return node;
-}
-
-void Document::deleteEntity(const Eid & eid)
+void Document::deleteEntity(const es::Eid & eid)
 {
     auto node = eid.entity<Node>();
-    if (node) {
+    if (node && !undoActive()) {
         // start undo group
         beginTransaction("Remove node");
 
@@ -235,72 +179,10 @@ void Document::deleteEntity(const Eid & eid)
         }
 
         // end undo group
-        d->undoManager->commitTransaction();
+        finishTransaction();
     }
 
     es::Document::deleteEntity(eid);
-}
-
-void Document::deleteNode(Node * node)
-{
-    // valid input?
-    Q_ASSERT(node != 0);
-    Q_ASSERT(d->entityMap.contains(node->eid()));
-
-    // get edge id
-    const es::Eid eid = node->eid();
-
-    // start undo group
-    d->undoManager->startTransaction("Remove node");
-
-    // make sure no edge points to the deleted node
-    for (auto entity : d->entities) {
-        if (auto path = dynamic_cast<Path *>(entity)) {
-            path->detachFromNode(node);
-        }
-
-        // TODO: a path might require the node?
-        //       in that case, maybe delete the path as well?
-    }
-
-    // delete node, push will call ::redo()
-    addUndoItem(new UndoDeleteNode(eid, this));
-
-    // end undo group
-    d->undoManager->commitTransaction();
-
-    // node really removed?
-    Q_ASSERT(!d->entityMap.contains(eid));
-}
-
-
-Path * Document::createPath(PathType type, const es::Eid & eid)
-{
-    Q_ASSERT(eid.isValid());
-
-    // create new path
-    Path* path = nullptr;
-    switch(type) {
-        case PathType::Line:
-        case PathType::HVLine:
-        case PathType::VHLine:
-        case PathType::BendCurve:
-        case PathType::InOutCurve:
-        case PathType::BezierCurve: {
-            path = new EdgePath(type, eid, this);
-            break;
-        }
-        case PathType::Ellipse:
-            path = new EllipsePath(eid, this);
-            break;
-        default:
-            Q_ASSERT(false);
-    }
-
-    // propagate changed signal
-    connect(path, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
-
-    return path;
 }
 
 }

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -18,7 +18,6 @@
  */
 
 #include "EdgePath.h"
-#include "UndoSetEdgePos.h"
 #include "Node.h"
 #include "Document.h"
 
@@ -90,7 +89,7 @@ void EdgePath::detachFromNode(Node * node)
     Q_ASSERT(d->end.node() != node);
 }
 
-const char * EdgePath::type() const
+const char * EdgePath::entityType() const
 {
     return "edge-path";
 }
@@ -162,17 +161,12 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        auto oldNode = startNode();
-        d->start = pos;
-        auto newNode = startNode();
-        if (oldNode != newNode) {
-            emit startNodeChanged(newNode);
-        }
-    } else {
-        document()->addUndoItem(
-            new UndoSetEdgePos(eid(), pos, true, document()));
+    Transaction transaction(this, "Set Edge Start Position");
+    auto oldNode = startNode();
+    d->start = pos;
+    auto newNode = startNode();
+    if (oldNode != newNode) {
+        emit startNodeChanged(newNode);
     }
 }
 
@@ -182,17 +176,12 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        auto oldNode = endNode();
-        d->end = pos;
-        auto newNode = endNode();
-        if (oldNode != newNode) {
-            emit endNodeChanged(newNode);
-        }
-    } else {
-        document()->addUndoItem(
-            new UndoSetEdgePos(eid(), pos, false, document()));
+    Transaction transaction(this, "Set Edge End Position");
+    auto oldNode = endNode();
+    d->end = pos;
+    auto newNode = endNode();
+    if (oldNode != newNode) {
+        emit endNodeChanged(newNode);
     }
 }
 

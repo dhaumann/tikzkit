@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -22,10 +22,6 @@
 #include "Document.h"
 #include "Visitor.h"
 #include "MetaPos.h"
-
-#include "UndoSetNodePos.h"
-#include "UndoSetNodeText.h"
-#include "UndoSetNodeStyle.h"
 
 #include <cmath>
 
@@ -96,12 +92,8 @@ void Node::setMetaPos(const tikz::core::MetaPos & pos)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->pos = pos;
-    } else {
-        document()->addUndoItem(new UndoSetNodePos(eid(), pos, document()));
-    }
+    Transaction transaction(this, "Move Node");
+    d->pos = pos;
 }
 
 const tikz::core::MetaPos & Node::metaPos() const
@@ -116,17 +108,9 @@ void Node::setText(const QString& text)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->text = text;
-        emit textChanged(d->text);
-    } else {
-        // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeText(eid(), text, document()));
-
-        // now the text should be updated
-        Q_ASSERT(d->text == text);
-    }
+    Transaction transaction(this, "Set Node Text");
+    d->text = text;
+    emit textChanged(d->text);
 }
 
 QString Node::text() const
@@ -141,18 +125,8 @@ NodeStyle* Node::style() const
 
 void Node::setStyle(const NodeStyle & style)
 {
-    // TODO: room for optimization: if style did not change, abort
-
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->style.setStyle(&style);
-    } else {
-    // create new undo item, push will call ::redo()
-    document()->addUndoItem(new UndoSetNodeStyle(eid(), style, document()));
-
-    // now the text should be updated
-//     Q_ASSERT(d->style == style); // same as above
-    }
+    Transaction transaction(this, "Set Node Style");
+    d->style.setStyle(&style);
 }
 
 }

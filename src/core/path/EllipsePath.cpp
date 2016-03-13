@@ -18,7 +18,6 @@
  */
 
 #include "EllipsePath.h"
-#include "UndoSetEllipsePos.h"
 #include "Node.h"
 #include "Document.h"
 
@@ -50,7 +49,7 @@ EllipsePath::~EllipsePath()
     delete d;
 }
 
-const char * EllipsePath::type() const
+const char * EllipsePath::entityType() const
 {
     return "ellipse-path";
 }
@@ -112,17 +111,12 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        auto oldNode = node();
-        d->pos = pos;
-        auto newNode = node();
-        if (oldNode != newNode) {
-            emit nodeChanged(newNode);
-        }
-    } else {
-        document()->addUndoItem(
-            new UndoSetEllipsePos(eid(), pos, document()));
+    Transaction transaction(this, "Move Ellipse");
+    auto oldNode = node();
+    d->pos = pos;
+    auto newNode = node();
+    if (oldNode != newNode) {
+        emit nodeChanged(newNode);
     }
 }
 

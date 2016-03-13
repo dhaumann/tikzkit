@@ -237,6 +237,15 @@ class ES_EXPORT Document : public ConfigObject
         Entity * entity(const es::Eid & eid) const;
 
         /**
+         * Templated helper function that returns a dynamic_casted Entity.
+         */
+        template<typename T>
+        T * entity(const es::Eid & eid) const
+        {
+            return dynamic_cast<T *>(entity(eid));
+        }
+
+        /**
          * Create a new entity associated with this document.
          */
         Entity * createEntity(const QString & type);
