@@ -230,6 +230,11 @@ class ES_EXPORT Document : public ConfigObject
     //
     public:
         /**
+         * Constructor with value and type.
+         */
+        Eid createEid(const QString & idStr) noexcept;
+
+        /**
          * Returns the Entity for the Eid @p eid.
          * A null pointer is returned if the Entity does not exist, or if the
          * Eid::document() pointer does not equal this Document.

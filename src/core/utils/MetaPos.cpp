@@ -88,9 +88,7 @@ void MetaPos::fromString(const QString & str)
 
         d->beginChange();
         const int endIndex = (dotIndex > 0) ? dotIndex : closeIndex;
-        bool ok;
-        d->nodeId = es::Eid(str.mid(openIndex + 1, endIndex - (openIndex + 1)).toLongLong(&ok), d->doc);
-        Q_ASSERT(ok);
+        d->nodeId = es::Eid::fromString(str.mid(openIndex + 1, endIndex - (openIndex + 1)), d->doc);
 
         // read the anchor
         if (dotIndex > 0) {

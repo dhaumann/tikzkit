@@ -48,31 +48,6 @@ class ES_EXPORT Eid
         }
 
         /**
-         * Constructor with value and type.
-         */
-        explicit constexpr Eid(qint64 id, Document * doc) noexcept
-            : m_id(id)
-            , m_document(doc)
-        {
-        }
-
-        /**
-         * Constructor with value and type.
-         */
-        explicit Eid(const QString & idStr, es::Document * doc) noexcept
-            : m_id(-1)
-            , m_document(doc)
-        {
-            bool ok = false;
-            m_id = idStr.toLongLong(&ok);
-            Q_ASSERT(ok);
-
-            if (! ok) {
-                m_id = -1;
-            }
-        }
-
-        /**
          * Returns @e true, if id() >= 0 and document() is other than a null pointer,
          * otherwise returns @e false.
          */
@@ -124,6 +99,11 @@ class ES_EXPORT Eid
             return QString::number(m_id);
         }
 
+        /**
+         * Converts the @p str to a possibly valid Eid based on the document @p doc.
+         */
+        static Eid fromString(const QString & str, Document * doc);
+
     //
     // operators
     //
@@ -149,6 +129,18 @@ class ES_EXPORT Eid
         {
             return QVariant::fromValue(*this);
         }
+
+    private:
+        /**
+         * Constructor with value and type.
+         */
+        explicit constexpr Eid(qint64 id, Document * doc) noexcept
+            : m_id(id)
+            , m_document(doc)
+        {
+        }
+
+        friend class Document;
 
     private:
         /**

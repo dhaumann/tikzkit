@@ -64,9 +64,8 @@ Eid Entity::eid() const
 
 void Entity::load(const QJsonObject & json)
 {
-    if (json.contains("eid")) {
-        d->eid = Eid(json["eid"].toString(), d->document);
-    }
+    Q_ASSERT(json.contains("eid"));
+    d->eid = Eid::fromString(json["eid"].toString(), d->document);
 
     // load payload
     QJsonObject joData = json["data"].toObject();

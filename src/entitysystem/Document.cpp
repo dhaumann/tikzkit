@@ -455,6 +455,20 @@ void Document::deleteEntity(Entity * entity)
     deleteEntity(entity->eid());
 }
 
+Eid Document::createEid(const QString & idStr) noexcept
+{
+    bool ok = false;
+    const qint64 id = idStr.toLongLong(&ok);
+    Q_ASSERT(ok);
+
+    if (! ok) {
+        return Eid();
+    }
+
+    Q_ASSERT(id <= d->nextId);
+    return Eid(id, this);
+}
+
 Entity * Document::entity(const es::Eid & eid) const
 {
     if (eid.document() != this) {

@@ -44,6 +44,12 @@ const char * Eid::type() const
     return e ? e->entityType() : invalid;
 }
 
+Eid Eid::fromString(const QString & str, Document * doc)
+{
+    Q_ASSERT(doc);
+    return doc ? doc->createEid(str) : Eid();
+}
+
 }
 
 namespace QTest {

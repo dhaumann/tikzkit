@@ -49,7 +49,7 @@ void DeleteEntityHistoryItem::apply()
 
 void DeleteEntityHistoryItem::loadData(const QJsonObject & json)
 {
-    m_eid = Eid(json["eid"].toString(), document());
+    m_eid = Eid::fromString(json["eid"].toString(), document());
 }
 
 QJsonObject DeleteEntityHistoryItem::saveData() const

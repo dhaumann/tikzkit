@@ -54,7 +54,7 @@ void CreateEntityHistoryItem::apply()
 
 void CreateEntityHistoryItem::loadData(const QJsonObject & json)
 {
-    m_eid = Eid(json["eid"].toString(), document());
+    m_eid = Eid::fromString(json["eid"].toString(), document());
     m_entityType = json["type"].toString();
 }
 

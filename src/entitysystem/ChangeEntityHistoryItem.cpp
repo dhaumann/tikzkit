@@ -58,7 +58,7 @@ bool ChangeEntityHistoryItem::mergeWith(const HistoryItem * command)
 
 void ChangeEntityHistoryItem::loadData(const QJsonObject & json)
 {
-    m_eid = Eid(json["eid"].toString(), document());
+    m_eid = Eid::fromString(json["eid"].toString(), document());
     m_jsonData = json["data"].toObject();
 }
 
