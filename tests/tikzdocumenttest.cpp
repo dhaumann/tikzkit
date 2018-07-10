@@ -14,8 +14,6 @@
 
 QTEST_MAIN(TikzDocumentTest)
 
-#include "tikzdocumenttest.moc"
-
 void TikzDocumentTest::initTestCase()
 {
 }

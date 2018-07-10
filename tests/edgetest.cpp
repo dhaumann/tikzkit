@@ -8,8 +8,6 @@
 
 QTEST_MAIN(EdgeTest)
 
-#include "edgetest.moc"
-
 void EdgeTest::initTestCase()
 {
 }

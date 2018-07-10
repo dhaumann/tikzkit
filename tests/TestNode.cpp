@@ -17,7 +17,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "TestNode.h"
-#include "TestNode.moc"
 
 #include <QtTest/QTest>
 

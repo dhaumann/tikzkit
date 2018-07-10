@@ -10,8 +10,6 @@
 
 QTEST_MAIN(DocumentTest)
 
-#include "documenttest.moc"
-
 void DocumentTest::initTestCase()
 {
 }

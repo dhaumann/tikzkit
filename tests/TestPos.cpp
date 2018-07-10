@@ -17,7 +17,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "TestPos.h"
-#include "TestPos.moc"
 
 #include <QtTest/QTest>
 

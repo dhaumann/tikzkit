@@ -17,7 +17,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "TestValue.h"
-#include "TestValue.moc"
 
 #include <QtTest/QTest>
 

@@ -17,7 +17,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "TestMetaPos.h"
-#include "TestMetaPos.moc"
 
 #include <QtTest/QTest>
 
