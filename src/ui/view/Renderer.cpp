@@ -212,7 +212,7 @@ bool Renderer::viewportEvent(QEvent * event)
     const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
     const qreal xZoom = transform().m11() / physicalDpiX() * s;
     const qreal yZoom = qAbs(transform().m22()) / physicalDpiY() * s;
-    Q_ASSERT(xZoom == yZoom);
+    Q_ASSERT(qFuzzyCompare(xZoom, yZoom));
 
     // update ruler (zoom, origin)
     m_hRuler->setOrigin(m_hRuler->mapFromGlobal(viewport()->mapToGlobal(mapFromScene(QPointF(0, 0)))).x());
