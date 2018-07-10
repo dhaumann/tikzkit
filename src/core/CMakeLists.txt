@@ -1,28 +1,9 @@
 project(qtikzcore)
 
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
-
 # find Qt5 modules
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
-include_directories(
-    .
-    document/
-    utils/
-    undo/
-    visitor/
-    style/
-    node
-    path
-    path/edge
-    path/ellipse
-)
-
-set(qtikzcore_SOURCES
+add_library(qtikzcore SHARED
     tikz.cpp
 
     document/Document.cpp
@@ -78,15 +59,25 @@ set(qtikzcore_SOURCES
     visitor/TikzExport.cpp
 )
 
-add_library(qtikzcore SHARED
-    ${qtikzcore_SOURCES}
-)
-
 target_compile_features(qtikzcore PRIVATE cxx_std_14)
 
 target_link_libraries(qtikzcore
     Qt5::Core
     Qt5::Widgets
+)
+
+target_include_directories(qtikzcore
+    PRIVATE
+    .
+    document/
+    utils/
+    undo/
+    visitor/
+    style/
+    node
+    path
+    path/edge
+    path/ellipse
 )
 
 # kate: indent-width 4; replace-tabs on;

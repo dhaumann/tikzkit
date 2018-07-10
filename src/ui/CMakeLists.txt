@@ -1,37 +1,6 @@
 project(qtikzui)
 
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
-
-# find Qt5 modules
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
-
-
-include_directories(
-    .
-    ${CMAKE_SOURCE_DIR}/src/include
-
-    ${CMAKE_SOURCE_DIR}/src/ui/tools
-    ${CMAKE_SOURCE_DIR}/src/ui/handle
-    ${CMAKE_SOURCE_DIR}/src/ui/paths
-    ${CMAKE_SOURCE_DIR}/src/ui/shapes
-    ${CMAKE_SOURCE_DIR}/src/ui/arrows
-    ${CMAKE_SOURCE_DIR}/src/ui/tex
-    ${CMAKE_SOURCE_DIR}/src/ui/widgets
-    ${CMAKE_SOURCE_DIR}/src/ui/view
-    ${CMAKE_SOURCE_DIR}/src/ui/colors
-    ${CMAKE_SOURCE_DIR}/src/ui/propertybrowser
-    ${CMAKE_SOURCE_DIR}/src/ui/include
-    ${CMAKE_SOURCE_DIR}/src/ui/app
-    ${CMAKE_SOURCE_DIR}/src/ui/document
-
-    ${CMAKE_SOURCE_DIR}/src/qtpropertybrowser/src
-
-#     ${CMAKE_CURRENT_BINARY_DIR}
-)
 
 set(qtikzui_SOURCES
     TikzItem.cpp
@@ -137,6 +106,28 @@ target_link_libraries(qtikzui
     Qt5::Svg
     qtikzcore
     qtpropertybrowser
+)
+
+target_include_directories(qtikzui
+    PRIVATE
+    .
+    ${CMAKE_SOURCE_DIR}/src/include
+
+    ${CMAKE_SOURCE_DIR}/src/ui/tools
+    ${CMAKE_SOURCE_DIR}/src/ui/handle
+    ${CMAKE_SOURCE_DIR}/src/ui/paths
+    ${CMAKE_SOURCE_DIR}/src/ui/shapes
+    ${CMAKE_SOURCE_DIR}/src/ui/arrows
+    ${CMAKE_SOURCE_DIR}/src/ui/tex
+    ${CMAKE_SOURCE_DIR}/src/ui/widgets
+    ${CMAKE_SOURCE_DIR}/src/ui/view
+    ${CMAKE_SOURCE_DIR}/src/ui/colors
+    ${CMAKE_SOURCE_DIR}/src/ui/propertybrowser
+    ${CMAKE_SOURCE_DIR}/src/ui/include
+    ${CMAKE_SOURCE_DIR}/src/ui/app
+    ${CMAKE_SOURCE_DIR}/src/ui/document
+
+    ${CMAKE_SOURCE_DIR}/src/qtpropertybrowser/src
 )
 
 # kate: indent-width 4; replace-tabs on;
