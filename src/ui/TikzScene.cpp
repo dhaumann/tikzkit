@@ -34,6 +34,7 @@
 #include <QVarLengthArray>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QUndoStack>
 
 #include <math.h>
 

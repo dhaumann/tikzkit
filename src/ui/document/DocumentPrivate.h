@@ -162,42 +162,42 @@ class DocumentPrivate : public tikz::ui::Document
         void deletePathItem(tikz::ui::PathItem * path) override;
 
         /**
-         * Get the NodeItem with @p eid.
-         * @param eid unique id of the node
+         * Get the NodeItem with @p uid.
+         * @param uid unique id of the node
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        NodeItem * nodeItemFromId(const es::Eid & eid) const;
+        NodeItem * nodeItemFromId(const tikz::core::Uid & uid) const;
 
         /**
-         * Get the tikz::ui::PathItem with @p eid.
-         * @param eid unique id of the path
+         * Get the tikz::ui::PathItem with @p uid.
+         * @param uid unique id of the path
          * @return null, if the id is -1, otherwise a valid pointer to the node
          */
-        tikz::ui::PathItem * pathItemFromId(const es::Eid & eid) const;
+        tikz::ui::PathItem * pathItemFromId(const tikz::core::Uid & uid) const;
 
     //
     // internal: Undo / redo items manipulate with ID
     //
     protected:
         /**
-         * Create a new node associated with this document with @p eid.
+         * Create a new node associated with this document with @p uid.
          */
-        tikz::core::Node * createNode(const es::Eid & eid) override;
+        tikz::core::Node * createNode(const tikz::core::Uid & uid) override;
 
         /**
-         * Delete node @p eid associated with this document.
+         * Delete node @p uid associated with this document.
          */
-        void deleteNode(const es::Eid & eid) override;
+        void deleteNode(const tikz::core::Uid & uid) override;
 
         /**
-         * Create a new path associated with this document with @p eid.
+         * Create a new path associated with this document with @p uid.
          */
-        tikz::core::Path * createPath(tikz::PathType type, const es::Eid & eid) override;
+        tikz::core::Path * createPath(tikz::PathType type, const tikz::core::Uid & uid) override;
 
         /**
-         * Delete path @p eid associated with this document.
+         * Delete path @p uid associated with this document.
          */
-        void deletePath(const es::Eid & eid) override;
+        void deletePath(const tikz::core::Uid & uid) override;
 
     //
     // cleanup functions
@@ -224,12 +224,12 @@ class DocumentPrivate : public tikz::ui::Document
         /**
          * Node lookup map
          */
-        QHash<es::Eid, NodeItem*> m_nodeMap;
+        QHash<tikz::core::Uid, NodeItem*> m_nodeMap;
 
         /**
          * Edge lookup map
          */
-        QHash<es::Eid, tikz::ui::PathItem *> m_pathMap;
+        QHash<tikz::core::Uid, tikz::ui::PathItem *> m_pathMap;
 
         /**
          * Graphics scene for the document.

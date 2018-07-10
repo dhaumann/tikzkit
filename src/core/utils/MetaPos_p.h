@@ -22,7 +22,7 @@
 
 #include "tikz.h"
 
-#include <EntitySystem/Eid.h>
+#include "Uid.h"
 #include "Pos.h"
 #include <QSharedPointer>
 
@@ -45,7 +45,7 @@ class MetaPosPrivate : public QObject
         Document * doc = nullptr;
 
         tikz::Pos pos;
-        es::Eid nodeId;
+        Uid nodeId;
         QString anchor;
 
     public:

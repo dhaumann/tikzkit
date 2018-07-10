@@ -151,7 +151,7 @@ void TikzExportVisitor::visit(Node * node)
 
     QString cmd = QString("\\node[%1,draw] (%2) at %3 {%4};")
         .arg(options)
-        .arg(node->eid().toString())
+        .arg(node->uid().toString())
         .arg(node->pos().toString())
         .arg(node->text());
 

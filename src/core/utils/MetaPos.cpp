@@ -88,7 +88,9 @@ void MetaPos::fromString(const QString & str)
 
         d->beginChange();
         const int endIndex = (dotIndex > 0) ? dotIndex : closeIndex;
-        d->nodeId = es::Eid::fromString(str.mid(openIndex + 1, endIndex - (openIndex + 1)), d->doc);
+        bool ok;
+        d->nodeId = Uid(str.mid(openIndex + 1, endIndex - (openIndex + 1)).toLongLong(&ok), d->doc);
+        Q_ASSERT(ok);
 
         // read the anchor
         if (dotIndex > 0) {
@@ -170,7 +172,7 @@ void MetaPos::setPos(const tikz::Pos & pos)
     if (oldNode) {
         // disconnect changed() signal
         QObject::disconnect(oldNode, 0, d, 0);
-        d->nodeId = es::Eid();
+        d->nodeId = Uid();
 
         change = true;
     }
@@ -210,7 +212,7 @@ bool MetaPos::setNode(Node* newNode)
     }
 
     // set new node and forward change() signal if applicable
-    d->nodeId = newNode ? newNode->eid() : es::Eid();
+    d->nodeId = newNode ? newNode->uid() : Uid();
     curNode = node();
 
     // attach to newNode
@@ -231,7 +233,7 @@ bool MetaPos::setNode(Node* newNode)
 
 Node* MetaPos::node() const
 {
-    return d->doc->entity<Node>(d->nodeId);
+    return d->doc->nodeFromId(d->nodeId);
 }
 
 void MetaPos::setAnchor(const QString & anchor)

@@ -71,9 +71,9 @@ tikz::core::Path * PathItem::path() const
     return d->path;
 }
 
-es::Eid PathItem::eid() const
+tikz::core::Uid PathItem::uid() const
 {
-    return d->path->eid();
+    return d->path->uid();
 }
 
 tikz::core::EdgeStyle* PathItem::style() const

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -22,6 +22,8 @@
 #include "Visitor.h"
 #include "Document.h"
 
+#include "UndoSetPathStyle.h"
+
 namespace tikz {
 namespace core {
 
@@ -32,8 +34,8 @@ class PathPrivate
         EdgeStyle style;
 };
 
-Path::Path(const es::Eid & eid, Document* doc)
-    : Entity(eid, doc)
+Path::Path(const Uid & uid, Document* doc)
+    : Entity(uid, doc)
     , d(new PathPrivate())
 {
     d->style.setParentStyle(doc->style());
@@ -46,14 +48,18 @@ Path::~Path()
     delete d;
 }
 
-const char * Path::entityType() const
+tikz::EntityType Path::entityType() const
 {
-    return "path";
+    return EntityType::Path;
 }
 
 PathType Path::type() const
 {
     return PathType::Invalid;
+}
+
+void Path::deconstruct()
+{
 }
 
 void Path::detachFromNode(Node * node)
@@ -73,7 +79,18 @@ EdgeStyle* Path::style() const
 
 void Path::setStyle(const EdgeStyle & style)
 {
-    d->style.setStyle(&style);
+    // TODO: room for optimization: if style did not change, abort
+
+    if (document()->undoActive()) {
+        ConfigTransaction transaction(this);
+        d->style.setStyle(&style);
+    } else {
+        // create new undo item, push will call ::redo()
+        document()->addUndoItem(new UndoSetPathStyle(uid(), style, document()));
+
+        // now the text should be updated
+        //     Q_ASSERT(d->style == style); // same as above
+    }
 }
 
 // Edge * Path::createEdge(int index)
@@ -86,13 +103,24 @@ void Path::setStyle(const EdgeStyle & style)
 //         index = d->edges.size();
 //     }
 //
-//     ConfigTransaction transaction(this);
+//     Edge * edge = 0;
 //
-//     // create and insert edge
-//     Edge * edge = new Edge(this);
+//     if (document()->undoActive()) {
+//         ConfigTransaction transaction(this);
 //
-//     // insert edge
-//     d->edges.insert(index, edge);
+//         // create and insert edge
+//         edge = new Edge(this);
+//
+//         // insert edge
+//         d->edges.insert(index, edge);
+//     } else {
+//         // create edge via undo system
+//         document()->addUndoItem(new UndoCreateEdge(uid(), index, document()));
+//         Q_ASSERT(index < d->edges.size());
+//
+//         // return newly created edge
+//         edge = d->edges[index];
+//     }
 //
 //     return edge;
 // }
@@ -110,16 +138,21 @@ void Path::setStyle(const EdgeStyle & style)
 //     Q_ASSERT(index >= 0);
 //     Q_ASSERT(index < d->edges.size());
 //
-//     ConfigTransaction transaction(this);
+//     if (document()->undoActive()) {
+//         ConfigTransaction transaction(this);
 //
-//     // get edge to delete
-//     Edge * edge = d->edges[index];
+//         // get edge to delete
+//         Edge * edge = d->edges[index];
 //
-//     // remove edge
-//     d->edges.remove(index);
+//         // remove edge
+//         d->edges.remove(index);
 //
-//     // finally delete edge
-//     delete edge;
+//         // finally delete edge
+//         delete edge;
+//     } else {
+//         // create edge via undo system
+//         document()->addUndoItem(new UndoDeleteEdge(uid(), index, document()));
+//     }
 // }
 //
 // Edge* Path::edge(int i)

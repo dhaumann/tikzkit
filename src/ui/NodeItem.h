@@ -70,9 +70,9 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         tikz::core::Node * node();
 
         /**
-         * Returns node().eid();
+         * Returns node().uid();
          */
-        es::Eid eid() const;
+        tikz::core::Uid uid() const;
 
         /**
          * Returns the style of this node.

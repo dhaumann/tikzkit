@@ -122,9 +122,9 @@ tikz::core::Node * NodeItem::node()
     return d->node;
 }
 
-es::Eid NodeItem::eid() const
+tikz::core::Uid NodeItem::uid() const
 {
-    return d->node->eid();
+    return d->node->uid();
 }
 
 tikz::core::NodeStyle* NodeItem::style() const

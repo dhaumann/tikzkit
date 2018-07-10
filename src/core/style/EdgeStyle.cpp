@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -60,8 +60,8 @@ EdgeStyle::EdgeStyle()
 {
 }
 
-EdgeStyle::EdgeStyle(const es::Eid & eid, Document* tikzDocument)
-    : Style(eid, tikzDocument)
+EdgeStyle::EdgeStyle(const Uid & uid, Document* tikzDocument)
+    : Style(uid, tikzDocument)
     , d(new EdgeStylePrivate())
 {
 }
@@ -70,14 +70,14 @@ EdgeStyle::~EdgeStyle()
 {
 }
 
-const char * EdgeStyle::entityType() const
+tikz::EntityType EdgeStyle::entityType() const
 {
-    return "edge-style";
+    return EntityType::EdgeStyle;
 }
 
 void EdgeStyle::setStyle(const Style * other)
 {
-    Transaction transaction(this, "Copy Edge Style");
+    ConfigTransaction transaction(this);
     Style::setStyle(other);
     auto edgeStyle = qobject_cast<const EdgeStyle *>(other);
     if (edgeStyle) {
@@ -87,7 +87,7 @@ void EdgeStyle::setStyle(const Style * other)
 
 void EdgeStyle::loadData(const QJsonObject & json)
 {
-    Transaction transaction(this, "Load Edge Style");
+    ConfigTransaction transaction(this);
 
     Style::loadData(json);
 
@@ -220,7 +220,7 @@ bool EdgeStyle::radiusYSet() const
 void EdgeStyle::setRadiusX(const tikz::Value & xradius)
 {
     if (!propertySet(s_radiusX) || d->radiusX != xradius) {
-        Transaction transaction(this, "Set X Radius");
+        ConfigTransaction transaction(this);
         addProperty(s_radiusX);
         d->radiusX = xradius;
     }
@@ -229,7 +229,7 @@ void EdgeStyle::setRadiusX(const tikz::Value & xradius)
 void EdgeStyle::setRadiusY(const tikz::Value & yradius)
 {
     if (!propertySet(s_radiusY) || d->radiusY != yradius) {
-        Transaction transaction(this, "Set Y Radius");
+        ConfigTransaction transaction(this);
         addProperty(s_radiusY);
         d->radiusY = yradius;
     }
@@ -238,7 +238,7 @@ void EdgeStyle::setRadiusY(const tikz::Value & yradius)
 void EdgeStyle::unsetRadiusX()
 {
     if (propertySet(s_radiusX)) {
-        Transaction transaction(this, "Reset X Radius");
+        ConfigTransaction transaction(this);
         removeProperty(s_radiusX);
         d->radiusX = tikz::Value(0, tikz::Unit::Centimeter);
     }
@@ -247,7 +247,7 @@ void EdgeStyle::unsetRadiusX()
 void EdgeStyle::unsetRadiusY()
 {
     if (propertySet(s_radiusY)) {
-        Transaction transaction(this, "Reset Y Radius");
+        ConfigTransaction transaction(this);
         removeProperty(s_radiusY);
         d->radiusY = tikz::Value(0, tikz::Unit::Centimeter);
     }
@@ -279,7 +279,7 @@ void EdgeStyle::setBendAngle(qreal angle)
     while (angle < -180) angle += 360.0;
 
     if (!propertySet(s_bendAngle) || d->bendAngle != angle) {
-        Transaction transaction(this, "Set Bend Angle");
+        ConfigTransaction transaction(this);
         addProperty(s_bendAngle);
         d->bendAngle = angle;
     }
@@ -288,7 +288,7 @@ void EdgeStyle::setBendAngle(qreal angle)
 void EdgeStyle::unsetBendAngle()
 {
     if (propertySet(s_bendAngle)) {
-        Transaction transaction(this, "Reset Bend Angle");
+        ConfigTransaction transaction(this);
         removeProperty(s_bendAngle);
         d->bendAngle = 0.0;
     }
@@ -316,7 +316,7 @@ bool EdgeStyle::loosenessSet() const
 void EdgeStyle::setLooseness(qreal looseness)
 {
     if (!propertySet(s_looseness) || d->looseness != looseness) {
-        Transaction transaction(this, "Set Looseness");
+        ConfigTransaction transaction(this);
         addProperty(s_looseness);
         d->looseness = looseness;
     }
@@ -325,7 +325,7 @@ void EdgeStyle::setLooseness(qreal looseness)
 void EdgeStyle::unsetLooseness()
 {
     if (propertySet(s_looseness)) {
-        Transaction transaction(this, "Reset Looseness");
+        ConfigTransaction transaction(this);
         removeProperty(s_looseness);
         d->looseness = 1.0;
     }
@@ -373,7 +373,7 @@ bool EdgeStyle::outAngleSet() const
 void EdgeStyle::setOutAngle(qreal angle)
 {
     if (!propertySet(s_outAngle) || d->outAngle != angle) {
-        Transaction transaction(this, "Set Out Angle");
+        ConfigTransaction transaction(this);
         addProperty(s_outAngle);
         d->outAngle = angle;
     }
@@ -382,7 +382,7 @@ void EdgeStyle::setOutAngle(qreal angle)
 void EdgeStyle::unsetOutAngle()
 {
     if (propertySet(s_outAngle)) {
-        Transaction transaction(this, "Reset Out Angle");
+        ConfigTransaction transaction(this);
         removeProperty(s_outAngle);
         d->outAngle = 45;
     }
@@ -410,7 +410,7 @@ bool EdgeStyle::inAngleSet() const
 void EdgeStyle::setInAngle(qreal angle)
 {
     if (!propertySet(s_inAngle) || d->inAngle != angle) {
-        Transaction transaction(this, "Set In Angle");
+        ConfigTransaction transaction(this);
         addProperty(s_inAngle);
         d->inAngle = angle;
     }
@@ -419,7 +419,7 @@ void EdgeStyle::setInAngle(qreal angle)
 void EdgeStyle::unsetInAngle()
 {
     if (propertySet(s_inAngle)) {
-        Transaction transaction(this, "Reset In Angle");
+        ConfigTransaction transaction(this);
         removeProperty(s_inAngle);
         d->inAngle = 135;
     }
@@ -466,7 +466,7 @@ bool EdgeStyle::arrowHeadSet() const
 void EdgeStyle::setArrowTail(tikz::Arrow tail)
 {
     if (!propertySet(s_arrowTail) || d->arrowTail != tail) {
-        Transaction transaction(this, "Set Arrow Tail");
+        ConfigTransaction transaction(this);
         addProperty(s_arrowTail);
         d->arrowTail = tail;
     }
@@ -475,7 +475,7 @@ void EdgeStyle::setArrowTail(tikz::Arrow tail)
 void EdgeStyle::setArrowHead(tikz::Arrow head)
 {
     if (!propertySet(s_arrowHead) || d->arrowHead != head) {
-        Transaction transaction(this, "Set Arrow Head");
+        ConfigTransaction transaction(this);
         addProperty(s_arrowHead);
         d->arrowHead = head;
     }
@@ -484,7 +484,7 @@ void EdgeStyle::setArrowHead(tikz::Arrow head)
 void EdgeStyle::unsetArrowTail()
 {
     if (propertySet(s_arrowTail)) {
-        Transaction transaction(this, "Reset Arrow Tail");
+        ConfigTransaction transaction(this);
         removeProperty(s_arrowTail);
         d->arrowTail = tikz::Arrow::NoArrow;
     }
@@ -493,7 +493,7 @@ void EdgeStyle::unsetArrowTail()
 void EdgeStyle::unsetArrowHead()
 {
     if (propertySet(s_arrowHead)) {
-        Transaction transaction(this, "Reset Arrow Head");
+        ConfigTransaction transaction(this);
         removeProperty(s_arrowHead);
         d->arrowHead = tikz::Arrow::NoArrow;
     }
@@ -540,7 +540,7 @@ bool EdgeStyle::shortenEndSet() const
 void EdgeStyle::setShortenStart(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenStart) || d->shortenStart != shorten) {
-        Transaction transaction(this, "Set Shorten Start");
+        ConfigTransaction transaction(this);
         addProperty(s_shortenStart);
         d->shortenStart = shorten;
     }
@@ -549,7 +549,7 @@ void EdgeStyle::setShortenStart(const tikz::Value & shorten)
 void EdgeStyle::setShortenEnd(const tikz::Value & shorten)
 {
     if (!propertySet(s_shortenEnd) || d->shortenEnd != shorten) {
-        Transaction transaction(this, "Set Shorten End");
+        ConfigTransaction transaction(this);
         addProperty(s_shortenEnd);
         d->shortenEnd = shorten;
     }
@@ -558,7 +558,7 @@ void EdgeStyle::setShortenEnd(const tikz::Value & shorten)
 void EdgeStyle::unsetShortenStart()
 {
     if (propertySet(s_shortenStart)) {
-        Transaction transaction(this, "Reset Shorten Start");
+        ConfigTransaction transaction(this);
         removeProperty(s_shortenStart);
         d->shortenStart = tikz::Value(0, tikz::Unit::Centimeter);
     }
@@ -567,7 +567,7 @@ void EdgeStyle::unsetShortenStart()
 void EdgeStyle::unsetShortenEnd()
 {
     if (propertySet(s_shortenEnd)) {
-        Transaction transaction(this, "Reset Shorten End");
+        ConfigTransaction transaction(this);
         removeProperty(s_shortenEnd);
         d->shortenEnd = tikz::Value(0, tikz::Unit::Centimeter);
     }

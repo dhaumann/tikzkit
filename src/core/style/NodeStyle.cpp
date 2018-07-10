@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -50,8 +50,8 @@ NodeStyle::NodeStyle()
 {
 }
 
-NodeStyle::NodeStyle(const es::Eid & eid, Document* tikzDocument)
-    : Style(eid, tikzDocument)
+NodeStyle::NodeStyle(const Uid & uid, Document* tikzDocument)
+    : Style(uid, tikzDocument)
     , d(new NodeStylePrivate())
 {
 }
@@ -60,14 +60,14 @@ NodeStyle::~NodeStyle()
 {
 }
 
-const char * NodeStyle::entityType() const
+tikz::EntityType NodeStyle::entityType() const
 {
-    return "node-style";
+    return EntityType::NodeStyle;
 }
 
 void NodeStyle::setStyle(const Style * other)
 {
-    Transaction transaction(this, "Copy Node Style");
+    ConfigTransaction transaction(this);
     Style::setStyle(other);
     auto nodeStyle = qobject_cast<const NodeStyle *>(other);
     if (nodeStyle) {
@@ -77,7 +77,7 @@ void NodeStyle::setStyle(const Style * other)
 
 void NodeStyle::loadData(const QJsonObject & json)
 {
-    Transaction transaction(this, "Load Node Style");
+    ConfigTransaction transaction(this);
 
     Style::loadData(json);
 
@@ -159,7 +159,7 @@ bool NodeStyle::textAlignSet() const
 void NodeStyle::setTextAlign(tikz::TextAlignment align)
 {
     if (!propertySet(s_align) || d->textAlign != align) {
-        Transaction transaction(this, "Set Text Align");
+        ConfigTransaction transaction(this);
         addProperty(s_align);
         d->textAlign = align;
     }
@@ -168,7 +168,7 @@ void NodeStyle::setTextAlign(tikz::TextAlignment align)
 void NodeStyle::unsetTextAlign()
 {
     if (propertySet(s_align)) {
-        Transaction transaction(this, "Reset Text Align");
+        ConfigTransaction transaction(this);
         removeProperty(s_align);
         d->textAlign = TextAlignment::NoAlign;
     }
@@ -196,7 +196,7 @@ bool NodeStyle::shapeSet() const
 void NodeStyle::setShape(tikz::Shape shape)
 {
     if (!propertySet(s_shape) || d->shape != shape) {
-        Transaction transaction(this, "Set Shape");
+        ConfigTransaction transaction(this);
         addProperty(s_shape);
         d->shape = shape;
     }
@@ -205,7 +205,7 @@ void NodeStyle::setShape(tikz::Shape shape)
 void NodeStyle::unsetShape()
 {
     if (propertySet(s_shape)) {
-        Transaction transaction(this, "Reset Shape");
+        ConfigTransaction transaction(this);
         removeProperty(s_shape);
         d->shape = Shape::ShapeRectangle;
     }
@@ -214,7 +214,7 @@ void NodeStyle::unsetShape()
 void NodeStyle::setInnerSep(const tikz::Value & sep)
 {
     if (!propertySet(s_innerSep) || d->innerSep != sep) {
-        Transaction transaction(this, "Set Inner Sep");
+        ConfigTransaction transaction(this);
         addProperty(s_innerSep);
         d->innerSep = sep;
     }
@@ -237,7 +237,7 @@ tikz::Value NodeStyle::innerSep() const
 void NodeStyle::setOuterSep(const tikz::Value & sep)
 {
     if (!propertySet(s_outerSep) || d->outerSep != sep) {
-        Transaction transaction(this, "Set Outer Sep");
+        ConfigTransaction transaction(this);
         addProperty(s_outerSep);
         d->outerSep = sep;
     }
@@ -259,7 +259,7 @@ tikz::Value NodeStyle::outerSep() const
 void NodeStyle::unsetInnerSep()
 {
     if (propertySet(s_innerSep)) {
-        Transaction transaction(this, "Reset Inner Sep");
+        ConfigTransaction transaction(this);
         removeProperty(s_innerSep);
         d->innerSep = tikz::Value(3); //FIXME: 0.3333em
     }
@@ -268,7 +268,7 @@ void NodeStyle::unsetInnerSep()
 void NodeStyle::unsetOuterSep()
 {
     if (propertySet(s_outerSep)) {
-        Transaction transaction(this, "Reset Outer Sep");
+        ConfigTransaction transaction(this);
         removeProperty(s_outerSep);
         d->outerSep = tikz::Value(3); //FIXME: 0.3333em
     }
@@ -315,7 +315,7 @@ bool NodeStyle::minimumWidthSet() const
 void NodeStyle::setMinimumHeight(const tikz::Value & height)
 {
     if (!propertySet(s_minimumHeight) || d->minimumHeight != height) {
-        Transaction transaction(this, "Set Minimum Height");
+        ConfigTransaction transaction(this);
         addProperty(s_minimumHeight);
         d->minimumHeight = height;
     }
@@ -324,7 +324,7 @@ void NodeStyle::setMinimumHeight(const tikz::Value & height)
 void NodeStyle::setMinimumWidth(const tikz::Value & width)
 {
     if (!propertySet(s_minimumWidth) || d->minimumWidth != width) {
-        Transaction transaction(this, "Set Minimum Width");
+        ConfigTransaction transaction(this);
         addProperty(s_minimumWidth);
         d->minimumWidth = width;
     }
@@ -333,7 +333,7 @@ void NodeStyle::setMinimumWidth(const tikz::Value & width)
 void NodeStyle::unsetMinimumHeight()
 {
     if (propertySet(s_minimumHeight)) {
-        Transaction transaction(this, "Reset Minimum Height");
+        ConfigTransaction transaction(this);
         removeProperty(s_minimumHeight);
         d->minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
     }
@@ -342,7 +342,7 @@ void NodeStyle::unsetMinimumHeight()
 void NodeStyle::unsetMinimumWidth()
 {
     if (propertySet(s_minimumWidth)) {
-        Transaction transaction(this, "Reset Minimum Width");
+        ConfigTransaction transaction(this);
         removeProperty(s_minimumWidth);
         d->minimumWidth = tikz::Value(0, tikz::Unit::Centimeter);
     }

@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -21,7 +21,7 @@
 #define TIKZ_STYLE_H
 
 #include "tikz.h"
-#include <EntitySystem/Entity.h>
+#include "Entity.h"
 #include "Value.h"
 
 #include <QColor>
@@ -32,7 +32,7 @@ namespace core {
 class Document;
 class StylePrivate;
 
-class TIKZCORE_EXPORT Style : public es::Entity
+class TIKZCORE_EXPORT Style : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor RESET unsetPenColor)
@@ -62,9 +62,9 @@ class TIKZCORE_EXPORT Style : public es::Entity
         virtual ~Style();
 
         /**
-         * Returns "style".
+         * Returns EntityType::Style.
          */
-        const char * entityType() const override;
+        tikz::EntityType entityType() const override;
 
         /**
          * Set the properties of this style to all properties of @p other.
@@ -103,10 +103,10 @@ class TIKZCORE_EXPORT Style : public es::Entity
 
         /**
          * Searches this style as well as all child styles recursively for
-         * a style that matches @p styleEid. If no style with @p styleEid is
+         * a style that matches @p styleUid. If no style with @p styleUid is
          * found, a nullptr is returned.
          */
-        Style * findStyle(const es::Eid & styleEid) const;
+        Style * findStyle(const Uid & styleUid) const;
 
     //
     // properties
@@ -427,9 +427,9 @@ class TIKZCORE_EXPORT Style : public es::Entity
         friend class Document;
 
         /**
-         * Associate this style with @p eid to the document @p tikzDocument.
+         * Associate this style with @p uid to the document @p tikzDocument.
          */
-        Style(const es::Eid & eid, Document* tikzDocument);
+        Style(const Uid & uid, Document* tikzDocument);
 
     private:
         std::unique_ptr<StylePrivate> const d;

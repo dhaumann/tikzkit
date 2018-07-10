@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -51,9 +51,9 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         virtual ~NodeStyle();
 
         /**
-         * Returns "node-style".
+         * Returns EntityType::NodeStyle.
          */
-        const char * entityType() const override;
+        tikz::EntityType entityType() const override;
 
         /**
          * Set the properties of this style to all properties of @p other.
@@ -231,9 +231,9 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         friend class Document;
 
         /**
-         * Associate this style with @p eid to the document @p tikzDocument.
+         * Associate this style with @p uid to the document @p tikzDocument.
          */
-        NodeStyle(const es::Eid & eid, Document* tikzDocument);
+        NodeStyle(const Uid & uid, Document* tikzDocument);
 
     private:
         std::unique_ptr<NodeStylePrivate> const d;

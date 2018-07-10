@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -77,13 +77,13 @@ public:
 };
 
 Style::Style()
-    : es::Entity()
+    : Entity()
     , d(new StylePrivate())
 {
 }
 
-Style::Style(const es::Eid & eid, Document* doc)
-    : es::Entity(eid, doc)
+Style::Style(const Uid & uid, Document* doc)
+    : Entity(uid, doc)
     , d(new StylePrivate())
 {
 }
@@ -103,9 +103,9 @@ Style::~Style()
     setParentStyle(0);
 }
 
-const char * Style::entityType() const
+tikz::EntityType Style::entityType() const
 {
-    return "style";
+    return EntityType::Style;
 }
 
 void Style::setStyle(const Style * other)
@@ -115,7 +115,7 @@ void Style::setStyle(const Style * other)
     }
 
     // start configuration
-    Transaction transaction(this, "Copy Style");
+    ConfigTransaction transaction(this);
 
     // backup properties not to copy
     Style * parent = d->parent;
@@ -129,11 +129,11 @@ void Style::setStyle(const Style * other)
 
 void Style::loadData(const QJsonObject & json)
 {
-    Transaction transaction(this, "Load Style");
+    ConfigTransaction transaction(this);
 
     if (json.contains("parent-id")) {
-        const es::Eid styleId(json["parent-id"].toString(), document());
-        d->parent = static_cast<Document*>(document())->style()->findStyle(styleId);
+        const Uid styleId(json["parent-id"].toString(), document());
+        d->parent = document()->style()->findStyle(styleId);
     }
 
     if (json.contains("pen-color")) {
@@ -185,7 +185,7 @@ QJsonObject Style::saveData() const
     QJsonObject json = Entity::saveData();
 
     if (parentStyle()) {
-        json["parent-id"] = parentStyle()->eid().toString();
+        json["parent-id"] = parentStyle()->uid().toString();
     }
 
     if (penColorSet()) {
@@ -245,7 +245,7 @@ void Style::setParentStyle(Style *parent)
     Q_ASSERT(parent != this);
 
     if (d->parent != parent) {
-        Transaction transaction(this, "Set Parent Style");
+        ConfigTransaction transaction(this);
         if (d->parent) {
             // disconnect all signals (e.g. changed())
             disconnect(d->parent, 0, this, 0);
@@ -271,14 +271,14 @@ bool Style::hasChildStyles() const
     return d->children.size() > 0;
 }
 
-Style * Style::findStyle(const es::Eid & styleEid) const
+Style * Style::findStyle(const Uid & styleUid) const
 {
-    if (eid() == styleEid) {
+    if (uid() == styleUid) {
         return const_cast<Style*>(this);
     }
 
     for (const auto style : d->children) {
-        auto ptr = style->findStyle(styleEid);
+        auto ptr = style->findStyle(styleUid);
         if (ptr) {
             return ptr;
         }
@@ -323,7 +323,7 @@ bool Style::penStyleSet() const
 void Style::setPenStyle(tikz::PenStyle style)
 {
     if (!propertySet(s_penStyle) || d->penStyle != style) {
-        Transaction transaction(this, "Set Pen Style");
+        ConfigTransaction transaction(this);
         addProperty(s_penStyle);
         d->penStyle = style;
     }
@@ -332,7 +332,7 @@ void Style::setPenStyle(tikz::PenStyle style)
 void Style::unsetPenStyle()
 {
     if (propertySet(s_penStyle)) {
-        Transaction transaction(this, "Reset Pen Style");
+        ConfigTransaction transaction(this);
         removeProperty(s_penStyle);
         d->penStyle = tikz::PenStyle::SolidLine;
     }
@@ -359,7 +359,7 @@ void Style::setLineWidth(const tikz::Value & width)
     if (!propertySet(s_lineWidth)
         || d->lineWidth != width
     ) {
-        Transaction transaction(this, "Set Line Width");
+        ConfigTransaction transaction(this);
         addProperty(s_lineWidth);
         d->lineWidth = width;
     }
@@ -381,7 +381,7 @@ tikz::Value Style::lineWidth() const
 void Style::unsetLineWidth()
 {
     if (propertySet(s_lineWidth)) {
-        Transaction transaction(this, "Reset Line Widt");
+        ConfigTransaction transaction(this);
         removeProperty(s_lineWidth);
         d->lineWidth = tikz::Value::semiThick();
     }
@@ -408,7 +408,7 @@ bool Style::doubleLineSet() const
 void Style::setDoubleLine(bool enabled)
 {
     if (!propertySet(s_doubleLine) || d->doubleLine != enabled) {
-        Transaction transaction(this, "Set Double Line");
+        ConfigTransaction transaction(this);
         addProperty(s_doubleLine);
         d->doubleLine = enabled;
     }
@@ -417,7 +417,7 @@ void Style::setDoubleLine(bool enabled)
 void Style::unsetDoubleLine()
 {
     if (propertySet(s_doubleLine)) {
-        Transaction transaction(this, "Reset Double Line");
+        ConfigTransaction transaction(this);
         removeProperty(s_doubleLine);
         d->doubleLine = false;
     }
@@ -448,7 +448,7 @@ bool Style::innerLineWidthSet() const
 void Style::setInnerLineWidth(const tikz::Value & width)
 {
     if (!propertySet(s_innerLineWidth) || d->innerLineWidth != width) {
-        Transaction transaction(this, "Set Inner Line Width");
+        ConfigTransaction transaction(this);
         addProperty(s_innerLineWidth);
         d->innerLineWidth = width;
     }
@@ -457,7 +457,7 @@ void Style::setInnerLineWidth(const tikz::Value & width)
 void Style::unsetInnerLineWidth()
 {
     if (propertySet(s_innerLineWidth)) {
-        Transaction transaction(this, "Reset Inner Line Width");
+        ConfigTransaction transaction(this);
         removeProperty(s_innerLineWidth);
         d->innerLineWidth = tikz::Value::semiThick();
     }
@@ -479,7 +479,7 @@ qreal Style::penOpacity() const
 void Style::setPenOpacity(qreal opacity)
 {
     if (!propertySet(s_penOpacity) || d->penOpacity != opacity) {
-        Transaction transaction(this, "Set Pen Opacity");
+        ConfigTransaction transaction(this);
         addProperty(s_penOpacity);
         d->penOpacity = opacity;
     }
@@ -493,7 +493,7 @@ bool Style::penOpacitySet() const
 void Style::unsetPenOpacity()
 {
     if (propertySet(s_penOpacity)) {
-        Transaction transaction(this, "Reset Pen Opacity");
+        ConfigTransaction transaction(this);
         removeProperty(s_penOpacity);
         d->penOpacity = 1.0;
     }
@@ -520,7 +520,7 @@ bool Style::fillOpacitySet() const
 void Style::setFillOpacity(qreal opacity)
 {
     if (!propertySet(s_fillOpacity) || d->fillOpacity != opacity) {
-        Transaction transaction(this, "Set Fill Opactiy");
+        ConfigTransaction transaction(this);
         addProperty(s_fillOpacity);
         d->fillOpacity = opacity;
     }
@@ -529,7 +529,7 @@ void Style::setFillOpacity(qreal opacity)
 void Style::unsetFillOpacity()
 {
     if (propertySet(s_fillOpacity)) {
-        Transaction transaction(this, "Reset Fill Opacity");
+        ConfigTransaction transaction(this);
         removeProperty(s_fillOpacity);
         d->fillOpacity = 1.0;
     }
@@ -592,7 +592,7 @@ bool Style::fillColorSet() const
 void Style::setPenColor(const QColor & color)
 {
     if (!propertySet(s_penColor) || d->penColor != color) {
-        Transaction transaction(this, "Set Line Color");
+        ConfigTransaction transaction(this);
         addProperty(s_penColor);
         d->penColor = color;
     }
@@ -601,7 +601,7 @@ void Style::setPenColor(const QColor & color)
 void Style::unsetPenColor()
 {
     if (propertySet(s_penColor)) {
-        Transaction transaction(this, "Reset Line Color");
+        ConfigTransaction transaction(this);
         removeProperty(s_penColor);
         d->penColor = Qt::black;
     }
@@ -610,7 +610,7 @@ void Style::unsetPenColor()
 void Style::setInnerLineColor(const QColor & color)
 {
     if (!propertySet(s_innerLineColor) || d->innerLineColor != color) {
-        Transaction transaction(this, "Set Inner Line Color");
+        ConfigTransaction transaction(this);
         addProperty(s_innerLineColor);
         d->innerLineColor = color;
     }
@@ -619,7 +619,7 @@ void Style::setInnerLineColor(const QColor & color)
 void Style::unsetInnerLineColor()
 {
     if (propertySet(s_innerLineColor)) {
-        Transaction transaction(this, "Reset Inner Line Color");
+        ConfigTransaction transaction(this);
         removeProperty(s_innerLineColor);
         d->innerLineColor = Qt::white;
     }
@@ -628,7 +628,7 @@ void Style::unsetInnerLineColor()
 void Style::setFillColor(const QColor & color)
 {
     if (!propertySet(s_fillColor) || d->fillColor != color) {
-        Transaction transaction(this, "Set Fill Color");
+        ConfigTransaction transaction(this);
         addProperty(s_fillColor);
         d->fillColor = color;
     }
@@ -637,7 +637,7 @@ void Style::setFillColor(const QColor & color)
 void Style::unsetFillColor()
 {
     if (propertySet(s_fillColor)) {
-        Transaction transaction(this, "Reset Fill Color");
+        ConfigTransaction transaction(this);
         removeProperty(s_fillColor);
         d->fillColor = Qt::transparent;
     }
@@ -664,7 +664,7 @@ bool Style::rotationSet() const
 void Style::setRotation(qreal angle)
 {
     if (!propertySet(s_rotation) || d->rotation != angle) {
-        Transaction transaction(this, "Set Rotation");
+        ConfigTransaction transaction(this);
         addProperty(s_rotation);
         d->rotation = angle;
     }
@@ -673,7 +673,7 @@ void Style::setRotation(qreal angle)
 void Style::unsetRotation()
 {
     if (propertySet(s_rotation)) {
-        Transaction transaction(this, "Reset Rotation");
+        ConfigTransaction transaction(this);
         removeProperty(s_rotation);
         d->rotation = 0.0;
     }

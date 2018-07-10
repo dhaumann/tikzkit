@@ -113,6 +113,28 @@ inline void error(const QString & text)
 }
 
 /**
+ * Entity types.
+ */
+enum class EntityType : char {
+    Invalid   = 0,
+    Style     = 1,
+    NodeStyle = 2,
+    EdgeStyle = 3,
+    Node      = 4,
+    Path      = 5
+};
+
+/**
+ * Converts the EntityType @p type to a string.
+ */
+TIKZCORE_EXPORT QString toString(EntityType type);
+
+/**
+ * Converts the string @p str to an EntityType.
+ */
+TIKZCORE_EXPORT EntityType toEntityType(const QString & str);
+
+/**
  * Available units.
  */
 enum class Unit : int {

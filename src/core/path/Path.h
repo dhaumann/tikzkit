@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2016 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <EntitySystem/Entity.h>
+#include "Entity.h"
 #include "tikz.h"
 
 namespace tikz {
@@ -34,7 +34,7 @@ class EdgeStyle;
 class Visitor;
 class PathPrivate;
 
-class TIKZCORE_EXPORT Path : public es::Entity
+class TIKZCORE_EXPORT Path : public Entity
 {
     Q_OBJECT
 
@@ -55,9 +55,9 @@ class TIKZCORE_EXPORT Path : public es::Entity
         virtual ~Path();
 
         /**
-         * Returns "path".
+         * Returns EntityType::Edge.
          */
-        const char * entityType() const override;
+        tikz::EntityType entityType() const override;
 
     //
     // visitor pattern
@@ -91,10 +91,23 @@ class TIKZCORE_EXPORT Path : public es::Entity
 
         /**
          * Constructor that associates this path with the tikz Document @p doc.
-         * @param eid unique id of the path
+         * @param uid unique id of the path
          * @param doc associated document
          */
-        Path(const es::Eid & eid, Document* doc);
+        Path(const Uid & uid, Document* doc);
+
+        /**
+         * This function is called by Document::deletePath() right before the
+         * Path is deleted. Invoking the undo action will construct the path
+         * again. Therefore, this function needs to add all undo items so that
+         * the respective call of undo() will add properties of the Path again.
+         *
+         * @note: the EdgeStyle of this path is taken care of. No need to put
+         *        this into the undo stack again.
+         *
+         * The default implementation is empty.
+         */
+        virtual void deconstruct();
 
         /**
          * This function is called for all paths to notify that @p node is

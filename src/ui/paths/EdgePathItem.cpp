@@ -74,7 +74,7 @@ void EdgePathItem::updateStartNode(tikz::core::Node * node)
     NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->nodeItemFromId(node->eid());
+        newNode = document()->nodeItemFromId(node->uid());
     }
 
     if (m_startNode != newNode) {
@@ -89,7 +89,7 @@ void EdgePathItem::updateEndNode(tikz::core::Node * node)
     NodeItem * newNode = 0;
 
     if (node) {
-        newNode = document()->nodeItemFromId(node->eid());
+        newNode = document()->nodeItemFromId(node->uid());
     }
 
     if (m_endNode != newNode) {
