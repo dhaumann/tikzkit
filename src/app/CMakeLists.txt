@@ -37,6 +37,8 @@ add_executable(tikzkit
     ${tikzkit_FORMS_HEADERS}
 )
 
+target_compile_features(tikzkit PRIVATE cxx_std_14)
+
 target_link_libraries(tikzkit
     Qt5::Core
     Qt5::Widgets

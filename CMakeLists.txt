@@ -9,8 +9,6 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules
 )
 
-add_definitions("-std=c++11")
-
 add_subdirectory(src/core)
 add_subdirectory(src/qtpropertybrowser/src)
 add_subdirectory(src/ui)

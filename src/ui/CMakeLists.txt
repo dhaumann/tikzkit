@@ -129,6 +129,8 @@ add_library(qtikzui SHARED
     ${qtikzui_FORMS_HEADERS}
 )
 
+target_compile_features(qtikzui PRIVATE cxx_std_14)
+
 target_link_libraries(qtikzui
     Qt5::Core
     Qt5::Widgets

@@ -9,8 +9,6 @@ set(CMAKE_AUTOMOC ON)
 # find Qt5 modules
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
-add_definitions("-std=c++11")
-
 include_directories(
     .
     document/
@@ -83,6 +81,8 @@ set(qtikzcore_SOURCES
 add_library(qtikzcore SHARED
     ${qtikzcore_SOURCES}
 )
+
+target_compile_features(qtikzcore PRIVATE cxx_std_14)
 
 target_link_libraries(qtikzcore
     Qt5::Core

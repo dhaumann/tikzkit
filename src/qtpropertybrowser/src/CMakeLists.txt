@@ -34,6 +34,9 @@ add_library(qtpropertybrowser STATIC
     ${qtpropertybrowser_FORMS_HEADERS}
 )
 
+target_compile_features(qtpropertybrowser PRIVATE cxx_std_14)
+
+
 target_link_libraries(qtpropertybrowser
     Qt5::Core
     Qt5::Widgets
