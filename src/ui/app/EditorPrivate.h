@@ -178,6 +178,16 @@ public:
 
 private:
     /**
+     * Dummy application object to be null safe
+     */
+    tikz::ui::Application m_dummyApplication;
+
+    /**
+     * Dummy main window to be null safe
+     */
+    tikz::ui::MainWindow m_dummyMainWindow;
+
+    /**
      * registered docs, map from general to specialized pointer
      */
     QVector<tikz::ui::DocumentPrivate *> m_documents;
@@ -191,16 +201,6 @@ private:
      * access to application
      */
     QPointer<tikz::ui::Application> m_application;
-
-    /**
-     * Dummy application object to be null safe
-     */
-    tikz::ui::Application m_dummyApplication;
-
-    /**
-     * Dummy main window to be null safe
-     */
-    tikz::ui::MainWindow m_dummyMainWindow;
 };
 
 }
