@@ -21,11 +21,13 @@
 
 #include "tikz_export.h"
 
+#include <QObject>
 #include <QString>
 #include <functional>
 #include <type_traits>
 
 namespace tikz {
+Q_NAMESPACE
 
 /**
  * Template helper to convert strings to enum.
@@ -123,6 +125,7 @@ enum class EntityType : char {
     Node      = 4,
     Path      = 5
 };
+Q_ENUM_NS(EntityType)
 
 /**
  * Converts the EntityType @p type to a string.
@@ -143,6 +146,7 @@ enum class Unit : int {
     Centimeter,
     Inch
 };
+Q_ENUM_NS(Unit)
 
 /**
  * Convert the tikz::Unit @p unit to a QString.
@@ -166,6 +170,7 @@ enum class TextAlignment : int {
     AlignJustify
     // TODO: add all types ?
 };
+Q_ENUM_NS(TextAlignment)
 
 /**
  * Convert the tikz::TextAlignment @p alignment to a QString.
@@ -189,6 +194,7 @@ enum class Shape : int {
     ShapeDiamond,
     ShapeEllipse
 };
+Q_ENUM_NS(Shape)
 
 /**
  * Convert the tikz::Shape @p shape to a QString.
@@ -220,6 +226,7 @@ enum class PenStyle : int {
     DenselyDashDotDottedLine,
     LooselyDashDotDottedLine
 };
+Q_ENUM_NS(PenStyle)
 
 /**
  * Convert @p penStyle to a QString.
@@ -241,6 +248,7 @@ enum class LineCap : int {
     RectCap,
     ButtCap     // TikZ default
 };
+Q_ENUM_NS(LineCap)
 
 enum class LineJoin : int {
     JoinUnset = 0,
@@ -248,6 +256,7 @@ enum class LineJoin : int {
     BevelJoin,
     MiterJoin    // TikZ default
 };
+Q_ENUM_NS(LineJoin)
 
 enum class Arrow : int {
     NoArrow = 0,
@@ -268,6 +277,7 @@ enum class Arrow : int {
     ReversedStealthTickArrow,
     ArrowCount
 };
+Q_ENUM_NS(Arrow)
 
 /**
  * Convert @p arrow to a QString.
@@ -296,6 +306,7 @@ enum class PathType : int {
     Rectangle, // (a) rectangle (b)
     Grid // (a) grid (b)
 };
+Q_ENUM_NS(PathType)
 
 /**
  * Convert PathType @p type to a QString.
