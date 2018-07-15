@@ -136,20 +136,20 @@ class TIKZCORE_EXPORT Style : public Entity
          * Get the PenStyle of this style.
          * @see PenStyle
          */
-        PenStyle penStyle() const;
+        Q_INVOKABLE PenStyle penStyle() const;
 
         /**
          * Check whether the pen style is set.
          * @return true, if this style has an own pen style
          */
-        bool penStyleSet() const;
+        Q_INVOKABLE bool penStyleSet() const;
 
     public Q_SLOTS:
         /**
          * Set the PenStyle of this style to @p style.
          * @see PenStyle
          */
-        void setPenStyle(tikz::PenStyle style);
+        Q_INVOKABLE void setPenStyle(tikz::PenStyle style);
 
         /**
          * Unset the pen style.
@@ -158,7 +158,7 @@ class TIKZCORE_EXPORT Style : public Entity
          * default pen style @e tikz::PenStyle::SolidLine.
          * @see PenStyle, penStyle()
          */
-        void unsetPenStyle();
+        Q_INVOKABLE void unsetPenStyle();
 
     //
     // pen style / line width
@@ -168,12 +168,12 @@ class TIKZCORE_EXPORT Style : public Entity
          * Check whether the line width is set.
          * @return true, if this style has an own line width
          */
-        bool lineWidthSet() const;
+        Q_INVOKABLE bool lineWidthSet() const;
 
         /**
          * Get the lineWidth() in cm.
          */
-        tikz::Value lineWidth() const;
+        Q_INVOKABLE tikz::Value lineWidth() const;
 
         /**
          * Get the pen width for drawing in cm.
@@ -181,7 +181,7 @@ class TIKZCORE_EXPORT Style : public Entity
          * If double lines are enabled, the pen width is set to
          * 2 * lineWidth() + innerLineWidth().
          */
-        tikz::Value penWidth() const;
+        Q_INVOKABLE tikz::Value penWidth() const;
 
     public Q_SLOTS:
         /**
@@ -191,7 +191,7 @@ class TIKZCORE_EXPORT Style : public Entity
          * @p width the line width [cm]
          * @see Linewidth
          */
-        void setLineWidth(const tikz::Value & width);
+        Q_INVOKABLE void setLineWidth(const tikz::Value & width);
 
         /**
          * Unset the line width.
@@ -200,7 +200,7 @@ class TIKZCORE_EXPORT Style : public Entity
          * otherwise the returned line width is @e Value::semiThick().
          * @see LineWidth, lineWidth()
          */
-        void unsetLineWidth();
+        Q_INVOKABLE void unsetLineWidth();
 
     //
     // double lines
@@ -210,39 +210,39 @@ class TIKZCORE_EXPORT Style : public Entity
          * Get whether this line is a double line.
          * By default, returns @e false.
          */
-        bool doubleLine() const;
+        Q_INVOKABLE bool doubleLine() const;
 
         /**
          * Check whether the double line property is set.
          * @return true, if this style has an own double line property
          */
-        bool doubleLineSet() const;
+        Q_INVOKABLE bool doubleLineSet() const;
 
     public Q_SLOTS:
         /**
          * Draw double lines if @p enabled is @e true.
          */
-        void setDoubleLine(bool enabled);
+        Q_INVOKABLE void setDoubleLine(bool enabled);
 
         /**
          * Unset the double line property.
          * After this, calling isDoubleLine() returns values of the parent()
          * style, if applicable; otherwise the returned line width is @e false.
          */
-        void unsetDoubleLine();
+        Q_INVOKABLE void unsetDoubleLine();
 
     public:
         /**
          * Get the inner line width in cm.
          * The inner line width is used for double lines in paths and shapes.
          */
-        tikz::Value innerLineWidth() const;
+        Q_INVOKABLE tikz::Value innerLineWidth() const;
 
         /**
          * Check whether the inner line width property is set.
          * @return true, if this style has an own inner line width property
          */
-        bool innerLineWidthSet() const;
+        Q_INVOKABLE bool innerLineWidthSet() const;
 
     public Q_SLOTS:
         /**
@@ -252,14 +252,14 @@ class TIKZCORE_EXPORT Style : public Entity
          * @p width the line width [cm]
          * @see LineWidth
          */
-        void setInnerLineWidth(const tikz::Value & width);
+        Q_INVOKABLE void setInnerLineWidth(const tikz::Value & width);
 
         /**
          * Unset the inner line width property.
          * After this, calling innerLineWidth() returns parent()->innerLineWidth(),
          * or the default inner line width, if parent() is null.
          */
-        void unsetInnerLineWidth();
+        Q_INVOKABLE void unsetInnerLineWidth();
 
     //
     // draw & fill opacity
@@ -268,51 +268,51 @@ class TIKZCORE_EXPORT Style : public Entity
         /**
          * Get the opacity for drawing primitives in the interval [0.0; 1.0].
          */
-        qreal penOpacity() const;
+        Q_INVOKABLE qreal penOpacity() const;
 
         /**
          * Check whether the pen opacity property is set.
          * @return true, if this style has an own pen opacity property
          */
-        bool penOpacitySet() const;
+        Q_INVOKABLE bool penOpacitySet() const;
 
         /**
          * Get the opacity for filling operations in the interval [0.0; 1.0].
          */
-        qreal fillOpacity() const;
+        Q_INVOKABLE qreal fillOpacity() const;
 
         /**
          * Check whether the fill opacity property is set.
          * @return true, if this style has an own fill opacity property
          */
-        bool fillOpacitySet() const;
+        Q_INVOKABLE bool fillOpacitySet() const;
 
     public Q_SLOTS:
         /**
          * Set the opacity for drawing primitives to @p opacity.
          * @param opacity the opacity in the interval [0.0; 1.0]
          */
-        void setPenOpacity(qreal opacity);
+        Q_INVOKABLE void setPenOpacity(qreal opacity);
 
         /**
          * Unsets the draw opacity of the pen.
          * Afterwards, penOpacity() returns either the opacity of the parent()
          * style, or the default value @e 1.0.
          */
-        void unsetPenOpacity();
+        Q_INVOKABLE void unsetPenOpacity();
 
         /**
          * Set the opacity for filling primitives to @p opacity.
          * @param opacity the opacity in the interval [0.0; 1.0]
          */
-        void setFillOpacity(qreal opacity);
+        Q_INVOKABLE void setFillOpacity(qreal opacity);
 
         /**
          * Unsets the fill opacity of fill operations.
          * Afterwards, fillOpacity() returns either the opacity of the parent()
          * style, or the default value @e 1.0.
          */
-        void unsetFillOpacity();
+        Q_INVOKABLE void unsetFillOpacity();
 
     //
     // pen color and fill color/brush
@@ -322,77 +322,77 @@ class TIKZCORE_EXPORT Style : public Entity
          * Gets the pen color for drawing paths.
          * If the color is not explicitly set, the returned color is Qt::black.
          */
-        QColor penColor() const;
+        Q_INVOKABLE QColor penColor() const;
 
         /**
          * Check whether the pen color property is set.
          * @return true, if this style has an own pen color property
          */
-        bool penColorSet() const;
+        Q_INVOKABLE bool penColorSet() const;
 
         /**
          * Gets the inner line pen color for drawing double line paths.
          * If the color is not explicitly set, the returned color is Qt::white.
          */
-        QColor innerLineColor() const;
+        Q_INVOKABLE QColor innerLineColor() const;
 
         /**
          * Check whether the inner line color property is set.
          * @return true, if this style has an own inner line color property
          */
-        bool innerLineColorSet() const;
+        Q_INVOKABLE bool innerLineColorSet() const;
 
         /**
          * Gets the fill color for filling paths.
          * If the color is not explicitly set, the returned color is Qt::transparent.
          */
-        QColor fillColor() const;
+        Q_INVOKABLE QColor fillColor() const;
 
         /**
          * Check whether the fill color property is set.
          * @return true, if this style has an own fill color property
          */
-        bool fillColorSet() const;
+        Q_INVOKABLE bool fillColorSet() const;
 
     public Q_SLOTS:
         /**
          * Sets the pen color used for drawing paths to @p color.
          * @param color draw color
          */
-        void setPenColor(const QColor & color);
+        Q_INVOKABLE void setPenColor(const QColor & color);
 
         /**
          * Unsets the pen color used for drawing paths.
          * Afterwards, penColor() returns either the color of the parent()
          * style, or the default color Qt::black.
          */
-        void unsetPenColor();
+        Q_INVOKABLE void unsetPenColor();
 
         /**
          * Sets the inner line color used for drawing double paths to @p color.
          * @param color draw color
          */
-        void setInnerLineColor(const QColor & color);
+        Q_INVOKABLE void setInnerLineColor(const QColor & color);
 
         /**
          * Unsets the inner line color used for drawing double line paths.
          * Afterwards, innerLineColor() returns either the color of the parent()
          * style, or the default color Qt::white.
          */
-        void unsetInnerLineColor();
+        Q_INVOKABLE void unsetInnerLineColor();
 
         /**
          * Sets the fill color used for filling paths to @p color.
          * @param color draw color
          */
-        void setFillColor(const QColor & color);
+        Q_INVOKABLE void setFillColor(const QColor & color);
 
         /**
          * Unsets the fill color used for filling paths.
          * Afterwards, fillColor() returns either the color of the parent()
          * style, or the default Qt::transparent.
          */
-        void unsetFillColor();
+        Q_INVOKABLE void unsetFillColor();
 
     //
     // rotation
@@ -401,24 +401,24 @@ class TIKZCORE_EXPORT Style : public Entity
         /**
          * Get the rotation in degrees.
          */
-        qreal rotation() const;
+        Q_INVOKABLE qreal rotation() const;
 
         /**
          * Check whether the rotation is set.
          */
-        bool rotationSet() const;
+        Q_INVOKABLE bool rotationSet() const;
 
     public Q_SLOTS:
         /**
          * Set the rotation to @p angle degrees.
          */
-        void setRotation(qreal angle);
+        Q_INVOKABLE void setRotation(qreal angle);
 
         /**
          * Unset the rotation attribute.
          * Afterwards, the rotation falls back to the value of parent()->rotation().
          */
-        void unsetRotation();
+        Q_INVOKABLE void unsetRotation();
 
     //
     // internal to tikz::Document
