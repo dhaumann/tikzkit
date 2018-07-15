@@ -36,7 +36,6 @@ add_library(qtpropertybrowser STATIC
 
 target_compile_features(qtpropertybrowser PRIVATE cxx_std_14)
 
-
 target_link_libraries(qtpropertybrowser
     Qt5::Core
     Qt5::Widgets
