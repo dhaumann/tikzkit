@@ -67,6 +67,7 @@ protected Q_SLOTS:
     void valueChanged(QtProperty *property, const QColor & val);
     void valueChanged(QtProperty *property, int val);
     void valueChanged(QtProperty *property, double val);
+    void doubleValueChanged(QtProperty *property, double val);
 
     void updateCurrentItem();
 

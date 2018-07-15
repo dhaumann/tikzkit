@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QPointer>
+#include <QMetaProperty>
 
 #include <QtTreePropertyBrowser>
 #include <QtDoublePropertyManager>
@@ -41,21 +42,61 @@
 #include <QtColorPropertyManager>
 #include <QtColorEditorFactory>
 
+#include <QFile>
+#include <QJsonDocument>
+
+class PropertyInfo
+{
+public:
+    PropertyInfo() = default;
+    void load(const QString & jsonFileName)
+    {
+        QFile file(jsonFileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug() << "Could not read file" << jsonFileName;
+            return;
+        }
+        const auto xx = file.readAll();
+//         qDebug() << xx;
+        m_json = QJsonDocument::fromJson(xx);
+    }
+
+    bool isValid(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName].isObject();
+    }
+
+    QString type(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["type"].toString();
+    }
+
+    QString title(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["title"].toString();
+    }
+
+    QVariant minimum(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["minimum"].toVariant();
+    }
+
+    QVariant maximum(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["maximum"].toVariant();
+    }
+
+    double singleStep(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["singleStep"].toDouble(1.0);
+    }
+
+private:
+    QJsonDocument m_json;
+};
+
 namespace tikz {
 namespace ui {
-
-// NOTE: These strings have to match the Q_PROPERTY names of Style,
-//       EdgeStyle, NodeStyle, Edge and Node
-static constexpr char s_penStyle[] = "penStyle";
-static constexpr char s_lineWidth[] = "lineWidth";
-static constexpr char s_doubleLine[] = "doubleLine";
-static constexpr char s_innerLineWidth[] = "innerLineWidth";
-static constexpr char s_penOpacity[] = "penOpacity";
-static constexpr char s_fillOpacity[] = "fillOpacity";
-static constexpr char s_penColor[] = "penColor";
-static constexpr char s_innerLineColor[] = "innerLineColor";
-static constexpr char s_fillColor[] = "fillColor";
-static constexpr char s_rotation[] = "rotation";
 
 class PropertyBrowserPrivate
 {
@@ -65,7 +106,7 @@ public:
     QtBoolPropertyManager * boolManager = nullptr;
     QtColorPropertyManager * colorManager = nullptr;
     OpacityPropertyManager * opacityManager = nullptr;
-    QtDoublePropertyManager * doubleSliderManager = nullptr;
+    QtDoublePropertyManager * doubleManager = nullptr;
 
     QPointer<View> view = nullptr;
     TikzItem * item = nullptr;
@@ -87,6 +128,54 @@ public:
         parent->addSubProperty(property);
 //         browser->setExpanded(item, idToExpanded[name]);
     }
+
+    void addProperty(QObject * object, const QString & name)
+    {
+        PropertyInfo info;
+        info.load("../data/properties.json");
+
+        if (!info.isValid(name)) {
+            qDebug() << "Unknown property type:" << name;
+            return;
+        }
+
+        QVariant prop = object->property(name.toLatin1());
+        if (!prop.isValid()) {
+            qDebug() << "Unknown property type:" << name;
+            return;
+        }
+
+        QtProperty *property = nullptr;
+
+        const QString type = info.type(name);
+        if (type == "value") {
+            property = valueManager->addProperty(name);
+            valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
+            valueManager->setSingleStep(property, info.singleStep(name));
+            valueManager->setValue(property, prop.value<tikz::Value>());
+        }
+        else if (type == "bool") {
+            property = boolManager->addProperty(name);
+            boolManager->setValue(property, prop.toBool());
+        }
+        else if (type == "color") {
+            property = colorManager->addProperty(name);
+            colorManager->setValue(property, prop.value<QColor>());
+        }
+        else if (type == "opacity") {
+            property = opacityManager->addProperty(name);
+            opacityManager->setValue(property, prop.toDouble());
+        }
+        else if (type == "double") {
+            property = doubleManager->addProperty(name);
+            doubleManager->setValue(property, prop.toDouble());
+        }
+        else {
+            qDebug() << "Unknown property type:" << name;
+        }
+        if (property)
+            addProperty(property, name);
+    }
 };
 
 
@@ -107,12 +196,14 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->boolManager = new QtBoolPropertyManager(this);
     d->colorManager = new QtColorPropertyManager(this);
     d->opacityManager = new OpacityPropertyManager(this);
+    d->doubleManager = new QtDoublePropertyManager(this);
 
     // setup propertybrowser
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
     d->browser->setFactoryForManager(d->boolManager, new QtCheckBoxFactory(this));
     d->browser->setFactoryForManager(d->colorManager, new QtColorEditorFactory(this));
     d->browser->setFactoryForManager(d->opacityManager, new OpacityEditorFactory(this));
+    d->browser->setFactoryForManager(d->doubleManager, new QtDoubleSpinBoxFactory(this));
 
     d->browser->setPropertiesWithoutValueMarked(true);
     d->browser->setRootIsDecorated(false);
@@ -127,6 +218,8 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
             this, SLOT(valueChanged(QtProperty*, const QColor &)));
     connect(d->opacityManager, SIGNAL(valueChanged(QtProperty*, qreal)),
             this, SLOT(valueChanged(QtProperty*, qreal)));
+    connect(d->doubleManager, SIGNAL(valueChanged(QtProperty*, double)),
+            this, SLOT(doubleValueChanged(QtProperty*, double)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -152,6 +245,24 @@ void PropertyBrowser::setView(tikz::ui::View * view)
     updateCurrentItem();
 }
 
+QObject * styleForItem(TikzItem * item)
+{
+    if (item == nullptr) {
+        return nullptr;
+    }
+
+    auto node = qobject_cast<tikz::ui::NodeItem *>(item);
+    auto path = qobject_cast<tikz::ui::PathItem *>(item);
+    Q_ASSERT(node != nullptr || path != nullptr);
+
+    auto nodeStyle = node ? node->style() : nullptr;
+    auto edgeStyle = path ? path->style() : nullptr;
+    tikz::core::Style * style = nodeStyle ? static_cast<tikz::core::Style *>(nodeStyle)
+                                          : static_cast<tikz::core::Style *>(edgeStyle);
+
+    return style;
+}
+
 void PropertyBrowser::setItem(TikzItem * item)
 {
     if (d->item == item) {
@@ -165,62 +276,18 @@ void PropertyBrowser::setItem(TikzItem * item)
     d->boolManager->clear();
     d->colorManager->clear();
     d->opacityManager->clear();
+    d->doubleManager->clear();
     d->propertyMap.clear();
 
-    if (! d->item) {
-        return;
-    }
-
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    auto path = qobject_cast<tikz::ui::PathItem *>(d->item);
-    Q_ASSERT(node != nullptr || path != nullptr);
-
-    auto nodeStyle = node ? node->style() : nullptr;
-    auto edgeStyle = path ? path->style() : nullptr;
-    tikz::core::Style * style = nodeStyle ? static_cast<tikz::core::Style *>(nodeStyle)
-                                          : static_cast<tikz::core::Style *>(edgeStyle);
-
-    if (node) {
-        QtProperty *property;
-
-        property = d->valueManager->addProperty(tr("Line Width"));
-        property->setModified(node->style()->lineWidthSet());
-        d->valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
-        d->valueManager->setSingleStep(property, 0.1);
-        d->valueManager->setValue(property, node->style()->lineWidth());
-        d->addProperty(property, s_lineWidth);
-
-        property = d->colorManager->addProperty(tr("Line Color"));
-        property->setModified(node->style()->penColorSet());
-        d->colorManager->setValue(property, node->style()->penColor());
-        d->addProperty(property, s_penColor);
-
-        property = d->opacityManager->addProperty(tr("Opacity"));
-        d->opacityManager->setValue(property, node->style()->penOpacity());
-        d->addProperty(property, s_penOpacity);
-
-        auto doubleLine = d->boolManager->addProperty(tr("Double Line"));
-        property->setModified(node->style()->doubleLineSet());
-        d->boolManager->setValue(doubleLine, node->style()->doubleLine());
-        d->addProperty(doubleLine, s_doubleLine);
-
-        property = d->valueManager->addProperty(tr("Inner Line Width"));
-        property->setModified(node->style()->innerLineWidthSet());
-        d->valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
-        d->valueManager->setSingleStep(property, 0.1);
-        d->valueManager->setValue(property, node->style()->innerLineWidth());
-        d->addSubProperty(doubleLine, property, s_innerLineWidth);
-
-        property = d->colorManager->addProperty(tr("Inner Line Color"));
-        property->setModified(node->style()->innerLineColorSet());
-        d->colorManager->setValue(property, node->style()->innerLineColor());
-        d->addSubProperty(doubleLine, property, s_innerLineColor);
-
-        property = d->colorManager->addProperty(tr("Fill Color"));
-        property->setModified(node->style()->fillColorSet());
-        d->colorManager->setValue(property, node->style()->fillColor());
-        d->addProperty(property, s_fillColor);
-
+    auto style = styleForItem(d->item);
+    if (style) {
+        auto metaObj = style->metaObject();
+        while (metaObj) {
+            for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
+                d->addProperty(style, metaObj->property(i).name());
+            }
+            metaObj = metaObj->superClass();
+        }
     }
 }
 
@@ -233,14 +300,11 @@ void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val
         return;
     }
 
-    Q_ASSERT(d->item);
-
+    auto style = styleForItem(d->item);
     QString name = d->propertyMap[property];
-
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    if (node) {
-        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            node->style()->setProperty(name.toLatin1(), val);
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
             property->setModified(true);
         }
     }
@@ -255,14 +319,12 @@ void PropertyBrowser::valueChanged(QtProperty *property, bool val)
         return;
     }
 
-    Q_ASSERT(d->item);
-
+    auto style = styleForItem(d->item);
     QString name = d->propertyMap[property];
-
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    if (node) {
-        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            node->style()->setProperty(name.toLatin1(), val);
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
         }
     }
 }
@@ -276,14 +338,12 @@ void PropertyBrowser::valueChanged(QtProperty *property, const QColor & val)
         return;
     }
 
-    Q_ASSERT(d->item);
-
+    auto style = styleForItem(d->item);
     QString name = d->propertyMap[property];
-
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    if (node) {
-        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            node->style()->setProperty(name.toLatin1(), val);
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
         }
     }
 }
@@ -297,18 +357,12 @@ void PropertyBrowser::valueChanged(QtProperty *property, int val)
         return;
     }
 
-    Q_ASSERT(d->item);
-
+    auto style = styleForItem(d->item);
     QString name = d->propertyMap[property];
-
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    if (node) {
-        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            if (name == s_penOpacity) {
-                node->style()->setProperty(name.toLatin1(), val / 100.0);
-            } else {
-                node->style()->setProperty(name.toLatin1(), val);
-            }
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
         }
     }
 }
@@ -322,14 +376,31 @@ void PropertyBrowser::valueChanged(QtProperty *property, double val)
         return;
     }
 
-    Q_ASSERT(d->item);
-
+    auto style = styleForItem(d->item);
     QString name = d->propertyMap[property];
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
+        }
+    }
+}
 
-    auto node = qobject_cast<tikz::ui::NodeItem *>(d->item);
-    if (node) {
-        if (node->style()->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            node->style()->setProperty(name.toLatin1(), val);
+void PropertyBrowser::doubleValueChanged(QtProperty *property, double val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    auto style = styleForItem(d->item);
+    QString name = d->propertyMap[property];
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
         }
     }
 }

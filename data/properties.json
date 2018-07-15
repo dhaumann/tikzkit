@@ -1,0 +1,87 @@
+{
+    "properties" : {
+        "doubleLine" : {
+            "type" : "bool",
+            "title" : "Double Line",
+            "description" : "Stroke with double line",
+            "modified" : "doubleLineSet",
+            "reset" : "unsetDoubleLine"
+        },
+        "fillColor" : {
+            "type" : "color",
+            "title" : "Fill Color",
+            "description" : "Define the fill color",
+            "modified" : "fillColorSet",
+            "reset" : "unsetFillColor"
+        },
+        "innerLineColor" : {
+            "type" : "color",
+            "title" : "Inner Pen Color",
+            "description" : "Define the inner color of double lines",
+            "modified" : "innerLineColorSet",
+            "reset" : "unsetInnerLineColor"
+        },
+        "innerLineWidth" : {
+            "type" : "value",
+            "title" : "Inner Line Width",
+            "description" : "Define the inner line width",
+            "modified" : "innerLineWidthSet",
+            "reset" : "unsetInnerLineWidth",
+            "minimum" : "0",
+            "singleStep" : 1.0
+        },
+        "lineWidth" : {
+            "type" : "value",
+            "title" : "Line Width",
+            "description" : "Define the line width",
+            "modified" : "lineWidthSet",
+            "reset" : "unsetLineWidth",
+            "minimum" : "0",
+            "singleStep" : 1.0
+        },
+        "penColor" : {
+            "type" : "color",
+            "title" : "Pen Color",
+            "description" : "Define the color of the pen",
+            "modified" : "penColorSet",
+            "reset" : "unsetPenColor"
+        },
+        "penStyle" : {
+            "type" : "enum",
+            "title" : "Pen Style",
+            "description" : "Define the style of the pen",
+            "modified" : "penStyleSet",
+            "reset" : "unsetPenStyle"
+        },
+        "penOpacity" : {
+            "type" : "opacity",
+            "title" : "Pen Opacity",
+            "description" : "Define the opacity of the pen",
+            "modified" : "penOpacitySet",
+            "reset" : "unsetPenOpacity",
+            "minimum" : 0.0,
+            "maximum" : 1.0,
+            "singleStep" : 0.1
+        },
+        "fillOpacity" : {
+            "type" : "opacity",
+            "title" : "Fill Opacity",
+            "description" : "Define the fill opacity",
+            "modified" : "fillOpacitySet",
+            "reset" : "unsetFillOpacity",
+            "minimum" : 0.0,
+            "maximum" : 1.0,
+            "singleStep" : 0.1
+        },
+        "rotation" : {
+            "type" : "double",
+            "title" : "Rotation",
+            "description" : "Define the rotation of the shape",
+            "modified" : "rotationSet",
+            "reset" : "unsetRotation",
+            "minimum" : -360.0,
+            "maximum" : 360.0,
+            "singleStep" : 5
+        }
+    }
+}
