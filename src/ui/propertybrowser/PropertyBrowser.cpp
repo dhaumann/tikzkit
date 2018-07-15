@@ -73,7 +73,8 @@ public:
 
     QString title(const QString & propertyName) const
     {
-        return m_json["properties"][propertyName]["title"].toString();
+        const auto value = m_json["properties"][propertyName]["title"].toString();
+        return value.isEmpty() ? propertyName : value;
     }
 
     QVariant minimum(const QString & propertyName) const
@@ -149,25 +150,30 @@ public:
 
         const QString type = info.type(name);
         if (type == "value") {
-            property = valueManager->addProperty(name);
+            property = valueManager->addProperty(info.title(name));
             valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
+            valueManager->setMinimum(property, tikz::Value::fromString(info.minimum(name).toString()));
+            valueManager->setMaximum(property, tikz::Value::fromString(info.maximum(name).toString()));
             valueManager->setSingleStep(property, info.singleStep(name));
             valueManager->setValue(property, prop.value<tikz::Value>());
         }
         else if (type == "bool") {
-            property = boolManager->addProperty(name);
+            property = boolManager->addProperty(info.title(name));
             boolManager->setValue(property, prop.toBool());
         }
         else if (type == "color") {
-            property = colorManager->addProperty(name);
+            property = colorManager->addProperty(info.title(name));
             colorManager->setValue(property, prop.value<QColor>());
         }
         else if (type == "opacity") {
-            property = opacityManager->addProperty(name);
+            property = opacityManager->addProperty(info.title(name));
             opacityManager->setValue(property, prop.toDouble());
         }
         else if (type == "double") {
-            property = doubleManager->addProperty(name);
+            property = doubleManager->addProperty(info.title(name));
+            doubleManager->setMinimum(property, info.minimum(name).toDouble());
+            doubleManager->setMaximum(property, info.maximum(name).toDouble());
+            doubleManager->setSingleStep(property, info.singleStep(name));
             doubleManager->setValue(property, prop.toDouble());
         }
         else {

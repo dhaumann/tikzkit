@@ -27,8 +27,9 @@
             "description" : "Define the inner line width",
             "modified" : "innerLineWidthSet",
             "reset" : "unsetInnerLineWidth",
-            "minimum" : "0",
-            "singleStep" : 1.0
+            "minimum" : "0pt",
+            "maximum" : "10mm",
+            "singleStep" : 0.1
         },
         "lineWidth" : {
             "type" : "value",
@@ -36,8 +37,9 @@
             "description" : "Define the line width",
             "modified" : "lineWidthSet",
             "reset" : "unsetLineWidth",
-            "minimum" : "0",
-            "singleStep" : 1.0
+            "minimum" : "0pt",
+            "maximum" : "10mm",
+            "singleStep" : 0.1
         },
         "penColor" : {
             "type" : "color",
