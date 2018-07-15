@@ -31,7 +31,7 @@
 #include <QMouseEvent>
 #include <QStylePainter>
 #include <QStyleOptionSpinBox>
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #include <QContextMenuEvent>
 #include <QCursor>
 #include <QDebug>
@@ -44,7 +44,7 @@ public:
     {}
 
     QStyleOptionSpinBox spinBoxOptions() const;
-    QStyleOptionProgressBarV2 progressBarOptions() const;
+    QStyleOptionProgressBar progressBarOptions() const;
     QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
@@ -85,12 +85,12 @@ QStyleOptionSpinBox SliderSpinBoxPrivate::spinBoxOptions() const
     return opts;
 }
 
-QStyleOptionProgressBarV2 SliderSpinBoxPrivate::progressBarOptions() const
+QStyleOptionProgressBar SliderSpinBoxPrivate::progressBarOptions() const
 {
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     //Create opts for drawing the progress portion
-    QStyleOptionProgressBarV2 progressOpts;
+    QStyleOptionProgressBar progressOpts;
     progressOpts.initFrom(q);
     progressOpts.maximum = q->maximum();
     progressOpts.minimum = q->minimum();
@@ -210,7 +210,7 @@ void SliderSpinBox::paintEvent(QPaintEvent* event)
     //
     // draw progress bar background on top of the spin box
     //
-    QStyleOptionProgressBarV2 progressOpts = d->progressBarOptions();
+    QStyleOptionProgressBar progressOpts = d->progressBarOptions();
     p.drawControl(QStyle::CE_ProgressBar, progressOpts);
 
     //

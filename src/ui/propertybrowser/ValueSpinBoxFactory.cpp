@@ -293,6 +293,5 @@ void ValueSpinBoxFactory::disconnectPropertyManager(ValuePropertyManager *manage
 }
 
 #include "moc_ValueSpinBoxFactory.cpp"
-#include "ValueSpinBoxFactory.moc"
 
 // kate: indent-width 4; replace-tabs on;

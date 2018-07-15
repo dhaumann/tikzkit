@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QStylePainter>
 #include <QStyleOptionSpinBox>
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #include <QContextMenuEvent>
 #include <QCursor>
 #include <QDebug>
@@ -40,7 +40,7 @@ public:
     {}
 
     QStyleOptionSpinBox spinBoxOptions() const;
-    QStyleOptionProgressBarV2 progressBarOptions() const;
+    QStyleOptionProgressBar progressBarOptions() const;
     QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
     QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
@@ -81,7 +81,7 @@ QStyleOptionSpinBox SliderDoubleSpinBoxPrivate::spinBoxOptions() const
     return opts;
 }
 
-QStyleOptionProgressBarV2 SliderDoubleSpinBoxPrivate::progressBarOptions() const
+QStyleOptionProgressBar SliderDoubleSpinBoxPrivate::progressBarOptions() const
 {
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
@@ -89,7 +89,7 @@ QStyleOptionProgressBarV2 SliderDoubleSpinBoxPrivate::progressBarOptions() const
     const double factor = std::pow(10.0, q->decimals());
 
     //Create opts for drawing the progress portion
-    QStyleOptionProgressBarV2 progressOpts;
+    QStyleOptionProgressBar progressOpts;
     progressOpts.initFrom(q);
     progressOpts.maximum = q->maximum() * factor;
     progressOpts.minimum = q->minimum() * factor;
@@ -209,7 +209,7 @@ void SliderDoubleSpinBox::paintEvent(QPaintEvent* event)
     //
     // draw progress bar background on top of the spin box
     //
-    QStyleOptionProgressBarV2 progressOpts = d->progressBarOptions();
+    QStyleOptionProgressBar progressOpts = d->progressBarOptions();
     p.drawControl(QStyle::CE_ProgressBar, progressOpts);
 
     //

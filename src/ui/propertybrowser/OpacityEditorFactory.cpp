@@ -185,6 +185,5 @@ void OpacityEditorFactory::disconnectPropertyManager(OpacityPropertyManager *man
 }
 
 #include "moc_OpacityEditorFactory.cpp"
-#include "OpacityEditorFactory.moc"
 
 // kate: indent-width 4; replace-tabs on;
