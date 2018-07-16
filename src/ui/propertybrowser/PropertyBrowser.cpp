@@ -108,6 +108,7 @@ public:
     QtColorPropertyManager * colorManager = nullptr;
     OpacityPropertyManager * opacityManager = nullptr;
     QtDoublePropertyManager * doubleManager = nullptr;
+    QtEnumPropertyManager * enumManager = nullptr;
 
     QPointer<View> view = nullptr;
     TikzItem * item = nullptr;
@@ -176,6 +177,29 @@ public:
             doubleManager->setSingleStep(property, info.singleStep(name));
             doubleManager->setValue(property, prop.toDouble());
         }
+        else if (type == "enum") {
+            // find out property type
+            auto metaProp = object->metaObject()->property(object->metaObject()->indexOfProperty(name.toLatin1()));
+            if (metaProp.userType() == QMetaType::UnknownType) {
+                qDebug() << "Unknown enum type";
+            }
+
+            // remove namespace, if applicable
+            QString typeName = metaProp.typeName();
+            if (typeName.startsWith("tikz::")) {
+                typeName.remove(0, 6);
+            }
+
+            const int enumIndex = tikz::staticMetaObject.indexOfEnumerator(typeName.toLatin1());
+            const QMetaEnum metaEnum = tikz::staticMetaObject.enumerator(enumIndex);
+            QStringList enumNames;
+            for (int i = 0; i < metaEnum.keyCount(); ++i) {
+                enumNames << metaEnum.key(i);
+            }
+            property = enumManager->addProperty(info.title(name));
+            enumManager->setEnumNames(property, enumNames);
+            enumManager->setValue(property, prop.toInt());
+        }
         else {
             qDebug() << "Unknown property type:" << name;
         }
@@ -203,6 +227,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->colorManager = new QtColorPropertyManager(this);
     d->opacityManager = new OpacityPropertyManager(this);
     d->doubleManager = new QtDoublePropertyManager(this);
+    d->enumManager = new QtEnumPropertyManager(this);
 
     // setup propertybrowser
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
@@ -210,6 +235,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->browser->setFactoryForManager(d->colorManager, new QtColorEditorFactory(this));
     d->browser->setFactoryForManager(d->opacityManager, new OpacityEditorFactory(this));
     d->browser->setFactoryForManager(d->doubleManager, new QtDoubleSpinBoxFactory(this));
+    d->browser->setFactoryForManager(d->enumManager, new QtEnumEditorFactory(this));
 
     d->browser->setPropertiesWithoutValueMarked(true);
     d->browser->setRootIsDecorated(false);
@@ -226,6 +252,8 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
             this, SLOT(valueChanged(QtProperty*, qreal)));
     connect(d->doubleManager, SIGNAL(valueChanged(QtProperty*, double)),
             this, SLOT(doubleValueChanged(QtProperty*, double)));
+    connect(d->enumManager, SIGNAL(valueChanged(QtProperty*, int)),
+            this, SLOT(enumValueChanged(QtProperty*, int)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -283,6 +311,7 @@ void PropertyBrowser::setItem(TikzItem * item)
     d->colorManager->clear();
     d->opacityManager->clear();
     d->doubleManager->clear();
+    d->enumManager->clear();
     d->propertyMap.clear();
 
     auto style = styleForItem(d->item);
@@ -393,6 +422,25 @@ void PropertyBrowser::valueChanged(QtProperty *property, double val)
 }
 
 void PropertyBrowser::doubleValueChanged(QtProperty *property, double val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    auto style = styleForItem(d->item);
+    QString name = d->propertyMap[property];
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
+        }
+    }
+}
+
+void PropertyBrowser::enumValueChanged(QtProperty *property, int val)
 {
     // if items are inserted, the slot valueChanged() is also called.
     // In this case, the item is not yet registered in the map. Hence,
