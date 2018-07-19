@@ -352,6 +352,12 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
     }
 
 // FIXME
+    if (style->bendAngleSet()) {
+        const qreal angle = style->bendAngle();
+        if (angle > 0) options << QString("bend left=%1").arg(angle);
+        if (angle < 0) options << QString("bend right=%1").arg(-angle);
+    }
+
 #if 0
     //
     // export curve mode
@@ -385,15 +391,15 @@ QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
             default: Q_ASSERT(false); break;
         }
 
-        //
-        // export looseness
-        //
-        if (style->loosenessSet()) {
-            Q_ASSERT(cm == CurveMode::BendCurve || cm == CurveMode::InOutCurve || cm == CurveMode::BezierCurve);
-            options << QString("looseness").arg(style->looseness());
-        }
     }
 #endif
+    //
+    // export looseness
+    //
+    if (style->loosenessSet()) {
+//         Q_ASSERT(cm == CurveMode::BendCurve || cm == CurveMode::InOutCurve || cm == CurveMode::BezierCurve);
+        options << QString("looseness=%1").arg(style->looseness());
+    }
 
 #if 0
         if (d->curveMode == BezierCurve) {
