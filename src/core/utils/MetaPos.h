@@ -187,7 +187,7 @@ class TIKZCORE_EXPORT MetaPos
         /**
          * Disable default constructor.
          */
-        MetaPos();
+        MetaPos() = delete;
 
         /**
          * Private data pointer.
