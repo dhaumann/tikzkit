@@ -84,6 +84,100 @@
             "minimum" : -360.0,
             "maximum" : 360.0,
             "singleStep" : 5
+        },
+        "radiusX" : {
+            "type" : "value",
+            "title" : "Radius x",
+            "description" : "Ellipse x radius",
+            "modified" : "radiusXSet",
+            "reset" : "unsetRadiusX",
+            "minimum" : "0mm",
+            "maximum" : "1000mm",
+            "singleStep" : 0.1
+        },
+        "radiusY" : {
+            "type" : "value",
+            "title" : "Radius y",
+            "description" : "Ellipse y radius",
+            "modified" : "radiusYSet",
+            "reset" : "unsetRadiusY",
+            "minimum" : "0mm",
+            "maximum" : "1000mm",
+            "singleStep" : 0.1
+        },
+        "bendAngle" : {
+            "type" : "double",
+            "title" : "Bend Angle",
+            "description" : "Bend angle of the edge",
+            "modified" : "bendAngleSet",
+            "reset" : "unsetBendAngle",
+            "minimum" : -180.0,
+            "maximum" : 180.0,
+            "singleStep" : 5
+        },
+        "looseness" : {
+            "type" : "double",
+            "title" : "Looseness",
+            "description" : "Loosenes for bended edges",
+            "modified" : "loosenessSet",
+            "reset" : "unsetLooseness",
+            "minimum" : 0,
+            "maximum" : 10,
+            "singleStep" : 0.1
+        },
+        "outAngle" : {
+            "type" : "double",
+            "title" : "Out Angle",
+            "description" : "Out angle for bended edges",
+            "modified" : "outAngleSet",
+            "reset" : "unsetOutAngle",
+            "minimum" : -360,
+            "maximum" : 360,
+            "singleStep" : 5
+        },
+        "inAngle" : {
+            "type" : "double",
+            "title" : "In Angle",
+            "description" : "In angle for bended edges",
+            "modified" : "inAngleSet",
+            "reset" : "unsetInAngle",
+            "minimum" : -360,
+            "maximum" : 360,
+            "singleStep" : 5
+        },
+        "arrowTail" : {
+            "type" : "enum",
+            "title" : "Arrow Tail",
+            "description" : "Arrow tail for the edge",
+            "modified" : "arrowTailSet",
+            "reset" : "unsetArrowTail"
+        },
+        "arrowHead" : {
+            "type" : "enum",
+            "title" : "Arrow Head",
+            "description" : "Arrow head for the edge",
+            "modified" : "arrowHeadSet",
+            "reset" : "unsetArrowHead"
+        },
+        "shortenStart" : {
+            "type" : "value",
+            "title" : "Shorten Start",
+            "description" : "Shorten start",
+            "modified" : "shortenStartSet",
+            "reset" : "unsetShortenStart",
+            "minimum" : "-5mm",
+            "maximum" : "5mm",
+            "singleStep" : 0.1
+        },
+        "shortenEnd" : {
+            "type" : "value",
+            "title" : "Shorten End",
+            "description" : "Shorten end",
+            "modified" : "shortenEndSet",
+            "reset" : "unsetShortenEnd",
+            "minimum" : "-5mm",
+            "maximum" : "5mm",
+            "singleStep" : 0.1
         }
     }
 }
