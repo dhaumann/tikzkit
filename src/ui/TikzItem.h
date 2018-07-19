@@ -34,7 +34,7 @@ class TIKZUI_EXPORT TikzItem : public QGraphicsObject
         /**
          * Default constructor.
          */
-        TikzItem(QGraphicsItem * parent = 0);
+        TikzItem(QGraphicsItem * parent = nullptr);
 
         /**
          * Destructor

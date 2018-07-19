@@ -509,7 +509,7 @@ Path * Document::createPath(PathType type)
 
 void Document::deletePath(Path * path)
 {
-    Q_ASSERT(path != 0);
+    Q_ASSERT(path != nullptr);
     Q_ASSERT(d->entityMap.contains(path->uid()));
 
     // TODO: not yet the case, but maybe in future: remove child nodes here?
@@ -566,7 +566,7 @@ Node * Document::createNode(const Uid & uid)
 void Document::deleteNode(Node * node)
 {
     // valid input?
-    Q_ASSERT(node != 0);
+    Q_ASSERT(node != nullptr);
     Q_ASSERT(d->entityMap.contains(node->uid()));
 
     // get edge id

@@ -32,7 +32,7 @@ class ValuePropertyManager : public QtAbstractPropertyManager
 {
     Q_OBJECT
 public:
-    ValuePropertyManager(QObject *parent = 0);
+    ValuePropertyManager(QObject *parent = nullptr);
     ~ValuePropertyManager();
 
     tikz::Value value(const QtProperty *property) const;

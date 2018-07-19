@@ -599,7 +599,7 @@ void DocumentPrivate::deletePath(const tikz::core::Uid & uid)
 NodeItem * DocumentPrivate::nodeItemFromId(const tikz::core::Uid & uid) const
 {
     if (! uid.isValid()) {
-        return 0;
+        return nullptr;
     }
 
     Q_ASSERT(m_nodeMap.contains(uid));
@@ -609,7 +609,7 @@ NodeItem * DocumentPrivate::nodeItemFromId(const tikz::core::Uid & uid) const
 tikz::ui::PathItem * DocumentPrivate::pathItemFromId(const tikz::core::Uid & uid) const
 {
     if (! uid.isValid()) {
-        return 0;
+        return nullptr;
     }
 
     Q_ASSERT(m_pathMap.contains(uid));

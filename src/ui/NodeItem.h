@@ -47,7 +47,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         /**
          * Constructor for @p node and parent @p parent.
          */
-        NodeItem(tikz::core::Node * node, QGraphicsItem * parent = 0);
+        NodeItem(tikz::core::Node * node, QGraphicsItem * parent = nullptr);
 
         /**
          * Destructor
@@ -116,7 +116,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
         /**
          * Returns the bounding rect of this item.

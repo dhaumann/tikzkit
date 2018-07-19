@@ -31,7 +31,7 @@ class OpacityEditor : public QWidget
 {
     Q_OBJECT
 public:
-    OpacityEditor(QWidget * parent = 0);
+    OpacityEditor(QWidget * parent = nullptr);
     ~OpacityEditor();
 
 public Q_SLOTS:

@@ -38,7 +38,7 @@ public:
     /**
      * Constructor with optional @p parennt widget.
      */
-    explicit IconComboBox(QWidget *parent = 0);
+    explicit IconComboBox(QWidget *parent = nullptr);
 
     /**
      * Override sizeHint() to return a size without text.

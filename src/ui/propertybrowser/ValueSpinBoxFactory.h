@@ -34,7 +34,7 @@ class ValueSpinBoxFactory : public QtAbstractEditorFactory<ValuePropertyManager>
 {
     Q_OBJECT
 public:
-    ValueSpinBoxFactory(QObject *parent = 0);
+    ValueSpinBoxFactory(QObject *parent = nullptr);
     ~ValueSpinBoxFactory();
 protected:
     void connectPropertyManager(ValuePropertyManager *manager) override;

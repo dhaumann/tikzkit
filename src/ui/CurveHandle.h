@@ -43,7 +43,7 @@ class CurveHandle : public TikzItem
         /**
          * Constructor.
          */
-        CurveHandle(tikz::ui::PathItem * path = 0);
+        CurveHandle(tikz::ui::PathItem * path = nullptr);
 
         /**
          * Destructor
@@ -69,7 +69,7 @@ class CurveHandle : public TikzItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
         /**
          * Returns the bounding rect of this item.

@@ -44,7 +44,7 @@ class AnchorManager : public QObject
         /**
          * Constructor.
          */
-        AnchorManager(QGraphicsScene * scene, tikz::ui::DocumentPrivate * document, QObject * parent = 0);
+        AnchorManager(QGraphicsScene * scene, tikz::ui::DocumentPrivate * document, QObject * parent = nullptr);
 
         /**
          * Destructor.

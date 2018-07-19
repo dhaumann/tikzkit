@@ -49,7 +49,7 @@ class DocumentPrivate : public tikz::ui::Document
         /**
          * Default constructor.
          */
-        DocumentPrivate(QObject * parent = 0);
+        DocumentPrivate(QObject * parent = nullptr);
 
         /**
          * Destructor

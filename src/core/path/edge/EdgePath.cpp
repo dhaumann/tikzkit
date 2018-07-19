@@ -80,19 +80,19 @@ void EdgePath::deconstruct()
 
 void EdgePath::detachFromNode(Node * node)
 {
-    Q_ASSERT(node != 0);
+    Q_ASSERT(node != nullptr);
 
     // disconnect start from node, if currently attached
     if (d->start.node() == node) {
         auto newPos = startMetaPos();
-        newPos.setNode(0);
+        newPos.setNode(nullptr);
         setStartMetaPos(newPos);
     }
 
     // disconnect end from node, if currently attached
     if (d->end.node() == node) {
         auto newPos = endMetaPos();
-        newPos.setNode(0);
+        newPos.setNode(nullptr);
         setEndMetaPos(newPos);
     }
 

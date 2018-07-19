@@ -44,8 +44,8 @@ TexGenerator::TexGenerator(QObject * parent)
 : QObject(parent)
     , d(new TexGeneratorPrivate())
 {
-    d->process = 0;
-    d->tempFile = 0;
+    d->process = nullptr;
+    d->tempFile = nullptr;
     d->postProcessRunning = false;
 }
 

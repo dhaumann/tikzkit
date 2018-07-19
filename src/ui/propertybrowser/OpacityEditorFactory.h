@@ -34,7 +34,7 @@ class OpacityEditorFactory : public QtAbstractEditorFactory<OpacityPropertyManag
 {
     Q_OBJECT
 public:
-    OpacityEditorFactory(QObject *parent = 0);
+    OpacityEditorFactory(QObject *parent = nullptr);
     ~OpacityEditorFactory();
 protected:
     void connectPropertyManager(OpacityPropertyManager *manager) override;

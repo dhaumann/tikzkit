@@ -40,7 +40,7 @@ class TIKZUI_EXPORT Ruler : public QWidget
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom)
 
 public:
-    Ruler(Qt::Orientation orientation, QWidget* parent = 0);
+    Ruler(Qt::Orientation orientation, QWidget* parent = nullptr);
 
     QSize minimumSizeHint() const override;
 

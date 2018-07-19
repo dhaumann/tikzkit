@@ -39,8 +39,8 @@ PdfGenerator::PdfGenerator(QObject * parent)
 : QObject(parent)
     , d(new PdfGeneratorPrivate())
 {
-    d->process = 0;
-    d->tempFile = 0;
+    d->process = nullptr;
+    d->tempFile = nullptr;
 }
 
 PdfGenerator::~PdfGenerator()

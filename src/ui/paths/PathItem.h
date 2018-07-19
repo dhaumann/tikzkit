@@ -44,7 +44,7 @@ class TIKZUI_EXPORT PathItem :  public TikzItem
         /**
          * Constructor for @p path and parent @p parent.
          */
-        PathItem(tikz::core::Path * path, QGraphicsItem * parent = 0);
+        PathItem(tikz::core::Path * path, QGraphicsItem * parent = nullptr);
 
         /**
          * Destructor

@@ -50,7 +50,7 @@ class TIKZCORE_EXPORT Document : public ConfigObject
         /**
          * Default constructor.
          */
-        explicit Document(QObject * parent = 0);
+        explicit Document(QObject * parent = nullptr);
 
         /**
          * Destructor

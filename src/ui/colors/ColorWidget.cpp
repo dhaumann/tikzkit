@@ -42,7 +42,7 @@ namespace ui {
 class ColorButton : public QAbstractButton
 {
 public:
-    ColorButton(QRgb color, QWidget * parent = 0)
+    ColorButton(QRgb color, QWidget * parent = nullptr)
         : QAbstractButton(parent)
         , m_color(color)
     {

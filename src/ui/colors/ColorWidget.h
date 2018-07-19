@@ -47,7 +47,7 @@ class TIKZUI_EXPORT ColorWidget : public QFrame
         /**
          * Default constructor.
          */
-        explicit ColorWidget(QWidget * parent = 0);
+        explicit ColorWidget(QWidget * parent = nullptr);
 
         /**
          * Destructor

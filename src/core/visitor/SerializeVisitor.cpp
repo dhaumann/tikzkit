@@ -110,14 +110,14 @@ void SerializeVisitor::visit(Node * node)
 
 static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
 {
-    Q_ASSERT(edge != 0);
+    Q_ASSERT(edge != nullptr);
     map.insert("start", edge->startMetaPos().toString());
     map.insert("end", edge->endMetaPos().toString());
 }
 
 static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
 {
-    Q_ASSERT(ellipse != 0);
+    Q_ASSERT(ellipse != nullptr);
     map.insert("center", ellipse->metaPos().toString());
 }
 

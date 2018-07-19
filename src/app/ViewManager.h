@@ -41,7 +41,7 @@ class ViewManager : public QWidget
     Q_OBJECT
 
 public:
-    ViewManager(MainWindow * mainWin, QWidget * parent = 0);
+    ViewManager(MainWindow * mainWin, QWidget * parent = nullptr);
     virtual ~ViewManager();
 
 public:

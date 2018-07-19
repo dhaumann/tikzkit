@@ -92,7 +92,7 @@ static T *first(const QList<QGraphicsItem *> &items)
             return t;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void AnchorManager::addAllNodes()

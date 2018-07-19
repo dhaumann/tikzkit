@@ -26,7 +26,7 @@ namespace core {
 MetaPosPrivate::MetaPosPrivate(MetaPos * metaPos)
     : QObject()
     , q(metaPos)
-    , doc(0)
+    , doc(nullptr)
     , nodeId()
     , anchor()
     , changeRefCounter(0)

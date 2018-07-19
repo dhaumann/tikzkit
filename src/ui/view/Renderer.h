@@ -43,7 +43,7 @@ class Renderer : public QGraphicsView
         /**
          * Constructor.
          */
-        Renderer(DocumentPrivate * document = 0, QWidget * parent = 0);
+        Renderer(DocumentPrivate * document = nullptr, QWidget * parent = nullptr);
 
         /**
          * Destructor.

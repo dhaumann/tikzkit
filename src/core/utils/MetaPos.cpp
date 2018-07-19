@@ -171,7 +171,7 @@ void MetaPos::setPos(const tikz::Pos & pos)
     Node * oldNode = node();
     if (oldNode) {
         // disconnect changed() signal
-        QObject::disconnect(oldNode, 0, d, 0);
+        QObject::disconnect(oldNode, nullptr, d, nullptr);
         d->nodeId = Uid();
 
         change = true;
@@ -205,7 +205,7 @@ bool MetaPos::setNode(Node* newNode)
     // detach from old node
     if (curNode) {
         // disconnect changed() signal
-        QObject::disconnect(curNode, 0, d, 0);
+        QObject::disconnect(curNode, nullptr, d, nullptr);
 
         // update pos in case the newNode is 0
         d->pos = pos();

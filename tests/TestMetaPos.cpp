@@ -41,7 +41,7 @@ void MetaPosTest::testMetaPos()
 
     // initially (0, 0)
     QCOMPARE(m.pos(), tikz::Pos(0, 0));
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
     QVERIFY(m == m);
 
     // test changed signal
@@ -60,7 +60,7 @@ void MetaPosTest::testMetaPos()
     QCOMPARE(m_changeCount, 1);
 
     // make sure setNode with null pointer has no effect
-    QVERIFY( ! m.setNode(0));
+    QVERIFY( ! m.setNode(nullptr));
     QVERIFY(m == m);
     QCOMPARE(m_changeCount, 1);
 }
@@ -110,7 +110,7 @@ void MetaPosTest::testMetaPosWithNode()
     QVERIFY(m == m);
 
     // using setPos() resets node, test this
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
 
     // make sure signals are emitted only once
     QCOMPARE(m_changeCount, 1);
@@ -151,10 +151,10 @@ void MetaPosTest::testSet0()
     QVERIFY(m == m);
 
     // now set node to 0 again
-    QVERIFY(m.setNode(0));
+    QVERIFY(m.setNode(nullptr));
 
     // make sure the node is 0 and the position is kept
-    QCOMPARE(m.node(), (tikz::core::Node*)0);
+    QCOMPARE(m.node(), (tikz::core::Node*)nullptr);
     QCOMPARE(m.pos(), tikz::Pos(5, 5));
     QVERIFY(m == m);
 }

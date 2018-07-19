@@ -50,7 +50,7 @@ UndoSetEdgePos::~UndoSetEdgePos()
 void UndoSetEdgePos::undo()
 {
     EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
-    Q_ASSERT(path != 0);
+    Q_ASSERT(path != nullptr);
 
     if (m_isStart) {
         path->setStartMetaPos(m_undoPos);
@@ -62,7 +62,7 @@ void UndoSetEdgePos::undo()
 void UndoSetEdgePos::redo()
 {
     EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
-    Q_ASSERT(path != 0);
+    Q_ASSERT(path != nullptr);
 
     if (m_isStart) {
         path->setStartMetaPos(m_redoPos);

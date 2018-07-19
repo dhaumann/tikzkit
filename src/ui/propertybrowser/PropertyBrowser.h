@@ -47,7 +47,7 @@ public:
     /**
      * Constructor with optional @p parennt widget.
      */
-    explicit PropertyBrowser(QWidget *parent = 0);
+    explicit PropertyBrowser(QWidget *parent = nullptr);
 
     /**
      * Virtual destructor.

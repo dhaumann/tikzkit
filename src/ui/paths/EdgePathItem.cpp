@@ -71,7 +71,7 @@ tikz::core::EdgePath * EdgePathItem::edgePath() const
 
 void EdgePathItem::updateStartNode(tikz::core::Node * node)
 {
-    NodeItem * newNode = 0;
+    NodeItem * newNode = nullptr;
 
     if (node) {
         newNode = document()->nodeItemFromId(node->uid());
@@ -86,7 +86,7 @@ void EdgePathItem::updateStartNode(tikz::core::Node * node)
 
 void EdgePathItem::updateEndNode(tikz::core::Node * node)
 {
-    NodeItem * newNode = 0;
+    NodeItem * newNode = nullptr;
 
     if (node) {
         newNode = document()->nodeItemFromId(node->uid());
@@ -102,7 +102,7 @@ void EdgePathItem::updateEndNode(tikz::core::Node * node)
 void EdgePathItem::setStartNode(NodeItem * start)
 {
     if (m_startNode != start) {
-        edgePath()->setStartNode(start ? start->node() : 0);
+        edgePath()->setStartNode(start ? start->node() : nullptr);
     }
 
     // m_startNode was fixed through updateStartNode()
@@ -112,7 +112,7 @@ void EdgePathItem::setStartNode(NodeItem * start)
 void EdgePathItem::setEndNode(NodeItem * end)
 {
     if (m_endNode != end) {
-        edgePath()->setEndNode(end ? end->node() : 0);
+        edgePath()->setEndNode(end ? end->node() : nullptr);
     }
 
     // m_startNode was fixed through updateStartNode()

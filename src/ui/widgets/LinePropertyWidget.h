@@ -45,7 +45,7 @@ public:
     /**
      * Constructor with optional @p parennt widget.
      */
-    explicit LinePropertyWidget(QWidget *parent = 0);
+    explicit LinePropertyWidget(QWidget *parent = nullptr);
 
     /**
      * Virtual destructor.

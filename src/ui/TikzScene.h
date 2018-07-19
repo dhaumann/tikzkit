@@ -39,7 +39,7 @@ class TIKZUI_EXPORT TikzScene : public QGraphicsScene
         /**
          * Constructor.
          */
-        TikzScene(DocumentPrivate * document = 0);
+        TikzScene(DocumentPrivate * document = nullptr);
 
         /**
          * Destructor.

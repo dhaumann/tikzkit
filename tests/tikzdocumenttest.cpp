@@ -24,11 +24,11 @@ void TikzDocumentTest::cleanupTestCase()
 
 void TikzDocumentTest::documentTest()
 {
-    auto doc = tikz::ui::Editor::instance()->createDocument(0);
+    auto doc = tikz::ui::Editor::instance()->createDocument(nullptr);
 
     tikz::ui::NodeItem * node = doc->createNodeItem();
 
-    Q_ASSERT(node != 0);
+    Q_ASSERT(node != nullptr);
 
 //     tikz::core::Node * node = doc.createNode();
 }

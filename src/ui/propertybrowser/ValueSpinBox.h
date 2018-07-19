@@ -32,7 +32,7 @@ class ValueSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 public:
-    ValueSpinBox(QWidget * parent = 0);
+    ValueSpinBox(QWidget * parent = nullptr);
     ~ValueSpinBox();
 
     /**

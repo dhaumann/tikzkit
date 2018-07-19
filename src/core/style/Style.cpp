@@ -97,10 +97,10 @@ Style::~Style()
     Q_ASSERT(d->children.size() == 0);
 
     // avoid unnecessary propagation of the changed() signal
-    disconnect(this, SIGNAL(changed()), 0, 0);
+    disconnect(this, SIGNAL(changed()), nullptr, nullptr);
 
     // now: remove from parent's child list, if needed
-    setParentStyle(0);
+    setParentStyle(nullptr);
 }
 
 tikz::EntityType Style::entityType() const
@@ -244,7 +244,7 @@ void Style::setParentStyle(Style *parent)
         ConfigTransaction transaction(this);
         if (d->parent) {
             // disconnect all signals (e.g. changed())
-            disconnect(d->parent, 0, this, 0);
+            disconnect(d->parent, nullptr, this, nullptr);
 
             // remove this in old parent's children list
             Q_ASSERT(d->parent->d->children.contains(this));

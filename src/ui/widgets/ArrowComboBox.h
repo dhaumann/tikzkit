@@ -34,7 +34,7 @@ class TIKZUI_EXPORT ArrowComboBox : public QWidget
         /**
          * Default constructor.
          */
-        ArrowComboBox(bool arrowHead, QWidget* parent = 0);
+        ArrowComboBox(bool arrowHead, QWidget* parent = nullptr);
 
         /**
          * Virtual destructor.

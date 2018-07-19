@@ -31,7 +31,7 @@ class OpacityPropertyManager : public QtAbstractPropertyManager
 {
     Q_OBJECT
 public:
-    OpacityPropertyManager(QObject *parent = 0);
+    OpacityPropertyManager(QObject *parent = nullptr);
     ~OpacityPropertyManager();
 
     qreal value(const QtProperty *property) const;

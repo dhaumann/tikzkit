@@ -68,7 +68,7 @@ MainWindow::MainWindow()
 {
     setWindowTitle("TikZKit - The Graphical Editor for PGF/TikZ");
 
-    m_pdfGenerator = 0;
+    m_pdfGenerator = nullptr;
 
     auto mainWidget = new QWidget(this);
     setCentralWidget(mainWidget);
@@ -152,7 +152,7 @@ void MainWindow::setupUi()
     // menubar and status bar
     //
     m_fileMenu = new QMenu(menuBar());
-    m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", 0));
+    m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", nullptr));
     menuBar()->addAction(m_fileMenu->menuAction());
 
     m_toolBar = new QToolBar(this);
@@ -225,42 +225,42 @@ void MainWindow::setupActions()
 {
     m_fileNew = new QAction(this);
     m_fileNew->setIcon(QIcon::fromTheme("document-new"));
-    m_fileNew->setText(QApplication::translate("MainWindow", "&New", 0));
-    m_fileNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", 0));
+    m_fileNew->setText(QApplication::translate("MainWindow", "&New", nullptr));
+    m_fileNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
 
     m_fileOpen = new QAction(this);
     m_fileOpen->setIcon(QIcon::fromTheme("document-open"));
-    m_fileOpen->setText(QApplication::translate("MainWindow", "&Open", 0));
-    m_fileOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
+    m_fileOpen->setText(QApplication::translate("MainWindow", "&Open", nullptr));
+    m_fileOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", nullptr));
 
     m_fileSave = new QAction(this);
     m_fileSave->setIcon(QIcon::fromTheme("document-save"));
-    m_fileSave->setText(QApplication::translate("MainWindow", "&Save", 0));
-    m_fileSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
+    m_fileSave->setText(QApplication::translate("MainWindow", "&Save", nullptr));
+    m_fileSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", nullptr));
 
     m_fileClose = new QAction(this);
     m_fileClose->setIcon(QIcon::fromTheme("document-close"));
-    m_fileClose->setText(QApplication::translate("MainWindow", "&Close", 0));
-    m_fileClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+W", 0));
+    m_fileClose->setText(QApplication::translate("MainWindow", "&Close", nullptr));
+    m_fileClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+W", nullptr));
 
     m_fileQuit = new QAction(this);
     m_fileQuit->setIcon(QIcon::fromTheme("application-exit"));
-    m_fileQuit->setText(QApplication::translate("MainWindow", "&Quit", 0));
-    m_fileQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", 0));
+    m_fileQuit->setText(QApplication::translate("MainWindow", "&Quit", nullptr));
+    m_fileQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", nullptr));
 
     m_filePreview = new QAction(this);
     m_filePreview->setIcon(QIcon::fromTheme("application-pdf"));
-    m_filePreview->setText(QApplication::translate("MainWindow", "Preview", 0));
+    m_filePreview->setText(QApplication::translate("MainWindow", "Preview", nullptr));
 
     m_editUndo = new QAction(this);
     m_editUndo->setIcon(QIcon::fromTheme("edit-undo", QIcon(":/icons/icons/edit-undo.png")));
-    m_editUndo->setText(QApplication::translate("MainWindow", "&Undo", 0));
-    m_editUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0));
+    m_editUndo->setText(QApplication::translate("MainWindow", "&Undo", nullptr));
+    m_editUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", nullptr));
 
     m_editRedo = new QAction(this);
     m_editRedo->setIcon(QIcon::fromTheme("edit-redo", QIcon(":/icons/icons/edit-redo.png")));
-    m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", 0));
-    m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", 0));
+    m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", nullptr));
+    m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", nullptr));
 
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);

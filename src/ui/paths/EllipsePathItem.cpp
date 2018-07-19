@@ -64,7 +64,7 @@ DocumentPrivate * EllipsePathItem::document() const
 void EllipsePathItem::setNode(NodeItem* node)
 {
     if (m_node != node) {
-        ellipsePath()->setNode(node ? node->node() : 0);
+        ellipsePath()->setNode(node ? node->node() : nullptr);
     }
 }
 
@@ -155,7 +155,7 @@ bool EllipsePathItem::contains(const QPointF & point) const
 
 void EllipsePathItem::updateNode(tikz::core::Node * node)
 {
-    NodeItem * newNode = 0;
+    NodeItem * newNode = nullptr;
 
     if (node) {
         newNode = document()->nodeItemFromId(node->uid());

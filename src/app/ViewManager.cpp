@@ -95,7 +95,7 @@ void ViewManager::slotDocumentCreated(tikz::ui::Document *doc)
 void ViewManager::slotAboutToDeleteDocument(tikz::ui::Document *doc)
 {
     // kill all connections (namely, documentNameChanged(), modifiedChanged(), ...)
-    disconnect(doc, 0, this, 0);
+    disconnect(doc, nullptr, this, nullptr);
 
     // collect all views of that document that belong to this manager
     QList<tikz::ui::View *> closeList;

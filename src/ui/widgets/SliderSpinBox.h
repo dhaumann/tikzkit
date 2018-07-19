@@ -41,7 +41,7 @@ public:
     /**
      * Default constructor with an optional @p parent widget.
      */
-    explicit SliderSpinBox(QWidget * parent = 0);
+    explicit SliderSpinBox(QWidget * parent = nullptr);
 
     /**
      * Virtual destructor.

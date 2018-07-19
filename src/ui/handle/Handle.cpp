@@ -124,7 +124,7 @@ static QGraphicsView * viewForEvent(QGraphicsSceneEvent * event)
     if (viewport) {
         return qobject_cast<QGraphicsView *>(viewport->parent());
     }
-    return 0;
+    return nullptr;
 }
 
 void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)

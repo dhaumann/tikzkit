@@ -94,7 +94,7 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     d->group->setExclusive(true);
 
     const int initialMode = TikzEditMode::ModePlaceNode;
-    Q_ASSERT(d->group->button(initialMode) != 0);
+    Q_ASSERT(d->group->button(initialMode) != nullptr);
     d->group->button(initialMode)->setChecked(true);
 
     connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(setEditModeInternal(int)));

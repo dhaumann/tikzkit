@@ -40,7 +40,7 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
         /**
          * Constructor.
          */
-        TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent = 0);
+        TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent = nullptr);
 
         /**
          * Destructor.

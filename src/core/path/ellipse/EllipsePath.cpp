@@ -66,12 +66,12 @@ void EllipsePath::deconstruct()
 
 void EllipsePath::detachFromNode(Node * node)
 {
-    Q_ASSERT(node != 0);
+    Q_ASSERT(node != nullptr);
 
     // disconnect from node, if currently attached
     if (d->pos.node() == node) {
         auto newPos = metaPos();
-        newPos.setNode(0);
+        newPos.setNode(nullptr);
         setMetaPos(newPos);
     }
     Q_ASSERT(d->pos.node() != node);
