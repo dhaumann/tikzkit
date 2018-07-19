@@ -37,10 +37,10 @@ public:
     OpacityEditorFactory(QObject *parent = 0);
     ~OpacityEditorFactory();
 protected:
-    void connectPropertyManager(OpacityPropertyManager *manager);
+    void connectPropertyManager(OpacityPropertyManager *manager) override;
     QWidget *createEditor(OpacityPropertyManager *manager, QtProperty *property,
-                QWidget *parent);
-    void disconnectPropertyManager(OpacityPropertyManager *manager);
+                QWidget *parent) override;
+    void disconnectPropertyManager(OpacityPropertyManager *manager) override;
 private:
     OpacityEditorFactoryPrivate *d_ptr;
     Q_DECLARE_PRIVATE(OpacityEditorFactory)

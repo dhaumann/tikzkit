@@ -49,18 +49,18 @@ public:
     /**
      * See sizeHint() for details.
      */
-    virtual QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const override;
 
     /**
      * Overridden to adapt the width of the popup.
      */
-    virtual void showPopup();
+    void showPopup() override;
 
 protected:
     /**
      * Overridden to draw the combo box and icon without text.
      */
-    virtual void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 };
 
 #endif // ICON_COMBOBOX_H

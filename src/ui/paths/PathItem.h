@@ -59,7 +59,7 @@ class TIKZUI_EXPORT PathItem :  public TikzItem
         /**
          * Reimplment to return a proper UserType + 3.
          */
-        virtual int type() const;
+        int type() const override;
 
         /**
          * Returns the pointer to the associated Path.

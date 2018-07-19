@@ -37,43 +37,43 @@ class ToArrow : public AbstractArrow
         /**
          * Returns the type of this arrow.
          */
-        virtual tikz::Arrow type() const;
+        tikz::Arrow type() const override;
 
         /**
          * Gui visible name, such as "to" or "stealth".
          * The string should be translated.
          */
-        virtual QString name() const;
+        QString name() const override;
 
         /**
          * The 'left extend' value defines the extent of the arrow to the left,
          * beginning at the arrow tip. This value is only only important when
          * when an arrow is being reversed or composed with other arrow tips.
          */
-        virtual qreal leftExtend() const;
+        qreal leftExtend() const override;
 
         /**
          * The line is shortened by the amount of 'right extend' on the right.
          * This is often equal to half of the line width.
          */
-        virtual qreal rightExtend() const;
+        qreal rightExtend() const override;
 
         /**
          * Draw the arrow.
          */
-        virtual void draw(QPainter* painter) const;
+        void draw(QPainter* painter) const override;
 
         /**
          * Returns the painter path of this arrow.
          * This path is lated used for bounding box creation and mouse interaction.
          */
-        virtual QPainterPath path() const;
+        QPainterPath path() const override;
 
         /**
          * Returns the contour painter path of this arrow by drawing the
          * arrow's path with a pen of width @p width.
          */
-        virtual QPainterPath contour(qreal width) const;
+        QPainterPath contour(qreal width) const override;
 
     private:
         ToArrowPrivate * const d;
@@ -85,7 +85,7 @@ class ReversedToArrow : public AbstractArrow
 {
     public:
         ReversedToArrow(tikz::core::EdgeStyle* style);
-        virtual ~ReversedToArrow();
+        ~ReversedToArrow() override;
 
     //
     // Arrow properties
@@ -94,15 +94,15 @@ class ReversedToArrow : public AbstractArrow
         /**
          * Returns the type of this arrow.
          */
-        virtual tikz::Arrow type() const;
-        virtual QString name() const;
+        tikz::Arrow type() const override;
+        QString name() const override;
 
-        virtual qreal leftExtend() const;
-        virtual qreal rightExtend() const;
+        qreal leftExtend() const override;
+        qreal rightExtend() const override;
 
-        virtual void draw(QPainter* painter) const;
-        virtual QPainterPath path() const;
-        virtual QPainterPath contour(qreal width) const;
+        void draw(QPainter* painter) const override;
+        QPainterPath path() const override;
+        QPainterPath contour(qreal width) const override;
 
     private:
         ReversedToArrowPrivate * const d;

@@ -62,7 +62,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         /**
          * Reimplment to return a proper UserType + 2.
          */
-        virtual int type() const;
+        int type() const override;
 
         /**
          * Returns the pointer to the associated Node.
@@ -116,17 +116,17 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
         /**
          * Returns the bounding rect of this item.
          */
-        QRectF boundingRect() const;
+        QRectF boundingRect() const override;
 
         /**
          * Returns an exact shape as painter path
          */
-        QPainterPath shape() const;
+        QPainterPath shape() const override;
 
         /**
          * Returns @p true, if @p point is contained in this node.
@@ -143,7 +143,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
     // protected overrides
     //
     protected:
-        virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+        QVariant itemChange(GraphicsItemChange change, const QVariant & value) override;
 
     protected Q_SLOTS:
         void slotSetPos(const QPointF& pos);

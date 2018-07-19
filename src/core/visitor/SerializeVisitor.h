@@ -60,27 +60,27 @@ class SerializeVisitor : public Visitor
         /**
          * Serializes document @p doc document.
          */
-        virtual void visit(Document * doc) override;
+        void visit(Document * doc) override;
 
         /**
          * Serializes @p node.
          */
-        virtual void visit(Node * node) override;
+        void visit(Node * node) override;
 
         /**
          * Serializes @p path.
          */
-        virtual void visit(Path * path) override;
+        void visit(Path * path) override;
 
         /**
          * Serializes @p style.
          */
-        virtual void visit(NodeStyle * style) override;
+        void visit(NodeStyle * style) override;
 
         /**
          * Serializes @p style.
          */
-        virtual void visit(EdgeStyle * style) override;
+        void visit(EdgeStyle * style) override;
 
     //
     // helper functions

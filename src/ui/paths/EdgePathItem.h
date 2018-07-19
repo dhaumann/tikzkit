@@ -183,22 +183,22 @@ class EdgePathItem :  public PathItem
         /**
          * Paint this item.
          */
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
         /**
          * Returns the bounding rect of this item.
          */
-        QRectF boundingRect() const;
+        QRectF boundingRect() const override;
 
         /**
          * Returns an exact shape as painter path
          */
-        QPainterPath shape() const;
+        QPainterPath shape() const override;
 
         /**
          * Returns @p true, if @p point is contained in the edge.
          */
-        bool contains(const QPointF & point) const;
+        bool contains(const QPointF & point) const override;
 
     private Q_SLOTS:
         void slotUpdate();

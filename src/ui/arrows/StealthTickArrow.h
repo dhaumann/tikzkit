@@ -37,37 +37,37 @@ class StealthTickArrow : public AbstractArrow
         /**
          * Returns the type of this arrow.
          */
-        virtual tikz::Arrow type() const;
+        tikz::Arrow type() const override;
 
         /**
          * Gui visible name, such as "to" or "stealth".
          * The string should be translated.
          */
-        virtual QString name() const;
+        QString name() const override;
 
         /**
          * The 'left extend' value defines the extent of the arrow to the left,
          * beginning at the arrow tip. This value is only only important when
          * when an arrow is being reversed or composed with other arrow tips.
          */
-        virtual qreal leftExtend() const;
+        qreal leftExtend() const override;
 
         /**
          * The line is shortened by the amount of 'right extend' on the right.
          * This is often equal to half of the line width.
          */
-        virtual qreal rightExtend() const;
+        qreal rightExtend() const override;
 
         /**
          * Draw the arrow.
          */
-        virtual void draw(QPainter* painter) const;
+        void draw(QPainter* painter) const override;
 
         /**
          * Returns the painter path of this arrow.
          * This path is lated used for bounding box creation and mouse interaction.
          */
-        virtual QPainterPath path() const;
+        QPainterPath path() const override;
 
     private:
         StealthTickArrowPrivate * const d;
@@ -79,15 +79,15 @@ public:
     ReversedStealthTickArrow(tikz::core::EdgeStyle * style);
 
 public:
-    virtual tikz::Arrow type() const;
-    virtual QString name() const;
+    tikz::Arrow type() const override;
+    QString name() const override;
 
-    virtual qreal leftExtend() const;
-    virtual qreal rightExtend() const;
+    qreal leftExtend() const override;
+    qreal rightExtend() const override;
 
     // not needed to reimplement draw()
     //virtual void draw(QPainter* painter) const;
-    virtual QPainterPath path() const;
+    QPainterPath path() const override;
 };
 
 #endif // TIKZ_UI_STEALTH_TICK_ARROW_H

@@ -37,10 +37,10 @@ public:
     ValueSpinBoxFactory(QObject *parent = 0);
     ~ValueSpinBoxFactory();
 protected:
-    void connectPropertyManager(ValuePropertyManager *manager);
+    void connectPropertyManager(ValuePropertyManager *manager) override;
     QWidget *createEditor(ValuePropertyManager *manager, QtProperty *property,
-                QWidget *parent);
-    void disconnectPropertyManager(ValuePropertyManager *manager);
+                QWidget *parent) override;
+    void disconnectPropertyManager(ValuePropertyManager *manager) override;
 private:
     ValueSpinBoxFactoryPrivate *d_ptr;
     Q_DECLARE_PRIVATE(ValueSpinBoxFactory)

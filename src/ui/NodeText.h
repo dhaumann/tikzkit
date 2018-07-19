@@ -40,9 +40,9 @@ class NodeText : public QGraphicsItem
         virtual ~NodeText();
 
     public:
-        QRectF boundingRect() const;
+        QRectF boundingRect() const override;
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
         QRectF textRect() const;
 

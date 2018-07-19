@@ -44,7 +44,7 @@ class TIKZUI_EXPORT TikzItem : public QGraphicsObject
         /**
          * Reimplment to return a proper UserType + 1.
          */
-        virtual int type() const;
+        int type() const override;
 
     //
     // Hovering
@@ -58,8 +58,8 @@ class TIKZUI_EXPORT TikzItem : public QGraphicsObject
         bool isHovered() const;
 
     protected:
-        virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
-        virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
+        void hoverEnterEvent(QGraphicsSceneHoverEvent * event) override;
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent * event) override;
 
     private:
         TikzItemPrivate * const d;

@@ -51,12 +51,12 @@ class UndoDeleteNode : public UndoItem
         /**
          * Undo: add node again.
          */
-        virtual void undo() override;
+        void undo() override;
 
         /**
          * Redo: delete node again.
          */
-        virtual void redo() override;
+        void redo() override;
 
     protected:
         /**
