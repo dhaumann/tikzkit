@@ -97,7 +97,7 @@ static QString colorToString(const QColor & color)
         return colorMap[color.rgb()];
     }
 
-    return QString("orange");
+    return QString("{rgb,255:red,%1; green,%2; blue,%3}").arg(color.red()).arg(color.green()).arg(color.blue());
 }
 
 static QString lineWidthToString(const tikz::Value & lw)
