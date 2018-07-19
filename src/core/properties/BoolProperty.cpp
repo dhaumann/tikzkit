@@ -26,7 +26,6 @@ namespace core {
 
 BoolProperty::BoolProperty(const QString & propertyName, PropertyInterface * interface)
     : Property(propertyName, interface)
-    , m_enabled(false)
 {
 }
 

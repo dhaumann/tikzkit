@@ -33,7 +33,6 @@ Handle::Handle(Type type, Position position)
     : TikzItem()
     , m_type(type)
     , m_position(position)
-    , m_active(false)
 {
     // by default, only left mouse button triggers events
     setAcceptedMouseButtons(Qt::LeftButton);

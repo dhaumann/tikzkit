@@ -202,7 +202,7 @@ class Handle : public TikzItem
         Type m_type;
         Position m_position;
         QRectF m_handleRect;
-        bool m_active;
+        bool m_active = false;
 };
 
 }

@@ -61,7 +61,6 @@ class TIKZCORE_EXPORT Uid
          */
         explicit Uid(const QString & idStr, tikz::core::Document * doc) noexcept
             : m_document(doc)
-            , m_id(-1)
         {
             bool ok = false;
             m_id = idStr.toLongLong(&ok);
