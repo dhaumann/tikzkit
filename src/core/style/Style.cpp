@@ -159,20 +159,18 @@ void Style::loadData(const QJsonObject & json)
     if (json.contains("line-width")) {
         setLineWidth(Value::fromString(json["line-width"].toString()));
     }
-    // FIXME line type
+    // FIXME line type, inner line type?
 
     if (json.contains("double-line")) {
         setDoubleLine(json["double-line"].toBool());
+    }
 
-        if (json.contains("inner-line-width")) {
-            setInnerLineWidth(Value::fromString(json["inner-line-width"].toString()));
-        }
+    if (json.contains("inner-line-width")) {
+        setInnerLineWidth(Value::fromString(json["inner-line-width"].toString()));
+    }
 
-        // FIXME line type
-
-        if (json.contains("inner-line-color")) {
-            setInnerLineColor(json["inner-line-color"].toString());
-        }
+    if (json.contains("inner-line-color")) {
+        setInnerLineColor(json["inner-line-color"].toString());
     }
 
     if (json.contains("rotation")) {
@@ -216,16 +214,14 @@ QJsonObject Style::saveData() const
 
     if (doubleLineSet()) {
         json["double-line"] = "true";
+    }
 
-        if (innerLineWidthSet()) {
-            json["inner-line-width"] = innerLineWidth().toString();
-        }
+    if (innerLineWidthSet()) {
+        json["inner-line-width"] = innerLineWidth().toString();
+    }
 
-        // FIXME line width
-
-        if (innerLineColorSet()) {
-            json["inner-line-color"] = innerLineColor().name();
-        }
+    if (innerLineColorSet()) {
+        json["inner-line-color"] = innerLineColor().name();
     }
 
     if (rotationSet()) {
