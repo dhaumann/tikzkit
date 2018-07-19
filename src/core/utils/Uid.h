@@ -45,16 +45,14 @@ class TIKZCORE_EXPORT Uid
         /**
          * Default constructor. Creates an invalid Uid.
          */
-        explicit constexpr Uid() noexcept
-        {
-        }
+        explicit constexpr Uid() noexcept = default;
 
         /**
          * Constructor with value and type.
          */
         explicit constexpr Uid(qint64 id, Document * doc) noexcept
-            : m_id(id)
-            , m_document(doc)
+            : m_document(doc)
+            , m_id(id)
         {
         }
 
@@ -62,8 +60,8 @@ class TIKZCORE_EXPORT Uid
          * Constructor with value and type.
          */
         explicit Uid(const QString & idStr, tikz::core::Document * doc) noexcept
-            : m_id(-1)
-            , m_document(doc)
+            : m_document(doc)
+            , m_id(-1)
         {
             bool ok = false;
             m_id = idStr.toLongLong(&ok);

@@ -26,8 +26,8 @@ namespace core {
 
 UndoSetEllipsePos::UndoSetEllipsePos(Document * doc)
     : UndoItem("Set Ellipse Position", doc)
-    , m_redoPos(doc)
     , m_undoPos(doc)
+    , m_redoPos(doc)
 {
 }
 
@@ -36,8 +36,8 @@ UndoSetEllipsePos::UndoSetEllipsePos(EllipsePath * path,
                                      Document * doc)
     : UndoItem("Set Ellipse Position", doc)
     , m_pathUid(path->uid())
-    , m_redoPos(newPos)
     , m_undoPos(path->metaPos())
+    , m_redoPos(newPos)
 {
 }
 
