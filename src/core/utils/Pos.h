@@ -31,11 +31,7 @@ class TIKZCORE_EXPORT Pos
         /**
          * Default constructor, setting the position to 0, 0 in unit pt.
          */
-        constexpr Pos()
-            : m_x()
-            , m_y()
-        {
-        }
+        constexpr Pos() = default;
 
         /**
          * Constructor setting the position to @p x and @p y in @p unit..

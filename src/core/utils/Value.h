@@ -305,12 +305,12 @@ class TIKZCORE_EXPORT Value
         /**
          * The value.
          */
-        qreal m_value;
+        qreal m_value = 0;
 
         /**
          * The unit of this value.
          */
-        Unit m_unit;
+        Unit m_unit = Unit::Point;
 };
 
 /**
