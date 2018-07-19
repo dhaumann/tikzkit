@@ -52,7 +52,7 @@ void ArrowComboBoxPrivate::fillComboBox()
 
     // get default icon size
     const int iconHeight = q->style()->pixelMetric(QStyle::PM_SmallIconSize, &option, q);
-    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+//     const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
     const qreal w = q->physicalDpiX() / tikz::in2pt(1); // = pixel per pt
     const qreal h = q->physicalDpiY() / tikz::in2pt(1); // = pixel per pt
 
@@ -90,7 +90,7 @@ void ArrowComboBoxPrivate::fillComboBox()
         // now paint to pixmap
         QPainter p(&pixmap);
         p.setRenderHint(QPainter::Antialiasing, true);
-        const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+        //const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
         p.scale(w, -h);//q->physicalDpiX() / s, -q->physicalDpiY() / s);
         p.translate(0.0, -iconHeight / (2.0 * h));
 

@@ -119,7 +119,8 @@ public:
     {
         Q_ASSERT(! propertyMap.contains(property));
         propertyMap[property] = name;
-        QtBrowserItem *item = browser->addProperty(property);
+//         QtBrowserItem *item =
+        browser->addProperty(property);
 //         browser->setExpanded(item, idToExpanded[name]);
     }
 

@@ -99,6 +99,7 @@ add_library(qtikzui SHARED
 )
 
 target_compile_features(qtikzui PRIVATE cxx_std_14)
+target_compile_options(qtikzui PRIVATE -Wall)
 
 target_link_libraries(qtikzui
     Qt5::Core

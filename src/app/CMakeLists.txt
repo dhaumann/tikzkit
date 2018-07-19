@@ -12,6 +12,7 @@ add_executable(tikzkit
 )
 
 target_compile_features(tikzkit PRIVATE cxx_std_14)
+target_compile_options(tikzkit PRIVATE -Wall)
 
 target_include_directories(tikzkit
     PRIVATE

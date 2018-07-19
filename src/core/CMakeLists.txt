@@ -60,6 +60,7 @@ add_library(qtikzcore SHARED
 )
 
 target_compile_features(qtikzcore PRIVATE cxx_std_14)
+target_compile_options(qtikzcore PRIVATE -Wall)
 
 target_link_libraries(qtikzcore
     Qt5::Core

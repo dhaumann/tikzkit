@@ -62,8 +62,6 @@
 
 #include <QDebug>
 
-static tikz::ui::NodeItem* a;
-
 MainWindow::MainWindow()
     : QMainWindow()
     , m_wrapper(new tikz::ui::MainWindow(this))

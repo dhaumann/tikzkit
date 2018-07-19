@@ -32,8 +32,8 @@ namespace ui {
 EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     : tikz::ui::Editor(this)
     , m_dummyApplication(nullptr)
-    , m_application(&m_dummyApplication)
     , m_dummyMainWindow(nullptr)
+    , m_application(&m_dummyApplication)
 {
     // remember this
     staticInstance = this;
