@@ -93,10 +93,13 @@ static QString colorToString(const QColor & color)
         colorMap.insert(QColor(128, 128, 0).rgb(), "olive");
     }
 
-    if (colorMap.contains(color.rgb())) {
-        return colorMap[color.rgb()];
+    // try to find a smart colorname
+    auto it = colorMap.find(color.rgb());
+    if (it != colorMap.end()) {
+        return it.value();
     }
 
+    // use generic fallback color schema
     return QString("{rgb,255:red,%1; green,%2; blue,%3}").arg(color.red()).arg(color.green()).arg(color.blue());
 }
 
