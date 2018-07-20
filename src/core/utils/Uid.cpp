@@ -25,7 +25,6 @@ namespace core {
 
 Entity * Uid::entity() const
 {
-    Q_ASSERT(m_document);
     if (! m_document) {
         return nullptr;
     }

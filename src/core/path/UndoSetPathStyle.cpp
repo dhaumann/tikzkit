@@ -35,7 +35,7 @@ UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style,
     , m_pathUid(pathUid)
 {
     // get path to save data
-    Path* path = document()->pathFromId(m_pathUid);
+    auto path = m_pathUid.entity<Path>();
     Q_ASSERT(path);
 
     // save properties
@@ -49,7 +49,7 @@ UndoSetPathStyle::~UndoSetPathStyle()
 
 void UndoSetPathStyle::undo()
 {
-    Path* path = document()->pathFromId(m_pathUid);
+    auto path = m_pathUid.entity<Path>();
     Q_ASSERT(path);
 
     path->setStyle(m_undoStyle);
@@ -57,7 +57,7 @@ void UndoSetPathStyle::undo()
 
 void UndoSetPathStyle::redo()
 {
-    Path* path = document()->pathFromId(m_pathUid);
+    auto path = m_pathUid.entity<Path>();
     Q_ASSERT(path);
 
     path->setStyle(m_redoStyle);

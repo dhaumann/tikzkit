@@ -672,16 +672,6 @@ void Document::deletePath(const Uid & uid)
     }
 }
 
-Node * Document::nodeFromId(const Uid & uid)
-{
-    return dynamic_cast<Node *>(entity(uid));
-}
-
-Path * Document::pathFromId(const Uid & uid)
-{
-    return dynamic_cast<Path *>(entity(uid));
-}
-
 Entity * Document::entity(const tikz::core::Uid & uid) const
 {
     if (uid.document() != this) {

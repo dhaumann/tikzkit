@@ -35,7 +35,7 @@ UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style,
     , m_nodeId(nodeUid)
 {
     // get node to save data
-    Node* node = document()->nodeFromId(m_nodeId);
+    auto node = m_nodeId.entity<Node>();
     Q_ASSERT(node);
 
     // save properties
@@ -49,14 +49,14 @@ UndoSetNodeStyle::~UndoSetNodeStyle()
 
 void UndoSetNodeStyle::undo()
 {
-    Node* node = document()->nodeFromId(m_nodeId);
+    auto node = m_nodeId.entity<Node>();
     Q_ASSERT(node);
     node->setStyle(m_undoStyle);
 }
 
 void UndoSetNodeStyle::redo()
 {
-    Node* node = document()->nodeFromId(m_nodeId);
+    auto node = m_nodeId.entity<Node>();
     Q_ASSERT(node);
     node->setStyle(m_redoStyle);
 }

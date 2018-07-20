@@ -49,7 +49,7 @@ UndoSetEdgePos::~UndoSetEdgePos()
 
 void UndoSetEdgePos::undo()
 {
-    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
+    auto path = m_pathUid.entity<EdgePath>();
     Q_ASSERT(path != nullptr);
 
     if (m_isStart) {
@@ -61,7 +61,7 @@ void UndoSetEdgePos::undo()
 
 void UndoSetEdgePos::redo()
 {
-    EdgePath * path = qobject_cast<EdgePath*>(document()->pathFromId(m_pathUid));
+    auto path = m_pathUid.entity<EdgePath>();
     Q_ASSERT(path != nullptr);
 
     if (m_isStart) {

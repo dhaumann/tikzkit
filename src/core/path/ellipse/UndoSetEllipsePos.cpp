@@ -47,7 +47,7 @@ UndoSetEllipsePos::~UndoSetEllipsePos()
 
 void UndoSetEllipsePos::undo()
 {
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
+    auto path = m_pathUid.entity<EllipsePath>();
     Q_ASSERT(path != nullptr);
 
     path->setMetaPos(m_undoPos);
@@ -55,7 +55,7 @@ void UndoSetEllipsePos::undo()
 
 void UndoSetEllipsePos::redo()
 {
-    EllipsePath * path = qobject_cast<EllipsePath*>(document()->pathFromId(m_pathUid));
+    auto path = m_pathUid.entity<EllipsePath>();
     Q_ASSERT(path != nullptr);
 
     path->setMetaPos(m_redoPos);

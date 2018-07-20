@@ -47,7 +47,7 @@ UndoSetNodePos::~UndoSetNodePos()
 
 void UndoSetNodePos::undo()
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
 
     node->setMetaPos(m_undoPos);
@@ -55,7 +55,7 @@ void UndoSetNodePos::undo()
 
 void UndoSetNodePos::redo()
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
     node->setMetaPos(m_redoPos);
 }

@@ -102,6 +102,16 @@ class TIKZCORE_EXPORT Uid
         Entity * entity() const;
 
         /**
+         * Templated getter for accessing the entity this Uid refers to as a
+         * specific type.
+         */
+        template <typename T>
+        T * entity() const
+        {
+            return qobject_cast<T*>(entity());
+        }
+
+        /**
          * Convert this Uid to a string of the form "id (type)"
          */
         inline QString toString() const noexcept

@@ -292,20 +292,6 @@ class TIKZCORE_EXPORT Document : public ConfigObject
         QVector<Path*> paths() const;
 
         /**
-         * Get the node with Uid @p uid.
-         * @param uid unique id of the node
-         * @return null, if the uid is -1, otherwise a valid pointer to the node
-         */
-        Node * nodeFromId(const Uid & uid);
-
-        /**
-         * Get the path with Uid @p uid.
-         * @param uid unique id of the path
-         * @return null, if the uid is -1, otherwise a valid pointer to the path
-         */
-        Path * pathFromId(const Uid & uid);
-
-        /**
          * Returns the Entity for the Uid @p uid.
          * A null pointer is returned if the Entity does not exist, or if the
          * Uid::document() pointer does not equal this Document.

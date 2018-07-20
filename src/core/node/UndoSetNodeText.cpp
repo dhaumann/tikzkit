@@ -33,7 +33,7 @@ UndoSetNodeText::UndoSetNodeText(const Uid & nodeUid, const QString & newText, D
     : UndoItem("Set Node Text", doc)
     , m_nodeUid(nodeUid)
 {
-    Node * node = doc->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
 
     m_undoText = node->text();
@@ -46,14 +46,14 @@ UndoSetNodeText::~UndoSetNodeText()
 
 void UndoSetNodeText::undo()
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
     node->setText(m_undoText);
 }
 
 void UndoSetNodeText::redo()
 {
-    Node * node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
     node->setText(m_redoText);
 }

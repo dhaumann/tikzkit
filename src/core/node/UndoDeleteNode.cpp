@@ -35,7 +35,7 @@ UndoDeleteNode::UndoDeleteNode(const Uid & nodeUid, Document * doc)
     , m_nodeUid(nodeUid)
 {
     // get node to save data
-    Node* node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
 
     // save properties
@@ -52,7 +52,7 @@ void UndoDeleteNode::undo()
 {
     document()->createNode(m_nodeUid);
 
-    Node* node = document()->nodeFromId(m_nodeUid);
+    auto node = m_nodeUid.entity<Node>();
     Q_ASSERT(node);
 
     ConfigTransaction transaction(node);

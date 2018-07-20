@@ -233,7 +233,7 @@ bool MetaPos::setNode(Node* newNode)
 
 Node* MetaPos::node() const
 {
-    return d->doc->nodeFromId(d->nodeId);
+    return d->nodeId.entity<Node>();
 }
 
 void MetaPos::setAnchor(const QString & anchor)

@@ -35,7 +35,7 @@ UndoDeletePath::UndoDeletePath(const Uid & pathUid, Document * doc)
     , m_pathUid(pathUid)
 {
     // get path to save data
-    Path* path = document()->pathFromId(m_pathUid);
+    auto path = m_pathUid.entity<Path>();
     Q_ASSERT(path);
 
     m_type = path->type();
@@ -52,7 +52,7 @@ void UndoDeletePath::undo()
 {
     document()->createPath(m_type, m_pathUid);
 
-    Path * path = document()->pathFromId(m_pathUid);
+    auto path = m_pathUid.entity<Path>();
     Q_ASSERT(path);
 
     ConfigTransaction transaction(path);
