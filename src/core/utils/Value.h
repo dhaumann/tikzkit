@@ -454,94 +454,81 @@ inline bool operator<=(const Value & lhs, const Value & rhs) noexcept
 /**
  * Convert @p value from unit @p from to unit @p to.
  */
-inline qreal convertTo(qreal value, Unit from, Unit to)
+inline constexpr qreal convertTo(qreal value, Unit from, Unit to)
 {
-    const qreal s = internal::units[static_cast<int>(from)][static_cast<int>(to)];
-    return value * s;
+    return value * internal::units[static_cast<int>(from)][static_cast<int>(to)];
 }
 
 //
 // pt to *
 //
-inline qreal pt2mm(qreal value)
+inline constexpr qreal pt2mm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Millimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Millimeter)];
 }
 
-inline qreal pt2cm(qreal value)
+inline constexpr qreal pt2cm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Centimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Centimeter)];
 }
 
-inline qreal pt2in(qreal value)
+inline constexpr qreal pt2in(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Inch)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Inch)];
 }
 
 //
 // cm to *
 //
-inline qreal cm2pt(qreal value)
+inline constexpr qreal cm2pt(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Point)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Point)];
 }
 
-inline qreal cm2mm(qreal value)
+inline constexpr qreal cm2mm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Millimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Millimeter)];
 }
 
-inline qreal cm2in(qreal value)
+inline constexpr qreal cm2in(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Inch)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Inch)];
 }
 
 //
 // mm to *
 //
-inline qreal mm2pt(qreal value)
+inline constexpr qreal mm2pt(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Point)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Point)];
 }
 
-inline qreal mm2cm(qreal value)
+inline constexpr qreal mm2cm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Centimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Centimeter)];
 }
 
-inline qreal mm2in(qreal value)
+inline constexpr qreal mm2in(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Inch)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Inch)];
 }
 
 //
 // in to *
 //
-inline qreal in2pt(qreal value)
+inline constexpr qreal in2pt(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Point)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Point)];
 }
 
-inline qreal in2cm(qreal value)
+inline constexpr qreal in2cm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Centimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Centimeter)];
 }
 
-inline qreal in2mm(qreal value)
+inline constexpr qreal in2mm(qreal value)
 {
-    const qreal s = internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Millimeter)];
-    return value * s;
+    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Millimeter)];
 }
 
 }
