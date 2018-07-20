@@ -464,17 +464,17 @@ inline constexpr qreal convertTo(qreal value, Unit from, Unit to)
 //
 inline constexpr qreal pt2mm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Millimeter)];
+    return convertTo(value, Unit::Point, Unit::Millimeter);
 }
 
 inline constexpr qreal pt2cm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Centimeter)];
+    return convertTo(value, Unit::Point, Unit::Centimeter);
 }
 
 inline constexpr qreal pt2in(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Point)][static_cast<int>(Unit::Inch)];
+    return convertTo(value, Unit::Point, Unit::Inch);
 }
 
 //
@@ -482,17 +482,17 @@ inline constexpr qreal pt2in(qreal value)
 //
 inline constexpr qreal cm2pt(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Point)];
+    return convertTo(value, Unit::Centimeter, Unit::Point);
 }
 
 inline constexpr qreal cm2mm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Millimeter)];
+    return convertTo(value, Unit::Centimeter, Unit::Millimeter);
 }
 
 inline constexpr qreal cm2in(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Centimeter)][static_cast<int>(Unit::Inch)];
+    return convertTo(value, Unit::Centimeter, Unit::Inch);
 }
 
 //
@@ -500,17 +500,17 @@ inline constexpr qreal cm2in(qreal value)
 //
 inline constexpr qreal mm2pt(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Point)];
+    return convertTo(value, Unit::Millimeter, Unit::Point);
 }
 
 inline constexpr qreal mm2cm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Centimeter)];
+    return convertTo(value, Unit::Millimeter, Unit::Centimeter);
 }
 
 inline constexpr qreal mm2in(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Millimeter)][static_cast<int>(Unit::Inch)];
+    return convertTo(value, Unit::Millimeter, Unit::Inch);
 }
 
 //
@@ -518,17 +518,17 @@ inline constexpr qreal mm2in(qreal value)
 //
 inline constexpr qreal in2pt(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Point)];
+    return convertTo(value, Unit::Inch, Unit::Point);
 }
 
 inline constexpr qreal in2cm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Centimeter)];
+    return convertTo(value, Unit::Inch, Unit::Centimeter);
 }
 
 inline constexpr qreal in2mm(qreal value)
 {
-    return value * internal::units[static_cast<int>(Unit::Inch)][static_cast<int>(Unit::Millimeter)];
+    return convertTo(value, Unit::Inch, Unit::Millimeter);
 }
 
 }
