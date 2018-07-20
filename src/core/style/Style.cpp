@@ -433,7 +433,7 @@ tikz::Value Style::innerLineWidth() const
         return tikz::Value::semiThick();
     }
 
-    return tikz::Value(0.0);
+    return 0.0_pt;
 }
 
 bool Style::innerLineWidthSet() const

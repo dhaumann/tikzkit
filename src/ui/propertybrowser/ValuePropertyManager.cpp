@@ -27,8 +27,8 @@ class ValuePropertyManagerPrivate
 public:
     struct Data
     {
-        tikz::Value val = tikz::Value(0, Unit::Millimeter);
-        tikz::Value minVal = tikz::Value(0, Unit::Millimeter);
+        tikz::Value val = 0.0_mm;
+        tikz::Value minVal = 0.0_mm;
         tikz::Value maxVal = tikz::Value(INT_MAX, Unit::Millimeter);
         double singleStep = 0.1;
         int decimals = 2;
@@ -55,7 +55,7 @@ tikz::Value ValuePropertyManager::value(const QtProperty *property) const
 {
     const auto it = d_ptr->m_values.constFind(property);
     if (it == d_ptr->m_values.constEnd())
-        return tikz::Value(0);
+        return 0.0_pt;
     return it.value().val;
 }
 
@@ -63,7 +63,7 @@ tikz::Value ValuePropertyManager::minimum(const QtProperty *property) const
 {
     const auto it = d_ptr->m_values.constFind(property);
     if (it == d_ptr->m_values.constEnd())
-        return tikz::Value(0);
+        return 0.0_pt;
     return it.value().minVal;
 }
 
@@ -71,7 +71,7 @@ tikz::Value ValuePropertyManager::maximum(const QtProperty *property) const
 {
     const auto it = d_ptr->m_values.constFind(property);
     if (it == d_ptr->m_values.constEnd())
-        return tikz::Value(0);
+        return 0.0_pt;
     return it.value().maxVal;
 }
 

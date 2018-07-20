@@ -130,7 +130,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     ns.setStyle(item1->node()->style());
     ns.setLineWidth(tikz::Value::veryThin());
     ns.setShape(tikz::Shape::ShapeRectangle);
-    ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    ns.setInnerSep(2.0_mm);
     item1->node()->setStyle(ns);
     item1->node()->setText("$\\int f(x) dx$");
 
@@ -139,7 +139,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     ns.setStyle(item2->node()->style());
     ns.setLineWidth(tikz::Value::thin());
     ns.setShape(tikz::Shape::ShapeCircle);
-    ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    ns.setInnerSep(2.0_mm);
     item2->node()->setStyle(ns);
     item2->node()->setText("$\\Leftrightarrow$");
     finishTransaction();
@@ -150,8 +150,8 @@ View * DocumentPrivate::createView(QWidget * parent,
     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
     tikz::core::EdgeStyle es;
     es.setStyle(ellipse->style());
-    es.setRadiusX(tikz::Value(2.0, tikz::Unit::Centimeter));
-    es.setRadiusY(tikz::Value(1.0, tikz::Unit::Centimeter));
+    es.setRadiusX(2.0_cm);
+    es.setRadiusY(1.0_cm);
     es.setLineWidth(tikz::Value::semiThick());
     ellipse->setStyle(es);
 
@@ -173,14 +173,14 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1->setPos(tikz::Pos(-3, 1, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::thin());
     item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(2.0_mm);
     item1->node()->setText("$a$");
 
     item2 = m_doc->createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 1, tikz::Unit::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
     item2->node()->style()->setShape(tikz::Shape::ShapeCircle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(2.0_mm);
     item2->node()->setText("a");
 
     // an path
@@ -194,14 +194,14 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1->setPos(tikz::Pos(-3, -1, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
     item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(2.0_mm);
     item1->node()->setText("$\\iiint \\max$");
 
     item2 = m_doc->createNodeItem();
     item2->node()->setPos(tikz::Pos(3, -1, tikz::Unit::Centimeter));
     item2->node()->style()->setLineWidth(tikz::Value::ultraThick());
     item2->node()->style()->setShape(tikz::Shape::ShapeRectangle);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(2.0_mm);
     item2->node()->setText("A long text\\\\which is wrapped");
 
 //     item2->style()->setParentStyle(item1->style());
@@ -219,7 +219,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     item1->setPos(tikz::Pos(-3, -3, tikz::Unit::Centimeter));
     item1->node()->style()->setLineWidth(tikz::Value::veryThick());
     item1->node()->style()->setShape(tikz::Shape::ShapeRectangle);
-    item1->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item1->node()->style()->setInnerSep(2.0_mm);
     item1->node()->setText("c");
 
     a = item1;
@@ -229,7 +229,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     item2->node()->style()->setDoubleLine(true);
     item2->node()->style()->setLineWidth(tikz::Value::semiThick());
     item2->node()->style()->setShape(tikz::Shape::ShapeEllipse);
-    item2->node()->style()->setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
+    item2->node()->style()->setInnerSep(2.0_mm);
     item2->node()->style()->setMinimumWidth(2);
     item2->node()->setText("8");
 
@@ -279,9 +279,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Unit::Centimeter));
         ns.setStyle(n1->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.0_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(0, 0, 204));
         ns.setFillColor(QColor(204, 204, 255));
         n1->node()->setStyle(ns);
@@ -291,9 +291,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Unit::Centimeter));
         ns.setStyle(n2->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.0_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 153, 51));
         ns.setFillColor(QColor(255, 230, 204));
         n2->node()->setStyle(ns);
@@ -303,9 +303,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Unit::Centimeter));
         ns.setStyle(n3->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.5_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 51, 51));
         ns.setFillColor(QColor(255, 204, 204));
         n3->node()->setStyle(ns);
@@ -315,9 +315,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Unit::Centimeter));
         ns.setStyle(n4->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.5_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 51, 51));
         ns.setFillColor(QColor(255, 204, 204));
         n4->node()->setStyle(ns);
@@ -327,9 +327,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Unit::Centimeter));
         ns.setStyle(n5->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.5_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 51, 51));
         ns.setFillColor(QColor(255, 204, 204));
         n5->node()->setStyle(ns);
@@ -339,9 +339,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Unit::Centimeter));
         ns.setStyle(n5->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.5_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 51, 51));
         ns.setFillColor(QColor(255, 204, 204));
         n6->node()->setStyle(ns);
@@ -351,9 +351,9 @@ View * DocumentPrivate::createView(QWidget * parent,
         n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Unit::Centimeter));
         ns.setStyle(n7->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(tikz::Value(2, tikz::Unit::Millimeter));
-        ns.setMinimumWidth(tikz::Value(2.5, tikz::Unit::Centimeter));
-        ns.setMinimumHeight(tikz::Value(1.5, tikz::Unit::Centimeter));
+        ns.setInnerSep(2.0_mm);
+        ns.setMinimumWidth(2.5_cm);
+        ns.setMinimumHeight(1.5_cm);
         ns.setPenColor(QColor(255, 51, 51));
         ns.setFillColor(QColor(255, 204, 204));
         n7->node()->setStyle(ns);

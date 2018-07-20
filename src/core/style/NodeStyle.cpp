@@ -38,10 +38,10 @@ public:
     // Node styles
     TextAlignment textAlign = tikz::TextAlignment::NoAlign;
     Shape shape = tikz::Shape::ShapeRectangle;
-    tikz::Value innerSep = tikz::Value(3); //FIXME: 0.3333em
-    tikz::Value outerSep = tikz::Value(0.5); // 0.5 \pgflinewidth
-    tikz::Value minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
-    tikz::Value minimumWidth = tikz::Value(0, tikz::Unit::Centimeter);
+    tikz::Value innerSep = 3.0_pt; //FIXME: 0.3333em
+    tikz::Value outerSep = 0.5_pt; // 0.5 \pgflinewidth
+    tikz::Value minimumHeight = 0.0_cm;
+    tikz::Value minimumWidth = 0.0_cm;
 };
 
 NodeStyle::NodeStyle()
@@ -261,7 +261,7 @@ void NodeStyle::unsetInnerSep()
     if (propertySet(s_innerSep)) {
         ConfigTransaction transaction(this);
         removeProperty(s_innerSep);
-        d->innerSep = tikz::Value(3); //FIXME: 0.3333em
+        d->innerSep = 3.0_pt; //FIXME: 0.3333em
     }
 }
 
@@ -270,7 +270,7 @@ void NodeStyle::unsetOuterSep()
     if (propertySet(s_outerSep)) {
         ConfigTransaction transaction(this);
         removeProperty(s_outerSep);
-        d->outerSep = tikz::Value(3); //FIXME: 0.3333em
+        d->outerSep = 3.0_pt; //FIXME: 0.3333em
     }
 }
 
@@ -285,7 +285,7 @@ tikz::Value NodeStyle::minimumHeight() const
         return parentStyle->minimumHeight();
     }
 
-    return tikz::Value(0, tikz::Unit::Centimeter);
+    return 0.0_cm;
 }
 
 bool NodeStyle::minimumHeightSet() const
@@ -304,7 +304,7 @@ tikz::Value NodeStyle::minimumWidth() const
         return parentStyle->minimumWidth();
     }
 
-    return tikz::Value(0, tikz::Unit::Centimeter);
+    return 0.0_cm;
 }
 
 bool NodeStyle::minimumWidthSet() const
@@ -335,7 +335,7 @@ void NodeStyle::unsetMinimumHeight()
     if (propertySet(s_minimumHeight)) {
         ConfigTransaction transaction(this);
         removeProperty(s_minimumHeight);
-        d->minimumHeight = tikz::Value(0, tikz::Unit::Centimeter);
+        d->minimumHeight = 0.0_cm;
     }
 }
 
@@ -344,7 +344,7 @@ void NodeStyle::unsetMinimumWidth()
     if (propertySet(s_minimumWidth)) {
         ConfigTransaction transaction(this);
         removeProperty(s_minimumWidth);
-        d->minimumWidth = tikz::Value(0, tikz::Unit::Centimeter);
+        d->minimumWidth = 0.0_cm;
     }
 }
 

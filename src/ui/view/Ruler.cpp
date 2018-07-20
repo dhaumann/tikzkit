@@ -117,7 +117,7 @@ void Ruler::paintEvent(QPaintEvent* event)
 
     // how many pixels is one unit ?
     const qreal dpi = physicalDpi();
-    const qreal pixelPerUnit = m_zoom * dpi / tikz::Value(1, tikz::Unit::Inch).convertTo(m_unit).value();
+    const qreal pixelPerUnit = m_zoom * dpi / 1.0_in .convertTo(m_unit).value();
 
     if (horizontal) {
         for (int i = floor(-m_origin / pixelPerUnit); i < (width() - m_origin) / pixelPerUnit; ++i) {

@@ -54,10 +54,9 @@ void PosTest::testFromString()
     QCOMPARE(pos, tikz::Pos::fromString("(0, 0)"));
     QCOMPARE(pos, tikz::Pos::fromString("(0,0)"));
 
-    pos = tikz::Pos(tikz::Value(3, tikz::Unit::Centimeter),
-                    tikz::Value(5, tikz::Unit::Centimeter));
-    QCOMPARE(pos.x(), tikz::Value(3, tikz::Unit::Centimeter));
-    QCOMPARE(pos.y(), tikz::Value(5, tikz::Unit::Centimeter));
+    pos = tikz::Pos(3.0_cm, 5.0_cm);
+    QCOMPARE(pos.x(), 3.0_cm);
+    QCOMPARE(pos.y(), 5.0_cm);
     QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)"));
     QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Point));
     QCOMPARE(pos, tikz::Pos::fromString("(3cm, 5cm)").convertTo(tikz::Unit::Millimeter));

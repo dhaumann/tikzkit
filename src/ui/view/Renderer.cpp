@@ -209,7 +209,7 @@ void Renderer::wheelEvent(QWheelEvent* event)
 
 bool Renderer::viewportEvent(QEvent * event)
 {
-    const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+    constexpr qreal s = 1.0_in .toPoint();
     const qreal xZoom = transform().m11() / physicalDpiX() * s;
     const qreal yZoom = qAbs(transform().m22()) / physicalDpiY() * s;
     Q_ASSERT(qFuzzyCompare(xZoom, yZoom));
