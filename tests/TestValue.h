@@ -35,6 +35,7 @@ private slots:
     void testPoint();
     void testFromString();
     void testStringAccuracy();
+    void testLiteralOperators();
 };
 
 #endif // TEST_VALUE_H

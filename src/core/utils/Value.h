@@ -546,6 +546,26 @@ inline qreal in2mm(qreal value)
 
 }
 
+inline constexpr tikz::Value operator""_pt(long double value)
+{
+    return tikz::Value(value, tikz::Unit::Point);
+}
+
+inline constexpr tikz::Value operator""_mm(long double value)
+{
+    return tikz::Value(value, tikz::Unit::Millimeter);
+}
+
+inline constexpr tikz::Value operator""_cm(long double value)
+{
+    return tikz::Value(value, tikz::Unit::Centimeter);
+}
+
+inline constexpr tikz::Value operator""_in(long double value)
+{
+    return tikz::Value(value, tikz::Unit::Inch);
+}
+
 namespace QTest
 {
     // forward declaration of template in qtestcase.h

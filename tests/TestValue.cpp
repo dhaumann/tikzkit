@@ -153,4 +153,12 @@ void ValueTest::testStringAccuracy()
     }
 }
 
+void ValueTest::testLiteralOperators()
+{
+    QCOMPARE(1.01_pt, tikz::Value(1.01, tikz::Unit::Point));
+    QCOMPARE(2.34_mm, tikz::Value(2.34, tikz::Unit::Millimeter));
+    QCOMPARE(5.67_cm, tikz::Value(5.67, tikz::Unit::Centimeter));
+    QCOMPARE(8.99_in, tikz::Value(8.99, tikz::Unit::Inch));
+}
+
 // kate: indent-width 4; replace-tabs on;
