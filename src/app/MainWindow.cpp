@@ -110,11 +110,18 @@ MainWindow::MainWindow()
     m_toolBar->addWidget(arrowTailCombo);
     m_toolBar->addWidget(arrowHeadCombo);
     arrowHeadCombo->setMinimumWidth(40);
-//     h->addWidget(arrowTailCombo);
-//     h->addWidget(arrowHeadCombo);
-//     h->addStretch();
-//     arrowTailCombo->show();
-//     arrowHeadCombo->show();
+
+    // color button
+    QToolButton * colorBtn = new QToolButton(this);
+    auto colorWidget = new tikz::ui::ColorWidget(colorBtn);
+    colorWidget->setWindowFlags(Qt::Popup);
+    colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    colorWidget->setFocusPolicy(Qt::NoFocus);
+    colorWidget->setFocusProxy(this);
+    colorWidget->hide();
+    connect(colorBtn, SIGNAL(clicked()), colorWidget, SLOT(show()));
+    m_toolBar->addWidget(colorBtn);
+
 
     //
     // initialize tikz::ui::MainWindow wrapper object (forward signals from the
@@ -188,19 +195,6 @@ void MainWindow::setupUi()
     m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
 
     dockWidget->setWidget(m_linePropertyWidget);
-
-    QToolButton * btn = new QToolButton(this);
-
-    auto colorWidget = new tikz::ui::ColorWidget(btn);
-    colorWidget->setWindowFlags(Qt::Popup);
-    colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    colorWidget->setFocusPolicy(Qt::NoFocus);
-    colorWidget->setFocusProxy(this);
-    colorWidget->hide();
-//     m_linePropertyWidget->layout()->addWidget(colorWidget);
-
-    connect(btn, SIGNAL(clicked()), colorWidget, SLOT(show()));
-    m_linePropertyWidget->layout()->addWidget(btn);
 
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
