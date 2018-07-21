@@ -92,6 +92,11 @@ public:
         return m_json["properties"][propertyName]["singleStep"].toDouble(1.0);
     }
 
+    QString modifiedGetter(const QString & propertyName) const
+    {
+        return m_json["properties"][propertyName]["modified"].toString();
+    }
+
 private:
     QJsonDocument m_json;
 };
@@ -204,8 +209,23 @@ public:
         else {
             qDebug() << "Unknown property type:" << name;
         }
-        if (property)
+        if (property) {
+            const QString modifiedGetter = info.modifiedGetter(name);
+            if (!modifiedGetter.isEmpty()) {
+                bool isModified = false;
+                const bool ok = QMetaObject::invokeMethod(object,
+                                                          modifiedGetter.toLatin1(),
+                                                          Qt::DirectConnection,
+                                                          Q_RETURN_ARG(bool, isModified)
+                );
+                if (ok) {
+                    property->setModified(isModified);
+                } else {
+                    tikz::debug("properties.json: Invalid modified getter" + modifiedGetter);
+                }
+            }
             addProperty(property, name);
+        }
     }
 };
 
