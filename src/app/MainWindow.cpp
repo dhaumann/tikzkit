@@ -84,24 +84,7 @@ MainWindow::MainWindow()
 
     setupUi();
     setupActions();
-
-    // setup statusbar
-    m_positionLabel = new QLabel(this);
-    m_unitComboBox = new QComboBox(this);
-    m_unitComboBox->addItem("pt", "pt");
-    m_unitComboBox->addItem("mm", "mm");
-    m_unitComboBox->addItem("cm", "cm");
-    m_unitComboBox->addItem("in", "in");
-    m_unitComboBox->setCurrentIndex(2);
-
-    connect(m_unitComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreferredUnitChanged(int)));
-
-    m_zoomComboBox = new QComboBox(this);
-
-    statusBar()->addPermanentWidget(m_positionLabel);
-    statusBar()->addPermanentWidget(m_unitComboBox);
-    statusBar()->addPermanentWidget(m_zoomComboBox);
-
+    setupStatusBar();
 
     // add arrow head/tail combos
     auto arrowTailCombo = new ArrowComboBox(false, nullptr);
@@ -275,6 +258,27 @@ void MainWindow::setupActions()
     connect(m_fileClose, SIGNAL(triggered()), this, SLOT(slotCloseActiveView()));
     connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(m_filePreview, SIGNAL(triggered()), this, SLOT(previewPdf()));
+}
+
+void MainWindow::setupStatusBar()
+{
+    // unit/position combo box
+    m_positionLabel = new QLabel(this);
+    m_unitComboBox = new QComboBox(this);
+    m_unitComboBox->addItem("pt", "pt");
+    m_unitComboBox->addItem("mm", "mm");
+    m_unitComboBox->addItem("cm", "cm");
+    m_unitComboBox->addItem("in", "in");
+    m_unitComboBox->setCurrentIndex(2);
+
+    connect(m_unitComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreferredUnitChanged(int)));
+
+    m_zoomComboBox = new QComboBox(this);
+
+    statusBar()->addPermanentWidget(m_positionLabel);
+    statusBar()->addPermanentWidget(m_unitComboBox);
+    statusBar()->addPermanentWidget(m_zoomComboBox);
+
 }
 
 void MainWindow::mergeView(tikz::ui::View * view)

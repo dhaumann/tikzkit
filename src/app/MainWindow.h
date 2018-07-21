@@ -74,6 +74,7 @@ public Q_SLOTS:
 protected:
     void setupUi();
     void setupActions();
+    void setupStatusBar();
 
 protected Q_SLOTS:
     void mergeView(tikz::ui::View * view);
