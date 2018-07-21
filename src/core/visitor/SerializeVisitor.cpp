@@ -73,15 +73,15 @@ void SerializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list;
-    foreach (Node * node, doc->nodes()) {
-        list.append(node->uid().toString());
+    foreach (const Uid & uid, doc->nodes()) {
+        list.append(uid.toString());
     }
     m_root.insert("node-ids", list.join(", "));
 
     // aggregate path ids
     list.clear();
-    foreach (Path * path, doc->paths()) {
-        list.append(path->uid().toString());
+    foreach (const Uid & uid, doc->paths()) {
+        list.append(uid.toString());
     }
     m_root.insert("path-ids", list.join(", "));
 

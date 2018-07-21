@@ -466,23 +466,25 @@ Style * Document::style() const
     return d->style;
 }
 
-QVector<Node*> Document::nodes() const
+QVector<Uid> Document::nodes() const
 {
-    QVector <Node *> nodeList;
-    for (auto e : d->entities) {
-        if (auto node = dynamic_cast<Node *>(e)) {
-            nodeList.append(node);
+    QVector <Uid> nodeList;
+    auto it = d->entityMap.cbegin();
+    while (it != d->entityMap.cend()) {
+        if (qobject_cast<Node *>(it.value())) {
+            nodeList.append(it.key());
         }
     }
     return nodeList;
 }
 
-QVector<Path*> Document::paths() const
+QVector<Uid> Document::paths() const
 {
-    QVector <Path *> pathList;
-    for (auto e : d->entities) {
-        if (auto path = dynamic_cast<Path *>(e)) {
-            pathList.append(path);
+    QVector <Uid> pathList;
+    auto it = d->entityMap.cbegin();
+    while (it != d->entityMap.cend()) {
+        if (qobject_cast<Path *>(it.value())) {
+            pathList.append(it.key());
         }
     }
     return pathList;

@@ -284,12 +284,12 @@ class TIKZCORE_EXPORT Document : public ConfigObject
         /**
          * Get the list of nodes of the tikz document.
          */
-        QVector<Node*> nodes() const;
+        QVector<Uid> nodes() const;
 
         /**
          * Get the list of paths of the tikz document.
          */
-        QVector<Path*> paths() const;
+        QVector<Uid> paths() const;
 
         /**
          * Returns the Entity for the Uid @p uid.
