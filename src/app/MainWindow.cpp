@@ -66,6 +66,7 @@ MainWindow::MainWindow()
     , m_wrapper(new tikz::ui::MainWindow(this))
 {
     setWindowTitle("TikZKit - The Graphical Editor for PGF/TikZ");
+    setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::ForceTabbedDocks);
 
     m_pdfGenerator = nullptr;
 
@@ -103,7 +104,6 @@ MainWindow::MainWindow()
     colorWidget->hide();
     connect(colorBtn, SIGNAL(clicked()), colorWidget, SLOT(show()));
     m_toolBar->addWidget(colorBtn);
-
 
     //
     // initialize tikz::ui::MainWindow wrapper object (forward signals from the
@@ -154,40 +154,51 @@ void MainWindow::setupUi()
     //
     // dock widgets
     //
-    auto dockWidget = new QDockWidget("Property Browser", this);
-    m_browser = new tikz::ui::PropertyBrowser(dockWidget);
-    dockWidget->setWidget(m_browser);
+    auto propertiesDockWidget = new QDockWidget("Properties", this);
+    m_browser = new tikz::ui::PropertyBrowser(propertiesDockWidget);
+//     m_browser->setMinimumWidth(350);
+    propertiesDockWidget->setWidget(m_browser);
 
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+    addDockWidget(Qt::RightDockWidgetArea, propertiesDockWidget);
 
     //
     // undo history
     //
-    dockWidget = new QDockWidget("History", this);
-    m_historyView = new QTreeView(dockWidget);
+    auto historyDockWidget = new QDockWidget("History", this);
+    m_historyView = new QTreeView(historyDockWidget);
     m_historyView->setHeaderHidden(true);
     m_historyView->setAlternatingRowColors(true);
-    dockWidget->setWidget(m_historyView);
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+    historyDockWidget->setWidget(m_historyView);
+    addDockWidget(Qt::RightDockWidgetArea, historyDockWidget);
+
+    tabifyDockWidget(propertiesDockWidget, historyDockWidget);
+//     setTabPosition(Qt::BottomDockWidgetArea, QTabWidget::West);
 
     //
-    // next one
+    // TikZ code
     //
-    dockWidget = new QDockWidget("TikZ Code", this);
-    m_textEdit = new QTextEdit(dockWidget);
-    dockWidget->setWidget(m_textEdit);
+    auto tikzDockWidget = new QDockWidget("TikZ Code", this);
+    m_textEdit = new QTextEdit(tikzDockWidget);
+    tikzDockWidget->setWidget(m_textEdit);
+    addDockWidget(Qt::BottomDockWidgetArea, tikzDockWidget);
 
-    addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
-
     //
-    // next one
+    // Messages
     //
-    dockWidget = new QDockWidget("Messages", this);
-    m_logWidget = new QListWidget(dockWidget);
+    auto messageDockWidget = new QDockWidget("Messages", this);
+    m_logWidget = new QListWidget(messageDockWidget);
     m_logWidget->setAlternatingRowColors(true);
-    dockWidget->setWidget(m_logWidget);
+    messageDockWidget->setWidget(m_logWidget);
+    addDockWidget(Qt::BottomDockWidgetArea, messageDockWidget);
 
-    addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
+    tabifyDockWidget(tikzDockWidget, messageDockWidget);
+    setTabPosition(Qt::BottomDockWidgetArea, QTabWidget::West);
+
+    //
+    // Properties and TikZ dock widgets should have focus
+    //
+    propertiesDockWidget->raise();
+    tikzDockWidget->raise();
 }
 
 void MainWindow::setupActions()
