@@ -260,7 +260,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
 
     d->browser->setPropertiesWithoutValueMarked(true);
     d->browser->setRootIsDecorated(false);
-    d->browser->setResizeMode(QtTreePropertyBrowser::Interactive);
+    d->browser->setResizeMode(QtTreePropertyBrowser::ResizeToContents);
 
     // setup connections
     connect(d->valueManager, SIGNAL(valueChanged(QtProperty*, const tikz::Value &)),
