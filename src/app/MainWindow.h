@@ -165,6 +165,7 @@ Q_SIGNALS:
 
 private:
     QMenu * m_fileMenu = nullptr;
+    QMenu * m_viewMenu = nullptr;
     QToolBar * m_toolBar = nullptr;
     QAction * m_fileNew = nullptr;
     QAction * m_fileOpen = nullptr;
@@ -172,6 +173,10 @@ private:
     QAction * m_fileClose = nullptr;
     QAction * m_fileQuit = nullptr;
     QAction * m_filePreview = nullptr;
+
+    QAction * m_aZoomIn = nullptr;
+    QAction * m_aResetZoom = nullptr;
+    QAction * m_aZoomOut = nullptr;
 
     QAction * m_editUndo = nullptr;
     QAction * m_editRedo = nullptr;

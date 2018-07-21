@@ -147,6 +147,10 @@ void MainWindow::setupUi()
     m_fileMenu->setTitle(QApplication::translate("TikZKit", "&File", nullptr));
     menuBar()->addAction(m_fileMenu->menuAction());
 
+    m_viewMenu = new QMenu(menuBar());
+    m_viewMenu->setTitle(QApplication::translate("TikZKit", "&View", nullptr));
+    menuBar()->addAction(m_viewMenu->menuAction());
+
     m_toolBar = new QToolBar(this);
     m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     addToolBar(m_toolBar);
@@ -156,7 +160,6 @@ void MainWindow::setupUi()
     //
     auto propertiesDockWidget = new QDockWidget("Properties", this);
     m_browser = new tikz::ui::PropertyBrowser(propertiesDockWidget);
-//     m_browser->setMinimumWidth(350);
     propertiesDockWidget->setWidget(m_browser);
 
     addDockWidget(Qt::RightDockWidgetArea, propertiesDockWidget);
@@ -242,6 +245,24 @@ void MainWindow::setupActions()
     m_editRedo->setText(QApplication::translate("MainWindow", "&Redo", nullptr));
     m_editRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", nullptr));
 
+    m_aZoomIn = new QAction(this);
+    m_aZoomIn->setIcon(QIcon::fromTheme("zoom-in", QIcon(":/icons/icons/edit-redo.png")));
+    m_aZoomIn->setText(QApplication::translate("MainWindow", "&Zoom In", nullptr));
+    m_aZoomIn->setShortcut(QApplication::translate("MainWindow", "Ctrl++", nullptr));
+
+    m_aResetZoom = new QAction(this);
+    m_aResetZoom->setIcon(QIcon::fromTheme("zoom-original", QIcon(":/icons/icons/edit-redo.png")));
+    m_aResetZoom->setText(QApplication::translate("MainWindow", "&Rest Zoom", nullptr));
+    m_aResetZoom->setShortcut(QApplication::translate("MainWindow", "Ctrl+Space", nullptr));
+
+    m_aZoomOut = new QAction(this);
+    m_aZoomOut->setIcon(QIcon::fromTheme("zoom-out", QIcon(":/icons/icons/edit-redo.png")));
+    m_aZoomOut->setText(QApplication::translate("MainWindow", "&Zoom Out", nullptr));
+    m_aZoomOut->setShortcut(QApplication::translate("MainWindow", "Ctrl+-", nullptr));
+
+    //
+    // File menu
+    //
     m_fileMenu->addAction(m_fileNew);
     m_fileMenu->addAction(m_fileOpen);
     m_fileMenu->addSeparator();
@@ -250,6 +271,13 @@ void MainWindow::setupActions()
     m_fileMenu->addAction(m_fileClose);
     m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_fileQuit);
+
+    //
+    // View menu
+    //
+    m_viewMenu->addAction(m_aZoomIn);
+    m_viewMenu->addAction(m_aResetZoom);
+    m_viewMenu->addAction(m_aZoomOut);
 
     m_toolBar->addAction(m_fileNew);
     m_toolBar->addAction(m_fileOpen);
@@ -289,7 +317,6 @@ void MainWindow::setupStatusBar()
     statusBar()->addPermanentWidget(m_positionLabel);
     statusBar()->addPermanentWidget(m_unitComboBox);
     statusBar()->addPermanentWidget(m_zoomComboBox);
-
 }
 
 void MainWindow::mergeView(tikz::ui::View * view)
@@ -309,6 +336,10 @@ void MainWindow::mergeView(tikz::ui::View * view)
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateTikzCode()));
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
     connect(view, SIGNAL(mousePositionChanged(tikz::Pos)), this, SLOT(updateMousePosition(tikz::Pos)));
+
+    connect(m_aZoomIn, SIGNAL(triggered()), view->zoomController(), SLOT(zoomIn()));
+    connect(m_aResetZoom, SIGNAL(triggered()), view->zoomController(), SLOT(resetZoom()));
+    connect(m_aZoomOut, SIGNAL(triggered()), view->zoomController(), SLOT(zoomOut()));
 
     updateWindowTitle();
     updateTikzCode();
@@ -337,6 +368,10 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     view->zoomController()->attachToComboBox(nullptr);
 
     // disconnect actions from current view
+    disconnect(m_aZoomIn, SIGNAL(triggered()), view->zoomController(), SLOT(zoomIn()));
+    disconnect(m_aResetZoom, SIGNAL(triggered()), view->zoomController(), SLOT(resetZoom()));
+    disconnect(m_aZoomOut, SIGNAL(triggered()), view->zoomController(), SLOT(zoomOut()));
+
     disconnect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
     disconnect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));
 
