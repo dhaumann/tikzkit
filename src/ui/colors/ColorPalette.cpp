@@ -24,6 +24,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QRegularExpression>
 
@@ -110,7 +111,7 @@ void ColorPalette::load(const QString & filename)
         d->rows = d->colors.size() / d->columns;
     }
 
-    qDebug() << "read" << d->colors.size() << "colors (" << d->rows << ", " << d->columns << ")";
+//     qDebug() << "Color palette" << QFileInfo(filename).fileName() << ":" << d->colors.size() << "colors (" << d->rows << ", " << d->columns << ")";
 }
 
 QString ColorPalette::name() const noexcept
