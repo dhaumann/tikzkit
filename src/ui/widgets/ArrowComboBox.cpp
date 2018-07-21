@@ -37,10 +37,10 @@
 class ArrowComboBoxPrivate
 {
     public:
-        ArrowComboBox * q;
+        ArrowComboBox * q = nullptr;
 
-        bool arrowHead;
-        QComboBox * comboBox;
+        bool arrowHead = true;
+        QComboBox * comboBox = nullptr;
 
         void fillComboBox();
 };
@@ -52,19 +52,16 @@ void ArrowComboBoxPrivate::fillComboBox()
 
     // get default icon size
     const int iconHeight = q->style()->pixelMetric(QStyle::PM_SmallIconSize, &option, q);
-//     const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
-    const qreal w = q->physicalDpiX() / tikz::in2pt(1); // = pixel per pt
-    const qreal h = q->physicalDpiY() / tikz::in2pt(1); // = pixel per pt
+    const qreal w = q->physicalDpiX() / tikz::in2mm(1); // = pixel per mm
+    const qreal h = q->physicalDpiY() / tikz::in2mm(1); // = pixel per mm
 
     // adjust desired icon size to avoid scaling
-    const QSize iconSize(ceil(30 * w), iconHeight); // 30pt * w pixel per pt == [pixel] width
+    const QSize iconSize(5 * w, iconHeight); // 10mm * w pixel per mm == [pixel] width
     comboBox->setIconSize(iconSize);
 
     // create horizontal edge from 0.1cm to 0.9cm
     tikz::core::EdgeStyle style;
     style.setLineWidth(tikz::Value::veryThick());
-//     style.setInnerLineWidth(tikz::Value::veryThick());
-//     style.setDoubleLine(true);
 
     // prepare painter pen
     QPen pen(Qt::black);
@@ -87,27 +84,19 @@ void ArrowComboBoxPrivate::fillComboBox()
         // create arrow
         AbstractArrow* arrow = createArrow(static_cast<tikz::Arrow>(i), &style);
 
-        // now paint to pixmap
+        // now paint to pixmap in Point unit
         QPainter p(&pixmap);
         p.setRenderHint(QPainter::Antialiasing, true);
-        //const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
-        p.scale(w, -h);//q->physicalDpiX() / s, -q->physicalDpiY() / s);
-        p.translate(0.0, -iconHeight / (2.0 * h));
+        const qreal s = tikz::Value(1, tikz::Unit::Inch).toPoint();
+        p.scale(q->physicalDpiX() / s, -q->physicalDpiY() / s);
+        p.translate(0.0, -tikz::mm2pt(1) * iconHeight / h / 2.0);
 
         // draw line
         p.setPen(pen);
         if (arrowHead) {
             p.drawLine(QPointF(0.0, 0.0), QPointF(tikz::cm2pt(0.5) - arrow->rightExtend(), 0.0));
-            if (style.doubleLine()) {
-                p.setPen(innerPen);
-                p.drawLine(QPointF(0.0, 0.0), QPointF(tikz::cm2pt(0.5) - arrow->rightExtend(), 0.0));
-            }
         } else {
             p.drawLine(QPointF(tikz::cm2pt(0.5), 0.0), QPointF(tikz::cm2pt(0.0) + arrow->rightExtend(), 0.0));
-            if (style.doubleLine()) {
-                p.setPen(innerPen);
-                p.drawLine(QPointF(tikz::cm2pt(0.5), 0.0), QPointF(tikz::cm2pt(0.0) + arrow->rightExtend(), 0.0));
-            }
         }
 
         // draw arrow

@@ -44,7 +44,7 @@ public:
      * Override sizeHint() to return a size without text.
      * The size matches the required size of the icons.
      */
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     /**
      * See sizeHint() for details.

@@ -105,8 +105,11 @@ MainWindow::MainWindow()
 
 
     // add arrow head/tail combos
-//     ArrowComboBox * arrowTailCombo = new ArrowComboBox(false, this);
-//     ArrowComboBox * arrowHeadCombo = new ArrowComboBox(true, this);
+    auto arrowTailCombo = new ArrowComboBox(false, nullptr);
+    auto arrowHeadCombo = new ArrowComboBox(true, nullptr);
+    m_toolBar->addWidget(arrowTailCombo);
+    m_toolBar->addWidget(arrowHeadCombo);
+    arrowHeadCombo->setMinimumWidth(40);
 //     h->addWidget(arrowTailCombo);
 //     h->addWidget(arrowHeadCombo);
 //     h->addStretch();

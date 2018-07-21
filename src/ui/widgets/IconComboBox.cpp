@@ -39,9 +39,9 @@ QSize IconComboBox::minimumSizeHint() const
     const int cnt = count();
 
     for (int i = 0; i < cnt; ++i) {
-	if (!itemIcon(i).isNull()) {
-	    sh.setWidth(qMax(sh.width(), is.width()));
-	}
+        if (!itemIcon(i).isNull()) {
+            sh.setWidth(qMax(sh.width(), is.width()));
+        }
     }
 
     // height
@@ -79,7 +79,7 @@ void IconComboBox::showPopup()
     const int right = mapToGlobal(popupRect.bottomRight()).x();
 
     if (right > screen.right()) {
-	popupRect.moveRight(popupRect.right() - (right - screen.right()));
+        popupRect.moveRight(popupRect.right() - (right - screen.right()));
     }
     popup->move(mapToGlobal(popupRect.topLeft()).x(), popup->y());
 }
