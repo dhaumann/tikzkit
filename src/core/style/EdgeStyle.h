@@ -83,46 +83,46 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Get the "x radius" of an ellipse path. The default value is 0.0.
          * @note This value has an effect only if the path is of type Path::Ellipse.
          */
-        tikz::Value radiusX() const;
+        Q_INVOKABLE tikz::Value radiusX() const;
 
         /**
          * Get the "y radius" of an ellipse path. The default value is 0.0.
          * @note This value has an effect only if the path is of type Path::Ellipse.
          */
-        tikz::Value radiusY() const;
+        Q_INVOKABLE tikz::Value radiusY() const;
 
         /**
          * Check whether the "x radius" property is set.
          */
-        bool radiusXSet() const;
+        Q_INVOKABLE bool radiusXSet() const;
 
         /**
          * Check whether the "y radius" property is set.
          */
-        bool radiusYSet() const;
+        Q_INVOKABLE bool radiusYSet() const;
 
     public Q_SLOTS:
         /**
          * Set the "x radius" of the ellipse to @p xradius.
          * This value is used by tikz::EllipsePath.
          */
-        void setRadiusX(const tikz::Value & xradius);
+        Q_INVOKABLE void setRadiusX(const tikz::Value & xradius);
 
         /**
          * Set the "y radius" of the ellipse to @p yradius.
          * This value is used by tikz::EllipsePath.
          */
-        void setRadiusY(const tikz::Value & yradius);
+        Q_INVOKABLE void setRadiusY(const tikz::Value & yradius);
 
         /**
          * Unset the "x radius" property.
          */
-        void unsetRadiusX();
+        Q_INVOKABLE void unsetRadiusX();
 
         /**
          * Unset the "y radius" property.
          */
-        void unsetRadiusY();
+        Q_INVOKABLE void unsetRadiusY();
 
     public:
         /**
@@ -131,24 +131,24 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @return The bending angle is always expressed as 'bend left'.
          *         Therefore, negative values can be interpreted as positive with 'bend right'.
          */
-        qreal bendAngle() const;
+        Q_INVOKABLE qreal bendAngle() const;
 
         /**
          * Check whether the bend angle is set.
          */
-        bool bendAngleSet() const;
+        Q_INVOKABLE bool bendAngleSet() const;
 
     public Q_SLOTS:
         /**
          * Set the bending angle to @p angle.
          * @note This value has an effect only if the edge type is BendCurve.
          */
-        void setBendAngle(qreal angle);
+        Q_INVOKABLE void setBendAngle(qreal angle);
 
         /**
          * Unset the bend angle property.
          */
-        void unsetBendAngle();
+        Q_INVOKABLE void unsetBendAngle();
 
     public:
         /**
@@ -156,12 +156,12 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @note This value has an effect only if the edge type is set to
          *       CurveMode::BendCurve or CurveMode::InOutCurve.
          */
-        qreal looseness() const;
+        Q_INVOKABLE qreal looseness() const;
 
         /**
          * Check whether the looseness is set.
          */
-        bool loosenessSet() const;
+        Q_INVOKABLE bool loosenessSet() const;
 
     public Q_SLOTS:
         /**
@@ -169,12 +169,12 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @note This value has an effect only if the edge type is set to
          *       CurveMode::BendCurve or CurveMode::InOutCurve.
          */
-        void setLooseness(qreal looseness);
+        Q_INVOKABLE void setLooseness(qreal looseness);
 
         /**
          * Unset the looseness for bending the edge.
          */
-        void unsetLooseness();
+        Q_INVOKABLE void unsetLooseness();
 
     public:
         /**
@@ -212,24 +212,24 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @note This value is only of meaning if the edge type is set to
          *       CurveMode::InOutCurve.
          */
-        qreal outAngle() const;
+        Q_INVOKABLE qreal outAngle() const;
 
         /**
          * Check whether the out angle is set.
          */
-        bool outAngleSet() const;
+        Q_INVOKABLE bool outAngleSet() const;
 
         /**
          * Get the in angle for the end node.
          * @note This value is only of meaning if the edge type is set to
          *       CurveMode::InOutCurve.
          */
-        qreal inAngle() const;
+        Q_INVOKABLE qreal inAngle() const;
 
         /**
          * Check whether the in angle is set.
          */
-        bool inAngleSet() const;
+        Q_INVOKABLE bool inAngleSet() const;
 
     public Q_SLOTS:
         /**
@@ -237,24 +237,24 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * @note This value has an effect only if the edge type is set to
          *       CurveMode::InOutCurve.
          */
-        void setOutAngle(qreal angle);
+        Q_INVOKABLE void setOutAngle(qreal angle);
 
         /**
          * Unset the out angle property.
          */
-        void unsetOutAngle();
+        Q_INVOKABLE void unsetOutAngle();
 
         /**
          * Set the in angle for the end node to @p angle.
          * @note This value has an effect only if the edge type is set to
          *       CurveMode::InOutCurve.
          */
-        void setInAngle(qreal angle);
+        Q_INVOKABLE void setInAngle(qreal angle);
 
         /**
          * Unset the in angle property.
          */
-        void unsetInAngle();
+        Q_INVOKABLE void unsetInAngle();
 
     //
     // Arrow attributes
@@ -263,43 +263,43 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
         /**
          * Get the arrow tail style.
          */
-        Arrow arrowTail() const;
+        Q_INVOKABLE Arrow arrowTail() const;
 
         /**
          * Check whether the arrow tail is set.
          */
-        bool arrowTailSet() const;
+        Q_INVOKABLE bool arrowTailSet() const;
 
         /**
          * Get the arrow head style.
          */
-        Arrow arrowHead() const;
+        Q_INVOKABLE Arrow arrowHead() const;
 
         /**
          * Check whether the arrow head is set.
          */
-        bool arrowHeadSet() const;
+        Q_INVOKABLE bool arrowHeadSet() const;
 
     public Q_SLOTS:
         /**
          * Set the arrow tail style to @p tail.
          */
-        void setArrowTail(tikz::Arrow tail);
+        Q_INVOKABLE void setArrowTail(tikz::Arrow tail);
 
         /**
          * Set the arrow head style to @p head.
          */
-        void setArrowHead(tikz::Arrow head);
+        Q_INVOKABLE void setArrowHead(tikz::Arrow head);
 
         /**
          * Unset the arrow tail style.
          */
-        void unsetArrowTail();
+        Q_INVOKABLE void unsetArrowTail();
 
         /**
          * Unset the arrow head style.
          */
-        void unsetArrowHead();
+        Q_INVOKABLE void unsetArrowHead();
 
     //
     // shorten >, shorten < of edges
@@ -309,44 +309,44 @@ class TIKZCORE_EXPORT EdgeStyle : public Style
          * Shorten amount for the start of the edge in cm.
          * Default: 0.0cm
          */
-        tikz::Value shortenStart() const;
+        Q_INVOKABLE tikz::Value shortenStart() const;
 
         /**
          * Check whether shorten start is set.
          */
-        bool shortenStartSet() const;
+        Q_INVOKABLE bool shortenStartSet() const;
 
         /**
          * Shorten amount for the end of the edge in cm.
          * Default: 0.0cm
          */
-        tikz::Value shortenEnd() const;
+        Q_INVOKABLE tikz::Value shortenEnd() const;
 
         /**
          * Check whether shorten end is set.
          */
-        bool shortenEndSet() const;
+        Q_INVOKABLE bool shortenEndSet() const;
 
     public Q_SLOTS:
         /**
          * Set the start shorten amount to @p shorten cm.
          */
-        void setShortenStart(const tikz::Value & shorten);
+        Q_INVOKABLE void setShortenStart(const tikz::Value & shorten);
 
         /**
          * Set the end shorten amount to @p shorten cm.
          */
-        void setShortenEnd(const tikz::Value & shorten);
+        Q_INVOKABLE void setShortenEnd(const tikz::Value & shorten);
 
         /**
          * Unset the start shorten amount.
          */
-        void unsetShortenStart();
+        Q_INVOKABLE void unsetShortenStart();
 
         /**
          * Unset the end shorten amount.
          */
-        void unsetShortenEnd();
+        Q_INVOKABLE void unsetShortenEnd();
 
     //
     // internal to tikz::Document

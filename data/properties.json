@@ -178,6 +178,60 @@
             "minimum" : "-5mm",
             "maximum" : "5mm",
             "singleStep" : 0.1
+        },
+        "textAlign" : {
+            "type" : "enum",
+            "title" : "Text Alignment",
+            "description" : "Text alignment",
+            "modified" : "textAlignSet",
+            "reset" : "unsetTextAlign"
+        },
+        "shape" : {
+            "type" : "enum",
+            "title" : "Node Shape",
+            "description" : "Node shape",
+            "modified" : "shapeSet",
+            "reset" : "unsetShape"
+        },
+        "innerSep" : {
+            "type" : "value",
+            "title" : "Inner Separation",
+            "description" : "Define the inner spacing in the node",
+            "modified" : "innerSepSet",
+            "reset" : "unsetInnerSep",
+            "minimum" : "0pt",
+            "maximum" : "30mm",
+            "singleStep" : 0.1
+        },
+        "outerSep" : {
+            "type" : "value",
+            "title" : "Outer Separation",
+            "description" : "Define the outer spacing in the node",
+            "modified" : "outerSepSet",
+            "reset" : "unsetOuterSep",
+            "minimum" : "0pt",
+            "maximum" : "30mm",
+            "singleStep" : 0.1
+        },
+        "minimumHeight" : {
+            "type" : "value",
+            "title" : "Minimum Height",
+            "description" : "Define the minimum height of a node",
+            "modified" : "minimumHeightSet",
+            "reset" : "unsetMinimumHeight",
+            "minimum" : "0pt",
+            "maximum" : "1000mm",
+            "singleStep" : 0.1
+        },
+        "minimumWidth" : {
+            "type" : "value",
+            "title" : "Minimum Width",
+            "description" : "Define the minimum width of a node",
+            "modified" : "minimumWidthSet",
+            "reset" : "unsetMinimumWidth",
+            "minimum" : "0pt",
+            "maximum" : "1000mm",
+            "singleStep" : 0.1
         }
     }
 }
