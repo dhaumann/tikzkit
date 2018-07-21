@@ -81,12 +81,12 @@ private:
 class ColorWidgetPrivate
 {
     public:
-        QComboBox * cmbPalette;
+        QComboBox * cmbPalette = nullptr;
         QVector<ColorButton*> buttons;
-        QButtonGroup * group;
-        QVBoxLayout * vLayout;
-        QGridLayout * gridLayout;
-        SliderSpinBox * sbOpacity;
+        QButtonGroup * group = nullptr;
+        QVBoxLayout * vLayout = nullptr;
+        QGridLayout * gridLayout = nullptr;
+        SliderSpinBox * sbOpacity = nullptr;
 
 };
 
