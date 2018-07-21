@@ -30,7 +30,6 @@
 #include <tikz/ui/TikzScene.h>
 #include <tikz/ui/TikzToolBox.h>
 #include <tikz/ui/ArrowComboBox.h>
-#include <tikz/ui/LinePropertyWidget.h>
 #include <tikz/ui/ColorWidget.h>
 #include <tikz/ui/PropertyBrowser.h>
 #include <tikz/ui/ZoomController.h>
@@ -186,16 +185,6 @@ void MainWindow::setupUi()
     m_historyView->setHeaderHidden(true);
     m_historyView->setAlternatingRowColors(true);
     dockWidget->setWidget(m_historyView);
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-    //
-    // next one
-    //
-    dockWidget = new QDockWidget("Properties", this);
-    m_linePropertyWidget = new tikz::ui::LinePropertyWidget(dockWidget);
-
-    dockWidget->setWidget(m_linePropertyWidget);
-
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
     //

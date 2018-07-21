@@ -71,7 +71,6 @@ set(qtikzui_SOURCES
 
     widgets/ArrowComboBox.cpp
     widgets/IconComboBox.cpp
-    widgets/LinePropertyWidget.cpp
     widgets/SliderSpinBox.cpp
     widgets/SliderDoubleSpinBox.cpp
     widgets/ToolLayout.cpp
@@ -85,7 +84,7 @@ set(qtikzui_SOURCES
     propertybrowser/OpacityEditor.cpp
 )
 
-set(qtikzui_FORMS forms/LinePropertyWidget.ui)
+set(qtikzui_FORMS )
 qt5_wrap_ui(qtikzui_FORMS_HEADERS ${qtikzui_FORMS})
 
 # add icon resource

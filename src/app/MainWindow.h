@@ -41,7 +41,6 @@ namespace ui {
     class MainWindow;
     class Document;
     class View;
-    class LinePropertyWidget;
     class PropertyBrowser;
 }
 }
@@ -183,7 +182,6 @@ private:
 
     QTextEdit * m_textEdit = nullptr;
 
-    tikz::ui::LinePropertyWidget * m_linePropertyWidget = nullptr;
     tikz::ui::PropertyBrowser * m_browser = nullptr;
     QTreeView * m_historyView = nullptr;
     QListWidget * m_logWidget = nullptr;
