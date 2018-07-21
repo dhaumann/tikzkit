@@ -104,7 +104,7 @@ void PdfGenerator::generatePdf(const QString& texCode)
     QStringList args;
     args << "-halt-on-error" << d->tempFile->fileName();
 
-    qDebug() << "launching process: 'pdflatex'" << args;
+//    qDebug() << "launching process: 'pdflatex'" << args;
     d->process->start("pdflatex", args);
 }
 

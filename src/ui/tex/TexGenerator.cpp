@@ -120,14 +120,14 @@ void TexGenerator::generateImage(const QString& texCode)
     QStringList args;
     args << "-halt-on-error" << d->tempFile->fileName();
 
-    qDebug() << "launching process: 'latex'";
+//    qDebug() << "launching process: 'latex'";
     d->process->start("latex", args);
 }
 
 void TexGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "process finished with exitCode" << exitCode;
     if (exitCode != 0) {
+        qDebug() << "process finished with exitCode" << exitCode;
         return;
     }
 
@@ -137,7 +137,7 @@ void TexGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         args << "--no-fonts"<<(fi.baseName() + ".dvi")
              << (fi.baseName() + ".svg");
 
-        qDebug() << "launching process: 'dvisvgm'";
+//        qDebug() << "launching process: 'dvisvgm'";
         d->postProcessRunning = true;
         d->process->start("dvisvgm", args);
     } else {
