@@ -97,6 +97,11 @@ class TIKZCORE_EXPORT Uid
         }
 
         /**
+         * Returns the Entity type Uid refers to.
+         */
+        EntityType entityType() const;
+
+        /**
          * Returns the Entity this Uid refers to.
          */
         Entity * entity() const;

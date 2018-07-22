@@ -23,6 +23,14 @@
 namespace tikz {
 namespace core {
 
+
+EntityType Uid::entityType() const
+{
+    auto e = entity();
+    Q_ASSERT(e);
+    return e->entityType();
+}
+
 Entity * Uid::entity() const
 {
     if (! m_document) {
