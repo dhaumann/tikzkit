@@ -315,6 +315,19 @@ class TIKZCORE_EXPORT Document : public Entity
     //
     public:
         /**
+         * Creates a new style associated with this document.
+         * If the style is not needed anymore, delete it with deleteEntity().
+         */
+        Entity * createEntity(tikz::EntityType type);
+
+        /**
+         * Remove @p entity from the document by deleting the entity object.
+         * Afterwards, the pointer is invalid.
+         * @param entity entity to delete
+         */
+        void deleteEntity(Entity * entity);
+
+        /**
          * Creates a new node associated with this document.
          * If the node is not needed anymore, delete it with deleteNode().
          */
@@ -345,6 +358,16 @@ class TIKZCORE_EXPORT Document : public Entity
     // internal: Undo / redo items manipulate with ID
     //
     protected:
+        /**
+         * Create a new entity of @p type associated with this document with @p uid.
+         */
+        virtual Entity * createEntity(const Uid & uid, EntityType type);
+
+        /**
+         * Delete entity @p uid associated with this document.
+         */
+        virtual void deleteEntity(const Uid & uid);
+
         /**
          * Create a new node associated with this document with @p uid.
          */
@@ -379,6 +402,8 @@ class TIKZCORE_EXPORT Document : public Entity
         friend class DeserializeVisitor;
 
         // uddo/redo system
+        friend class UndoCreateEntity;
+        friend class UndoDeleteEntity;
         friend class UndoCreateNode;
         friend class UndoDeleteNode;
         friend class UndoCreatePath;

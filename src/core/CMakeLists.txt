@@ -7,6 +7,8 @@ add_library(qtikzcore SHARED
     tikz.cpp
 
     document/Document.cpp
+    document/UndoCreateEntity.cpp
+    document/UndoDeleteEntity.cpp
 
     style/Style.cpp
     style/NodeStyle.cpp

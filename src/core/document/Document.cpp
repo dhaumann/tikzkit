@@ -31,6 +31,8 @@
 #include "UndoDeleteNode.h"
 #include "UndoCreatePath.h"
 #include "UndoDeletePath.h"
+#include "UndoCreateEntity.h"
+#include "UndoDeleteEntity.h"
 
 #include "Visitor.h"
 #include "SerializeVisitor.h"
@@ -537,6 +539,109 @@ void Document::deletePath(Path * path)
     Q_ASSERT(!d->entityMap.contains(uid));
 }
 
+Entity * Document::createEntity(tikz::EntityType type)
+{
+    // create new node, push will call ::redo()
+    const Uid uid(d->uniqueId(), this);
+    addUndoItem(new UndoCreateEntity(uid, type, this));
+
+    // now the node should be in the map
+    const auto it = d->entityMap.find(uid);
+    if (it != d->entityMap.end()) {
+        return *it;
+    }
+
+    // requested id not in map, this is a bug, since UndoCreateEntity should
+    // call createEntity(uid, type) that inserts the Entity
+    Q_ASSERT(false);
+
+    return nullptr;
+}
+
+Entity * Document::createEntity(const Uid & uid, EntityType type)
+{
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(uid.document() == this);
+    Q_ASSERT(!d->entityMap.contains(uid));
+
+    // create new node
+    Entity * e = nullptr;
+    switch (type) {
+        case EntityType::Document: Q_ASSERT(false); break;
+        case EntityType::Style: e = new Style(uid); break;
+        case EntityType::NodeStyle: e = new NodeStyle(uid); break;
+        case EntityType::EdgeStyle: e = new EdgeStyle(uid); break;
+        case EntityType::Node: e = new Node(uid); break;
+        case EntityType::Path: e = new Path(uid); break;
+    }
+
+    Q_ASSERT(e);
+    d->entities.append(e);
+
+    // insert entity into hash map
+    d->entityMap.insert(uid, e);
+
+    // propagate changed signal
+    connect(e, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
+
+    return e;
+}
+
+void Document::deleteEntity(Entity * e)
+{
+    // valid input?
+    Q_ASSERT(e != nullptr);
+    Q_ASSERT(d->entityMap.contains(e->uid()));
+
+    // get id
+    const Uid uid = e->uid();
+
+    // start undo group
+    d->undoManager->startTransaction("Remove entity");
+
+    // make sure no edge points to the deleted node
+    if (auto nodeEntity = dynamic_cast<Node*>(e)) {
+        for (auto entity : d->entities) {
+            if (auto path = dynamic_cast<Path *>(entity)) {
+                path->detachFromNode(nodeEntity);
+            }
+
+            // TODO: a path might require the node?
+            //       in that case, maybe delete the path as well?
+        }
+    }
+
+    // delete node, push will call ::redo()
+    addUndoItem(new UndoDeleteEntity(uid, this));
+
+    // end undo group
+    d->undoManager->commitTransaction();
+
+    // node really removed?
+    Q_ASSERT(!d->entityMap.contains(uid));
+}
+
+void Document::deleteEntity(const Uid & uid)
+{
+    // valid input?
+    Q_ASSERT(uid.isValid());
+    Q_ASSERT(d->entityMap.contains(uid));
+
+    // get entity
+    auto it = d->entityMap.find(uid);
+    if (it != d->entityMap.end()) {
+        const auto entity = *it;
+
+        // unregister entity
+        d->entityMap.erase(it);
+        Q_ASSERT(d->entities.contains(entity));
+        d->entities.erase(std::find(d->entities.begin(), d->entities.end(), entity));
+
+        // truly delete node
+        delete entity;
+    }
+}
+
 Node* Document::createNode()
 {
     // create new node, push will call ::redo()
@@ -693,6 +798,11 @@ Entity * Document::entity(const tikz::core::Uid & uid) const
     // Uid 0 alreay refers to this Document
     if (uid.id() == 0) {
         return const_cast<Document*>(this);
+    }
+
+    // Uid 1 alreay refers to this Document's Style
+    if (uid.id() == 0) {
+        return d->style;
     }
 
     // all other entities are in the entity list
