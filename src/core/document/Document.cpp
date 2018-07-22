@@ -690,6 +690,12 @@ Entity * Document::entity(const tikz::core::Uid & uid) const
         return nullptr;
     }
 
+    // Uid 0 alreay refers to this Document
+    if (uid.id() == 0) {
+        return const_cast<Document*>(this);
+    }
+
+    // all other entities are in the entity list
     const auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
         return *it;
