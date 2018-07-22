@@ -52,11 +52,11 @@ class NodePrivate
         NodeStyle style;
 };
 
-Node::Node(const Uid & uid, Document* doc)
-    : Entity(uid, doc)
-    , d(new NodePrivate(doc))
+Node::Node(const Uid & uid)
+    : Entity(uid)
+    , d(new NodePrivate(uid.document()))
 {
-    d->style.setParentStyle(doc->style());
+    d->style.setParentStyle(uid.document()->style());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }

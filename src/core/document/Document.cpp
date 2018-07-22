@@ -121,7 +121,7 @@ Document::Document(QObject * parent)
     d->undoManager = new UndoManager(this);
     d->undoActive = false;
     d->nextId = 0;
-    d->style = new Style(Uid(d->uniqueId(), this), this);
+    d->style = new Style(Uid(d->uniqueId(), this));
 
     // Debugging:
     d->style->setLineWidth(tikz::Value::veryThick());
@@ -180,7 +180,7 @@ void Document::close()
 
     // reinitialize document style
     delete d->style;
-    d->style = new Style(Uid(d->uniqueId(), this), this);
+    d->style = new Style(Uid(d->uniqueId(), this));
 
     // clear undo stack
     d->undoManager->clear();
@@ -550,10 +550,11 @@ Node* Document::createNode()
 Node * Document::createNode(const Uid & uid)
 {
     Q_ASSERT(uid.isValid());
+    Q_ASSERT(uid.document() == this);
     Q_ASSERT(!d->entityMap.contains(uid));
 
     // create new node
-    Node* node = new Node(uid, this);
+    auto node = new Node(uid);
     d->entities.append(node);
 
     // insert node into hash map
@@ -631,11 +632,11 @@ Path * Document::createPath(PathType type, const Uid & uid)
         case PathType::BendCurve:
         case PathType::InOutCurve:
         case PathType::BezierCurve: {
-            path = new EdgePath(type, uid, this);
+            path = new EdgePath(type, uid);
             break;
         }
         case PathType::Ellipse:
-            path = new EllipsePath(uid, this);
+            path = new EllipsePath(uid);
             break;
         default:
             Q_ASSERT(false);

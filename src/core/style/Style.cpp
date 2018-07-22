@@ -82,8 +82,8 @@ Style::Style()
 {
 }
 
-Style::Style(const Uid & uid, Document* doc)
-    : Entity(uid, doc)
+Style::Style(const Uid & uid)
+    : Entity(uid)
     , d(new StylePrivate())
 {
 }

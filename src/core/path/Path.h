@@ -90,11 +90,11 @@ class TIKZCORE_EXPORT Path : public Entity
         friend class Document;
 
         /**
-         * Constructor that associates this path with the tikz Document @p doc.
+         * Constructor that associates this path with the tikz Document
+         * referred to by @p uid.
          * @param uid unique id of the path
-         * @param doc associated document
          */
-        Path(const Uid & uid, Document* doc);
+        Path(const Uid & uid);
 
         /**
          * This function is called by Document::deletePath() right before the

@@ -34,11 +34,11 @@ class PathPrivate
         EdgeStyle style;
 };
 
-Path::Path(const Uid & uid, Document* doc)
-    : Entity(uid, doc)
+Path::Path(const Uid & uid)
+    : Entity(uid)
     , d(new PathPrivate())
 {
-    d->style.setParentStyle(doc->style());
+    d->style.setParentStyle(uid.document()->style());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }

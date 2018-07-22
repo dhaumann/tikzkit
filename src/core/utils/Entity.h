@@ -104,9 +104,10 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
         friend class Document;
 
         /**
-         * Associate this style with @p uid to the document @p tikzDocument.
+         * Associate this style with @p uid. The passed @p uid also
+         * provides the associated tikz Document.
          */
-        Entity(const Uid & uid, Document* tikzDocument);
+        explicit Entity(const Uid & uid);
 
     private:
         std::unique_ptr<EntityPrivate> const d;

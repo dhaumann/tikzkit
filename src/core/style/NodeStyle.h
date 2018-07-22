@@ -231,9 +231,9 @@ class TIKZCORE_EXPORT NodeStyle : public Style
         friend class Document;
 
         /**
-         * Associate this style with @p uid to the document @p tikzDocument.
+         * Associate this style with @p uid.
          */
-        NodeStyle(const Uid & uid, Document* tikzDocument);
+        NodeStyle(const Uid & uid);
 
     private:
         std::unique_ptr<NodeStylePrivate> const d;

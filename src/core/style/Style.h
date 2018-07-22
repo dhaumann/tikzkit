@@ -427,9 +427,9 @@ class TIKZCORE_EXPORT Style : public Entity
         friend class Document;
 
         /**
-         * Associate this style with @p uid to the document @p tikzDocument.
+         * Associate this style with @p uid.
          */
-        Style(const Uid & uid, Document* tikzDocument);
+        Style(const Uid & uid);
 
     private:
         std::unique_ptr<StylePrivate> const d;

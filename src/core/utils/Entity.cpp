@@ -31,9 +31,6 @@ class EntityPrivate
 public:
     // unique id, or -1 (negative)
     Uid uid = Uid();
-
-    // associated Document (if any)
-    Document * document = nullptr;
 };
 
 Entity::Entity()
@@ -42,15 +39,11 @@ Entity::Entity()
 {
 }
 
-Entity::Entity(const Uid & uid, Document* doc)
-    : ConfigObject(doc)
+Entity::Entity(const Uid & uid)
+    : ConfigObject()
     , d(new EntityPrivate())
 {
     Q_ASSERT(uid.isValid());
-    Q_ASSERT(uid.document() == doc);
-    Q_ASSERT(doc);
-
-    d->document = doc;
     d->uid = uid;
 }
 
@@ -71,7 +64,7 @@ tikz::EntityType Entity::entityType() const
 void Entity::load(const QJsonObject & json)
 {
     if (json.contains("uid")) {
-        d->uid = Uid(json["uid"].toString(), d->document);
+        d->uid = Uid(json["uid"].toString(), d->uid.document());
     }
 
     // load payload
@@ -102,7 +95,7 @@ void Entity::loadData(const QJsonObject & json)
 
 Document * Entity::document() const
 {
-    return d->document;
+    return d->uid.document();
 }
 
 }
