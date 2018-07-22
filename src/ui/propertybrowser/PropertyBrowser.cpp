@@ -23,12 +23,17 @@
 #include "OpacityEditorFactory.h"
 #include "OpacityPropertyManager.h"
 
+#include <tikz/core/Uid.h>
+#include <tikz/core/Document.h>
+#include <tikz/core/Node.h>
+#include <tikz/core/Path.h>
 #include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgeStyle.h>
 
 #include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
 #include <tikz/ui/PathItem.h>
+#include <tikz/ui/Document.h>
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -116,7 +121,7 @@ public:
     QtEnumPropertyManager * enumManager = nullptr;
 
     QPointer<View> view = nullptr;
-    TikzItem * item = nullptr;
+    tikz::core::Uid uid;
     QHash<QtProperty *, QString> propertyMap;
 
 public:
@@ -300,31 +305,32 @@ void PropertyBrowser::setView(tikz::ui::View * view)
     updateCurrentItem();
 }
 
-QObject * styleForItem(TikzItem * item)
+QObject * styleForItem(const tikz::core::Uid & uid)
 {
-    if (item == nullptr) {
+    if (! uid.isValid()) {
         return nullptr;
     }
 
-    auto node = qobject_cast<tikz::ui::NodeItem *>(item);
-    auto path = qobject_cast<tikz::ui::PathItem *>(item);
-    Q_ASSERT(node != nullptr || path != nullptr);
+    auto e = uid.entity();
+    switch (e->entityType()) {
+        case tikz::EntityType::Document: return uid.entity<tikz::core::Document>()->style();
+        case tikz::EntityType::Node: return uid.entity<tikz::core::Node>()->style();
+        case tikz::EntityType::Path: return uid.entity<tikz::core::Path>()->style();
+        case tikz::EntityType::Style: return uid.entity<tikz::core::Style>();
+        case tikz::EntityType::EdgeStyle: return uid.entity<tikz::core::Style>();
+        case tikz::EntityType::NodeStyle: return uid.entity<tikz::core::Style>();
+    }
 
-    auto nodeStyle = node ? node->style() : nullptr;
-    auto edgeStyle = path ? path->style() : nullptr;
-    tikz::core::Style * style = nodeStyle ? static_cast<tikz::core::Style *>(nodeStyle)
-                                          : static_cast<tikz::core::Style *>(edgeStyle);
-
-    return style;
+    return nullptr;
 }
 
-void PropertyBrowser::setItem(TikzItem * item)
+void PropertyBrowser::setItem(const tikz::core::Uid & uid)
 {
-    if (d->item == item) {
+    if (d->uid == uid) {
         return;
     }
 
-    d->item = item;
+    d->uid = uid;
 
     // clear all managers and mappings
     d->valueManager->clear();
@@ -335,7 +341,7 @@ void PropertyBrowser::setItem(TikzItem * item)
     d->enumManager->clear();
     d->propertyMap.clear();
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     if (style) {
         auto metaObj = style->metaObject();
         while (metaObj) {
@@ -356,7 +362,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -375,7 +381,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, bool val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -394,7 +400,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, const QColor & val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -413,7 +419,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, int val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -432,7 +438,7 @@ void PropertyBrowser::valueChanged(QtProperty *property, double val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -451,7 +457,7 @@ void PropertyBrowser::doubleValueChanged(QtProperty *property, double val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -470,7 +476,7 @@ void PropertyBrowser::enumValueChanged(QtProperty *property, int val)
         return;
     }
 
-    auto style = styleForItem(d->item);
+    auto style = styleForItem(d->uid);
     QString name = d->propertyMap[property];
     if (style) {
         if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
@@ -484,11 +490,20 @@ void PropertyBrowser::updateCurrentItem()
 {
     auto tikzItems = d->view->selectedItems();
     if (tikzItems.size() != 1) {
-        setItem(nullptr);
+        if (d->view) {
+            setItem(d->view->document()->uid());
+        } else {
+            setItem(tikz::core::Uid());
+        }
         return;
     }
 
-    setItem(tikzItems.front());
+    auto item = tikzItems.front();
+    if (qobject_cast<NodeItem*>(item)) {
+        setItem(qobject_cast<NodeItem*>(item)->uid());
+    } else if (qobject_cast<PathItem*>(item)) {
+        setItem(qobject_cast<PathItem*>(item)->uid());
+    }
 }
 
 }

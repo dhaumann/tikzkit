@@ -23,11 +23,11 @@
 #include "tikzgui_export.h"
 
 #include <tikz/core/Value.h>
+#include <tikz/core/Uid.h>
 
 #include <QComboBox>
 
 
-class TikzItem;
 class QtProperty;
 
 namespace tikz {
@@ -55,9 +55,9 @@ public:
     virtual ~PropertyBrowser();
 
     /**
-     * Set the scene item to be modified to @p item.
+     * Set the scene item to be modified to @p uid.
      */
-    void setItem(TikzItem * item);
+    void setItem(const tikz::core::Uid & uid);
 
     void setView(tikz::ui::View * view);
 
