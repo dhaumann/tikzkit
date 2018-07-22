@@ -37,6 +37,7 @@ class PathPrivate;
 class TIKZCORE_EXPORT Path : public Entity
 {
     Q_OBJECT
+    Q_PROPERTY(Style* style READ style)
 
     //
     // Path type

@@ -23,6 +23,7 @@
 #include <tikz/core/tikz.h>
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>
+#include <tikz/core/Style.h>
 
 #include <QApplication>
 
@@ -49,6 +50,7 @@ EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
     qRegisterMetaType<tikz::Pos>("Pos");
     qRegisterMetaType<tikz::Value>("Value");
+    qRegisterMetaType<tikz::core::Style*>("Style*");
 }
 
 EditorPrivate::~EditorPrivate()

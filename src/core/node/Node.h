@@ -41,6 +41,7 @@ class TIKZCORE_EXPORT Node : public Entity
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText)
     Q_PROPERTY(tikz::Pos pos READ pos WRITE setPos)
+    Q_PROPERTY(Style* style READ style)
 
     public:
         /**

@@ -437,6 +437,9 @@ class TIKZCORE_EXPORT Style : public Entity
 
 }
 }
+
+Q_DECLARE_METATYPE(tikz::core::Style*)
+
 #endif // TIKZ_STYLE_H
 
 // kate: indent-width 4; replace-tabs on;

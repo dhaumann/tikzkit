@@ -47,6 +47,7 @@ class TIKZCORE_EXPORT Document : public Entity
     Q_OBJECT
     Q_PROPERTY(tikz::Unit preferredUnit READ preferredUnit WRITE setPreferredUnit NOTIFY preferredUnitChanged)
     Q_PROPERTY(QString documentName READ documentName)
+    Q_PROPERTY(Style* style READ style)
 
     public:
         /**

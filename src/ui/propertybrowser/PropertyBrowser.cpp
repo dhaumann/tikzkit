@@ -313,11 +313,11 @@ QObject * styleForItem(const tikz::core::Uid & uid)
 
     auto e = uid.entity();
     switch (e->entityType()) {
-        case tikz::EntityType::Document: return uid.entity<tikz::core::Document>()->style();
-        case tikz::EntityType::Node: return uid.entity<tikz::core::Node>()->style();
-        case tikz::EntityType::Path: return uid.entity<tikz::core::Path>()->style();
-        case tikz::EntityType::Style: return uid.entity<tikz::core::Style>();
-        case tikz::EntityType::EdgeStyle: return uid.entity<tikz::core::Style>();
+        case tikz::EntityType::Document:;
+        case tikz::EntityType::Node:
+        case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
+        case tikz::EntityType::Style:
+        case tikz::EntityType::EdgeStyle:
         case tikz::EntityType::NodeStyle: return uid.entity<tikz::core::Style>();
     }
 
