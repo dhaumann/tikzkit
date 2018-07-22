@@ -56,11 +56,6 @@ Uid Entity::uid() const
     return d->uid;
 }
 
-tikz::EntityType Entity::entityType() const
-{
-    return EntityType::Invalid;
-}
-
 void Entity::load(const QJsonObject & json)
 {
     if (json.contains("uid")) {

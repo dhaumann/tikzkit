@@ -117,13 +117,13 @@ inline void error(const QString & text)
 /**
  * Entity types.
  */
-enum class EntityType : char {
-    Invalid   = 0,
-    Style     = 1,
-    NodeStyle = 2,
-    EdgeStyle = 3,
-    Node      = 4,
-    Path      = 5
+enum class EntityType {
+    Document  = 0,
+    Style,
+    NodeStyle,
+    EdgeStyle,
+    Node,
+    Path
 };
 Q_ENUM_NS(EntityType)
 

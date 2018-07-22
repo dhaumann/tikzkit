@@ -81,7 +81,9 @@ class DocumentPrivate
         // Node lookup map
         QHash<Uid, Entity *> entityMap;
 
-        qint64 nextId = 0;
+        // the document-wide unique ids start at 1.
+        // Id 0 is reserved for the Document Uid, see Document constructor.
+        qint64 nextId = 1;
 
         // helper to get a document-wide unique id
         qint64 uniqueId()
@@ -114,13 +116,15 @@ public:
 };
 
 Document::Document(QObject * parent)
-    : ConfigObject(parent)
+    : Entity(Uid(0, this))
     , d(new DocumentPrivate())
 {
+    // the Document's ownership is maintained elsewhere. Since the Entity
+    // does not allow passing the ownership, we need to do this explicitly here.
+    setParent(parent);
+
     d->q = this;
     d->undoManager = new UndoManager(this);
-    d->undoActive = false;
-    d->nextId = 0;
     d->style = new Style(Uid(d->uniqueId(), this));
 
     // Debugging:
@@ -139,6 +143,11 @@ Document::~Document()
     Q_ASSERT(d->entities.isEmpty());
 
     delete d;
+}
+
+tikz::EntityType Document::entityType() const
+{
+    return tikz::EntityType::Document;
 }
 
 bool Document::accept(Visitor & visitor)
@@ -176,7 +185,7 @@ void Document::close()
     d->entityMap.clear();
 
     // reset unique id counter
-    d->nextId = 0;
+    d->nextId = 1;
 
     // reinitialize document style
     delete d->style;

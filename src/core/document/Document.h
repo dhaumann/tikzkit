@@ -20,7 +20,7 @@
 #ifndef TIKZ_DOCUMENT_H
 #define TIKZ_DOCUMENT_H
 
-#include "ConfigObject.h"
+#include "Entity.h"
 #include "tikz_export.h"
 #include "tikz.h"
 #include "Path.h"
@@ -42,7 +42,7 @@ class EdgeStyle;
 class UndoItem;
 class Visitor;
 
-class TIKZCORE_EXPORT Document : public ConfigObject
+class TIKZCORE_EXPORT Document : public Entity
 {
     Q_OBJECT
 
@@ -56,6 +56,15 @@ class TIKZCORE_EXPORT Document : public ConfigObject
          * Destructor
          */
         virtual ~Document();
+
+    //
+    // Reimplemented from Entity
+    //
+    public:
+        /**
+         * Returns the EntityType Document.
+         */
+        tikz::EntityType entityType() const override;
 
     //
     // visitor pattern

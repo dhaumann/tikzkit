@@ -49,7 +49,7 @@ void log(LogType level, const QString & text)
 QString toString(EntityType type)
 {
     switch (type) {
-        case EntityType::Invalid   : return QStringLiteral("Invalid");
+        case EntityType::Document  : return QStringLiteral("Document");
         case EntityType::Style     : return QStringLiteral("Style");
         case EntityType::NodeStyle : return QStringLiteral("NodeStyle");
         case EntityType::EdgeStyle : return QStringLiteral("EdgeStyle");
@@ -57,13 +57,14 @@ QString toString(EntityType type)
         case EntityType::Path      : return QStringLiteral("Path");
         default: break;
     }
-    return QStringLiteral("Invalid");
+    Q_ASSERT(false);
+    return QString();
 }
 
 EntityType toEntityType(const QString & str)
 {
-    if (str == QStringLiteral("Invalid")) {
-        return EntityType::Invalid;
+    if (str == QStringLiteral("Document")) {
+        return EntityType::Document;
     } else if (str == QStringLiteral("Style")) {
         return EntityType::Style;
     } else if (str == QStringLiteral("NodeStyle")) {
@@ -76,7 +77,8 @@ EntityType toEntityType(const QString & str)
         return EntityType::Path;
     }
 
-    return EntityType::Invalid;
+    Q_ASSERT(false);
+    return EntityType::Document;
 }
 
 QString toString(tikz::Unit unit)

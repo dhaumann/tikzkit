@@ -60,9 +60,8 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
 
         /**
          * Returns the EntityType.
-         * The default implementation returns EntityType::Invalid.
          */
-        virtual tikz::EntityType entityType() const;
+        virtual tikz::EntityType entityType() const = 0;
 
 
         /**
