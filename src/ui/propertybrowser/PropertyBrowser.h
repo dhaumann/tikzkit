@@ -20,7 +20,7 @@
 #ifndef TIKZUI_PROPERTY_BROWSER_H
 #define TIKZUI_PROPERTY_BROWSER_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <tikz/core/Value.h>
 #include <tikz/core/Uid.h>

@@ -20,7 +20,7 @@
 #ifndef TIKZUI_COLOR_WIDGET_H
 #define TIKZUI_COLOR_WIDGET_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 #include <QFrame>
 
 class QAbstractButton;

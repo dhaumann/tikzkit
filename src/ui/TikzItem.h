@@ -22,7 +22,7 @@
 
 #include <QGraphicsObject>
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 class TikzItemPrivate;
 

@@ -22,8 +22,8 @@
 
 #include <QGraphicsScene>
 
-#include "tikzgui_export.h"
-#include "tikzgui.h"
+#include "tikzui_export.h"
+#include "tikzui.h"
 
 namespace tikz {
 namespace ui {

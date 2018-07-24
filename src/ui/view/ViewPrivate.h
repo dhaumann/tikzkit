@@ -20,7 +20,7 @@
 #ifndef TIKZ_UI_VIEW_PRIVATE_H
 #define TIKZ_UI_VIEW_PRIVATE_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 #include "View.h"
 
 #include <tikz/core/Value.h>

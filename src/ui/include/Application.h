@@ -21,7 +21,7 @@
 #ifndef TIKZUI_APPLICATION_H
 #define TIKZUI_APPLICATION_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 #include <QObject>
 #include <QVector>
 

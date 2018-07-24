@@ -23,7 +23,7 @@
 #include <QPointF>
 #include <QPainterPath>
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 class TIKZUI_EXPORT BezierCurve
 {

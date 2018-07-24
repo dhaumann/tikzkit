@@ -20,7 +20,7 @@
 #ifndef TIKZ_UI_NODE_ITEM_H
 #define TIKZ_UI_NODE_ITEM_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include "TikzItem.h"
 

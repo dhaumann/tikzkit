@@ -20,7 +20,7 @@
 #ifndef ICON_COMBOBOX_H
 #define ICON_COMBOBOX_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <QComboBox>
 

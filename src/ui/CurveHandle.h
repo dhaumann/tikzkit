@@ -20,7 +20,7 @@
 #ifndef TIKZ_UI_CURVE_HANDLE_H
 #define TIKZ_UI_CURVE_HANDLE_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <tikz/core/tikz.h>
 

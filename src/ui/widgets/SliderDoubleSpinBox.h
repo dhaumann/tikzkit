@@ -20,7 +20,7 @@
 #ifndef TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 #define TIKZUI_SLIDER_DOUBLE_SPINBOX_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <QDoubleSpinBox>
 

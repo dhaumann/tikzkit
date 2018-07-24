@@ -20,8 +20,8 @@
 #ifndef TIKZ_UI_DOCUMENT_PRIVATE_H
 #define TIKZ_UI_DOCUMENT_PRIVATE_H
 
-#include "tikzgui.h"
-#include "tikzgui_export.h"
+#include "tikzui.h"
+#include "tikzui_export.h"
 
 #include "Document.h"
 #include <tikz/core/MetaPos.h>

@@ -20,7 +20,7 @@
 #ifndef TIKZ_UI_ABSTRACT_TOOL_H
 #define TIKZ_UI_ABSTRACT_TOOL_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 #include <QObject>
 
 class QGraphicsSceneMouseEvent;

@@ -22,7 +22,7 @@
 
 #include <QGraphicsView>
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <tikz/core/Value.h>
 #include <tikz/core/Pos.h>

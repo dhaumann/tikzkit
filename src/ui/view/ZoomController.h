@@ -19,7 +19,7 @@
 #ifndef TIKZUI_ZOOM_CONTROLLER_H
 #define TIKZUI_ZOOM_CONTROLLER_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <QObject>
 #include <QPointer>

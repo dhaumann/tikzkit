@@ -20,7 +20,7 @@
 #ifndef QTIKZGUI_ARROW_COMBO_BOX_H
 #define QTIKZGUI_ARROW_COMBO_BOX_H
 
-#include "tikzgui_export.h"
+#include "tikzui_export.h"
 
 #include <QWidget>
 
