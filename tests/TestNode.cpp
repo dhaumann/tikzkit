@@ -36,7 +36,7 @@ void NodeTest::cleanupTestCase()
 void NodeTest::testPos()
 {
     tikz::core::Document doc;
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
     // initially (0, 0)
     QCOMPARE(n->pos(), tikz::Pos(0, 0));

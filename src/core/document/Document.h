@@ -321,6 +321,15 @@ class TIKZCORE_EXPORT Document : public Entity
         Entity * createEntity(tikz::EntityType type);
 
         /**
+         * Templated helper function for creating entities.
+         */
+        template<typename T>
+        T * createEntity(tikz::EntityType type)
+        {
+            return qobject_cast<T*>(createEntity(type));
+        }
+
+        /**
          * Remove @p entity from the document by deleting the entity object.
          * Afterwards, the pointer is invalid.
          * @param entity entity to delete

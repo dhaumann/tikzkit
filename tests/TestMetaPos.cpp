@@ -74,7 +74,7 @@ void MetaPosTest::testMetaPosWithNode()
 {
     tikz::core::Document doc;
     tikz::core::MetaPos m(&doc);
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
     // set distinct node position
     n->setPos(tikz::Pos(5, 5));
@@ -138,7 +138,7 @@ void MetaPosTest::testSet0()
 {
     tikz::core::Document doc;
     tikz::core::MetaPos m(&doc);
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
 
     // set distinct node position
@@ -178,7 +178,7 @@ void MetaPosTest::testMetaPosPtr()
     QVERIFY(m1 != m2);
 
     // now test with Node
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
 
     m1->setNode(n);
@@ -193,7 +193,7 @@ void MetaPosTest::testToString()
 {
     tikz::core::Document doc;
     tikz::core::MetaPos m(&doc);
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
 
     QCOMPARE(n->uid(), tikz::core::Uid(1, &doc));
@@ -230,7 +230,7 @@ void MetaPosTest::testFromString()
 {
     tikz::core::Document doc;
     tikz::core::MetaPos m(&doc);
-    tikz::core::Node * n = qobject_cast<tikz::core::Node*>(doc.createEntity(tikz::EntityType::Node));
+    auto n = doc.createEntity<tikz::core::Node>(tikz::EntityType::Node);
 
     QCOMPARE(n->uid(), tikz::core::Uid(1, &doc));
     m.fromString("(-3cm, 4cm)");
