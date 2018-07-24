@@ -17,7 +17,7 @@ target_compile_options(tikzkit PRIVATE -Wall)
 target_include_directories(tikzkit
     PRIVATE
     .
-    ${CMAKE_SOURCE_DIR}/src/include
+    ${CMAKE_BINARY_DIR}/include
 )
 
 target_link_libraries(tikzkit

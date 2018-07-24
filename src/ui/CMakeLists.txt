@@ -112,7 +112,7 @@ target_link_libraries(qtikzui
 target_include_directories(qtikzui
     PRIVATE
     .
-    ${CMAKE_SOURCE_DIR}/src/include
+    ${CMAKE_BINARY_DIR}/include
 
     ${CMAKE_SOURCE_DIR}/src/ui/tools
     ${CMAKE_SOURCE_DIR}/src/ui/handle

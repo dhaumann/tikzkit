@@ -15,6 +15,27 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
+# prepare include folder in build dir: include/tikz/core/*.h
+file(GLOB_RECURSE ALL_HEADERS ${CMAKE_SOURCE_DIR}/src/core/*.h)
+foreach(header ${ALL_HEADERS})
+    file(STRINGS "${header}" lines REGEX "TIKZCORE_EXPORT")
+    if(lines)
+        file(COPY ${header}
+             DESTINATION ${CMAKE_BINARY_DIR}/include/tikz/core/)
+    endif()
+endforeach()
+
+# prepare include folder in build dir: include/tikz/ui/*.h
+file(GLOB_RECURSE ALL_HEADERS ${CMAKE_SOURCE_DIR}/src/ui/*.h)
+foreach(header ${ALL_HEADERS})
+    file(STRINGS "${header}" lines REGEX "TIKZUI_EXPORT")
+    if(lines)
+        file(COPY ${header}
+             DESTINATION ${CMAKE_BINARY_DIR}/include/tikz/ui/)
+    endif()
+endforeach()
+
+
 add_subdirectory(src/core)
 add_subdirectory(src/qtpropertybrowser/src)
 add_subdirectory(src/ui)

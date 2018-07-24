@@ -1,6 +1,5 @@
 project(qtikzcore)
 
-# find Qt5 modules
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
 add_library(qtikzcore SHARED
