@@ -48,8 +48,6 @@ add_library(qtikzcore SHARED
     undo/Transaction.cpp
 
     node/Node.cpp
-    node/UndoCreateNode.cpp
-    node/UndoDeleteNode.cpp
     node/UndoSetNodePos.cpp
     node/UndoSetNodeText.cpp
     node/UndoSetNodeStyle.cpp

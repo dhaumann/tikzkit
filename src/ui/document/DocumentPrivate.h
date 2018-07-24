@@ -180,14 +180,14 @@ class DocumentPrivate : public tikz::ui::Document
     //
     protected:
         /**
-         * Create a new node associated with this document with @p uid.
+         * Create a new entity of @p type associated with this document with @p uid.
          */
-        tikz::core::Node * createNode(const tikz::core::Uid & uid) override;
+        tikz::core::Entity * createEntity(const tikz::core::Uid & uid, EntityType type) override;
 
         /**
-         * Delete node @p uid associated with this document.
+         * Delete entity @p uid associated with this document.
          */
-        void deleteNode(const tikz::core::Uid & uid) override;
+        void deleteEntity(const tikz::core::Uid & uid) override;
 
         /**
          * Create a new path associated with this document with @p uid.

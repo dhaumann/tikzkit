@@ -328,19 +328,6 @@ class TIKZCORE_EXPORT Document : public Entity
         void deleteEntity(Entity * entity);
 
         /**
-         * Creates a new node associated with this document.
-         * If the node is not needed anymore, delete it with deleteNode().
-         */
-        Node * createNode();
-
-        /**
-         * Remove @p node from the document by deleting the node object.
-         * Afterwards, the pointer is invalid.
-         * @param node node to delete
-         */
-        void deleteNode(Node * node);
-
-        /**
          * Creates a new path associated with this document.
          * If the path is not needed anymore, delete it with deletePath().
          * @param type the path type
@@ -369,16 +356,6 @@ class TIKZCORE_EXPORT Document : public Entity
         virtual void deleteEntity(const Uid & uid);
 
         /**
-         * Create a new node associated with this document with @p uid.
-         */
-        virtual Node * createNode(const Uid & uid);
-
-        /**
-         * Delete node @p uid associated with this document.
-         */
-        virtual void deleteNode(const Uid & uid);
-
-        /**
          * Create a new path associated with this document with @p uid.
          */
         virtual Path * createPath(PathType type, const Uid & uid);
@@ -404,8 +381,6 @@ class TIKZCORE_EXPORT Document : public Entity
         // uddo/redo system
         friend class UndoCreateEntity;
         friend class UndoDeleteEntity;
-        friend class UndoCreateNode;
-        friend class UndoDeleteNode;
         friend class UndoCreatePath;
         friend class UndoDeletePath;
 };

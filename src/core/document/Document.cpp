@@ -22,13 +22,13 @@
 #include "EdgePath.h"
 #include "EllipsePath.h"
 #include "Style.h"
+#include "NodeStyle.h"
+#include "EdgeStyle.h"
 
 #include "Transaction.h"
 #include "UndoManager.h"
 #include "UndoFactory.h"
 #include "UndoGroup.h"
-#include "UndoCreateNode.h"
-#include "UndoDeleteNode.h"
 #include "UndoCreatePath.h"
 #include "UndoDeletePath.h"
 #include "UndoCreateEntity.h"
@@ -622,97 +622,6 @@ void Document::deleteEntity(Entity * e)
 }
 
 void Document::deleteEntity(const Uid & uid)
-{
-    // valid input?
-    Q_ASSERT(uid.isValid());
-    Q_ASSERT(d->entityMap.contains(uid));
-
-    // get entity
-    auto it = d->entityMap.find(uid);
-    if (it != d->entityMap.end()) {
-        const auto entity = *it;
-
-        // unregister entity
-        d->entityMap.erase(it);
-        Q_ASSERT(d->entities.contains(entity));
-        d->entities.erase(std::find(d->entities.begin(), d->entities.end(), entity));
-
-        // truly delete node
-        delete entity;
-    }
-}
-
-Node* Document::createNode()
-{
-    // create new node, push will call ::redo()
-    const Uid uid(d->uniqueId(), this);
-    addUndoItem(new UndoCreateNode(uid, this));
-
-    // now the node should be in the map
-    const auto it = d->entityMap.find(uid);
-    if (it != d->entityMap.end()) {
-        return dynamic_cast<Node *>(*it);
-    }
-
-    // requested id not in map, this is a bug, since UndoCreatePath should
-    // call createPath(int) that inserts the Entity
-    Q_ASSERT(false);
-
-    return nullptr;
-}
-
-Node * Document::createNode(const Uid & uid)
-{
-    Q_ASSERT(uid.isValid());
-    Q_ASSERT(uid.document() == this);
-    Q_ASSERT(!d->entityMap.contains(uid));
-
-    // create new node
-    auto node = new Node(uid);
-    d->entities.append(node);
-
-    // insert node into hash map
-    d->entityMap.insert(uid, node);
-
-    // propagate changed signal
-    connect(node, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
-
-    return node;
-}
-
-void Document::deleteNode(Node * node)
-{
-    // valid input?
-    Q_ASSERT(node != nullptr);
-    Q_ASSERT(d->entityMap.contains(node->uid()));
-
-    // get edge id
-    const Uid uid = node->uid();
-
-    // start undo group
-    d->undoManager->startTransaction("Remove node");
-
-    // make sure no edge points to the deleted node
-    for (auto entity : d->entities) {
-        if (auto path = dynamic_cast<Path *>(entity)) {
-            path->detachFromNode(node);
-        }
-
-        // TODO: a path might require the node?
-        //       in that case, maybe delete the path as well?
-    }
-
-    // delete node, push will call ::redo()
-    addUndoItem(new UndoDeleteNode(uid, this));
-
-    // end undo group
-    d->undoManager->commitTransaction();
-
-    // node really removed?
-    Q_ASSERT(!d->entityMap.contains(uid));
-}
-
-void Document::deleteNode(const Uid & uid)
 {
     // valid input?
     Q_ASSERT(uid.isValid());

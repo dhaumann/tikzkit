@@ -71,7 +71,7 @@ void DeserializeVisitor::visit(Document * doc)
     // aggregate node ids
     QStringList list = m_root["node-ids"].toString().split(", ");
     foreach (const QString & uid, list) {
-        doc->createNode(Uid(uid, doc));
+        doc->createEntity(Uid(uid, doc), tikz::EntityType::Node);
     }
 
     // aggregate edge ids

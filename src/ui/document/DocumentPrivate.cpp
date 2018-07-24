@@ -462,7 +462,7 @@ QVector<PathItem*> DocumentPrivate::pathItems() const
 NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
-    tikz::core::Node * node = Document::createNode();
+    tikz::core::Node * node = qobject_cast<tikz::core::Node*>(Document::createEntity(tikz::EntityType::Node));
     Q_ASSERT(m_nodeMap.contains(node->uid()));
 
     return m_nodeMap[node->uid()];
@@ -482,7 +482,7 @@ void DocumentPrivate::deleteNodeItem(NodeItem * node)
     // delete node from id
     const auto uid = node->uid();
     Q_ASSERT(m_nodeMap.contains(uid));
-    Document::deleteNode(node->node());
+    Document::deleteEntity(node->node());
     Q_ASSERT(! m_nodeMap.contains(uid));
 }
 
@@ -495,43 +495,74 @@ void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
     Q_ASSERT(! m_pathMap.contains(uid));
 }
 
-tikz::core::Node * DocumentPrivate::createNode(const tikz::core::Uid & uid)
+tikz::core::Entity * DocumentPrivate::createEntity(const tikz::core::Uid & uid, EntityType type)
 {
-    // create node by tikz::core::Document
-    tikz::core::Node * node = Document::createNode(uid);
-    Q_ASSERT(uid == node->uid());
-    Q_ASSERT(! m_nodeMap.contains(uid));
+    // create entity by tikz::core::Document
+    auto entity = Document::createEntity(uid, type);
 
-    // create GUI item
-    NodeItem * nodeItem = new NodeItem(node);
-    m_nodes.append(nodeItem);
-    m_nodeMap.insert(uid, nodeItem);
+    switch (type) {
+        case tikz::EntityType::Node: {
+            auto node = qobject_cast<tikz::core::Node *>(entity);
+            Q_ASSERT(uid == node->uid());
+            Q_ASSERT(! m_nodeMap.contains(uid));
 
-    // add to graphics scene
-    m_scene->addItem(nodeItem);
+            // create GUI item
+            NodeItem * nodeItem = new NodeItem(node);
+            m_nodes.append(nodeItem);
+            m_nodeMap.insert(uid, nodeItem);
 
-    return node;
+            // add to graphics scene
+            m_scene->addItem(nodeItem);
+
+            break;
+        }
+        case tikz::EntityType::Path:
+            Q_ASSERT(false); // not implemented
+            break;
+        case tikz::EntityType::Style:
+        case tikz::EntityType::NodeStyle:
+        case tikz::EntityType::EdgeStyle:
+            // nothing to do
+            break;
+        default: Q_ASSERT(false);
+    }
+
+    return entity;
 }
 
-void DocumentPrivate::deleteNode(const tikz::core::Uid & uid)
+void DocumentPrivate::deleteEntity(const tikz::core::Uid & uid)
 {
-    Q_ASSERT(m_nodeMap.contains(uid));
+    switch (uid.entityType()) {
+        case tikz::EntityType::Node: {
+            Q_ASSERT(m_nodeMap.contains(uid));
 
-    // get NodeItem
-    NodeItem * nodeItem = m_nodeMap[uid];
+            // get NodeItem
+            NodeItem * nodeItem = m_nodeMap[uid];
 
-    // remove from scene
-    m_scene->removeItem(nodeItem);
+            // remove from scene
+            m_scene->removeItem(nodeItem);
 
-    const int index = m_nodes.indexOf(nodeItem);
-    Q_ASSERT(index >= 0);
+            const int index = m_nodes.indexOf(nodeItem);
+            Q_ASSERT(index >= 0);
 
-    // delete item
-    m_nodeMap.remove(uid);
-    m_nodes.remove(index);
-    delete nodeItem;
+            // delete item
+            m_nodeMap.remove(uid);
+            m_nodes.remove(index);
+            delete nodeItem;
+            break;
+        }
+        case tikz::EntityType::Path:
+            Q_ASSERT(false); // not implemented
+            break;
+        case tikz::EntityType::Style:
+        case tikz::EntityType::NodeStyle:
+        case tikz::EntityType::EdgeStyle:
+            // nothing to do
+            break;
+        default: Q_ASSERT(false);
+    }
 
-    tikz::core::Document::deleteNode(uid);
+    tikz::core::Document::deleteEntity(uid);
 }
 
 tikz::core::Path * DocumentPrivate::createPath(tikz::PathType type, const tikz::core::Uid & uid)

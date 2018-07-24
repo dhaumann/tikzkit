@@ -20,8 +20,8 @@
 #include "UndoFactory.h"
 #include "Document.h"
 
-#include "UndoCreateNode.h"
-#include "UndoDeleteNode.h"
+#include "UndoCreateEntity.h"
+#include "UndoDeleteEntity.h"
 #include "UndoSetNodePos.h"
 #include "UndoSetNodeStyle.h"
 #include "UndoSetNodeStyle.h"
@@ -66,10 +66,10 @@ UndoItem * UndoFactory::createItem(const QString & type)
         return nullptr;
     }
 
-    if (type == "node-create") {
-        return new UndoCreateNode(document());
-    } else if (type == "node-delete") {
-        return new UndoDeleteNode(document());
+    if (type == "entity-create") {
+        return new UndoCreateEntity(document());
+    } else if (type == "entity-delete") {
+        return new UndoDeleteEntity(document());
     } else if (type == "node-set-pos") {
         return new UndoSetNodePos(document());
     } else if (type == "node-set-style") {
