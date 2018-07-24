@@ -11,13 +11,13 @@ Please join tikzkit development to quickly get to a usable state.
 
 ## Architecture
 
-TikZKit is written in C++11 and Qt5.
+TikZKit is written in modern C++ and Qt5.
 It is organized in two libraries following the model/view concept, and the application:
-1. tikzcore: This library provides the model. The model entirely defines a TikZ
-   picture. The model itself is represented by the class tikz::core::Document.
+1. tikzcore: This library provides the data model. The model entirely defines a
+   TikZ picture. The model itself is represented by the class tikz::core::Document.
 2. tikzui: This library provides the view. It renders the scene by using the
    QGraphicsView based on a tikz::core::Document.
-3. TikZKit: The application is a thiin wrapper around the libraries tikzcore and
+3. TikZKit: The application is a thin wrapper around the libraries tikzcore and
    tikzui.
 
 ## TODO List for a first tikzkit 1.0 release (incomplete)
@@ -45,11 +45,7 @@ It is organized in two libraries following the model/view concept, and the appli
 - introduce tikz::Editor: add EntityFactoryInterface similar to
   KTE::CommandInterface, add class EntityFactory that returns a list of
   QStrings ("node-rectangle", ... ?
-- Introduce AbstractNode and AbstractPath (and SimpleNode, SimplePath), or rather: AbstractEntity ?
 - implement pseudo-plugin that uses the EntityFactory
-- remove tikz::EntityType in favour of just one AbstractEntity class
-- (done) logging: Editor::log(LogLevel, text) (LogLevel: Debug, Info, Warning, Error)
-- (done) anchors auf QStrings umstellen, so nennen wie in tikz (NoAnchor == empty string)
 
 - tikz::core::Path (priority: high)
   - add support for rectangle primitive
