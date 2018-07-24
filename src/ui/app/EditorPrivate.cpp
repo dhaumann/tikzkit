@@ -48,6 +48,7 @@ EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     qRegisterMetaType<tikz::PenStyle>("PenStyle");
     qRegisterMetaType<tikz::Shape>("Shape");
     qRegisterMetaType<tikz::TextAlignment>("TextAlignment");
+    qRegisterMetaType<tikz::Unit>("Unit");
     qRegisterMetaType<tikz::Pos>("Pos");
     qRegisterMetaType<tikz::Value>("Value");
     qRegisterMetaType<tikz::core::Style*>("Style*");

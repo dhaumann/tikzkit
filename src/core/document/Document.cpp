@@ -730,7 +730,7 @@ Entity * Document::entity(const tikz::core::Uid & uid) const
     }
 
     // Uid 1 alreay refers to this Document's Style
-    if (uid.id() == 0) {
+    if (uid.id() == 1) {
         return d->style;
     }
 
