@@ -1,5 +1,17 @@
 {
     "properties" : {
+        "objectName" : {
+            "type" : "string",
+            "title" : "Name",
+            "description" : "Internal entity ID",
+            "modified" : "objectNameSet",
+            "reset" : "unsetObjectName"
+        },
+        "uid" : {
+            "type" : "uid",
+            "title" : "Internal ID",
+            "description" : "Internal entity ID"
+        },
         "doubleLine" : {
             "type" : "bool",
             "title" : "Double Line",

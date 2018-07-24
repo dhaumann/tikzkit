@@ -82,6 +82,7 @@ set(qtikzui_SOURCES
     propertybrowser/OpacityPropertyManager.cpp
     propertybrowser/OpacityEditorFactory.cpp
     propertybrowser/OpacityEditor.cpp
+    propertybrowser/UidPropertyManager.cpp
 )
 
 set(qtikzui_FORMS )

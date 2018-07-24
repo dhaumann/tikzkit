@@ -568,11 +568,31 @@ Entity * Document::createEntity(const Uid & uid, EntityType type)
     Entity * e = nullptr;
     switch (type) {
         case EntityType::Document: Q_ASSERT(false); break;
-        case EntityType::Style: e = new Style(uid); break;
-        case EntityType::NodeStyle: e = new NodeStyle(uid); break;
-        case EntityType::EdgeStyle: e = new EdgeStyle(uid); break;
-        case EntityType::Node: e = new Node(uid); break;
-        case EntityType::Path: e = new Path(uid); break;
+        case EntityType::Style: {
+            e = new Style(uid);
+            e->setObjectName("Style " + uid.toString());
+            break;
+        }
+        case EntityType::NodeStyle: {
+            e = new NodeStyle(uid);
+            e->setObjectName("Style " + uid.toString());
+            break;
+        }
+        case EntityType::EdgeStyle: {
+            e = new EdgeStyle(uid);
+            e->setObjectName("Style " + uid.toString());
+            break;
+        }
+        case EntityType::Node: {
+            e = new Node(uid);
+            e->setObjectName("Node " + uid.toString());
+            break;
+        }
+        case EntityType::Path: {
+            e = new Path(uid);
+            e->setObjectName("Path " + uid.toString());
+            break;
+        }
     }
 
     Q_ASSERT(e);

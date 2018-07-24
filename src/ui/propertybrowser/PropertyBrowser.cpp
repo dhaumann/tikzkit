@@ -22,6 +22,7 @@
 #include "ValueSpinBoxFactory.h"
 #include "OpacityEditorFactory.h"
 #include "OpacityPropertyManager.h"
+#include "UidPropertyManager.h"
 
 #include <tikz/core/Uid.h>
 #include <tikz/core/Document.h>
@@ -120,6 +121,7 @@ public:
     QtDoublePropertyManager * doubleManager = nullptr;
     QtEnumPropertyManager * enumManager = nullptr;
     QtStringPropertyManager * stringManager = nullptr;
+    UidPropertyManager * uidManager = nullptr;
 
     QPointer<View> view = nullptr;
     tikz::core::Uid uid;
@@ -165,6 +167,10 @@ public:
         if (type == "string") {
             property = stringManager->addProperty(info.title(name));
             stringManager->setValue(property, prop.toString());
+        }
+        else if (type == "uid") {
+            property = uidManager->addProperty(info.title(name));
+            uidManager->setValue(property, prop.value<tikz::core::Uid>());
         }
         else if (type == "value") {
             property = valueManager->addProperty(info.title(name));
@@ -260,6 +266,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->doubleManager = new QtDoublePropertyManager(this);
     d->enumManager = new QtEnumPropertyManager(this);
     d->stringManager = new QtStringPropertyManager(this);
+    d->uidManager = new UidPropertyManager(this);
 
     // setup propertybrowser
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
@@ -269,6 +276,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->browser->setFactoryForManager(d->doubleManager, new QtDoubleSpinBoxFactory(this));
     d->browser->setFactoryForManager(d->enumManager, new QtEnumEditorFactory(this));
     d->browser->setFactoryForManager(d->stringManager, new QtLineEditFactory(this));
+//  d->uidManager: Uids are read-only, no editor required
 
     d->browser->setPropertiesWithoutValueMarked(true);
     d->browser->setRootIsDecorated(false);
@@ -289,6 +297,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
             this, SLOT(enumValueChanged(QtProperty*, int)));
     connect(d->stringManager, SIGNAL(valueChanged(QtProperty*, QString)),
             this, SLOT(valueChanged(QtProperty*, QString)));
+    // d->uidManager: read-only, no connection required
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -349,6 +358,7 @@ void PropertyBrowser::setItem(const tikz::core::Uid & uid)
     d->doubleManager->clear();
     d->enumManager->clear();
     d->stringManager->clear();
+    d->uidManager->clear();
     d->propertyMap.clear();
 
     auto style = styleForItem(d->uid);

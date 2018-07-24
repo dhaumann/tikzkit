@@ -51,6 +51,7 @@ EditorPrivate::EditorPrivate(QPointer<tikz::ui::EditorPrivate> &staticInstance)
     qRegisterMetaType<tikz::Pos>("Pos");
     qRegisterMetaType<tikz::Value>("Value");
     qRegisterMetaType<tikz::core::Style*>("Style*");
+    qRegisterMetaType<tikz::core::Uid>("Uid");
 }
 
 EditorPrivate::~EditorPrivate()
