@@ -56,6 +56,16 @@ Uid Entity::uid() const
     return d->uid;
 }
 
+bool Entity::objectNameSet() const
+{
+    return !objectName().isEmpty();
+}
+
+void Entity::unsetObjectName()
+{
+    setObjectName(QString());
+}
+
 void Entity::load(const QJsonObject & json)
 {
     if (json.contains("uid")) {

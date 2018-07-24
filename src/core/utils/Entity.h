@@ -69,6 +69,17 @@ class TIKZCORE_EXPORT Entity : public ConfigObject
          */
         Document * document() const;
 
+    public:
+        /**
+         * Helper function that returns true if the object name is empty.
+         */
+        Q_INVOKABLE bool objectNameSet() const;
+
+        /**
+         * Helper function that always returns true for the object name;
+         */
+        Q_INVOKABLE void unsetObjectName();
+
     //
     // serialization
     //

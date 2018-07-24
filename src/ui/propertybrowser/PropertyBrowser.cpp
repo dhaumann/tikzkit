@@ -119,6 +119,7 @@ public:
     OpacityPropertyManager * opacityManager = nullptr;
     QtDoublePropertyManager * doubleManager = nullptr;
     QtEnumPropertyManager * enumManager = nullptr;
+    QtStringPropertyManager * stringManager = nullptr;
 
     QPointer<View> view = nullptr;
     tikz::core::Uid uid;
@@ -161,7 +162,11 @@ public:
         QtProperty *property = nullptr;
 
         const QString type = info.type(name);
-        if (type == "value") {
+        if (type == "string") {
+            property = stringManager->addProperty(info.title(name));
+            stringManager->setValue(property, prop.toString());
+        }
+        else if (type == "value") {
             property = valueManager->addProperty(info.title(name));
             valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
             valueManager->setMinimum(property, tikz::Value::fromString(info.minimum(name).toString()));
@@ -254,6 +259,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->opacityManager = new OpacityPropertyManager(this);
     d->doubleManager = new QtDoublePropertyManager(this);
     d->enumManager = new QtEnumPropertyManager(this);
+    d->stringManager = new QtStringPropertyManager(this);
 
     // setup propertybrowser
     d->browser->setFactoryForManager(d->valueManager, new ValueSpinBoxFactory(this));
@@ -262,6 +268,7 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
     d->browser->setFactoryForManager(d->opacityManager, new OpacityEditorFactory(this));
     d->browser->setFactoryForManager(d->doubleManager, new QtDoubleSpinBoxFactory(this));
     d->browser->setFactoryForManager(d->enumManager, new QtEnumEditorFactory(this));
+    d->browser->setFactoryForManager(d->stringManager, new QtLineEditFactory(this));
 
     d->browser->setPropertiesWithoutValueMarked(true);
     d->browser->setRootIsDecorated(false);
@@ -280,6 +287,8 @@ PropertyBrowser::PropertyBrowser(QWidget *parent)
             this, SLOT(doubleValueChanged(QtProperty*, double)));
     connect(d->enumManager, SIGNAL(valueChanged(QtProperty*, int)),
             this, SLOT(enumValueChanged(QtProperty*, int)));
+    connect(d->stringManager, SIGNAL(valueChanged(QtProperty*, QString)),
+            this, SLOT(valueChanged(QtProperty*, QString)));
 }
 
 PropertyBrowser::~PropertyBrowser()
@@ -339,6 +348,7 @@ void PropertyBrowser::setItem(const tikz::core::Uid & uid)
     d->opacityManager->clear();
     d->doubleManager->clear();
     d->enumManager->clear();
+    d->stringManager->clear();
     d->propertyMap.clear();
 
     auto style = styleForItem(d->uid);
@@ -468,6 +478,25 @@ void PropertyBrowser::doubleValueChanged(QtProperty *property, double val)
 }
 
 void PropertyBrowser::enumValueChanged(QtProperty *property, int val)
+{
+    // if items are inserted, the slot valueChanged() is also called.
+    // In this case, the item is not yet registered in the map. Hence,
+    // we just return.
+    if (! d->propertyMap.contains(property)) {
+        return;
+    }
+
+    auto style = styleForItem(d->uid);
+    QString name = d->propertyMap[property];
+    if (style) {
+        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+            style->setProperty(name.toLatin1(), val);
+            property->setModified(true);
+        }
+    }
+}
+
+void PropertyBrowser::valueChanged(QtProperty *property, const QString & val)
 {
     // if items are inserted, the slot valueChanged() is also called.
     // In this case, the item is not yet registered in the map. Hence,
