@@ -81,28 +81,28 @@ void NodeStyle::loadData(const QJsonObject & json)
 
     Style::loadData(json);
 
-    if (json.contains("text-align")) {
-        setTextAlign(toEnum<TextAlignment>(json["text-align"].toString()));
+    if (json.contains("textAlign")) {
+        setTextAlign(toEnum<TextAlignment>(json["textAlign"].toString()));
     }
 
     if (json.contains("shape")) {
         setShape(toEnum<Shape>(json["shape"].toString()));
     }
 
-    if (json.contains("minimum-width")) {
-        setMinimumWidth(tikz::Value::fromString(json["minimum-width"].toString()));
+    if (json.contains("minimumWidth")) {
+        setMinimumWidth(tikz::Value::fromString(json["minimumWidth"].toString()));
     }
 
-    if (json.contains("minimum-height")) {
-        setMinimumHeight(tikz::Value::fromString(json["minimum-height"].toString()));
+    if (json.contains("minimumHeight")) {
+        setMinimumHeight(tikz::Value::fromString(json["minimumHeight"].toString()));
     }
 
-    if (json.contains("inner-sep")) {
-        setInnerSep(tikz::Value::fromString(json["inner-sep"].toString()));
+    if (json.contains("innerSep")) {
+        setInnerSep(tikz::Value::fromString(json["innerSep"].toString()));
     }
 
-    if (json.contains("outer-sep")) {
-        setOuterSep(tikz::Value::fromString(json["outer-sep"].toString()));
+    if (json.contains("outerSep")) {
+        setOuterSep(tikz::Value::fromString(json["outerSep"].toString()));
     }
 }
 
@@ -111,7 +111,7 @@ QJsonObject NodeStyle::saveData() const
     QJsonObject json = Style::saveData();
 
     if (textAlignSet()) {
-        json["text-align"] = toString(textAlign());
+        json["textAlign"] = toString(textAlign());
     }
 
     if (shapeSet()) {
@@ -119,19 +119,19 @@ QJsonObject NodeStyle::saveData() const
     }
 
     if (minimumWidthSet()) {
-        json["minimum-width"] = minimumWidth().toString();
+        json["minimumWidth"] = minimumWidth().toString();
     }
 
     if (minimumHeightSet()) {
-        json["minimum-height"] = minimumHeight().toString();
+        json["minimumHeight"] = minimumHeight().toString();
     }
 
     if (innerSepSet()) {
-        json["inner-sep"] = innerSep().toString();
+        json["innerSep"] = innerSep().toString();
     }
 
     if (outerSepSet()) {
-        json["outer-sep"] = outerSep().toString();
+        json["outerSep"] = outerSep().toString();
     }
 
     return json;

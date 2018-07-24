@@ -91,44 +91,44 @@ void EdgeStyle::loadData(const QJsonObject & json)
 
     Style::loadData(json);
 
-    if (json.contains("radius-x")) {
-        setRadiusX(tikz::Value::fromString(json["radius-x"].toString()));
+    if (json.contains("radiusX")) {
+        setRadiusX(tikz::Value::fromString(json["radiusX"].toString()));
     }
 
-    if (json.contains("radius-y")) {
-        setRadiusY(tikz::Value::fromString(json["radius-y"].toString()));
+    if (json.contains("radiusY")) {
+        setRadiusY(tikz::Value::fromString(json["radiusY"].toString()));
     }
 
-    if (json.contains("bend-angle")) {
-        setBendAngle(json["bend-angle"].toDouble());
+    if (json.contains("bendAngle")) {
+        setBendAngle(json["bendAngle"].toDouble());
     }
 
     if (json.contains("looseness")) {
         setLooseness(json["looseness"].toDouble());
     }
 
-    if (json.contains("out-angle")) {
-        setOutAngle(json["out-angle"].toDouble());
+    if (json.contains("outAngle")) {
+        setOutAngle(json["outAngle"].toDouble());
     }
 
-    if (json.contains("in-angle")) {
-        setInAngle(json["in-angle"].toDouble());
+    if (json.contains("inAngle")) {
+        setInAngle(json["inAngle"].toDouble());
     }
 
-    if (json.contains("arrow-tail")) {
-        setArrowTail(toEnum<Arrow>(json["arrow-tail"].toString()));
+    if (json.contains("arrowTail")) {
+        setArrowTail(toEnum<Arrow>(json["arrowTail"].toString()));
     }
 
-    if (json.contains("arrow-head")) {
-        setArrowHead(toEnum<Arrow>(json["arrow-head"].toString()));
+    if (json.contains("arrowHead")) {
+        setArrowHead(toEnum<Arrow>(json["arrowHead"].toString()));
     }
 
-    if (json.contains("shorten-start")) {
-        setShortenStart(tikz::Value::fromString(json["shorten-start"].toString()));
+    if (json.contains("shortenStart")) {
+        setShortenStart(tikz::Value::fromString(json["shortenStart"].toString()));
     }
 
-    if (json.contains("shorten-end")) {
-        setShortenEnd(tikz::Value::fromString(json["shorten-end"].toString()));
+    if (json.contains("shortenEnd")) {
+        setShortenEnd(tikz::Value::fromString(json["shortenEnd"].toString()));
     }
 }
 
@@ -137,15 +137,15 @@ QJsonObject EdgeStyle::saveData() const
     QJsonObject json = Style::saveData();
 
     if (radiusXSet()) {
-        json["radius-x"] = radiusX().toString();
+        json["radiusX"] = radiusX().toString();
     }
 
     if (radiusYSet()) {
-        json["radius-y"] = radiusY().toString();
+        json["radiusY"] = radiusY().toString();
     }
 
     if (bendAngleSet()) {
-        json["bend-angle"] = bendAngle();
+        json["bendAngle"] = bendAngle();
     }
 
     if (loosenessSet()) {
@@ -153,27 +153,27 @@ QJsonObject EdgeStyle::saveData() const
     }
 
     if (outAngleSet()) {
-        json["out-angle"] = outAngle();
+        json["outAngle"] = outAngle();
     }
 
     if (inAngleSet()) {
-        json["in-angle"] = inAngle();
+        json["inAngle"] = inAngle();
     }
 
     if (arrowTailSet()) {
-        json["arrow-tail"] = toString(arrowTail());
+        json["arrowTail"] = toString(arrowTail());
     }
 
     if (arrowHeadSet()) {
-        json["arrow-head"] = toString(arrowHead());
+        json["arrowHead"] = toString(arrowHead());
     }
 
     if (shortenStartSet()) {
-        json["shorten-start"] = shortenStart().toString();
+        json["shortenStart"] = shortenStart().toString();
     }
 
     if (shortenEndSet()) {
-        json["shorten-end"] = shortenEnd().toString();
+        json["shortenEnd"] = shortenEnd().toString();
     }
 
     return json;

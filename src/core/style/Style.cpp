@@ -136,41 +136,41 @@ void Style::loadData(const QJsonObject & json)
         d->parent = document()->style()->findStyle(styleId);
     }
 
-    if (json.contains("pen-color")) {
-        setPenColor(json["pen-color"].toString());
+    if (json.contains("penColor")) {
+        setPenColor(json["penColor"].toString());
     }
 
-    if (json.contains("fill-color")) {
-        setFillColor(json["fill-color"].toString());
+    if (json.contains("fillColor")) {
+        setFillColor(json["fillColor"].toString());
     }
 
-    if (json.contains("pen-opacity")) {
-        setPenOpacity(json["pen-opacity"].toDouble());
+    if (json.contains("penOpacity")) {
+        setPenOpacity(json["penOpacity"].toDouble());
     }
 
-    if (json.contains("fill-opacity")) {
-        setFillOpacity(json["fill-opacity"].toDouble());
+    if (json.contains("fillOpacity")) {
+        setFillOpacity(json["fillOpacity"].toDouble());
     }
 
-    if (json.contains("pen-style")) {
-        setPenStyle(toEnum<PenStyle>(json["pen-style"].toString()));
+    if (json.contains("penStyle")) {
+        setPenStyle(toEnum<PenStyle>(json["penStyle"].toString()));
     }
 
-    if (json.contains("line-width")) {
-        setLineWidth(Value::fromString(json["line-width"].toString()));
+    if (json.contains("lineWidth")) {
+        setLineWidth(Value::fromString(json["lineWidth"].toString()));
     }
     // FIXME line type, inner line type?
 
-    if (json.contains("double-line")) {
-        setDoubleLine(json["double-line"].toBool());
+    if (json.contains("doubleLine")) {
+        setDoubleLine(json["doubleLine"].toBool());
     }
 
-    if (json.contains("inner-line-width")) {
-        setInnerLineWidth(Value::fromString(json["inner-line-width"].toString()));
+    if (json.contains("innerLineWidth")) {
+        setInnerLineWidth(Value::fromString(json["innerLineWidth"].toString()));
     }
 
-    if (json.contains("inner-line-color")) {
-        setInnerLineColor(json["inner-line-color"].toString());
+    if (json.contains("innerLineColor")) {
+        setInnerLineColor(json["innerLineColor"].toString());
     }
 
     if (json.contains("rotation")) {
@@ -187,41 +187,41 @@ QJsonObject Style::saveData() const
     }
 
     if (penColorSet()) {
-        json["pen-color"] = penColor().name();
+        json["penColor"] = penColor().name();
     }
 
     if (fillColorSet()) {
-        json["fill-color"] = fillColor().name();
+        json["fillColor"] = fillColor().name();
     }
 
     if (penOpacitySet()) {
-        json["pen-opacity"] = penOpacity();
+        json["penOpacity"] = penOpacity();
     }
 
     if (fillOpacitySet()) {
-        json["fill-opacity"] = fillOpacity();
+        json["fillOpacity"] = fillOpacity();
     }
 
     if (penStyleSet()) {
-        json["pen-style"] = toString(penStyle());
+        json["penStyle"] = toString(penStyle());
     }
 
     if (lineWidthSet()) {
-        json["line-width"] = lineWidth().toString();
+        json["lineWidth"] = lineWidth().toString();
     }
 
     // FIXME line type
 
     if (doubleLineSet()) {
-        json["double-line"] = "true";
+        json["doubleLine"] = "true";
     }
 
     if (innerLineWidthSet()) {
-        json["inner-line-width"] = innerLineWidth().toString();
+        json["innerLineWidth"] = innerLineWidth().toString();
     }
 
     if (innerLineColorSet()) {
-        json["inner-line-color"] = innerLineColor().name();
+        json["innerLineColor"] = innerLineColor().name();
     }
 
     if (rotationSet()) {
