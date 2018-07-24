@@ -51,6 +51,25 @@
 #include <QFile>
 #include <QJsonDocument>
 
+QObject * styleForItem(const tikz::core::Uid & uid)
+{
+    if (! uid.isValid()) {
+        return nullptr;
+    }
+
+    auto e = uid.entity();
+    switch (e->entityType()) {
+        case tikz::EntityType::Document:;
+        case tikz::EntityType::Node:
+        case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
+        case tikz::EntityType::Style:
+        case tikz::EntityType::EdgeStyle:
+        case tikz::EntityType::NodeStyle: return uid.entity<tikz::core::Style>();
+    }
+
+    return nullptr;
+}
+
 class PropertyInfo
 {
 public:
@@ -243,6 +262,26 @@ public:
             addProperty(property, name);
         }
     }
+
+    template <typename T>
+    void setValue(QtProperty * property, const T & val)
+    {
+        // if items are inserted, the slot valueChanged() is also called.
+        // In this case, the item is not yet registered in the map. Hence,
+        // we just return.
+        if (! propertyMap.contains(property)) {
+            return;
+        }
+
+        auto style = styleForItem(uid);
+        if (style) {
+            const QString name = propertyMap[property];
+            if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
+                style->setProperty(name.toLatin1(), val);
+                property->setModified(true);
+            }
+        }
+    }
 };
 
 
@@ -323,25 +362,6 @@ void PropertyBrowser::setView(tikz::ui::View * view)
     updateCurrentItem();
 }
 
-QObject * styleForItem(const tikz::core::Uid & uid)
-{
-    if (! uid.isValid()) {
-        return nullptr;
-    }
-
-    auto e = uid.entity();
-    switch (e->entityType()) {
-        case tikz::EntityType::Document:;
-        case tikz::EntityType::Node:
-        case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
-        case tikz::EntityType::Style:
-        case tikz::EntityType::EdgeStyle:
-        case tikz::EntityType::NodeStyle: return uid.entity<tikz::core::Style>();
-    }
-
-    return nullptr;
-}
-
 void PropertyBrowser::setItem(const tikz::core::Uid & uid)
 {
     if (d->uid == uid) {
@@ -375,154 +395,42 @@ void PropertyBrowser::setItem(const tikz::core::Uid & uid)
 
 void PropertyBrowser::valueChanged(QtProperty *property, const tikz::Value & val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::valueChanged(QtProperty *property, bool val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::valueChanged(QtProperty *property, const QColor & val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::valueChanged(QtProperty *property, int val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::valueChanged(QtProperty *property, double val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::doubleValueChanged(QtProperty *property, double val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::enumValueChanged(QtProperty *property, int val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::valueChanged(QtProperty *property, const QString & val)
 {
-    // if items are inserted, the slot valueChanged() is also called.
-    // In this case, the item is not yet registered in the map. Hence,
-    // we just return.
-    if (! d->propertyMap.contains(property)) {
-        return;
-    }
-
-    auto style = styleForItem(d->uid);
-    QString name = d->propertyMap[property];
-    if (style) {
-        if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-            style->setProperty(name.toLatin1(), val);
-            property->setModified(true);
-        }
-    }
+    d->setValue(property, val);
 }
 
 void PropertyBrowser::updateCurrentItem()
