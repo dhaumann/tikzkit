@@ -19,7 +19,7 @@
 
 #include "PipeArrow.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 
 #include <QPainter>
 
@@ -30,7 +30,7 @@ class PipeArrowPrivate
     public:
 };
 
-PipeArrow::PipeArrow(tikz::core::EdgeStyle * style)
+PipeArrow::PipeArrow(tikz::core::Style * style)
     : AbstractArrow(style)
     , d(new PipeArrowPrivate())
 {

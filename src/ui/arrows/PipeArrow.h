@@ -27,7 +27,7 @@ class PipeArrowPrivate;
 class PipeArrow : public AbstractArrow
 {
     public:
-        PipeArrow(tikz::core::EdgeStyle* style);
+        PipeArrow(tikz::core::Style* style);
         virtual ~PipeArrow();
 
     //

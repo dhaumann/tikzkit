@@ -27,7 +27,7 @@
 #include "ViewPrivate.h"
 #include "Renderer.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 #include <tikz/core/EllipsePath.h>
 #include <tikz/core/Transaction.h>
 
@@ -148,7 +148,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         const QPointF delta = m_path->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
-        tikz::core::EdgeStyle s;
+        tikz::core::Style s;
         s.setStyle(m_path->style());
         s.setRotation(deg);
 
@@ -224,7 +224,7 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     w = tikz::Value(qAbs(w.value()), w.unit());
     h = tikz::Value(qAbs(h.value()), h.unit());
 
-    tikz::core::EdgeStyle s;
+    tikz::core::Style s;
     s.setStyle(m_path->style());
     s.setRadiusX(w);
     s.setRadiusY(h);

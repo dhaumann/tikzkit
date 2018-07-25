@@ -30,7 +30,7 @@ namespace core {
 
 class Document;
 class Node;
-class EdgeStyle;
+class Style;
 class Visitor;
 class PathPrivate;
 
@@ -77,12 +77,12 @@ class TIKZCORE_EXPORT Path : public Entity
         /**
          * Get the Style object of this path.
          */
-        EdgeStyle* style() const;
+        Style* style() const;
 
         /**
          * Set the Style of this path to @p style.
          */
-        void setStyle(const EdgeStyle & style);
+        void setStyle(const Style & style);
 
     //
     // internal to tikz::Document
@@ -103,7 +103,7 @@ class TIKZCORE_EXPORT Path : public Entity
          * again. Therefore, this function needs to add all undo items so that
          * the respective call of undo() will add properties of the Path again.
          *
-         * @note: the EdgeStyle of this path is taken care of. No need to put
+         * @note: the Style of this path is taken care of. No need to put
          *        this into the undo stack again.
          *
          * The default implementation is empty.

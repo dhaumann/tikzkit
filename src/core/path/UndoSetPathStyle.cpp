@@ -19,7 +19,6 @@
 
 #include "UndoSetPathStyle.h"
 #include "Path.h"
-#include "EdgeStyle.h"
 #include "Document.h"
 
 namespace tikz {
@@ -30,7 +29,7 @@ UndoSetPathStyle::UndoSetPathStyle(Document * doc)
 {
 }
 
-UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc)
+UndoSetPathStyle::UndoSetPathStyle(const Uid & pathUid, const Style & style, Document * doc)
     : UndoItem("Change Path Style", doc)
     , m_pathUid(pathUid)
 {

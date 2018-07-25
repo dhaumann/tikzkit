@@ -52,7 +52,6 @@ QString toString(EntityType type)
         case EntityType::Document  : return QStringLiteral("Document");
         case EntityType::Style     : return QStringLiteral("Style");
         case EntityType::NodeStyle : return QStringLiteral("NodeStyle");
-        case EntityType::EdgeStyle : return QStringLiteral("EdgeStyle");
         case EntityType::Node      : return QStringLiteral("Node");
         case EntityType::Path      : return QStringLiteral("Path");
         default: break;
@@ -69,8 +68,6 @@ EntityType toEntityType(const QString & str)
         return EntityType::Style;
     } else if (str == QStringLiteral("NodeStyle")) {
         return EntityType::NodeStyle;
-    } else if (str == QStringLiteral("EdgeStyle")) {
-        return EntityType::EdgeStyle;
     } else if (str == QStringLiteral("Node")) {
         return EntityType::Node;
     } else if (str == QStringLiteral("Path")) {

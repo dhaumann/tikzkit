@@ -11,7 +11,6 @@ add_library(qtikzcore SHARED
 
     style/Style.cpp
     style/NodeStyle.cpp
-    style/EdgeStyle.cpp
 
     utils/Value.cpp
     utils/Pos.cpp

@@ -80,14 +80,14 @@ class SerializeVisitor : public Visitor
         /**
          * Serializes @p style.
          */
-        void visit(EdgeStyle * style) override;
+        void visit(Style * style) override;
 
     //
     // helper functions
     //
     private:
         QVariantMap serializeStyle(Style * style);
-        QVariantMap serializeEdgeStyle(EdgeStyle * style);
+        QVariantMap serializeEdgeStyle(Style * style);
         QVariantMap serializeNodeStyle(NodeStyle * style);
 
     //

@@ -31,7 +31,6 @@ class Style;
 class Node;
 class Path;
 class NodeStyle;
-class EdgeStyle;
 
 /**
  * Deserializes a tikz::core::Document from a json file.
@@ -86,14 +85,14 @@ class DeserializeVisitor : public Visitor
         /**
          * Serializes @p style.
          */
-        void visit(EdgeStyle * style) override;
+        void visit(Style * style) override;
 
     //
     // helper functions
     //
     private:
         void deserializeStyle(Style * style, const QVariantMap & map);
-        void deserializeEdgeStyle(EdgeStyle * style, const QVariantMap & map);
+        void deserializeEdgeStyle(Style * style, const QVariantMap & map);
         void deserializeNodeStyle(NodeStyle * style, const QVariantMap & map);
 
     //

@@ -38,7 +38,6 @@ class DocumentPrivate;
 class Style;
 class Node;
 class NodeStyle;
-class EdgeStyle;
 class UndoItem;
 class Visitor;
 

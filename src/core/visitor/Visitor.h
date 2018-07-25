@@ -75,9 +75,9 @@ class TIKZCORE_EXPORT Visitor
         virtual void visit(tikz::core::NodeStyle * style) = 0;
 
         /**
-         * This function is called for every tikz::core::EdgeNode in the document.
+         * This function is called for every tikz::core::Style in the document.
          */
-        virtual void visit(tikz::core::EdgeStyle * style) = 0;
+        virtual void visit(tikz::core::Style * style) = 0;
 };
 
 }

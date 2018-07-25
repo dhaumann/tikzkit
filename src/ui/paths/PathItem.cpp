@@ -76,7 +76,7 @@ tikz::core::Uid PathItem::uid() const
     return d->path->uid();
 }
 
-tikz::core::EdgeStyle* PathItem::style() const
+tikz::core::Style* PathItem::style() const
 {
     return d->path->style();
 }

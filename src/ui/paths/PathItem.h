@@ -28,7 +28,7 @@
 namespace tikz {
 namespace core {
     class Path;
-    class EdgeStyle;
+    class Style;
 }
 
 namespace ui {
@@ -73,10 +73,10 @@ class TIKZUI_EXPORT PathItem :  public TikzItem
         tikz::core::Uid uid() const;
 
         /**
-         * Get the EdgeStyle of this path.
+         * Get the Style of this path.
          * The returned pointer is always valid.
          */
-        tikz::core::EdgeStyle* style() const;
+        tikz::core::Style* style() const;
 
     Q_SIGNALS:
         /**

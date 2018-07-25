@@ -19,7 +19,7 @@
 
 #include "ToArrow.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 
 #include <QPainter>
 
@@ -30,7 +30,7 @@ class ToArrowPrivate
     public:
 };
 
-ToArrow::ToArrow(tikz::core::EdgeStyle * style)
+ToArrow::ToArrow(tikz::core::Style * style)
     : AbstractArrow(style)
     , d(new ToArrowPrivate())
 {
@@ -113,7 +113,7 @@ class ReversedToArrowPrivate
     public:
 };
 
-ReversedToArrow::ReversedToArrow(tikz::core::EdgeStyle * style)
+ReversedToArrow::ReversedToArrow(tikz::core::Style * style)
     : AbstractArrow(style)
     , d(new ReversedToArrowPrivate())
 {

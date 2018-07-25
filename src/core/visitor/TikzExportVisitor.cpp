@@ -25,7 +25,7 @@
 #include "EllipsePath.h"
 #include "EdgePath.h"
 #include "NodeStyle.h"
-#include "EdgeStyle.h"
+#include "Style.h"
 
 #include <QStringList>
 #include <QTextStream>
@@ -258,7 +258,7 @@ void TikzExportVisitor::visit(NodeStyle * style)
 {
 }
 
-void TikzExportVisitor::visit(EdgeStyle * style)
+void TikzExportVisitor::visit(Style * style)
 {
 }
 
@@ -322,7 +322,7 @@ QStringList TikzExportVisitor::styleOptions(Style * style)
     return options;
 }
 
-QStringList TikzExportVisitor::edgeStyleOptions(EdgeStyle * style)
+QStringList TikzExportVisitor::edgeStyleOptions(Style * style)
 {
     QStringList options = styleOptions(style);
 

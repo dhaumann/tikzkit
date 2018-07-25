@@ -34,8 +34,8 @@
 #include <tikz/ui/PropertyBrowser.h>
 #include <tikz/ui/ZoomController.h>
 
+#include <tikz/core/Style.h>
 #include <tikz/core/NodeStyle.h>
-#include <tikz/core/EdgeStyle.h>
 #include <tikz/core/tikz.h>
 #include <tikz/core/Path.h>
 #include <tikz/core/EdgePath.h>

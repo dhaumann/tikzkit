@@ -26,8 +26,8 @@
 #include <tikz/core/Document.h>
 
 //BEGIN DEBUG
+#include <tikz/core/Style.h>
 #include <tikz/core/NodeStyle.h>
-#include <tikz/core/EdgeStyle.h>
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/EllipsePath.h>
 //END DEBUG
@@ -148,7 +148,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     // an ellipse path
     tikz::ui::PathItem* path = createPathItem(tikz::PathType::Ellipse);
     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
-    tikz::core::EdgeStyle es;
+    tikz::core::Style es;
     es.setStyle(ellipse->style());
     es.setRadiusX(2.0_cm);
     es.setRadiusY(1.0_cm);
@@ -521,7 +521,6 @@ tikz::core::Entity * DocumentPrivate::createEntity(const tikz::core::Uid & uid, 
             break;
         case tikz::EntityType::Style:
         case tikz::EntityType::NodeStyle:
-        case tikz::EntityType::EdgeStyle:
             // nothing to do
             break;
         default: Q_ASSERT(false);
@@ -556,7 +555,6 @@ void DocumentPrivate::deleteEntity(const tikz::core::Uid & uid)
             break;
         case tikz::EntityType::Style:
         case tikz::EntityType::NodeStyle:
-        case tikz::EntityType::EdgeStyle:
             // nothing to do
             break;
         default: Q_ASSERT(false);

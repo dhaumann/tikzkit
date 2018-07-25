@@ -27,7 +27,7 @@ class LatexArrowPrivate;
 class LatexArrow : public AbstractArrow
 {
     public:
-        LatexArrow(tikz::core::EdgeStyle* style);
+        LatexArrow(tikz::core::Style* style);
         virtual ~LatexArrow();
 
     //
@@ -82,7 +82,7 @@ class LatexArrow : public AbstractArrow
 class ReversedLatexArrow : public LatexArrow
 {
     public:
-        ReversedLatexArrow(tikz::core::EdgeStyle * style);
+        ReversedLatexArrow(tikz::core::Style * style);
 
     public:
         tikz::Arrow type() const override;

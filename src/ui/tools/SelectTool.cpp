@@ -24,7 +24,7 @@
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/Transaction.h>
 #include <tikz/core/NodeStyle.h>
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 #include "Document.h"
 
 #include <QGraphicsScene>
@@ -88,7 +88,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         path->edgePath()->setStartPos(tikz::Pos(-1, 0, tikz::Unit::Centimeter));
         path->edgePath()->setEndPos(tikz::Pos(1, 0, tikz::Unit::Centimeter));
 
-        tikz::core::EdgeStyle es;
+        tikz::core::Style es;
         es.setArrowHead(tikz::Arrow::ToArrow);
         path->path()->setStyle(es);
     }

@@ -24,8 +24,8 @@
 #include "Path.h"
 #include "EdgePath.h"
 #include "EllipsePath.h"
+#include "Style.h"
 #include "NodeStyle.h"
-#include "EdgeStyle.h"
 
 #include <QJsonDocument>
 #include <QStringList>
@@ -168,7 +168,7 @@ void SerializeVisitor::visit(NodeStyle * style)
 {
 }
 
-void SerializeVisitor::visit(EdgeStyle * style)
+void SerializeVisitor::visit(Style * style)
 {
 }
 
@@ -177,38 +177,38 @@ QVariantMap SerializeVisitor::serializeStyle(Style * style)
     QVariantMap map;
 
     if (style->penColorSet()) {
-        map.insert("pen-color", style->penColor());
+        map.insert("penColor", style->penColor());
     }
 
     if (style->fillColorSet()) {
-        map.insert("fill-color", style->fillColor());
+        map.insert("fillColor", style->fillColor());
     }
 
     if (style->penOpacitySet()) {
-        map.insert("pen-opacity", style->penOpacity());
+        map.insert("penOpacity", style->penOpacity());
     }
 
     if (style->fillOpacitySet()) {
-        map.insert("fill-opacity", style->fillOpacity());
+        map.insert("fillOpacity", style->fillOpacity());
     }
 
     if (style->penStyleSet()) {
-        map.insert("pen-style", toString(style->penStyle()));
+        map.insert("penStyle", toString(style->penStyle()));
     }
 
     // FIXME line width
 //     if (style->penStyleSet()) {
-//         map.insert("pen-style", toString(style->penStyle()));
+//         map.insert("penStyle", toString(style->penStyle()));
 //     }
     
 
     if (style->doubleLineSet()) {
-        map.insert("double-line", "true");
+        map.insert("doubleLine", "true");
 
         // FIXME line width
 
         if (style->innerLineColorSet()) {
-            map.insert("double-line-color", style->innerLineColor());
+            map.insert("doubleLineColor", style->innerLineColor());
         }
     }
 
@@ -219,20 +219,20 @@ QVariantMap SerializeVisitor::serializeStyle(Style * style)
     return map;
 }
 
-QVariantMap SerializeVisitor::serializeEdgeStyle(EdgeStyle * style)
+QVariantMap SerializeVisitor::serializeEdgeStyle(Style * style)
 {
     QVariantMap map = serializeStyle(style);
 
     if (style->radiusXSet()) {
-        map.insert("radius-x", style->radiusX().toString());
+        map.insert("radiusX", style->radiusX().toString());
     }
 
     if (style->radiusYSet()) {
-        map.insert("radius-y", style->radiusY().toString());
+        map.insert("radiusY", style->radiusY().toString());
     }
 
     if (style->bendAngleSet()) {
-        map.insert("bend-angle", style->bendAngle());
+        map.insert("bendAngle", style->bendAngle());
     }
 
     if (style->loosenessSet()) {
@@ -240,27 +240,27 @@ QVariantMap SerializeVisitor::serializeEdgeStyle(EdgeStyle * style)
     }
 
     if (style->outAngleSet()) {
-        map.insert("out-angle", style->outAngle());
+        map.insert("outAngle", style->outAngle());
     }
 
     if (style->inAngleSet()) {
-        map.insert("in-angle", style->inAngle());
+        map.insert("inAngle", style->inAngle());
     }
 
     if (style->arrowTailSet()) {
-        map.insert("arrow-tail", toString(style->arrowTail()));
+        map.insert("arrowTail", toString(style->arrowTail()));
     }
 
     if (style->arrowHeadSet()) {
-        map.insert("arrow-head", toString(style->arrowHead()));
+        map.insert("arrowHead", toString(style->arrowHead()));
     }
 
     if (style->shortenStartSet()) {
-        map.insert("shorten-start", style->shortenStart().toString());
+        map.insert("shortenStart", style->shortenStart().toString());
     }
 
     if (style->shortenEndSet()) {
-        map.insert("shorten-end", style->shortenEnd().toString());
+        map.insert("shortenEnd", style->shortenEnd().toString());
     }
 
     return map;
@@ -271,7 +271,7 @@ QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
     QVariantMap map = serializeStyle(style);
 
     if (style->textAlignSet()) {
-        map.insert("text-align", toString(style->textAlign()));
+        map.insert("textAlign", toString(style->textAlign()));
     }
 
     if (style->shapeSet()) {
@@ -279,11 +279,11 @@ QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
     }
 
     if (style->minimumWidthSet()) {
-        map.insert("minimum-width", style->minimumWidth().toString());
+        map.insert("minimumWidth", style->minimumWidth().toString());
     }
 
     if (style->minimumHeightSet()) {
-        map.insert("minimum-height", style->minimumHeight().toString());
+        map.insert("minimumHeight", style->minimumHeight().toString());
     }
 
     return map;

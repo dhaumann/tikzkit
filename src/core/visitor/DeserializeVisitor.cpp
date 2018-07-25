@@ -25,7 +25,7 @@
 #include "EdgePath.h"
 #include "EllipsePath.h"
 #include "NodeStyle.h"
-#include "EdgeStyle.h"
+#include "Style.h"
 
 #include <QJsonDocument>
 #include <QStringList>
@@ -154,7 +154,7 @@ void DeserializeVisitor::visit(NodeStyle * style)
 {
 }
 
-void DeserializeVisitor::visit(EdgeStyle * style)
+void DeserializeVisitor::visit(Style * style)
 {
 }
 
@@ -162,37 +162,37 @@ void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map
 {
     ConfigTransaction transaction(style);
 
-    if (map.contains("pen-color")) {
-        style->setPenColor(map["pen-color"].value<QColor>());
+    if (map.contains("penColor")) {
+        style->setPenColor(map["penColor"].value<QColor>());
     }
 
-    if (map.contains("fill-color")) {
-        style->setFillColor(map["fill-color"].value<QColor>());
+    if (map.contains("fillColor")) {
+        style->setFillColor(map["fillColor"].value<QColor>());
     }
 
-    if (map.contains("pen-opacity")) {
-        style->setPenOpacity(map["pen-opacity"].toDouble());
+    if (map.contains("penOpacity")) {
+        style->setPenOpacity(map["penOpacity"].toDouble());
     }
 
-    if (map.contains("fill-opacity")) {
-        style->setFillOpacity(map["fill-opacity"].toDouble());
+    if (map.contains("fillOpacity")) {
+        style->setFillOpacity(map["fillOpacity"].toDouble());
     }
 
-    if (map.contains("pen-style")) {
-        style->setPenStyle(toEnum<PenStyle>(map["pen-style"].toString()));
+    if (map.contains("penStyle")) {
+        style->setPenStyle(toEnum<PenStyle>(map["penStyle"].toString()));
     }
-    
+
     // FIXME line type
     // FIXME line width
 
-    if (map.contains("double-line")) {
+    if (map.contains("doubleLine")) {
         style->setDoubleLine(true);
 
         // FIXME line type
         // FIXME line width
 
-        if (map.contains("double-line-color")) {
-            style->setInnerLineColor(map["double-line-color"].value<QColor>());
+        if (map.contains("doubleLineColor")) {
+            style->setInnerLineColor(map["doubleLineColor"].value<QColor>());
         }
     }
 
@@ -201,50 +201,50 @@ void DeserializeVisitor::deserializeStyle(Style * style, const QVariantMap & map
     }
 }
 
-void DeserializeVisitor::deserializeEdgeStyle(EdgeStyle * style, const QVariantMap & map)
+void DeserializeVisitor::deserializeEdgeStyle(Style * style, const QVariantMap & map)
 {
     ConfigTransaction transaction(style);
 
     deserializeStyle(style, map);
 
-    if (map.contains("radius-x")) {
-        style->setRadiusX(tikz::Value::fromString(map["radius-x"].toString()));
+    if (map.contains("radiusX")) {
+        style->setRadiusX(tikz::Value::fromString(map["radiusX"].toString()));
     }
 
-    if (map.contains("radius-y")) {
-        style->setRadiusY(tikz::Value::fromString(map["radius-y"].toString()));
+    if (map.contains("radiusY")) {
+        style->setRadiusY(tikz::Value::fromString(map["radiusY"].toString()));
     }
 
-    if (map.contains("bend-angle")) {
-        style->setBendAngle(map["bend-angle"].toDouble());
+    if (map.contains("bendAngle")) {
+        style->setBendAngle(map["bendAngle"].toDouble());
     }
 
     if (map.contains("looseness")) {
         style->setLooseness(map["looseness"].toDouble());
     }
 
-    if (map.contains("out-angle")) {
-        style->setOutAngle(map["out-angle"].toDouble());
+    if (map.contains("outAngle")) {
+        style->setOutAngle(map["outAngle"].toDouble());
     }
 
-    if (map.contains("in-angle")) {
-        style->setInAngle(map["in-angle"].toDouble());
+    if (map.contains("inAngle")) {
+        style->setInAngle(map["inAngle"].toDouble());
     }
 
-    if (map.contains("arrow-tail")) {
-        style->setArrowTail(toEnum<Arrow>(map["arrow-tail"].toString()));
+    if (map.contains("arrowTail")) {
+        style->setArrowTail(toEnum<Arrow>(map["arrowTail"].toString()));
     }
 
-    if (map.contains("arrow-head")) {
-        style->setArrowHead(toEnum<Arrow>(map["arrow-head"].toString()));
+    if (map.contains("arrowHead")) {
+        style->setArrowHead(toEnum<Arrow>(map["arrowHead"].toString()));
     }
 
-    if (map.contains("shorten-start")) {
-        style->setShortenStart(tikz::Value::fromString(map["shorten-start"].toString()));
+    if (map.contains("shortenStart")) {
+        style->setShortenStart(tikz::Value::fromString(map["shortenStart"].toString()));
     }
 
-    if (map.contains("shorten-end")) {
-        style->setShortenEnd(tikz::Value::fromString(map["shorten-end"].toString()));
+    if (map.contains("shortenEnd")) {
+        style->setShortenEnd(tikz::Value::fromString(map["shortenEnd"].toString()));
     }
 }
 
@@ -254,20 +254,20 @@ void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantM
 
     deserializeStyle(style, map);
 
-    if (map.contains("text-align")) {
-        style->setTextAlign(toEnum<TextAlignment>(map["text-align"].toString()));
+    if (map.contains("textAlign")) {
+        style->setTextAlign(toEnum<TextAlignment>(map["textAlign"].toString()));
     }
 
     if (map.contains("shape")) {
         style->setShape(toEnum<Shape>(map["shape"].toString()));
     }
 
-    if (map.contains("minimum-width")) {
-        style->setMinimumWidth(tikz::Value::fromString(map["minimum-width"].toString()));
+    if (map.contains("minimumWidth")) {
+        style->setMinimumWidth(tikz::Value::fromString(map["minimumWidth"].toString()));
     }
 
-    if (map.contains("minimum-height")) {
-        style->setMinimumHeight(tikz::Value::fromString(map["minimum-height"].toString()));
+    if (map.contains("minimumHeight")) {
+        style->setMinimumHeight(tikz::Value::fromString(map["minimumHeight"].toString()));
     }
 }
 

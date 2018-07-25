@@ -39,6 +39,18 @@ static constexpr char s_innerLineColor[] = "innerLineColor";
 static constexpr char s_fillColor[] = "fillColor";
 static constexpr char s_rotation[] = "rotation";
 
+// Path properties
+static constexpr char s_radiusX[] = "radiusX";
+static constexpr char s_radiusY[] = "radiusY";
+static constexpr char s_bendAngle[] = "bendAngle";
+static constexpr char s_looseness[] = "looseness";
+static constexpr char s_outAngle[] = "outAngle";
+static constexpr char s_inAngle[] = "inAngle";
+static constexpr char s_arrowTail[] = "arrowTail";
+static constexpr char s_arrowHead[] = "arrowHead";
+static constexpr char s_shortenStart[] = "shortenStart";
+static constexpr char s_shortenEnd[] = "shortenEnd";
+
 /**
  * Private data and helper functions of class Style.
  */
@@ -74,6 +86,24 @@ public:
     qreal fillOpacity = 1.0;
 
     qreal rotation = 0.0;
+
+//
+// Path members
+//
+public:
+    tikz::Value radiusX = 0.0_cm;
+    tikz::Value radiusY = 0.0_cm;
+
+    qreal bendAngle = 0.0; // in degree
+    qreal looseness = 1.0;
+    qreal outAngle = 45.0; // in degree
+    qreal inAngle = 135.0; // in degree
+
+    Arrow arrowTail = tikz::Arrow::NoArrow;
+    Arrow arrowHead = tikz::Arrow::NoArrow;
+
+    tikz::Value shortenStart;
+    tikz::Value shortenEnd;
 };
 
 Style::Style()
@@ -176,6 +206,47 @@ void Style::loadData(const QJsonObject & json)
     if (json.contains("rotation")) {
         setRotation(json["rotation"].toDouble());
     }
+
+    if (json.contains("radiusX")) {
+        setRadiusX(tikz::Value::fromString(json["radiusX"].toString()));
+    }
+
+    if (json.contains("radiusY")) {
+        setRadiusY(tikz::Value::fromString(json["radiusY"].toString()));
+    }
+
+    if (json.contains("bendAngle")) {
+        setBendAngle(json["bendAngle"].toDouble());
+    }
+
+    if (json.contains("looseness")) {
+        setLooseness(json["looseness"].toDouble());
+    }
+
+    if (json.contains("outAngle")) {
+        setOutAngle(json["outAngle"].toDouble());
+    }
+
+    if (json.contains("inAngle")) {
+        setInAngle(json["inAngle"].toDouble());
+    }
+
+    if (json.contains("arrowTail")) {
+        setArrowTail(toEnum<Arrow>(json["arrowTail"].toString()));
+    }
+
+    if (json.contains("arrowHead")) {
+        setArrowHead(toEnum<Arrow>(json["arrowHead"].toString()));
+    }
+
+    if (json.contains("shortenStart")) {
+        setShortenStart(tikz::Value::fromString(json["shortenStart"].toString()));
+    }
+
+    if (json.contains("shortenEnd")) {
+        setShortenEnd(tikz::Value::fromString(json["shortenEnd"].toString()));
+    }
+
 }
 
 QJsonObject Style::saveData() const
@@ -226,6 +297,46 @@ QJsonObject Style::saveData() const
 
     if (rotationSet()) {
         json["rotation"] = rotation();
+    }
+
+    if (radiusXSet()) {
+        json["radiusX"] = radiusX().toString();
+    }
+
+    if (radiusYSet()) {
+        json["radiusY"] = radiusY().toString();
+    }
+
+    if (bendAngleSet()) {
+        json["bendAngle"] = bendAngle();
+    }
+
+    if (loosenessSet()) {
+        json["looseness"] = looseness();
+    }
+
+    if (outAngleSet()) {
+        json["outAngle"] = outAngle();
+    }
+
+    if (inAngleSet()) {
+        json["inAngle"] = inAngle();
+    }
+
+    if (arrowTailSet()) {
+        json["arrowTail"] = toString(arrowTail());
+    }
+
+    if (arrowHeadSet()) {
+        json["arrowHead"] = toString(arrowHead());
+    }
+
+    if (shortenStartSet()) {
+        json["shortenStart"] = shortenStart().toString();
+    }
+
+    if (shortenEndSet()) {
+        json["shortenEnd"] = shortenEnd().toString();
     }
 
     return json;
@@ -674,6 +785,401 @@ void Style::unsetRotation()
         d->rotation = 0.0;
     }
 }
+
+tikz::Value Style::radiusX() const
+{
+    if (propertySet(s_radiusX)) {
+        return d->radiusX;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->radiusX();
+    }
+
+    return 0.0_cm;
+}
+
+tikz::Value Style::radiusY() const
+{
+    if (propertySet(s_radiusY)) {
+        return d->radiusY;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->radiusY();
+    }
+
+    return 0.0_cm;
+}
+
+bool Style::radiusXSet() const
+{
+    return propertySet(s_radiusX);
+}
+
+bool Style::radiusYSet() const
+{
+    return propertySet(s_radiusY);
+}
+
+void Style::setRadiusX(const tikz::Value & xradius)
+{
+    if (!propertySet(s_radiusX) || d->radiusX != xradius) {
+        ConfigTransaction transaction(this);
+        addProperty(s_radiusX);
+        d->radiusX = xradius;
+    }
+}
+
+void Style::setRadiusY(const tikz::Value & yradius)
+{
+    if (!propertySet(s_radiusY) || d->radiusY != yradius) {
+        ConfigTransaction transaction(this);
+        addProperty(s_radiusY);
+        d->radiusY = yradius;
+    }
+}
+
+void Style::unsetRadiusX()
+{
+    if (propertySet(s_radiusX)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_radiusX);
+        d->radiusX = 0.0_cm;
+    }
+}
+
+void Style::unsetRadiusY()
+{
+    if (propertySet(s_radiusY)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_radiusY);
+        d->radiusY = 0.0_cm;
+    }
+}
+
+qreal Style::bendAngle() const
+{
+    if (propertySet(s_bendAngle)) {
+        return d->bendAngle;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->bendAngle();
+    }
+
+    return 0.0;
+}
+
+bool Style::bendAngleSet() const
+{
+    return propertySet(s_bendAngle);
+}
+
+void Style::setBendAngle(qreal angle)
+{
+    // normalize to [-180, 180]
+    while (angle > 180) angle -= 360.0;
+    while (angle < -180) angle += 360.0;
+
+    if (!propertySet(s_bendAngle) || d->bendAngle != angle) {
+        ConfigTransaction transaction(this);
+        addProperty(s_bendAngle);
+        d->bendAngle = angle;
+    }
+}
+
+void Style::unsetBendAngle()
+{
+    if (propertySet(s_bendAngle)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_bendAngle);
+        d->bendAngle = 0.0;
+    }
+}
+
+qreal Style::looseness() const
+{
+    if (propertySet(s_looseness)) {
+        return d->looseness;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->looseness();
+    }
+
+    return 1.0;
+}
+
+bool Style::loosenessSet() const
+{
+    return propertySet(s_looseness);
+}
+
+void Style::setLooseness(qreal looseness)
+{
+    if (!propertySet(s_looseness) || d->looseness != looseness) {
+        ConfigTransaction transaction(this);
+        addProperty(s_looseness);
+        d->looseness = looseness;
+    }
+}
+
+void Style::unsetLooseness()
+{
+    if (propertySet(s_looseness)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_looseness);
+        d->looseness = 1.0;
+    }
+}
+
+void Style::setStartControlPoint(const QPointF & cp1)
+{
+    // TODO
+}
+
+void Style::setEndControlPoint(const QPointF & cp2)
+{
+    // TODO
+}
+
+QPointF Style::startControlPoint() const
+{
+    return QPointF(); // TODO
+}
+
+QPointF Style::endControlPoint() const
+{
+    return QPointF(); // TODO
+}
+
+qreal Style::outAngle() const
+{
+    if (propertySet(s_outAngle)) {
+        return d->outAngle;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->outAngle();
+    }
+
+    return 45;
+}
+
+bool Style::outAngleSet() const
+{
+    return propertySet(s_outAngle);
+}
+
+void Style::setOutAngle(qreal angle)
+{
+    if (!propertySet(s_outAngle) || d->outAngle != angle) {
+        ConfigTransaction transaction(this);
+        addProperty(s_outAngle);
+        d->outAngle = angle;
+    }
+}
+
+void Style::unsetOutAngle()
+{
+    if (propertySet(s_outAngle)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_outAngle);
+        d->outAngle = 45;
+    }
+}
+
+qreal Style::inAngle() const
+{
+    if (propertySet(s_inAngle)) {
+        return d->inAngle;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->inAngle();
+    }
+
+    return 135;
+}
+
+bool Style::inAngleSet() const
+{
+    return propertySet(s_inAngle);
+}
+
+void Style::setInAngle(qreal angle)
+{
+    if (!propertySet(s_inAngle) || d->inAngle != angle) {
+        ConfigTransaction transaction(this);
+        addProperty(s_inAngle);
+        d->inAngle = angle;
+    }
+}
+
+void Style::unsetInAngle()
+{
+    if (propertySet(s_inAngle)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_inAngle);
+        d->inAngle = 135;
+    }
+}
+
+Arrow Style::arrowTail() const
+{
+    if (propertySet(s_arrowTail)) {
+        return d->arrowTail;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->arrowTail();
+    }
+
+    return tikz::Arrow::NoArrow;
+}
+
+bool Style::arrowTailSet() const
+{
+    return propertySet(s_arrowTail);
+}
+
+Arrow Style::arrowHead() const
+{
+    if (propertySet(s_arrowHead)) {
+        return d->arrowHead;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->arrowHead();
+    }
+
+    return tikz::Arrow::NoArrow;
+}
+
+bool Style::arrowHeadSet() const
+{
+    return propertySet(s_arrowHead);
+}
+
+void Style::setArrowTail(tikz::Arrow tail)
+{
+    if (!propertySet(s_arrowTail) || d->arrowTail != tail) {
+        ConfigTransaction transaction(this);
+        addProperty(s_arrowTail);
+        d->arrowTail = tail;
+    }
+}
+
+void Style::setArrowHead(tikz::Arrow head)
+{
+    if (!propertySet(s_arrowHead) || d->arrowHead != head) {
+        ConfigTransaction transaction(this);
+        addProperty(s_arrowHead);
+        d->arrowHead = head;
+    }
+}
+
+void Style::unsetArrowTail()
+{
+    if (propertySet(s_arrowTail)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_arrowTail);
+        d->arrowTail = tikz::Arrow::NoArrow;
+    }
+}
+
+void Style::unsetArrowHead()
+{
+    if (propertySet(s_arrowHead)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_arrowHead);
+        d->arrowHead = tikz::Arrow::NoArrow;
+    }
+}
+
+tikz::Value Style::shortenStart() const
+{
+    if (propertySet(s_shortenStart)) {
+        return d->shortenStart;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->shortenStart();
+    }
+
+    return 0.0_cm;
+}
+
+bool Style::shortenStartSet() const
+{
+    return propertySet(s_shortenStart);
+}
+
+tikz::Value Style::shortenEnd() const
+{
+    if (propertySet(s_shortenEnd)) {
+        return d->shortenEnd;
+    }
+
+    Style * style = parentStyle();
+    if (style) {
+        return style->shortenEnd();
+    }
+
+    return 0.0_cm;
+}
+
+bool Style::shortenEndSet() const
+{
+    return propertySet(s_shortenEnd);
+}
+
+void Style::setShortenStart(const tikz::Value & shorten)
+{
+    if (!propertySet(s_shortenStart) || d->shortenStart != shorten) {
+        ConfigTransaction transaction(this);
+        addProperty(s_shortenStart);
+        d->shortenStart = shorten;
+    }
+}
+
+void Style::setShortenEnd(const tikz::Value & shorten)
+{
+    if (!propertySet(s_shortenEnd) || d->shortenEnd != shorten) {
+        ConfigTransaction transaction(this);
+        addProperty(s_shortenEnd);
+        d->shortenEnd = shorten;
+    }
+}
+
+void Style::unsetShortenStart()
+{
+    if (propertySet(s_shortenStart)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_shortenStart);
+        d->shortenStart = 0.0_cm;
+    }
+}
+
+void Style::unsetShortenEnd()
+{
+    if (propertySet(s_shortenEnd)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_shortenEnd);
+        d->shortenEnd = 0.0_cm;
+    }
+}
+
 
 }
 }

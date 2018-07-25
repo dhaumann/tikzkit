@@ -21,7 +21,7 @@
 #define TIKZ_UNDO_SET_PATH_STYLE_H
 
 #include "UndoItem.h"
-#include <EdgeStyle.h>
+#include "Style.h"
 
 namespace tikz {
 namespace core {
@@ -40,7 +40,7 @@ class UndoSetPathStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetPathStyle(const Uid & pathUid, const EdgeStyle & style, Document * doc);
+        UndoSetPathStyle(const Uid & pathUid, const Style & style, Document * doc);
 
         /**
          * Destructor
@@ -89,12 +89,12 @@ protected:
         /**
          * The node style before the change
          */
-        EdgeStyle m_undoStyle;
+        Style m_undoStyle;
 
         /**
          * The node style after the change
          */
-        EdgeStyle m_redoStyle;
+        Style m_redoStyle;
 };
 
 }

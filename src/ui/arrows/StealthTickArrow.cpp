@@ -19,7 +19,7 @@
 
 #include "StealthTickArrow.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 
 #include <QPainter>
 
@@ -30,7 +30,7 @@ class StealthTickArrowPrivate
     public:
 };
 
-StealthTickArrow::StealthTickArrow(tikz::core::EdgeStyle * style)
+StealthTickArrow::StealthTickArrow(tikz::core::Style * style)
     : AbstractArrow(style)
     , d(new StealthTickArrowPrivate())
 {
@@ -107,7 +107,7 @@ QPainterPath StealthTickArrow::path() const
 
 
 
-ReversedStealthTickArrow::ReversedStealthTickArrow(tikz::core::EdgeStyle * style)
+ReversedStealthTickArrow::ReversedStealthTickArrow(tikz::core::Style * style)
     : StealthTickArrow(style)
 {
 }

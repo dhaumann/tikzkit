@@ -22,7 +22,7 @@
 
 #include "UndoItem.h"
 #include "Path.h"
-#include "EdgeStyle.h"
+#include "Style.h"
 
 namespace tikz {
 namespace core {
@@ -80,7 +80,7 @@ class UndoDeletePath : public UndoItem
         /**
          * The edge style of the created edge
          */
-        EdgeStyle m_style;
+        Style m_style;
 };
 
 }

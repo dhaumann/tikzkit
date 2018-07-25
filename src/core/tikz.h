@@ -121,7 +121,6 @@ enum class EntityType {
     Document  = 0,
     Style,
     NodeStyle,
-    EdgeStyle,
     Node,
     Path
 };

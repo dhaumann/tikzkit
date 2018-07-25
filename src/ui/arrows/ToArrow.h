@@ -27,7 +27,7 @@ class ToArrowPrivate;
 class ToArrow : public AbstractArrow
 {
     public:
-        ToArrow(tikz::core::EdgeStyle* style);
+        ToArrow(tikz::core::Style* style);
         virtual ~ToArrow();
 
     //
@@ -84,7 +84,7 @@ class ReversedToArrowPrivate;
 class ReversedToArrow : public AbstractArrow
 {
     public:
-        ReversedToArrow(tikz::core::EdgeStyle* style);
+        ReversedToArrow(tikz::core::Style* style);
         ~ReversedToArrow() override;
 
     //

@@ -22,7 +22,7 @@
 #include "AbstractArrow.h"
 #include "IconComboBox.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 #include <tikz/core/tikz.h>
 
 #include <QStylePainter>
@@ -60,7 +60,7 @@ void ArrowComboBoxPrivate::fillComboBox()
     comboBox->setIconSize(iconSize);
 
     // create horizontal edge from 0.1cm to 0.9cm
-    tikz::core::EdgeStyle style;
+    tikz::core::Style style;
     style.setLineWidth(tikz::Value::veryThick());
 
     // prepare painter pen
@@ -139,7 +139,7 @@ ArrowComboBox::~ArrowComboBox()
     delete d;
 }
 
-// void ArrowComboBox::setStyle(tikz::core::EdgeStyle * style)
+// void ArrowComboBox::setStyle(tikz::core::Style * style)
 // {
 //
 // }

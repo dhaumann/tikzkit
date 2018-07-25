@@ -23,7 +23,6 @@
 #include "EllipsePath.h"
 #include "Style.h"
 #include "NodeStyle.h"
-#include "EdgeStyle.h"
 
 #include "Transaction.h"
 #include "UndoManager.h"
@@ -575,11 +574,6 @@ Entity * Document::createEntity(const Uid & uid, EntityType type)
         }
         case EntityType::NodeStyle: {
             e = new NodeStyle(uid);
-            e->setObjectName("Style " + uid.toString());
-            break;
-        }
-        case EntityType::EdgeStyle: {
-            e = new EdgeStyle(uid);
             e->setObjectName("Style " + uid.toString());
             break;
         }

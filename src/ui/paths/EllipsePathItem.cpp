@@ -27,7 +27,7 @@
 #include "Painter.h"
 
 #include <tikz/core/EllipsePath.h>
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 
 #include <QApplication>
 #include <QPainter>

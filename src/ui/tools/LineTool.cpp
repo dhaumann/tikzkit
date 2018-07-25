@@ -27,7 +27,7 @@
 #include "ViewPrivate.h"
 #include "Renderer.h"
 
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/Transaction.h>
 

@@ -18,7 +18,7 @@
  */
 
 #include "Path.h"
-#include "EdgeStyle.h"
+#include "Style.h"
 #include "Visitor.h"
 #include "Document.h"
 
@@ -31,7 +31,7 @@ class PathPrivate
 {
     public:
         // this edge's style
-        EdgeStyle style;
+        Style style;
 };
 
 Path::Path(const Uid & uid)
@@ -72,12 +72,12 @@ bool Path::accept(Visitor & visitor)
     return true;
 }
 
-EdgeStyle* Path::style() const
+Style* Path::style() const
 {
     return &d->style;
 }
 
-void Path::setStyle(const EdgeStyle & style)
+void Path::setStyle(const Style & style)
 {
     // TODO: room for optimization: if style did not change, abort
 

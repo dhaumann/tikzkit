@@ -25,7 +25,7 @@
 #include "Painter.h"
 
 #include <tikz/core/EdgePath.h>
-#include <tikz/core/EdgeStyle.h>
+#include <tikz/core/Style.h>
 
 #include <QPainter>
 #include <QDebug>

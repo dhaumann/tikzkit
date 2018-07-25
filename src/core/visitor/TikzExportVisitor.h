@@ -34,7 +34,6 @@ class Style;
 class Node;
 class Path;
 class NodeStyle;
-class EdgeStyle;
 
 /**
  * Visitor exporint the tikz::core::Document to PGF/TikZ.
@@ -88,14 +87,14 @@ class TikzExportVisitor : public Visitor
         /**
          * Serializes @p style.
          */
-        void visit(EdgeStyle * style) override;
+        void visit(Style * style) override;
 
     //
     // helper functions
     //
     private:
         QStringList styleOptions(Style * style);
-        QStringList edgeStyleOptions(EdgeStyle * style);
+        QStringList edgeStyleOptions(Style * style);
         QStringList nodeStyleOptions(NodeStyle * style);
 
     //
