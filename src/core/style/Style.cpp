@@ -20,6 +20,7 @@
 #include "Style.h"
 
 #include "Document.h"
+#include "Visitor.h"
 
 #include <QSet>
 
@@ -136,6 +137,12 @@ Style::~Style()
 tikz::EntityType Style::entityType() const
 {
     return EntityType::Style;
+}
+
+bool Style::accept(Visitor & visitor)
+{
+    visitor.visit(this);
+    return true;
 }
 
 void Style::setStyle(const Style * other)

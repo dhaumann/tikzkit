@@ -172,6 +172,14 @@ bool Document::accept(Visitor & visitor)
         }
     }
 
+    // visit all styles
+    for (auto entity : d->entities) {
+        auto style = dynamic_cast<Style *>(entity);
+        if (style) {
+            style->accept(visitor);
+        }
+    }
+
     return true;
 }
 
@@ -484,6 +492,7 @@ QVector<Uid> Document::nodes() const
         if (qobject_cast<Node *>(it.value())) {
             nodeList.append(it.key());
         }
+        ++it;
     }
     return nodeList;
 }
@@ -496,6 +505,7 @@ QVector<Uid> Document::paths() const
         if (qobject_cast<Path *>(it.value())) {
             pathList.append(it.key());
         }
+        ++it;
     }
     return pathList;
 }

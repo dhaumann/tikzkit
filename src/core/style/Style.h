@@ -31,6 +31,7 @@ namespace core {
 
 class Document;
 class StylePrivate;
+class Visitor;
 
 class TIKZCORE_EXPORT Style : public Entity
 {
@@ -83,6 +84,16 @@ class TIKZCORE_EXPORT Style : public Entity
          * Save the style to the json object.
          */
         QJsonObject saveData() const override;
+
+    //
+    // visitor pattern
+    //
+    public:
+        /**
+         * Visitor pattern.
+         * Visits all elements of the document.
+         */
+        bool accept(Visitor & visitor);
 
     //
     // parent / child hierarchy
