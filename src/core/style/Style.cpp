@@ -161,8 +161,8 @@ void Style::loadData(const QJsonObject & json)
 {
     ConfigTransaction transaction(this);
 
-    if (json.contains("parent-id")) {
-        const Uid styleId(json["parent-id"].toString(), document());
+    if (json.contains("parentStyle")) {
+        const Uid styleId(json["parentStyle"].toString(), document());
         d->parent = document()->style()->findStyle(styleId);
     }
 
@@ -246,16 +246,13 @@ void Style::loadData(const QJsonObject & json)
     if (json.contains("shortenEnd")) {
         setShortenEnd(tikz::Value::fromString(json["shortenEnd"].toString()));
     }
-
 }
 
 QJsonObject Style::saveData() const
 {
     QJsonObject json = Entity::saveData();
 
-    if (parentStyle()) {
-        json["parent-id"] = parentStyle()->uid().toString();
-    }
+    json["parentStyle"] = parentStyle() ? parentStyle()->uid().toString() : Uid().toString();
 
     if (penColorSet()) {
         json["penColor"] = penColor().name();
@@ -284,7 +281,7 @@ QJsonObject Style::saveData() const
     // FIXME line type
 
     if (doubleLineSet()) {
-        json["doubleLine"] = "true";
+        json["doubleLine"] = doubleLine();
     }
 
     if (innerLineWidthSet()) {

@@ -77,6 +77,36 @@ bool Node::accept(Visitor & visitor)
     return true;
 }
 
+void Node::loadData(const QJsonObject & json)
+{
+    ConfigTransaction transaction(this);
+
+    if (json.contains("text")) {
+        d->text = json["text"].toString();
+    }
+
+    if (json.contains("pos")) {
+        d->pos = MetaPos(json["pos"].toString(), document());
+    }
+
+    if (json.contains("style")) {
+        const Uid styleId(json["style"].toString(), document());
+        // FIXME: convert style to Uid
+        // d->style = document()->entity<NodeStyle>(styleId);
+    }
+}
+
+QJsonObject Node::saveData() const
+{
+    QJsonObject json = Entity::saveData();
+
+    json["text"] = d->text;
+    json["pos"] = d->pos.toString();
+    json["style"] = d->style.uid().toString();
+
+    return json;
+}
+
 void Node::setPos(const tikz::Pos & pos)
 {
     auto newPos = metaPos();

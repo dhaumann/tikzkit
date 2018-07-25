@@ -39,7 +39,7 @@ class MetaPos;
 class TIKZCORE_EXPORT Node : public Entity
 {
     Q_OBJECT
-    Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(tikz::Pos pos READ pos WRITE setPos)
     Q_PROPERTY(Style* style READ style)
 
@@ -63,6 +63,20 @@ class TIKZCORE_EXPORT Node : public Entity
          * Visits all elements of the document.
          */
         bool accept(Visitor & visitor);
+
+    //
+    // serialization
+    //
+    public:
+        /**
+         * Load the state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
+        /**
+         * Save the state to the json object.
+         */
+        QJsonObject saveData() const override;
 
     //
     // position, style and text
@@ -113,7 +127,6 @@ class TIKZCORE_EXPORT Node : public Entity
         void setStyle(const NodeStyle & style);
 
     Q_SIGNALS:
-
         /**
          * This signal is emitted whenever this node's text changed.
          */

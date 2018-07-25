@@ -72,16 +72,27 @@ void Entity::load(const QJsonObject & json)
         d->uid = Uid(json["uid"].toString(), d->uid.document());
     }
 
+    if (json.contains("entityType")) {
+        Q_ASSERT(entityType() == toEntityType(json["entityType"].toString()));
+    }
+
+    if (json.contains("objectName")) {
+        setObjectName(json["objectName"].toString());
+    }
+
     // load payload
-    QJsonObject joData = json["data"].toObject();
-    loadData(joData);
+    const QJsonObject data = json["data"].toObject();
+    loadData(data);
 }
 
 QJsonObject Entity::save() const
 {
     QJsonObject json;
 
+    // entity data
     json["uid"] = d->uid.toString();
+    json["entityType"] = toString(entityType());
+    json["objectName"] = objectName();
 
     // save payload
     json["data"] = saveData();
@@ -96,6 +107,7 @@ QJsonObject Entity::saveData() const
 
 void Entity::loadData(const QJsonObject & json)
 {
+    Q_UNUSED(json)
 }
 
 Document * Entity::document() const

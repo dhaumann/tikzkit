@@ -30,7 +30,6 @@ class Style;
 class Node;
 class Path;
 class NodeStyle;
-class EdgeStyle;
 
 /**
  * Visitor pattern.
