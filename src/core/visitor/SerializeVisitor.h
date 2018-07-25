@@ -21,7 +21,7 @@
 #define TIKZ_SERIALIZE_VISITOR_H
 
 #include "Visitor.h"
-#include <QVariantMap>
+#include <QJsonObject>
 
 namespace tikz {
 namespace core {
@@ -87,18 +87,15 @@ class SerializeVisitor : public Visitor
     //
     private:
         QVariantMap serializeStyle(Style * style);
-        QVariantMap serializeEdgeStyle(Style * style);
-        QVariantMap serializeNodeStyle(NodeStyle * style);
 
     //
     // private data
     //
     private:
-        QVariantMap m_root;
-        QVariantMap m_nodes;
-        QVariantMap m_paths;
-        QVariantMap m_nodeStyles;
-        QVariantMap m_edgeStyles;
+        QJsonObject m_root;
+        QJsonObject m_nodes;
+        QJsonObject m_paths;
+        QJsonObject m_styles;
 };
 
 }

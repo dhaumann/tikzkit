@@ -737,6 +737,12 @@ Entity * Document::entity(const tikz::core::Uid & uid) const
     return nullptr;
 }
 
+QVector<Uid> Document::entities() const
+{
+    return QVector<Uid>::fromList(d->entityMap.keys());
+}
+
+
 }
 }
 

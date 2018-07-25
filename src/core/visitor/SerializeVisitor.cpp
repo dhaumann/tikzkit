@@ -48,13 +48,10 @@ SerializeVisitor::~SerializeVisitor()
 
 bool SerializeVisitor::save(const QString & filename)
 {
-    // build final tree
-    QVariantMap root = m_root;
-    root.insert("nodes", m_nodes);
-    root.insert("paths", m_paths);
-    root.insert("node-styles", m_nodeStyles);
-    root.insert("edge-styles", m_edgeStyles);
-
+    QJsonObject root = m_root;
+    root["nodes"] = m_nodes;
+    root["paths"] = m_paths;
+    root["styles"] = m_styles;
 
     // open file
     QFile target(filename);
@@ -63,8 +60,9 @@ bool SerializeVisitor::save(const QString & filename)
     }
 
     // write json to text stream
+    QJsonDocument json(root);
     QTextStream ts(&target);
-    ts << QJsonDocument::fromVariant(root).toJson();
+    ts << json.toJson();
 
     return true;
 }
@@ -76,217 +74,45 @@ void SerializeVisitor::visit(Document * doc)
     foreach (const Uid & uid, doc->nodes()) {
         list.append(uid.toString());
     }
-    m_root.insert("node-ids", list.join(", "));
+    m_root["node-ids"] = list.join(", ");
 
     // aggregate path ids
     list.clear();
     foreach (const Uid & uid, doc->paths()) {
         list.append(uid.toString());
     }
-    m_root.insert("path-ids", list.join(", "));
+    m_root["path-ids"] = list.join(", ");
+
+    // aggregate style ids
+    list.clear();
+    foreach (const Uid & uid, doc->entities()) {
+        if (uid.entityType() == EntityType::Style)
+            list.append(uid.toString());
+    }
+    m_root["style-ids"] = list.join(", ");
 
     // save document style
-    QVariantMap docStyle;
-    docStyle.insert("properties", serializeStyle(doc->style()));
-    m_root.insert("document-style", docStyle);
+    m_root["document-style"] = doc->style()->save();
 }
 
 void SerializeVisitor::visit(Node * node)
 {
-    QVariantMap map;
-
-    // serialize node
-    map.insert("pos", node->metaPos().toString());
-    map.insert("text", node->text());
-
-    // serialize node style
-    QVariantMap styleMap;
-    styleMap.insert("parent", node->style()->parentStyle() ? node->style()->parentStyle()->uid().id() : -1);
-    styleMap.insert("properties", serializeNodeStyle(node->style()));
-    map.insert("style", styleMap);
-
-    m_nodes.insert("node-" + node->uid().toString(), map);
-}
-
-static void serializeEdge(QVariantMap & map, tikz::core::EdgePath * edge)
-{
-    Q_ASSERT(edge != nullptr);
-    map.insert("start", edge->startMetaPos().toString());
-    map.insert("end", edge->endMetaPos().toString());
-}
-
-static void serializeEdge(QVariantMap & map, tikz::core::EllipsePath * ellipse)
-{
-    Q_ASSERT(ellipse != nullptr);
-    map.insert("center", ellipse->metaPos().toString());
+    m_nodes["node-" + node->uid().toString()] = node->save();
 }
 
 void SerializeVisitor::visit(Path * path)
 {
-    QVariantMap map;
-    auto edge = dynamic_cast<tikz::core::EdgePath*>(path);
-
-    map.insert("type", tikz::toString(path->type()));
-
-    switch (path->type()) {
-        case PathType::Line:
-        case PathType::HVLine:
-        case PathType::VHLine:
-        case PathType::BendCurve:
-        case PathType::InOutCurve:
-        case PathType::BezierCurve:
-            serializeEdge(map, edge);
-            break;
-        case PathType::Ellipse:
-            serializeEdge(map, dynamic_cast<tikz::core::EllipsePath*>(path));
-            break;
-        case PathType::Rectangle:
-        case PathType::Grid:
-            serializeEdge(map, edge);
-            break;
-        case PathType::Invalid:
-            Q_ASSERT(false);
-            break;
-        default: break;
-    }
-
-    //
-    // serialize common path properties
-    //
-    QVariantMap styleMap;
-    styleMap.insert("parent", path->style()->parentStyle() ? path->style()->parentStyle()->uid().id() : -1);
-    styleMap.insert("properties", serializeEdgeStyle(path->style()));
-    map.insert("style", styleMap);
-
-    //
-    // put into paths map
-    //
-    m_paths.insert("path-" + path->uid().toString(), map);
+    m_paths["path-" + path->uid().toString()] = path->save();
 }
 
 void SerializeVisitor::visit(NodeStyle * style)
 {
+    // TODO: delete
 }
 
 void SerializeVisitor::visit(Style * style)
 {
-}
-
-QVariantMap SerializeVisitor::serializeStyle(Style * style)
-{
-    QVariantMap map;
-
-    if (style->penColorSet()) {
-        map.insert("penColor", style->penColor());
-    }
-
-    if (style->fillColorSet()) {
-        map.insert("fillColor", style->fillColor());
-    }
-
-    if (style->penOpacitySet()) {
-        map.insert("penOpacity", style->penOpacity());
-    }
-
-    if (style->fillOpacitySet()) {
-        map.insert("fillOpacity", style->fillOpacity());
-    }
-
-    if (style->penStyleSet()) {
-        map.insert("penStyle", toString(style->penStyle()));
-    }
-
-    // FIXME line width
-//     if (style->penStyleSet()) {
-//         map.insert("penStyle", toString(style->penStyle()));
-//     }
-    
-
-    if (style->doubleLineSet()) {
-        map.insert("doubleLine", "true");
-
-        // FIXME line width
-
-        if (style->innerLineColorSet()) {
-            map.insert("doubleLineColor", style->innerLineColor());
-        }
-    }
-
-    if (style->rotationSet()) {
-        map.insert("rotation", style->rotation());
-    }
-
-    return map;
-}
-
-QVariantMap SerializeVisitor::serializeEdgeStyle(Style * style)
-{
-    QVariantMap map = serializeStyle(style);
-
-    if (style->radiusXSet()) {
-        map.insert("radiusX", style->radiusX().toString());
-    }
-
-    if (style->radiusYSet()) {
-        map.insert("radiusY", style->radiusY().toString());
-    }
-
-    if (style->bendAngleSet()) {
-        map.insert("bendAngle", style->bendAngle());
-    }
-
-    if (style->loosenessSet()) {
-        map.insert("looseness", style->looseness());
-    }
-
-    if (style->outAngleSet()) {
-        map.insert("outAngle", style->outAngle());
-    }
-
-    if (style->inAngleSet()) {
-        map.insert("inAngle", style->inAngle());
-    }
-
-    if (style->arrowTailSet()) {
-        map.insert("arrowTail", toString(style->arrowTail()));
-    }
-
-    if (style->arrowHeadSet()) {
-        map.insert("arrowHead", toString(style->arrowHead()));
-    }
-
-    if (style->shortenStartSet()) {
-        map.insert("shortenStart", style->shortenStart().toString());
-    }
-
-    if (style->shortenEndSet()) {
-        map.insert("shortenEnd", style->shortenEnd().toString());
-    }
-
-    return map;
-}
-
-QVariantMap SerializeVisitor::serializeNodeStyle(NodeStyle * style)
-{
-    QVariantMap map = serializeStyle(style);
-
-    if (style->textAlignSet()) {
-        map.insert("textAlign", toString(style->textAlign()));
-    }
-
-    if (style->shapeSet()) {
-        map.insert("shape", toString(style->shape()));
-    }
-
-    if (style->minimumWidthSet()) {
-        map.insert("minimumWidth", style->minimumWidth().toString());
-    }
-
-    if (style->minimumHeightSet()) {
-        map.insert("minimumHeight", style->minimumHeight().toString());
-    }
-
-    return map;
+    m_nodes["style-" + style->uid().toString()] = style->save();
 }
 
 }

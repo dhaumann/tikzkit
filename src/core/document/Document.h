@@ -309,6 +309,11 @@ class TIKZCORE_EXPORT Document : public Entity
          */
         Entity * entity(const tikz::core::Uid & uid) const;
 
+        /**
+         * Get list of all entities.
+         */
+        QVector<Uid> entities() const;
+
     //
     // Node and path creation
     //
