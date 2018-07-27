@@ -72,6 +72,26 @@ bool Path::accept(Visitor & visitor)
     return true;
 }
 
+void Path::loadData(const QJsonObject & json)
+{
+    ConfigTransaction transaction(this);
+
+    if (json.contains("style")) {
+        const Uid styleId(json["style"].toString(), document());
+        // FIXME: convert style to Uid
+        // d->style = document()->entity<Style>(styleId);
+    }
+}
+
+QJsonObject Path::saveData() const
+{
+    QJsonObject json = Entity::saveData();
+
+    json["style"] = d->style.uid().toString();
+
+    return json;
+}
+
 Style* Path::style() const
 {
     return &d->style;

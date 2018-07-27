@@ -71,6 +71,20 @@ class TIKZCORE_EXPORT Path : public Entity
         bool accept(Visitor & visitor);
 
     //
+    // serialization
+    //
+    public:
+        /**
+         * Load the state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
+        /**
+         * Save the state to the json object.
+         */
+        QJsonObject saveData() const override;
+
+    //
     // path properties
     //
     public:
