@@ -29,6 +29,7 @@
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
+#include <tikz/core/PropertyManager.h>
 
 #include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
@@ -66,62 +67,6 @@ QObject * styleForItem(const tikz::core::Uid & uid)
 
     return nullptr;
 }
-
-class PropertyInfo
-{
-public:
-    PropertyInfo() = default;
-    void load(const QString & jsonFileName)
-    {
-        QFile file(jsonFileName);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qDebug() << "Could not read file" << jsonFileName;
-            return;
-        }
-        const auto xx = file.readAll();
-//         qDebug() << xx;
-        m_json = QJsonDocument::fromJson(xx);
-    }
-
-    bool isValid(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName].isObject();
-    }
-
-    QString type(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName]["type"].toString();
-    }
-
-    QString title(const QString & propertyName) const
-    {
-        const auto value = m_json["properties"][propertyName]["title"].toString();
-        return value.isEmpty() ? propertyName : value;
-    }
-
-    QVariant minimum(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName]["minimum"].toVariant();
-    }
-
-    QVariant maximum(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName]["maximum"].toVariant();
-    }
-
-    double singleStep(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName]["singleStep"].toDouble(1.0);
-    }
-
-    QString modifiedGetter(const QString & propertyName) const
-    {
-        return m_json["properties"][propertyName]["modified"].toString();
-    }
-
-private:
-    QJsonDocument m_json;
-};
 
 namespace tikz {
 namespace ui {
@@ -163,11 +108,10 @@ public:
 
     void addProperty(QObject * object, const QString & name)
     {
-        PropertyInfo info;
-        info.load("../data/properties.json");
+        const auto info = tikz::core::propertyManager().info(name);
 
-        if (!info.isValid(name)) {
-            qDebug() << "Unknown property type:" << name;
+        if (!info.isValid()) {
+            qDebug() << "Unknown property:" << name;
             return;
         }
 
@@ -179,40 +123,40 @@ public:
 
         QtProperty *property = nullptr;
 
-        const QString type = info.type(name);
+        const QString type = info.type();
         if (type == "string") {
-            property = stringManager->addProperty(info.title(name));
+            property = stringManager->addProperty(info.title());
             stringManager->setValue(property, prop.toString());
         }
         else if (type == "uid") {
-            property = uidManager->addProperty(info.title(name));
+            property = uidManager->addProperty(info.title());
             uidManager->setValue(property, prop.value<tikz::core::Uid>());
         }
         else if (type == "value") {
-            property = valueManager->addProperty(info.title(name));
+            property = valueManager->addProperty(info.title());
             valueManager->setRange(property, tikz::Value(0, tikz::Unit::Millimeter), tikz::Value(10, tikz::Unit::Millimeter));
-            valueManager->setMinimum(property, tikz::Value::fromString(info.minimum(name).toString()));
-            valueManager->setMaximum(property, tikz::Value::fromString(info.maximum(name).toString()));
-            valueManager->setSingleStep(property, info.singleStep(name));
+            valueManager->setMinimum(property, tikz::Value::fromString(info.minimum().toString()));
+            valueManager->setMaximum(property, tikz::Value::fromString(info.maximum().toString()));
+            valueManager->setSingleStep(property, info.singleStep());
             valueManager->setValue(property, prop.value<tikz::Value>());
         }
         else if (type == "bool") {
-            property = boolManager->addProperty(info.title(name));
+            property = boolManager->addProperty(info.title());
             boolManager->setValue(property, prop.toBool());
         }
         else if (type == "color") {
-            property = colorManager->addProperty(info.title(name));
+            property = colorManager->addProperty(info.title());
             colorManager->setValue(property, prop.value<QColor>());
         }
         else if (type == "opacity") {
-            property = opacityManager->addProperty(info.title(name));
+            property = opacityManager->addProperty(info.title());
             opacityManager->setValue(property, prop.toDouble());
         }
         else if (type == "double") {
-            property = doubleManager->addProperty(info.title(name));
-            doubleManager->setMinimum(property, info.minimum(name).toDouble());
-            doubleManager->setMaximum(property, info.maximum(name).toDouble());
-            doubleManager->setSingleStep(property, info.singleStep(name));
+            property = doubleManager->addProperty(info.title());
+            doubleManager->setMinimum(property, info.minimum().toDouble());
+            doubleManager->setMaximum(property, info.maximum().toDouble());
+            doubleManager->setSingleStep(property, info.singleStep());
             doubleManager->setValue(property, prop.toDouble());
         }
         else if (type == "enum") {
@@ -234,7 +178,7 @@ public:
             for (int i = 0; i < metaEnum.keyCount(); ++i) {
                 enumNames << metaEnum.key(i);
             }
-            property = enumManager->addProperty(info.title(name));
+            property = enumManager->addProperty(info.title());
             enumManager->setEnumNames(property, enumNames);
             enumManager->setValue(property, prop.toInt());
         }
@@ -242,18 +186,18 @@ public:
             qDebug() << "Unknown property type:" << name;
         }
         if (property) {
-            const QString modifiedGetter = info.modifiedGetter(name);
-            if (!modifiedGetter.isEmpty()) {
+            const QString modifiedFunction = info.modifiedFunction();
+            if (!modifiedFunction.isEmpty()) {
                 bool isModified = false;
                 const bool ok = QMetaObject::invokeMethod(object,
-                                                          modifiedGetter.toLatin1(),
+                                                          modifiedFunction.toLatin1(),
                                                           Qt::DirectConnection,
                                                           Q_RETURN_ARG(bool, isModified)
                 );
                 if (ok) {
                     property->setModified(isModified);
                 } else {
-                    tikz::debug("properties.json: Invalid modified getter" + modifiedGetter);
+                    tikz::debug("properties.json: Invalid modified getter " + modifiedFunction);
                 }
             }
             addProperty(property, name);

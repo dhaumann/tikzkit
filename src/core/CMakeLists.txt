@@ -18,6 +18,7 @@ add_library(qtikzcore SHARED
     utils/Uid.cpp
     utils/Entity.cpp
     utils/ConfigObject.cpp
+    utils/PropertyManager.cpp
 
     properties/Property.cpp
     properties/PropertyInterface.cpp
