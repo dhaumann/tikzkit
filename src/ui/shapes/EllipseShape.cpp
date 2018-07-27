@@ -20,7 +20,7 @@
 #include "EllipseShape.h"
 #include "NodeItem.h"
 
-#include <tikz/core/NodeStyle.h>
+#include <tikz/core/Style.h>
 #include <tikz/core/tikz.h>
 
 #include <cmath>

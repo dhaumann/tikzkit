@@ -23,7 +23,6 @@
 #include "EdgePathItem.h"
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/Transaction.h>
-#include <tikz/core/NodeStyle.h>
 #include <tikz/core/Style.h>
 #include "Document.h"
 
@@ -62,7 +61,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Node"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::NodeStyle ns;
+        tikz::core::Style ns;
         ns.setStyle(node->node()->style());
         ns.setShape(tikz::Shape::ShapeRectangle);
         ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
@@ -74,7 +73,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Node"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::NodeStyle ns;
+        tikz::core::Style ns;
         ns.setStyle(node->node()->style());
         ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
         ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
@@ -97,7 +96,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Ellipse"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::NodeStyle ns;
+        tikz::core::Style ns;
         ns.setStyle(node->node()->style());
         ns.setShape(tikz::Shape::ShapeEllipse);
         ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
@@ -109,7 +108,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Ellipse"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::NodeStyle ns;
+        tikz::core::Style ns;
         ns.setStyle(node->node()->style());
         ns.setFillColor(Qt::black);
         ns.setShape(tikz::Shape::ShapeEllipse);

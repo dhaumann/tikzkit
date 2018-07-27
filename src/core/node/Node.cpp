@@ -18,7 +18,7 @@
  */
 
 #include "Node.h"
-#include "NodeStyle.h"
+#include "Style.h"
 #include "Document.h"
 #include "Visitor.h"
 #include "MetaPos.h"
@@ -49,7 +49,7 @@ class NodePrivate
         QString text;
 
         // this node's style
-        NodeStyle style;
+        Style style;
 };
 
 Node::Node(const Uid & uid)
@@ -92,7 +92,7 @@ void Node::loadData(const QJsonObject & json)
     if (json.contains("style")) {
         const Uid styleId(json["style"].toString(), document());
         // FIXME: convert style to Uid
-        // d->style = document()->entity<NodeStyle>(styleId);
+        // d->style = document()->entity<Style>(styleId);
     }
 }
 
@@ -165,12 +165,12 @@ QString Node::text() const
     return d->text;
 }
 
-NodeStyle* Node::style() const
+Style* Node::style() const
 {
     return &d->style;
 }
 
-void Node::setStyle(const NodeStyle & style)
+void Node::setStyle(const Style & style)
 {
     // TODO: room for optimization: if style did not change, abort
 

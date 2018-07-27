@@ -22,7 +22,6 @@
 #include "EdgePath.h"
 #include "EllipsePath.h"
 #include "Style.h"
-#include "NodeStyle.h"
 
 #include "Transaction.h"
 #include "UndoManager.h"
@@ -280,6 +279,11 @@ bool Document::save()
 
 bool Document::saveAs(const QUrl & targetUrl)
 {
+    SerializeVisitor v;
+    accept(v);
+    v.save(targetUrl.path());
+    return true;
+
     const bool urlChanged = d->url.toLocalFile() != targetUrl.toLocalFile();
 
     if (targetUrl.isLocalFile()) {
@@ -579,11 +583,6 @@ Entity * Document::createEntity(const Uid & uid, EntityType type)
         case EntityType::Document: Q_ASSERT(false); break;
         case EntityType::Style: {
             e = new Style(uid);
-            e->setObjectName("Style " + uid.toString());
-            break;
-        }
-        case EntityType::NodeStyle: {
-            e = new NodeStyle(uid);
             e->setObjectName("Style " + uid.toString());
             break;
         }

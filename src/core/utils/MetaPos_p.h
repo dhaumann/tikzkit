@@ -79,7 +79,7 @@ class MetaPosPrivate : public QObject
         /**
          * This signal is emitted either when a new node is set with setNode(),
          * when the x/y position of the node changed, or when the associated
-         * NodeStyle of the node changed.
+         * Style of the node changed.
          */
         void changed(tikz::core::MetaPos * metaPos);
 

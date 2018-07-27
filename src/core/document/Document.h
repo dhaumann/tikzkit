@@ -37,7 +37,6 @@ namespace core {
 class DocumentPrivate;
 class Style;
 class Node;
-class NodeStyle;
 class UndoItem;
 class Visitor;
 

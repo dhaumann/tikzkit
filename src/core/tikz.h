@@ -120,7 +120,6 @@ inline void error(const QString & text)
 enum class EntityType {
     Document  = 0,
     Style,
-    NodeStyle,
     Node,
     Path
 };

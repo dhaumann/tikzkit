@@ -27,7 +27,6 @@
 
 //BEGIN DEBUG
 #include <tikz/core/Style.h>
-#include <tikz/core/NodeStyle.h>
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/EllipsePath.h>
 //END DEBUG
@@ -126,7 +125,7 @@ View * DocumentPrivate::createView(QWidget * parent,
     beginTransaction("Create Nodes");
     tikz::ui::NodeItem* item1 = createNodeItem();
     item1->node()->setPos(tikz::Pos(-3, 3, tikz::Unit::Centimeter));
-    tikz::core::NodeStyle ns;
+    tikz::core::Style ns;
     ns.setStyle(item1->node()->style());
     ns.setLineWidth(tikz::Value::veryThin());
     ns.setShape(tikz::Shape::ShapeRectangle);
@@ -520,7 +519,6 @@ tikz::core::Entity * DocumentPrivate::createEntity(const tikz::core::Uid & uid, 
             Q_ASSERT(false); // not implemented
             break;
         case tikz::EntityType::Style:
-        case tikz::EntityType::NodeStyle:
             // nothing to do
             break;
         default: Q_ASSERT(false);
@@ -554,7 +552,6 @@ void DocumentPrivate::deleteEntity(const tikz::core::Uid & uid)
             Q_ASSERT(false); // not implemented
             break;
         case tikz::EntityType::Style:
-        case tikz::EntityType::NodeStyle:
             // nothing to do
             break;
         default: Q_ASSERT(false);

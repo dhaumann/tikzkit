@@ -75,11 +75,6 @@ class SerializeVisitor : public Visitor
         /**
          * Serializes @p style.
          */
-        void visit(NodeStyle * style) override;
-
-        /**
-         * Serializes @p style.
-         */
         void visit(Style * style) override;
 
     //

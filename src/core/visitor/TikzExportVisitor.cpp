@@ -24,7 +24,6 @@
 #include "Path.h"
 #include "EllipsePath.h"
 #include "EdgePath.h"
-#include "NodeStyle.h"
 #include "Style.h"
 
 #include <QStringList>
@@ -254,10 +253,6 @@ void TikzExportVisitor::visit(Path * path)
     m_tikzExport.addTikzLine(line);
 }
 
-void TikzExportVisitor::visit(NodeStyle * style)
-{
-}
-
 void TikzExportVisitor::visit(Style * style)
 {
 }
@@ -415,7 +410,7 @@ QStringList TikzExportVisitor::edgeStyleOptions(Style * style)
     return options;
 }
 
-QStringList TikzExportVisitor::nodeStyleOptions(NodeStyle * style)
+QStringList TikzExportVisitor::nodeStyleOptions(Style * style)
 {
     QStringList options = styleOptions(style);
 

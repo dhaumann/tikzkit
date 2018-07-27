@@ -25,7 +25,6 @@
 #include "EdgePath.h"
 #include "EllipsePath.h"
 #include "Style.h"
-#include "NodeStyle.h"
 
 #include <QJsonDocument>
 #include <QStringList>
@@ -103,11 +102,6 @@ void SerializeVisitor::visit(Node * node)
 void SerializeVisitor::visit(Path * path)
 {
     m_paths["path-" + path->uid().toString()] = path->save();
-}
-
-void SerializeVisitor::visit(NodeStyle * style)
-{
-    // TODO: delete
 }
 
 void SerializeVisitor::visit(Style * style)

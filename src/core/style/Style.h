@@ -723,6 +723,172 @@ private:
         Q_INVOKABLE void unsetShortenEnd();
 
 
+private:
+    //
+    // properties specific to Node
+    //
+    Q_PROPERTY(tikz::TextAlignment textAlign READ textAlign WRITE setTextAlign RESET unsetTextAlign)
+    Q_PROPERTY(tikz::Shape shape READ shape WRITE setShape RESET unsetShape)
+    Q_PROPERTY(tikz::Value innerSep READ innerSep WRITE setInnerSep RESET unsetInnerSep)
+    Q_PROPERTY(tikz::Value outerSep READ outerSep WRITE setOuterSep RESET unsetOuterSep)
+    Q_PROPERTY(tikz::Value minimumHeight READ minimumHeight WRITE setMinimumHeight RESET unsetMinimumHeight)
+    Q_PROPERTY(tikz::Value minimumWidth READ minimumWidth WRITE setMinimumWidth RESET unsetMinimumWidth)
+
+    //
+    // text alignment
+    //
+    public:
+        /**
+         * Get the text alignment.
+         */
+        Q_INVOKABLE TextAlignment textAlign() const;
+
+        /**
+         * Check whether the alignment is set.
+         */
+        Q_INVOKABLE bool textAlignSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the text alignment to @p align.
+         */
+        Q_INVOKABLE void setTextAlign(tikz::TextAlignment align);
+
+        /**
+         * Unset the alignment attribute.
+         * The default value is tikz::NoAlign.
+         */
+        Q_INVOKABLE void unsetTextAlign();
+
+    //
+    // Node specific attributes
+    //
+    public:
+        /**
+         * Get the Shape of this style.
+         * @see Shape
+         */
+        Q_INVOKABLE Shape shape() const;
+
+        /**
+         * Check whether the shape is set.
+         */
+        Q_INVOKABLE bool shapeSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the Shape of this style.
+         * @see Shape
+         */
+        Q_INVOKABLE void setShape(tikz::Shape shape);
+
+        /**
+         * Unset the shape attribute.
+         * Afterwards, the shape falls back to the value of parent()->shape().
+         */
+        Q_INVOKABLE void unsetShape();
+
+    //
+    // size methods
+    //
+    public:
+        /**
+         * Get the 'inner sep'.
+         * Default: 0.3333ex
+         */
+        Q_INVOKABLE tikz::Value innerSep() const;
+
+        /**
+         * Check whether the inner sep is set.
+         */
+        Q_INVOKABLE bool innerSepSet() const;
+
+        /**
+         * Get the 'outer sep'.
+         * Default: 0.5 lineWidth()
+         */
+        Q_INVOKABLE tikz::Value outerSep() const;
+
+        /**
+         * Check whether the inner sep is set.
+         */
+        Q_INVOKABLE bool outerSepSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Set the 'inner sep' to @p sep.
+         */
+        Q_INVOKABLE void setInnerSep(const tikz::Value & sep);
+
+        /**
+         * Set the 'outer sep' to @p sep.
+         */
+        Q_INVOKABLE void setOuterSep(const tikz::Value & sep);
+
+        /**
+         * Unset the 'inner sep'.
+         * Afterwards, the style falls back to the value of parent()->innerSep().
+         */
+        Q_INVOKABLE void unsetInnerSep();
+
+        /**
+         * Unset the 'outer sep'.
+         * Afterwards, the style falls back to the value of parent()->outerSep().
+         */
+        Q_INVOKABLE void unsetOuterSep();
+
+    //
+    // minimum width & height
+    //
+    public:
+        /**
+         * Get the minimum height.
+         * Initially unset, and the default value is 0 mm.
+         */
+        Q_INVOKABLE tikz::Value minimumHeight() const;
+
+        /**
+         * Check whether the minimum height is set.
+         */
+        Q_INVOKABLE bool minimumHeightSet() const;
+
+        /**
+         * Get the minimum width.
+         * Initially unset, and the default value is 0 mm.
+         */
+        Q_INVOKABLE tikz::Value minimumWidth() const;
+
+        /**
+         * Check whether the minimum width is set.
+         */
+        Q_INVOKABLE bool minimumWidthSet() const;
+
+    public Q_SLOTS:
+        /**
+         * Get the minimum height.
+         * Initially unset, and the default value is 0 mm.
+         */
+        Q_INVOKABLE void setMinimumHeight(const tikz::Value & height);
+
+        /**
+         * Get the minimum width.
+         * Initially unset, and the default value is 0 mm.
+         */
+        Q_INVOKABLE void setMinimumWidth(const tikz::Value & width);
+
+        /**
+         * Unset the minimum height.
+         * Afterwards, the style falls back to the value of parent()->minimumHeight().
+         */
+        Q_INVOKABLE void unsetMinimumHeight();
+
+        /**
+         * Unset the minimum width.
+         * Afterwards, the style falls back to the value of parent()->minimumWidth().
+         */
+        Q_INVOKABLE void unsetMinimumWidth();
+
+
     //
     // internal to tikz::Document
     //

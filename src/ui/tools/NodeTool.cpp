@@ -26,7 +26,7 @@
 #include "ViewPrivate.h"
 #include "Renderer.h"
 
-#include <tikz/core/NodeStyle.h>
+#include <tikz/core/Style.h>
 #include <tikz/core/Transaction.h>
 
 #include <QApplication>
@@ -177,7 +177,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
         const QPointF delta = m_node->node()->pos() - tikz::Pos(scenePos);
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
-        tikz::core::NodeStyle s;
+        tikz::core::Style s;
         s.setStyle(m_node->style());
         s.setRotation(deg);
 
@@ -243,7 +243,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     w = tikz::Value(qAbs(w.value()), w.unit());
     h = tikz::Value(qAbs(h.value()), h.unit());
 
-    tikz::core::NodeStyle s;
+    tikz::core::Style s;
     s.setStyle(m_node->style());
     s.setMinimumWidth(w);
     s.setMinimumHeight(h);

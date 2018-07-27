@@ -29,7 +29,6 @@ class Document;
 class Style;
 class Node;
 class Path;
-class NodeStyle;
 
 /**
  * Visitor pattern.
@@ -67,11 +66,6 @@ class TIKZCORE_EXPORT Visitor
          * This function is called for every tikz::core::Path in the document.
          */
         virtual void visit(tikz::core::Path * path) = 0;
-
-        /**
-         * This function is called for every tikz::core::NodeStyle in the document.
-         */
-        virtual void visit(tikz::core::NodeStyle * style) = 0;
 
         /**
          * This function is called for every tikz::core::Style in the document.

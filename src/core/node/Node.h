@@ -31,7 +31,7 @@ namespace tikz {
 namespace core {
 
 class NodePrivate;
-class NodeStyle;
+class Style;
 class Document;
 class Visitor;
 class MetaPos;
@@ -119,12 +119,12 @@ class TIKZCORE_EXPORT Node : public Entity
         /**
          * Get the Style object of this node.
          */
-        NodeStyle* style() const;
+        Style* style() const;
 
         /**
          * Set the style of this node to @p style.
          */
-        void setStyle(const NodeStyle & style);
+        void setStyle(const Style & style);
 
     Q_SIGNALS:
         /**

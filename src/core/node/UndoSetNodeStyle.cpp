@@ -19,7 +19,7 @@
 
 #include "UndoSetNodeStyle.h"
 #include "Node.h"
-#include "NodeStyle.h"
+#include "Style.h"
 #include "Document.h"
 
 namespace tikz {
@@ -30,7 +30,7 @@ UndoSetNodeStyle::UndoSetNodeStyle(Document * doc)
 {
 }
 
-UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc)
+UndoSetNodeStyle::UndoSetNodeStyle(const Uid & nodeUid, const Style & style, Document * doc)
     : UndoItem("Set Node Style", doc)
     , m_nodeId(nodeUid)
 {

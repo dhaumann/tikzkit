@@ -52,6 +52,14 @@ static constexpr char s_arrowHead[] = "arrowHead";
 static constexpr char s_shortenStart[] = "shortenStart";
 static constexpr char s_shortenEnd[] = "shortenEnd";
 
+// Node properties
+static constexpr char s_align[] = "textAlign";
+static constexpr char s_shape[] = "shape";
+static constexpr char s_innerSep[] = "innerSep";
+static constexpr char s_outerSep[] = "outerSep";
+static constexpr char s_minimumHeight[] = "minimumHeight";
+static constexpr char s_minimumWidth[] = "minimumWidth";
+
 /**
  * Private data and helper functions of class Style.
  */
@@ -105,6 +113,18 @@ public:
 
     tikz::Value shortenStart;
     tikz::Value shortenEnd;
+
+//
+// Node members
+//
+public:
+    // Node styles
+    TextAlignment textAlign = tikz::TextAlignment::NoAlign;
+    Shape shape = tikz::Shape::ShapeRectangle;
+    tikz::Value innerSep = 3.0_pt; //FIXME: 0.3333em
+    tikz::Value outerSep = 0.5_pt; // 0.5 \pgflinewidth
+    tikz::Value minimumHeight = 0.0_cm;
+    tikz::Value minimumWidth = 0.0_cm;
 };
 
 Style::Style()
@@ -253,6 +273,30 @@ void Style::loadData(const QJsonObject & json)
     if (json.contains("shortenEnd")) {
         setShortenEnd(tikz::Value::fromString(json["shortenEnd"].toString()));
     }
+
+    if (json.contains("textAlign")) {
+        setTextAlign(toEnum<TextAlignment>(json["textAlign"].toString()));
+    }
+
+    if (json.contains("shape")) {
+        setShape(toEnum<Shape>(json["shape"].toString()));
+    }
+
+    if (json.contains("minimumWidth")) {
+        setMinimumWidth(tikz::Value::fromString(json["minimumWidth"].toString()));
+    }
+
+    if (json.contains("minimumHeight")) {
+        setMinimumHeight(tikz::Value::fromString(json["minimumHeight"].toString()));
+    }
+
+    if (json.contains("innerSep")) {
+        setInnerSep(tikz::Value::fromString(json["innerSep"].toString()));
+    }
+
+    if (json.contains("outerSep")) {
+        setOuterSep(tikz::Value::fromString(json["outerSep"].toString()));
+    }
 }
 
 QJsonObject Style::saveData() const
@@ -341,6 +385,30 @@ QJsonObject Style::saveData() const
 
     if (shortenEndSet()) {
         json["shortenEnd"] = shortenEnd().toString();
+    }
+
+    if (textAlignSet()) {
+        json["textAlign"] = toString(textAlign());
+    }
+
+    if (shapeSet()) {
+        json["shape"] = toString(shape());
+    }
+
+    if (minimumWidthSet()) {
+        json["minimumWidth"] = minimumWidth().toString();
+    }
+
+    if (minimumHeightSet()) {
+        json["minimumHeight"] = minimumHeight().toString();
+    }
+
+    if (innerSepSet()) {
+        json["innerSep"] = innerSep().toString();
+    }
+
+    if (outerSepSet()) {
+        json["outerSep"] = outerSep().toString();
     }
 
     return json;
@@ -1181,6 +1249,217 @@ void Style::unsetShortenEnd()
         ConfigTransaction transaction(this);
         removeProperty(s_shortenEnd);
         d->shortenEnd = 0.0_cm;
+    }
+}
+
+TextAlignment Style::textAlign() const
+{
+    if (propertySet(s_align)) {
+        return d->textAlign;
+    }
+
+    Style * parentStyle = qobject_cast<Style*>(parent());
+    if (parentStyle) {
+        return parentStyle->textAlign();
+    }
+
+    return TextAlignment::NoAlign;
+}
+
+bool Style::textAlignSet() const
+{
+    return propertySet(s_align);
+}
+
+void Style::setTextAlign(tikz::TextAlignment align)
+{
+    if (!propertySet(s_align) || d->textAlign != align) {
+        ConfigTransaction transaction(this);
+        addProperty(s_align);
+        d->textAlign = align;
+    }
+}
+
+void Style::unsetTextAlign()
+{
+    if (propertySet(s_align)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_align);
+        d->textAlign = TextAlignment::NoAlign;
+    }
+}
+
+Shape Style::shape() const
+{
+    if (propertySet(s_shape)) {
+        return d->shape;
+    }
+
+    Style * parentStyle = qobject_cast<Style*>(parent());
+    if (parentStyle) {
+        return parentStyle->shape();
+    }
+
+    return Shape::ShapeRectangle;
+}
+
+bool Style::shapeSet() const
+{
+    return propertySet(s_shape);
+}
+
+void Style::setShape(tikz::Shape shape)
+{
+    if (!propertySet(s_shape) || d->shape != shape) {
+        ConfigTransaction transaction(this);
+        addProperty(s_shape);
+        d->shape = shape;
+    }
+}
+
+void Style::unsetShape()
+{
+    if (propertySet(s_shape)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_shape);
+        d->shape = Shape::ShapeRectangle;
+    }
+}
+
+void Style::setInnerSep(const tikz::Value & sep)
+{
+    if (!propertySet(s_innerSep) || d->innerSep != sep) {
+        ConfigTransaction transaction(this);
+        addProperty(s_innerSep);
+        d->innerSep = sep;
+    }
+}
+
+bool Style::innerSepSet() const
+{
+    return propertySet(s_innerSep);
+}
+
+tikz::Value Style::innerSep() const
+{
+    Style * parentStyle = qobject_cast<Style*>(parent());
+    if (!propertySet(s_innerSep) && parentStyle) {
+        return parentStyle->innerSep();
+    }
+    return d->innerSep;
+}
+
+void Style::setOuterSep(const tikz::Value & sep)
+{
+    if (!propertySet(s_outerSep) || d->outerSep != sep) {
+        ConfigTransaction transaction(this);
+        addProperty(s_outerSep);
+        d->outerSep = sep;
+    }
+}
+
+bool Style::outerSepSet() const
+{
+    return propertySet(s_outerSep);
+}
+
+tikz::Value Style::outerSep() const
+{
+    if (!propertySet(s_outerSep)) {
+        return 0.5 * penWidth();
+    }
+    return d->outerSep;
+}
+
+void Style::unsetInnerSep()
+{
+    if (propertySet(s_innerSep)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_innerSep);
+        d->innerSep = 3.0_pt; //FIXME: 0.3333em
+    }
+}
+
+void Style::unsetOuterSep()
+{
+    if (propertySet(s_outerSep)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_outerSep);
+        d->outerSep = 3.0_pt; //FIXME: 0.3333em
+    }
+}
+
+tikz::Value Style::minimumHeight() const
+{
+    if (propertySet(s_minimumHeight)) {
+        return d->minimumHeight;
+    }
+
+    Style * parentStyle = qobject_cast<Style*>(parent());
+    if (parentStyle) {
+        return parentStyle->minimumHeight();
+    }
+
+    return 0.0_cm;
+}
+
+bool Style::minimumHeightSet() const
+{
+    return propertySet(s_minimumHeight);
+}
+
+tikz::Value Style::minimumWidth() const
+{
+    if (propertySet(s_minimumWidth)) {
+        return d->minimumWidth;
+    }
+
+    Style * parentStyle = qobject_cast<Style*>(parent());
+    if (parentStyle) {
+        return parentStyle->minimumWidth();
+    }
+
+    return 0.0_cm;
+}
+
+bool Style::minimumWidthSet() const
+{
+    return propertySet(s_minimumWidth);
+}
+
+void Style::setMinimumHeight(const tikz::Value & height)
+{
+    if (!propertySet(s_minimumHeight) || d->minimumHeight != height) {
+        ConfigTransaction transaction(this);
+        addProperty(s_minimumHeight);
+        d->minimumHeight = height;
+    }
+}
+
+void Style::setMinimumWidth(const tikz::Value & width)
+{
+    if (!propertySet(s_minimumWidth) || d->minimumWidth != width) {
+        ConfigTransaction transaction(this);
+        addProperty(s_minimumWidth);
+        d->minimumWidth = width;
+    }
+}
+
+void Style::unsetMinimumHeight()
+{
+    if (propertySet(s_minimumHeight)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_minimumHeight);
+        d->minimumHeight = 0.0_cm;
+    }
+}
+
+void Style::unsetMinimumWidth()
+{
+    if (propertySet(s_minimumWidth)) {
+        ConfigTransaction transaction(this);
+        removeProperty(s_minimumWidth);
+        d->minimumWidth = 0.0_cm;
     }
 }
 

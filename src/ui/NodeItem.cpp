@@ -18,7 +18,7 @@
  */
 
 #include "NodeItem.h"
-#include <tikz/core/NodeStyle.h>
+#include <tikz/core/Style.h>
 #include "NodeText.h"
 #include "Painter.h"
 #include "AbstractShape.h"
@@ -127,7 +127,7 @@ tikz::core::Uid NodeItem::uid() const
     return d->node->uid();
 }
 
-tikz::core::NodeStyle* NodeItem::style() const
+tikz::core::Style* NodeItem::style() const
 {
     return d->node->style();
 }

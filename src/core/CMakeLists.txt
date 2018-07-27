@@ -10,7 +10,6 @@ add_library(qtikzcore SHARED
     document/UndoDeleteEntity.cpp
 
     style/Style.cpp
-    style/NodeStyle.cpp
 
     utils/Value.cpp
     utils/Pos.cpp

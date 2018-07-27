@@ -21,7 +21,7 @@
 #define TIKZ_UNDO_SET_NODE_STYLE_H
 
 #include "UndoItem.h"
-#include <NodeStyle.h>
+#include <Style.h>
 
 namespace tikz {
 namespace core {
@@ -40,7 +40,7 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * Constructor.
          */
-        UndoSetNodeStyle(const Uid & nodeUid, const NodeStyle & style, Document * doc);
+        UndoSetNodeStyle(const Uid & nodeUid, const Style & style, Document * doc);
 
         /**
          * Destructor
@@ -89,12 +89,12 @@ class UndoSetNodeStyle : public UndoItem
         /**
          * The node style before the change
          */
-        NodeStyle m_undoStyle;
+        Style m_undoStyle;
 
         /**
          * The node style after the change
          */
-        NodeStyle m_redoStyle;
+        Style m_redoStyle;
 };
 
 }

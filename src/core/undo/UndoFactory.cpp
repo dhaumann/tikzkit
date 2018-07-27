@@ -24,7 +24,6 @@
 #include "UndoDeleteEntity.h"
 #include "UndoSetNodePos.h"
 #include "UndoSetNodeStyle.h"
-#include "UndoSetNodeStyle.h"
 #include "UndoSetNodeText.h"
 #include "UndoSetEdgePos.h"
 #include "UndoSetEllipsePos.h"

@@ -78,7 +78,7 @@ class TIKZUI_EXPORT NodeItem : public TikzItem
          * Returns the style of this node.
          * This is the same as node().style().
          */
-        tikz::core::NodeStyle* style() const;
+        tikz::core::Style* style() const;
 
     //
     // anchor methods

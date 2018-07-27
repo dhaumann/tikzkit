@@ -29,7 +29,6 @@
 #include <tikz/core/Node.h>
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
-#include <tikz/core/NodeStyle.h>
 
 #include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
@@ -62,8 +61,7 @@ QObject * styleForItem(const tikz::core::Uid & uid)
         case tikz::EntityType::Document:;
         case tikz::EntityType::Node:
         case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
-        case tikz::EntityType::Style:
-        case tikz::EntityType::NodeStyle: return uid.entity<tikz::core::Style>();
+        case tikz::EntityType::Style: return uid.entity<tikz::core::Style>();
     }
 
     return nullptr;

@@ -24,7 +24,6 @@
 #include "Path.h"
 #include "EdgePath.h"
 #include "EllipsePath.h"
-#include "NodeStyle.h"
 #include "Style.h"
 
 #include <QJsonDocument>
@@ -150,10 +149,6 @@ void DeserializeVisitor::visit(Path * path)
     deserializeEdgeStyle(path->style(), propertyMap);
 }
 
-void DeserializeVisitor::visit(NodeStyle * style)
-{
-}
-
 void DeserializeVisitor::visit(Style * style)
 {
 }
@@ -248,7 +243,7 @@ void DeserializeVisitor::deserializeEdgeStyle(Style * style, const QVariantMap &
     }
 }
 
-void DeserializeVisitor::deserializeNodeStyle(NodeStyle * style, const QVariantMap & map)
+void DeserializeVisitor::deserializeNodeStyle(Style * style, const QVariantMap & map)
 {
     ConfigTransaction transaction(style);
 
