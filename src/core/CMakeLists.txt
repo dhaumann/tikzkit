@@ -8,6 +8,7 @@ add_library(qtikzcore SHARED
     document/Document.cpp
     document/UndoCreateEntity.cpp
     document/UndoDeleteEntity.cpp
+    document/UndoSetProperty.cpp
 
     style/Style.cpp
 
