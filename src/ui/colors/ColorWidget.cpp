@@ -41,6 +41,8 @@ namespace ui {
 
 class ColorButton : public QAbstractButton
 {
+    Q_OBJECT
+
 public:
     ColorButton(QRgb color, QWidget * parent = nullptr)
         : QAbstractButton(parent)
@@ -202,7 +204,7 @@ void ColorWidget::setPalette(const QString & palette)
 
 void ColorWidget::setColor(QAbstractButton * button)
 {
-    auto colorButton = dynamic_cast<ColorButton *>(button);
+    auto colorButton = qobject_cast<ColorButton *>(button);
     Q_ASSERT(colorButton);
 
     qDebug() << colorButton->color();
@@ -215,5 +217,7 @@ void ColorWidget::setPaletteFromIndex(int index)
 
 }
 }
+
+#include "ColorWidget.moc"
 
 // kate: indent-width 4; replace-tabs on;

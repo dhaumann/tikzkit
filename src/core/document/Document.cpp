@@ -157,7 +157,7 @@ bool Document::accept(Visitor & visitor)
 
     // visit all nodes
     for (auto entity : d->entities) {
-        auto node = dynamic_cast<Node *>(entity);
+        auto node = qobject_cast<Node *>(entity);
         if (node) {
             node->accept(visitor);
         }
@@ -165,7 +165,7 @@ bool Document::accept(Visitor & visitor)
 
     // visit all paths
     for (auto entity : d->entities) {
-        auto path = dynamic_cast<Path *>(entity);
+        auto path = qobject_cast<Path *>(entity);
         if (path) {
             path->accept(visitor);
         }
@@ -173,7 +173,7 @@ bool Document::accept(Visitor & visitor)
 
     // visit all styles
     for (auto entity : d->entities) {
-        auto style = dynamic_cast<Style *>(entity);
+        auto style = qobject_cast<Style *>(entity);
         if (style) {
             style->accept(visitor);
         }
@@ -523,7 +523,7 @@ Path * Document::createPath(PathType type)
     // now the edge should be in the map
     const auto it = d->entityMap.find(uid);
     if (it != d->entityMap.end()) {
-        return dynamic_cast<Path*>(*it);
+        return qobject_cast<Path*>(*it);
     }
 
     // requested id not in map, this is a bug, since UndoCreatePath should
@@ -623,9 +623,9 @@ void Document::deleteEntity(Entity * e)
     d->undoManager->startTransaction("Remove entity");
 
     // make sure no edge points to the deleted node
-    if (auto nodeEntity = dynamic_cast<Node*>(e)) {
+    if (auto nodeEntity = qobject_cast<Node*>(e)) {
         for (auto entity : d->entities) {
-            if (auto path = dynamic_cast<Path *>(entity)) {
+            if (auto path = qobject_cast<Path *>(entity)) {
                 path->detachFromNode(nodeEntity);
             }
 
