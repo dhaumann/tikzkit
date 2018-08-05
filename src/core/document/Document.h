@@ -333,6 +333,11 @@ class TIKZCORE_EXPORT Document : public Entity
         }
 
         /**
+         * Helper function to create a Node.
+         */
+        Node * createNode();
+
+        /**
          * Remove @p entity from the document by deleting the entity object.
          * Afterwards, the pointer is invalid.
          * @param entity entity to delete

@@ -36,6 +36,8 @@ class Visitor;
 class TIKZCORE_EXPORT Style : public Entity
 {
     Q_OBJECT
+    Q_PROPERTY(Uid parentStyle READ parentStyle WRITE setParentStyle)
+
     //
     // properties shared between Nodes and Paths
     //
@@ -102,25 +104,18 @@ class TIKZCORE_EXPORT Style : public Entity
         /**
          * Get the parent style this style inherits from.
          */
-        Style *parentStyle() const;
+        Uid parentStyle() const;
 
         /**
-         * Set @p parent as new parent to inherit attributes from.
+         * Set @p parentUid as new parent to inherit attributes from.
          */
-        void setParentStyle(Style *parent);
+        void setParentStyle(const Uid & parentUid);
 
         /**
          * Returns true, if this style has child styles inheriting from
          * this style.
          */
         bool hasChildStyles() const;
-
-        /**
-         * Searches this style as well as all child styles recursively for
-         * a style that matches @p styleUid. If no style with @p styleUid is
-         * found, a nullptr is returned.
-         */
-        Style * findStyle(const Uid & styleUid) const;
 
     //
     // properties

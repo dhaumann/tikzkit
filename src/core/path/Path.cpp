@@ -38,7 +38,7 @@ Path::Path(const Uid & uid)
     : Entity(uid)
     , d(new PathPrivate())
 {
-    d->style.setParentStyle(uid.document()->style());
+    d->style.setParentStyle(uid.document()->style()->uid());
 
     connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }

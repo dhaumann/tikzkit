@@ -28,6 +28,7 @@
 
 #include <tikz/core/Style.h>
 #include <tikz/core/Transaction.h>
+#include <tikz/core/UndoSetProperty.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -38,6 +39,11 @@
 
 namespace tikz {
 namespace ui {
+
+static void setProp(const tikz::core::Uid & entity, const QString & key, const QVariant & value)
+{
+    entity.document()->addUndoItem(new tikz::core::UndoSetProperty(entity, key, value));
+}
 
 NodeTool::NodeTool(NodeItem * node, QGraphicsScene * scene)
     : AbstractTool(node->document(), scene)
@@ -177,11 +183,7 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
         const QPointF delta = m_node->node()->pos() - tikz::Pos(scenePos);
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
-        tikz::core::Style s;
-        s.setStyle(m_node->style());
-        s.setRotation(deg);
-
-        m_node->node()->setStyle(s);
+        setProp(m_node->style()->uid(), "rotation", deg);
         return;
     }
 
@@ -203,6 +205,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
 
     // honor rotation of node
     const tikz::Pos delta = tikz::Pos(2 * t.map(m_node->node()->pos() - tikz::Pos(scenePos))).convertTo(unit);
+    const tikz::Value oldW = m_node->style()->minimumWidth();
+    const tikz::Value oldH = m_node->style()->minimumHeight();
     tikz::Value w = m_node->style()->minimumWidth();
     tikz::Value h = m_node->style()->minimumHeight();
 
@@ -243,12 +247,8 @@ void NodeTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphicsV
     w = tikz::Value(qAbs(w.value()), w.unit());
     h = tikz::Value(qAbs(h.value()), h.unit());
 
-    tikz::core::Style s;
-    s.setStyle(m_node->style());
-    s.setMinimumWidth(w);
-    s.setMinimumHeight(h);
-
-    m_node->node()->setStyle(s);
+    if (w != oldW) setProp(m_node->style()->uid(), "minimumWidth", w);
+    if (h != oldH) setProp(m_node->style()->uid(), "minimumHeight", h);
 }
 
 void NodeTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)

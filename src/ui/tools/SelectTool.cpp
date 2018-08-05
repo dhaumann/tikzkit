@@ -24,6 +24,7 @@
 #include <tikz/core/EdgePath.h>
 #include <tikz/core/Transaction.h>
 #include <tikz/core/Style.h>
+#include <tikz/core/UndoSetProperty.h>
 #include "Document.h"
 
 #include <QGraphicsScene>
@@ -33,6 +34,11 @@
 
 namespace tikz {
 namespace ui {
+
+static void setProp(const tikz::core::Uid & entity, const QString & key, const QVariant & value)
+{
+    entity.document()->addUndoItem(new tikz::core::UndoSetProperty(entity, key, value));
+}
 
 SelectTool::SelectTool(tikz::ui::Document * doc, QGraphicsScene * scene)
     : AbstractTool(doc, scene)
@@ -61,23 +67,17 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Node"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::Style ns;
-        ns.setStyle(node->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
-        node->node()->setStyle(ns);
+        setProp(node->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(node->style()->uid(), "minimumWidth", 4.0_mm);
+        setProp(node->style()->uid(), "minimumHeight", 4.0_mm);
     }
 
     if (event->key() == Qt::Key_M) {
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Node"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::Style ns;
-        ns.setStyle(node->node()->style());
-        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
-        node->node()->setStyle(ns);
+        setProp(node->style()->uid(), "minimumWidth", 4.0_mm);
+        setProp(node->style()->uid(), "minimumHeight", 4.0_mm);
         node->node()->setText("x");
     }
 
@@ -96,12 +96,9 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Ellipse"));
         tikz::ui::NodeItem * node = document()->createNodeItem();
         node->setPos(tikz::Pos(0, 0));
-        tikz::core::Style ns;
-        ns.setStyle(node->node()->style());
-        ns.setShape(tikz::Shape::ShapeEllipse);
-        ns.setMinimumWidth(tikz::Value(4, Unit::Millimeter));
-        ns.setMinimumHeight(tikz::Value(4, Unit::Millimeter));
-        node->node()->setStyle(ns);
+        setProp(node->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeEllipse));
+        setProp(node->style()->uid(), "minimumWidth", 4.0_mm);
+        setProp(node->style()->uid(), "minimumHeight", 4.0_mm);
     }
 
     if (event->key() == Qt::Key_V) {
@@ -111,11 +108,10 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         tikz::core::Style ns;
         ns.setStyle(node->node()->style());
         ns.setFillColor(Qt::black);
-        ns.setShape(tikz::Shape::ShapeEllipse);
-        ns.setMinimumWidth(tikz::Value(1, Unit::Millimeter));
-        ns.setMinimumHeight(tikz::Value(1, Unit::Millimeter));
-        ns.setInnerSep(tikz::Value(0, Unit::Millimeter));
-        node->node()->setStyle(ns);
+        setProp(node->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeEllipse));
+        setProp(node->style()->uid(), "minimumWidth", 1.0_mm);
+        setProp(node->style()->uid(), "minimumHeight", 1.0_mm);
+        setProp(node->style()->uid(), "innerSep", 0.0_mm);
     }
 }
 

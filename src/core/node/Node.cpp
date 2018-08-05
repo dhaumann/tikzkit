@@ -25,7 +25,6 @@
 
 #include "UndoSetNodePos.h"
 #include "UndoSetNodeText.h"
-#include "UndoSetNodeStyle.h"
 
 #include <cmath>
 
@@ -49,20 +48,23 @@ class NodePrivate
         QString text;
 
         // this node's style
-        Style style;
+        Uid styleUid;
+        Style * style = nullptr;
 };
 
 Node::Node(const Uid & uid)
     : Entity(uid)
     , d(new NodePrivate(uid.document()))
 {
-    d->style.setParentStyle(uid.document()->style());
-
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    setStyle(Uid());
 }
 
 Node::~Node()
 {
+    if (d->style) {
+        delete d->style;
+        d->style = nullptr;
+    }
     delete d;
 }
 
@@ -91,8 +93,7 @@ void Node::loadData(const QJsonObject & json)
 
     if (json.contains("style")) {
         const Uid styleId(json["style"].toString(), document());
-        // FIXME: convert style to Uid
-        // d->style = document()->entity<Style>(styleId);
+        setStyle(styleId);
     }
 }
 
@@ -102,7 +103,7 @@ QJsonObject Node::saveData() const
 
     json["text"] = d->text;
     json["pos"] = d->pos.toString();
-    json["style"] = d->style.uid().toString();
+    json["style"] = style()->uid().toString();
 
     return json;
 }
@@ -167,23 +168,49 @@ QString Node::text() const
 
 Style* Node::style() const
 {
-    return &d->style;
+    return d->styleUid.isValid() ? d->styleUid.entity<Style>() : d->style;
 }
 
+#if 0
 void Node::setStyle(const Style & style)
 {
     // TODO: room for optimization: if style did not change, abort
 
     if (document()->undoActive()) {
         ConfigTransaction transaction(this);
-        d->style.setStyle(&style);
+//        style()->setStyle(&style);
     } else {
-    // create new undo item, push will call ::redo()
-    document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
+        // create new undo item, push will call ::redo()
+        document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
 
-    // now the text should be updated
+        // now the text should be updated
 //     Q_ASSERT(d->style == style); // same as above
     }
+}
+#endif
+
+Uid Node::styleUid() const
+{
+    return d->styleUid;
+}
+
+void Node::setStyle(const Uid & styleUid)
+{
+    if (!d->styleUid.isValid()) {
+        delete d->style;
+        d->style = nullptr;
+    } else {
+        disconnect(d->styleUid.entity<Style>(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    }
+
+    if (styleUid.isValid()) {
+        d->styleUid = styleUid;
+    } else {
+        d->style = new Style();
+        d->style->setParentStyle(document()->style()->uid());
+    }
+
+    connect(style(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 }

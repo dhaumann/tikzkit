@@ -30,6 +30,7 @@
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
 #include <tikz/core/PropertyManager.h>
+#include <tikz/core/UndoSetProperty.h>
 
 #include <tikz/ui/View.h>
 #include <tikz/ui/NodeItem.h>
@@ -51,7 +52,7 @@
 #include <QFile>
 #include <QJsonDocument>
 
-QObject * styleForItem(const tikz::core::Uid & uid)
+tikz::core::Style * styleForItem(const tikz::core::Uid & uid)
 {
     if (! uid.isValid()) {
         return nullptr;
@@ -60,8 +61,8 @@ QObject * styleForItem(const tikz::core::Uid & uid)
     auto e = uid.entity();
     switch (e->entityType()) {
         case tikz::EntityType::Document:;
-        case tikz::EntityType::Node:
         case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
+        case tikz::EntityType::Node: return qvariant_cast<tikz::core::Uid>(uid.entity()->property("style")).entity<tikz::core::Style>();
         case tikz::EntityType::Style: return uid.entity<tikz::core::Style>();
     }
 
@@ -217,10 +218,7 @@ public:
         auto style = styleForItem(uid);
         if (style) {
             const QString name = propertyMap[property];
-            if (style->metaObject()->indexOfProperty(name.toLatin1()) >= 0) {
-                style->setProperty(name.toLatin1(), val);
-                property->setModified(true);
-            }
+            style->document()->addUndoItem(new tikz::core::UndoSetProperty(style->uid(), name, val));
         }
     }
 };

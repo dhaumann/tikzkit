@@ -20,6 +20,7 @@
 #ifndef TIKZ_UNDO_SET_PROPERTY_H
 #define TIKZ_UNDO_SET_PROPERTY_H
 
+#include "tikz_export.h"
 #include "UndoItem.h"
 #include "Entity.h"
 
@@ -29,7 +30,7 @@ namespace core {
 class Node;
 class Document;
 
-class UndoSetProperty : public UndoItem
+class TIKZCORE_EXPORT UndoSetProperty : public UndoItem
 {
     public:
         /**

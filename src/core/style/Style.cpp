@@ -67,8 +67,8 @@ class StylePrivate
 {
 public:
     // parent / child hierarchy
-    Style * parent = nullptr;
-    QVector<Style *> children;
+    Uid parentStyle;
+    QVector<Uid> children;
 
     // config reference counter
     int refCounter = 0;
@@ -142,8 +142,8 @@ Style::Style(const Uid & uid)
 Style::~Style()
 {
     // unregister all child styles
-    foreach (Style * style, d->children) {
-        style->setParentStyle(d->parent);
+    foreach (const Uid & styleUid, d->children) {
+        styleUid.entity<Style>()->setParentStyle(d->parentStyle);
     }
     Q_ASSERT(d->children.size() == 0);
 
@@ -151,7 +151,7 @@ Style::~Style()
     disconnect(this, SIGNAL(changed()), nullptr, nullptr);
 
     // now: remove from parent's child list, if needed
-    setParentStyle(nullptr);
+    setParentStyle(Uid());
 }
 
 tikz::EntityType Style::entityType() const
@@ -175,13 +175,13 @@ void Style::setStyle(const Style * other)
     ConfigTransaction transaction(this);
 
     // backup properties not to copy
-    Style * parent = d->parent;
+    Uid parent = d->parentStyle;
 
     // perform copy of properties
     *d = *other->d;
 
     // restore persistent properties
-    d->parent = parent;
+    d->parentStyle = parent;
 }
 
 void Style::loadData(const QJsonObject & json)
@@ -189,8 +189,7 @@ void Style::loadData(const QJsonObject & json)
     ConfigTransaction transaction(this);
 
     if (json.contains("parentStyle")) {
-        const Uid styleId(json["parentStyle"].toString(), document());
-        d->parent = document()->style()->findStyle(styleId);
+        d->parentStyle = Uid(json["parentStyle"].toString(), document());
     }
 
     if (json.contains("penColor")) {
@@ -303,7 +302,7 @@ QJsonObject Style::saveData() const
 {
     QJsonObject json = Entity::saveData();
 
-    json["parentStyle"] = parentStyle() ? parentStyle()->uid().toString() : Uid().toString();
+    json["parentStyle"] = parentStyle() ? parentStyle().entity<Style>()->uid().toString() : Uid().toString();
 
     if (penColorSet()) {
         json["penColor"] = penColor().name();
@@ -414,33 +413,35 @@ QJsonObject Style::saveData() const
     return json;
 }
 
-Style *Style::parentStyle() const
+Uid Style::parentStyle() const
 {
-    return d->parent;
+    return d->parentStyle;
 }
 
-void Style::setParentStyle(Style *parent)
+void Style::setParentStyle(const Uid & parentUid)
 {
-    Q_ASSERT(parent != this);
+    if (!uid().isValid()) {
+        return;
+    }
 
-    if (d->parent != parent) {
+    if (d->parentStyle != parentUid) {
         ConfigTransaction transaction(this);
-        if (d->parent) {
+        if (d->parentStyle.isValid()) {
             // disconnect all signals (e.g. changed())
-            disconnect(d->parent, nullptr, this, nullptr);
+            disconnect(d->parentStyle.entity(), nullptr, this, nullptr);
 
             // remove this in old parent's children list
-            Q_ASSERT(d->parent->d->children.contains(this));
-            d->parent->d->children.remove(d->parent->d->children.indexOf(this));
+            Q_ASSERT(d->parentStyle.entity<Style>()->d->children.contains(uid()));
+            d->parentStyle.entity<Style>()->d->children.remove(d->parentStyle.entity<Style>()->d->children.indexOf(uid()));
         }
-        d->parent = parent;
-        if (d->parent) {
+        d->parentStyle = parentUid;
+        if (d->parentStyle.isValid()) {
             // forward changed() signal
-            connect(d->parent, SIGNAL(changed()), this, SIGNAL(changed()));
+            connect(d->parentStyle.entity(), SIGNAL(changed()), this, SIGNAL(changed()));
 
-            // interst us into the new parent's children list
-            Q_ASSERT(! d->parent->d->children.contains(this));
-            d->parent->d->children.append(this);
+            // insert us into the new parent's children list
+            Q_ASSERT(! d->parentStyle.entity<Style>()->d->children.contains(uid()));
+            d->parentStyle.entity<Style>()->d->children.append(uid());
         }
     }
 }
@@ -448,22 +449,6 @@ void Style::setParentStyle(Style *parent)
 bool Style::hasChildStyles() const
 {
     return d->children.size() > 0;
-}
-
-Style * Style::findStyle(const Uid & styleUid) const
-{
-    if (uid() == styleUid) {
-        return const_cast<Style*>(this);
-    }
-
-    for (const auto style : d->children) {
-        auto ptr = style->findStyle(styleUid);
-        if (ptr) {
-            return ptr;
-        }
-    }
-
-    return nullptr;
 }
 
 void Style::addProperty(const QString & property)
@@ -487,8 +472,8 @@ PenStyle Style::penStyle() const
         return d->penStyle;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->penStyle();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->penStyle();
     }
 
     return tikz::PenStyle::SolidLine;
@@ -550,8 +535,8 @@ tikz::Value Style::lineWidth() const
         return d->lineWidth;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->lineWidth();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->lineWidth();
     }
 
     return tikz::Value::semiThick();
@@ -572,8 +557,8 @@ bool Style::doubleLine() const
         return d->doubleLine;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->doubleLine();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->doubleLine();
     }
 
     return false;
@@ -609,8 +594,8 @@ tikz::Value Style::innerLineWidth() const
             return d->innerLineWidth;
         }
 
-        if (parentStyle() && parentStyle()->doubleLine()) {
-            return parentStyle()->innerLineWidth();
+        if (parentStyle().isValid() && parentStyle().entity<Style>()->doubleLine()) {
+            return parentStyle().entity<Style>()->innerLineWidth();
         }
 
         return tikz::Value::semiThick();
@@ -648,8 +633,8 @@ qreal Style::penOpacity() const
         return d->penOpacity;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->penOpacity();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->penOpacity();
     }
 
     return 1.0;
@@ -684,8 +669,8 @@ qreal Style::fillOpacity() const
         return d->fillOpacity;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->fillOpacity();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->fillOpacity();
     }
 
     return 1.0;
@@ -720,8 +705,8 @@ QColor Style::penColor() const
         return d->penColor;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->penColor();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->penColor();
     }
 
     return Qt::black;
@@ -738,8 +723,8 @@ QColor Style::innerLineColor() const
         return d->innerLineColor;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->innerLineColor();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->innerLineColor();
     }
 
     return Qt::white;
@@ -756,8 +741,8 @@ QColor Style::fillColor() const
         return d->fillColor;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->fillColor();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->fillColor();
     }
 
     return Qt::transparent;
@@ -828,8 +813,8 @@ qreal Style::rotation() const
         return d->rotation;
     }
 
-    if (parentStyle()) {
-        return parentStyle()->rotation();
+    if (parentStyle().isValid()) {
+        return parentStyle().entity<Style>()->rotation();
     }
 
     return 0.0;
@@ -864,7 +849,7 @@ tikz::Value Style::radiusX() const
         return d->radiusX;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->radiusX();
     }
@@ -878,7 +863,7 @@ tikz::Value Style::radiusY() const
         return d->radiusY;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->radiusY();
     }
@@ -938,7 +923,7 @@ qreal Style::bendAngle() const
         return d->bendAngle;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->bendAngle();
     }
@@ -979,7 +964,7 @@ qreal Style::looseness() const
         return d->looseness;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->looseness();
     }
@@ -1036,7 +1021,7 @@ qreal Style::outAngle() const
         return d->outAngle;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->outAngle();
     }
@@ -1073,7 +1058,7 @@ qreal Style::inAngle() const
         return d->inAngle;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->inAngle();
     }
@@ -1110,7 +1095,7 @@ Arrow Style::arrowTail() const
         return d->arrowTail;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->arrowTail();
     }
@@ -1129,7 +1114,7 @@ Arrow Style::arrowHead() const
         return d->arrowHead;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->arrowHead();
     }
@@ -1184,7 +1169,7 @@ tikz::Value Style::shortenStart() const
         return d->shortenStart;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->shortenStart();
     }
@@ -1203,7 +1188,7 @@ tikz::Value Style::shortenEnd() const
         return d->shortenEnd;
     }
 
-    Style * style = parentStyle();
+    auto style = parentStyle().entity<Style>();
     if (style) {
         return style->shortenEnd();
     }
@@ -1258,9 +1243,9 @@ TextAlignment Style::textAlign() const
         return d->textAlign;
     }
 
-    Style * parentStyle = qobject_cast<Style*>(parent());
-    if (parentStyle) {
-        return parentStyle->textAlign();
+    auto style = parentStyle().entity<Style>();
+    if (style) {
+        return style->textAlign();
     }
 
     return TextAlignment::NoAlign;
@@ -1295,9 +1280,9 @@ Shape Style::shape() const
         return d->shape;
     }
 
-    Style * parentStyle = qobject_cast<Style*>(parent());
-    if (parentStyle) {
-        return parentStyle->shape();
+    auto style = parentStyle().entity<Style>();
+    if (style) {
+        return style->shape();
     }
 
     return Shape::ShapeRectangle;
@@ -1342,9 +1327,9 @@ bool Style::innerSepSet() const
 
 tikz::Value Style::innerSep() const
 {
-    Style * parentStyle = qobject_cast<Style*>(parent());
-    if (!propertySet(s_innerSep) && parentStyle) {
-        return parentStyle->innerSep();
+    auto style = parentStyle().entity<Style>();
+    if (!propertySet(s_innerSep) && style) {
+        return style->innerSep();
     }
     return d->innerSep;
 }
@@ -1395,9 +1380,9 @@ tikz::Value Style::minimumHeight() const
         return d->minimumHeight;
     }
 
-    Style * parentStyle = qobject_cast<Style*>(parent());
-    if (parentStyle) {
-        return parentStyle->minimumHeight();
+    auto style = parentStyle().entity<Style>();
+    if (style) {
+        return style->minimumHeight();
     }
 
     return 0.0_cm;
@@ -1414,9 +1399,9 @@ tikz::Value Style::minimumWidth() const
         return d->minimumWidth;
     }
 
-    Style * parentStyle = qobject_cast<Style*>(parent());
-    if (parentStyle) {
-        return parentStyle->minimumWidth();
+    auto style = parentStyle().entity<Style>();
+    if (style) {
+        return style->minimumWidth();
     }
 
     return 0.0_cm;

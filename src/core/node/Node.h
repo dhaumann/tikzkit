@@ -41,7 +41,7 @@ class TIKZCORE_EXPORT Node : public Entity
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(tikz::Pos pos READ pos WRITE setPos)
-    Q_PROPERTY(Style* style READ style)
+    Q_PROPERTY(Uid style READ styleUid WRITE setStyle)
 
     public:
         /**
@@ -118,13 +118,29 @@ class TIKZCORE_EXPORT Node : public Entity
 
         /**
          * Get the Style object of this node.
+         * The returned style is always a valid pointer.
          */
-        Style* style() const;
+        Style * style() const;
 
         /**
-         * Set the style of this node to @p style.
+         * Get the Style object of this node.
+         * The returned style is always a valid pointer.
+         */
+        Uid styleUid() const;
+
+#if 0
+        /**
+         * Set the style properties of this node to @p style.
+         * The internal style Uid does not change.
          */
         void setStyle(const Style & style);
+#endif
+
+        /**
+         * Set the internal style of this node to @p uid.
+         * If the node previously had a valid
+         */
+        void setStyle(const Uid & styleUid);
 
     Q_SIGNALS:
         /**
@@ -140,10 +156,11 @@ class TIKZCORE_EXPORT Node : public Entity
 
         /**
          * Constructor that associates this node with the tikz Document
-         * referred to by @p uid.
-         * @param uid unique id of the node
+         * referred to by @p nodeUid.
+         * @param nodeUid unique id of the node
+         * @param styleUid unique id of the style this
          */
-        Node(const Uid & uid);
+        Node(const Uid & nodeUid);
 
     private:
         /**

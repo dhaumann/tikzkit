@@ -24,6 +24,7 @@
 #include <tikz/core/Path.h>
 #include <tikz/core/Style.h>
 #include <tikz/core/Document.h>
+#include <tikz/core/UndoSetProperty.h>
 
 //BEGIN DEBUG
 #include <tikz/core/Style.h>
@@ -46,6 +47,11 @@
 
 namespace tikz {
 namespace ui {
+
+static void setProp(const tikz::core::Uid & entity, const QString & key, const QVariant & value)
+{
+    entity.document()->addUndoItem(new tikz::core::UndoSetProperty(entity, key, value));
+}
 
 DocumentPrivate::DocumentPrivate(QObject * parent)
     : tikz::ui::Document(this, parent)
@@ -125,21 +131,18 @@ View * DocumentPrivate::createView(QWidget * parent,
     beginTransaction("Create Nodes");
     tikz::ui::NodeItem* item1 = createNodeItem();
     item1->node()->setPos(tikz::Pos(-3, 3, tikz::Unit::Centimeter));
-    tikz::core::Style ns;
-    ns.setStyle(item1->node()->style());
-    ns.setLineWidth(tikz::Value::veryThin());
-    ns.setShape(tikz::Shape::ShapeRectangle);
-    ns.setInnerSep(2.0_mm);
-    item1->node()->setStyle(ns);
+    qDebug() << " ____" << item1->style()->uid();
+    qDebug() << " ____" << item1->style()->property("style");
+    setProp(item1->style()->uid(), "lineWidth", tikz::Value::veryThin());
+    setProp(item1->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+    setProp(item1->style()->uid(), "innerSep", 2.0_mm);
     item1->node()->setText("$\\int f(x) dx$");
 
     tikz::ui::NodeItem* item2 = createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
-    ns.setStyle(item2->node()->style());
-    ns.setLineWidth(tikz::Value::thin());
-    ns.setShape(tikz::Shape::ShapeCircle);
-    ns.setInnerSep(2.0_mm);
-    item2->node()->setStyle(ns);
+    setProp(item2->style()->uid(), "lineWidth", tikz::Value::thin());
+    setProp(item2->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+    setProp(item2->style()->uid(), "innerSep", 2.0_mm);
     item2->node()->setText("$\\Leftrightarrow$");
     finishTransaction();
 
@@ -276,86 +279,72 @@ View * DocumentPrivate::createView(QWidget * parent,
 
         tikz::ui::NodeItem *n1 = createNodeItem();
         n1->node()->setPos(tikz::Pos(0, 6, tikz::Unit::Centimeter));
-        ns.setStyle(n1->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.0_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(0, 0, 204));
-        ns.setFillColor(QColor(204, 204, 255));
-        n1->node()->setStyle(ns);
+        setProp(n1->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n1->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n1->style()->uid(), "minimumWidth", 2.0_cm);
+        setProp(n1->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n1->style()->uid(), "penColor", QColor(0, 0, 204));
+        setProp(n1->style()->uid(), "fillColor", QColor(204, 204, 255));
         n1->node()->setText("Kate Part\\\\(Backend library)");
 
         tikz::ui::NodeItem *n2 = createNodeItem();
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Unit::Centimeter));
-        ns.setStyle(n2->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.0_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 153, 51));
-        ns.setFillColor(QColor(255, 230, 204));
-        n2->node()->setStyle(ns);
+        setProp(n2->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n2->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n2->style()->uid(), "minimumWidth", 2.0_cm);
+        setProp(n2->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n2->style()->uid(), "penColor", QColor(255, 153, 51));
+        setProp(n2->style()->uid(), "fillColor", QColor(255, 230, 204));
         n2->node()->setText("KTextEditor\\\\(Interfaces)");
 
         tikz::ui::NodeItem *n3 = createNodeItem();
         n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Unit::Centimeter));
-        ns.setStyle(n3->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.5_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 51, 51));
-        ns.setFillColor(QColor(255, 204, 204));
-        n3->node()->setStyle(ns);
+        setProp(n3->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n3->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n3->style()->uid(), "minimumWidth", 2.5_cm);
+        setProp(n3->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n3->style()->uid(), "penColor", QColor(255, 51, 51));
+        setProp(n3->style()->uid(), "fillColor", QColor(255, 204, 204));
         n3->node()->setText("Kate\\\\(Application)");
 
         tikz::ui::NodeItem *n4 = createNodeItem();
         n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Unit::Centimeter));
-        ns.setStyle(n4->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.5_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 51, 51));
-        ns.setFillColor(QColor(255, 204, 204));
-        n4->node()->setStyle(ns);
+        setProp(n4->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n4->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n4->style()->uid(), "minimumWidth", 2.5_cm);
+        setProp(n4->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n4->style()->uid(), "penColor", QColor(255, 51, 51));
+        setProp(n4->style()->uid(), "fillColor", QColor(255, 204, 204));
         n4->node()->setText("KWrite\\\\(Application)");
 
         tikz::ui::NodeItem *n5 = createNodeItem();
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Unit::Centimeter));
-        ns.setStyle(n5->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.5_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 51, 51));
-        ns.setFillColor(QColor(255, 204, 204));
-        n5->node()->setStyle(ns);
+        setProp(n5->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n5->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n5->style()->uid(), "minimumWidth", 2.5_cm);
+        setProp(n5->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n5->style()->uid(), "penColor", QColor(255, 51, 51));
+        setProp(n5->style()->uid(), "fillColor", QColor(255, 204, 204));
         n5->node()->setText("KDevelop\\\\(Application)");
 
         tikz::ui::NodeItem *n6 = createNodeItem();
         n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Unit::Centimeter));
-        ns.setStyle(n5->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.5_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 51, 51));
-        ns.setFillColor(QColor(255, 204, 204));
-        n6->node()->setStyle(ns);
+        setProp(n6->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n6->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n6->style()->uid(), "minimumWidth", 2.5_cm);
+        setProp(n6->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n6->style()->uid(), "penColor", QColor(255, 51, 51));
+        setProp(n6->style()->uid(), "fillColor", QColor(255, 204, 204));
         n6->node()->setText("Kile\\\\(Application)");
 
         tikz::ui::NodeItem *n7 = createNodeItem();
         n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Unit::Centimeter));
-        ns.setStyle(n7->node()->style());
-        ns.setShape(tikz::Shape::ShapeRectangle);
-        ns.setInnerSep(2.0_mm);
-        ns.setMinimumWidth(2.5_cm);
-        ns.setMinimumHeight(1.5_cm);
-        ns.setPenColor(QColor(255, 51, 51));
-        ns.setFillColor(QColor(255, 204, 204));
-        n7->node()->setStyle(ns);
+        setProp(n7->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
+        setProp(n7->style()->uid(), "innerSep", 2.0_mm);
+        setProp(n7->style()->uid(), "minimumWidth", 2.5_cm);
+        setProp(n7->style()->uid(), "minimumHeight", 1.5_cm);
+        setProp(n7->style()->uid(), "penColor", QColor(255, 51, 51));
+        setProp(n7->style()->uid(), "fillColor", QColor(255, 204, 204));
         n7->node()->setText("3rd party\\\\(Application)");
 
         //
@@ -461,7 +450,7 @@ QVector<PathItem*> DocumentPrivate::pathItems() const
 NodeItem * DocumentPrivate::createNodeItem()
 {
     // create node
-    tikz::core::Node * node = qobject_cast<tikz::core::Node*>(Document::createEntity(tikz::EntityType::Node));
+    tikz::core::Node * node = qobject_cast<tikz::core::Node*>(Document::createNode());
     Q_ASSERT(m_nodeMap.contains(node->uid()));
 
     return m_nodeMap[node->uid()];

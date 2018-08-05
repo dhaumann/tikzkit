@@ -31,6 +31,7 @@
 #include "UndoDeletePath.h"
 #include "UndoCreateEntity.h"
 #include "UndoDeleteEntity.h"
+#include "UndoSetProperty.h"
 
 #include "Visitor.h"
 #include "SerializeVisitor.h"
@@ -584,6 +585,7 @@ Entity * Document::createEntity(const Uid & uid, EntityType type)
         case EntityType::Style: {
             e = new Style(uid);
             e->setObjectName("Style " + uid.toString());
+            ((Style*)e)->setParentStyle(style()->uid());
             break;
         }
         case EntityType::Node: {
@@ -663,6 +665,22 @@ void Document::deleteEntity(const Uid & uid)
         // truly delete node
         delete entity;
     }
+}
+
+Node * Document::createNode()
+{
+    Transaction transaction(this, "Create Node");
+
+    // create node style
+    auto nodeStyle = createEntity(tikz::EntityType::Style);
+
+    // create node
+    auto node = createEntity<Node>(tikz::EntityType::Node);
+
+    // set the node style
+    addUndoItem(new UndoSetProperty(node->uid(), "style", nodeStyle->uid()));
+
+    return node;
 }
 
 Path * Document::createPath(PathType type, const Uid & uid)

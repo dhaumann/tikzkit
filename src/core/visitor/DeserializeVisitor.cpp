@@ -101,7 +101,7 @@ void DeserializeVisitor::visit(Node * node)
     const QVariantMap & propertyMap = styleMap["properties"].toMap();
 
     // set parent style (TODO: read id?)
-    node->style()->setParentStyle(node->document()->style());
+    node->style()->setParentStyle(node->document()->style()->uid());
 
     deserializeNodeStyle(node->style(), propertyMap);
 }
@@ -144,7 +144,7 @@ void DeserializeVisitor::visit(Path * path)
     const QVariantMap & propertyMap = styleMap["properties"].toMap();
 
     // set parent style (TODO: read id?)
-    path->style()->setParentStyle(path->document()->style());
+    path->style()->setParentStyle(path->document()->style()->uid());
 
     deserializeEdgeStyle(path->style(), propertyMap);
 }
