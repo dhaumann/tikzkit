@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2018 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -170,24 +170,6 @@ Style* Node::style() const
 {
     return d->styleUid.isValid() ? d->styleUid.entity<Style>() : d->style;
 }
-
-#if 0
-void Node::setStyle(const Style & style)
-{
-    // TODO: room for optimization: if style did not change, abort
-
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-//        style()->setStyle(&style);
-    } else {
-        // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeStyle(uid(), style, document()));
-
-        // now the text should be updated
-//     Q_ASSERT(d->style == style); // same as above
-    }
-}
-#endif
 
 Uid Node::styleUid() const
 {

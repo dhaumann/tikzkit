@@ -1,6 +1,6 @@
 /* This file is part of the TikZKit project.
  *
- * Copyright (C) 2013-2014 Dominik Haumann <dhaumann@kde.org>
+ * Copyright (C) 2013-2018 Dominik Haumann <dhaumann@kde.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -124,17 +124,8 @@ class TIKZCORE_EXPORT Node : public Entity
 
         /**
          * Get the Style object of this node.
-         * The returned style is always a valid pointer.
          */
         Uid styleUid() const;
-
-#if 0
-        /**
-         * Set the style properties of this node to @p style.
-         * The internal style Uid does not change.
-         */
-        void setStyle(const Style & style);
-#endif
 
         /**
          * Set the internal style of this node to @p uid.
