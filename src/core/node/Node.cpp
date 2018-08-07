@@ -24,7 +24,6 @@
 #include "MetaPos.h"
 
 #include "UndoSetNodePos.h"
-#include "UndoSetNodeText.h"
 
 #include <cmath>
 
@@ -148,17 +147,9 @@ void Node::setText(const QString& text)
         return;
     }
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->text = text;
-        emit textChanged(d->text);
-    } else {
-        // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetNodeText(uid(), text, document()));
-
-        // now the text should be updated
-        Q_ASSERT(d->text == text);
-    }
+    ConfigTransaction transaction(this);
+    d->text = text;
+    emit textChanged(d->text);
 }
 
 QString Node::text() const

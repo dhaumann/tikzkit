@@ -191,6 +191,11 @@
             "maximum" : "5mm",
             "singleStep" : 0.1
         },
+        "text" : {
+            "type" : "string",
+            "title" : "Text",
+            "description" : "Node text"
+        },
         "textAlign" : {
             "type" : "enum",
             "title" : "Text Alignment",

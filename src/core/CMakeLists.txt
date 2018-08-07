@@ -48,7 +48,6 @@ add_library(qtikzcore SHARED
 
     node/Node.cpp
     node/UndoSetNodePos.cpp
-    node/UndoSetNodeText.cpp
 
     visitor/Visitor.cpp
     visitor/SerializeVisitor.cpp

@@ -91,7 +91,7 @@ void NodeTool::keyPressEvent(QKeyEvent * event)
         bool ok = true;
         QString text = QInputDialog::getMultiLineText(nullptr, "Set Text", "Enter node text in LaTeX", m_node->node()->text(), &ok);
         if (ok) {
-            m_node->node()->setText(text);
+            setProp(m_node->uid(), "text", text);
         }
     }
 }

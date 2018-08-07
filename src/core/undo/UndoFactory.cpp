@@ -23,7 +23,6 @@
 #include "UndoCreateEntity.h"
 #include "UndoDeleteEntity.h"
 #include "UndoSetNodePos.h"
-#include "UndoSetNodeText.h"
 #include "UndoSetEdgePos.h"
 #include "UndoSetEllipsePos.h"
 #include "UndoCreatePath.h"
@@ -70,8 +69,6 @@ UndoItem * UndoFactory::createItem(const QString & type)
         return new UndoDeleteEntity(document());
     } else if (type == "node-set-pos") {
         return new UndoSetNodePos(document());
-    } else if (type == "node-set-text") {
-        return new UndoSetNodeText(document());
     } else if (type == "edge-set-pos") {
         return new UndoSetEdgePos(document());
     } else if (type == "ellipse-set-pos") {

@@ -136,14 +136,14 @@ View * DocumentPrivate::createView(QWidget * parent,
     setProp(item1->style()->uid(), "lineWidth", tikz::Value::veryThin());
     setProp(item1->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
     setProp(item1->style()->uid(), "innerSep", 2.0_mm);
-    item1->node()->setText("$\\int f(x) dx$");
+    setProp(item1->node()->uid(), "text", "$\\int f(x) dx$");
 
     tikz::ui::NodeItem* item2 = createNodeItem();
     item2->node()->setPos(tikz::Pos(3, 3, tikz::Unit::Centimeter));
     setProp(item2->style()->uid(), "lineWidth", tikz::Value::thin());
     setProp(item2->style()->uid(), "shape", QVariant::fromValue(tikz::Shape::ShapeRectangle));
     setProp(item2->style()->uid(), "innerSep", 2.0_mm);
-    item2->node()->setText("$\\Leftrightarrow$");
+    setProp(item2->node()->uid(), "text", "$\\Leftrightarrow$");
     finishTransaction();
 
     beginTransaction("Create Paths");
@@ -285,7 +285,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n1->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n1->style()->uid(), "penColor", QColor(0, 0, 204));
         setProp(n1->style()->uid(), "fillColor", QColor(204, 204, 255));
-        n1->node()->setText("Kate Part\\\\(Backend library)");
+        setProp(n1->node()->uid(), "text", "Kate Part\\\\(Backend library)");
 
         tikz::ui::NodeItem *n2 = createNodeItem();
         n2->node()->setPos(tikz::Pos(0, 8, tikz::Unit::Centimeter));
@@ -295,7 +295,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n2->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n2->style()->uid(), "penColor", QColor(255, 153, 51));
         setProp(n2->style()->uid(), "fillColor", QColor(255, 230, 204));
-        n2->node()->setText("KTextEditor\\\\(Interfaces)");
+        setProp(n2->node()->uid(), "text", "KTextEditor\\\\(Interfaces)");
 
         tikz::ui::NodeItem *n3 = createNodeItem();
         n3->node()->setPos(tikz::Pos(-5.8, 10, tikz::Unit::Centimeter));
@@ -305,7 +305,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n3->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n3->style()->uid(), "penColor", QColor(255, 51, 51));
         setProp(n3->style()->uid(), "fillColor", QColor(255, 204, 204));
-        n3->node()->setText("Kate\\\\(Application)");
+        setProp(n3->node()->uid(), "text", "Kate\\\\(Application)");
 
         tikz::ui::NodeItem *n4 = createNodeItem();
         n4->node()->setPos(tikz::Pos(-2.9, 10, tikz::Unit::Centimeter));
@@ -315,7 +315,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n4->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n4->style()->uid(), "penColor", QColor(255, 51, 51));
         setProp(n4->style()->uid(), "fillColor", QColor(255, 204, 204));
-        n4->node()->setText("KWrite\\\\(Application)");
+        setProp(n4->node()->uid(), "text", "KWrite\\\\(Application)");
 
         tikz::ui::NodeItem *n5 = createNodeItem();
         n5->node()->setPos(tikz::Pos(0, 10, tikz::Unit::Centimeter));
@@ -325,7 +325,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n5->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n5->style()->uid(), "penColor", QColor(255, 51, 51));
         setProp(n5->style()->uid(), "fillColor", QColor(255, 204, 204));
-        n5->node()->setText("KDevelop\\\\(Application)");
+        setProp(n5->node()->uid(), "text", "KDevelop\\\\(Application)");
 
         tikz::ui::NodeItem *n6 = createNodeItem();
         n6->node()->setPos(tikz::Pos(2.9, 10, tikz::Unit::Centimeter));
@@ -335,7 +335,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n6->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n6->style()->uid(), "penColor", QColor(255, 51, 51));
         setProp(n6->style()->uid(), "fillColor", QColor(255, 204, 204));
-        n6->node()->setText("Kile\\\\(Application)");
+        setProp(n6->node()->uid(), "text", "Kile\\\\(Application)");
 
         tikz::ui::NodeItem *n7 = createNodeItem();
         n7->node()->setPos(tikz::Pos(5.8, 10, tikz::Unit::Centimeter));
@@ -345,7 +345,7 @@ View * DocumentPrivate::createView(QWidget * parent,
         setProp(n7->style()->uid(), "minimumHeight", 1.5_cm);
         setProp(n7->style()->uid(), "penColor", QColor(255, 51, 51));
         setProp(n7->style()->uid(), "fillColor", QColor(255, 204, 204));
-        n7->node()->setText("3rd party\\\\(Application)");
+        setProp(n7->node()->uid(), "text", "3rd party\\\\(Application)");
 
         //
         // paths

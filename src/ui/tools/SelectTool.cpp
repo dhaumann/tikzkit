@@ -78,7 +78,7 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
         node->setPos(tikz::Pos(0, 0));
         setProp(node->style()->uid(), "minimumWidth", 4.0_mm);
         setProp(node->style()->uid(), "minimumHeight", 4.0_mm);
-        node->node()->setText("x");
+        setProp(node->node()->uid(), "text", "x");
     }
 
     if (event->key() == Qt::Key_E) {
