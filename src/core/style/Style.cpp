@@ -302,7 +302,7 @@ QJsonObject Style::saveData() const
 {
     QJsonObject json = Entity::saveData();
 
-    json["parentStyle"] = parentStyle() ? parentStyle().entity<Style>()->uid().toString() : Uid().toString();
+    json["parentStyle"] = parentStyle().isValid() ? parentStyle().entity<Style>()->uid().toString() : Uid().toString();
 
     if (penColorSet()) {
         json["penColor"] = penColor().name();

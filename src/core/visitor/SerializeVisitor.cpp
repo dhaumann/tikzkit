@@ -106,7 +106,7 @@ void SerializeVisitor::visit(Path * path)
 
 void SerializeVisitor::visit(Style * style)
 {
-    m_nodes["style-" + style->uid().toString()] = style->save();
+    m_styles["style-" + style->uid().toString()] = style->save();
 }
 
 }

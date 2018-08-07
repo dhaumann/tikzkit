@@ -99,12 +99,12 @@ void DeserializeVisitor::visit(Node * node)
 
 void DeserializeVisitor::visit(Path * path)
 {
-    path->load(m_nodes["path-" + path->uid().toString()].toObject());
+    path->load(m_paths["path-" + path->uid().toString()].toObject());
 }
 
 void DeserializeVisitor::visit(Style * style)
 {
-    style->load(m_nodes["style-" + style->uid().toString()].toObject());
+    style->load(m_styles["style-" + style->uid().toString()].toObject());
 }
 
 }
