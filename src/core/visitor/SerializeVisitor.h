@@ -78,12 +78,6 @@ class SerializeVisitor : public Visitor
         void visit(Style * style) override;
 
     //
-    // helper functions
-    //
-    private:
-        QVariantMap serializeStyle(Style * style);
-
-    //
     // private data
     //
     private:

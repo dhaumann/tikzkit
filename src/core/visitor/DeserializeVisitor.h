@@ -21,7 +21,7 @@
 #define TIKZ_DESERIALIZE_VISITOR_H
 
 #include "Visitor.h"
-#include <QVariantMap>
+#include <QJsonObject>
 
 namespace tikz {
 namespace core {
@@ -82,22 +82,13 @@ class DeserializeVisitor : public Visitor
         void visit(Style * style) override;
 
     //
-    // helper functions
-    //
-    private:
-        void deserializeStyle(Style * style, const QVariantMap & map);
-        void deserializeEdgeStyle(Style * style, const QVariantMap & map);
-        void deserializeNodeStyle(Style * style, const QVariantMap & map);
-
-    //
     // private data
     //
     private:
-        QVariantMap m_root;
-        QVariantMap m_nodes;
-        QVariantMap m_paths;
-        QVariantMap m_nodeStyles;
-        QVariantMap m_edgeStyles;
+        QJsonObject m_root;
+        QJsonObject m_nodes;
+        QJsonObject m_paths;
+        QJsonObject m_styles;
 };
 
 }

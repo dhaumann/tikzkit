@@ -156,6 +156,14 @@ bool Document::accept(Visitor & visitor)
     // visit this document
     visitor.visit(this);
 
+    // visit all styles
+    for (auto entity : d->entities) {
+        auto style = qobject_cast<Style *>(entity);
+        if (style) {
+            style->accept(visitor);
+        }
+    }
+
     // visit all nodes
     for (auto entity : d->entities) {
         auto node = qobject_cast<Node *>(entity);
@@ -169,14 +177,6 @@ bool Document::accept(Visitor & visitor)
         auto path = qobject_cast<Path *>(entity);
         if (path) {
             path->accept(visitor);
-        }
-    }
-
-    // visit all styles
-    for (auto entity : d->entities) {
-        auto style = qobject_cast<Style *>(entity);
-        if (style) {
-            style->accept(visitor);
         }
     }
 
