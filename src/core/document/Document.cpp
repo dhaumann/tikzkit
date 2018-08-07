@@ -253,7 +253,7 @@ bool Document::load(const QUrl & fileurl)
     // used id, and then add "+1".
     auto keys = d->entityMap.keys();
     if (keys.size()) {
-        d->nextId = *std::max_element(keys.begin(), keys.end()) + 1;
+        d->nextId = std::max_element(keys.begin(), keys.end())->id() + 1;
     }
 
     // keep the document name up-to-date

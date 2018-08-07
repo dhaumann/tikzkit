@@ -22,6 +22,7 @@
 #include "tikz.h"
 #include "tikz_export.h"
 
+#include <QHash>
 #include <QVariant>
 #include <QDebug>
 
@@ -204,9 +205,9 @@ Q_DECLARE_METATYPE(tikz::core::Uid)
 /**
  * QHash function.
  */
-inline uint qHash(const tikz::core::Uid & uid)
+inline uint qHash(const tikz::core::Uid & uid, uint seed = 0) noexcept
 {
-    return qHash(uid.id());
+    return qHash(uid.id(), seed);
 }
 
 #endif // TIKZ_CORE_UID_H
