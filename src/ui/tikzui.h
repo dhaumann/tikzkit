@@ -21,7 +21,7 @@
 
 // TIKZUI_EXPORT: this like exists just to copy the include files
 
-enum TikzEditMode {
+enum class TikzEditMode {
     ModeSelect = 0,
     ModePlaceCoord,
     ModePlaceNode,

@@ -42,6 +42,7 @@ namespace ui {
     class Document;
     class View;
     class PropertyBrowser;
+    class TikzToolBox;
 }
 }
 
@@ -191,6 +192,8 @@ private:
     tikz::ui::PropertyBrowser * m_browser = nullptr;
     QTreeView * m_historyView = nullptr;
     QListWidget * m_logWidget = nullptr;
+
+    tikz::ui::TikzToolBox * m_toolBox = nullptr;
 
     tex::PdfGenerator * m_pdfGenerator = nullptr;
 

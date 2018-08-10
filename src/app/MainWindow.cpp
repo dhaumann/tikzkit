@@ -76,8 +76,8 @@ MainWindow::MainWindow()
     hbox->setContentsMargins(0, 0, 0, 0);
     hbox->setSpacing(0);
 
-    auto toolBox = new tikz::ui::TikzToolBox(m_wrapper);
-    hbox->addWidget(toolBox);
+    m_toolBox = new tikz::ui::TikzToolBox(m_wrapper);
+    hbox->addWidget(m_toolBox);
 
     m_viewManager = new ViewManager(this, this);
     hbox->addWidget(m_viewManager);
@@ -336,9 +336,13 @@ void MainWindow::mergeView(tikz::ui::View * view)
     connect(view->document(), SIGNAL(changed()), this, SLOT(updateActions()));
     connect(view, SIGNAL(mousePositionChanged(tikz::Pos)), this, SLOT(updateMousePosition(tikz::Pos)));
 
+    // zoom
     connect(m_aZoomIn, SIGNAL(triggered()), view->zoomController(), SLOT(zoomIn()));
     connect(m_aResetZoom, SIGNAL(triggered()), view->zoomController(), SLOT(resetZoom()));
     connect(m_aZoomOut, SIGNAL(triggered()), view->zoomController(), SLOT(zoomOut()));
+
+    // edit mode
+    connect(m_toolBox, SIGNAL(editModeChanged(TikzEditMode)), view, SLOT(setEditMode(TikzEditMode)));
 
     updateWindowTitle();
     updateTikzCode();
@@ -352,6 +356,8 @@ void MainWindow::mergeView(tikz::ui::View * view)
     const auto unitString = tikz::toString(unit);
     const auto unitIndex = m_unitComboBox->findData(unitString);
     m_unitComboBox->setCurrentIndex(unitIndex);
+
+    m_toolBox->setEditMode(view->editMode());
 
     m_browser->setView(view);
 }
@@ -370,6 +376,9 @@ void MainWindow::unmergeView(tikz::ui::View * view)
     disconnect(m_aZoomIn, SIGNAL(triggered()), view->zoomController(), SLOT(zoomIn()));
     disconnect(m_aResetZoom, SIGNAL(triggered()), view->zoomController(), SLOT(resetZoom()));
     disconnect(m_aZoomOut, SIGNAL(triggered()), view->zoomController(), SLOT(zoomOut()));
+
+    // edit mode
+    disconnect(m_toolBox, SIGNAL(editModeChanged(TikzEditMode)), view, SLOT(setEditMode(TikzEditMode)));
 
     disconnect(view->document(), SIGNAL(undoAvailableChanged(bool)), m_editUndo, SLOT(setEnabled(bool)));
     disconnect(view->document(), SIGNAL(redoAvailableChanged(bool)), m_editRedo, SLOT(setEnabled(bool)));

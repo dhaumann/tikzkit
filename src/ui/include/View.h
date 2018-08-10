@@ -22,6 +22,7 @@
 #define TIKZUI_VIEW_H
 
 #include "tikzui_export.h"
+#include "tikzui.h"
 
 #include <tikz/core/Pos.h>
 
@@ -88,6 +89,17 @@ public:
      * Returns this View's ZoomContrller object.
      */
     virtual tikz::ui::ZoomController * zoomController() const = 0;
+
+    /**
+     * Returns the edit mode.
+     */
+    virtual TikzEditMode editMode() const = 0;
+
+public Q_SLOTS:
+    /**
+     * Set the edit mode.
+     */
+    virtual void setEditMode(TikzEditMode mode) const = 0;
 
     /*
      * SIGNALS

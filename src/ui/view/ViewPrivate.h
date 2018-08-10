@@ -70,6 +70,16 @@ class ViewPrivate : public tikz::ui::View
         tikz::ui::ZoomController * zoomController() const override;
 
         /**
+         * Returns the edit mode.
+         */
+        TikzEditMode editMode() const override;
+
+        /**
+         * Set the edit mode.
+         */
+        void setEditMode(TikzEditMode mode) const override;
+
+        /**
          * Check whether the view has selected items.
          */
         bool hasSelection() const override;

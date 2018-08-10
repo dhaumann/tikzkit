@@ -85,13 +85,13 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     // create button group
     d->group = new QButtonGroup(this);
 
-    d->group->addButton(selectAction, TikzEditMode::ModeSelect);
-    d->group->addButton(createCoordAction, TikzEditMode::ModePlaceCoord);
-    d->group->addButton(createNodeAction, TikzEditMode::ModePlaceNode);
-    d->group->addButton(createEdgeAction, TikzEditMode::ModePlaceEdge);
+    d->group->addButton(selectAction, static_cast<int>(TikzEditMode::ModeSelect));
+    d->group->addButton(createCoordAction, static_cast<int>(TikzEditMode::ModePlaceCoord));
+    d->group->addButton(createNodeAction, static_cast<int>(TikzEditMode::ModePlaceNode));
+    d->group->addButton(createEdgeAction, static_cast<int>(TikzEditMode::ModePlaceEdge));
     d->group->setExclusive(true);
 
-    const int initialMode = TikzEditMode::ModePlaceNode;
+    const int initialMode = static_cast<int>(TikzEditMode::ModePlaceNode);
     Q_ASSERT(d->group->button(initialMode) != nullptr);
     d->group->button(initialMode)->setChecked(true);
 
@@ -109,7 +109,7 @@ TikzToolBox::~TikzToolBox()
 void TikzToolBox::setEditMode(TikzEditMode mode)
 {
     if (editMode() != mode) {
-        d->group->button(mode)->setChecked(true);
+        d->group->button(static_cast<int>(mode))->setChecked(true);
     }
 }
 

@@ -80,6 +80,16 @@ tikz::ui::ZoomController * ViewPrivate::zoomController() const
     return m_renderer->zoomController();
 }
 
+TikzEditMode ViewPrivate::editMode() const
+{
+    return m_doc->scene()->editMode();
+}
+
+void ViewPrivate::setEditMode(TikzEditMode mode) const
+{
+    m_doc->scene()->setEditMode(mode);
+}
+
 bool ViewPrivate::hasSelection() const
 {
     return ! m_doc->scene()->selectedItems().isEmpty();
