@@ -36,10 +36,10 @@ class TikzToolBoxPrivate
 {
 public:
     // associated Document
-    Document * doc;
+    Document * doc = nullptr;
 
     // this button group contains all tools
-    QButtonGroup * group;
+    QButtonGroup * group = nullptr;
 };
 
 TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)

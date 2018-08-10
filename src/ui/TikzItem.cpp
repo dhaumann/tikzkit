@@ -26,15 +26,13 @@
 class TikzItemPrivate
 {
     public:
-        bool hovered;
+        bool hovered = false;
 };
 
 TikzItem::TikzItem(QGraphicsItem * parent)
     : QGraphicsObject(parent)
     , d(new TikzItemPrivate())
 {
-    d->hovered = false;
-
     setAcceptHoverEvents(true);
 }
 

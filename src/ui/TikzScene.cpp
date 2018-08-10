@@ -45,16 +45,16 @@ class TikzScenePrivate
 {
 public:
     // associated tikz Document
-    DocumentPrivate * doc;
+    DocumentPrivate * doc = nullptr;
 
     // The size of the cells in the grid.
-    int subDivisions;
+    int subDivisions = 1;
 
     // Mouse edit mode
-    TikzEditMode editMode;
+    TikzEditMode editMode = TikzEditMode::ModeSelect;
 
     // currently active tool
-    AbstractTool * tool;
+    AbstractTool * tool = nullptr;
 };
 
 TikzScene::TikzScene(DocumentPrivate * doc)
@@ -62,8 +62,6 @@ TikzScene::TikzScene(DocumentPrivate * doc)
     , d(new TikzScenePrivate())
 {
     d->doc = doc;
-    d->subDivisions = 1;
-    d->editMode = TikzEditMode::ModeSelect;
     d->tool = new ProxyTool(doc, this);
 
     connect(doc, &DocumentPrivate::changed, this, &TikzScene::updateSceneRect);
