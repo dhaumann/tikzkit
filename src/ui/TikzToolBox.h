@@ -29,7 +29,6 @@ namespace tikz {
 namespace ui {
 
 class MainWindow;
-class Document;
 class TikzToolBoxPrivate;
 
 class TIKZUI_EXPORT TikzToolBox : public QWidget
@@ -47,11 +46,6 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
          */
         virtual ~TikzToolBox();
 
-        /**
-         * Returns the associated Document.
-         */
-        Document * document() const;
-
     //
     // Edit mode
     //
@@ -67,14 +61,11 @@ class TIKZUI_EXPORT TikzToolBox : public QWidget
          */
         TikzEditMode editMode() const;
 
-    //
-    // Internal setter for edit mode
-    //
-    private Q_SLOTS:
+    Q_SIGNALS:
         /**
-         * Set the edit mode from the buttons.
+         * This signal is emitted whenever the edit mode changed.
          */
-        void setEditModeInternal(int mode);
+        void editModeChanged(TikzEditMode mode);
 
     private:
         TikzToolBoxPrivate * const d;

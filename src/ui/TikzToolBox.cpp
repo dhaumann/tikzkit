@@ -46,8 +46,6 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     : QWidget(parent)
     , d(new TikzToolBoxPrivate())
 {
-    d->doc = nullptr;//mainWin->activeView()->document();
-
     QVBoxLayout * vbox = new QVBoxLayout(this);
     setLayout(vbox);
 
@@ -97,8 +95,10 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     Q_ASSERT(d->group->button(initialMode) != nullptr);
     d->group->button(initialMode)->setChecked(true);
 
-    connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(setEditModeInternal(int)));
-    connect(d->doc, SIGNAL(editModeChanged(TikzEditMode)), this, SLOT(setEditMode(TikzEditMode)));
+    connect(d->group, qOverload<int>(&QButtonGroup::buttonClicked), [this](int mode) {
+        Q_ASSERT(mode >= 0);
+        emit editModeChanged(static_cast<TikzEditMode>(mode));
+    });
 }
 
 TikzToolBox::~TikzToolBox()
@@ -106,18 +106,10 @@ TikzToolBox::~TikzToolBox()
     delete d;
 }
 
-Document * TikzToolBox::document() const
-{
-    return d->doc;
-}
-
 void TikzToolBox::setEditMode(TikzEditMode mode)
 {
-    const int id = static_cast<int>(mode);
-    Q_ASSERT(id >= 0);
-
-    if (d->group->checkedId() != id) {
-        d->group->button(id)->setChecked(true);
+    if (editMode() != mode) {
+        d->group->button(mode)->setChecked(true);
     }
 }
 
@@ -127,12 +119,6 @@ TikzEditMode TikzToolBox::editMode() const
     Q_ASSERT(id >= 0);
 
     return static_cast<TikzEditMode>(id);
-}
-
-void TikzToolBox::setEditModeInternal(int mode)
-{
-    Q_ASSERT(mode >= 0);
-//     document()->setEditMode(static_cast<TikzEditMode>(mode));
 }
 
 }
