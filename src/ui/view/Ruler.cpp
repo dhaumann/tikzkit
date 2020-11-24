@@ -22,6 +22,7 @@
 #include <tikz/core/Document.h>
 
 #include <QDebug>
+#include <QPainterPath>
 
 namespace tikz {
 namespace ui {
