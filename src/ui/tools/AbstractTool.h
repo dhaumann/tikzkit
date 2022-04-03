@@ -41,7 +41,7 @@ class Document;
  * This way, child classes can show interactive tools to the user with which
  * e.g. new nodes or edges can be created etc.
  */
-class TIKZUI_EXPORT AbstractTool : public QObject
+class TIKZKITUI_EXPORT AbstractTool : public QObject
 {
     Q_OBJECT
 

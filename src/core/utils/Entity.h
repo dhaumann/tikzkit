@@ -34,7 +34,7 @@ namespace core {
 class Document;
 class EntityPrivate;
 
-class TIKZCORE_EXPORT Entity : public ConfigObject
+class TIKZKITCORE_EXPORT Entity : public ConfigObject
 {
     Q_OBJECT
     Q_PROPERTY(Uid uid READ uid)

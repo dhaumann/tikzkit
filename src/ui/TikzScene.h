@@ -31,7 +31,7 @@ namespace ui {
 class DocumentPrivate;
 class TikzScenePrivate;
 
-class TIKZUI_EXPORT TikzScene : public QGraphicsScene
+class TIKZKITUI_EXPORT TikzScene : public QGraphicsScene
 {
     Q_OBJECT
 

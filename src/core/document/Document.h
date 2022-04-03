@@ -40,7 +40,7 @@ class Node;
 class UndoItem;
 class Visitor;
 
-class TIKZCORE_EXPORT Document : public Entity
+class TIKZKITCORE_EXPORT Document : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(tikz::Unit preferredUnit READ preferredUnit WRITE setPreferredUnit NOTIFY preferredUnitChanged)

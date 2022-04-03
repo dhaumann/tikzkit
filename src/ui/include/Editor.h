@@ -35,7 +35,7 @@ class View;
 class EditorPrivate;
 class ConfigPage;
 
-class TIKZUI_EXPORT Editor : public QObject
+class TIKZKITUI_EXPORT Editor : public QObject
 {
     Q_OBJECT
 

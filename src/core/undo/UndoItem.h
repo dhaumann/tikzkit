@@ -35,7 +35,7 @@ class UndoItemPrivate;
 /**
  * Base class for undo/redo items.
  */
-class TIKZCORE_EXPORT UndoItem
+class TIKZKITCORE_EXPORT UndoItem
 {
 public:
     /**

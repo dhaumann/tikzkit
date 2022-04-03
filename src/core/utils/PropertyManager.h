@@ -29,7 +29,7 @@
 namespace tikz {
 namespace core {
 
-class TIKZCORE_EXPORT PropertyInfo
+class TIKZKITCORE_EXPORT PropertyInfo
 {
 public:
     /**
@@ -80,7 +80,7 @@ private:
  *
  * @see Entity
  */
-class TIKZCORE_EXPORT PropertyManager
+class TIKZKITCORE_EXPORT PropertyManager
 {
 public:
     /**
@@ -103,7 +103,7 @@ private:
 /**
  * Getter that returns the global instance.
  */
-TIKZCORE_EXPORT PropertyManager & propertyManager();
+TIKZKITCORE_EXPORT PropertyManager & propertyManager();
 
 }
 }

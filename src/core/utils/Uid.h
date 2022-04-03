@@ -40,7 +40,7 @@ class Document;
  *
  * @see Entity, Document
  */
-class TIKZCORE_EXPORT Uid
+class TIKZKITCORE_EXPORT Uid
 {
     public:
         /**
@@ -193,7 +193,7 @@ namespace QTest
     template<typename T> char* toString(const T&);
     
     template<>
-    TIKZCORE_EXPORT char *toString(const tikz::core::Uid & uid);
+    TIKZKITCORE_EXPORT char *toString(const tikz::core::Uid & uid);
 }
 
 /**

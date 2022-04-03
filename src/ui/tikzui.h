@@ -19,7 +19,7 @@
 #ifndef TIKZ_UI_H
 #define TIKZ_UI_H
 
-// TIKZUI_EXPORT: this like exists just to copy the include files
+// TIKZKITUI_EXPORT: this like exists just to copy the include files
 
 enum class TikzEditMode {
     ModeSelect = 0,

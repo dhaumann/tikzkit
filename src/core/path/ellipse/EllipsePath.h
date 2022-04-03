@@ -37,7 +37,7 @@ class EllipsePathPrivate;
  * \draw (1, 1) ellipse (2cm and 1cm);
  * @endcode
  */
-class TIKZCORE_EXPORT EllipsePath : public Path
+class TIKZKITCORE_EXPORT EllipsePath : public Path
 {
     Q_OBJECT
 

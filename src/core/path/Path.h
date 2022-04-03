@@ -34,7 +34,7 @@ class Style;
 class Visitor;
 class PathPrivate;
 
-class TIKZCORE_EXPORT Path : public Entity
+class TIKZKITCORE_EXPORT Path : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(Style* style READ style)

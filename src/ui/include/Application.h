@@ -51,7 +51,7 @@ class MainWindow;
  * interface object that allows to call the functions of the MainWindow without needs for a nullptr
  * check around it in the client code.
  */
-class TIKZUI_EXPORT Application : public QObject
+class TIKZKITUI_EXPORT Application : public QObject
 {
     Q_OBJECT
 

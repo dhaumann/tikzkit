@@ -30,7 +30,7 @@
  * The IconComboBox shows icons only in the combo box itself.
  * However, the popup still shows the text and icons, exactly like QComboBox.
  */
-class TIKZUI_EXPORT IconComboBox : public QComboBox
+class TIKZKITUI_EXPORT IconComboBox : public QComboBox
 {
     Q_OBJECT
 

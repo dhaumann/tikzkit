@@ -37,7 +37,7 @@ class MainWindow;
 class NodeItem;
 class PathItem;
 
-class TIKZUI_EXPORT Document : public tikz::core::Document
+class TIKZKITUI_EXPORT Document : public tikz::core::Document
 {
     Q_OBJECT
 

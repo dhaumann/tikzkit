@@ -29,7 +29,7 @@ class SliderDoubleSpinBoxPrivate;
 /**
  * A modified QSpinBox showing a progress bar instead of an line edit.
  */
-class TIKZUI_EXPORT SliderDoubleSpinBox : public QDoubleSpinBox
+class TIKZKITUI_EXPORT SliderDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 

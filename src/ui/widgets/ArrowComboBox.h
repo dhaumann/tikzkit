@@ -26,7 +26,7 @@
 
 class ArrowComboBoxPrivate;
 
-class TIKZUI_EXPORT ArrowComboBox : public QWidget
+class TIKZKITUI_EXPORT ArrowComboBox : public QWidget
 {
     Q_OBJECT
 

@@ -45,7 +45,7 @@ class EdgePathPrivate;
  *   \draw (a) to[bend left=30] (b);
  * - ...
  */
-class TIKZCORE_EXPORT EdgePath : public Path
+class TIKZKITCORE_EXPORT EdgePath : public Path
 {
     Q_OBJECT
 

@@ -18,7 +18,7 @@ set(CMAKE_AUTOMOC ON)
 # prepare include folder in build dir: include/tikz/core/*.h
 file(GLOB_RECURSE ALL_HEADERS ${CMAKE_SOURCE_DIR}/src/core/*.h)
 foreach(header ${ALL_HEADERS})
-    file(STRINGS "${header}" lines REGEX "TIKZCORE_EXPORT")
+    file(STRINGS "${header}" lines REGEX "TIKZKITCORE_EXPORT")
     if(lines)
         file(COPY ${header}
              DESTINATION ${CMAKE_BINARY_DIR}/include/tikz/core/)
@@ -28,7 +28,7 @@ endforeach()
 # prepare include folder in build dir: include/tikz/ui/*.h
 file(GLOB_RECURSE ALL_HEADERS ${CMAKE_SOURCE_DIR}/src/ui/*.h)
 foreach(header ${ALL_HEADERS})
-    file(STRINGS "${header}" lines REGEX "TIKZUI_EXPORT")
+    file(STRINGS "${header}" lines REGEX "TIKZKITUI_EXPORT")
     if(lines)
         file(COPY ${header}
              DESTINATION ${CMAKE_BINARY_DIR}/include/tikz/ui/)

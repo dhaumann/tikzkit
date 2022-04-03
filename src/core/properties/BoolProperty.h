@@ -27,7 +27,7 @@ namespace core {
 /**
  * BoolProperty.
  */
-class TIKZCORE_EXPORT BoolProperty : public Property
+class TIKZKITCORE_EXPORT BoolProperty : public Property
 {
 public:
     /**

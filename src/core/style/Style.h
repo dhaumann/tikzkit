@@ -33,7 +33,7 @@ class Document;
 class StylePrivate;
 class Visitor;
 
-class TIKZCORE_EXPORT Style : public Entity
+class TIKZKITCORE_EXPORT Style : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(Uid parentStyle READ parentStyle WRITE setParentStyle)

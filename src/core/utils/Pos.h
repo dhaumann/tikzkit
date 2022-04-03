@@ -25,7 +25,7 @@
 namespace tikz
 {
 
-class TIKZCORE_EXPORT Pos
+class TIKZKITCORE_EXPORT Pos
 {
     public:
         /**
@@ -277,7 +277,7 @@ namespace QTest
     template<typename T> char* toString(const T&);
     
     template<>
-    TIKZCORE_EXPORT char *toString(const tikz::Pos & pos);
+    TIKZKITCORE_EXPORT char *toString(const tikz::Pos & pos);
 }
 
 /**

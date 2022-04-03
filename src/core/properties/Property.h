@@ -42,7 +42,7 @@ class PropertyInterface;
  *
  * @see Entity
  */
-class TIKZCORE_EXPORT Property
+class TIKZKITCORE_EXPORT Property
 {
 public:
     /**

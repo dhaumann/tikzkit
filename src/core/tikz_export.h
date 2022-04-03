@@ -23,9 +23,9 @@
 #include <QtCore/QtGlobal>
 
 #if defined(MAKE_TIKZCORE)
-#  define TIKZCORE_EXPORT Q_DECL_EXPORT
+#  define TIKZKITCORE_EXPORT Q_DECL_EXPORT
 #else
-#  define TIKZCORE_EXPORT Q_DECL_IMPORT
+#  define TIKZKITCORE_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // TIKZ_EXPORT_H

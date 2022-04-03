@@ -39,7 +39,7 @@ class ColorPalette;
  * Thereafter, the colors can be obtained with @p color() with parameters
  * in the range of rows() and columns().
  */
-class TIKZUI_EXPORT ColorWidget : public QFrame
+class TIKZKITUI_EXPORT ColorWidget : public QFrame
 {
     Q_OBJECT
 

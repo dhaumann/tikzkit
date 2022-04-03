@@ -39,7 +39,7 @@ class View;
 /**
  * todo
  */
-class TIKZUI_EXPORT PropertyBrowser : public QWidget
+class TIKZKITUI_EXPORT PropertyBrowser : public QWidget
 {
     Q_OBJECT
 

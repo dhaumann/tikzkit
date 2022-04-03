@@ -30,7 +30,7 @@ namespace core {
 class Node;
 class Document;
 
-class TIKZCORE_EXPORT UndoSetProperty : public UndoItem
+class TIKZKITCORE_EXPORT UndoSetProperty : public UndoItem
 {
     public:
         /**

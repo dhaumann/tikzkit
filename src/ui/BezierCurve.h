@@ -25,7 +25,7 @@
 
 #include "tikzui_export.h"
 
-class TIKZUI_EXPORT BezierCurve
+class TIKZKITUI_EXPORT BezierCurve
 {
     public:
         /**

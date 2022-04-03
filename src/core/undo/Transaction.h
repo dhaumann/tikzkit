@@ -55,7 +55,7 @@ class TransactionPrivate;
  * Further, if a running transaction should be aborted, just call cancel().
  * This is handy whenever the user hits Escape during a modification.
  */
-class TIKZCORE_EXPORT Transaction
+class TIKZKITCORE_EXPORT Transaction
 {
     public:
         /**

@@ -36,7 +36,7 @@ class Entity;
  *
  * @see Entity
  */
-class TIKZCORE_EXPORT PropertyInterface
+class TIKZKITCORE_EXPORT PropertyInterface
 {
 public:
     /**

@@ -39,7 +39,7 @@ class Document;
  * This position may either be a simple coordinate, or a node.
  * In case of a node, the anchor additionally takes effect.
  */
-class TIKZCORE_EXPORT MetaPos
+class TIKZKITCORE_EXPORT MetaPos
 {
     //
     // types
@@ -204,7 +204,7 @@ namespace QTest
     template<typename T> char* toString(const T&);
     
     template<>
-    TIKZCORE_EXPORT char *toString(const tikz::core::MetaPos & metaPos);
+    TIKZKITCORE_EXPORT char *toString(const tikz::core::MetaPos & metaPos);
 }
 
 #endif // TIKZ_METAPOS_H

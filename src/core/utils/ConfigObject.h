@@ -33,7 +33,7 @@ namespace core {
  * The ConfigObject contains a changed() signal.
  * @TODO FIXME
  */
-class TIKZCORE_EXPORT ConfigObject : public QObject
+class TIKZKITCORE_EXPORT ConfigObject : public QObject
 {
     Q_OBJECT
 
@@ -94,7 +94,7 @@ class TIKZCORE_EXPORT ConfigObject : public QObject
         int m_refCounter = 0;
 };
 
-class TIKZCORE_EXPORT ConfigTransaction
+class TIKZKITCORE_EXPORT ConfigTransaction
 {
 public:
     // Disable some constructors.

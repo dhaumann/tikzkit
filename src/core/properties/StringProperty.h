@@ -27,7 +27,7 @@ namespace core {
 /**
  * Color property.
  */
-class TIKZCORE_EXPORT StringProperty : public Property
+class TIKZKITCORE_EXPORT StringProperty : public Property
 {
 public:
     /**

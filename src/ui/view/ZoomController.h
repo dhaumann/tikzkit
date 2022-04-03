@@ -43,7 +43,7 @@ namespace ui {
  * A combo box can be attached by calling attachToComboBox(). The attached
  * combo box is automatically filled with the defined zoom factors.
  */
-class TIKZUI_EXPORT ZoomController : public QObject
+class TIKZKITUI_EXPORT ZoomController : public QObject
 {
     Q_OBJECT
 

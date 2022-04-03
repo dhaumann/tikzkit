@@ -38,7 +38,7 @@ class MainWindow;
 class ViewPrivate;
 class ZoomController;
 
-class TIKZUI_EXPORT View : public QWidget
+class TIKZKITUI_EXPORT View : public QWidget
 {
     Q_OBJECT
 

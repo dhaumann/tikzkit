@@ -31,7 +31,7 @@ namespace ui {
 class MainWindow;
 class TikzToolBoxPrivate;
 
-class TIKZUI_EXPORT TikzToolBox : public QWidget
+class TIKZKITUI_EXPORT TikzToolBox : public QWidget
 {
     Q_OBJECT
 

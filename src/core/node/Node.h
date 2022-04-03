@@ -36,7 +36,7 @@ class Document;
 class Visitor;
 class MetaPos;
 
-class TIKZCORE_EXPORT Node : public Entity
+class TIKZKITCORE_EXPORT Node : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)

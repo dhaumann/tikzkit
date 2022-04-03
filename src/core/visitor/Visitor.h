@@ -34,7 +34,7 @@ class Path;
  * Visitor pattern.
  * Visits all elements of a tikz::document.
  */
-class TIKZCORE_EXPORT Visitor
+class TIKZKITCORE_EXPORT Visitor
 {
     public:
         /**

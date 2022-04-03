@@ -27,7 +27,7 @@
 #include <type_traits>
 
 namespace tikz {
-Q_NAMESPACE_EXPORT(TIKZCORE_EXPORT)
+Q_NAMESPACE_EXPORT(TIKZKITCORE_EXPORT)
 
 /**
  * Template helper to convert strings to enum.
@@ -69,18 +69,18 @@ enum class LogType : int {
  *          on invalid data.
  * @see unsetLogFunction()
  */
-TIKZCORE_EXPORT void setLogFunction(std::function<void(LogType, const QString &)> logFunc);
+TIKZKITCORE_EXPORT void setLogFunction(std::function<void(LogType, const QString &)> logFunc);
 
 /**
  * Reset the logging function to a simple call of qDebug().
  * @see setLogFunction()
  */
-TIKZCORE_EXPORT void unsetLogFunction();
+TIKZKITCORE_EXPORT void unsetLogFunction();
 
 /**
  * Logging facilities.
  */
-TIKZCORE_EXPORT void log(LogType level, const QString & text);
+TIKZKITCORE_EXPORT void log(LogType level, const QString & text);
 
 /**
  * Logging helper function that equals the call of log(LogType::Debug, text).
@@ -128,12 +128,12 @@ Q_ENUM_NS(EntityType)
 /**
  * Converts the EntityType @p type to a string.
  */
-TIKZCORE_EXPORT QString toString(EntityType type);
+TIKZKITCORE_EXPORT QString toString(EntityType type);
 
 /**
  * Converts the string @p str to an EntityType.
  */
-TIKZCORE_EXPORT EntityType toEntityType(const QString & str);
+TIKZKITCORE_EXPORT EntityType toEntityType(const QString & str);
 
 /**
  * Available units.
@@ -149,13 +149,13 @@ Q_ENUM_NS(Unit)
 /**
  * Convert the tikz::Unit @p unit to a QString.
  */
-TIKZCORE_EXPORT QString toString(tikz::Unit unit);
+TIKZKITCORE_EXPORT QString toString(tikz::Unit unit);
 
 /**
  * Convert the string @p unit to an enum tikz::Unit.
  */
 template<>
-TIKZCORE_EXPORT Unit toEnum<Unit>(const QString & unit);
+TIKZKITCORE_EXPORT Unit toEnum<Unit>(const QString & unit);
 
 /**
  * TextAlignment, following the TikZ text alignment options.
@@ -174,13 +174,13 @@ Q_ENUM_NS(TextAlignment)
  * Convert the tikz::TextAlignment @p alignment to a QString.
  * @note This function creates TikZ compatible strings.
  */
-TIKZCORE_EXPORT QString toString(tikz::TextAlignment alignment);
+TIKZKITCORE_EXPORT QString toString(tikz::TextAlignment alignment);
 
 /**
  * Convert the string @p alignment to an enum tikz::TextAlignment.
  */
 template<>
-TIKZCORE_EXPORT TextAlignment toEnum<TextAlignment>(const QString & alignment);
+TIKZKITCORE_EXPORT TextAlignment toEnum<TextAlignment>(const QString & alignment);
 
 /**
  * Supported TikZ Shapes.
@@ -198,13 +198,13 @@ Q_ENUM_NS(Shape)
  * Convert the tikz::Shape @p shape to a QString.
  * @note This function creates TikZ compatible strings.
  */
-TIKZCORE_EXPORT QString toString(tikz::Shape shape);
+TIKZKITCORE_EXPORT QString toString(tikz::Shape shape);
 
 /**
  * Convert the string @p shape to an enum tikz::Shape.
  */
 template<>
-TIKZCORE_EXPORT Shape toEnum<Shape>(const QString & shape);
+TIKZKITCORE_EXPORT Shape toEnum<Shape>(const QString & shape);
 
 /**
  * Supported TikZ pen styles.
@@ -231,14 +231,14 @@ Q_ENUM_NS(PenStyle)
  * Examples are e.g. "solid", "densely dashed", ...
  * @note This function creates TikZ compatible strings.
  */
-TIKZCORE_EXPORT QString toString(tikz::PenStyle penStyle);
+TIKZKITCORE_EXPORT QString toString(tikz::PenStyle penStyle);
 
 /**
  * Convert @p penStyle to a QString.
  * Examples are e.g. "solid", "densely dashed", ...
  */
 template<>
-TIKZCORE_EXPORT PenStyle toEnum<PenStyle>(const QString & penStyle);
+TIKZKITCORE_EXPORT PenStyle toEnum<PenStyle>(const QString & penStyle);
 
 enum class LineCap : int {
     CapUnset = 0,
@@ -281,13 +281,13 @@ Q_ENUM_NS(Arrow)
  * Convert @p arrow to a QString.
  * @note This function creates TikZ compatible strings.
  */
-TIKZCORE_EXPORT QString toString(tikz::Arrow arrow);
+TIKZKITCORE_EXPORT QString toString(tikz::Arrow arrow);
 
 /**
  * Convert the string @p arrow to an enum tikz::Arrow.
  */
 template<>
-TIKZCORE_EXPORT Arrow toEnum<Arrow>(const QString & arrow);
+TIKZKITCORE_EXPORT Arrow toEnum<Arrow>(const QString & arrow);
 
 /**
  * Available path types.
@@ -309,13 +309,13 @@ Q_ENUM_NS(PathType)
 /**
  * Convert PathType @p type to a QString.
  */
-TIKZCORE_EXPORT QString toString(tikz::PathType type);
+TIKZKITCORE_EXPORT QString toString(tikz::PathType type);
 
 /**
  * Convert the string @p type to an enum tikz::PathType.
  */
 template<>
-TIKZCORE_EXPORT PathType toEnum<PathType>(const QString & type);
+TIKZKITCORE_EXPORT PathType toEnum<PathType>(const QString & type);
 
 }
 

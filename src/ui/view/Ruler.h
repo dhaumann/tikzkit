@@ -32,7 +32,7 @@
 namespace tikz {
 namespace ui {
 
-class TIKZUI_EXPORT Ruler : public QWidget
+class TIKZKITUI_EXPORT Ruler : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(qreal origin READ origin WRITE setOrigin)

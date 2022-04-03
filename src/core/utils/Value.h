@@ -51,7 +51,7 @@ namespace internal {
  * By using the Value class whenever metric values are required,
  * it is recommended to use Value as it avoids unit conversion errors.
  */
-class TIKZCORE_EXPORT Value
+class TIKZKITCORE_EXPORT Value
 {
     //
     // static functions
@@ -559,7 +559,7 @@ namespace QTest
     template<typename T> char* toString(const T&);
     
     template<>
-    TIKZCORE_EXPORT char *toString(const tikz::Value & value);
+    TIKZKITCORE_EXPORT char *toString(const tikz::Value & value);
 }
 
 /**
