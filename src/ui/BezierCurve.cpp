@@ -189,7 +189,7 @@ qreal BezierCurve::intersect(const QPainterPath & path)
                          path.pointAtPercent((b + 1) * tau));
 
             QPointF crossing;
-            if (QLineF::BoundedIntersection == line1.intersect(line2, &crossing)) {
+            if (QLineF::BoundedIntersection == line1.intersects(line2, &crossing)) {
                 return a * tau;
             }
         }

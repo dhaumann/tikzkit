@@ -95,7 +95,7 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
     Q_ASSERT(d->group->button(initialMode) != nullptr);
     d->group->button(initialMode)->setChecked(true);
 
-    connect(d->group, qOverload<int>(&QButtonGroup::buttonClicked), [this](int mode) {
+    connect(d->group, &QButtonGroup::idClicked, [this](int mode) {
         Q_ASSERT(mode >= 0);
         emit editModeChanged(static_cast<TikzEditMode>(mode));
     });

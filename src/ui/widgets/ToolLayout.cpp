@@ -63,7 +63,7 @@ QLayoutItem *ToolLayout::takeAt(int index)
 
 Qt::Orientations ToolLayout::expandingDirections() const
 {
-    return nullptr;
+    return Qt::Orientations();
 }
 
 bool ToolLayout::hasHeightForWidth() const

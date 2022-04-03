@@ -257,14 +257,14 @@ bool ZoomController::eventFilter(QObject *watched, QEvent *event)
 
     // we want vertical wheel events
     auto evWheel = static_cast<QWheelEvent*>(event);
-    if (!evWheel || evWheel->orientation() != Qt::Vertical) {
+    if (!evWheel || evWheel->angleDelta().y() > 0) {
         return QObject::eventFilter(watched, event);
     }
 
     // zoom in/out
-    if (evWheel->delta() < 0) {
+    if (evWheel->angleDelta().y() < 0) {
         zoomOut(true);
-    } else {
+    } else if (evWheel->angleDelta().y() > 0) {
         zoomIn(true);
     }
 

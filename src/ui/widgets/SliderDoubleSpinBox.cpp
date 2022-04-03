@@ -75,7 +75,7 @@ QStyleOptionSpinBox SliderDoubleSpinBoxPrivate::spinBoxOptions() const
     } else if (downButtonRect(opts).contains(mousePos)) {
         opts.activeSubControls = QStyle::SC_SpinBoxDown;
     } else {
-        opts.activeSubControls = nullptr;
+        opts.activeSubControls = QStyle::SC_None;
     }
 
     return opts;

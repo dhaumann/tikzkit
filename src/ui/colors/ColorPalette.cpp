@@ -65,7 +65,7 @@ void ColorPalette::load(const QString & filename)
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
             return;
         QTextStream ts(&file);
-        lines = ts.readAll().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+        lines = ts.readAll().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     }
 
     static QRegularExpression whiteSpaces("\\s+");
@@ -91,7 +91,7 @@ void ColorPalette::load(const QString & filename)
 
         // check for Spacing: space separated int list. Each int is a row, starting at 0.
         if (line.startsWith(QLatin1String("Spacing:"))) {
-            QStringList list = line.right(line.size() - 8).trimmed().split(whiteSpaces, QString::SkipEmptyParts);
+            QStringList list = line.right(line.size() - 8).trimmed().split(whiteSpaces, Qt::SkipEmptyParts);
             foreach (const QString r, list) {
                 d->spacings.append(r.toInt());
             }
@@ -99,7 +99,7 @@ void ColorPalette::load(const QString & filename)
         }
 
         // check for "r g b <tab> name"
-        QStringList color = line.split(whiteSpaces, QString::SkipEmptyParts);
+        QStringList color = line.split(whiteSpaces, Qt::SkipEmptyParts);
         if (color.size() >= 3) {
             d->colors << qRgb(color[0].toInt(),
                               color[1].toInt(),

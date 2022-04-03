@@ -259,14 +259,14 @@ void EdgePathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 //     painter->drawPath(d->m_headPath);
 
     // TODO: create d->paths
-    if (isHovered()) {
-        QPointF startAnchor = startPos();
-        QPointF endAnchor = endPos();
-        QPointF diff(endAnchor - startAnchor);
-        const qreal radAngle = std::atan2(diff.y(), diff.x());
+//     if (isHovered()) {
+//         QPointF startAnchor = startPos();
+//         QPointF endAnchor = endPos();
+//         QPointF diff(endAnchor - startAnchor);
+//         const qreal radAngle = std::atan2(diff.y(), diff.x());
 //         d->drawHandle(painter, startAnchor, m_startNode != 0);
 //         d->drawHandle(painter, endAnchor, m_endNode != 0);
-    }
+//     }
 
     // debug: draw bounding rect:
 //     painter->setBrush(Qt::NoBrush);

@@ -172,10 +172,10 @@ QPointF DiamondShape::contactPoint(const QString & anchor, qreal rad) const
     const QLineF l4(0, -ry, -rx, 0);
 
     QPointF intersectionPoint;
-    if ((l1.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
-        (l2.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
-        (l3.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
-        (l4.intersect(radLine, &intersectionPoint) == QLineF::BoundedIntersection)
+    if ((l1.intersects(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l2.intersects(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l3.intersects(radLine, &intersectionPoint) == QLineF::BoundedIntersection) ||
+        (l4.intersects(radLine, &intersectionPoint) == QLineF::BoundedIntersection)
     ) {
         return intersectionPoint;
     }

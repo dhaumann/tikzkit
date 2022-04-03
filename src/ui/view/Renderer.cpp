@@ -201,7 +201,7 @@ void Renderer::wheelEvent(QWheelEvent* event)
 {
     if (event->modifiers() & Qt::ControlModifier) {
         setTransformationAnchor(AnchorUnderMouse);
-        m_zoomController->processWheelEvent(event->delta());
+        m_zoomController->processWheelEvent(event->angleDelta().y());
     } else {
         QGraphicsView::wheelEvent(event);
     }
