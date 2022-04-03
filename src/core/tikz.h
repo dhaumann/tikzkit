@@ -27,7 +27,7 @@
 #include <type_traits>
 
 namespace tikz {
-Q_NAMESPACE
+Q_NAMESPACE_EXPORT(TIKZCORE_EXPORT)
 
 /**
  * Template helper to convert strings to enum.
