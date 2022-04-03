@@ -99,7 +99,10 @@ add_library(qtikzui SHARED
 )
 
 target_compile_features(qtikzui PRIVATE cxx_std_14)
-target_compile_options(qtikzui PRIVATE -Wall)
+target_compile_options(qtikzui PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+)
 
 target_link_libraries(qtikzui
     Qt5::Core

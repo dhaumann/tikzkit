@@ -12,7 +12,10 @@ add_executable(tikzkit
 )
 
 target_compile_features(tikzkit PRIVATE cxx_std_14)
-target_compile_options(tikzkit PRIVATE -Wall)
+target_compile_options(tikzkit PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+)
 
 target_include_directories(tikzkit
     PRIVATE

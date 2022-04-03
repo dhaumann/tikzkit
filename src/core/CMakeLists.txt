@@ -57,7 +57,10 @@ add_library(qtikzcore SHARED
 )
 
 target_compile_features(qtikzcore PRIVATE cxx_std_14)
-target_compile_options(qtikzcore PRIVATE -Wall)
+target_compile_options(qtikzcore PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+)
 
 target_link_libraries(qtikzcore
     Qt5::Core
