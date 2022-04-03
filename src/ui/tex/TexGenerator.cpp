@@ -134,8 +134,8 @@ void TexGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     if (!d->postProcessRunning) {
         QFileInfo fi(*d->tempFile);
         QStringList args;
-        args << "--no-fonts"<<(fi.baseName() + ".dvi")
-             << (fi.baseName() + ".svg");
+        args << "--no-fonts" << (fi.baseName() + ".dvi")
+             << "-o" << (fi.baseName() + ".svg");
 
 //        qDebug() << "launching process: 'dvisvgm'";
         d->postProcessRunning = true;
