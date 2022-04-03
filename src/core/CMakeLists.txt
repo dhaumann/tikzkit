@@ -1,8 +1,8 @@
-project(qtikzcore)
+project(tikzkitcore)
 
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets)
 
-add_library(qtikzcore SHARED
+add_library(tikzkitcore SHARED
     tikz.cpp
 
     document/Document.cpp
@@ -56,18 +56,18 @@ add_library(qtikzcore SHARED
     visitor/TikzExport.cpp
 )
 
-target_compile_features(qtikzcore PRIVATE cxx_std_14)
-target_compile_options(qtikzcore PRIVATE
+target_compile_features(tikzkitcore PRIVATE cxx_std_14)
+target_compile_options(tikzkitcore PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
   $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
-target_link_libraries(qtikzcore
+target_link_libraries(tikzkitcore
     Qt5::Core
     Qt5::Widgets
 )
 
-target_include_directories(qtikzcore
+target_include_directories(tikzkitcore
     PRIVATE
     .
     document/

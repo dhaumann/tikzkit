@@ -1,8 +1,8 @@
-project(qtikzui)
+project(tikzkitui)
 
 find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
 
-set(qtikzui_SOURCES
+set(tikzkitui_SOURCES
     TikzItem.cpp
     NodeItem.cpp
 #     TikzEdge.cpp
@@ -85,34 +85,34 @@ set(qtikzui_SOURCES
     propertybrowser/UidPropertyManager.cpp
 )
 
-set(qtikzui_FORMS )
-qt5_wrap_ui(qtikzui_FORMS_HEADERS ${qtikzui_FORMS})
+set(tikzkitui_FORMS )
+qt5_wrap_ui(tikzkitui_FORMS_HEADERS ${tikzkitui_FORMS})
 
 # add icon resource
-set(qtikzui_RESOURCES icons.qrc)
-qt5_add_resources(qtikzui_RESOURCES_RCC ${qtikzui_RESOURCES})
+set(tikzkitui_RESOURCES icons.qrc)
+qt5_add_resources(tikzkitui_RESOURCES_RCC ${tikzkitui_RESOURCES})
 
-add_library(qtikzui SHARED
-    ${qtikzui_SOURCES}
-    ${qtikzui_RESOURCES_RCC}
-    ${qtikzui_FORMS_HEADERS}
+add_library(tikzkitui SHARED
+    ${tikzkitui_SOURCES}
+    ${tikzkitui_RESOURCES_RCC}
+    ${tikzkitui_FORMS_HEADERS}
 )
 
-target_compile_features(qtikzui PRIVATE cxx_std_14)
-target_compile_options(qtikzui PRIVATE
+target_compile_features(tikzkitui PRIVATE cxx_std_14)
+target_compile_options(tikzkitui PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
   $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
-target_link_libraries(qtikzui
+target_link_libraries(tikzkitui
     Qt5::Core
     Qt5::Widgets
     Qt5::Svg
-    qtikzcore
+    tikzkitcore
     qtpropertybrowser
 )
 
-target_include_directories(qtikzui
+target_include_directories(tikzkitui
     PRIVATE
     .
     ${CMAKE_BINARY_DIR}/include

@@ -26,8 +26,8 @@ target_include_directories(tikzkit
 target_link_libraries(tikzkit
     Qt5::Core
     Qt5::Widgets
-    qtikzcore
-    qtikzui
+    tikzkitcore
+    tikzkitui
 )
 
 # kate: indent-width 4; replace-tabs on;
