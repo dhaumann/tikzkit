@@ -95,6 +95,7 @@ class Renderer : public QGraphicsView
         bool viewportEvent(QEvent * event) override;
 
         void drawBackground(QPainter * painter, const QRectF & rect) override;
+        void drawForeground(QPainter * painter, const QRectF & rect) override;
 
     private:
         DocumentPrivate * m_doc = nullptr;

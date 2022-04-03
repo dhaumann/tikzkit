@@ -235,6 +235,12 @@ void Renderer::drawBackground(QPainter * painter, const QRectF & rect)
     m_grid->draw(painter, sceneRect().united(rect));
 }
 
+void Renderer::drawForeground(QPainter * painter, const QRectF & rect)
+{
+    // draw default background (typically nothing)
+    QGraphicsView::drawForeground(painter, rect);
+}
+
 }
 }
 
