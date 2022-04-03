@@ -64,7 +64,7 @@ class TIKZCORE_EXPORT Pos
         /**
          * Check whether this value is a finite value, i.e. other than NaN or infinity.
          */
-        inline constexpr bool isValid() const noexcept
+        inline bool isValid() const noexcept
         {
             return m_x.isValid() && m_y.isValid();
         }
@@ -202,7 +202,7 @@ class TIKZCORE_EXPORT Pos
 /**
  * Check for equality with (p1 == p2).
  */
-inline constexpr bool operator==(const Pos & p1, const Pos & p2) noexcept
+inline bool operator==(const Pos & p1, const Pos & p2) noexcept
 {
     return (p1.x() == p2.x()) && (p1.y() == p2.y());
 }
@@ -210,7 +210,7 @@ inline constexpr bool operator==(const Pos & p1, const Pos & p2) noexcept
 /**
  * Check for inequality with (val1 != val2).
  */
-inline constexpr bool operator!=(const Pos & p1, const Pos & p2) noexcept
+inline bool operator!=(const Pos & p1, const Pos & p2) noexcept
 {
     return ! (p1 == p2);
 }
@@ -238,7 +238,7 @@ inline Pos operator-(const Pos & p1, const Pos & p2) noexcept
 /**
  * Returns a copy of @p pos, multiplied by @p factor.
  */
-inline constexpr Pos operator*(const Pos & pos, qreal factor) noexcept
+inline Pos operator*(const Pos & pos, qreal factor) noexcept
 {
     return Pos(pos.x() * factor, pos.y() * factor);
 }
@@ -246,7 +246,7 @@ inline constexpr Pos operator*(const Pos & pos, qreal factor) noexcept
 /**
  * Returns a copy of @p pos, multiplied by @p factor.
  */
-inline constexpr Pos operator*(qreal factor, const Pos & pos) noexcept
+inline Pos operator*(qreal factor, const Pos & pos) noexcept
 {
     return Pos(pos.x() * factor, pos.y() * factor);
 }

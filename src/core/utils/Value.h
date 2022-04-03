@@ -127,7 +127,7 @@ class TIKZCORE_EXPORT Value
         /**
          * Check whether this value is a finite value, i.e. other than NaN or infinity.
          */
-        inline constexpr bool isValid() const noexcept
+        inline bool isValid() const noexcept
         {
             return std::isfinite(m_value);
         }
@@ -318,7 +318,7 @@ class TIKZCORE_EXPORT Value
  * Return @e true, if the Value @p lhs equals the Value @p rhs.
  * @note The comparison is unit-aware.
  */
-inline constexpr bool operator==(const Value & lhs, const Value & rhs) noexcept
+inline bool operator==(const Value & lhs, const Value & rhs) noexcept
 {
     return (!lhs.isValid() && !rhs.isValid())
         || qFuzzyIsNull(lhs.value() - rhs.convertTo(lhs.unit()).value());
@@ -329,7 +329,7 @@ inline constexpr bool operator==(const Value & lhs, const Value & rhs) noexcept
  * Return @e true, if the Value @p lhs does not equal the Value @p rhs.
  * @note The comparison is unit-aware.
  */
-inline constexpr bool operator!=(const Value & lhs, const Value & rhs) noexcept
+inline bool operator!=(const Value & lhs, const Value & rhs) noexcept
 {
     return ! (lhs == rhs);
 }
@@ -338,7 +338,7 @@ inline constexpr bool operator!=(const Value & lhs, const Value & rhs) noexcept
  * Returns a Value that is formed by multiplying @p value with @p factor.
  * @warning This operation is independent of the unit.
  */
-inline constexpr Value operator*(const Value & value, qreal factor) noexcept
+inline Value operator*(const Value & value, qreal factor) noexcept
 {
     return Value(value.value() * factor, value.unit());
 }
@@ -347,7 +347,7 @@ inline constexpr Value operator*(const Value & value, qreal factor) noexcept
  * Returns a Value that is formed by multiplying @p value with @p factor.
  * @warning This operation is independent of the unit.
  */
-inline constexpr Value operator*(qreal factor, const Value & value) noexcept
+inline Value operator*(qreal factor, const Value & value) noexcept
 {
     return value * factor;
 }
