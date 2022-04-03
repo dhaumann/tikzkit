@@ -115,6 +115,7 @@ void PropertyInterface::notifyPropertyChanged(Property * property)
 
 void PropertyInterface::notifyPropertyAboutToChange(Property * property)
 {
+    Q_UNUSED(property)
     // TODO: leave empty for now ?
 }
 

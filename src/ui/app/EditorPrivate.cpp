@@ -61,6 +61,7 @@ EditorPrivate::~EditorPrivate()
 
 tikz::ui::Document * EditorPrivate::createDocument(QObject *parent)
 {
+    Q_UNUSED(parent) // FIXME: delete parameter? or is 'this' below wrong?
     auto doc = new tikz::ui::DocumentPrivate(this);
 
     emit documentCreated(doc);

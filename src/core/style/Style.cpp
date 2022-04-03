@@ -997,11 +997,13 @@ void Style::unsetLooseness()
 
 void Style::setStartControlPoint(const QPointF & cp1)
 {
+    Q_UNUSED(cp1)
     // TODO
 }
 
 void Style::setEndControlPoint(const QPointF & cp2)
 {
+    Q_UNUSED(cp2)
     // TODO
 }
 

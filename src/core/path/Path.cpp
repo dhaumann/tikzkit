@@ -64,6 +64,7 @@ void Path::deconstruct()
 
 void Path::detachFromNode(Node * node)
 {
+    Q_UNUSED(node)
 }
 
 bool Path::accept(Visitor & visitor)

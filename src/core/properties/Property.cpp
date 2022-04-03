@@ -163,6 +163,7 @@ void Property::load(const QJsonObject & json)
 
 void Property::loadData(const QJsonObject & json)
 {
+    Q_UNUSED(json)
 }
 
 void Property::save(QJsonObject & json)
@@ -180,6 +181,7 @@ void Property::save(QJsonObject & json)
 
 void Property::saveData(QJsonObject & json)
 {
+    Q_UNUSED(json)
 }
 
 }

@@ -255,6 +255,7 @@ void TikzExportVisitor::visit(Path * path)
 
 void TikzExportVisitor::visit(Style * style)
 {
+    Q_UNUSED(style)
 }
 
 QStringList TikzExportVisitor::styleOptions(Style * style)
