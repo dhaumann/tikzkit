@@ -29,7 +29,7 @@
 namespace tikz {
 namespace core {
 
-class PropertyInfo
+class TIKZCORE_EXPORT PropertyInfo
 {
 public:
     /**
