@@ -35,6 +35,8 @@ foreach(header ${ALL_HEADERS})
     endif()
 endforeach()
 
+# _USE_MATH_DEFINES needed on Windows to define M_PI in <cmath>
+add_compile_definitions(_USE_MATH_DEFINES)
 
 add_subdirectory(src/core)
 add_subdirectory(src/qtpropertybrowser/src)
