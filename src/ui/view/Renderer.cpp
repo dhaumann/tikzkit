@@ -146,7 +146,7 @@ void Renderer::mousePressEvent(QMouseEvent* event)
     m_lastMousePos = event->pos();
 
     // start scrolling with middle mouse button
-    if (event->button() == Qt::MidButton) {
+    if (event->button() == Qt::MiddleButton) {
         setCursor(Qt::SizeAllCursor);
         m_handTool = true;
         event->accept();
@@ -188,7 +188,7 @@ void Renderer::mouseMoveEvent(QMouseEvent* event)
 void Renderer::mouseReleaseEvent(QMouseEvent* event)
 {
     // end scrolling with middle mouse button
-    if (event->button() == Qt::MidButton) {
+    if (event->button() == Qt::MiddleButton) {
         unsetCursor();
         m_handTool = false;
         event->accept();

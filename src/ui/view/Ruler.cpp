@@ -109,7 +109,7 @@ void Ruler::mouseMoveEvent(QMouseEvent* event)
 void Ruler::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    painter.setRenderHints(QPainter::TextAntialiasing | QPainter::HighQualityAntialiasing);
+    painter.setRenderHints(QPainter::TextAntialiasing | QPainter::Antialiasing);
     painter.setPen(Qt::black);
 
     // translate origin
