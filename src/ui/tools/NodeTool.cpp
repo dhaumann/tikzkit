@@ -37,6 +37,8 @@
 
 #include <QDebug>
 
+#include <cmath>
+
 namespace tikz {
 namespace ui {
 
