@@ -46,7 +46,7 @@ Renderer::Renderer(DocumentPrivate * doc, QWidget * parent)
     setViewportMargins(s_ruler_size, s_ruler_size, 0, 0);
     QGridLayout* gridLayout = new QGridLayout();
     gridLayout->setSpacing(0);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins(0, 0, 0, 0);
 
     m_grid = new Grid(this);
 
