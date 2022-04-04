@@ -44,18 +44,18 @@ UndoSetProperty::UndoSetProperty(const Uid & entityUid, const QString & property
     if (info.isResettable()) {
         bool isModified = false;
         const bool ok = QMetaObject::invokeMethod(entity,
-                                                  info.modifiedFunction().toLatin1(),
+                                                  info.modifiedFunction().toLatin1().data(),
                                                   Qt::DirectConnection,
                                                   Q_RETURN_ARG(bool, isModified)
         );
         if (!ok) {
             qDebug() << "Unable to check modified state of property" + m_propertyName;
-            entity->setProperty(m_propertyName.toLatin1(), m_undoValue);
+            entity->setProperty(m_propertyName.toLatin1().data(), m_undoValue);
         }
 
-        m_undoValue = (ok && isModified) ? entity->property(propertyName.toLatin1()) : QVariant();
+        m_undoValue = (ok && isModified) ? entity->property(propertyName.toLatin1().data()) : QVariant();
     } else {
-        m_undoValue = entity->property(propertyName.toLatin1());
+        m_undoValue = entity->property(propertyName.toLatin1().data());
     }
 }
 
@@ -69,16 +69,16 @@ void UndoSetProperty::undo()
     Q_ASSERT(entity);
 
     if (m_undoValue.isValid()) {
-        entity->setProperty(m_propertyName.toLatin1(), m_undoValue);
+        entity->setProperty(m_propertyName.toLatin1().data(), m_undoValue);
     } else {
         const auto info = propertyManager().info(m_propertyName);
         const bool ok = QMetaObject::invokeMethod(entity,
-                                                  info.resetFunction().toLatin1(),
+                                                  info.resetFunction().toLatin1().data(),
                                                   Qt::DirectConnection
         );
         if (!ok) {
             qDebug() << "Unable to reset property" + m_propertyName;
-            entity->setProperty(m_propertyName.toLatin1(), m_undoValue);
+            entity->setProperty(m_propertyName.toLatin1().data(), m_undoValue);
         }
     }
 }
@@ -89,16 +89,16 @@ void UndoSetProperty::redo()
     Q_ASSERT(entity);
 
     if (m_redoValue.isValid()) {
-        entity->setProperty(m_propertyName.toLatin1(), m_redoValue);
+        entity->setProperty(m_propertyName.toLatin1().data(), m_redoValue);
     } else {
         const auto info = propertyManager().info(m_propertyName);
         const bool ok = QMetaObject::invokeMethod(entity,
-                                                  info.resetFunction().toLatin1(),
+                                                  info.resetFunction().toLatin1().data(),
                                                   Qt::DirectConnection
         );
         if (!ok) {
             qDebug() << "Unable to reset property" + m_propertyName;
-            entity->setProperty(m_propertyName.toLatin1(), m_redoValue);
+            entity->setProperty(m_propertyName.toLatin1().data(), m_redoValue);
         }
     }
 }

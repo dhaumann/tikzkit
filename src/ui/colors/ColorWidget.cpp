@@ -121,7 +121,8 @@ ColorWidget::ColorWidget(QWidget * parent)
         for (const QString & palette : palettes) {
             cp.load("../data/palettes/" + palette);
             if (! cp.name().isEmpty()) {
-                d->cmbPalette->addItem(cp.name(), "../data/palettes/" + palette);
+                const QString path = QStringLiteral("../data/palettes/") + palette;
+                d->cmbPalette->addItem(cp.name(), path);
             }
         }
 

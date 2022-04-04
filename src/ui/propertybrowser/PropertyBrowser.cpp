@@ -116,7 +116,7 @@ public:
             return;
         }
 
-        QVariant prop = object->property(name.toLatin1());
+        QVariant prop = object->property(name.toLatin1().data());
         if (!prop.isValid()) {
             qDebug() << "Unknown property type:" << name;
             return;
@@ -162,7 +162,7 @@ public:
         }
         else if (type == "enum") {
             // find out property type
-            auto metaProp = object->metaObject()->property(object->metaObject()->indexOfProperty(name.toLatin1()));
+            auto metaProp = object->metaObject()->property(object->metaObject()->indexOfProperty(name.toLatin1().data()));
             if (metaProp.userType() == QMetaType::UnknownType) {
                 qDebug() << "Unknown enum type";
             }
@@ -173,7 +173,7 @@ public:
                 typeName.remove(0, 6);
             }
 
-            const int enumIndex = tikz::staticMetaObject.indexOfEnumerator(typeName.toLatin1());
+            const int enumIndex = tikz::staticMetaObject.indexOfEnumerator(typeName.toLatin1().data());
             const QMetaEnum metaEnum = tikz::staticMetaObject.enumerator(enumIndex);
             QStringList enumNames;
             for (int i = 0; i < metaEnum.keyCount(); ++i) {
@@ -191,7 +191,7 @@ public:
             if (!modifiedFunction.isEmpty()) {
                 bool isModified = false;
                 const bool ok = QMetaObject::invokeMethod(object,
-                                                          modifiedFunction.toLatin1(),
+                                                          modifiedFunction.toLatin1().data(),
                                                           Qt::DirectConnection,
                                                           Q_RETURN_ARG(bool, isModified)
                 );
