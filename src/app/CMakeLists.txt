@@ -1,7 +1,3 @@
-project(tikzkit)
-
-find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
-
 add_executable(tikzkit
     main.cpp
     TikzKit.cpp

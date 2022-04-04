@@ -1,19 +1,21 @@
-#
-# The official cmake documentation for Qt5 is available here:
-# http://qt-project.org/doc/qt-5/cmake-manual.html
-#
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-set(CMAKE_MODULE_PATH
-  ${CMAKE_MODULE_PATH}
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules
-)
+project(tikzkit VERSION "0.80")
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+find_package(Qt5 "5.15.2" NO_MODULE REQUIRED Core Widgets Svg Test)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
+
+include(FeatureSummary)
 
 # prepare include folder in build dir: include/tikz/core/*.h
 file(GLOB_RECURSE ALL_HEADERS ${CMAKE_SOURCE_DIR}/src/core/*.h)

@@ -1,7 +1,3 @@
-project(tikzkitui)
-
-find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Svg)
-
 set(tikzkitui_SOURCES
     TikzItem.cpp
     NodeItem.cpp

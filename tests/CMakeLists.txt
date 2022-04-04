@@ -1,12 +1,3 @@
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
-
-# find Qt5 modules
-find_package(Qt5 "5.2.0" NO_MODULE REQUIRED Core Widgets Test Svg)
-
 # set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories(
