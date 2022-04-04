@@ -89,7 +89,8 @@ static QSize sizeForItems(const QList<QLayoutItem *> items)
 QSize ToolLayout::minimumSize() const
 {
     // in case the user set margins
-    return sizeForItems(m_items) + QSize(2 * margin(), 2 * margin());
+    const auto margins = contentsMargins();
+    return sizeForItems(m_items) + QSize(margins.left() + margins.right(), margins.top() + margins.bottom());
 }
 
 QSize ToolLayout::sizeHint() const

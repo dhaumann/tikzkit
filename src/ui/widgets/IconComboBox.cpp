@@ -21,8 +21,9 @@
 
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
+#include <QWindow>
+
 #include <QDebug>
 
 IconComboBox::IconComboBox(QWidget *parent)
@@ -60,9 +61,9 @@ QSize IconComboBox::sizeHint() const
     return minimumSizeHint();
 }
 
-static QRect popupGeometry(int screen)
+static QRect popupGeometry(QWidget* widget)
 {
-    return QApplication::desktop()->screenGeometry(screen);
+    return widget->window()->windowHandle()->screen()->geometry();
 }
 
 void IconComboBox::showPopup()
@@ -75,7 +76,7 @@ void IconComboBox::showPopup()
 
     // make sure the popup is on screen
     QRect popupRect = popup->rect();
-    const QRect screen = popupGeometry(QApplication::desktop()->screenNumber(this));
+    const QRect screen = popupGeometry(this);
     const int right = mapToGlobal(popupRect.bottomRight()).x();
 
     if (right > screen.right()) {
