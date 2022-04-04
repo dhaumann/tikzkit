@@ -115,10 +115,10 @@ ColorWidget::ColorWidget(QWidget * parent)
         hbox->addStretch();
 
         QDir dir("../data/palettes/");
-        QStringList palettes = dir.entryList(QStringList() << "*.gpl");
+        const QStringList palettes = dir.entryList(QStringList() << "*.gpl");
 
         ColorPalette cp;
-        foreach (const QString & palette, palettes) {
+        for (const QString & palette : palettes) {
             cp.load("../data/palettes/" + palette);
             if (! cp.name().isEmpty()) {
                 d->cmbPalette->addItem(cp.name(), "../data/palettes/" + palette);

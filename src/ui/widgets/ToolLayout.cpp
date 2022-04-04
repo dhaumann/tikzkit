@@ -77,10 +77,10 @@ int ToolLayout::heightForWidth(int width) const
 }
 
 // find size containing all widgets
-static QSize sizeForItems(const QList<QLayoutItem *> items)
+static QSize sizeForItems(const QList<QLayoutItem *>& items)
 {
     QSize size;
-    foreach (QLayoutItem * item, items) {
+    for (QLayoutItem * item : items) {
         size = size.expandedTo(item->minimumSize());
     }
     return size;

@@ -66,12 +66,12 @@ public:
      */
     void processWheelEvent(int delta);
 
-public slots:
+public Q_SLOTS:
     void zoomIn(bool animated = false);
     void zoomOut(bool animated = false);
     void resetZoom();
 
-private slots:
+private Q_SLOTS:
     void syncComboBox();
     void comboBoxActivated(int index);
     void comboBoxEdited();

@@ -115,7 +115,7 @@ void PdfGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         return;
     }
 
-    emit finished(pdfFile());
+    Q_EMIT finished(pdfFile());
 }
 
 void PdfGenerator::processError(QProcess::ProcessError error)

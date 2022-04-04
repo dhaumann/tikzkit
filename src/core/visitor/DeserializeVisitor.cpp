@@ -69,13 +69,13 @@ void DeserializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list = m_root["node-ids"].toString().split(',');
-    foreach (const QString & uid, list) {
+    for (const QString & uid : qAsConst(list)) {
         doc->createEntity(Uid(uid, doc), tikz::EntityType::Node);
     }
 
     // aggregate edge ids
     list = m_root["path-ids"].toString().split(',');
-    foreach (const QString & idAsStr, list) {
+    for (const QString & idAsStr : qAsConst(list)) {
         const Uid uid(idAsStr, doc);
         const QString type = m_root["paths"].toObject()["path-" + uid.toString()].toObject()["type"].toString();
 //         qDebug() << type << pathType(type);
@@ -84,7 +84,7 @@ void DeserializeVisitor::visit(Document * doc)
 
     // aggregate style ids
     list = m_root["style-ids"].toString().split(',');
-    foreach (const QString & uid, list) {
+    for (const QString & uid : qAsConst(list)) {
         doc->createEntity(Uid(uid, doc), tikz::EntityType::Style);
     }
 

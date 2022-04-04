@@ -96,7 +96,7 @@ QList<tikz::ui::MainWindow *> TikzKit::mainWindows()
 {
     // assemble right list
     QList<tikz::ui::MainWindow *> windows;
-    foreach (auto window, m_mainWindows) {
+    for (auto window : qAsConst(m_mainWindows)) {
         windows.append(window->wrapper());
     }
     return windows;

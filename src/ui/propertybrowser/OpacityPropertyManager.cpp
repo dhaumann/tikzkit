@@ -93,8 +93,8 @@ void OpacityPropertyManager::setValue(QtProperty *property, qreal val)
         return;
 
     qDebug() << "emiting new value:" << data.val;
-    emit propertyChanged(property);
-    emit valueChanged(property, data.val);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT valueChanged(property, data.val);
 }
 
 void OpacityPropertyManager::setReadOnly(QtProperty *property, bool readOnly)
@@ -111,8 +111,8 @@ void OpacityPropertyManager::setReadOnly(QtProperty *property, bool readOnly)
     data.readOnly = readOnly;
     it.value() = data;
 
-    emit propertyChanged(property);
-    emit readOnlyChanged(property, data.readOnly);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT readOnlyChanged(property, data.readOnly);
 }
 
 void OpacityPropertyManager::initializeProperty(QtProperty *property)

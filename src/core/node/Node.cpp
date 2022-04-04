@@ -149,7 +149,7 @@ void Node::setText(const QString& text)
 
     ConfigTransaction transaction(this);
     d->text = text;
-    emit textChanged(d->text);
+    Q_EMIT textChanged(d->text);
 }
 
 QString Node::text() const

@@ -142,7 +142,7 @@ Style::Style(const Uid & uid)
 Style::~Style()
 {
     // unregister all child styles
-    foreach (const Uid & styleUid, d->children) {
+    for (const Uid & styleUid : qAsConst(d->children)) {
         styleUid.entity<Style>()->setParentStyle(d->parentStyle);
     }
     Q_ASSERT(d->children.size() == 0);

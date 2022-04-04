@@ -525,7 +525,7 @@ void QtProperty::propertyChanged()
 void QtAbstractPropertyManagerPrivate::propertyDestroyed(QtProperty *property)
 {
     if (m_properties.contains(property)) {
-        emit q_ptr->propertyDestroyed(property);
+        Q_EMIT q_ptr->propertyDestroyed(property);
         q_ptr->uninitializeProperty(property);
         m_properties.remove(property);
     }
@@ -533,19 +533,19 @@ void QtAbstractPropertyManagerPrivate::propertyDestroyed(QtProperty *property)
 
 void QtAbstractPropertyManagerPrivate::propertyChanged(QtProperty *property) const
 {
-    emit q_ptr->propertyChanged(property);
+    Q_EMIT q_ptr->propertyChanged(property);
 }
 
 void QtAbstractPropertyManagerPrivate::propertyRemoved(QtProperty *property,
             QtProperty *parentProperty) const
 {
-    emit q_ptr->propertyRemoved(property, parentProperty);
+    Q_EMIT q_ptr->propertyRemoved(property, parentProperty);
 }
 
 void QtAbstractPropertyManagerPrivate::propertyInserted(QtProperty *property,
             QtProperty *parentProperty, QtProperty *afterProperty) const
 {
-    emit q_ptr->propertyInserted(property, parentProperty, afterProperty);
+    Q_EMIT q_ptr->propertyInserted(property, parentProperty, afterProperty);
 }
 
 /*!
@@ -1947,7 +1947,7 @@ void QtAbstractPropertyBrowser::setCurrentItem(QtBrowserItem *item)
     QtBrowserItem *oldItem = d_ptr->m_currentItem;
     d_ptr->m_currentItem = item;
     if (oldItem != item)
-        emit  currentItemChanged(item);
+        Q_EMIT  currentItemChanged(item);
 }
 
 QT_END_NAMESPACE

@@ -122,7 +122,7 @@ void EllipsePath::setMetaPos(const tikz::core::MetaPos & pos)
         d->pos = pos;
         auto newNode = node();
         if (oldNode != newNode) {
-            emit nodeChanged(newNode);
+            Q_EMIT nodeChanged(newNode);
         }
     } else {
         document()->addUndoItem(

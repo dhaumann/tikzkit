@@ -126,8 +126,8 @@ void ValuePropertyManager::setValue(QtProperty *property, const tikz::Value & va
     if (data.val == oldVal && data.val.unit() == oldVal.unit())
         return;
 
-    emit propertyChanged(property);
-    emit valueChanged(property, data.val);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT valueChanged(property, data.val);
 }
 
 void ValuePropertyManager::setSingleStep(QtProperty *property, double step)
@@ -148,7 +148,7 @@ void ValuePropertyManager::setSingleStep(QtProperty *property, double step)
 
     it.value() = data;
 
-    emit singleStepChanged(property, data.singleStep);
+    Q_EMIT singleStepChanged(property, data.singleStep);
 }
 
 void ValuePropertyManager::setReadOnly(QtProperty *property, bool readOnly)
@@ -165,8 +165,8 @@ void ValuePropertyManager::setReadOnly(QtProperty *property, bool readOnly)
     data.readOnly = readOnly;
     it.value() = data;
 
-    emit propertyChanged(property);
-    emit readOnlyChanged(property, data.readOnly);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT readOnlyChanged(property, data.readOnly);
 }
 
 void ValuePropertyManager::setDecimals(QtProperty *property, int prec)
@@ -189,7 +189,7 @@ void ValuePropertyManager::setDecimals(QtProperty *property, int prec)
 
     it.value() = data;
 
-    emit decimalsChanged(property, data.decimals);
+    Q_EMIT decimalsChanged(property, data.decimals);
 }
 
 void ValuePropertyManager::setMinimum(QtProperty *property, const tikz::Value & minVal)
@@ -205,8 +205,8 @@ void ValuePropertyManager::setMinimum(QtProperty *property, const tikz::Value & 
     if (data.val < data.minVal) {
         data.val = data.minVal;
 
-        emit propertyChanged(property);
-        emit valueChanged(property, data.val);
+        Q_EMIT propertyChanged(property);
+        Q_EMIT valueChanged(property, data.val);
     }
 }
 
@@ -223,8 +223,8 @@ void ValuePropertyManager::setMaximum(QtProperty *property, const tikz::Value & 
     if (data.val > data.maxVal) {
         data.val = data.maxVal;
 
-        emit propertyChanged(property);
-        emit valueChanged(property, data.val);
+        Q_EMIT propertyChanged(property);
+        Q_EMIT valueChanged(property, data.val);
     }
 }
 
@@ -254,8 +254,8 @@ void ValuePropertyManager::setRange(QtProperty *property, const tikz::Value & mi
     }
 
     if (changed) {
-        emit propertyChanged(property);
-        emit valueChanged(property, data.val);
+        Q_EMIT propertyChanged(property);
+        Q_EMIT valueChanged(property, data.val);
     }
 }
 

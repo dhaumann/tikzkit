@@ -75,7 +75,7 @@ void ZoomController::setZoom(qreal z)
 
     syncComboBox();
 
-    emit zoomChanged(m_currentZoom);
+    Q_EMIT zoomChanged(m_currentZoom);
 }
 
 qreal ZoomController::currentZoom() const

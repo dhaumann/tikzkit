@@ -83,7 +83,7 @@ void TikzScene::setEditMode(TikzEditMode mode)
     if (mode != d->editMode) {
         d->editMode = mode;
 
-        emit editModeChanged(mode);
+        Q_EMIT editModeChanged(mode);
     }
 }
 
@@ -152,7 +152,7 @@ void TikzScene::keyPressEvent(QKeyEvent * keyEvent)
         tikz::core::Transaction transaction(d->doc);
 
         // delete all selected items
-        foreach (QGraphicsItem* item, selectedItems()) {
+        for (QGraphicsItem* item : selectedItems()) {
             if (item->type() == QGraphicsItem::UserType + 2) {
                 NodeItem* node = dynamic_cast<NodeItem*>(item);
                 Q_ASSERT(node);

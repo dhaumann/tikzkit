@@ -70,21 +70,21 @@ void SerializeVisitor::visit(Document * doc)
 {
     // aggregate node ids
     QStringList list;
-    foreach (const Uid & uid, doc->nodes()) {
+    for (const Uid & uid : doc->nodes()) {
         list.append(uid.toString());
     }
     m_root["node-ids"] = list.join(",");
 
     // aggregate path ids
     list.clear();
-    foreach (const Uid & uid, doc->paths()) {
+    for (const Uid & uid : doc->paths()) {
         list.append(uid.toString());
     }
     m_root["path-ids"] = list.join(",");
 
     // aggregate style ids
     list.clear();
-    foreach (const Uid & uid, doc->entities()) {
+    for (const Uid & uid : doc->entities()) {
         if (uid.entityType() == EntityType::Style)
             list.append(uid.toString());
     }

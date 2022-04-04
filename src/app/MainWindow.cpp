@@ -519,7 +519,7 @@ void MainWindow::slotViewChanged(tikz::ui::View * view)
     qDebug() << "the active view changed to" << view;
 
     // forward viewChanged() signal
-    emit viewChanged(view);
+    Q_EMIT viewChanged(view);
 }
 
 tikz::ui::MainWindow * MainWindow::wrapper() const

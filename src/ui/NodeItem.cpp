@@ -262,7 +262,7 @@ void NodeItem::styleChanged()
     d->dirty = true;
     d->updateCache();
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 }

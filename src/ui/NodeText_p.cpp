@@ -50,7 +50,7 @@ void NodeTextPrivate::readSvgFile(const QString& file)
 {
     q->prepareGeometryChange();
     svgRenderer.load(file);
-    emit svgChanged();
+    Q_EMIT svgChanged();
 }
 
 }

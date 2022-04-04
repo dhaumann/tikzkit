@@ -128,7 +128,7 @@ static QGraphicsView * viewForEvent(QGraphicsSceneEvent * event)
 
 void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    emit positionChanged(this, event->scenePos(), viewForEvent(event));
+    Q_EMIT positionChanged(this, event->scenePos(), viewForEvent(event));
 
     event->accept();
 }
@@ -136,7 +136,7 @@ void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit mousePressed(this, event->scenePos(), viewForEvent(event));
+        Q_EMIT mousePressed(this, event->scenePos(), viewForEvent(event));
 
         activate();
 
@@ -147,7 +147,7 @@ void Handle::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void Handle::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit mouseReleased(this, event->scenePos(), viewForEvent(event));
+        Q_EMIT mouseReleased(this, event->scenePos(), viewForEvent(event));
 
         deactivate();
 

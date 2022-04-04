@@ -84,8 +84,8 @@ void UidPropertyManager::setValue(QtProperty *property, const tikz::core::Uid & 
 
     data.val = val;
 
-    emit propertyChanged(property);
-    emit valueChanged(property, data.val);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT valueChanged(property, data.val);
 }
 
 void UidPropertyManager::setReadOnly(QtProperty *property, bool readOnly)
@@ -102,8 +102,8 @@ void UidPropertyManager::setReadOnly(QtProperty *property, bool readOnly)
     data.readOnly = readOnly;
     it.value() = data;
 
-    emit propertyChanged(property);
-    emit readOnlyChanged(property, data.readOnly);
+    Q_EMIT propertyChanged(property);
+    Q_EMIT readOnlyChanged(property, data.readOnly);
 }
 
 void UidPropertyManager::initializeProperty(QtProperty *property)

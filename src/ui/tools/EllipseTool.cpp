@@ -94,7 +94,7 @@ void EllipseTool::createPathHandles()
     updateHandlePositions();
 
     // show and connect to get handle movements
-    foreach (Handle * handle, m_handles) {
+    for (Handle * handle : qAsConst(m_handles)) {
         scene()->addItem(handle);
         handle->show();
         connect(handle, SIGNAL(positionChanged(tikz::ui::Handle *, const QPointF &, QGraphicsView *)),
@@ -108,7 +108,7 @@ void EllipseTool::createPathHandles()
 
 void EllipseTool::updateHandlePositions()
 {
-    foreach (Handle * handle, m_handles) {
+    for (Handle * handle : qAsConst(m_handles)) {
         handle->setPos(handlePos(handle->handlePos()));
         handle->setRotation(-m_path->style()->rotation());
     }

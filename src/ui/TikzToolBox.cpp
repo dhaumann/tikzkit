@@ -97,7 +97,7 @@ TikzToolBox::TikzToolBox(tikz::ui::MainWindow * mainWin, QWidget * parent)
 
     connect(d->group, &QButtonGroup::idClicked, [this](int mode) {
         Q_ASSERT(mode >= 0);
-        emit editModeChanged(static_cast<TikzEditMode>(mode));
+        Q_EMIT editModeChanged(static_cast<TikzEditMode>(mode));
     });
 }
 

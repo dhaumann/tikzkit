@@ -136,7 +136,7 @@ Renderer * ViewPrivate::renderer() const
 
 void ViewPrivate::slotSelectionChanged()
 {
-    emit selectionChanged(this);
+    Q_EMIT selectionChanged(this);
 }
 
 }

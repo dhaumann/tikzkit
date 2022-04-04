@@ -144,7 +144,7 @@ void TexGenerator::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         d->postProcessRunning = false;
 
         QFileInfo fi(*d->tempFile);
-        emit svgReady(fi.baseName() + ".svg");
+        Q_EMIT svgReady(fi.baseName() + ".svg");
     }
 }
 

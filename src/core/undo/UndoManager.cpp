@@ -114,7 +114,7 @@ void UndoManager::setClean()
 {
     if (! isClean()) {
         d->cleanUndoGroup = d->undoItems.isEmpty() ? nullptr : d->undoItems.last();
-        emit cleanChanged(true);
+        Q_EMIT cleanChanged(true);
     }
 }
 
@@ -151,12 +151,12 @@ void UndoManager::undo()
         QModelIndex startIndex = index(startRow, 0);
         QModelIndex endIndex = index(startRow + 1, 0);
         const QVector<int> roles {Qt::FontRole};
-        emit dataChanged(startIndex, endIndex, roles);
+        Q_EMIT dataChanged(startIndex, endIndex, roles);
 
         // emit cleanChanged() if required
         const bool newClean = isClean();
         if (oldClean != newClean) {
-            emit cleanChanged(newClean);
+            Q_EMIT cleanChanged(newClean);
         }
     }
 }
@@ -178,11 +178,11 @@ void UndoManager::redo()
         QModelIndex startIndex = index(startRow, 0);
         QModelIndex endIndex = index(startRow + 1, 0);
         const QVector<int> roles {Qt::FontRole};
-        emit dataChanged(startIndex, endIndex, roles);
+        Q_EMIT dataChanged(startIndex, endIndex, roles);
 
         const bool newClean = isClean();
         if (oldClean != newClean) {
-            emit cleanChanged(newClean);
+            Q_EMIT cleanChanged(newClean);
         }
     }
 }
@@ -325,7 +325,7 @@ void UndoManager::commitTransaction()
 
     // track clean state
     if (d->wasClean) {
-        emit cleanChanged(false);
+        Q_EMIT cleanChanged(false);
     }
 }
 

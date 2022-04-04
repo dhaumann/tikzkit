@@ -14,6 +14,10 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 "5.15.2" NO_MODULE REQUIRED Core Widgets Svg Test)
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
+add_definitions(
+    -DQT_NO_KEYWORDS
+    -DQT_NO_FOREACH
+)
 
 include(FeatureSummary)
 

@@ -43,7 +43,7 @@ void MetaPosPrivate::endChange()
 
     --changeRefCounter;
     if (changeRefCounter == 0) {
-        emit changed(q);
+        Q_EMIT changed(q);
     }
 }
 

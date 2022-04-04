@@ -116,7 +116,7 @@ void OpacityEditor::slotSliderChanged(int opacity)
 
     if (d->intOpacity != opacity) {
         setValue(opacity / 100.0);
-        emit valueChanged(d->intOpacity / 100.0);
+        Q_EMIT valueChanged(d->intOpacity / 100.0);
     } else if (d->slider->value() != opacity) {
         const bool blockSlider = d->slider->blockSignals(true);
         d->slider->setValue(opacity);
@@ -128,7 +128,7 @@ void OpacityEditor::slotSpinBoxChanged(int opacity)
 {
     if (opacity != d->intOpacity) {
         setValue(opacity / 100.0);
-        emit valueChanged(d->intOpacity / 100.0);
+        Q_EMIT valueChanged(d->intOpacity / 100.0);
     }
 }
 

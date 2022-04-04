@@ -67,7 +67,7 @@ void ValueSpinBox::setValueWithUnit(const tikz::Value & val)
 
 void ValueSpinBox::slotValueChanged(double value)
 {
-    emit valueChanged(tikz::Value(value, d->unit));
+    Q_EMIT valueChanged(tikz::Value(value, d->unit));
 }
 
 QString ValueSpinBox::textFromValue(double value) const

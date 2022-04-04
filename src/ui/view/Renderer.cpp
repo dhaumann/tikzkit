@@ -182,7 +182,7 @@ void Renderer::mouseMoveEvent(QMouseEvent* event)
 
     const QPointF scenePos = mapToScene(event->pos());
     const tikz::Pos mousePos = tikz::Pos(scenePos).convertTo(m_grid->unit());
-    emit mousePositionChanged(snapPos(mousePos));
+    Q_EMIT mousePositionChanged(snapPos(mousePos));
 }
 
 void Renderer::mouseReleaseEvent(QMouseEvent* event)

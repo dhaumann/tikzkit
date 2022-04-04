@@ -173,7 +173,7 @@ void EdgePath::setStartMetaPos(const tikz::core::MetaPos & pos)
         d->start = pos;
         auto newNode = startNode();
         if (oldNode != newNode) {
-            emit startNodeChanged(newNode);
+            Q_EMIT startNodeChanged(newNode);
         }
     } else {
         document()->addUndoItem(
@@ -193,7 +193,7 @@ void EdgePath::setEndMetaPos(const tikz::core::MetaPos & pos)
         d->end = pos;
         auto newNode = endNode();
         if (oldNode != newNode) {
-            emit endNodeChanged(newNode);
+            Q_EMIT endNodeChanged(newNode);
         }
     } else {
         document()->addUndoItem(

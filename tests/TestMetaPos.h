@@ -26,11 +26,11 @@ class MetaPosTest : public QObject
 {
     Q_OBJECT
 
-public slots:
+public Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-private slots:
+private Q_SLOTS:
     void testMetaPos();
     void testMetaPosWithNode();
     void testSet0();
@@ -38,7 +38,7 @@ private slots:
     void testToString();
     void testFromString();
 
-public slots:
+public Q_SLOTS:
     void changedEmitted();
 
 private:

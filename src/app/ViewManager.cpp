@@ -64,7 +64,7 @@ ViewManager::ViewManager(MainWindow * mainWin, QWidget * parent)
             this, SLOT(slotDocumentDeleted(tikz::ui::Document*)));
 
     // register existing documents
-    foreach (auto doc, TikzKit::self()->documentManager()->documentList()) {
+    for (auto doc : TikzKit::self()->documentManager()->documentList()) {
         slotDocumentCreated(doc);
     }
 }
@@ -99,13 +99,13 @@ void ViewManager::slotAboutToDeleteDocument(tikz::ui::Document *doc)
 
     // collect all views of that document that belong to this manager
     QList<tikz::ui::View *> closeList;
-    foreach (auto view, doc->views()) {
+    for (auto view : doc->views()) {
         if (m_views.contains(view)) {
             closeList.append(view);
         }
     }
 
-    foreach (auto view, closeList) {
+    for (auto view : qAsConst(closeList)) {
         deleteView(view);
     }
 }
@@ -133,7 +133,7 @@ tikz::ui::View * ViewManager::createView(tikz::ui::Document *doc)
 
 //     connect(view, SIGNAL(focusIn(tikz::ui::View*)), this, SLOT(activateSpace(tikz::ui::View*)));
 
-    emit viewCreated(view);
+    Q_EMIT viewCreated(view);
 
     if (!activeView()) {
         activateView(view);
@@ -197,7 +197,7 @@ void ViewManager::activateView(tikz::ui::View * view)
     m_activeView = view;
     m_stack->setCurrentWidget(view);
 
-    emit viewChanged(view);
+    Q_EMIT viewChanged(view);
 }
 
 tikz::ui::View *ViewManager::activateView(tikz::ui::Document * doc)
@@ -288,7 +288,7 @@ void ViewManager::activateTab(int index)
     // if there are no tabs, just return
     if (index < 0) {
         m_activeView = nullptr;
-        emit viewChanged(m_activeView);
+        Q_EMIT viewChanged(m_activeView);
         return;
     }
 
@@ -313,7 +313,7 @@ void ViewManager::closeRequest(int index)
     // Otherwise, it's a dangling pointer!
     Q_ASSERT(tikz::ui::Editor::instance()->views().contains(view));
 
-    emit closeDocumentRequested(view->document());
+    Q_EMIT closeDocumentRequested(view->document());
 }
 
 void ViewManager::updateDocumentName(tikz::core::Document * doc)

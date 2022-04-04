@@ -43,7 +43,7 @@ tikz::ui::Document *DocumentManager::createDocument()
     m_documents.append(doc);
 
     // we have a new document, show it the world
-    emit documentCreated(doc);
+    Q_EMIT documentCreated(doc);
 
     // return our new document
     return doc;
@@ -53,7 +53,7 @@ tikz::ui::Document *DocumentManager::findDocument(const QUrl &url) const
 {
     QUrl u(url.adjusted(QUrl::NormalizePathSegments));
 
-    foreach(tikz::ui::Document * it, m_documents) {
+    for (tikz::ui::Document * it : m_documents) {
         if (it->url() == u) {
             return it;
         }
@@ -99,14 +99,14 @@ bool DocumentManager::closeDocument(tikz::ui::Document *doc, bool closeUrl)
 
     if (closeUrl) {
         // document will be deleted, soon
-        emit aboutToDeleteDocument(doc);
+        Q_EMIT aboutToDeleteDocument(doc);
 
         // really delete the document
         Q_ASSERT(m_documents.contains(doc));
         delete m_documents.takeAt(m_documents.indexOf(doc));
 
-        // document is gone, emit our signals
-        emit documentDeleted(doc);
+        // document is gone, Q_EMIT our signals
+        Q_EMIT documentDeleted(doc);
     }
 
     /**
@@ -123,7 +123,7 @@ bool DocumentManager::closeDocument(tikz::ui::Document *doc, bool closeUrl)
 
 bool DocumentManager::closeAllDocuments(bool closeUrl)
 {
-    foreach (auto doc, m_documents) {
+    for (auto doc : qAsConst(m_documents)) {
         closeDocument(doc, closeUrl);
     }
     return true;
@@ -136,7 +136,7 @@ bool DocumentManager::closeAllDocuments(bool closeUrl)
 QVector<tikz::ui::Document *> DocumentManager::modifiedDocumentList()
 {
     QVector<tikz::ui::Document *> modified;
-    foreach(auto doc, m_documents) {
+    for (auto doc : qAsConst(m_documents)) {
         if (doc->isModified()) {
             modified.append(doc);
         }
@@ -148,7 +148,7 @@ bool DocumentManager::queryCloseDocuments(MainWindow * w)
 {
 #if 0
     int docCount = m_documents.count();
-    foreach(tikz::ui::Document * doc, m_documents) {
+    for (tikz::ui::Document * doc : qAsConst(m_documents)) {
         if (doc->url().isEmpty() && doc->isModified()) {
             int msgres = QMessageBox::warningYesNoCancel(w,
                          tr("<p>The document '%1' has been modified, but not saved.</p>"
@@ -194,7 +194,7 @@ bool DocumentManager::queryCloseDocuments(MainWindow * w)
 
 void DocumentManager::saveAll()
 {
-    foreach(tikz::ui::Document * doc, m_documents)
+    for (tikz::ui::Document * doc : qAsConst(m_documents))
     if (doc->isModified()) {
         doc->save();
     }
@@ -203,7 +203,7 @@ void DocumentManager::saveAll()
 void DocumentManager::reloadAll()
 {
     // reload all docs that are NOT modified on disk
-    foreach(tikz::ui::Document * doc, m_documents) {
+    for (tikz::ui::Document * doc : qAsConst(m_documents)) {
         doc->reload();
     }
 }

@@ -49,7 +49,7 @@ QString TikzExport::tikzCode()
     //
     // add all lines
     //
-    foreach (const TikzLine & line, m_lines) {
+    for (const TikzLine & line : qAsConst(m_lines)) {
         doc += line.contents + "\n";
     }
 

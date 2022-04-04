@@ -43,7 +43,7 @@ void ConfigObject::endConfig()
 
     --m_refCounter;
     if (m_refCounter == 0) {
-        emit changed();
+        Q_EMIT changed();
     }
 }
 
@@ -55,7 +55,7 @@ bool ConfigObject::configActive() const
 void ConfigObject::emitChangedIfNeeded()
 {
     if (! configActive()) {
-        emit changed();
+        Q_EMIT changed();
     }
 }
 

@@ -110,7 +110,7 @@ QVector<Property *> PropertyInterface::properties() const
 
 void PropertyInterface::notifyPropertyChanged(Property * property)
 {
-    emit propertyChanged(this, property);
+    Q_EMIT propertyChanged(this, property);
 }
 
 void PropertyInterface::notifyPropertyAboutToChange(Property * property)

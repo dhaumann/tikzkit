@@ -50,7 +50,7 @@ QGraphicsScene * AnchorManager::scene() const
 void AnchorManager::clear()
 {
     // just remove all anchors
-    foreach (NodeItem * node, m_nodes) {
+    for (NodeItem * node : qAsConst(m_nodes)) {
         Q_ASSERT(m_handleMap.contains(node));
         qDeleteAll(m_handleMap[node]);
         m_handleMap.remove(node);
@@ -66,9 +66,9 @@ void AnchorManager::clear()
 
 void AnchorManager::hideAnchors()
 {
-    foreach (NodeItem * node, m_nodes) {
+    for (NodeItem * node : qAsConst(m_nodes)) {
         Q_ASSERT(m_handleMap.contains(node));
-        foreach (AnchorHandle * handle, m_handleMap[node]) {
+        for (AnchorHandle * handle : qAsConst(m_handleMap[node])) {
             handle->hide();
         }
     }
@@ -76,9 +76,9 @@ void AnchorManager::hideAnchors()
 
 void AnchorManager::showAnchors()
 {
-    foreach (NodeItem * node, m_nodes) {
+    for (NodeItem * node : qAsConst(m_nodes)) {
         Q_ASSERT(m_handleMap.contains(node));
-        foreach (AnchorHandle * handle, m_handleMap[node]) {
+        for (AnchorHandle * handle : qAsConst(m_handleMap[node])) {
             handle->show();
         }
     }
@@ -87,7 +87,7 @@ void AnchorManager::showAnchors()
 template <class T>
 static T *first(const QList<QGraphicsItem *> &items)
 {
-    foreach (QGraphicsItem *item, items) {
+    for (QGraphicsItem *item : items) {
         if (T * t = dynamic_cast<T*>(item)) {
             return t;
         }
@@ -97,7 +97,7 @@ static T *first(const QList<QGraphicsItem *> &items)
 
 void AnchorManager::addAllNodes()
 {
-    foreach (NodeItem * node, m_doc->nodeItems()) {
+    for (NodeItem * node : m_doc->nodeItems()) {
         addNode(node);
     }
 }
@@ -112,7 +112,7 @@ void AnchorManager::addNode(NodeItem * node)
     m_nodes.append(node);
 
     // creade and add anchors to scene
-    foreach (const QString & anchor, node->supportedAnchors()) {
+    for (const QString & anchor : node->supportedAnchors()) {
         AnchorHandle * handle = new AnchorHandle(node, anchor);
         m_handleMap[node].append(handle);
         scene()->addItem(handle);

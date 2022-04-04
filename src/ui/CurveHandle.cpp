@@ -84,7 +84,7 @@ bool CurveHandle::contains(const QPointF &point) const
 void CurveHandle::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     event->accept();
-    emit positionChanged(event->pos());
+    Q_EMIT positionChanged(event->pos());
 }
 
 void CurveHandle::mousePressEvent(QGraphicsSceneMouseEvent * event)

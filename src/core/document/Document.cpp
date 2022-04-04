@@ -111,7 +111,7 @@ public:
 
         if (newName != docName) {
             docName = newName;
-            emit q->documentNameChanged(q);
+            Q_EMIT q->documentNameChanged(q);
         }
     }
 };
@@ -186,7 +186,7 @@ bool Document::accept(Visitor & visitor)
 void Document::close()
 {
     // tell the world that all Nodes and Paths are about to be deleted
-    emit aboutToClear();
+    Q_EMIT aboutToClear();
 
     // free all node and path data
     qDeleteAll(d->entities);
@@ -434,11 +434,11 @@ void Document::undo()
     const bool redoNowAvailable = redoAvailable();
 
     if (undoWasAvailable != undoNowAvailable) {
-        emit undoAvailableChanged(undoNowAvailable);
+        Q_EMIT undoAvailableChanged(undoNowAvailable);
     }
 
     if (redoWasAvailable != redoNowAvailable) {
-        emit redoAvailableChanged(redoNowAvailable);
+        Q_EMIT redoAvailableChanged(redoNowAvailable);
     }
 }
 
@@ -453,11 +453,11 @@ void Document::redo()
     const bool redoNowAvailable = redoAvailable();
 
     if (undoWasAvailable != undoNowAvailable) {
-        emit undoAvailableChanged(undoNowAvailable);
+        Q_EMIT undoAvailableChanged(undoNowAvailable);
     }
 
     if (redoWasAvailable != redoNowAvailable) {
-        emit redoAvailableChanged(redoNowAvailable);
+        Q_EMIT redoAvailableChanged(redoNowAvailable);
     }
 }
 
@@ -475,7 +475,7 @@ void Document::setPreferredUnit(tikz::Unit unit)
 {
     if (d->preferredUnit != unit) {
         d->preferredUnit = unit;
-        emit preferredUnitChanged(d->preferredUnit);
+        Q_EMIT preferredUnitChanged(d->preferredUnit);
     }
 }
 

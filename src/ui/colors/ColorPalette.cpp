@@ -91,8 +91,8 @@ void ColorPalette::load(const QString & filename)
 
         // check for Spacing: space separated int list. Each int is a row, starting at 0.
         if (line.startsWith(QLatin1String("Spacing:"))) {
-            QStringList list = line.right(line.size() - 8).trimmed().split(whiteSpaces, Qt::SkipEmptyParts);
-            foreach (const QString r, list) {
+            const QStringList list = line.right(line.size() - 8).trimmed().split(whiteSpaces, Qt::SkipEmptyParts);
+            for (const QString r : list) {
                 d->spacings.append(r.toInt());
             }
             continue;
