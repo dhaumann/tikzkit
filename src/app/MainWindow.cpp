@@ -95,6 +95,7 @@ MainWindow::MainWindow()
 
     // color button
     QToolButton * colorBtn = new QToolButton(this);
+    colorBtn->setIcon(QIcon::fromTheme("org.kde.plasma.colorpicker"));
     auto colorWidget = new tikz::ui::ColorWidget(colorBtn);
     colorWidget->setWindowFlags(Qt::Popup);
     colorWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
