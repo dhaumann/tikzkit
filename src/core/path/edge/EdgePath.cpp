@@ -229,6 +229,37 @@ void EdgePath::setEndAnchor(const QString & anchor)
     Q_ASSERT(d->end.anchor() == anchor);
 }
 
+void EdgePath::loadData(const QJsonObject & json)
+{
+    ConfigTransaction transaction(this);
+    Path::loadData(json);
+
+    if (json.contains("start")) {
+        setStartMetaPos(MetaPos(json["start"].toString(), document()));
+    }
+
+    if (json.contains("end")) {
+        setEndMetaPos(MetaPos(json["end"].toString(), document()));
+    }
+
+    if (json.contains("style")) {
+        const Uid styleId(json["style"].toString(), document());
+        setStyle(styleId);
+    }
+}
+
+QJsonObject EdgePath::saveData() const
+{
+    QJsonObject json = Path::saveData();
+
+    json["start"] = d->start.toString();
+    json["end"] = d->end.toString();
+    json["style"] = styleUid().toString();
+
+    return json;
+}
+
+
 }
 }
 

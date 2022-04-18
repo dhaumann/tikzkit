@@ -187,6 +187,20 @@ class TIKZKITCORE_EXPORT EdgePath : public Path
         void endNodeChanged(tikz::core::Node * start);
 
     //
+    // serialization
+    //
+    public:
+        /**
+         * Load the state from the @p json object.
+         */
+        void loadData(const QJsonObject & json) override;
+
+        /**
+         * Save the state to the json object.
+         */
+        QJsonObject saveData() const override;
+
+    //
     // internal to tikz::core::Document
     //
     protected:
