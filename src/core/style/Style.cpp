@@ -589,19 +589,15 @@ void Style::unsetDoubleLine()
 
 tikz::Value Style::innerLineWidth() const
 {
-    if (doubleLine()) {
-        if (propertySet(s_innerLineWidth)) {
-            return d->innerLineWidth;
-        }
-
-        if (parentStyle().isValid() && parentStyle().entity<Style>()->doubleLine()) {
-            return parentStyle().entity<Style>()->innerLineWidth();
-        }
-
-        return tikz::Value::semiThick();
+    if (propertySet(s_innerLineWidth)) {
+        return d->innerLineWidth;
     }
 
-    return 0.0_pt;
+    if (parentStyle().isValid() && parentStyle().entity<Style>()->doubleLine()) {
+        return parentStyle().entity<Style>()->innerLineWidth();
+    }
+
+    return tikz::Value::semiThick();
 }
 
 bool Style::innerLineWidthSet() const
