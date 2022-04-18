@@ -83,7 +83,7 @@ void Node::loadData(const QJsonObject & json)
     ConfigTransaction transaction(this);
 
     if (json.contains("text")) {
-        d->text = json["text"].toString();
+        setText(json["text"].toString());
     }
 
     if (json.contains("pos")) {
