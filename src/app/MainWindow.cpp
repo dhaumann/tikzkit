@@ -150,7 +150,7 @@ void MainWindow::setupUi()
     m_viewMenu->setTitle(QApplication::translate("TikZKit", "&View", nullptr));
     menuBar()->addAction(m_viewMenu->menuAction());
 
-    m_toolBar = new QToolBar(this);
+    m_toolBar = new QToolBar("Main Toolbar", this);
     m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     addToolBar(m_toolBar);
 
