@@ -30,6 +30,7 @@
 #include <tikz/core/Style.h>
 #include <tikz/core/EllipsePath.h>
 #include <tikz/core/Transaction.h>
+#include <tikz/core/UndoSetProperty.h>
 
 #include <QApplication>
 #include <QGraphicsScene>
@@ -150,11 +151,9 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
         const QPointF delta = m_path->pos() - scenePos;
         const qreal rad = atan2(-delta.y(), -delta.x());
         const qreal deg = tikzView->snapAngle(rad * 180 / M_PI + 90);
-        tikz::core::Style s;
-        s.setStyle(m_path->style());
-        s.setRotation(deg);
 
-        m_path->path()->setStyle(s);
+        m_path->document()->addUndoItem(new tikz::core::UndoSetProperty(m_path->path()->styleUid(), "rotation", deg));
+
         return;
     }
 
@@ -226,12 +225,8 @@ void EllipseTool::handleMoved(Handle * handle, const QPointF & scenePos, QGraphi
     w = tikz::Value(qAbs(w.value()), w.unit());
     h = tikz::Value(qAbs(h.value()), h.unit());
 
-    tikz::core::Style s;
-    s.setStyle(m_path->style());
-    s.setRadiusX(w);
-    s.setRadiusY(h);
-
-    m_path->path()->setStyle(s);
+    m_path->document()->addUndoItem(new tikz::core::UndoSetProperty(m_path->path()->styleUid(), "radiusX", w));
+    m_path->document()->addUndoItem(new tikz::core::UndoSetProperty(m_path->path()->styleUid(), "radiusY", h));
 }
 
 void EllipseTool::handleMousePressed(Handle * handle, const QPointF & scenePos, QGraphicsView * view)

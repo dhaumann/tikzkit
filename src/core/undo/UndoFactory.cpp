@@ -25,9 +25,6 @@
 #include "UndoSetNodePos.h"
 #include "UndoSetEdgePos.h"
 #include "UndoSetEllipsePos.h"
-#include "UndoCreatePath.h"
-#include "UndoDeletePath.h"
-#include "UndoSetPathStyle.h"
 
 namespace tikz {
 namespace core {
@@ -73,12 +70,6 @@ UndoItem * UndoFactory::createItem(const QString & type)
         return new UndoSetEdgePos(document());
     } else if (type == "ellipse-set-pos") {
         return new UndoSetEllipsePos(document());
-    } else if (type == "path-create") {
-        return new UndoCreatePath(document());
-    } else if (type == "path-delete") {
-        return new UndoDeletePath(document());
-    } else if (type == "path-set-style") {
-        return new UndoSetPathStyle(document());
     }
 
     Q_ASSERT(false);

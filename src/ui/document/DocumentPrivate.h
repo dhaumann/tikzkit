@@ -194,11 +194,6 @@ class DocumentPrivate : public tikz::ui::Document
          */
         tikz::core::Path * createPath(tikz::PathType type, const tikz::core::Uid & uid) override;
 
-        /**
-         * Delete path @p uid associated with this document.
-         */
-        void deletePath(const tikz::core::Uid & uid) override;
-
     //
     // cleanup functions
     //

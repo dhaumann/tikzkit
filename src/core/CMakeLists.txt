@@ -26,9 +26,6 @@ add_library(tikzkitcore SHARED
     properties/PosProperty.cpp
 
     path/Path.cpp
-    path/UndoSetPathStyle.cpp
-    path/UndoCreatePath.cpp
-    path/UndoDeletePath.cpp
 
     path/edge/EdgePath.cpp
     path/edge/UndoSetEdgePos.cpp

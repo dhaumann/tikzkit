@@ -345,18 +345,9 @@ class TIKZKITCORE_EXPORT Document : public Entity
         void deleteEntity(Entity * entity);
 
         /**
-         * Creates a new path associated with this document.
-         * If the path is not needed anymore, delete it with deletePath().
-         * @param type the path type
+         * Helper function to create a Path.
          */
-        Path * createPath(tikz::PathType type = PathType::Line);
-
-        /**
-         * Remove @p path from the document by deleting the path object.
-         * Afterwards, the pointer is invalid.
-         * @param path path to delete
-         */
-        void deletePath(tikz::core::Path * path);
+        Path * createPath();
 
     //
     // internal: Undo / redo items manipulate with ID
@@ -376,11 +367,6 @@ class TIKZKITCORE_EXPORT Document : public Entity
          * Create a new path associated with this document with @p uid.
          */
         virtual Path * createPath(PathType type, const Uid & uid);
-
-        /**
-         * Delete path @p uid associated with this document.
-         */
-        virtual void deletePath(const Uid & uid);
 
     //
     // data pointer

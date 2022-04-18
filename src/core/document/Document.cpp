@@ -27,8 +27,6 @@
 #include "UndoManager.h"
 #include "UndoFactory.h"
 #include "UndoGroup.h"
-#include "UndoCreatePath.h"
-#include "UndoDeletePath.h"
 #include "UndoCreateEntity.h"
 #include "UndoDeleteEntity.h"
 #include "UndoSetProperty.h"
@@ -515,44 +513,6 @@ QVector<Uid> Document::paths() const
     return pathList;
 }
 
-Path * Document::createPath(PathType type)
-{
-    // create new edge, push will call ::redo()
-    const Uid uid(d->uniqueId(), this);
-    addUndoItem(new UndoCreatePath(type, uid, this));
-
-    // now the edge should be in the map
-    const auto it = d->entityMap.find(uid);
-    if (it != d->entityMap.end()) {
-        return qobject_cast<Path*>(*it);
-    }
-
-    // requested id not in map, this is a bug, since UndoCreatePath should
-    // call createPath(int) that inserts the Entity
-    Q_ASSERT(false);
-
-    return nullptr;
-}
-
-void Document::deletePath(Path * path)
-{
-    Q_ASSERT(path != nullptr);
-    Q_ASSERT(d->entityMap.contains(path->uid()));
-
-    // TODO: not yet the case, but maybe in future: remove child nodes here?
-    //       or: probably move this to Path::deconstruct()!
-
-    // destruct path, so that it fully constructs itself again in undo
-    path->deconstruct();
-
-    // delete path, push will call ::redo()
-    const Uid uid = path->uid();
-    addUndoItem(new UndoDeletePath(uid, this));
-
-    // path really removed?
-    Q_ASSERT(!d->entityMap.contains(uid));
-}
-
 Entity * Document::createEntity(tikz::EntityType type)
 {
     // create new node, push will call ::redo()
@@ -594,7 +554,7 @@ Entity * Document::createEntity(const Uid & uid, EntityType type)
             break;
         }
         case EntityType::Path: {
-            e = new Path(uid);
+            e = new EdgePath(PathType::Line, uid); // FIXME: only EdgePath right now
             e->setObjectName("Path " + uid.toString());
             break;
         }
@@ -683,6 +643,22 @@ Node * Document::createNode()
     return node;
 }
 
+Path * Document::createPath()
+{
+    Transaction transaction(this, "Create Path");
+
+    // create path style
+    auto pathStyle = createEntity(tikz::EntityType::Style);
+
+    // create path
+    auto path = createEntity<Path>(tikz::EntityType::Path);
+
+    // set the path style
+    addUndoItem(new UndoSetProperty(path->uid(), "style", pathStyle->uid()));
+
+    return path;
+}
+
 Path * Document::createPath(PathType type, const Uid & uid)
 {
     Q_ASSERT(uid.isValid());
@@ -716,27 +692,6 @@ Path * Document::createPath(PathType type, const Uid & uid)
     connect(path, &ConfigObject::changed, this, &ConfigObject::emitChangedIfNeeded);
 
     return path;
-}
-
-void Document::deletePath(const Uid & uid)
-{
-    // valid input?
-    Q_ASSERT(uid.isValid());
-    Q_ASSERT(d->entityMap.contains(uid));
-
-    // get entity
-    auto it = d->entityMap.find(uid);
-    if (it != d->entityMap.end()) {
-        const auto entity = *it;
-
-        // unregister entity
-        d->entityMap.erase(it);
-        Q_ASSERT(d->entities.contains(entity));
-        d->entities.erase(std::find(d->entities.begin(), d->entities.end(), entity));
-
-        // truly delete node
-        delete entity;
-    }
 }
 
 Entity * Document::entity(const tikz::core::Uid & uid) const

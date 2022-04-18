@@ -147,25 +147,24 @@ View * DocumentPrivate::createView(QWidget * parent,
     finishTransaction();
 
     beginTransaction("Create Paths");
+
     // an ellipse path
-    tikz::ui::PathItem* path = createPathItem(tikz::PathType::Ellipse);
-    auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
-    tikz::core::Style es;
-    es.setStyle(ellipse->style());
-    es.setRadiusX(2.0_cm);
-    es.setRadiusY(1.0_cm);
-    es.setLineWidth(tikz::Value::semiThick());
-    ellipse->setStyle(es);
+//     tikz::ui::PathItem* path = createPathItem(tikz::PathType::Ellipse);
+//     auto ellipse = qobject_cast<tikz::core::EllipsePath*>(path->path());
+//     tikz::core::Style es;
+//     es.setStyle(ellipse->style());
+//     es.setRadiusX(2.0_cm);
+//     es.setRadiusY(1.0_cm);
+//     es.setLineWidth(tikz::Value::semiThick());
+//     ellipse->setStyle(es);
 
     // add a line path
-    path = createPathItem(tikz::PathType::Line);
+    auto path = createPathItem(tikz::PathType::Line);
     auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
-    es.setStyle(edge->style());
-    es.setLineWidth(tikz::Value::semiThick());
-//     es.setDoubleLine(true);
-    es.setArrowTail(tikz::Arrow::LatexArrow);
-    es.setArrowHead(tikz::Arrow::ToArrow);
-    edge->setStyle(es);
+    setProp(edge->style()->uid(), "lineWidth", tikz::Value::semiThick());
+    //setProp(edge->style()->uid(), "doubleLine", true);
+    setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+    setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::ToArrow));
     edge->setStartNode(item1->node());
     edge->setEndNode(item2->node());
     finishTransaction();
@@ -354,62 +353,50 @@ View * DocumentPrivate::createView(QWidget * parent,
         auto edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n1->node());
         edge->setEndNode(n2->node());
-        es.setStyle(path->path()->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n3->node());
-        es.setStyle(edge->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
         edge->setStartAnchor("west");
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n4->node());
-        es.setStyle(edge->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n5->node());
-        es.setStyle(edge->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n6->node());
-        es.setStyle(edge->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
 
         path = createPathItem();
         edge = qobject_cast<tikz::core::EdgePath*>(path->path());
         edge->setStartNode(n2->node());
         edge->setEndNode(n7->node());
-        es.setStyle(edge->style());
-        es.setArrowTail(tikz::Arrow::LatexArrow);
-        es.setArrowHead(tikz::Arrow::LatexArrow);
-        es.setPenColor(QColor(128, 128, 128));
-        edge->setStyle(es);
+        setProp(edge->style()->uid(), "arrowTail", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "arrowHead", QVariant::fromValue(tikz::Arrow::LatexArrow));
+        setProp(edge->style()->uid(), "penColor", QColor(128, 128, 128));
         edge->setStartAnchor("east");
 
         finishTransaction();
@@ -459,7 +446,7 @@ NodeItem * DocumentPrivate::createNodeItem()
 tikz::ui::PathItem * DocumentPrivate::createPathItem(tikz::PathType type)
 {
     // create path
-    auto path = Document::createPath(type);
+    auto path = Document::createPath(); // FIXME: type
     Q_ASSERT(m_pathMap.contains(path->uid()));
 
     return m_pathMap[path->uid()];
@@ -479,7 +466,7 @@ void DocumentPrivate::deletePathItem(tikz::ui::PathItem * path)
     // delete path from id
     const auto uid = path->uid();
     Q_ASSERT(m_pathMap.contains(uid));
-    Document::deletePath(path->path());
+    Document::deleteEntity(path->path());
     Q_ASSERT(! m_pathMap.contains(uid));
 }
 
@@ -504,9 +491,21 @@ tikz::core::Entity * DocumentPrivate::createEntity(const tikz::core::Uid & uid, 
 
             break;
         }
-        case tikz::EntityType::Path:
-            Q_ASSERT(false); // not implemented
+        case tikz::EntityType::Path: {
+            auto path = qobject_cast<tikz::core::EdgePath *>(entity);
+            Q_ASSERT(uid == path->uid());
+            Q_ASSERT(! m_pathMap.contains(uid));
+
+            // create GUI item
+            auto * pathItem = new tikz::ui::EdgePathItem(path);
+            m_paths.append(pathItem);
+            m_pathMap.insert(uid, pathItem);
+
+            // add to graphics scene
+            m_scene->addItem(pathItem);
+
             break;
+        }
         case tikz::EntityType::Style:
             // nothing to do
             break;
@@ -537,9 +536,24 @@ void DocumentPrivate::deleteEntity(const tikz::core::Uid & uid)
             delete nodeItem;
             break;
         }
-        case tikz::EntityType::Path:
-            Q_ASSERT(false); // not implemented
+        case tikz::EntityType::Path: {
+            Q_ASSERT(m_pathMap.contains(uid));
+
+            // get NodeItem
+            PathItem * pathItem = m_pathMap[uid];
+
+            // remove from scene
+            m_scene->removeItem(pathItem);
+
+            const int index = m_paths.indexOf(pathItem);
+            Q_ASSERT(index >= 0);
+
+            // delete item
+            m_pathMap.remove(uid);
+            m_paths.remove(index);
+            delete pathItem;
             break;
+        }
         case tikz::EntityType::Style:
             // nothing to do
             break;
@@ -588,27 +602,6 @@ tikz::core::Path * DocumentPrivate::createPath(tikz::PathType type, const tikz::
     m_scene->addItem(pathItem);
 
     return path;
-}
-
-void DocumentPrivate::deletePath(const tikz::core::Uid & uid)
-{
-    Q_ASSERT(m_pathMap.contains(uid));
-
-    // get tikz::ui::PathItem
-    tikz::ui::PathItem * pathItem = m_pathMap[uid];
-
-    // remove from scene
-    m_scene->removeItem(pathItem);
-
-    const int index = m_paths.indexOf(pathItem);
-    Q_ASSERT(index >= 0);
-
-    // delete item
-    m_pathMap.remove(uid);
-    m_paths.remove(index);
-    delete pathItem;
-
-    tikz::core::Document::deletePath(uid);
 }
 
 NodeItem * DocumentPrivate::nodeItemFromId(const tikz::core::Uid & uid) const

@@ -22,8 +22,6 @@
 #include "Visitor.h"
 #include "Document.h"
 
-#include "UndoSetPathStyle.h"
-
 namespace tikz {
 namespace core {
 
@@ -31,20 +29,24 @@ class PathPrivate
 {
     public:
         // this edge's style
-        Style style;
+        Uid styleUid;
+        Style * style = nullptr;
 };
 
 Path::Path(const Uid & uid)
     : Entity(uid)
     , d(new PathPrivate())
 {
-    d->style.setParentStyle(uid.document()->style()->uid());
-
-    connect(&d->style, SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
+    setStyle(Uid());
 }
 
 Path::~Path()
 {
+    if (d->style) {
+        delete d->style;
+        d->style = nullptr;
+    }
+
     delete d;
 }
 
@@ -79,8 +81,7 @@ void Path::loadData(const QJsonObject & json)
 
     if (json.contains("style")) {
         const Uid styleId(json["style"].toString(), document());
-        // FIXME: convert style to Uid
-        // d->style = document()->entity<Style>(styleId);
+        setStyle(styleId);
     }
 }
 
@@ -88,30 +89,38 @@ QJsonObject Path::saveData() const
 {
     QJsonObject json = Entity::saveData();
 
-    json["style"] = d->style.uid().toString();
+    json["style"] = style()->uid().toString();
 
     return json;
 }
 
 Style* Path::style() const
 {
-    return &d->style;
+    return d->styleUid.isValid() ? d->styleUid.entity<Style>() : d->style;
 }
 
-void Path::setStyle(const Style & style)
+Uid Path::styleUid() const
 {
-    // TODO: room for optimization: if style did not change, abort
+    return d->styleUid;
+}
 
-    if (document()->undoActive()) {
-        ConfigTransaction transaction(this);
-        d->style.setStyle(&style);
+void Path::setStyle(const Uid & styleUid)
+{
+    if (!d->styleUid.isValid()) {
+        delete d->style;
+        d->style = nullptr;
     } else {
-        // create new undo item, push will call ::redo()
-        document()->addUndoItem(new UndoSetPathStyle(uid(), style, document()));
-
-        // now the text should be updated
-        //     Q_ASSERT(d->style == style); // same as above
+        disconnect(d->styleUid.entity<Style>(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
     }
+
+    if (styleUid.isValid()) {
+        d->styleUid = styleUid;
+    } else {
+        d->style = new Style();
+        d->style->setParentStyle(document()->style()->uid());
+    }
+
+    connect(style(), SIGNAL(changed()), this, SLOT(emitChangedIfNeeded()));
 }
 
 // Edge * Path::createEdge(int index)

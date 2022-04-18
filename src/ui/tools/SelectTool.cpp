@@ -84,12 +84,8 @@ void SelectTool::keyPressEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_E) {
         tikz::core::Transaction transaction(document(), QStringLiteral("Create Edge"));
         auto path = dynamic_cast<EdgePathItem *>(document()->createPathItem(tikz::PathType::Line));
-        path->edgePath()->setStartPos(tikz::Pos(-1, 0, tikz::Unit::Centimeter));
         path->edgePath()->setEndPos(tikz::Pos(1, 0, tikz::Unit::Centimeter));
-
-        tikz::core::Style es;
-        es.setArrowHead(tikz::Arrow::ToArrow);
-        path->path()->setStyle(es);
+        setProp(path->path()->styleUid(), "arrowHead", QVariant::fromValue(tikz::Arrow::ToArrow));
     }
 
     if (event->key() == Qt::Key_C) {

@@ -60,8 +60,8 @@ tikz::core::Style * styleForItem(const tikz::core::Uid & uid)
 
     auto e = uid.entity();
     switch (e->entityType()) {
-        case tikz::EntityType::Document:;
-        case tikz::EntityType::Path: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
+        case tikz::EntityType::Document: return qvariant_cast<tikz::core::Style*>(uid.entity()->property("style"));
+        case tikz::EntityType::Path: return qvariant_cast<tikz::core::Uid>(uid.entity()->property("style")).entity<tikz::core::Style>();
         case tikz::EntityType::Node: return qvariant_cast<tikz::core::Uid>(uid.entity()->property("style")).entity<tikz::core::Style>();
         case tikz::EntityType::Style: return uid.entity<tikz::core::Style>();
     }

@@ -37,7 +37,7 @@ class PathPrivate;
 class TIKZKITCORE_EXPORT Path : public Entity
 {
     Q_OBJECT
-    Q_PROPERTY(Style* style READ style)
+    Q_PROPERTY(Uid style READ styleUid WRITE setStyle)
 
     //
     // Path type
@@ -90,13 +90,20 @@ class TIKZKITCORE_EXPORT Path : public Entity
     public:
         /**
          * Get the Style object of this path.
+         * The returned style is always a valid pointer.
          */
-        Style* style() const;
+        Style * style() const;
 
         /**
-         * Set the Style of this path to @p style.
+         * Get the Style object of this node.
+         * The returned style is always a valid pointer.
          */
-        void setStyle(const Style & style);
+        Uid styleUid() const;
+
+        /**
+         * Set the internal style of this path to @p uid.
+         */
+        void setStyle(const Uid & styleUid);
 
     //
     // internal to tikz::Document
